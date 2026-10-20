@@ -16,16 +16,39 @@ export function CatanOverview({ view, ownerId, busy, mutate, onOwner, onReadyToS
   if (pack.id !== 'catan-base') return null;
   const own = ownerId ? playerSummary(session, ownerId) : null;
   const setField = (field: string, value: Value, subject?: string) => mutate(() => api.update(session.id, { answers: [{ field, value, ownerId: subject }] }));
-  return <section className="catan-overview simple-assets" aria-label="플레이어 카드와 말">
-    {own && ownerId ? <details><summary>내 카드와 남은 말 바꾸기 +</summary><p className="small muted">개인 점수 {showNumber(own.totalScore)} · 자원 {showNumber(own.resourceTotal)}장</p>
-      {([['player.resources.counts', '자원 카드', 'resource'], ['player.development.handCounts', '개발 카드', 'development'], ['player.pieces.remaining', '남은 말', 'pieces']] as const).filter(([key]) => pack.fields.some(f => f.key === key)).map(([key, label, kind]) => {
-        const accepted = confirmed(session, key, ownerId);
-        const candidate = session.assertions.filter(a => a.field === key && a.ownerId === ownerId && a.status !== 'accepted' && (!accepted || a.updatedAt > accepted.updatedAt)).at(-1);
-        return <CountsEditor key={`${ownerId}:${key}`} field={{ id: key, label }} value={(candidate || accepted)?.value} kind={kind} busy={busy} forceSave={!!candidate} onReadyToSave={save => { if (save) saves.current.set(key, save); else saves.current.delete(key); }} onSave={value => setField(key, value, ownerId)}/>;
-      })}</details> : <details><summary>플레이어 보기 +</summary><div className="catan-players">{session.players.map(p => { const info = playerSummary(session, p.id); return <article key={p.id}><button className="catan-player-name" onClick={() => onOwner(p.id)}><span className="player-dot" style={{ background: p.color }}/><strong>{p.name}</strong></button><p>자원 {showNumber(info.resourceTotal)}장 · 공개 점수 {showNumber(info.publicScore)}</p><button className="button text small-button" onClick={() => setTradePlayer(p.id)}>교역 비율 보기</button></article>; })}</div></details>}
-    {ownerId && <button className="button text small-button" onClick={() => setTradePlayer(ownerId)}>교역 비율 보기</button>}
+  const counts = (key: string, label: string, kind: 'resource' | 'development' | 'pieces') => {
+    if (!ownerId || !pack.fields.some(f => f.key === key)) return null;
+    const accepted = confirmed(session, key, ownerId);
+    const candidate = session.assertions.filter(a => a.field === key && a.ownerId === ownerId && a.status !== 'accepted' && (!accepted || a.updatedAt > accepted.updatedAt)).at(-1);
+    return <CountsEditor key={`${ownerId}:${key}`} field={{ id: key, label: label + (candidate ? ' · 사진 후보' : '') }} value={(candidate || accepted)?.value} kind={kind} busy={busy} forceSave={!!candidate} onReadyToSave={save => { if (save) saves.current.set(key, save); else saves.current.delete(key); }} onSave={value => setField(key, value, ownerId)}/>;
+  };
+  const hiddenField = pack.fields.find(f => f.key === 'player.score.hiddenVictoryPoints');
+  const hiddenFact = ownerId ? session.assertions.filter(a => a.field === hiddenField?.key && a.ownerId === ownerId).at(-1) : undefined;
+  return <section className="catan-overview simple-assets" aria-label={ownerId ? '개인 보유 정보' : '플레이어 카드와 말'}>
+    {own && ownerId ? <div className="catan-owner-assets"><h3>{session.players.find(p => p.id === ownerId)?.name} 보유 정보</h3><p className="small muted">개인 점수 {showNumber(own.totalScore)} · 자원 {showNumber(own.resourceTotal)}장</p>
+      {counts('player.resources.counts', '자원 카드', 'resource')}
+      {counts('player.development.handCounts', '개발 카드 · 비공개 승점 포함', 'development')}
+      <details><summary>남은 말·기타 보유 기록 +</summary>
+        {counts('player.pieces.remaining', '남은 말', 'pieces')}
+        {hiddenField && hiddenFact && <PrivateCount key={`${ownerId}:${hiddenField.key}`} label="별도로 기록한 비공개 승점" value={hiddenFact.value} busy={busy} forceSave={hiddenFact.status !== 'accepted'} onSave={value => setField(hiddenField.key, value, ownerId)} onReadyToSave={save => { if (save) saves.current.set(hiddenField.key, save); else saves.current.delete(hiddenField.key); }}/>}
+      </details>
+    </div> : <details><summary>플레이어 보기 +</summary><div className="catan-players">{session.players.map(p => { const info = playerSummary(session, p.id); return <article key={p.id}><button className="catan-player-name" onClick={() => onOwner(p.id)}><span className="player-dot" style={{ background: p.color }}/><strong>{p.name} 보유 정보</strong></button><p>자원 {showNumber(info.resourceTotal)}장 · 공개 점수 {showNumber(info.publicScore)}</p><button className="button text small-button" onClick={() => setTradePlayer(p.id)}>교역 비율 보기</button></article>; })}</div></details>}
     {tradePlayer && <TradeDialog key={tradePlayer} viewerOwner={ownerId} view={view} playerId={tradePlayer} busy={busy} onClose={() => setTradePlayer(null)} onSave={value => setField('turn.trade', value)}/>}
   </section>;
+}
+
+function PrivateCount({ label, value, busy, forceSave, onSave, onReadyToSave }: { label: string; value: Value; busy: boolean; forceSave: boolean; onSave: (value: Value) => Promise<void>; onReadyToSave: (save: (() => Promise<void>) | null) => void }) {
+  const incoming = typeof value === 'number' ? String(value) : '';
+  const [draft, setDraft] = useState(incoming), [error, setError] = useState('');
+  const edited = useRef(false);
+  useEffect(() => { if (!edited.current) setDraft(incoming); }, [incoming]);
+  async function save() {
+    const next = draft === '' ? null : Number(draft);
+    if (next !== null && (!Number.isInteger(next) || next < 0)) { setError('0 이상의 수를 입력해 주세요.'); throw new Error('비공개 승점을 확인해 주세요.'); }
+    await onSave(next); edited.current = false; setError('');
+  }
+  useEffect(() => { onReadyToSave(edited.current || forceSave ? save : null); return () => onReadyToSave(null); });
+  return <form className="field-editor" onSubmit={event => { event.preventDefault(); void save().catch(() => {}); }}><label>{label}<input type="number" inputMode="numeric" min={0} step={1} placeholder="모름" value={draft} disabled={busy} onChange={event => { edited.current = true; setDraft(event.target.value); }}/></label><button className="button secondary small-button" disabled={busy}>반영</button>{error && <p role="alert">{error}</p>}</form>;
 }
 
 function TradeDialog({view,playerId,viewerOwner,busy,onClose,onSave}:{view:SessionView;playerId:string;viewerOwner?:string;busy:boolean;onClose:()=>void;onSave:(value:Value)=>Promise<void>}) {
