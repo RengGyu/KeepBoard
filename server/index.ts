@@ -11,6 +11,8 @@ import { Store } from './store.ts';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
 
+const timingHeader = (timings: Record<string, number>) => Object.entries(timings).filter(([, ms]) => Number.isFinite(ms) && ms >= 0).map(([stage, ms]) => `${stage};dur=${ms.toFixed(1)}`).join(', ');
+
 class HttpError extends Error { constructor(message: string, readonly status = 400) { super(message); } }
 
 export function validatePack(input: unknown): asserts input is GamePack {
@@ -76,13 +78,20 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
   }
 
   const pending = new Map<string, Promise<unknown>>();
-  async function change(id: string, mutate: (session: Session, pack: GamePack) => void | Promise<void>) {
+  async function change(id: string, mutate: (session: Session, pack: GamePack) => void | Promise<void>, timings?: Record<string, number>) {
+    const queuedAt = performance.now();
     const prior = pending.get(id) ?? Promise.resolve();
     const job = prior.catch(() => undefined).then(async () => {
+      let at = performance.now();
+      if (timings) timings.queue = at - queuedAt;
       const { session, pack } = await sessionFor(id);
-      await mutate(session, pack);
-      const view = recompute(session, pack);
-      await store.saveSession(session);
+      if (timings) timings.load = performance.now() - at;
+      at = performance.now(); await mutate(session, pack);
+      if (timings) timings.mutate = performance.now() - at;
+      at = performance.now(); const view = recompute(session, pack);
+      if (timings) timings.recompute = performance.now() - at;
+      at = performance.now(); await store.saveSession(session);
+      if (timings) timings.save = performance.now() - at;
       return view;
     });
     pending.set(id, job);
@@ -172,6 +181,7 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
     }));
   });
   app.post('/api/sessions/:id/evidence', async (req, res) => {
+    const timings: Record<string, number> = {};
     let createdEvidenceId: string | undefined;
     const view = await change(req.params.id, async session => {
       if (req.body?.expectedCaptureEpoch !== undefined && req.body.expectedCaptureEpoch !== session.captureEpoch) throw new HttpError('촬영 중 저장·재개 단계가 바뀌었습니다. 스캔을 닫고 현재 단계에서 다시 시작해 주세요.', 409);
@@ -184,7 +194,8 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
       createdEvidenceId = randomUUID();
       session.evidence.push({ id: createdEvidenceId, url, capturedAt: source?.capturedAt ?? new Date().toISOString(), captureEpoch: source?.captureEpoch ?? session.captureEpoch, label: typeof req.body.label === 'string' ? req.body.label : `사진 ${session.evidence.length + 1}`, scope: source?.scope ?? scope, ownerId: source?.ownerId ?? (scope === 'player' ? req.body.ownerId : undefined), sourceEvidenceId: source?.id, kind: source?.kind === 'example' ? 'example' : 'photo', width: req.body.width, height: req.body.height });
       activity(session, 'capture', '사진 원본을 로컬 디스크에 저장했습니다.');
-    });
+    }, timings);
+    res.setHeader('Server-Timing', timingHeader(timings));
     res.json({ ...view, createdEvidenceId });
   });
   app.delete('/api/sessions/:id/evidence/:evidenceId', async (req, res) => {
@@ -196,7 +207,8 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
     }));
   });
   app.post('/api/sessions/:id/analyze', async (req, res) => {
-    res.json(await change(req.params.id, async (session, pack) => {
+    const timings: Record<string, number> = {};
+    const view = await change(req.params.id, async (session, pack) => {
       const purpose = req.body?.purpose ?? 'capture';
       if (!['capture', 'restore'].includes(purpose)) throw new HttpError('분석 목적을 확인하세요.');
       if (req.body?.expectedCaptureEpoch !== undefined && req.body.expectedCaptureEpoch !== session.captureEpoch) throw new HttpError('분석하려는 스캔 이후 저장·재개 단계가 바뀌었습니다. 원본은 보관되어 있으며 현재 판을 다시 촬영해 주세요.', 409);
@@ -208,7 +220,7 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
       if (purpose === 'restore') session.stage = 'restore';
       const result: AnalysisResult = session.example && evidence.every(item => item.kind === 'example')
         ? { assertions: [], summary: purpose === 'restore' ? '예시 모식도는 실제 복원 사진 판독이 아닙니다. 현재 테이블 사진을 추가하거나 직접 비교하세요.' : '명시된 예시 상태만 사용합니다. 실제 사진을 판독한 결과가 아닙니다.', mode: 'example', warnings: [] }
-        : await analyzeEvidence({ session: structuredClone(session), evidence, pack, purpose, instruction: req.body?.instruction });
+        : await analyzeEvidence({ session: structuredClone(session), evidence, pack, purpose, instruction: req.body?.instruction, timings });
       if (session.example && purpose === 'capture' && evidence.some(item => item.kind === 'example') && !result.assertions.length) {
         const sample = evidence.find(item => item.kind === 'example')!;
         const fixtures = createExampleAssertions(session.players, session.turnInstanceId, sample.id);
@@ -224,7 +236,9 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
       session.analysisSummary = session.example && evidence.every(item => item.kind === 'example') ? `명시된 예시 모식도입니다. ${result.summary}` : result.summary;
       if (result.warnings.length) session.analysisSummary += `\n${result.warnings.join('\n')}`;
       activity(session, 'analyze', `${purpose === 'restore' ? '복원 비교' : '상태 분석'}: ${result.mode}`);
-    }));
+    }, timings);
+    res.setHeader('Server-Timing', timingHeader(timings));
+    res.json(view);
   });
   app.post('/api/sessions/:id/assertions/:assertionId/accept', async (req, res) => {
     res.json(await change(req.params.id, (session, pack) => {

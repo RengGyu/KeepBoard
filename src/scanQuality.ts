@@ -28,6 +28,8 @@ export interface ScanSelector {
   stableSince: number | null;
   lastAcceptedAt: number | null;
   accepted: ScanFingerprint[];
+  reserved?: { id: string; fingerprint: ScanFingerprint }[];
+  lastCapturedAt?: number;
 }
 export const emptyScanSelector = (): ScanSelector => ({ previous: null, stableSince: null, lastAcceptedAt: null, accepted: [] });
 export const resetScanDwell = (state: ScanSelector): ScanSelector => ({ ...state, previous: null, stableSince: null });
@@ -92,15 +94,16 @@ export function stepScanSelector(state: ScanSelector, frame: ScanFrame, at: numb
   const motion = frameMotion(frame, state.previous);
   const next = { ...state, previous: frame };
   const reject = (reason: ScanReason) => ({ state: { ...next, stableSince: null }, reason, motion });
-  if (state.accepted.length >= SCAN_LIMIT) return reject('budget');
+  if (state.accepted.length + (state.reserved?.length ?? 0) >= SCAN_LIMIT) return reject('budget');
   if (frame.mean < SCAN_THRESHOLDS.minMean || frame.darkFraction > SCAN_THRESHOLDS.maxClippedFraction) return reject('dark');
   if (frame.mean > SCAN_THRESHOLDS.maxMean || frame.brightFraction > SCAN_THRESHOLDS.maxClippedFraction) return reject('bright');
   if (frame.contrast < SCAN_THRESHOLDS.minContrast) return reject('flat');
   if (frame.laplacianVariance < SCAN_THRESHOLDS.minLaplacianVariance) return reject('blur');
   if (motion !== null && motion > SCAN_THRESHOLDS.maxMotion) return reject('motion');
-  if (state.accepted.some(fingerprint => sameScanView(frame.fingerprint, fingerprint))) return reject('duplicate');
-  if (state.lastAcceptedAt !== null && at - state.lastAcceptedAt < SCAN_THRESHOLDS.cooldownMs) return reject('cooldown');
+  if ([...state.accepted, ...(state.reserved ?? []).map(item => item.fingerprint)].some(fingerprint => sameScanView(frame.fingerprint, fingerprint))) return reject('duplicate');
   const stableSince = motion === null || state.stableSince === null || at < state.stableSince ? at : state.stableSince;
+  const lastCapture = state.lastCapturedAt ?? state.lastAcceptedAt;
+  if (lastCapture !== null && at - lastCapture < SCAN_THRESHOLDS.cooldownMs) return { state: { ...next, stableSince }, reason: 'cooldown', motion };
   return { state: { ...next, stableSince }, reason: at - stableSince >= SCAN_THRESHOLDS.stableDwellMs ? 'ready' : 'settling', motion };
 }
 
@@ -108,4 +111,15 @@ export function stepScanSelector(state: ScanSelector, frame: ScanFrame, at: numb
 export function acceptScanFrame(state: ScanSelector, frame: ScanFrame, at: number): ScanSelector {
   if (state.accepted.length >= SCAN_LIMIT) throw new Error('이번 스캔은 최대 6장까지 저장할 수 있습니다.');
   return { ...state, accepted: [...state.accepted, frame.fingerprint], lastAcceptedAt: at, stableSince: null };
+}
+
+/** Reserve at local capture time so pending originals count toward budget/duplicates without waiting for upload. */
+export function reserveScanFrame(state: ScanSelector, frame: ScanFrame, id: string, at: number): ScanSelector {
+  if (state.accepted.length + (state.reserved?.length ?? 0) >= SCAN_LIMIT) throw new Error('이번 스캔은 최대 6장입니다.');
+  return { ...state, reserved: [...(state.reserved ?? []), { id, fingerprint: frame.fingerprint }], lastCapturedAt: at, stableSince: null };
+}
+export function settleScanFrame(state: ScanSelector, id: string, saved: boolean): ScanSelector {
+  const entry = state.reserved?.find(item => item.id === id);
+  if (!entry) return state;
+  return { ...state, reserved: state.reserved!.filter(item => item.id !== id), accepted: saved ? [...state.accepted, entry.fingerprint] : state.accepted };
 }

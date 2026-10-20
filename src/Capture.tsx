@@ -2,7 +2,10 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { Camera, Check, Crop, Pause, Play, RotateCcw, ScanLine } from 'lucide-react';
 import type { Evidence } from '../shared/types';
 import { Modal } from './ui';
-import { acceptScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, type ScanFrame } from './scanQuality';
+import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, type ScanFrame } from './scanQuality';
+
+import { createScanUploadQueue, type UploadSnapshot } from './scanUploads';
+import { recordScanTiming } from './scanTiming';
 
 export type PhotoInput = { dataUrl: string; label?: string; width?: number; height?: number };
 
@@ -19,7 +22,11 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
   const closing = useRef(false);
   const closeDelivered = useRef(false);
   const capturing = useRef(false);
-  const pendingSave = useRef<Promise<void> | null>(null);
+  const queue = useRef<ReturnType<typeof createScanUploadQueue<PhotoInput, Evidence>> | null>(null);
+  const finishRequested = useRef(false);
+  const capturePreviews = useRef(new Map<string, { url: string; automatic: boolean }>());
+  const failedSeen = useRef(new Set<string>());
+  const [transfers, setTransfers] = useState<UploadSnapshot<Evidence>>({ entries: [], active: false, retainedBytes: 0 });
   const frameCallback = useRef<number | null>(null);
   const fallbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const takeRef = useRef<(automatic: boolean, frame?: ScanFrame) => Promise<void>>(async () => {});
@@ -30,7 +37,7 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
   const [finishing, setFinishing] = useState(false);
   const [error, setError] = useState('');
   const [status, setStatus] = useState('카메라를 연결하고 있어요…');
-  const [thumbnails, setThumbnails] = useState<{ id: string; url: string; automatic: boolean }[]>([]);
+
 
   function stopDevice() {
     generation.current += 1;
@@ -60,48 +67,58 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
     context.drawImage(element, 0, 0, width, height);
     return analyzeScanFrame(context.getImageData(0, 0, width, height).data, width, height);
   }
-  function takePhoto(automatic: boolean, sampled?: ScanFrame): Promise<void> {
-    if (!video.current?.videoWidth || !stream.current?.getVideoTracks().some(track => track.readyState === 'live') || video.current.readyState < 2 || pausedRef.current || closing.current || capturing.current || selector.current.accepted.length >= SCAN_LIMIT) return Promise.resolve();
-    capturing.current = true;
-    if (mounted.current) { setSavingPhoto(true); setError(''); setStatus('선택한 사진 원본을 저장하고 있어요…'); }
-    const task = (async () => {
-      try {
-        const frame = sampled || sampleFrame();
-        const element = video.current!;
-        const canvas = document.createElement('canvas');
-        // Never upscale the small quality sample: retain this camera frame's actual dimensions.
-        canvas.width = element.videoWidth; canvas.height = element.videoHeight;
-        const context = canvas.getContext('2d');
-        if (!context) throw new Error('사진 원본을 만들지 못했어요.');
-        context.drawImage(element, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', .94);
-        const thumbnail = sampleCanvas.current?.toDataURL('image/jpeg', .7) || dataUrl;
-        const saved = await callback.current({ dataUrl, label: `${automatic ? '자동 확보' : '직접 촬영'} ${selector.current.accepted.length + 1}`, width: canvas.width, height: canvas.height });
-        if (!saved.id) throw new Error('사진 저장 응답에 식별자가 없어요.');
-        selector.current = acceptScanFrame(selector.current, frame, performance.now());
-        if (mounted.current) {
-          setCount(selector.current.accepted.length);
-          setThumbnails(current => [...current, { id: saved.id, url: thumbnail, automatic }]);
-          if (!pausedRef.current && !closing.current) setStatus('저장했어요. 다른 영역으로 천천히 이동한 뒤 잠시 멈춰주세요.');
+  function uploadQueue() {
+    return queue.current ||= createScanUploadQueue<PhotoInput, Evidence>(async input => {
+      const saved = await callback.current(input);
+      if (!saved.id) throw new Error('사진 저장 응답에 식별자가 없어요.');
+      return saved;
+    }, snapshot => {
+      for (const entry of snapshot.entries) {
+        if (entry.state === 'saved') selector.current = settleScanFrame(selector.current, entry.id, true);
+        if (entry.state !== 'failed') failedSeen.current.delete(entry.id);
+        else if (!failedSeen.current.has(entry.id)) {
+          failedSeen.current.add(entry.id);
+          if (mounted.current) { pauseCamera('사진 전송이 멈췄어요. 원본은 이 화면에 남아 있어요.'); setError(entry.error || '사진 전송 실패'); }
         }
-        if (selector.current.accepted.length >= SCAN_LIMIT) pauseCamera(SCAN_REASON_LABELS.budget);
-      } catch (reason) {
-        // No accepted fingerprint/budget on failure. Explicit resume can retry the same view.
-        pauseCamera('사진을 저장하지 못해 일시정지했어요. 다시 시작해 같은 장면을 재시도할 수 있습니다.');
-        if (mounted.current) setError(reason instanceof Error ? reason.message : '사진 저장 실패');
-      } finally {
-        capturing.current = false;
-        if (mounted.current) setSavingPhoto(false);
       }
-    })();
-    pendingSave.current = task;
-    void task.then(() => { if (pendingSave.current === task) pendingSave.current = null; });
-    return task;
+      if (mounted.current) { setTransfers(snapshot); setCount(snapshot.entries.length); }
+    });
+  }
+  async function takePhoto(automatic: boolean, sampled?: ScanFrame): Promise<void> {
+    if (!video.current?.videoWidth || !stream.current?.getVideoTracks().some(track => track.readyState === 'live') || video.current.readyState < 2 || pausedRef.current || closing.current || capturing.current || uploadQueue().snapshot().entries.length >= SCAN_LIMIT) return;
+    capturing.current = true;
+    if (mounted.current) { setSavingPhoto(true); setError(''); }
+    const started = performance.now();
+    try {
+      const frame = sampled || sampleFrame();
+      const element = video.current!;
+      const canvas = document.createElement('canvas');
+      // Full camera resolution/quality is unchanged. Only the local quality sample is small.
+      canvas.width = element.videoWidth; canvas.height = element.videoHeight;
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('사진 원본을 만들지 못했어요.');
+      context.drawImage(element, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', .94);
+      const thumbnail = sampleCanvas.current?.toDataURL('image/jpeg', .7) || '';
+      const capturedAt = performance.now();
+      recordScanTiming({ stage: 'photo-encode', ms: capturedAt - started, photos: 1, bytes: Math.ceil(dataUrl.length * .75) });
+      const uploads = uploadQueue();
+      const id = uploads.enqueue({ dataUrl, label: `${automatic ? '자동 확보' : '직접 촬영'} ${uploads.snapshot().entries.length + 1}`, width: canvas.width, height: canvas.height }, dataUrl.length * 2);
+      capturePreviews.current.set(id, { url: thumbnail, automatic });
+      selector.current = reserveScanFrame(selector.current, frame, id, capturedAt);
+      setTransfers(uploads.snapshot()); setCount(uploads.snapshot().entries.length);
+      setStatus('확보했어요. 다른 영역에서 잠시 멈춰 주세요.');
+      if (uploads.snapshot().entries.length >= SCAN_LIMIT) pauseCamera(SCAN_REASON_LABELS.budget);
+    } catch (reason) {
+      pauseCamera('사진을 확보하지 못했어요. 전송을 기다리거나 다시 촬영해 주세요.');
+      if (mounted.current) setError(reason instanceof Error ? reason.message : '사진 확보 실패');
+    } finally { capturing.current = false; if (mounted.current) setSavingPhoto(false); }
   }
   takeRef.current = takePhoto;
 
   async function startCamera() {
-    if (closing.current || selector.current.accepted.length >= SCAN_LIMIT) return;
+    if (closing.current || selector.current.accepted.length + (selector.current.reserved?.length ?? 0) >= SCAN_LIMIT) return;
+    finishRequested.current = false;
     stopDevice();
     const ownGeneration = generation.current;
     pausedRef.current = false;
@@ -165,33 +182,53 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
     void startRef.current();
     const hidden = () => { if (document.hidden) pauseRef.current('화면이 가려져 카메라를 멈췄어요. 돌아온 뒤 다시 시작하세요.'); };
     const pageHide = () => pauseRef.current('페이지를 떠나 카메라를 멈췄어요.');
+    const unload = (event: BeforeUnloadEvent) => { if (queue.current?.snapshot().entries.some(e => e.state !== 'saved')) event.preventDefault(); };
     document.addEventListener('visibilitychange', hidden);
     window.addEventListener('pagehide', pageHide);
+    window.addEventListener('beforeunload', unload);
     return () => {
-      mounted.current = false; stopDevice();
+      mounted.current = false; stopDevice(); queue.current?.stop(); queue.current = null;
       document.removeEventListener('visibilitychange', hidden);
       window.removeEventListener('pagehide', pageHide);
+      window.removeEventListener('beforeunload', unload);
     };
   }, []);
 
   const closeCamera = async () => {
-    if (closing.current) return;
-    closing.current = true; pausedRef.current = true; stopDevice();
-    if (mounted.current) { setFinishing(true); setReady(false); setStatus(pendingSave.current ? '진행 중인 사진 저장을 마친 뒤 스캔을 종료합니다…' : '스캔을 마치고 있어요…'); }
-    await pendingSave.current;
+    if (closing.current || closeDelivered.current) return;
+    finishRequested.current = true; closing.current = true; pausedRef.current = true; stopDevice();
+    if (mounted.current) { setFinishing(true); setReady(false); setStatus('사진 전송을 마무리하고 있어요…'); }
+    const uploads = uploadQueue();
+    await uploads.drain();
+    if (!mounted.current) return;
+    if (uploads.snapshot().entries.some(e => e.state === 'failed')) {
+      closing.current = false; setFinishing(false); setError('전송하지 못한 원본이 남아 있어요. 다시 보내거나 해당 사진을 빼고 마쳐 주세요.'); return;
+    }
     if (!closeDelivered.current) { closeDelivered.current = true; closeCallback.current(); }
   };
+  async function retryUploads() {
+    setError(''); const uploads = uploadQueue(); uploads.retryFailed(); await uploads.drain();
+    if (finishRequested.current) await closeCamera();
+  }
+  function omitFailedAndFinish() {
+    const uploads = uploadQueue();
+    for (const id of uploads.discardFailed()) { selector.current = settleScanFrame(selector.current, id, false); capturePreviews.current.delete(id); }
+    void closeCamera();
+  }
+  const savedCount = transfers.entries.filter(e => e.state === 'saved').length;
+  const failedCount = transfers.entries.filter(e => e.state === 'failed').length;
   return <Modal title="판을 천천히 훑어주세요" onClose={() => void closeCamera()} wide>
     <div className="camera-view"><video ref={video} playsInline muted autoPlay/><div className="camera-guide"><ScanLine size={42}/></div><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
     <div className="modal-body">
       <ol className="scan-guidance"><li>판 전체</li><li>영역별로 잠시 멈추기</li><li>마치기</li></ol>
       <p className="camera-status" role="status" aria-live="polite">{status}</p>
-      <p className="muted small scan-explanation">흐림·밝기·움직임·비슷한 장면은 기기에서 검사합니다. AI 판독은 마친 뒤 이번 사진만 한 번 전송해 실행해요.</p>
-      {thumbnails.length > 0 && <div className="scan-thumbnails" aria-label="이번 스캔에서 저장한 사진">{thumbnails.map((photo, index) => <div key={photo.id}><img src={photo.url} alt={`확보한 사진 ${index + 1}`}/><span>{index + 1} · {photo.automatic ? '자동' : '직접'}</span></div>)}</div>}
+      <p className="muted small scan-explanation">흐림·밝기·움직임·비슷한 장면은 기기에서 검사합니다. 원본은 촬영 중 전송하고, AI는 마친 뒤 이번 사진만 한 번 읽어요.</p>
+      {count > 0 && <><p className="camera-status" role="status">사진 전송 {savedCount}/{count}{transfers.active ? ' · 보내는 중…' : failedCount ? ` · ${failedCount}장 실패` : ' · 완료'}</p><div className="scan-thumbnails" aria-label="이번 스캔에서 확보한 사진">{transfers.entries.map((entry, index) => { const preview = capturePreviews.current.get(entry.id); return <div key={entry.id}>{preview?.url && <img src={preview.url} alt={`확보한 사진 ${index + 1}`}/>}<span>{index + 1} · {entry.state === 'saved' ? '전송됨' : entry.state === 'failed' ? '전송 실패' : '전송 중'}</span></div>; })}</div></>}
+      {failedCount > 0 && <div className="button-row"><button className="button secondary" disabled={transfers.active || finishing} onClick={() => void retryUploads()}>전송 다시 시도</button><button className="button text" disabled={transfers.active || finishing} onClick={omitFailedAndFinish}>실패한 {failedCount}장 빼고 마치기</button></div>}
       {error && <p className="inline-error" role="alert">{error}</p>}
-      <div className="button-row"><button className="button secondary" disabled={finishing || count >= SCAN_LIMIT} onClick={() => paused ? void startCamera() : pauseCamera()}>{paused ? <Play size={17}/> : <Pause size={17}/>} {paused ? '다시 시작' : '일시정지'}</button><button className="button secondary" disabled={!ready || savingPhoto || finishing || count >= SCAN_LIMIT} onClick={() => void takePhoto(false)}><Camera size={17}/>{savingPhoto ? '저장 중…' : '직접 촬영'}</button></div>
+      <div className="button-row"><button className="button secondary" disabled={finishing || count >= SCAN_LIMIT} onClick={() => paused ? void startCamera() : pauseCamera()}>{paused ? <Play size={17}/> : <Pause size={17}/>} {paused ? '다시 시작' : '일시정지'}</button><button className="button secondary" disabled={!ready || savingPhoto || finishing || count >= SCAN_LIMIT} onClick={() => void takePhoto(false)}><Camera size={17}/>{savingPhoto ? '확보 중…' : '직접 촬영'}</button></div>
       <p className="muted small scan-manual-note">자동 선별이 어려우면 직접 촬영할 수 있어요. 확보한 장수로 판 전체나 복원 완료를 판단하지 않습니다.</p>
-      <button className="button primary full" disabled={finishing} onClick={() => void closeCamera()}><Check size={17}/>{finishing ? '저장 마무리 중…' : '스캔 마치고 사진 확인'}</button>
+      <button className="button primary full" disabled={finishing} onClick={() => void closeCamera()}><Check size={17}/>{finishing ? '사진 전송 마무리 중…' : '스캔 마치고 사진 확인'}</button>
     </div>
   </Modal>;
 }

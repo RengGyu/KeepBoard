@@ -1,12 +1,17 @@
 import type { AISettings, AIStatus, GamePack, Player, Session, SessionView, Stage, Value } from '../shared/types';
 
+import { parseServerTiming, recordScanTiming } from './scanTiming';
+
 async function request<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
+  const started = performance.now();
   const response = await fetch(`/api${path}`, {
     method,
     headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const data = await response.json().catch(() => null);
+  const stage = path.endsWith('/analyze') ? 'analysis-roundtrip' : path.endsWith('/evidence') && method === 'POST' ? 'photo-upload' : null;
+  if (stage) recordScanTiming({ stage, ms: performance.now() - started, server: parseServerTiming(response.headers.get('Server-Timing')), ...(stage === 'photo-upload' ? { photos: 1, bytes: typeof (body as { dataUrl?: string })?.dataUrl === 'string' ? Math.ceil((body as { dataUrl: string }).dataUrl.length * .75) : undefined } : { photos: (body as { evidenceIds?: string[] })?.evidenceIds?.length }) });
   if (!response.ok) throw new Error(data?.error || `요청을 처리하지 못했습니다 (${response.status}).`);
   return data as T;
 }

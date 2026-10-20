@@ -11,9 +11,14 @@ export function SceneWorkspace({ view, ownerId, busy, mutate, onEvidence, onRead
   const [dirty, setDirty] = useState(false);
   const [showSaved, setShowSaved] = useState(false);
   const [fieldKey, setFieldKey] = useState('');
+  const visibleField = useRef('');
   const saveEditor = useRef<(() => Promise<void>) | null>(null);
-  const field = fields.find(item => item.key === fieldKey) || fields.find(item => item.key === 'board.layout' && view.session.assertions.some(a => a.field === item.key && a.ownerId === ownerId)) || fields.find(item => view.session.assertions.some(a => a.field === item.key && a.ownerId === ownerId)) || fields[0];
+  const sceneAssertions = view.session.assertions.filter(a => a.ownerId === ownerId && fields.some(f => f.key === a.field));
+  const newestAccepted = sceneAssertions.filter(a => a.status === 'accepted').reduce((at, a) => a.updatedAt > at ? a.updatedAt : at, '');
+  const newestCandidate = sceneAssertions.filter(a => a.status === 'candidate' && a.updatedAt > newestAccepted).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+  const field = fields.find(item => item.key === (dirty ? visibleField.current : fieldKey)) || fields.find(item => item.key === newestCandidate?.field) || fields.find(item => item.key === 'board.layout' && sceneAssertions.some(a => a.field === item.key)) || fields.find(item => sceneAssertions.some(a => a.field === item.key)) || fields[0];
   if (!field) return null;
+  visibleField.current = field.key;
   const assertions = view.session.assertions.filter(item => item.field === field.key && item.ownerId === ownerId);
   const accepted = assertions.filter(item => item.status === 'accepted').at(-1);
   const candidate = assertions.filter(item => item.status !== 'accepted' && (!accepted || item.updatedAt > accepted.updatedAt)).at(-1);

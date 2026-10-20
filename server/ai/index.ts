@@ -5,6 +5,7 @@ import type { AISettings, AIStatus, AnalysisResult, Assertion, Evidence, GamePac
 import { observationPrompt, gamePackPrompt } from './prompt.ts';
 import { normalizeSceneDetailed } from '../../shared/scene.ts';
 import { isSceneField } from '../../shared/sceneFields.ts';
+import { assembleSceneAssertions } from './sceneAssembly.ts';
 
 const dataDir = () => path.resolve(process.env.KEEPBOARD_DATA_DIR || '.keepboard');
 const configFile = () => path.join(dataDir(), 'ai-settings.json');
@@ -149,14 +150,15 @@ export function normalizeObservations(raw: unknown, pack: GamePack, evidence: Ev
       ...(validRegion ? { region: { x: region.x, y: region.y, width: region.width, height: region.height } } : {}),
     };
     const duplicate = assertions.findIndex(a => a.field === assertion.field && a.ownerId === assertion.ownerId);
-    if (duplicate >= 0) assertions[duplicate] = assertion;
+    if (duplicate >= 0 && !isSceneField(definition)) assertions[duplicate] = assertion;
     else assertions.push(assertion);
   }
   if (!assertions.length) warnings.push('확인 가능한 상태를 찾지 못했습니다. 필요한 영역을 더 가까이 촬영하거나 직접 입력해 주세요.');
-  return { assertions, summary: typeof result.summary === 'string' ? result.summary : `${assertions.length}개 상태 후보를 읽었습니다.`, mode: 'live', warnings };
+  const assembled = assembleSceneAssertions(assertions, evidence, new Set(pack.fields.filter(isSceneField).map(f => f.key)));
+  return { assertions: assembled, summary: typeof result.summary === 'string' ? result.summary : `${assembled.length}개 상태 후보를 읽었습니다.`, mode: 'live', warnings };
 }
 
-export async function analyzeEvidence(input: { session: Session; evidence: Evidence[]; pack: GamePack; purpose?: string; instruction?: string }): Promise<AnalysisResult> {
+export async function analyzeEvidence(input: { session: Session; evidence: Evidence[]; pack: GamePack; purpose?: string; instruction?: string; timings?: Record<string, number> }): Promise<AnalysisResult> {
   const config = await settings();
   if (!config.apiKey) return {
     assertions: [], summary: '사진 원본을 보관했습니다. AI 설정을 연결하면 판독할 수 있습니다. 필요한 상태는 지금 직접 입력할 수도 있습니다.',
@@ -166,7 +168,7 @@ export async function analyzeEvidence(input: { session: Session; evidence: Evide
   if (!photos.length) throw new Error('분석할 사진을 먼저 촬영하거나 올려 주세요. 예시 그림은 실제 사진 판독에 사용하지 않습니다.');
   const groups = new Map<string, Evidence[]>();
   for (const photo of photos) {
-    const key = photo.ownerId || 'public';
+    const key = JSON.stringify([photo.ownerId ?? null, photo.captureEpoch]);
     groups.set(key, [...(groups.get(key) || []), photo]);
   }
   const results: AnalysisResult[] = [];
@@ -174,13 +176,19 @@ export async function analyzeEvidence(input: { session: Session; evidence: Evide
     // Keep owner contexts separate; batch originals instead of sending every frame at once.
     for (let offset = 0; offset < all.length; offset += 6) {
       const batch = all.slice(offset, offset + 6);
+      let at = performance.now();
       const images = await Promise.all(batch.map(readImage));
+      if (input.timings) input.timings.images = (input.timings.images ?? 0) + performance.now() - at;
+      at = performance.now();
       const raw = await requestJSON(observationPrompt(input.session, input.pack, batch, input.instruction, input.purpose), images, config);
+      if (input.timings) input.timings.provider = (input.timings.provider ?? 0) + performance.now() - at;
+      at = performance.now();
       results.push(normalizeObservations(raw, input.pack, batch, input.session.turnInstanceId, input.session.players.map(p=>p.id)));
+      if (input.timings) input.timings.normalize = (input.timings.normalize ?? 0) + performance.now() - at;
     }
   }
   return {
-    assertions: results.flatMap(r => r.assertions), summary: results.map(r => r.summary).join('\n'),
+    assertions: assembleSceneAssertions(results.flatMap(r => r.assertions), photos, new Set(input.pack.fields.filter(isSceneField).map(f => f.key))), summary: results.map(r => r.summary).join('\n'),
     mode: 'live', warnings: results.flatMap(r => r.warnings),
   };
 }

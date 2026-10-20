@@ -8,6 +8,8 @@ import { SceneWorkspace } from './SceneWorkspace';
 import { CameraDialog, PhotoDialog, type PhotoInput } from './Capture';
 import { fire, type Mutate } from './Fields';
 import { addSavedScanEvidence, createScanBatch, finishScanBatch, type ScanBatch, type ScanRunContext } from './scanBatch';
+import { createScanUploadQueue, SCAN_QUEUE_MAX_BYTES, type UploadSnapshot } from './scanUploads';
+import { recordScanTiming } from './scanTiming';
 import { SCAN_LIMIT } from './scanQuality';
 import { Busy, formatDate } from './ui';
 import './correction-workspace.css';
@@ -18,6 +20,7 @@ export const stages: { id: Stage; label: string; icon: typeof Camera; number: st
   { id: 'restore', label: '이어하기', icon: Play, number: '03' },
 ];
 interface RunningCapture { batch: ScanBatch }
+interface GalleryTransfer { run: RunningCapture; uploads: ReturnType<typeof createScanUploadQueue<PhotoInput, Evidence>>; unread: File[]; snapshot: UploadSnapshot<Evidence>; phase: 'reading' | 'sending' | 'failed' }
 interface BatchReadout { context: ScanRunContext; evidenceIds: string[]; state: 'manual' | 'analyzing' | 'done' | 'failed'; error?: string }
 type SaveDraft = (() => Promise<void>) | null;
 export default function SessionWorkspace({ view, busy, status, mutate, onBack, onSettings, ownerId, setOwnerId, onToast, onReadyToLeave }: { view: SessionView; busy: boolean; status: AIStatus | null; mutate: Mutate; onBack: () => void; onSettings: () => void; ownerId?: string; setOwnerId: (id?: string) => void; onToast: (message: string) => void; onReadyToLeave?: (save: SaveDraft) => void }) {
@@ -32,19 +35,29 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const [photo, setPhoto] = useState<{ evidence: Evidence; region?: Assertion['region'] } | null>(null);
   const upload = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [gallery, setGallery] = useState<GalleryTransfer | null>(null);
+  const galleryRef = useRef<GalleryTransfer | null>(null);
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    const unload = (event: BeforeUnloadEvent) => { if (galleryRef.current) event.preventDefault(); };
+    window.addEventListener('beforeunload', unload);
+    return () => { alive.current = false; galleryRef.current?.uploads.stop(); window.removeEventListener('beforeunload', unload); };
+  }, []);
   const [working, setWorking] = useState(false);
   const editorSave = useRef<SaveDraft>(null), contextSave = useRef<SaveDraft>(null), assetSave = useRef<SaveDraft>(null);
   const currentScreen = useRef({ sessionId: session.id, ownerId });
   currentScreen.current = { sessionId: session.id, ownerId };
   const snapshot = session.snapshots.at(-1);
-  const locked = busy || working || uploading;
-  async function flush() { await editorSave.current?.(); await assetSave.current?.(); await contextSave.current?.(); }
+  const locked = busy || working || uploading || !!gallery;
+  async function flush() { if (cameraRun || galleryRef.current) throw new Error('사진 전송을 마치거나 실패한 사진을 제외한 뒤 이동해 주세요.'); await editorSave.current?.(); await assetSave.current?.(); await contextSave.current?.(); }
   useEffect(() => { onReadyToLeave?.(flush); return () => onReadyToLeave?.(null); });
   function stage(value: Stage) { setActiveStage(value); const url = new URL(location.href); url.searchParams.set('step', value); history.replaceState({}, '', url); }
   async function navigate(value: Stage) { setWorking(true); try { await flush(); stage(value); } finally { setWorking(false); } }
   async function changeOwner(id?: string) { setWorking(true); try { await flush(); setOwnerId(id); } finally { setWorking(false); } }
   async function saveBoard(resume = false) { setWorking(true); try { await flush(); await mutate(() => api.commit(session.id, true), '이 판을 저장했어요'); if (resume) { await mutate(() => api.resume(session.id)); stage('restore'); } else stage('saved'); } finally { setWorking(false); } }
   function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = activeStage === 'restore' ? 'restore' : 'capture'): RunningCapture {
+    setLastScan(null);
     return { batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: !!status?.configured }) };
   }
   function openCamera(options?: { ownerId?: string; purpose?: 'capture' | 'restore' }) {
@@ -90,6 +103,43 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     else setLastScan({ context: run.batch.context, evidenceIds: [...run.batch.evidenceIds], state: 'manual' });
   };
 
+  function showGallery(transfer: GalleryTransfer) { if (alive.current) setGallery({ ...transfer }); }
+  async function sendGalleryFiles(transfer: GalleryTransfer, files: File[]) {
+    transfer.phase = 'reading'; transfer.unread = []; showGallery(transfer);
+    for (const file of files) {
+      if (!alive.current) return;
+      try {
+        const estimatedBytes = Math.ceil(file.size * 8 / 3) + 256;
+        if (estimatedBytes + transfer.uploads.snapshot().retainedBytes > SCAN_QUEUE_MAX_BYTES) await transfer.uploads.drain();
+        if (estimatedBytes + transfer.uploads.snapshot().retainedBytes > SCAN_QUEUE_MAX_BYTES) throw new Error('사진 전송 대기 공간 부족');
+        const start = performance.now();
+        const input = await readPhoto(file);
+        recordScanTiming({ stage: 'gallery-read', ms: performance.now() - start, photos: 1, bytes: file.size });
+        transfer.uploads.enqueue({ ...input, label: file.name }, input.dataUrl.length * 2);
+      } catch { transfer.unread.push(file); }
+    }
+    transfer.phase = 'sending'; showGallery(transfer);
+    await finishGallery(transfer);
+  }
+  async function finishGallery(transfer: GalleryTransfer) {
+    await transfer.uploads.drain();
+    if (!alive.current) return;
+    transfer.snapshot = transfer.uploads.snapshot();
+    setUploading(false);
+    if (transfer.unread.length || transfer.snapshot.entries.some(e => e.state === 'failed')) {
+      transfer.phase = 'failed'; showGallery(transfer); return;
+    }
+    galleryRef.current = null; setGallery(null);
+    await finishCaptureRun(transfer.run);
+  }
+  async function retryGallery(transfer: GalleryTransfer) {
+    setUploading(true); transfer.uploads.retryFailed();
+    await sendGalleryFiles(transfer, [...transfer.unread]);
+  }
+  async function omitGalleryFailures(transfer: GalleryTransfer) {
+    transfer.uploads.discardFailed(); transfer.unread = []; await finishGallery(transfer);
+  }
+
   return <div className="correction-workspace">
     <header className="correction-heading"><button className="icon-button" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={21}/></button><div><span className="eyebrow">{view.pack.title}</span><h1>{session.name}</h1></div><button className="icon-button" aria-label="설정" onClick={onSettings}><Settings2 size={19}/></button></header>
     <nav className="correction-steps" aria-label="판 메뉴">{stages.map(item => <button key={item.id} className={activeStage === item.id ? 'active' : ''} aria-current={activeStage === item.id ? 'page' : undefined} disabled={locked} onClick={() => fire(navigate(item.id))}><item.icon size={16}/>{item.label}</button>)}</nav>
@@ -97,6 +147,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     {activeStage === 'saved' ? <section className="simple-saved"><Save size={32}/><h2>{snapshot ? '저장한 판이 있어요' : '이대로 저장할 수 있어요'}</h2><p>{snapshot ? `${formatDate(snapshot.createdAt)} 저장` : '모르는 내용은 비워둬도 괜찮아요.'}</p>{snapshot && <p className="muted small">사진 {snapshot.evidence.filter(e => !e.ownerId || e.ownerId === ownerId).length}장 · {session.snapshots.length}번째 저장</p>}<button className="button secondary" disabled={locked} onClick={() => fire(navigate('capture'))}>그림 다시 보기</button></section> : <>
       {activeStage === 'restore' && <div className="resume-note"><strong>이 판을 보며 이어가세요.</strong><span>{snapshot ? `${formatDate(snapshot.createdAt)}에 남긴 기록입니다.` : '현재 기록을 보고 있어요.'}</span></div>}
       <div className="quick-capture"><button className="button primary" disabled={locked} onClick={() => fire(flush().then(() => openCamera()))}><Camera size={17}/>판 스캔</button><button className="button secondary" disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={17}/>사진 추가</button><span>사진에서 읽고, 그림에서 고쳐요.</span></div>
+      {gallery && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
       {lastScan && lastScan.context.ownerId === ownerId && <p role="status" className="scan-readout">{lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? '사진은 남아 있어요. 다시 읽거나 직접 고칠 수 있어요.' : lastScan.state === 'manual' ? '사진을 추가했어요. 그림에 부품을 놓아 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => void analyzeBatch(lastScan)}>다시 읽기</button>}</p>}
       <SceneWorkspace key={ownerId || 'public'} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>
       <CatanOverview key={ownerId || 'public'} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>
@@ -106,13 +157,18 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     <input hidden ref={upload} type="file" accept="image/*" multiple onChange={async event => {
       const files = Array.from(event.target.files || []); event.target.value = ''; if (!files.length) return;
       setUploading(true); const run = newCaptureRun(ownerId);
-      try { await flush(); for (const file of files.slice(0, SCAN_LIMIT)) await saveRunPhoto(run, { ...await readPhoto(file), label: file.name }); onToast(files.length > SCAN_LIMIT ? `처음 ${SCAN_LIMIT}장을 추가했어요` : `${files.length}장을 추가했어요`); }
-      catch (reason) { onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
-      finally { setUploading(false); await finishCaptureRun(run); }
+      try {
+        await flush();
+        const transfer = { run, unread: [], snapshot: { entries: [], active: false, retainedBytes: 0 }, phase: 'reading' } as unknown as GalleryTransfer;
+        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); });
+        galleryRef.current = transfer; showGallery(transfer);
+        if (files.length > SCAN_LIMIT) onToast(`처음 ${SCAN_LIMIT}장을 추가해요`);
+        await sendGalleryFiles(transfer, files.slice(0, SCAN_LIMIT));
+      } catch (reason) { setUploading(false); onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
     }}/>
     {cameraRun && <CameraDialog key={cameraRun.batch.context.id} onClose={() => void finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
     {photo && <PhotoDialog evidence={photo.evidence} region={photo.region} onClose={() => setPhoto(null)} onCrop={async input => { await mutate(() => api.evidence(session.id, { ...input, scope: photo.evidence.scope, ownerId: photo.evidence.ownerId, sourceEvidenceId: photo.evidence.id }), '확대한 사진을 추가했어요'); }}/>} 
-    {locked && <div className="mutation-indicator" role="status"><Busy label="저장하고 있어요"/></div>}
+    {(busy || working || uploading) && <div className="mutation-indicator" role="status"><Busy label={lastScan?.state === 'analyzing' ? '사진을 읽고 있어요' : uploading || cameraRun ? '사진을 보내고 있어요' : '저장하고 있어요'}/></div>}
   </div>;
 }
 

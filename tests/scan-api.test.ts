@@ -35,6 +35,13 @@ test('exact sweep retries send six originals once per request, retain accepted s
   const call = async (route: string, body?: unknown, method = 'POST') => {
     const response = await request(route, body, method);
     assert.equal(response.status < 300, true, await response.clone().text());
+    if (route.endsWith('/evidence') || route.endsWith('/analyze')) {
+      const timing = response.headers.get('Server-Timing');
+      assert.match(timing || '', /queue;dur=[\d.]+/);
+      assert.match(timing || '', /save;dur=[\d.]+/);
+      if (route.endsWith('/analyze')) assert.match(timing || '', /provider;dur=[\d.]+/);
+      assert(!timing?.includes('test-only'));
+    }
     return response.json();
   };
   try {
