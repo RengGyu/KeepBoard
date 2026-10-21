@@ -1,0 +1,631 @@
+{
+  "schema_version": "1.0",
+  "game_id": "isle-of-cats",
+  "name_ko": "아일 오브 캣",
+  "name_en": "The Isle of Cats",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "가족/표준 모드를 메모;확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "isle-of-cats.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "tiles",
+      "name": "고양이·Oshax·보물",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "폴리오미노 형태·방향·색과 선택한 Oshax 색.",
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "boats",
+      "name": "배·섬",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "배 격자·방/쥐/지도와 고양이 공급 구역.",
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "발견·레슨",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "공개 능력·개인 레슨·드래프트 손패.",
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "tokens",
+      "name": "생선·바구니·날짜",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "구매/구조 비용 자원과 라운드·순서.",
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "boat",
+        "name": "개인 배",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "tiles",
+          "boats"
+        ],
+        "anchor_contract": "배 셀·방·쥐/지도 인쇄층과 다중 셀 타일의 회전/반전·색 층.",
+        "description": "개인 배의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "island",
+        "name": "구조할 고양이·보물",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles",
+          "boats"
+        ],
+        "anchor_contract": "섬의 비용별 공급 구역·보물·Oshax 구별.",
+        "description": "구조할 고양이·보물의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "생선·바구니·공개 카드",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tokens",
+          "cards"
+        ],
+        "anchor_contract": "생선 잔액·사용 가능한 바구니·공개 능력/속도.",
+        "description": "생선·바구니·공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "레슨·드래프트 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "보유 레슨·현재 넘길 카드·구매 전 후보를 분리.",
+        "description": "레슨·드래프트 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "boat.scene",
+      "label": "개인 배",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "배 셀·방·쥐/지도 인쇄층과 다중 셀 타일의 회전/반전·색 층. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles",
+        "boats"
+      ],
+      "area_ids": [
+        "boat"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "island.scene",
+      "label": "구조할 고양이·보물",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "섬의 비용별 공급 구역·보물·Oshax 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles",
+        "boats"
+      ],
+      "area_ids": [
+        "island"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "생선·바구니·공개 카드",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "생선 잔액·사용 가능한 바구니·공개 능력/속도. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tokens",
+        "cards"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "레슨·드래프트 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "보유 레슨·현재 넘길 카드·구매 전 후보를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "day",
+      "label": "날짜·진행 단계",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "날짜와 낚시/드래프트/구조/희귀 발견 등 진행 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "lessons",
+      "label": "개인 레슨",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "자기가 확인한 목표만 기록; 점수 추정 강요 없음.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "oshax",
+      "label": "Oshax 지정 색",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "각 타일 인스턴스에 지정한 고양이 가족 색.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "카드 선택·전달/손패 구매/구조 순서·비용/타일 놓기/희귀 발견 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "placement",
+      "name": "연결 배치",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "첫 고양이와 이후 고양이의 접촉 조건이 다르므로 이미 놓인 타일 인스턴스를 보존한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "fish-basket",
+      "name": "구조 자원",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "고양이 구조에 바구니와 생선이 관련되며 같은 자원 하나로 합치지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "isle-of-cats.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "레슨·드래프트 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "보유 레슨·현재 넘길 카드·구매 전 후보를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "boat.scene",
+      "island.scene",
+      "player.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "뒷면 레슨·드래프트 카드, 미확인 Oshax 색을 그림 색으로 단정"
+    ],
+    "correction_targets": [
+      {
+        "id": "boat.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles",
+          "boats"
+        ],
+        "field_ids": [
+          "boat.scene"
+        ],
+        "area_ids": [
+          "boat"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "배 셀·방·쥐/지도 인쇄층과 다중 셀 타일의 회전/반전·색 층.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "island.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles",
+          "boats"
+        ],
+        "field_ids": [
+          "island.scene"
+        ],
+        "area_ids": [
+          "island"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "섬의 비용별 공급 구역·보물·Oshax 구별.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "tokens",
+          "cards"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "생선 잔액·사용 가능한 바구니·공개 능력/속도.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "보유 레슨·현재 넘길 카드·구매 전 후보를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "boat",
+      "island",
+      "player",
+      "hand"
+    ],
+    "editable_component_ids": [
+      "tiles",
+      "boats",
+      "cards",
+      "tokens"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "isle-of-cats.primary",
+      "title": "The Isle of Cats — 공식 자료",
+      "url": "https://thecityofkings.com/games/the-isle-of-cats/how-to-play/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 How to Play 검색 본문에서 5일·생선·드래프트/손패 구매·개인 lesson·바구니/생선 구조·첫 고양이와 후속 접촉·Oshax 색 선택 확인."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "표준 기본 모드. 가족/솔로는 같은 상자여도 다른 규칙 모드로 명시하고 확장 배·교훈 카드는 패치.",
+    "표준/가족 점수와 추가 카드 효과·공개 레슨의 처리 범위는 세부 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

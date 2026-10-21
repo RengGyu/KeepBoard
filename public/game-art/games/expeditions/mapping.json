@@ -1,0 +1,364 @@
+{
+  "game_id": "expeditions",
+  "name_ko": "익스페디션",
+  "name_en": "Expeditions",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "독립 게임;Ironclad 재질판은 중복 계수 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "expeditions.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/expeditions.json",
+  "source_sha256": "2f1cd6357d2342e8982554dc52a2ce17ad83262860d04c680c4fc1944dc8d961",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "tiles",
+      "name": "탐험 장소·타락",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "장소 ID·앞뒤·타락 표식과 연결.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "숲 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-forest"
+            }
+          ]
+        },
+        {
+          "name": "위험 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-skull",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "mechs",
+      "name": "메크·일꾼",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "메크 소유/위치와 카드에 배치한 색 일꾼.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "메크 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-mech"
+            }
+          ]
+        },
+        {
+          "name": "일꾼",
+          "layers": [
+            {
+              "asset_id": "common.worker"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "인물·퀘스트·아이템·운석",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "손패/플레이·강화/완료 등 실제 구역.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "목표 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-target",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "도구 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-wrench",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "석재 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-stone",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "markers",
+      "name": "파워·기지·돈·영광",
+      "kind": "token",
+      "source_confidence": "unclear",
+      "source_description": "서로 다른 수치와 완료 표식.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "map",
+      "name": "탐험 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "tiles",
+        "mechs"
+      ],
+      "anchor_contract": "타일 좌표·회전·공개/미탐험 면과 메크·타락 위치.",
+      "description": "탐험 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "cards",
+      "name": "공용 획득 카드",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "타일 사이 카드 공급 슬롯과 비어 있는 자리.",
+      "description": "공용 획득 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "메크판·강화",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "markers",
+        "mechs"
+      ],
+      "anchor_contract": "강화 아이템/운석/해결 퀘스트·일꾼 공급과 파워/기지 트랙.",
+      "description": "메크판·강화의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 카드 구역",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "현재 손패와 아직 공개하지 않은 선택. 공개 play구역은 별도 필드로 구분.",
+      "description": "개인 카드 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "component_id": "markers",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    }
+  ],
+  "area_preview": {
+    "name": "탐험 지도 · 구조 예시",
+    "area_id": "map",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "common.terrain-forest",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-mech",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

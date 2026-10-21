@@ -89,7 +89,8 @@ export function answerField(session: Session, pack: GamePack, fieldKey: string, 
   const previous = session.assertions.find(item => item.field === fieldKey && item.ownerId === ownerId && item.basis !== 'rule');
   session.assertions = session.assertions.filter(item => fieldId(item.field, item.ownerId) !== fieldId(fieldKey, ownerId));
   // A correction changes the value, while its photographed target stays linked.
-  if (value !== null) session.assertions.push({ id: randomUUID(), field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: previous?.evidenceIds || [], ...(previous?.region ? { region: previous.region } : {}), updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
+  const sceneEvidence = isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && Array.isArray(value.components) ? value.components.flatMap(raw => { const c = objectValue(raw); return typeof c.evidenceId === 'string' && session.evidence.some(e => e.id === c.evidenceId && (ownerId ? e.ownerId === ownerId || e.scope === 'public' : e.scope === 'public')) ? [c.evidenceId] : []; }) : [];
+  if (value !== null) session.assertions.push({ id: randomUUID(), field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: [...new Set([...(previous?.evidenceIds || []), ...sceneEvidence])], ...(previous?.region ? { region: previous.region } : {}), updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
 }
 
 export function recompute(session: Session, pack: GamePack): SessionView {
@@ -101,6 +102,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
     for (const rule of pack.derivedRules) {
       const owners = rule.scope === 'player' ? session.players.map(player => player.id) : [undefined];
       for (const ownerId of owners) {
+        if (pack.id === 'catan-base' && ['player.development.newActionCardUnavailableThisTurn','player.development.newVictoryPointCanBeRevealedToWin'].includes(rule.field) && facts.get(fieldId('player.development.boughtThisTurnType', ownerId))?.turnInstanceId !== session.turnInstanceId) continue;
         if (!evaluateCondition(rule.when, facts, ownerId)) continue;
         next.push({ id: `rule:${rule.id}:${ownerId ?? 'public'}`, field: rule.field, value: rule.value, ownerId, basis: 'rule', status: 'accepted', evidenceIds: conditionEvidence(rule.when, facts, ownerId), reason: rule.reason, turnInstanceId: session.turnInstanceId, updatedAt: session.updatedAt });
       }
@@ -111,8 +113,9 @@ export function recompute(session: Session, pack: GamePack): SessionView {
   }
   session.assertions = [...base, ...derived];
   const facts = currentFacts(session, pack, session.assertions);
-  const preservations: Preservation[] = [];
-  for (const template of pack.preservationTemplates) {
+  const simple = pack.id === 'catan-base' && session.recordingMode === 'simple';
+  const preservations: Preservation[] = simple ? session.preservations : [];
+  for (const template of simple ? [] : pack.preservationTemplates) {
     for (const ownerId of template.scope === 'player' ? session.players.map(player => player.id) : [undefined]) {
       if (!evaluateCondition(template.when, facts, ownerId)) continue;
       const id = `${ownerId ?? 'public'}:${template.id}`;
@@ -134,7 +137,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
     }
   }
   const required = new Map<string, SessionView['questions'][number]>();
-  for (const requirement of pack.requirements) {
+  for (const requirement of simple ? [] : pack.requirements) {
     for (const ownerId of requirement.scope === 'player' ? session.players.map(player => player.id) : [undefined]) {
       if (!evaluateCondition(requirement.when, facts, ownerId)) continue;
       for (const key of requirement.fields) {

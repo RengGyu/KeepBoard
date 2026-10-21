@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Camera, ImagePlus, Save, Users } from 'lucide-react';
+import { ArrowLeft, Camera, Hexagon, ImagePlus, LockKeyhole, Save, Users } from 'lucide-react';
 import type { AIStatus, Assertion, Evidence, SessionView, Value } from '../shared/types';
 import { confirmed } from '../shared/catanSummary';
 import { api, readPhoto } from './api';
@@ -13,16 +13,20 @@ import { addSavedScanEvidence, createScanBatch, finishScanBatch, type ScanBatch,
 import { createScanUploadQueue, SCAN_QUEUE_MAX_BYTES, type UploadSnapshot } from './scanUploads';
 import { recordScanTiming } from './scanTiming';
 import { SCAN_LIMIT } from './scanQuality';
-import { Busy, formatDate } from './ui';
+import { Busy, PlayerPiece, formatDate } from './ui';
+import { BoardEvent, CurrentTurnMark } from './BoardFeedback';
+import { BRAND_IMAGES } from './brandImages';
+import {PrivatePin} from './PrivatePin';
 import './correction-workspace.css';
 
 interface RunningCapture { batch: ScanBatch }
 interface GalleryTransfer { run: RunningCapture; uploads: ReturnType<typeof createScanUploadQueue<PhotoInput, Evidence>>; unread: File[]; snapshot: UploadSnapshot<Evidence>; phase: 'reading' | 'sending' | 'failed' }
 interface BatchReadout { context: ScanRunContext; evidenceIds: string[]; state: 'manual' | 'analyzing' | 'done' | 'failed'; error?: string }
 type SaveDraft = (() => Promise<void>) | null;
-export default function SessionWorkspace({ view, busy, status, mutate, onBack, ownerId, setOwnerId, onToast, onReadyToLeave }: { view: SessionView; busy: boolean; status: AIStatus | null; mutate: Mutate; onBack: () => void; ownerId?: string; setOwnerId: (id?: string) => void; onToast: (message: string) => void; onReadyToLeave?: (save: SaveDraft) => void }) {
+export default function SessionWorkspace({ view, busy, status, mutate, onBack, ownerId, setOwnerId, onToast, onReadyToLeave }: { view: SessionView; busy: boolean; status: AIStatus | null; mutate: Mutate; onBack: () => void; ownerId?: string; setOwnerId: (id?: string) => Promise<void>; onToast: (message: string) => void; onReadyToLeave?: (save: SaveDraft) => void }) {
   const { session } = view;
   const personalCatan = view.pack.id === 'catan-base' && !!ownerId;
+  const privateLocked=!!ownerId&&!!view.privacy?.protectedOwnerIds.includes(ownerId)&&!view.privacy?.unlockedOwnerIds.includes(ownerId);
   const [editingPlayers, setEditingPlayers] = useState(false);
   const [cameraRun, setCameraRun] = useState<RunningCapture | null>(null);
   const [lastScan, setLastScan] = useState<BatchReadout | null>(null);
@@ -40,6 +44,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     return () => { alive.current = false; galleryRef.current?.uploads.stop(); window.removeEventListener('beforeunload', unload); };
   }, []);
   const [working, setWorking] = useState(false);
+  const [saveFeedback, setSaveFeedback] = useState(0);
   const editorSave = useRef<SaveDraft>(null), contextSave = useRef<SaveDraft>(null), assetSave = useRef<SaveDraft>(null);
   const currentScreen = useRef({ sessionId: session.id, ownerId });
   currentScreen.current = { sessionId: session.id, ownerId };
@@ -47,8 +52,9 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const locked = busy || working || uploading || !!gallery;
   async function flush() { if (cameraRun || galleryRef.current) throw new Error('사진 전송을 마치거나 실패한 사진을 제외한 뒤 이동해 주세요.'); await editorSave.current?.(); await assetSave.current?.(); await contextSave.current?.(); }
   useEffect(() => { onReadyToLeave?.(flush); return () => onReadyToLeave?.(null); });
-  async function changeOwner(id?: string) { setWorking(true); try { await flush(); setOwnerId(id); } finally { setWorking(false); } }
-  async function saveBoard() { setWorking(true); try { await flush(); await mutate(() => api.commit(session.id, true), '저장했어요'); } finally { setWorking(false); } }
+  async function changeOwner(id?: string) { setWorking(true); try { await flush();await setOwnerId(id); } finally { setWorking(false); } }
+  async function saveBoard() { setWorking(true); try { await flush(); await mutate(() => api.commit(session.id, true), '저장했어요'); if (alive.current) setSaveFeedback(event => event + 1); } finally { setWorking(false); } }
+  async function startTurn(playerId: string) { setWorking(true); try { await flush(); await mutate(() => api.nextTurn(session.id, playerId), '새 차례를 시작했어요'); } finally { setWorking(false); } }
   function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture'): RunningCapture {
     setLastScan(null);
     return { batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: !!status?.configured }) };
@@ -132,17 +138,32 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     transfer.uploads.discardFailed(); transfer.unread = []; await finishGallery(transfer);
   }
 
+  const captureLabel = personalCatan ? '손패 스캔' : '판 스캔';
+  const uploadLabel = personalCatan ? '개인 사진 추가' : '사진 추가';
+  const savedLabel = snapshot ? `마지막 저장 ${formatDate(snapshot.createdAt)}` : '아직 저장 전';
+  const currentPlayer = confirmed(session, 'currentPlayer')?.value;
+  const hasPhotos = session.evidence.some(item => item.kind !== 'note' && (ownerId ? item.ownerId === ownerId : !item.ownerId));
   return <div className="correction-workspace">
-    <header className="correction-heading"><button className="icon-button" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={21}/></button><div><span className="eyebrow">{view.pack.title}</span><h1>{session.name}</h1></div><button className="button text small-button" disabled={locked} onClick={() => fire(flush().then(() => setEditingPlayers(true)))}><Users size={17}/>플레이어</button></header>
-    <div className="owner-tabs" role="tablist" aria-label="누구의 기록"><button role="tab" aria-selected={!ownerId} className={!ownerId ? 'active' : ''} disabled={locked} onClick={() => fire(changeOwner(undefined))}>공용 보드</button>{session.players.map(player => <button role="tab" key={player.id} aria-selected={ownerId === player.id} className={ownerId === player.id ? 'active' : ''} disabled={locked} onClick={() => fire(changeOwner(player.id))}><span className="player-dot" style={{ background: player.color }}/>{player.name}</button>)}</div>
-      <div className="quick-capture"><button className="button primary" disabled={locked} onClick={() => fire(flush().then(() => openCamera()))}><Camera size={17}/>{personalCatan ? '손패 스캔' : '판 스캔'}</button><button className="button secondary" disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={17}/>{personalCatan ? '개인 사진 추가' : '사진 추가'}</button><span>{personalCatan ? '내 카드와 비공개 자료를 남겨요.' : '사진에서 읽고, 그림에서 고쳐요.'}</span></div>
-      {gallery && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
-      {lastScan && lastScan.context.ownerId === ownerId && <p role="status" className="scan-readout">{lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? '사진은 남아 있어요. 다시 읽거나 직접 고칠 수 있어요.' : lastScan.state === 'manual' ? personalCatan ? '개인 사진을 추가했어요. 보유 수량을 확인해 주세요.' : '사진을 추가했어요. 그림에 부품을 놓아 주세요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => void analyzeBatch(lastScan)}>다시 읽기</button>}</p>}
-      {personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
-      <SceneWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>
-      {!personalCatan && <CatanOverview key={`assets:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
-    <QuickContext key={ownerId || 'public'} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { contextSave.current = save; }}/>
-    <footer className="quick-save"><p>{snapshot ? `마지막 저장 ${formatDate(snapshot.createdAt)}` : '모르는 내용은 비워둬도 괜찮아요.'}</p><button className="button primary" disabled={locked} onClick={() => fire(saveBoard())}><Save size={17}/>저장</button></footer>
+    <header className="correction-heading"><button className="icon-button cw-back" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={22}/></button><div className="cw-title"><h1>{session.name}</h1><p>{view.pack.title} · {session.players.length}명 · {savedLabel}</p></div>
+      <div className="cw-actions">{!privateLocked && <><button className="button secondary small-button" aria-label={captureLabel} disabled={locked} onClick={() => fire(flush().then(() => openCamera()))}><Camera size={18}/><span>{captureLabel}</span></button><button className="button secondary small-button" aria-label={uploadLabel} disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/><span>{uploadLabel}</span></button></>}<button className="button secondary small-button" aria-label="플레이어 이름과 색" disabled={locked} onClick={() => fire(flush().then(() => setEditingPlayers(true)))}><Users size={18}/><span>플레이어</span></button><button className="button primary small-button cw-save-top" disabled={locked} onClick={() => fire(saveBoard())}><Save size={18}/>저장</button></div>
+    </header>
+    {saveFeedback > 0 && <BoardEvent key={saveFeedback} kind="save"/>}
+    <div className="owner-tabs" role="tablist" aria-label="누구의 기록"><button role="tab" aria-selected={!ownerId} className={!ownerId ? 'active' : ''} disabled={locked} onClick={() => fire(changeOwner(undefined))}><Hexagon size={16}/>공용 보드</button>{session.players.map(player => <button role="tab" key={player.id} aria-selected={ownerId === player.id} className={ownerId === player.id ? 'active' : ''} disabled={locked} onClick={() => fire(changeOwner(player.id))}><PlayerPiece color={player.color} game={view.pack.id} size={24}/>{player.name}{currentPlayer === player.id && <CurrentTurnMark/>}{view.privacy?.protectedOwnerIds.includes(player.id) && <LockKeyhole size={13} aria-label="비밀번호 보호"/>}</button>)}</div>
+    {ownerId&&<PrivatePin key={`${ownerId}:${privateLocked}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} beforeChange={flush}/>}
+    {!privateLocked&&<div className="cw-grid">
+      <div className="cw-main">
+        {gallery && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
+        {lastScan && lastScan.context.ownerId === ownerId && <p role="status" className={`scan-readout ${lastScan.state}`}>{lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? '사진은 남아 있어요. 다시 읽거나 직접 고칠 수 있어요.' : lastScan.state === 'manual' ? personalCatan ? '개인 사진을 추가했어요. 보유 수량을 확인해 주세요.' : '사진을 추가했어요. 그림에 부품을 놓아 주세요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => void analyzeBatch(lastScan)}>다시 읽기</button>}</p>}
+        {!hasPhotos && !gallery && !cameraRun && <section className="capture-start" aria-label="첫 사진 찍기"><img src={BRAND_IMAGES.captureGuide} alt="" width={900} height={900} loading="lazy" decoding="async"/><div><h2>{personalCatan ? '내 카드를 한 장 찍어 두세요' : '판을 위에서 한 장 찍어 주세요'}</h2><p>{personalCatan ? '손패와 개인 자료는 나만 보는 기록으로 남아요.' : '휴대폰을 판과 평행하게 들고 전체가 들어오게 찍으면, 그림으로 바꿔 고칠 수 있어요.'}</p><div className="button-row"><button className="button primary" disabled={locked} onClick={() => fire(flush().then(() => openCamera()))}><Camera size={18}/>{captureLabel}</button><button className="button secondary" disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/>{uploadLabel}</button></div></div></section>}
+        {personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
+        <SceneWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>
+      </div>
+      <aside className="cw-side" aria-label="차례와 메모">
+        <QuickContext onStartTurn={id => fire(startTurn(id))} key={ownerId || 'public'} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { contextSave.current = save; }}/>
+        {!personalCatan && <CatanOverview key={`assets:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
+      </aside>
+    </div>}
+    <footer className="quick-save"><p>{snapshot ? savedLabel : '모르는 내용은 비워둬도 괜찮아요.'}</p><button className="button primary" disabled={locked} onClick={() => fire(saveBoard())}><Save size={18}/>저장</button></footer>
     {editingPlayers && <PlayersDialog players={session.players} onClose={() => setEditingPlayers(false)} onSave={players => mutate(() => api.update(session.id, { players }), '플레이어 이름과 색을 바꿨어요')}/>}
 
     <input hidden ref={upload} type="file" accept="image/*" multiple onChange={async event => {
@@ -163,7 +184,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   </div>;
 }
 
-function QuickContext({ view, ownerId, busy, mutate, onReadyToSave }: { view: SessionView; ownerId?: string; busy: boolean; mutate: Mutate; onReadyToSave: (save: SaveDraft) => void }) {
+function QuickContext({ view, ownerId, busy, mutate, onReadyToSave, onStartTurn }: { onStartTurn: (id: string) => void; view: SessionView; ownerId?: string; busy: boolean; mutate: Mutate; onReadyToSave: (save: SaveDraft) => void }) {
   const { session, pack } = view;
   const current = String(confirmed(session, 'currentPlayer')?.value ?? '');
   const currentPhase = String(confirmed(session, 'turn.phase')?.value ?? '');
@@ -178,5 +199,5 @@ function QuickContext({ view, ownerId, busy, mutate, onReadyToSave }: { view: Se
     if (!ownerId && phase !== currentPhase) answers.push({ field: 'turn.phase', value: phase || null });
     await mutate(() => api.update(session.id, { answers, ...(note !== savedNote ? { notes: { [ownerId || 'public']: note } } : {}) })); edits.current = { player: false, phase: false, note: false };
   } : null); return () => onReadyToSave(null); });
-  return <section className="quick-context"><h3>{ownerId ? '내 메모' : '차례·메모'}</h3>{!ownerId && <div className="two-columns"><div inert={busy}><OwnerColors label="누구 차례인가요?" players={session.players} value={player || null} onChange={id => { edits.current.player = true; setPlayer(id || ''); }}/></div><label>어디까지 했나요?<select value={phase} disabled={busy} onChange={event => { edits.current.phase = true; setPhase(event.target.value); }}><option value="">모름 / 메모로 남기기</option>{pack.fields.find(f => f.key === 'turn.phase')?.options?.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label></div>}<label>짧은 메모 <span className="muted">선택</span><textarea rows={2} value={note} disabled={busy} onChange={event => { edits.current.note = true; setNote(event.target.value); }} placeholder={ownerId ? '내 카드나 이어갈 때 필요한 개인 메모' : '예: 파랑이 자원 받을 차례. 카드는 작은 봉투에.'}/></label></section>;
+  return <section className="quick-context"><h3>{ownerId ? '내 메모' : '차례·메모'}</h3>{!ownerId && <div className="two-columns"><div inert={busy}><OwnerColors label="누구 차례인가요?" game={pack.id} players={session.players} value={player || null} onChange={id => { edits.current.player = true; setPlayer(id || ''); }}/></div><label>어디까지 했나요?<select value={phase} disabled={busy} onChange={event => { edits.current.phase = true; setPhase(event.target.value); }}><option value="">모름 / 메모로 남기기</option>{pack.fields.find(f => f.key === 'turn.phase')?.options?.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label></div>}{!ownerId && pack.id === 'catan-base' && <button className="button text small-button" disabled={busy || !player} onClick={() => onStartTurn(player)}>새 차례 시작</button>}<label>짧은 메모 <span className="muted">선택</span><textarea rows={2} value={note} disabled={busy} onChange={event => { edits.current.note = true; setNote(event.target.value); }} placeholder={ownerId ? '내 카드나 이어갈 때 필요한 개인 메모' : '예: 파랑이 자원 받을 차례. 카드는 작은 봉투에.'}/></label></section>;
 }

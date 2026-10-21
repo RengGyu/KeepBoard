@@ -1,0 +1,404 @@
+{
+  "game_id": "robinson-crusoe",
+  "name_ko": "로빈슨 크루소: 저주받은 섬의 모험",
+  "name_en": "Robinson Crusoe: Adventures on the Cursed Island",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판 모드",
+    "compatibility_notes": [
+      "Collector 번들 추가 시나리오/확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "robinson-crusoe.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/robinson-crusoe.json",
+  "source_sha256": "5b9bccc6f6765ee2787939c3afd1b423ff2499f6e51711ef7757f512175c6fb5",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "island",
+      "name": "섬·탐험 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "발견한 타일과 캠프, 미공개 탐험 더미.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "숲 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-forest"
+            }
+          ]
+        },
+        {
+          "name": "물 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-water"
+            }
+          ]
+        },
+        {
+          "name": "산 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-mountain"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "pawns",
+      "name": "인물·행동 말",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "행동별 할당 말과 캠프 밖 인물.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "말",
+          "layers": [
+            {
+              "asset_id": "common.pawn"
+            }
+          ]
+        },
+        {
+          "name": "일꾼",
+          "layers": [
+            {
+              "asset_id": "common.worker"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "goods",
+      "name": "자원·결의·상태",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "사용 가능/향후 자원과 개인 체력·결의.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "목재 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-wood",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "생선 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-fish",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "체력 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-heart",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "사건·발명·모험",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "사건 대기줄·발명 상태·해결/미해결 카드.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "책 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-book",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "도구 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-wrench",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "야영지 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-tent",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    }
+  ],
+  "areas": [
+    {
+      "id": "island-map",
+      "name": "섬과 캠프",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "island",
+        "pawns"
+      ],
+      "anchor_contract": "타일 이웃·회전·캠프 위치·각 인물 위치.",
+      "description": "섬과 캠프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "actions",
+      "name": "행동 할당",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "pawns",
+        "cards"
+      ],
+      "anchor_contract": "행동 종류·대상·할당 말·아직 해결 안 된 선택.",
+      "description": "행동 할당의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "camp",
+      "name": "캠프·공용 자원",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "goods",
+        "cards"
+      ],
+      "anchor_contract": "가용/향후 자원, 지붕/울타리/무기/도구를 다른 구역으로 둔다.",
+      "description": "캠프·공용 자원의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "character",
+      "name": "인물판",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "goods",
+        "pawns"
+      ],
+      "anchor_contract": "체력·결의·사용한 능력, 인물 특성.",
+      "description": "인물판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "사건·모험 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "시나리오용 덱/버림/되돌려 넣은 카드 묶음의 물리 순서.",
+      "description": "사건·모험 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "섬과 캠프 · 구조 예시",
+    "area_id": "island-map",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "common.terrain-forest",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.pawn",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

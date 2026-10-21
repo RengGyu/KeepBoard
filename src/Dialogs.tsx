@@ -4,6 +4,7 @@ import type { GamePack, Player, SessionView } from '../shared/types';
 import { DEFAULT_PLAYERS, observedColorCSS } from '../shared/playerColors';
 import { api } from './api';
 import { Busy, Modal } from './ui';
+import {ArtLibrary} from './ArtLibrary';
 
 export function CreateDialog({ packs, onClose, onCreated }: { packs: GamePack[]; onClose: () => void; onCreated: (view: SessionView) => void }) {
   const [name, setName] = useState('');
@@ -36,5 +37,6 @@ export function PlayersDialog({ players, onClose, onSave }: { players: Player[];
 }
 
 export function LibraryDialog({ packs, onClose }: { packs: GamePack[]; onClose: () => void; onChanged: () => Promise<void> }) {
-  return <Modal title="게임" onClose={onClose}><div className="modal-body"><div className="pack-list">{packs.map(pack => <div key={pack.id}><h3>{pack.title}</h3><p className="muted">{pack.edition}</p></div>)}</div></div></Modal>;
+  const [art,setArt]=useState(false);
+  return <Modal title="게임" onClose={onClose} wide><div className="modal-body"><div className="art-library-tabs" role="tablist" aria-label="게임 메뉴"><button role="tab" aria-selected={!art} className={!art?'active':''} onClick={()=>setArt(false)}>기록할 게임</button><button role="tab" aria-selected={art} className={art?'active':''} onClick={()=>setArt(true)}>구성물 보기 · 120종</button></div>{art?<ArtLibrary/>:<><p className="small muted">현재 앱에서 판을 기록할 수 있는 게임이에요.</p><div className="pack-list">{packs.map(pack => <div key={pack.id}><h3>{pack.title}</h3><p className="muted">{pack.edition}</p></div>)}</div></>}</div></Modal>;
 }

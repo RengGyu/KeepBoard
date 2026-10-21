@@ -1,0 +1,362 @@
+{
+  "game_id": "space-base",
+  "name_ko": "스페이스 베이스",
+  "name_en": "Space Base",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Command Station 등 추가 콘텐츠 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "space-base.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/space-base.json",
+  "source_sha256": "5d865c7489f544472b9ceb7029675d338fb65f0e025f3816318f3c9504482def",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "ships",
+      "name": "함선·식민지 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "중첩 능력 함선 카드",
+          "layers": [
+            {
+              "asset_id": "space-base.ships.sector-ship-card"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "markers",
+      "name": "크레딧·수입·승점·충전",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "개인 트랙과 카드별 충전.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "별 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "에너지 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-bolt",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "dice",
+      "name": "주사위",
+      "kind": "die",
+      "source_confidence": "reported",
+      "source_description": "현재 개별 눈·합과 능력 변경.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "눈 1 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-1"
+            }
+          ],
+          "example_face": 1
+        },
+        {
+          "name": "눈 2 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-2"
+            }
+          ],
+          "example_face": 2
+        },
+        {
+          "name": "눈 3 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-3"
+            }
+          ],
+          "example_face": 3
+        },
+        {
+          "name": "눈 4 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-4"
+            }
+          ],
+          "example_face": 4
+        },
+        {
+          "name": "눈 5 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-5"
+            }
+          ],
+          "example_face": 5
+        },
+        {
+          "name": "눈 6 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-6"
+            }
+          ],
+          "example_face": 6
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "sectors",
+      "name": "개인 섹터",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "ships",
+        "markers"
+      ],
+      "anchor_contract": "섹터별 정박 카드와 위로 배치한 카드 묶음·방향·노출 능력·충전 부착.",
+      "description": "개인 섹터의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "조선소·식민지",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "레벨별 공개 구매 카드·식민지·보충 전 빈자리.",
+      "description": "조선소·식민지의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "tracks",
+      "name": "개인 자원 트랙",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "markers"
+      ],
+      "anchor_contract": "크레딧/수입/승점은 서로 다른 트랙 ID.",
+      "description": "개인 자원 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "roll",
+      "name": "공용 굴림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dice"
+      ],
+      "anchor_contract": "현재 주사위 눈과 합, 능력 수정 여부.",
+      "description": "공용 굴림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "레벨별 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "레벨별 미공개 덱 순서와 버림 구별.",
+      "description": "레벨별 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 섹터 · 구조 예시",
+    "area_id": "sectors",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "space-base.ships.sector-ship-card",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.token-shell",
+        "transform": "translate(63 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-coin",
+        "transform": "translate(63 29) scale(.36) translate(30 30) scale(.5)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

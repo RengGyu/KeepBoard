@@ -1,0 +1,527 @@
+{
+  "schema_version": "1.0",
+  "game_id": "skull",
+  "name_ko": "스컬",
+  "name_en": "Skull",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "가려진 스택 내부는 추정 금지",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "skull.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "discs",
+      "name": "꽃·해골 디스크",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "소유자·정체·개인 손/쌓은 위치·제거 상태.",
+      "source_refs": [
+        "skull.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "mats",
+      "name": "개인 매트·Last Chance",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "성공 면·생존 상태와 현행 선택 규칙 표식.",
+      "source_refs": [
+        "skull.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "stacks",
+        "name": "공개 뒷면 더미",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "discs"
+        ],
+        "anchor_contract": "플레이어별 놓은 수·맨 위 순서·공개 면만. 미공개 정체는 별도.",
+        "description": "공개 뒷면 더미의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "개인 디스크 정체",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "discs"
+        ],
+        "anchor_contract": "손과 자신이 놓은 순서의 정체 대응. 상대 더미를 추론해 채우지 않는다.",
+        "description": "개인 디스크 정체의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "mats",
+        "name": "성공·남은 디스크",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "mats"
+        ],
+        "anchor_contract": "매트 면·남은 디스크 수와 탈락 상태.",
+        "description": "성공·남은 디스크의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "stacks.scene",
+      "label": "공개 뒷면 더미",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "플레이어별 놓은 수·맨 위 순서·공개 면만. 미공개 정체는 별도. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "discs"
+      ],
+      "area_ids": [
+        "stacks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "개인 디스크 정체",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "손과 자신이 놓은 순서의 정체 대응. 상대 더미를 추론해 채우지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "discs"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "mats.scene",
+      "label": "성공·남은 디스크",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "매트 면·남은 디스크 수와 탈락 상태. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "mats"
+      ],
+      "area_ids": [
+        "mats"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "bid",
+      "label": "도전 수·참가자",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 최고 선언·선언자·패스한 참가자.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "reveals",
+      "label": "뒤집기 진행",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "목표 수·지금까지 뒤집은 순서와 결과·다음 선택 대기.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "removed",
+      "label": "내 제거 디스크",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "제거된 정체를 본 경우만 기록. 공개 여부는 판본/상황 확인.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "디스크 놓기/입찰·패스/디스크 뒤집기/성공 또는 손실 처리 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "place-challenge",
+      "name": "놓기 또는 도전",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "뒷면 디스크를 놓거나 뒤집을 수를 선언하는 선택이 있다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "skull.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "skull",
+      "name": "해골 위험",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "도전은 해골을 피하며 선언 수를 뒤집는 것을 목표로 한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "skull.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "stacks.preserve",
+        "label": "공개 뒷면 더미 보존(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "stacks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "플레이어별 놓은 수·맨 위 순서·공개 면만. 미공개 정체는 별도.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private.preserve",
+        "label": "개인 디스크 정체 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "손과 자신이 놓은 순서의 정체 대응. 상대 더미를 추론해 채우지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "stacks.scene",
+      "mats.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "뒷면 더미 정체와 제거된 디스크, 사진만으로 최고 입찰 이력"
+    ],
+    "correction_targets": [
+      {
+        "id": "stacks.edit",
+        "scope": "player",
+        "component_ids": [
+          "discs"
+        ],
+        "field_ids": [
+          "stacks.scene"
+        ],
+        "area_ids": [
+          "stacks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "플레이어별 놓은 수·맨 위 순서·공개 면만. 미공개 정체는 별도.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "discs"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "손과 자신이 놓은 순서의 정체 대응. 상대 더미를 추론해 채우지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "mats.edit",
+        "scope": "player",
+        "component_ids": [
+          "mats"
+        ],
+        "field_ids": [
+          "mats.scene"
+        ],
+        "area_ids": [
+          "mats"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "매트 면·남은 디스크 수와 탈락 상태.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "stacks",
+      "private",
+      "mats"
+    ],
+    "editable_component_ids": [
+      "discs",
+      "mats"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "skull.primary",
+      "title": "Skull — 공식 자료",
+      "url": "https://www.spacecowboys-games.com/game/skull/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 현행 소개에서 개인 꽃/해골 디스크·뒷면 쌓기 또는 도전, 해골 없이 선언 수만큼 뒤집는 구조와 Last Chance 디스크 포함 확인. 개정 Last Chance 절차는 미대조."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "현행 기본판에 Last Chance 디스크가 표시된다. 구판과 그 규칙 차이를 별도 옵션으로 남긴다.",
+    "자기 더미 우선 공개·실패 제거 선택·승리 횟수·Last Chance 개정 세부는 원문 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

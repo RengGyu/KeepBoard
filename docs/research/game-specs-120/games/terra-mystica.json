@@ -1,0 +1,557 @@
+{
+  "schema_version": "1.0",
+  "game_id": "terra-mystica",
+  "name_ko": "테라 미스티카",
+  "name_en": "Terra Mystica",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Fire and Ice 등 확장 제외;현행 페이지 품절은 단종 확정 아님",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "terra-mystica.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "terrain",
+      "name": "지형 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "실제 변환된 지형과 인쇄 기본 지형.",
+      "source_refs": [
+        "terra-mystica.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "buildings",
+      "name": "건물·다리",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "종류·소유자, 다리 양 끝.",
+      "source_refs": [
+        "terra-mystica.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "resources",
+      "name": "일꾼·돈·성직자·파워",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "서로 다른 공급과 파워 그릇.",
+      "source_refs": [
+        "terra-mystica.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "tiles",
+      "name": "도시·호의·보너스",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "도시 타일",
+        "호의 타일",
+        "보너스 두루마리"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "terra-mystica.art-confirmation.terra-mystica-rules"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "map",
+        "name": "지형 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "terrain",
+          "buildings"
+        ],
+        "anchor_contract": "지형 셀, 건물층과 강을 건너는 다리의 양 끝. 직접/항해 연결을 구별.",
+        "description": "지형 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "faction",
+        "name": "세력판·자원",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "buildings",
+          "resources",
+          "tiles"
+        ],
+        "anchor_contract": "건물 공급, 파워 세 그릇, 기술·보너스.",
+        "description": "세력판·자원의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "cults",
+        "name": "종교·득점 트랙",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "resources",
+          "tiles"
+        ],
+        "anchor_contract": "각 종교 위치와 투입 성직자, 라운드 점수 목표.",
+        "description": "종교·득점 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "map.scene",
+      "label": "지형 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "지형 셀, 건물층과 강을 건너는 다리의 양 끝. 직접/항해 연결을 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "terrain",
+        "buildings"
+      ],
+      "area_ids": [
+        "map"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "faction.scene",
+      "label": "세력판·자원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "건물 공급, 파워 세 그릇, 기술·보너스. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "buildings",
+        "resources",
+        "tiles"
+      ],
+      "area_ids": [
+        "faction"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "cults.scene",
+      "label": "종교·득점 트랙",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "각 종교 위치와 투입 성직자, 라운드 점수 목표. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "resources",
+        "tiles"
+      ],
+      "area_ids": [
+        "cults"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "resources",
+      "label": "보유 자원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "돈/일꾼/성직자와 파워 분포를 독립 보존.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "skills",
+      "label": "항해·테라포밍",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "세력별 트랙값과 특수 행동 사용 표시.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "라운드·패스",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "패스 여부·현재 보너스·선 플레이어.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "지형 변경/건설/인접 파워 수령 응답/도시 보상/라운드 정산 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "upgrade",
+      "name": "건물 변화",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "건물 업그레이드는 생산과 세력 능력에 영향을 준다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "terra-mystica.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "public",
+      "name": "공개 정보",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "공식 소개가 완전 공개 정보 게임이라고 명시하므로 임의 비밀 손패를 요구하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "terra-mystica.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "map.scene",
+      "faction.scene",
+      "cults.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "미확인 도시 묶음과 과거 파워 수령, 건물만으로 남은 자원 계산"
+    ],
+    "correction_targets": [
+      {
+        "id": "map.edit",
+        "scope": "public",
+        "component_ids": [
+          "terrain",
+          "buildings"
+        ],
+        "field_ids": [
+          "map.scene"
+        ],
+        "area_ids": [
+          "map"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "지형 셀, 건물층과 강을 건너는 다리의 양 끝. 직접/항해 연결을 구별.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "faction.edit",
+        "scope": "player",
+        "component_ids": [
+          "buildings",
+          "resources",
+          "tiles"
+        ],
+        "field_ids": [
+          "faction.scene"
+        ],
+        "area_ids": [
+          "faction"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "건물 공급, 파워 세 그릇, 기술·보너스.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "cults.edit",
+        "scope": "public",
+        "component_ids": [
+          "resources",
+          "tiles"
+        ],
+        "field_ids": [
+          "cults.scene"
+        ],
+        "area_ids": [
+          "cults"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "각 종교 위치와 투입 성직자, 라운드 점수 목표.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "map",
+      "faction",
+      "cults"
+    ],
+    "editable_component_ids": [
+      "terrain",
+      "buildings",
+      "resources",
+      "tiles"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "terra-mystica.primary",
+      "title": "Terra Mystica — 공식 자료",
+      "url": "https://capstone-games.com/products/terra-mystica",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 본문에서 세력별 지형 변환, 주거→교역소→성채/사원→성소, 일꾼·돈·성직자·항해/테라포밍, 네 종교 트랙과 공개 정보 게임 확인."
+    },
+    {
+      "id": "terra-mystica.art-confirmation.terra-mystica-rules",
+      "title": "Terra Mystica Capstone base — English Rules",
+      "url": "https://capstone-games.com/cdn/shop/files/EN_terra_mystica_rules-3rd_CG_web.pdf?v=15200505769140123159",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "p.3 Components; pp.6–7 Setup; pp.12–15 Special Actions/Town/Passing — 도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Fire & Ice/Merchants 등의 새 세력·지도·선박은 패치. 기본판 전체와 Big Box 포함 모듈 구분.",
+    "세력별 예외·도시 조건·파워 순환·업데이트 시작 점수는 전체 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

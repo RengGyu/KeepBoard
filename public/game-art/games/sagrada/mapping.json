@@ -1,0 +1,396 @@
+{
+  "game_id": "sagrada",
+  "name_ko": "사그라다",
+  "name_en": "Sagrada",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "확장 제외;작은 주사위 눈금 인식 미검증",
+      "공식 링크는 원4인 기본 규칙이다. 2026 상품의 Remastered/Deluxe와 구성·규칙 호환은 확인되지 않았다."
+    ],
+    "source_refs": [
+      "sagrada.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/sagrada.json",
+  "source_sha256": "032ce9983e00a70ab8ae63bc1278757a296b3fde465ff7a88c5ac9bbdd5be6a9",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "dice",
+      "name": "색 주사위",
+      "kind": "die",
+      "source_confidence": "reported",
+      "source_description": "주사위 색·윗면 값·창문/공급/라운드 위치.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "눈 1 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-1"
+            }
+          ],
+          "example_face": 1
+        },
+        {
+          "name": "눈 2 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-2"
+            }
+          ],
+          "example_face": 2
+        },
+        {
+          "name": "눈 3 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-3"
+            }
+          ],
+          "example_face": 3
+        },
+        {
+          "name": "눈 4 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-4"
+            }
+          ],
+          "example_face": 4
+        },
+        {
+          "name": "눈 5 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-5"
+            }
+          ],
+          "example_face": 5
+        },
+        {
+          "name": "눈 6 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-6"
+            }
+          ],
+          "example_face": 6
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "windows",
+      "name": "창문판·패턴",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "선택 패턴 면·셀 색/숫자 인쇄 제약.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "색·숫자 창문 예시",
+          "layers": [
+            {
+              "asset_id": "sagrada.windows.stained-window"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "도구·목표",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "공개 도구·공개 목표·비공개 개인 목표.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "도구 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-wrench",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "목표 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-target",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "tokens",
+      "name": "은총·점수",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "남은 은총과 도구 위 지불 토큰.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "별 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "window",
+      "name": "개인 창문",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "dice",
+        "windows"
+      ],
+      "anchor_contract": "창문 행열 기준 패턴 층과 놓인 주사위 색/눈 층. 회전사진 기준을 고정.",
+      "description": "개인 창문의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "draft",
+      "name": "현재 주사위 공급",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dice"
+      ],
+      "anchor_contract": "이번 라운드 드래프트 풀의 개별 색/눈과 선택 중 주사위.",
+      "description": "현재 주사위 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "round-track",
+      "name": "라운드 잔여 주사위",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "dice"
+      ],
+      "anchor_contract": "라운드별 남은 주사위 묶음; 현재 풀과 분리.",
+      "description": "라운드 잔여 주사위의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "tools",
+      "name": "도구·공개 목표",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "도구 ID·올려놓은 은총·공개 목표.",
+      "description": "도구·공개 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "private",
+      "name": "개인 목표",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "자기 비공개 목표와 확인 점수만.",
+      "description": "개인 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 창문 · 구조 예시",
+    "area_id": "window",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "common.die-1",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "sagrada.windows.stained-window",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

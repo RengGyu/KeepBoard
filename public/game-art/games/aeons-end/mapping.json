@@ -1,0 +1,476 @@
+{
+  "game_id": "aeons-end",
+  "name_ko": "에이언즈 엔드",
+  "name_en": "Aeon’s End",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "기본 상자만;덱 내부 순서는 선택 수동 기록/물리 유지 필요",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "aeons-end.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/aeons-end.json",
+  "source_sha256": "d19d4feee320dcec4204f49672f8d43e4d45d586378066cbe01208b24dff6df3",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "mages",
+      "name": "마법사·균열",
+      "kind": "board",
+      "source_confidence": "unclear",
+      "source_description": "인물ID·체력·능력 충전·균열의 번호/회전/개방과 준비 주문.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "player-cards",
+      "name": "보석·유물·주문",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "손패·플레이 영역·준비 주문·개인 덱/버림의 순서.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "보석 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gem",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "보물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-treasure",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "불꽃 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-flame",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "nemesis",
+      "name": "네메시스·적 카드",
+      "kind": "card",
+      "source_confidence": "unclear",
+      "source_description": "선택 네메시스·체력·미니언/파워·특수 상태.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.unknown"
+        }
+      ]
+    },
+    {
+      "component_id": "turn-order",
+      "name": "차례 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "플레이어/네메시스 차례의 현재 공개 카드·덱/버림.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "시간 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-hourglass",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "counters",
+      "name": "체력·충전·진행",
+      "kind": "token",
+      "source_confidence": "unclear",
+      "source_description": "Gravehold·인물·적 체력과 카드별 표식.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "mages",
+      "name": "마법사·균열",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "mages",
+        "player-cards",
+        "counters"
+      ],
+      "anchor_contract": "인물·균열ID와 현재 회전/개방·준비 주문의 부모 균열·능력 충전.",
+      "description": "마법사·균열의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "player-cards"
+      ],
+      "anchor_contract": "현재 손패와 선택 중 카드. 협력 공개 정책은 선택 판본/그룹 합의로 조정 가능.",
+      "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "draw",
+      "name": "개인 덱",
+      "scope": "player",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "player-cards"
+      ],
+      "anchor_contract": "덱 위/아래 방향과 실제 묶음을 유지. 내용 미확인인 순서는 펼쳐 수집하지 않는다.",
+      "description": "개인 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "discard",
+      "name": "개인 버림·사용 영역",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "player-cards"
+      ],
+      "anchor_contract": "버림 순서·현재 플레이한 보석/유물·아직 버리지 않은 카드를 분리. 뒤집어 덱이 될 때 순서를 새로 섞지 않는 기록 제안.",
+      "description": "개인 버림·사용 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "공용 시장",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "player-cards"
+      ],
+      "anchor_contract": "종류별 공급 카드ID·남은 장수·획득/소멸 대기.",
+      "description": "공용 시장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "enemy",
+      "name": "네메시스·도시",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "nemesis",
+        "counters"
+      ],
+      "anchor_contract": "네메시스/Gravehold 체력·미니언별 체력·파워 카드 남은 카운트·고유 표식.",
+      "description": "네메시스·도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "차례·네메시스 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "turn-order",
+        "nemesis"
+      ],
+      "anchor_contract": "개인 덱과 구분된 차례 덱/버림·현재 공개 차례, 네메시스 덱/버림의 구역.",
+      "description": "차례·네메시스 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "component_id": "mages",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    },
+    {
+      "component_id": "nemesis",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    },
+    {
+      "component_id": "counters",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    }
+  ],
+  "area_preview": {
+    "name": "마법사·균열 · 구조 예시",
+    "area_id": "mages",
+    "layers": [
+      {
+        "asset_id": "common.area-zone"
+      },
+      {
+        "asset_id": "common.card-shell",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-gem",
+        "transform": "translate(15 29) scale(.36) translate(28 23) scale(.55)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "zone",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

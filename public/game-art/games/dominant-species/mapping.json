@@ -1,0 +1,392 @@
+{
+  "game_id": "dominant-species",
+  "name_ko": "도미넌트 스피시즈",
+  "name_en": "Dominant Species",
+  "edition": {
+    "id": "base",
+    "name": "원작 기본판",
+    "compatibility_notes": [
+      "Marine은 독립작이며 이번 목록 미계수",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "dominant-species.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/dominant-species.json",
+  "source_sha256": "b82e6492d414b5032bd5784dedf5a8d51ee451afd285bc1fabf964a191bd0fe8",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "earth",
+      "name": "지형·툰드라",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "확장되는 육각 지형과 툰드라 덮개.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "숲 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-forest"
+            }
+          ]
+        },
+        {
+          "name": "산 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-mountain"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "animals",
+      "name": "종 말·지배 원뿔",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "종의 개체 수와 지배 판정을 서로 다른 말로 기록.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "큐브",
+          "layers": [
+            {
+              "asset_id": "common.cube"
+            }
+          ]
+        },
+        {
+          "name": "원뿔",
+          "layers": [
+            {
+              "asset_id": "common.cone"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "elements",
+      "name": "원소 원반",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "동물판 및 여러 지형이 공유하는 접점의 원소.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "물 지형 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-water",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "곡물 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-grain",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "sun 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-sun",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "씨앗 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-seed",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "actions",
+      "name": "행동 말·지배 카드",
+      "kind": "piece",
+      "source_confidence": "verified",
+      "source_description": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "행동 원기둥",
+          "layers": [
+            {
+              "asset_id": "common.cylinder"
+            }
+          ]
+        },
+        {
+          "name": "지배 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-leaf",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "mixed; cylinder player color, card fixed",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "dominant-species.art-confirmation.dominant-species-primary"
+      ],
+      "source_location": "pp.2–3 Components/Glossary; pp.8–9 Action Display; pp.18–19 Dominance Cards"
+    }
+  ],
+  "areas": [
+    {
+      "id": "earth",
+      "name": "지형·접점 원소",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "earth",
+        "animals",
+        "elements"
+      ],
+      "anchor_contract": "육각 좌표·툰드라 부모 타일·접점 원소의 공유 vertex ID·지형별 동물 종류/개체 수/지배 원뿔.",
+      "description": "지형·접점 원소의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "animal",
+      "name": "동물판",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "elements",
+        "animals"
+      ],
+      "anchor_contract": "동물 종류·적응 원소 슬롯과 종 말의 미사용/제거 구역.",
+      "description": "동물판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "actions",
+      "name": "행동 화면",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "actions"
+      ],
+      "anchor_contract": "행동 종류·해결 순서의 칸별 말 소유자와 이미 해결한 칸.",
+      "description": "행동 화면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "cards",
+      "name": "공개 지배 카드",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "actions"
+      ],
+      "anchor_contract": "공개 후보·선택 중 카드·해결/제거 구역.",
+      "description": "공개 지배 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "tracks",
+      "name": "점수·주도권",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "animals",
+        "actions"
+      ],
+      "anchor_contract": "승점·주도권·생존 관련 공개 표식과 해당 동물.",
+      "description": "점수·주도권의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "지형·접점 원소 · 구조 예시",
+    "area_id": "earth",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "common.terrain-forest",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.cube",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

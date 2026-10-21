@@ -1,0 +1,712 @@
+{
+  "schema_version": "1.0",
+  "game_id": "galaxy-trucker",
+  "name_ko": "갤럭시 트러커",
+  "name_en": "Galaxy Trucker",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판",
+    "compatibility_notes": [
+      "실시간 조립 중보다 비행 사이 저장 우선",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "galaxy-trucker.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "ships",
+      "name": "선박판·부품 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "기준칸·부품ID·회전과 변별 연결구. 대포/엔진의 앞뒤 방향을 유지.",
+      "source_refs": [
+        "galaxy-trucker.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "contents",
+      "name": "승무원·외계인·배터리·화물",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "특정 부품 내부의 수용 슬롯과 종류별 적재.",
+      "source_refs": [],
+      "confidence": "unclear"
+    },
+    {
+      "id": "flight",
+      "name": "비행 말·모험 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "비행 순서/격차·현재 모험·아직 해결할 플레이어.",
+      "source_refs": [
+        "galaxy-trucker.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "credits",
+      "name": "크레딧·손실 부품",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "보유 돈·잃은 부품 묶음과 정산 중 수량.",
+      "source_refs": [],
+      "confidence": "unclear"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "ship",
+        "name": "개인 우주선",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "ships",
+          "contents"
+        ],
+        "anchor_contract": "선택 선박판 기준 행열·타일 회전·사방 연결구·부품 위 승무원/배터리/화물. 빈칸과 파손 제거를 구분.",
+        "description": "개인 우주선의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "build",
+        "name": "조립 공용 구역",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "ships"
+        ],
+        "anchor_contract": "미공개/공개 부품·손에 든 부품·임시 보관·조립 종료 표시. 앞면을 모르면 identity=null.",
+        "description": "조립 공용 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "flight",
+        "name": "비행 트랙·현재 모험",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "flight"
+        ],
+        "anchor_contract": "플레이어의 순서/격차와 공개 모험 카드·주사위 결과/처리 중 선택.",
+        "description": "비행 트랙·현재 모험의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "losses",
+        "name": "잃은 부품·개인 정산",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "ships",
+          "contents",
+          "credits"
+        ],
+        "anchor_contract": "비행 중 잃은 부품과 아직 지불/받지 않은 보상. 미사용 공급과 혼합하지 않는다.",
+        "description": "잃은 부품·개인 정산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "adventure",
+        "name": "미공개 모험 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "flight"
+        ],
+        "anchor_contract": "선택 등급의 모험 덱·공개/해결된 카드·앞으로의 비공개 순서.",
+        "description": "미공개 모험 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "ship.scene",
+      "label": "개인 우주선",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "선택 선박판 기준 행열·타일 회전·사방 연결구·부품 위 승무원/배터리/화물. 빈칸과 파손 제거를 구분. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "ships",
+        "contents"
+      ],
+      "area_ids": [
+        "ship"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "build.scene",
+      "label": "조립 공용 구역",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미공개/공개 부품·손에 든 부품·임시 보관·조립 종료 표시. 앞면을 모르면 identity=null. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "ships"
+      ],
+      "area_ids": [
+        "build"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "flight.scene",
+      "label": "비행 트랙·현재 모험",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "플레이어의 순서/격차와 공개 모험 카드·주사위 결과/처리 중 선택. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "flight"
+      ],
+      "area_ids": [
+        "flight"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "losses.scene",
+      "label": "잃은 부품·개인 정산",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "비행 중 잃은 부품과 아직 지불/받지 않은 보상. 미사용 공급과 혼합하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "ships",
+        "contents",
+        "credits"
+      ],
+      "area_ids": [
+        "losses"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "adventure.scene",
+      "label": "미공개 모험 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "선택 등급의 모험 덱·공개/해결된 카드·앞으로의 비공개 순서. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "flight"
+      ],
+      "area_ids": [
+        "adventure"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ship-class",
+      "label": "등급·진행 모드",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "2021 기본판의 실제 사용 선박 등급·조립/비행/정산.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "adventure",
+      "label": "모험 해결",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "카드ID·플레이어별 완료/선택 대기·굴림·유성/적 공격·보상 처리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "credits",
+      "label": "보유 크레딧",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 확인한 보유값. 최종 손실·화물 정산은 자동 적용하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "building-stop",
+      "label": "실시간 조립 중단 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "타이머/손에 든 부품·합의한 재개 방식. 사진만으로 공정한 실시간 재개를 보증하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실시간 조립/선박 점검/모험 공개/각 플레이어 선택·손상/화물 적재/비행 종료 정산 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "two-phases",
+      "name": "조립과 비행",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "실시간 우주선 조립과 완성 선박의 모험 비행은 서로 다른 중단 상태다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "galaxy-trucker.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "attachments",
+      "name": "화물 부착",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "화물/승무원/배터리를 총합만 저장하지 않고 들어 있던 부품과 연결한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "adventure.preserve",
+        "label": "미공개 모험 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "adventure.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "선택 등급의 모험 덱·공개/해결된 카드·앞으로의 비공개 순서.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "ship.scene",
+      "build.scene",
+      "flight.scene",
+      "losses.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "현재 선박 모습으로 잃은 부품·사용 배터리 역산, 뒤집힌 부품 정체·타이머 잔여시간 추정"
+    ],
+    "correction_targets": [
+      {
+        "id": "ship.edit",
+        "scope": "player",
+        "component_ids": [
+          "ships",
+          "contents"
+        ],
+        "field_ids": [
+          "ship.scene"
+        ],
+        "area_ids": [
+          "ship"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "선택 선박판 기준 행열·타일 회전·사방 연결구·부품 위 승무원/배터리/화물. 빈칸과 파손 제거를 구분.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "build.edit",
+        "scope": "public",
+        "component_ids": [
+          "ships"
+        ],
+        "field_ids": [
+          "build.scene"
+        ],
+        "area_ids": [
+          "build"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "미공개/공개 부품·손에 든 부품·임시 보관·조립 종료 표시. 앞면을 모르면 identity=null.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "flight.edit",
+        "scope": "public",
+        "component_ids": [
+          "flight"
+        ],
+        "field_ids": [
+          "flight.scene"
+        ],
+        "area_ids": [
+          "flight"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "플레이어의 순서/격차와 공개 모험 카드·주사위 결과/처리 중 선택.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "losses.edit",
+        "scope": "player",
+        "component_ids": [
+          "ships",
+          "contents",
+          "credits"
+        ],
+        "field_ids": [
+          "losses.scene"
+        ],
+        "area_ids": [
+          "losses"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "비행 중 잃은 부품과 아직 지불/받지 않은 보상. 미사용 공급과 혼합하지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "adventure.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "flight"
+        ],
+        "field_ids": [
+          "adventure.scene"
+        ],
+        "area_ids": [
+          "adventure"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "선택 등급의 모험 덱·공개/해결된 카드·앞으로의 비공개 순서.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "ship",
+      "build",
+      "flight",
+      "losses",
+      "adventure"
+    ],
+    "editable_component_ids": [
+      "ships",
+      "contents",
+      "flight",
+      "credits"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "galaxy-trucker.primary",
+      "title": "Galaxy Trucker — 공식 자료",
+      "url": "https://czechgames.com/files/rules/galaxy-trucker-rules-en.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 규칙 검색 본문에서 선박 등급I/II/III·비행 카드 구성·조립 후 모험 비행을 확인.2021 상품 소개에서 실시간 조립·화물·우주선 손상 구조 확인. 세부 연결/부품 기능은 원문 추가 대조 필요."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "2021 Galaxy Trucker 기본판. 구판·추가 선박/부품·Keep on Trucking 등의 별도 판본/확장 패치.",
+    "부품 연결 가능성·대포/엔진 방향·이중 부품·외계인·비행 카드별 손상과 돈 공개성은 전수 미대조. 타이머 동기화는 제품 미지원.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

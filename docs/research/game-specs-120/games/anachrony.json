@@ -1,0 +1,633 @@
+{
+  "schema_version": "1.0",
+  "game_id": "anachrony",
+  "name_ko": "아나크로니",
+  "name_en": "Anachrony",
+  "edition": {
+    "id": "base",
+    "name": "Essential Edition",
+    "compatibility_notes": [
+      "Essential은 2–4인 기본판만;솔로 모드 자동 포함 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "anachrony.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "workers",
+      "name": "일꾼·외골격",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "일꾼 종류·활성/피로와 외골격 가동·사용 여부.",
+      "source_refs": [
+        "anachrony.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "buildings",
+      "name": "건물·슈퍼프로젝트·이상현상",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "개인판 건물 슬롯·이상현상·과거 시대의 프로젝트.",
+      "source_refs": [
+        "anachrony.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "resources",
+      "name": "자원·워프·역설",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "물·자원·에너지 코어와 시대별 빌린 자원 표식.",
+      "source_refs": [
+        "anachrony.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "boards",
+      "name": "진영·시대·연구",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "진영 개인판",
+        "지도자",
+        "시대 타일",
+        "초점 표식",
+        "연구 돌파 타일"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "양면 Path판·개인판·지도자 카드·양면 Timeline 타일·Impact 타일이 별개다. 시간 초점은 Timeline 아래의 Path 표식이며 연구는 Breakthrough 타일과 두 연구 주사위를 사용한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "anachrony.art-confirmation.anachrony-primary"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "timeline",
+        "name": "시대와 워프",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "boards",
+          "resources",
+          "buildings"
+        ],
+        "anchor_contract": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결.",
+        "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "actions",
+        "name": "공용 행동",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "workers"
+        ],
+        "anchor_contract": "외골격 행동 공간과 일꾼 종류·행동 완료 여부.",
+        "description": "공용 행동의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "개인 기지",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "workers",
+          "buildings",
+          "resources"
+        ],
+        "anchor_contract": "건물 슬롯·이상현상, 일꾼 활성/피로, 외골격 가동/사용 구역.",
+        "description": "개인 기지의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "supply",
+        "name": "보유·연구",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "resources",
+          "boards"
+        ],
+        "anchor_contract": "자원별 수량과 연구 모양/기호, 진영 특수 상태.",
+        "description": "보유·연구의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "timeline.scene",
+      "label": "시대와 워프",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "boards",
+        "resources",
+        "buildings"
+      ],
+      "area_ids": [
+        "timeline"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "actions.scene",
+      "label": "공용 행동",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "외골격 행동 공간과 일꾼 종류·행동 완료 여부. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "workers"
+      ],
+      "area_ids": [
+        "actions"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "개인 기지",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "건물 슬롯·이상현상, 일꾼 활성/피로, 외골격 가동/사용 구역. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "workers",
+        "buildings",
+        "resources"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "supply.scene",
+      "label": "보유·연구",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "자원별 수량과 연구 모양/기호, 진영 특수 상태. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "resources",
+        "boards"
+      ],
+      "area_ids": [
+        "supply"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "era",
+      "label": "시대·충돌·대피",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 시대/충돌 전후·대피 처리·시간 초점은 서로 분리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "loans",
+      "label": "시대별 빌린 자원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "워프 타일 대상 시대와 반환 여부. 현재 보유량과 별개.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "workers",
+      "label": "일꾼·외골격 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "종류별 활성/피로 수와 가동 중 외골격 수.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "워프 선택·공개/일꾼 행동/빌린 자원 반환/충돌·대피/시대 종료 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "anomaly",
+      "name": "이상현상 공간",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "이상현상은 개인 건물 공간을 점유하는 상태가 된다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "anachrony.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "return",
+      "name": "반환과 시간",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "빌린 자원 반환/워프 타일 제거/시간여행 트랙의 처리는 동일 행동으로 뭉뚱그리지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "anachrony.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "timeline.scene",
+      "actions.scene",
+      "player.scene",
+      "supply.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "현재 자원으로 과거 시대의 빚과 역설 발생 이력"
+    ],
+    "correction_targets": [
+      {
+        "id": "timeline.edit",
+        "scope": "public",
+        "component_ids": [
+          "boards",
+          "resources",
+          "buildings"
+        ],
+        "field_ids": [
+          "timeline.scene"
+        ],
+        "area_ids": [
+          "timeline"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "actions.edit",
+        "scope": "public",
+        "component_ids": [
+          "workers"
+        ],
+        "field_ids": [
+          "actions.scene"
+        ],
+        "area_ids": [
+          "actions"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "외골격 행동 공간과 일꾼 종류·행동 완료 여부.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "workers",
+          "buildings",
+          "resources"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "건물 슬롯·이상현상, 일꾼 활성/피로, 외골격 가동/사용 구역.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "supply.edit",
+        "scope": "player",
+        "component_ids": [
+          "resources",
+          "boards"
+        ],
+        "field_ids": [
+          "supply.scene"
+        ],
+        "area_ids": [
+          "supply"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "자원별 수량과 연구 모양/기호, 진영 특수 상태.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "timeline",
+      "actions",
+      "player",
+      "supply"
+    ],
+    "editable_component_ids": [
+      "workers",
+      "buildings",
+      "resources",
+      "boards"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "anachrony.primary",
+      "title": "Anachrony — 공식 자료",
+      "url": "https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "Essential 공식 규칙 검색 본문에서 워프 타일/빌린 자원 반환, 가동 외골격, 이상현상의 건물 공간 점유, 시간 초점과 과거 슈퍼프로젝트 항목 확인."
+    },
+    {
+      "id": "anachrony.art-confirmation.anachrony-primary",
+      "title": "Anachrony Essential Edition — English Rulebook",
+      "url": "https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.2–3 Component List; pp.5–6 Setup; p.16 Research — 양면 Path판·개인판·지도자 카드·양면 Timeline 타일·Impact 타일이 별개다. 시간 초점은 Timeline 아래의 Path 표식이며 연구는 Breakthrough 타일과 두 연구 주사위를 사용한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Essential 기본판. Fractures of Time 등은 깜빡임·새 보드/트랙을 추가하는 별도 패치.",
+    "진영별 대피 조건·시간여행 비용·충돌 후 행동 공간 및 연구 조합은 전체 검증 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

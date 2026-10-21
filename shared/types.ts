@@ -59,6 +59,7 @@ export interface Session {
   evidence: Evidence[]; assertions: Assertion[]; preservations: Preservation[];
   snapshots: Snapshot[]; notes: Record<string,string>; activity: Activity[];
   deletedAt?: string; // List metadata only; source session/snapshot files are retained.
+  recordingMode?: 'simple'; // Explicit UI recording workflow; pinned detailed packs remain unchanged.
   example: boolean; analysisSummary?: string; analysisSummaryOwnerId?: string | null;
 }
 export interface BriefingItem { field?: string; text: string; ownerId?: string; evidenceIds: string[]; basis: Assertion['basis'] }
@@ -69,11 +70,12 @@ export interface PlannedAction {
   evidenceIds: string[]; priority: number;
 }
 export interface SessionView {
+  privacy?: {protectedOwnerIds:string[];unlockedOwnerIds:string[]};
   session: Session; pack: GamePack; questions: Question[];
   derived: Assertion[]; briefing: BriefingItem[]; ready: boolean;
   progress: { resolved: number; total: number }; differences: RestoreDifference[];
   actions?: PlannedAction[];
 }
 export interface AnalysisResult { assertions: Assertion[]; summary: string; mode: 'live' | 'example' | 'manual'; warnings: string[] }
-export interface AISettings { provider: 'gemini' | 'openai'; model: string; apiKey?: string; baseUrl?: string }
-export interface AIStatus { configured: boolean; provider: AISettings['provider']; model: string; baseUrl?: string }
+export interface AISettings { provider: 'gemini' | 'openai' | 'gateway'; model: string; apiKey?: string; baseUrl?: string }
+export interface AIStatus { configured: boolean; provider: AISettings['provider']; model: string; baseUrl?: string; alias?: string; upstreamProvider?: string; reasoningEffort?: string }

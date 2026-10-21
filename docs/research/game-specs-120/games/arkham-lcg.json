@@ -1,0 +1,716 @@
+{
+  "schema_version": "1.0",
+  "game_id": "arkham-lcg",
+  "name_ko": "아컴호러 카드게임",
+  "name_en": "Arkham Horror: The Card Game",
+  "edition": {
+    "id": "base",
+    "name": "2026 Chapter Two 기본판 AHC100",
+    "compatibility_notes": [
+      "기존 연구 AHC60 2021판은 별도 프로필;기본 상자 밖 카드 무한 지원 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "arkham-lcg.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "locations",
+      "name": "장소·막·주요사건",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "장소 공개면",
+        "장소 미공개면",
+        "막",
+        "주요사건",
+        "연결 표식"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "investigators",
+      "name": "조사자·자산·적",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "조사자 카드",
+        "조사자 토큰",
+        "자산",
+        "적"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "tokens",
+      "name": "단서·파멸·자원·피해·공포",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "단서 면",
+        "파멸 면",
+        "자원",
+        "피해",
+        "공포"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "decks",
+      "name": "플레이어·조우·혼돈",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "플레이어 덱",
+        "조우 덱",
+        "혼돈 주머니",
+        "혼돈 토큰 예시"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "map",
+        "name": "장소 연결",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "locations",
+          "investigators",
+          "tokens"
+        ],
+        "anchor_contract": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지.",
+        "description": "장소 연결의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "play",
+        "name": "조사자 플레이 영역",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "investigators",
+          "tokens"
+        ],
+        "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
+        "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "decks"
+        ],
+        "anchor_contract": "미공개 카드와 선택 중 카드를 분리.",
+        "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hidden",
+        "name": "조우·플레이어 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "decks",
+          "locations"
+        ],
+        "anchor_contract": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+        "description": "조우·플레이어 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "map.scene",
+      "label": "장소 연결",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "locations",
+        "investigators",
+        "tokens"
+      ],
+      "area_ids": [
+        "map"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "play.scene",
+      "label": "조사자 플레이 영역",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "investigators",
+        "tokens"
+      ],
+      "area_ids": [
+        "play"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미공개 카드와 선택 중 카드를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "decks"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hidden.scene",
+      "label": "조우·플레이어 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "decks",
+        "locations"
+      ],
+      "area_ids": [
+        "hidden"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "chapter",
+      "label": "캠페인·판본",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "2026 Chapter Two와 캠페인 ID; 2016/2021 코어 자동 대체 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "phase",
+      "label": "라운드·행동",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "단계와 조사자별 남은 행동/턴 완료 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "values",
+      "label": "조사자 수치",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "체력/정신력 피해, 단서·자원과 지속 효과.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "campaign-log",
+      "label": "캠페인 기록",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "campaign",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "해금/선택/트라우마·경험 등 공개한 기록만 보존.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "test",
+      "label": "진행 중 테스트",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "시도한 행동·대상·공개한 토큰과 아직 해결 전 단계.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "행동/기능 테스트/적 처리/막 진행 중 이미 해결한 부분과 남은 선택.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "campaign",
+      "name": "캠페인 지속",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "조사 결과가 캠페인 이후 게임으로 이어진다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "arkham-lcg.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "compatibility",
+      "name": "새 기본판",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "2026 코어의 플레이어 콘텐츠는 기존 제품과 호환된다고 명시하지만 시나리오 조우 요구까지 동일하다는 뜻은 아니다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "arkham-lcg.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "미공개 카드와 선택 중 카드를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hidden.preserve",
+        "label": "조우·플레이어 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "hidden.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "map.scene",
+      "play.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "조우 덱·혼돈 주머니에서 다음에 뽑을 것, 시나리오 뒤쪽 이야기"
+    ],
+    "correction_targets": [
+      {
+        "id": "map.edit",
+        "scope": "public",
+        "component_ids": [
+          "locations",
+          "investigators",
+          "tokens"
+        ],
+        "field_ids": [
+          "map.scene"
+        ],
+        "area_ids": [
+          "map"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "play.edit",
+        "scope": "player",
+        "component_ids": [
+          "investigators",
+          "tokens"
+        ],
+        "field_ids": [
+          "play.scene"
+        ],
+        "area_ids": [
+          "play"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "decks"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "미공개 카드와 선택 중 카드를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hidden.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "decks",
+          "locations"
+        ],
+        "field_ids": [
+          "hidden.scene"
+        ],
+        "area_ids": [
+          "hidden"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "map",
+      "play",
+      "hand",
+      "hidden"
+    ],
+    "editable_component_ids": [
+      "locations",
+      "investigators",
+      "tokens",
+      "decks"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "arkham-lcg.primary",
+      "title": "Arkham Horror: The Card Game — 공식 자료",
+      "url": "https://www.fantasyflightgames.com/product/arkham-horror-the-card-game/",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 AHC100 페이지 56–65행에서 Chapter Two 기본판·새 캠페인/조사자·구 플레이어 카드 호환 확인. 규칙 PDF 링크는 열기 오류. 장소·교전·행동 모델은 기존 시스템 기반 연구 후보이며 2026 원문 규칙 미대조."
+    },
+    {
+      "id": "arkham-lcg.art-confirmation.arkham-lcg-2026-rules",
+      "title": "Arkham Horror The Card Game AHC100 ©2026 — Rulebook",
+      "url": "https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/ahc100_rulebook-web.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.3–4 Components/Scenario Decks; pp.6–10 Setup; pp.15–16 Skill Tests — 플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "게임 전체 카드 수집은 하지 않는다. 캠페인/조우 세트 의존성과 덱 목록을 참조 ID로 연결하고 새 코어/구 코어 대체표는 별도 검증.",
+    "새 규칙 PDF 접근 실패; 핵심 시나리오 배치·공개성·타이밍은 2026 Grimoire로 추가 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

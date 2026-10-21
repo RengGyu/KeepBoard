@@ -1,0 +1,414 @@
+{
+  "game_id": "sleeping-gods",
+  "name_ko": "슬리핑 갓즈",
+  "name_en": "Sleeping Gods",
+  "edition": {
+    "id": "base",
+    "name": "원작 기본판",
+    "compatibility_notes": [
+      "Distant Skies는 독립 후속작으로 별도 요청",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "sleeping-gods.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/sleeping-gods.json",
+  "source_sha256": "860fdf1bd844e9b9af186e918e4751935d5674efc13df5c7e1e5a9c7e7ac5b0d",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "atlas",
+      "name": "아틀라스·함선·기록",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "현재 페이지/지역·함선 위치와 항해 기록.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "아틀라스·함선 구역",
+          "layers": [
+            {
+              "asset_id": "sleeping-gods.atlas.atlas-ship"
+            }
+          ]
+        },
+        {
+          "name": "기록지",
+          "layers": [
+            {
+              "asset_id": "common.sheet"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "crew",
+      "name": "선원·능력·레벨",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "담당 선원·능력 장착·체력/피로/상태.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "책 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-book",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "enemies",
+      "name": "적 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "적 배열·방어/심장 칸과 덮은 피해.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "적 피해 격자 예시",
+          "layers": [
+            {
+              "asset_id": "sleeping-gods.enemies.enemy-grid-card"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "assets",
+      "name": "명령·자원·모험·퀘스트",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "개인 명령과 공용 음식/재료/동전·공개 모험·퀘스트.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "flag 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-flag",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "생선 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-fish",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "목재 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-wood",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "목표 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-target",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "world",
+      "name": "아틀라스 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "atlas"
+      ],
+      "anchor_contract": "페이지ID·지역노드·페이지 연결·함선 위치. 아직 방문하지 않은 이야기 내용 제외.",
+      "description": "아틀라스 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "ship",
+      "name": "함선판",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "atlas",
+        "assets"
+      ],
+      "anchor_contract": "함선 행동 말·손상 칸·자원과 공용 모험 카드 부착 명령.",
+      "description": "함선판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "crew",
+      "name": "선원 구역",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "crew",
+        "assets"
+      ],
+      "anchor_contract": "선원별 담당자·피해/피로/상태·명령·능력/장비.",
+      "description": "선원 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "combat",
+      "name": "적 전투 배열",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "enemies",
+        "assets"
+      ],
+      "anchor_contract": "적 카드 좌우 순서·각 피해칸·현재 행동 토큰과 시너지 대상.",
+      "description": "적 전투 배열의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 능력 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "crew"
+      ],
+      "anchor_contract": "아직 내지 않은 능력 카드. 협력 공개 관례는 선택 메모.",
+      "description": "개인 능력 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "사건·운명·퀘스트 묶음",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "crew",
+        "enemies",
+        "assets"
+      ],
+      "anchor_contract": "덱/버림·활성 퀘스트·미공개 내용을 물리 묶음으로 유지.",
+      "description": "사건·운명·퀘스트 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "아틀라스 지도 · 구조 예시",
+    "area_id": "world",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "sleeping-gods.atlas.atlas-ship",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

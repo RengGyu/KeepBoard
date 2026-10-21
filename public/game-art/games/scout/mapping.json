@@ -1,0 +1,200 @@
+{
+  "game_id": "scout",
+  "name_ko": "스카우트",
+  "name_en": "SCOUT",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "사진의 위아래와 카드 방향 확인",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "scout.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/scout.json",
+  "source_sha256": "2d8cdd0878f348bcf8f915f25720446063c86888c206633565e237e550151b15",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "cards",
+      "name": "양방향 숫자 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "상하 숫자·현재 방향·손패의 이웃 순서.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "상하 방향 숫자 카드",
+          "layers": [
+            {
+              "asset_id": "scout.cards.reversible-card"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "tokens",
+      "name": "스카우트·점수 표식",
+      "kind": "token",
+      "source_confidence": "unclear",
+      "source_description": "획득 점수와 스카우트&쇼 사용 상태.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "hand",
+      "name": "순서 있는 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "왼쪽→오른쪽 인스턴스 순서와 상하 방향. 정렬·회전 보정 금지.",
+      "description": "순서 있는 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "show",
+      "name": "공개 쇼",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "현재 내려진 카드의 순서/방향·소유자와 양 끝.",
+      "description": "공개 쇼의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "score",
+      "name": "획득 카드·점수",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "획득한 카드/스카우트 토큰·사용한 특수 표식을 구분.",
+      "description": "획득 카드·점수의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "component_id": "tokens",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    }
+  ],
+  "area_preview": {
+    "name": "순서 있는 손패 · 구조 예시",
+    "area_id": "hand",
+    "layers": [
+      {
+        "asset_id": "common.area-stack"
+      },
+      {
+        "asset_id": "scout.cards.reversible-card",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "stack",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

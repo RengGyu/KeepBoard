@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
-import { Camera, Check, Crop, Pause, Play, RotateCcw, ScanLine } from 'lucide-react';
+import { Camera, Check, Crop, Pause, Play, RotateCcw } from 'lucide-react';
 import type { Evidence } from '../shared/types';
 import { Modal } from './ui';
+import { CaptureHelp } from './BoardFeedback';
+import { BRAND_IMAGES } from './brandImages';
 import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, type ScanFrame } from './scanQuality';
 
 import { createScanUploadQueue, type UploadSnapshot } from './scanUploads';
@@ -218,8 +220,9 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
   const savedCount = transfers.entries.filter(e => e.state === 'saved').length;
   const failedCount = transfers.entries.filter(e => e.state === 'failed').length;
   return <Modal title="판을 천천히 훑어주세요" onClose={() => void closeCamera()} wide>
-    <div className="camera-view"><video ref={video} playsInline muted autoPlay/><div className="camera-guide"><ScanLine size={42}/></div><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
+    <div className="camera-view"><video ref={video} playsInline muted autoPlay poster={BRAND_IMAGES.captureGuide}/><div className="camera-guide" aria-hidden="true"/><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
     <div className="modal-body">
+      <CaptureHelp/>
       <ol className="scan-guidance"><li>판 전체</li><li>영역별로 잠시 멈추기</li><li>마치기</li></ol>
       <p className="camera-status" role="status" aria-live="polite">{status}</p>
       <p className="muted small scan-explanation">흐림·밝기·움직임·비슷한 장면은 기기에서 검사합니다. 원본은 촬영 중 전송하고, AI는 마친 뒤 이번 사진만 한 번 읽어요.</p>

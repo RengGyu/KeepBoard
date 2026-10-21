@@ -1,0 +1,364 @@
+{
+  "game_id": "terra-mystica",
+  "name_ko": "테라 미스티카",
+  "name_en": "Terra Mystica",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Fire and Ice 등 확장 제외;현행 페이지 품절은 단종 확정 아님",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "terra-mystica.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/terra-mystica.json",
+  "source_sha256": "7eb1bd9ba3a0e469fce06bb6140053ee01435e1f5b2149155e39099ee3f3e30e",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "terrain",
+      "name": "지형 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "실제 변환된 지형과 인쇄 기본 지형.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "숲 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-forest"
+            }
+          ]
+        },
+        {
+          "name": "밭 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-field"
+            }
+          ]
+        },
+        {
+          "name": "산 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-mountain"
+            }
+          ]
+        },
+        {
+          "name": "물 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-water"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "buildings",
+      "name": "건물·다리",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "종류·소유자, 다리 양 끝.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "건물 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-building"
+            }
+          ]
+        },
+        {
+          "name": "성 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-castle"
+            }
+          ]
+        },
+        {
+          "name": "다리 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-bridge"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "resources",
+      "name": "일꾼·돈·성직자·파워",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "서로 다른 공급과 파워 그릇.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "일꾼",
+          "layers": [
+            {
+              "asset_id": "common.worker"
+            }
+          ]
+        },
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "인물 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-portrait"
+            }
+          ]
+        },
+        {
+          "name": "에너지 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-bolt",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "tiles",
+      "name": "도시·호의·보너스",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "도시 타일",
+          "layers": [
+            {
+              "asset_id": "terra-mystica.tiles.town-tile"
+            }
+          ]
+        },
+        {
+          "name": "호의 타일",
+          "layers": [
+            {
+              "asset_id": "terra-mystica.tiles.oval-favor"
+            }
+          ]
+        },
+        {
+          "name": "보너스 두루마리",
+          "layers": [
+            {
+              "asset_id": "terra-mystica.tiles.bonus-scroll"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "terra-mystica.art-confirmation.terra-mystica-rules"
+      ],
+      "source_location": "p.3 Components; pp.6–7 Setup; pp.12–15 Special Actions/Town/Passing"
+    }
+  ],
+  "areas": [
+    {
+      "id": "map",
+      "name": "지형 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "terrain",
+        "buildings"
+      ],
+      "anchor_contract": "지형 셀, 건물층과 강을 건너는 다리의 양 끝. 직접/항해 연결을 구별.",
+      "description": "지형 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "faction",
+      "name": "세력판·자원",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "buildings",
+        "resources",
+        "tiles"
+      ],
+      "anchor_contract": "건물 공급, 파워 세 그릇, 기술·보너스.",
+      "description": "세력판·자원의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "cults",
+      "name": "종교·득점 트랙",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "resources",
+        "tiles"
+      ],
+      "anchor_contract": "각 종교 위치와 투입 성직자, 라운드 점수 목표.",
+      "description": "종교·득점 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "지형 지도 · 구조 예시",
+    "area_id": "map",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "common.terrain-forest",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-building",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

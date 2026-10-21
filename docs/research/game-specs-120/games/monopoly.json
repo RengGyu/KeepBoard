@@ -1,0 +1,658 @@
+{
+  "schema_version": "1.0",
+  "game_id": "monopoly",
+  "name_ko": "모노폴리",
+  "name_en": "Monopoly",
+  "edition": {
+    "id": "base",
+    "name": "Classic 기본판",
+    "compatibility_notes": [
+      "지역·테마판의 칸/화폐 차이 확인;개별 테마판 수로 부풀리지 않음",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "monopoly.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "board",
+      "name": "재산·이동 보드",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "지역별 판 이름·칸 순서와 출발 방향.",
+      "source_refs": [
+        "monopoly.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "tokens",
+      "name": "플레이어 말·주사위",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "현재 칸·굴린 주사위와 말 identity.",
+      "source_refs": [
+        "monopoly.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "property",
+      "name": "소유권·집·호텔",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "소유권 정면",
+        "담보 면",
+        "집",
+        "호텔"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "monopoly.art-confirmation.monopoly-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "money",
+      "name": "현금·기회·공동기금",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "지폐",
+        "기회",
+        "공동기금"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "monopoly.art-confirmation.monopoly-rules"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "track",
+        "name": "이동판",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "board",
+          "tokens",
+          "property"
+        ],
+        "anchor_contract": "GO 기준 순환 칸·말·땅별 집/호텔. 감옥 방문과 수감은 다른 상태.",
+        "description": "이동판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "ownership",
+        "name": "개인 소유권",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "property"
+        ],
+        "anchor_contract": "땅 ID별 소유자·저당 면·집/호텔과 관련 카드.",
+        "description": "개인 소유권의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "assets",
+        "name": "개인 현금·보유 카드",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "money"
+        ],
+        "anchor_contract": "현재 보유 현금/보유 가능한 카드와 선택적 공개 잔액. 공개 관례 확인.",
+        "description": "개인 현금·보유 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks",
+        "name": "기회·공동기금",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "money"
+        ],
+        "anchor_contract": "종류별 카드 더미·버림·처리 중 카드.",
+        "description": "기회·공동기금의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "track.scene",
+      "label": "이동판",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "GO 기준 순환 칸·말·땅별 집/호텔. 감옥 방문과 수감은 다른 상태. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "board",
+        "tokens",
+        "property"
+      ],
+      "area_ids": [
+        "track"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ownership.scene",
+      "label": "개인 소유권",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "땅 ID별 소유자·저당 면·집/호텔과 관련 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "property"
+      ],
+      "area_ids": [
+        "ownership"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "assets.scene",
+      "label": "개인 현금·보유 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "현재 보유 현금/보유 가능한 카드와 선택적 공개 잔액. 공개 관례 확인. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "money"
+      ],
+      "area_ids": [
+        "assets"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "decks.scene",
+      "label": "기회·공동기금",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "종류별 카드 더미·버림·처리 중 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "money"
+      ],
+      "area_ids": [
+        "decks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn-state",
+      "label": "주사위·감옥·추가 턴",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "굴림·연속 더블·수감 횟수와 추가 굴림 대기 상태를 수동 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "debt",
+      "label": "미지급·거래·경매",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "지급자/수령자·금액·진행 중 경매/거래·아직 완료되지 않은 합의.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "house-rules",
+      "label": "하우스룰",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "무료 주차 적립 등 실제 사용한 관례만 메모하고 공식 기본 규칙으로 단정하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "굴림·이동/카드/구입·경매/임대료·부채/감옥·추가 턴 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "property",
+      "name": "재산 상태",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "재산을 사고 팔고 거래하며 집·호텔을 놓는 상태를 저장한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "monopoly.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "no-auto-money",
+      "name": "미완료 거래",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "말 이동 정정만으로 통행료·출발 보너스·거래를 자동 결제하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "assets.preserve",
+        "label": "개인 현금·보유 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "assets.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "현재 보유 현금/보유 가능한 카드와 선택적 공개 잔액. 공개 관례 확인.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "기회·공동기금 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "종류별 카드 더미·버림·처리 중 카드.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "track.scene",
+      "ownership.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "위치만으로 통행료 결제 완료·더블 횟수·현금 잔액, 언어판의 땅 이름 자동 일치"
+    ],
+    "correction_targets": [
+      {
+        "id": "track.edit",
+        "scope": "public",
+        "component_ids": [
+          "board",
+          "tokens",
+          "property"
+        ],
+        "field_ids": [
+          "track.scene"
+        ],
+        "area_ids": [
+          "track"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "GO 기준 순환 칸·말·땅별 집/호텔. 감옥 방문과 수감은 다른 상태.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "ownership.edit",
+        "scope": "player",
+        "component_ids": [
+          "property"
+        ],
+        "field_ids": [
+          "ownership.scene"
+        ],
+        "area_ids": [
+          "ownership"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "땅 ID별 소유자·저당 면·집/호텔과 관련 카드.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "assets.edit",
+        "scope": "player",
+        "component_ids": [
+          "money"
+        ],
+        "field_ids": [
+          "assets.scene"
+        ],
+        "area_ids": [
+          "assets"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "현재 보유 현금/보유 가능한 카드와 선택적 공개 잔액. 공개 관례 확인.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "decks.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "money"
+        ],
+        "field_ids": [
+          "decks.scene"
+        ],
+        "area_ids": [
+          "decks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "종류별 카드 더미·버림·처리 중 카드.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "track",
+      "ownership",
+      "assets",
+      "decks"
+    ],
+    "editable_component_ids": [
+      "board",
+      "tokens",
+      "property",
+      "money"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "monopoly.primary",
+      "title": "Monopoly — 공식 자료",
+      "url": "https://instructions.hasbro.com/en-us/instruction/monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "Hasbro 현행 Classic G0009 안내에서 클래식 구매·임대·거래·파산과 말/집/호텔/현금 보관 구성을 확인. 저당·감옥·경매·부채 세부는 규칙 파일 대조 전 미확인."
+    },
+    {
+      "id": "monopoly.art-confirmation.monopoly-rules",
+      "title": "Hasbro Monopoly Classic G0009 ©2025 — English instructions",
+      "url": "https://instructions.hasbro.com/api/download/G0009_en-us_monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "sheet1 Contents/Setup; sheet2 Chance and Community Chest — 지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Classic만. Monopoly Deal/전자은행/테마판 특수 규칙은 별도 계약; 지역별 통화·땅 ID 매핑 필요.",
+    "Hasbro 제품번호별 규칙 차이, 저당·감옥·경매·집 부족·파산 처리 원문 전체 대조 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

@@ -1,0 +1,773 @@
+{
+  "schema_version": "1.0",
+  "game_id": "frosthaven",
+  "name_ko": "프로스트헤이븐",
+  "name_en": "Frosthaven",
+  "edition": {
+    "id": "base",
+    "name": "독립 기본판",
+    "compatibility_notes": [
+      "우선 시나리오 사이 기록;전투 중 완전 복원·미공개 책 해독 보장 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "frosthaven.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "map",
+      "name": "시나리오 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "육각 지도 조합과 문/장애물.",
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "figures",
+      "name": "캐릭터·몬스터·소환물",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "인스턴스 번호·소유자·상태.",
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "능력·전리품·사건·보정",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "종류별 덱·버림·소실·활성 상태.",
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "outpost",
+      "name": "전초기지·달력·건물",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "계절/주차, 건물 레벨·상태와 예약된 사건.",
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "resources",
+      "name": "개인·마을 자원",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "금화·목재·가죽·금속 등 실제 보유 위치 구분.",
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "battle",
+        "name": "전투 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "map",
+          "figures"
+        ],
+        "anchor_contract": "타일 ID·회전과 hex 좌표, 문 연결; 공개하지 않은 방은 비어 있음이 아닌 미공개.",
+        "description": "전투 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "캐릭터 상태",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "resources"
+        ],
+        "anchor_contract": "현재 체력/경험·활성 카드·아이템·소환물과 연결.",
+        "description": "캐릭터 상태의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "능력 선택·개인 목표",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "미공개 선택·개인 퀘스트는 소유자 범위.",
+        "description": "능력 선택·개인 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "town",
+        "name": "전초기지",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "outpost",
+          "resources"
+        ],
+        "anchor_contract": "건물 인스턴스와 상태, 개인/마을 재고 분리.",
+        "description": "전초기지의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks",
+        "name": "계절별·전투 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "여름/겨울 사건, 전리품, 수비/공격 보정 덱을 독립 보존.",
+        "description": "계절별·전투 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "battle.scene",
+      "label": "전투 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "타일 ID·회전과 hex 좌표, 문 연결; 공개하지 않은 방은 비어 있음이 아닌 미공개. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "map",
+        "figures"
+      ],
+      "area_ids": [
+        "battle"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "캐릭터 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "현재 체력/경험·활성 카드·아이템·소환물과 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "resources"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "능력 선택·개인 목표",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미공개 선택·개인 퀘스트는 소유자 범위. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "town.scene",
+      "label": "전초기지",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "건물 인스턴스와 상태, 개인/마을 재고 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "outpost",
+        "resources"
+      ],
+      "area_ids": [
+        "town"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "decks.scene",
+      "label": "계절별·전투 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "여름/겨울 사건, 전리품, 수비/공격 보정 덱을 독립 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "decks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "clock",
+      "label": "캠페인 달력",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "campaign",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "연도/계절/체크 위치와 예약된 섹션 번호. 저장만으로 한 주 전진 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "scenario",
+      "label": "전투 진행",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "시나리오·난이도·라운드·현재 이니셔티브와 행동 완료 목록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "entities",
+      "label": "인스턴스 수치",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "번호별 체력·상태·경험·일시 효과. 정확한 값을 모르면 null.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "campaign",
+      "label": "해금·건설·은퇴",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "campaign",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재까지 공개된 것만. 미래 봉투 내용을 자동 수집하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "class-state",
+      "label": "클래스 고유 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "시간 토큰·소환물 등 실제 사용하는 클래스 표시. 일반 자원으로 합치지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "전투 행동/전리품 처리 또는 전초기지 사건·공격·건설 중 현재 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "calendar",
+      "name": "계절 달력",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "시나리오 후 귀환과 연계된 달력·계절 사건이 지속 상태다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "loot",
+      "name": "전리품 덱",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "시나리오별 전리품 덱과 마을 건설 자원이 있어 단순 코인 획득 기록으로 대체할 수 없다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "frosthaven.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "능력 선택·개인 목표 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "미공개 선택·개인 퀘스트는 소유자 범위.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "계절별·전투 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "여름/겨울 사건, 전리품, 수비/공격 보정 덱을 독립 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "battle.scene",
+      "player.scene",
+      "town.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "봉투/잠긴 클래스·사건 결과·미공개 선택 카드"
+    ],
+    "correction_targets": [
+      {
+        "id": "battle.edit",
+        "scope": "public",
+        "component_ids": [
+          "map",
+          "figures"
+        ],
+        "field_ids": [
+          "battle.scene"
+        ],
+        "area_ids": [
+          "battle"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "타일 ID·회전과 hex 좌표, 문 연결; 공개하지 않은 방은 비어 있음이 아닌 미공개.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards",
+          "resources"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "현재 체력/경험·활성 카드·아이템·소환물과 연결.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "미공개 선택·개인 퀘스트는 소유자 범위.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "town.edit",
+        "scope": "public",
+        "component_ids": [
+          "outpost",
+          "resources"
+        ],
+        "field_ids": [
+          "town.scene"
+        ],
+        "area_ids": [
+          "town"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "건물 인스턴스와 상태, 개인/마을 재고 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "decks.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "decks.scene"
+        ],
+        "area_ids": [
+          "decks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "여름/겨울 사건, 전리품, 수비/공격 보정 덱을 독립 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "battle",
+      "player",
+      "private",
+      "town",
+      "decks"
+    ],
+    "editable_component_ids": [
+      "map",
+      "figures",
+      "cards",
+      "outpost",
+      "resources"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "frosthaven.primary",
+      "title": "Frosthaven — 공식 자료",
+      "url": "https://cephalofair.com/collections/board-games/products/frosthaven-bundles",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 본문에서 전투와 전초기지, 여름/겨울 달력, 건물, 목재·가죽·금속 전리품 덱, 계절 사건 덱, 마을 수비 보정, 은퇴/해금 확인. 페이지의 시나리오 총수 138/139가 상충하여 확정 수량 미기입."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "다른 Haven 클래스·아이템의 교차 사용은 판본별 패치. 추가 캠페인 콘텐츠는 별도 참조.",
+    "공식 페이지 시나리오 총수 상충. 클래스별 완전한 상태·캠페인 원문 규칙은 전체 검증하지 않았다.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

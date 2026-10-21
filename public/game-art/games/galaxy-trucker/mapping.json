@@ -1,0 +1,376 @@
+{
+  "game_id": "galaxy-trucker",
+  "name_ko": "갤럭시 트러커",
+  "name_en": "Galaxy Trucker",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판",
+    "compatibility_notes": [
+      "실시간 조립 중보다 비행 사이 저장 우선",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "galaxy-trucker.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/galaxy-trucker.json",
+  "source_sha256": "ad156a29b267c2d9e4bb4d4009d3b4235c821c9299ce7574ed26454d4a5caec8",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "ships",
+      "name": "선박판·부품 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "기준칸·부품ID·회전과 변별 연결구. 대포/엔진의 앞뒤 방향을 유지.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "승무원실 부품 예시",
+          "layers": [
+            {
+              "asset_id": "galaxy-trucker.ships.truck-cabin"
+            }
+          ]
+        },
+        {
+          "name": "방향 있는 엔진",
+          "layers": [
+            {
+              "asset_id": "galaxy-trucker.ships.truck-engine"
+            }
+          ]
+        },
+        {
+          "name": "방향 있는 대포",
+          "layers": [
+            {
+              "asset_id": "galaxy-trucker.ships.truck-cannon"
+            }
+          ]
+        },
+        {
+          "name": "배터리 부품 예시",
+          "layers": [
+            {
+              "asset_id": "galaxy-trucker.ships.truck-battery"
+            }
+          ]
+        },
+        {
+          "name": "화물 부품 예시",
+          "layers": [
+            {
+              "asset_id": "galaxy-trucker.ships.truck-cargo"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "contents",
+      "name": "승무원·외계인·배터리·화물",
+      "kind": "piece",
+      "source_confidence": "unclear",
+      "source_description": "특정 부품 내부의 수용 슬롯과 종류별 적재.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "flight",
+      "name": "비행 말·모험 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "비행 순서/격차·현재 모험·아직 해결할 플레이어.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "함선 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-ship",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "flag 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-flag",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "credits",
+      "name": "크레딧·손실 부품",
+      "kind": "token",
+      "source_confidence": "unclear",
+      "source_description": "보유 돈·잃은 부품 묶음과 정산 중 수량.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "ship",
+      "name": "개인 우주선",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "ships",
+        "contents"
+      ],
+      "anchor_contract": "선택 선박판 기준 행열·타일 회전·사방 연결구·부품 위 승무원/배터리/화물. 빈칸과 파손 제거를 구분.",
+      "description": "개인 우주선의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "build",
+      "name": "조립 공용 구역",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "미공개/공개 부품·손에 든 부품·임시 보관·조립 종료 표시. 앞면을 모르면 identity=null.",
+      "description": "조립 공용 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "flight",
+      "name": "비행 트랙·현재 모험",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "flight"
+      ],
+      "anchor_contract": "플레이어의 순서/격차와 공개 모험 카드·주사위 결과/처리 중 선택.",
+      "description": "비행 트랙·현재 모험의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "losses",
+      "name": "잃은 부품·개인 정산",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "ships",
+        "contents",
+        "credits"
+      ],
+      "anchor_contract": "비행 중 잃은 부품과 아직 지불/받지 않은 보상. 미사용 공급과 혼합하지 않는다.",
+      "description": "잃은 부품·개인 정산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "adventure",
+      "name": "미공개 모험 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "flight"
+      ],
+      "anchor_contract": "선택 등급의 모험 덱·공개/해결된 카드·앞으로의 비공개 순서.",
+      "description": "미공개 모험 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "component_id": "contents",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    },
+    {
+      "component_id": "credits",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    }
+  ],
+  "area_preview": {
+    "name": "개인 우주선 · 구조 예시",
+    "area_id": "ship",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "galaxy-trucker.ships.truck-cabin",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

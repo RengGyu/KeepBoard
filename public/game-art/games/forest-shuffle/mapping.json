@@ -1,0 +1,267 @@
+{
+  "game_id": "forest-shuffle",
+  "name_ko": "포레스트 셔플",
+  "name_en": "Forest Shuffle",
+  "edition": {
+    "id": "base",
+    "name": "원작 기본판",
+    "compatibility_notes": [
+      "Dartmoor 등 독립 후속작·확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "forest-shuffle.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/forest-shuffle.json",
+  "source_sha256": "c2683b35cdeadbaef37841746d5781747b4a78ad2ba28f9d0ad18289461aee0c",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "cards",
+      "name": "나무·분할 동식물·겨울",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "물리 카드와 사용한 위/아래/좌/우 절반을 구별.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "부착 기준 나무 카드",
+          "layers": [
+            {
+              "asset_id": "forest-shuffle.cards.split-tree"
+            }
+          ]
+        },
+        {
+          "name": "위·아래 분할 카드",
+          "layers": [
+            {
+              "asset_id": "forest-shuffle.cards.split-horizontal"
+            }
+          ]
+        },
+        {
+          "name": "좌·우 분할 카드",
+          "layers": [
+            {
+              "asset_id": "forest-shuffle.cards.split-vertical"
+            }
+          ]
+        },
+        {
+          "name": "겨울 카드 대표형",
+          "layers": [
+            {
+              "asset_id": "forest-shuffle.cards.split-winter"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "cave",
+      "name": "동굴·숲",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "개인 숲과 동굴 저장 구역.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "나무·부착·동굴 구역",
+          "layers": [
+            {
+              "asset_id": "forest-shuffle.cave.forest-cave"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "forest",
+      "name": "개인 숲",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "나무를 부모 카드로 두고 위/아래/좌/우 부착 방향·사용 절반·가림을 기록.",
+      "description": "개인 숲의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "clearing",
+      "name": "공터",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "현재 공개 카드와 방금 비용으로 낸 카드, 비워진 상태 구별.",
+      "description": "공터의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "아직 선택하지 않은 분할 카드 전체 정체.",
+      "description": "손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "cave",
+      "name": "동굴 보관",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards",
+        "cave"
+      ],
+      "anchor_contract": "동굴에 넣은 물리 카드와 수. 공개 범위는 본문 재확인 전 소유자 기록만.",
+      "description": "동굴 보관의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "deck",
+      "name": "뽑기 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "미공개 덱과 공개된 겨울, 순서 추측 금지.",
+      "description": "뽑기 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 숲 · 구조 예시",
+    "area_id": "forest",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "forest-shuffle.cards.split-tree",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

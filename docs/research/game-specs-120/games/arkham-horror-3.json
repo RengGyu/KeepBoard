@@ -1,0 +1,756 @@
+{
+  "schema_version": "1.0",
+  "game_id": "arkham-horror-3",
+  "name_ko": "아컴호러 3판",
+  "name_en": "Arkham Horror: Third Edition",
+  "edition": {
+    "id": "base",
+    "name": "3판 기본판",
+    "compatibility_notes": [
+      "LCG와 별도 독립 게임;확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "arkham-horror-3.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "map",
+      "name": "동네·거리 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "동네 구역",
+        "거리 연결"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "시나리오 뒷면 배치도에 따라 동네 타일과 거리 타일을 연결한다. 지도와 사용 동네 덱은 시나리오별로 달라지므로 고정 전체 지도를 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-horror-3.art-confirmation.arkham-horror-3-primary",
+        "arkham-horror-3.art-confirmation.arkham-3-learn-web"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "pieces",
+      "name": "조사자·괴물·파멸·단서",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "조사자 스탠디",
+        "괴물 카드",
+        "파멸 면",
+        "단서 면"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "조사자는 받침에 세우는 토큰, 괴물은 카드다. 단서/파멸은 양면 토큰이며 장소/동네·조사자와의 관계를 보존한다. 괴물을 미니어처로 취급하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-horror-3.art-confirmation.arkham-horror-3-primary",
+        "arkham-horror-3.art-confirmation.arkham-3-learn-web"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "cards",
+      "name": "시나리오·코덱스·조우·물품",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "시나리오 시트",
+        "코덱스",
+        "조우",
+        "물품",
+        "주문",
+        "동료"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "시나리오 시트, 코덱스에 추가한 아카이브 카드, 동네/거리 조우 덱과 물품·동료·주문 덱을 구분한다. 공용 진열과 개인 자산도 별도다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "arkham-horror-3.art-confirmation.arkham-horror-3-primary",
+        "arkham-horror-3.art-confirmation.arkham-3-learn-web"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "mythos",
+      "name": "신화컵·상태 토큰",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "시나리오가 지정한 신화 토큰·이번 뽑은/해결한 토큰.",
+      "source_refs": [
+        "arkham-horror-3.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "map",
+        "name": "아컴 모듈 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "map",
+          "pieces"
+        ],
+        "anchor_contract": "타일 회전·동네/거리·연결과 장소별 파멸/단서·괴물·조사자.",
+        "description": "아컴 모듈 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "scenario",
+        "name": "시나리오·코덱스",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "pieces"
+        ],
+        "anchor_contract": "활성 공개 코덱스 카드·진행 토큰·조건 메모.",
+        "description": "시나리오·코덱스의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "조사자 자산",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "pieces"
+        ],
+        "anchor_contract": "체력/정신력·돈·단서·집중/상태와 공개 장비.",
+        "description": "조사자 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "비공개 면",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리.",
+        "description": "비공개 면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "cup",
+        "name": "신화컵·대기 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "mythos",
+          "cards"
+        ],
+        "anchor_contract": "미공개 컵/종류별 덱. 이미 뽑은 토큰은 mythos-state로 구분.",
+        "description": "신화컵·대기 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "map.scene",
+      "label": "아컴 모듈 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "타일 회전·동네/거리·연결과 장소별 파멸/단서·괴물·조사자. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "map",
+        "pieces"
+      ],
+      "area_ids": [
+        "map"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "scenario.scene",
+      "label": "시나리오·코덱스",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "활성 공개 코덱스 카드·진행 토큰·조건 메모. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "pieces"
+      ],
+      "area_ids": [
+        "scenario"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "조사자 자산",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "체력/정신력·돈·단서·집중/상태와 공개 장비. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "pieces"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "비공개 면",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "cup.scene",
+      "label": "신화컵·대기 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미공개 컵/종류별 덱. 이미 뽑은 토큰은 mythos-state로 구분. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "mythos",
+        "cards"
+      ],
+      "area_ids": [
+        "cup"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "phase",
+      "label": "라운드·활성화",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "행동/괴물/조우/신화 등 현재 단계와 처리한 조사자·괴물.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "mythos-state",
+      "label": "이번 신화 토큰",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "뽑은 토큰·대상·처리 완료 여부와 컵 복귀 대기.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "progress",
+      "label": "시나리오 진행",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "공개된 목표·연구/파멸 진행과 실제 코덱스 지시 이행 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "행동/괴물 이동·공격/조우·시험/신화 토큰/코덱스 전환 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "scenario-cup",
+      "name": "시나리오 설정",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "신화컵 구성은 시나리오 지시에 연결되므로 모든 게임에 같은 구성을 강제하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "arkham-horror-3.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "no-next-codex",
+      "name": "공개 범위",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "현재 공개된 코덱스만 기록하고 다음 조건/분기를 자동 펼치지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "비공개 면 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "cup.preserve",
+        "label": "신화컵·대기 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "cup.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "미공개 컵/종류별 덱. 이미 뽑은 토큰은 mythos-state로 구분.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "map.scene",
+      "scenario.scene",
+      "player.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "미공개 코덱스·다음 신화 토큰, 지도 파멸 합계로 이미 처리한 분기 역산"
+    ],
+    "correction_targets": [
+      {
+        "id": "map.edit",
+        "scope": "public",
+        "component_ids": [
+          "map",
+          "pieces"
+        ],
+        "field_ids": [
+          "map.scene"
+        ],
+        "area_ids": [
+          "map"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "타일 회전·동네/거리·연결과 장소별 파멸/단서·괴물·조사자.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "scenario.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards",
+          "pieces"
+        ],
+        "field_ids": [
+          "scenario.scene"
+        ],
+        "area_ids": [
+          "scenario"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "활성 공개 코덱스 카드·진행 토큰·조건 메모.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards",
+          "pieces"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "체력/정신력·돈·단서·집중/상태와 공개 장비.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "cup.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "mythos",
+          "cards"
+        ],
+        "field_ids": [
+          "cup.scene"
+        ],
+        "area_ids": [
+          "cup"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "미공개 컵/종류별 덱. 이미 뽑은 토큰은 mythos-state로 구분.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "map",
+      "scenario",
+      "player",
+      "private",
+      "cup"
+    ],
+    "editable_component_ids": [
+      "map",
+      "pieces",
+      "cards",
+      "mythos"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "arkham-horror-3.primary",
+      "title": "Arkham Horror: Third Edition — 공식 자료",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식3판 Rules Reference 검색 본문에서 시나리오별 신화컵 토큰 설정·카드/토큰 구분·라운드 구조 확인. 시나리오별 코덱스와 진행 조건은 전체 대조하지 않음."
+    },
+    {
+      "id": "arkham-horror-3.art-confirmation.arkham-horror-3-primary",
+      "title": "Arkham Horror Third Edition — Rules Reference",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.2–3 setup 103–109,111; glossary Codex/Archive — 시나리오 시트, 코덱스에 추가한 아카이브 카드, 동네/거리 조우 덱과 물품·동료·주문 덱을 구분한다. 공용 진열과 개인 자산도 별도다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    },
+    {
+      "id": "arkham-horror-3.art-confirmation.arkham-3-learn-web",
+      "title": "Arkham Horror Third Edition — Learn to Play 2018",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/ca/77/ca776ab5-8169-4e4e-9036-dd61843b08e1/ahb01_learn-to-play-compressed.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.3–7 Components/Setup/Reading Cards — 시나리오 시트, 코덱스에 추가한 아카이브 카드, 동네/거리 조우 덱과 물품·동료·주문 덱을 구분한다. 공용 진열과 개인 자산도 별도다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Arkham Horror3판.2판/카드게임은 별개이며 Dead of Night/Under Dark Waves 등 새 보드는 패치.",
+    "동네 파멸·변칙·연구·집중 한계·카드 공개 범위와 시나리오별 전환 조건은 원문 추가 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

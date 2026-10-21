@@ -1,0 +1,446 @@
+{
+  "game_id": "imperial-assault",
+  "name_ko": "스타워즈: 임페리얼 어썰트",
+  "name_en": "Star Wars: Imperial Assault",
+  "edition": {
+    "id": "base",
+    "name": "기본판 캠페인",
+    "compatibility_notes": [
+      "무한 미니어처 전투/확장 전체 지원 아님;Skirmish 별도",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "imperial-assault.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/imperial-assault.json",
+  "source_sha256": "e5c857a4c982f677d040232410bdbd022ecb74bb22f6dca775c4d3e9f4f161d2",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "map",
+      "name": "지도·문·터미널·상자",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "모듈식 지도 타일·받침이 있는 문·터미널·상자는 별개다. 지도 타일ID의 a/b면·회전·격자 연결, 문/터미널/상자의 점유 위치를 저장한다. 기본 상자에 동봉된 별도 피겨팩 구성은 목록에서 제외한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "격자 지도 구역",
+          "layers": [
+            {
+              "asset_id": "common.preset-room-doors"
+            }
+          ]
+        },
+        {
+          "name": "문",
+          "layers": [
+            {
+              "asset_id": "common.preset-door"
+            }
+          ]
+        },
+        {
+          "name": "터미널",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-computer",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "상자",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-box",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "imperial-assault.art-confirmation.imperial-assault-primary"
+      ],
+      "source_location": "pp.2–4 Component List/Tutorial Setup"
+    },
+    {
+      "component_id": "figures",
+      "name": "영웅·제국군·동료",
+      "kind": "piece",
+      "source_confidence": "verified",
+      "source_description": "영웅·제국군 피겨와 동료/악당 토큰이 구별된다. 배치 카드 그룹·개체 ID·받침색/위치와 영웅 활성화 토큰의 면을 보존한다. 모두 소유 플레이어색 미플로 바꾸지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "영웅 피겨 대표",
+          "layers": [
+            {
+              "asset_id": "common.piece-portrait"
+            }
+          ]
+        },
+        {
+          "name": "제국군 피겨 대표",
+          "layers": [
+            {
+              "asset_id": "common.piece-helmet"
+            }
+          ]
+        },
+        {
+          "name": "동료·악당 토큰",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "imperial-assault.art-confirmation.imperial-assault-primary"
+      ],
+      "source_location": "pp.2–4 Component List/Tutorial Setup"
+    },
+    {
+      "component_id": "cards",
+      "name": "배치·장비·직업·임무 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "공개 배치/장비와 비공개 그룹·계획.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "투구 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-helmet",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "검 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-sword",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "목표 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-target",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "tokens",
+      "name": "피해·스트레인·위협·상태",
+      "kind": "token",
+      "source_confidence": "verified",
+      "source_description": "피해·스트레인·상태 토큰과 위협/라운드 다이얼은 다른 물체다. 각 대상/수치와 활성화의 준비/소진 면을 구별한다. 피해1/5 외 장식 수를 실제값으로 해석하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "피해",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-heart",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "스트레인",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-bolt",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "상태",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-shield",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "위협·라운드",
+          "layers": [
+            {
+              "asset_id": "common.dual-dial"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "imperial-assault.art-confirmation.imperial-assault-primary"
+      ],
+      "source_location": "pp.2–3 Component List; pp.6–7 Damage/Status Phase"
+    }
+  ],
+  "areas": [
+    {
+      "id": "map",
+      "name": "공개 임무 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "map",
+        "figures"
+      ],
+      "anchor_contract": "타일 ID·행열/회전·문·장애물·실물번호와 그룹.",
+      "description": "공개 임무 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "heroes",
+      "name": "반란군 영웅",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "영웅 면·장비·스트레인/피해·활성화 표식과 인물별 상태.",
+      "description": "반란군 영웅의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "groups",
+      "name": "공개 배치군",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "figures",
+        "tokens"
+      ],
+      "anchor_contract": "그룹 카드·현재 인원·번호별 피해·활성화/소진.",
+      "description": "공개 배치군의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "imperial",
+      "name": "제국 비공개 준비",
+      "scope": "shared-secret",
+      "visibility": "role-limited",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "선택 Open Groups·Reserved Groups·공개 전 임무 지시만 제국 역할에 연결.",
+      "description": "제국 비공개 준비의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "visible_to_roles": [
+        "imperial"
+      ],
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "공개 임무 지도 · 구조 예시",
+    "area_id": "map",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "common.preset-room-doors",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-portrait",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

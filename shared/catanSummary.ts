@@ -57,7 +57,7 @@ export function playerSummary(session: Session, playerId: string) {
   const resources = countSummary(resourceFact?.value,RESOURCES,resourceFact ? [resourceFact.id] : []);
   const explicitTotal = confirmed(session,'player.resources.total',playerId);
   const total = countValue(explicitTotal?.value);
-  const resourceTotal: KnownNumber = total === null ? resources : { value:total,known:total,status:resources.value !== null && resources.value !== total ? 'conflict':'complete',assertionIds:[explicitTotal!.id,...resources.assertionIds] };
+  const resourceTotal: KnownNumber = total === null ? resources : { value:resources.value !== null && resources.value !== total ? null : total,known:total,status:resources.value !== null && resources.value !== total ? 'conflict':'complete',assertionIds:[explicitTotal!.id,...resources.assertionIds] };
   const buildings = scene.components.filter(c => ['settlement','city'].includes(c.kind) && c.quantity !== 0 && c.location.type === 'vertex');
   const roads = scene.components.filter(c => c.kind === 'road' && c.quantity !== 0 && c.location.type === 'edge');
   const pieces = Object.fromEntries(['road','settlement','city'].map(kind => {
@@ -81,8 +81,12 @@ export function playerSummary(session: Session, playerId: string) {
   const dev = confirmed(session,'player.development.handCounts',playerId);
   const hand = objectValue(dev?.value);
   const hiddenFact = confirmed(session,'player.score.hiddenVictoryPoints',playerId);
-  const hidden = countValue(hiddenFact?.value) ?? (session.gamePack?.fields.find(f=>f.key==='player.development.handCounts')?.lifetime==='session' ? countValue(hand['victory-point']):null);
-  const totalScore: KnownNumber = { value:publicScore.value !== null && hidden !== null ? publicScore.value+hidden:null,known:publicScore.known+(hidden??0),status:publicScore.value !== null && hidden !== null?'complete':hidden !== null||publicScore.known?'partial':'unknown',assertionIds:[...publicScore.assertionIds,...(hiddenFact?[hiddenFact.id]:dev?[dev.id]:[])] };
+  const recordedHidden = countValue(hiddenFact?.value);
+  const handHidden = session.gamePack?.fields.find(f=>f.key==='player.development.handCounts')?.lifetime==='session' ? countValue(hand['victory-point']) : null;
+  // Current profiles include all held VP cards in handCounts. Legacy partial-hand profiles do not.
+  const hidden = handHidden ?? recordedHidden;
+  const hiddenConflict = handHidden !== null && recordedHidden !== null && handHidden !== recordedHidden;
+  const totalScore: KnownNumber = { value:!hiddenConflict && publicScore.value !== null && hidden !== null ? publicScore.value+hidden:null,known:publicScore.known+(hidden??0),status:hiddenConflict?'conflict':publicScore.value !== null && hidden !== null?'complete':hidden !== null||publicScore.known?'partial':'unknown',assertionIds:[...publicScore.assertionIds,...(hiddenFact?[hiddenFact.id]:[]),...(dev?[dev.id]:[])] };
   const remainingFact = confirmed(session,'player.pieces.remaining',playerId), remaining = objectValue(remainingFact?.value);
   const supplyKnown = factValue(session,'physical.standardSupplyConfirmed') === true;
   const inventory = Object.fromEntries((['road','settlement','city'] as const).map(kind=>{ const explicit=countValue(remaining[kind]),capacity={road:15,settlement:5,city:4}[kind];return [kind,{value:explicit ?? (supplyKnown && pieces[kind].value !== null && pieces[kind].value! <= capacity ? capacity-pieces[kind].value!:null),derived:explicit===null}]; }));

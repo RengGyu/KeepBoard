@@ -1,0 +1,318 @@
+{
+  "game_id": "charterstone",
+  "name_ko": "차터스톤",
+  "name_en": "Charterstone",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "미공개 상자 내용 추정·카드 전체 해독 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "charterstone.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/charterstone.json",
+  "source_sha256": "38127ab24a89a6fcecc47299b138c7cd4dae24122b9b4c88b174ed7a157f173f",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "board",
+      "name": "마을·영구 건물 스티커",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "charter 구역·건물 ID·설치 위치와 인쇄/붙인 층.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "영구 건물 구역",
+          "layers": [
+            {
+              "asset_id": "charterstone.board.village-stickers"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "workers",
+      "name": "일꾼·진행 말",
+      "kind": "piece",
+      "source_confidence": "unclear",
+      "source_description": "현재 행동 위치·소유자·사용 가능한 말.",
+      "status": "unclear",
+      "variants": [
+        {
+          "name": "미확인 · 앞면/종류 추정 안 함",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음.",
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "assets",
+      "name": "자원·동전·카드",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "자원 종류와 이미 공개된 카드·획득 보너스.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "큐브",
+          "layers": [
+            {
+              "asset_id": "common.cube"
+            }
+          ]
+        },
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "보너스 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gift",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "records",
+      "name": "해금·캠페인 기록",
+      "kind": "sheet",
+      "source_confidence": "reported",
+      "source_description": "진행한 게임·공개된 규칙/상자와 영구 성과.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "기록지",
+          "layers": [
+            {
+              "asset_id": "common.sheet"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "village",
+      "name": "영구 마을",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "board",
+        "workers"
+      ],
+      "anchor_contract": "charter·건물 행동 자리·연결과 일꾼. 스티커 층과 이번 말은 독립.",
+      "description": "영구 마을의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "이번 자산",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "workers",
+        "assets"
+      ],
+      "anchor_contract": "개인 자원·돈·대기 일꾼과 공개된 보너스.",
+      "description": "이번 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "private",
+      "name": "개인 비공개 보유",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "assets"
+      ],
+      "anchor_contract": "현재 규칙에 따라 감춘 카드·목표만 소유자 기록.",
+      "description": "개인 비공개 보유의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "campaign",
+      "name": "공개 캠페인 기록",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "records"
+      ],
+      "anchor_contract": "완료한 게임·해금한 상자ID·공개 규칙과 실제 영구 변경.",
+      "description": "공개 캠페인 기록의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "component_id": "workers",
+      "reason": "명세 confidence=unclear; 구체적인 부품 형태/면/세부 종류는 확정하지 않음."
+    }
+  ],
+  "area_preview": {
+    "name": "영구 마을 · 구조 예시",
+    "area_id": "village",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "charterstone.board.village-stickers",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

@@ -1,0 +1,345 @@
+{
+  "game_id": "ticket-to-ride",
+  "name_ko": "티켓 투 라이드",
+  "name_en": "Ticket to Ride",
+  "edition": {
+    "id": "base",
+    "name": "북미 기본판",
+    "compatibility_notes": [
+      "유럽은 독립 실행 지도 게임이며 이번 120종에 별도 계수하지 않음;북미 슬롯과 호환 주장 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "ticket-to-ride.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/ticket-to-ride.json",
+  "source_sha256": "8b843f1b08e4aac6022c813fccc4a74c1ebad709c0d20438960787c5d8be97d1",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "map",
+      "name": "북미 지도",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "도시와 색/길이가 있는 노선.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "도시·열차 노선",
+          "layers": [
+            {
+              "asset_id": "ticket-to-ride.map.rail-network"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "trains",
+      "name": "열차 말",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "노선별 소유색과 점유 구간.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "열차 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-train"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "열차 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "색·기관차, 손패/공개 진열/덱/버림 분리.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "열차 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-train",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "tickets",
+      "name": "목적지 티켓",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "연결 도시쌍과 점수. 비공개 보존 설계.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "두 도시 목적지 티켓",
+          "layers": [
+            {
+              "asset_id": "ticket-to-ride.tickets.destination-ticket"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "score",
+      "name": "점수 말",
+      "kind": "marker",
+      "source_confidence": "reported",
+      "source_description": "누적 노선 점수와 최종 보너스 구분.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "map-area",
+      "name": "도시·노선",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "map",
+        "trains"
+      ],
+      "anchor_contract": "도시 ID와 평행 노선 각각의 ID, 색/길이/열차 소유자. 열차 개별 위치와 노선 소유를 구별.",
+      "description": "도시·노선의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "공개 열차 카드",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "진열 자릿수는 실제 사진 기준, 보충 전 빈칸 유지.",
+      "description": "공개 열차 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 카드·티켓",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tickets"
+      ],
+      "anchor_contract": "열차 카드 색별 수와 목적지 티켓을 분리.",
+      "description": "개인 카드·티켓의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "뽑기·버림",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards",
+        "tickets"
+      ],
+      "anchor_contract": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+      "description": "뽑기·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "도시·노선 · 구조 예시",
+    "area_id": "map-area",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "ticket-to-ride.map.rail-network",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-train",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

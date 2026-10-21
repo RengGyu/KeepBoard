@@ -1,0 +1,717 @@
+{
+  "schema_version": "1.0",
+  "game_id": "eclipse-second-dawn",
+  "name_ko": "이클립스: 두 번째 여명",
+  "name_en": "Eclipse: Second Dawn for the Galaxy",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "2011판과 2020판 배치/컴포넌트 호환 미검증",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "eclipse-second-dawn.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "sectors",
+      "name": "섹터 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "섹터 ID·회전·웜홀·행성.",
+      "source_refs": [
+        "eclipse-second-dawn.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "ships",
+      "name": "함선·부품",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "함선 종류/소유자와 개인 청사진의 부품.",
+      "source_refs": [
+        "eclipse-second-dawn.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "discs",
+      "name": "영향력·인구·식민선",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "영향력 원반",
+        "인구 큐브",
+        "식민선 준비면",
+        "식민선 사용면"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "eclipse-second-dawn.art-confirmation.eclipse-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "tiles",
+      "name": "기술·발견·평판",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "공개 연구/발견과 비공개 평판 묶음.",
+      "source_refs": [
+        "eclipse-second-dawn.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "galaxy",
+        "name": "은하 섹터망",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "sectors",
+          "ships",
+          "discs"
+        ],
+        "anchor_contract": "섹터 좌표·회전별 웜홀 변과 행성별 인구. 함선은 섹터 내부 묶음.",
+        "description": "은하 섹터망의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "blueprints",
+        "name": "개인 함선 청사진",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "ships"
+        ],
+        "anchor_contract": "함선 종류별 부품 슬롯과 빈 칸, 설치 위치를 고정 보존.",
+        "description": "개인 함선 청사진의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "종족판·경제",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "discs",
+          "tiles"
+        ],
+        "anchor_contract": "영향력 공급/행동/지도 분포, 인구 큐브의 트랙과 자원 수치.",
+        "description": "종족판·경제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "market",
+        "name": "기술·공개 발견",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "기술 시장과 획득 후 설치 위치.",
+        "description": "기술·공개 발견의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "비공개 평판·대기 타일",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "확인 가능한 자기 평판만. 비공개 공용 타일은 보이지 않는 물리 묶음.",
+        "description": "비공개 평판·대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "galaxy.scene",
+      "label": "은하 섹터망",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "섹터 좌표·회전별 웜홀 변과 행성별 인구. 함선은 섹터 내부 묶음. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "sectors",
+        "ships",
+        "discs"
+      ],
+      "area_ids": [
+        "galaxy"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "blueprints.scene",
+      "label": "개인 함선 청사진",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "함선 종류별 부품 슬롯과 빈 칸, 설치 위치를 고정 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "ships"
+      ],
+      "area_ids": [
+        "blueprints"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "종족판·경제",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "영향력 공급/행동/지도 분포, 인구 큐브의 트랙과 자원 수치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "discs",
+        "tiles"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "market.scene",
+      "label": "기술·공개 발견",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "기술 시장과 획득 후 설치 위치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "market"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "비공개 평판·대기 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "확인 가능한 자기 평판만. 비공개 공용 타일은 보이지 않는 물리 묶음. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "economy",
+      "label": "자원·수입 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "돈/과학/재료와 각 트랙, 지불 예정 유지비는 별도 메모.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "라운드·패스·전투",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 라운드·행동 순서·패스·진행 중 전투 섹터.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "damage",
+      "label": "함선 피해",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "전투 중 함선 인스턴스별 피해와 아직 적용 안 된 주사위 결과.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "탐험 선택/기술 구매/설계/함선 이동/전투·유지 처리 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "blueprints",
+      "name": "함선 설계",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "연구·함선 부품과 함선 건조를 별개 저장 대상으로 둔다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "eclipse-second-dawn.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "orientation",
+      "name": "회전과 연결",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "섹터 회전과 실제 연결을 보존하며 인접 섹터라는 이유만으로 통행을 확정하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "비공개 평판·대기 타일 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "확인 가능한 자기 평판만. 비공개 공용 타일은 보이지 않는 물리 묶음.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "galaxy.scene",
+      "blueprints.scene",
+      "player.scene",
+      "market.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "가려진 평판·타일과 이동 이력, 인구 수만으로 경제 트랙 복원"
+    ],
+    "correction_targets": [
+      {
+        "id": "galaxy.edit",
+        "scope": "public",
+        "component_ids": [
+          "sectors",
+          "ships",
+          "discs"
+        ],
+        "field_ids": [
+          "galaxy.scene"
+        ],
+        "area_ids": [
+          "galaxy"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "섹터 좌표·회전별 웜홀 변과 행성별 인구. 함선은 섹터 내부 묶음.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "blueprints.edit",
+        "scope": "player",
+        "component_ids": [
+          "ships"
+        ],
+        "field_ids": [
+          "blueprints.scene"
+        ],
+        "area_ids": [
+          "blueprints"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "함선 종류별 부품 슬롯과 빈 칸, 설치 위치를 고정 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "discs",
+          "tiles"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "영향력 공급/행동/지도 분포, 인구 큐브의 트랙과 자원 수치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "market.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "market.scene"
+        ],
+        "area_ids": [
+          "market"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "기술 시장과 획득 후 설치 위치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "확인 가능한 자기 평판만. 비공개 공용 타일은 보이지 않는 물리 묶음.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "galaxy",
+      "blueprints",
+      "player",
+      "market",
+      "private"
+    ],
+    "editable_component_ids": [
+      "sectors",
+      "ships",
+      "discs",
+      "tiles"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "eclipse-second-dawn.primary",
+      "title": "Eclipse: Second Dawn for the Galaxy — 공식 자료",
+      "url": "https://en.lautapelit.fi/product/45295/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 Second Dawn 상품에서 탐험·기술 연구·함선 건조 및 섹터·청사진·함선 부품·기술·발견·평판·식민선 구성물 확인. 경제·전투 세부 규칙 미대조."
+    },
+    {
+      "id": "eclipse-second-dawn.art-confirmation.eclipse-rules",
+      "title": "Eclipse Second Dawn English rulebook 2021-04-27",
+      "url": "https://ucf9ee4ca301ab1c6c5e2f8aed8e.dl.dropboxusercontent.com/cd/0/get/DKZywIFVNxybb6Yf79kyTy86yllpYySthc3d20jpHsd6zIX6g811oXXeQmlJXW-nLFMgh3Wm60fFsl_kQMuyfLcyJ5mnNp96Cw67Gj9stoSOQ2GKZtRc0_hxxFTI6ILFMQpd2O0pAvxGApWd5vVI9-Fs/file?dl=1",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.3–4 Components/Player Area; p.6 Game Concepts; p.8 Colonization — 영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Second Dawn 기본판. 2011판/외곽 섹터·이벤트·종족 확장은 부품/규칙 패치와 판본 확인이 필요하다.",
+    "웜홀 통행·영향력 유지·전투 후 평판 및 종족 예외의 원문 전체 검증 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}
