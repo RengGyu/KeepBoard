@@ -129,6 +129,7 @@ export function normalizeObservations(raw: unknown, pack: GamePack, evidence: Ev
         const normalized = normalizeSceneDetailed(item.value, evidenceIds);
         if (!normalized.recognized || !normalized.scene.components.length) { warnings.push('개별 구성물 형식의 판독 결과가 없습니다. 원본을 유지했습니다.'); continue; }
         const scene = normalized.scene;
+        for (const component of scene.components) if (playerIds.length && component.ownerId && !playerIds.includes(component.ownerId)) { component.ownerId = null; warnings.push('플레이어에 연결되지 않은 색은 소유자 미확인으로 남겼습니다.'); }
         const observedHexes = new Set(scene.components.filter(c => c.kind === 'terrain' && c.location.type === 'hex').map(c => c.location.id));
         if (definition.key === 'board.layout' && (scene.coverage !== 'full' || observedHexes.size !== 19)) {
           const partialField = pack.fields.find(f => f.key === 'components.observed' && f.acquisition === 'observe');

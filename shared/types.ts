@@ -58,6 +58,7 @@ export interface Session {
   captureEpoch: string; turnInstanceId: string; stage: Stage; players: Player[];
   evidence: Evidence[]; assertions: Assertion[]; preservations: Preservation[];
   snapshots: Snapshot[]; notes: Record<string,string>; activity: Activity[];
+  deletedAt?: string; // List metadata only; source session/snapshot files are retained.
   example: boolean; analysisSummary?: string; analysisSummaryOwnerId?: string | null;
 }
 export interface BriefingItem { field?: string; text: string; ownerId?: string; evidenceIds: string[]; basis: Assertion['basis'] }

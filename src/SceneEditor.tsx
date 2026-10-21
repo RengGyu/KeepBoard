@@ -9,6 +9,7 @@ import {
 } from '../shared/scene';
 import { changeSceneComponentKind, moveSceneComponent, sameSceneLocation, type SceneMoveResult } from '../shared/sceneMoves';
 import { canEditOwner, editSceneSelection } from '../shared/sceneEditing';
+import { observedColorCSS, linkObservedColor } from '../shared/playerColors';
 import { ComponentArt } from './ComponentArt';
 import { groupSceneComponents, deleteSceneGroupSelection, type SceneGroup } from './sceneGroups';
 import './scene-editor.css';
@@ -51,9 +52,9 @@ function componentTitle(c: SceneComponent) {
   return [variantLabel(c.kind, c.variant), pieceName(c.kind), typeof c.number === 'number' ? String(c.number) : null].filter(Boolean).join(' ');
 }
 // ComponentArt fills blanks with a default terrain/card; unknown contents must stay visibly unknown.
-function artProps(c: Pick<SceneComponent, 'kind' | 'variant' | 'ownerId' | 'number' | 'ratio'>, players: Player[]) {
+function artProps(c: Pick<SceneComponent, 'kind' | 'variant' | 'ownerId' | 'number' | 'ratio' | 'observedColor'>, players: Player[]) {
   const owned = c.kind === 'road' || c.kind === 'settlement' || c.kind === 'city';
-  const color = c.ownerId ? players.find(p => p.id === c.ownerId)?.color : owned ? NEUTRAL : undefined;
+  const color = c.ownerId ? players.find(p => p.id === c.ownerId)?.color : observedColorCSS(c.observedColor) ?? (owned ? NEUTRAL : undefined);
   if (c.kind === 'terrain' && !c.variant) return { kind: 'unknown', label: '지형 모름', color };
   const variant = c.variant ?? (c.kind === 'resource-card' || c.kind === 'development-card' ? 'unknown' : undefined);
   return { kind: c.kind, variant, color, number: c.kind === 'harbor' ? c.ratio ?? undefined : c.number ?? undefined };
@@ -133,6 +134,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   }
   function patchComponent(id: string, patch: Partial<SceneComponent>, key?: string) {
     const current = sceneRef.current;
+    if ('ownerId' in patch && current.components.find(c => c.id === id)?.observedColor) { commit(linkObservedColor(current, id, patch.ownerId ?? null)); return; }
     commit({ ...current, components: current.components.map(c => c.id === id ? { ...c, ...patch } : c) }, key ? `${id}:${key}` : null);
   }
   function undo() { setHistory(h => h.stack.length > 1 ? { stack: h.stack.slice(0, -1), key: null, at: 0 } : h); setMessage(null); }
@@ -285,8 +287,8 @@ function GroupButton({ group, players, selected, onClick }: { group: SceneGroup;
     <b>×{group.quantity ?? '?'}</b>
   </button>;
 }
-function OwnerColors({ players, value, onChange }: { players: Player[]; value: string | null | undefined; onChange: (ownerId: string | null) => void }) {
-  return <fieldset className="se-owner-colors"><legend>소유색</legend><div>
+export function OwnerColors({ players, value, onChange, label = '소유색' }: { label?: string; players: Player[]; value: string | null | undefined; onChange: (ownerId: string | null) => void }) {
+  return <fieldset className="se-owner-colors"><legend>{label}</legend><div>
     <button type="button" aria-pressed={value === null} className={value === null ? 'selected' : ''} onClick={() => onChange(null)}><i className="se-color-dot"/>모름</button>
     {players.map(player => <button type="button" key={player.id} aria-pressed={value === player.id} className={value === player.id ? 'selected' : ''} onClick={() => onChange(player.id)}><i className="se-color-dot" style={{ backgroundColor: player.color }}/>{player.name}</button>)}
   </div></fieldset>;
@@ -303,6 +305,7 @@ function PieceFields({ component: c, players, onPatch, adding = false, catalogOn
   const cards = ['resource-card','development-card','deck'].includes(c.kind);
   return <div className="se-piece-fields">
     {variants && <label>종류<select value={c.variant ?? ''} onChange={event => { const variant = event.target.value || null; onPatch({ variant, ...(c.kind === 'harbor' ? { ratio: variant === 'generic' ? 3 : variant ? 2 : null } : {}) }); }}><option value="">모름</option>{variants.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}{c.variant && !variants.some(o => o.value === c.variant) && <option value={c.variant}>{c.variant}</option>}</select></label>}
+    {canEditOwner(c.kind) && (c.observedColor || !c.ownerId && ['road', 'settlement', 'city'].includes(c.kind)) && <label>사진색 {c.observedColor ? `· ${c.observedColor}` : '· 미확인'}<input type="color" aria-label="사진에서 본 부품 색" value={observedColorCSS(c.observedColor) ?? '#cfcabb'} onInput={event => onPatch({ observedColor: event.currentTarget.value })} onChange={event => onPatch({ observedColor: event.target.value })}/>{c.observedColor && <small className="muted">같은 사진색은 소유색을 함께 연결해요.</small>}</label>}
     {canEditOwner(c.kind) && <OwnerColors players={players} value={c.ownerId} onChange={ownerId => onPatch({ ownerId })}/>}
     {(c.kind === 'number-token' || (c.kind === 'terrain' && c.number !== undefined)) && <label>숫자<select value={c.number ?? ''} onChange={event => onPatch({ number: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option>{CATAN_NUMBERS.map(n => <option key={n} value={n}>{n}</option>)}</select></label>}
     {c.kind === 'harbor' && <label>교환 비율<select value={c.ratio ?? ''} onChange={event => onPatch({ ratio: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option><option value={3}>3:1</option><option value={2}>2:1</option></select></label>}

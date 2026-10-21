@@ -10,6 +10,27 @@ export interface SessionExport {
 }
 
 export class Store {
+  private listChange: Promise<unknown> = Promise.resolve();
+  private async hiddenSessions(): Promise<Record<string, { deletedAt: string }>> {
+    try { return JSON.parse(await readFile(path.join(this.root, 'session-list.json'), 'utf8')); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return {}; throw error; }
+  }
+  async setSessionsHidden(ids: string[] | undefined, hidden: boolean): Promise<string[]> {
+    const job = this.listChange.catch(() => undefined).then(async () => {
+      const metadata = await this.hiddenSessions();
+      const selected = ids ?? (await this.list<Session>('sessions')).filter(s => !metadata[s.id]).map(s => s.id);
+      const changed: string[] = [];
+      for (const id of [...new Set(selected)]) {
+        if (!await this.getSession(id)) throw new Error('숨기거나 복원할 보드를 찾을 수 없습니다.');
+        if (hidden && !metadata[id]) { metadata[id] = { deletedAt: new Date().toISOString() }; changed.push(id); }
+        else if (!hidden && metadata[id]) { delete metadata[id]; changed.push(id); }
+      }
+      await this.atomicWrite(path.join(this.root, 'session-list.json'), metadata);
+      return changed;
+    });
+    this.listChange = job;
+    return job;
+  }
   constructor(readonly root = path.resolve(process.env.KEEPBOARD_DATA_DIR || '.keepboard'), readonly publicRoot = path.resolve('public')) {}
 
   private filename(kind: 'sessions' | 'packs', id: string) {
@@ -41,7 +62,10 @@ export class Store {
     return Promise.all(files.filter(file => file.endsWith('.json')).map(async file => JSON.parse(await readFile(path.join(this.root, kind, file), 'utf8'))));
   }
 
-  async listSessions() { return (await this.list<Session>('sessions')).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)); }
+  async listSessions(includeDeleted = false) {
+    const hidden = await this.hiddenSessions();
+    return (await this.list<Session>('sessions')).filter(s => includeDeleted || !hidden[s.id]).map(s => hidden[s.id] ? { ...s, deletedAt: hidden[s.id].deletedAt } : s).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  }
   async listPacks() { return this.list<GamePack>('packs'); }
   async savePack(pack: GamePack) { await this.atomicWrite(this.filename('packs', pack.id), pack); }
 

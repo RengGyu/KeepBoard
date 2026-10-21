@@ -7,6 +7,7 @@ import { catanPack, createExampleAssertions } from '../gamepacks/catan.ts';
 import type { AnalysisResult, Evidence, GamePack, Player, Session, Stage } from '../shared/types.ts';
 import { analyzeEvidence, generateGamePack, getAIStatus, saveAISettings } from './ai/index.ts';
 import { answerField, fieldId, nextTurn, recompute, validateValue } from './engine.ts';
+import { DEFAULT_PLAYERS } from '../shared/playerColors.ts';
 import { Store } from './store.ts';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
@@ -30,11 +31,7 @@ export function validatePack(input: unknown): asserts input is GamePack {
   for (const template of pack.preservationTemplates) if (!template || typeof template.id !== 'string' || !['public', 'player'].includes(template.scope) || !Array.isArray(template.conditions) || !Array.isArray(template.restoreAfter)) throw new HttpError('게임팩 보존 정의를 확인하세요.');
 }
 
-const defaultPlayers: Player[] = [
-  { id: 'red', name: '빨강', color: '#cf6656' },
-  { id: 'blue', name: '파랑', color: '#5c83a8' },
-  { id: 'white', name: '흰색', color: '#d1c7b7' },
-];
+const defaultPlayers = DEFAULT_PLAYERS.map(player => ({ ...player }));
 
 function validatePlayers(players: Player[]): void {
   if (!Array.isArray(players) || !players.length || players.some(player => !player || typeof player.id !== 'string' || !player.id || typeof player.name !== 'string' || typeof player.color !== 'string') || new Set(players.map(player => player.id)).size !== players.length) throw new HttpError('서로 다른 식별자의 플레이어를 입력하세요.');
@@ -117,7 +114,13 @@ export async function createApp({ store = new Store(), ui = false }: { store?: S
     if (!['gemini', 'openai'].includes(req.body?.provider) || typeof req.body.model !== 'string' || !req.body.model.trim()) throw new HttpError('제공자와 모델을 확인하세요.');
     res.json(await saveAISettings(req.body));
   });
-  app.get('/api/sessions', async (_req, res) => { res.json(await store.listSessions()); });
+  app.get('/api/sessions', async (req, res) => { res.json(await store.listSessions(req.query.includeDeleted === 'true')); });
+  app.post('/api/sessions/archive', async (req, res) => {
+    if (typeof req.body?.hidden !== 'boolean' || (req.body.ids !== undefined && (!Array.isArray(req.body.ids) || req.body.ids.some((id: unknown) => typeof id !== 'string')))) throw new HttpError('보드 식별자와 삭제/복원 상태를 확인하세요.');
+    if (!req.body.hidden && !req.body.ids) throw new HttpError('복원할 보드를 선택하세요.');
+    res.json({ ids: await store.setSessionsHidden(req.body.ids, req.body.hidden) });
+  });
+  app.delete('/api/sessions/:id', async (req, res) => { res.json({ ids: await store.setSessionsHidden([req.params.id], true) }); });
   app.post('/api/sessions/import', async (req, res) => {
     validatePack(req.body?.session?.gamePack);
     validatePlayers(req.body.session.players);

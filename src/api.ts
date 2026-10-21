@@ -17,7 +17,10 @@ async function request<T>(path: string, method = 'GET', body?: unknown): Promise
 }
 
 export const api = {
-  sessions: () => request<Session[]>('/sessions'),
+  sessions: (includeDeleted = false) => request<Session[]>(`/sessions${includeDeleted ? '?includeDeleted=true' : ''}`),
+  removeSession: (id: string) => request<{ ids: string[] }>(`/sessions/${id}`, 'DELETE'),
+  archiveSessions: (ids?: string[]) => request<{ ids: string[] }>('/sessions/archive', 'POST', { ids, hidden: true }),
+  restoreSessions: (ids: string[]) => request<{ ids: string[] }>('/sessions/archive', 'POST', { ids, hidden: false }),
   packs: () => request<GamePack[]>('/packs'),
   status: () => request<AIStatus>('/settings'),
   settings: (settings: AISettings) => request<AIStatus>('/settings', 'PUT', settings),

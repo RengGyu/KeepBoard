@@ -2,7 +2,7 @@ import type { Assertion, Evidence, Value } from '../../shared/types.ts';
 import { normalizeScene, isBoardSlotType, type SceneComponent } from '../../shared/scene.ts';
 
 const sceneFields = new Set(['board.layout', 'components.observed', 'player.components.observed']);
-const signature = (c: SceneComponent) => JSON.stringify([c.kind, c.variant, c.ownerId, c.quantity, c.number, c.ratio, c.face, c.direction, c.note]);
+const signature = (c: SceneComponent) => JSON.stringify([c.kind, c.variant, c.ownerId, c.quantity, c.number, c.ratio, c.face, c.direction, c.note, c.observedColor]);
 
 /** Assemble only observations from this analysis and the same owner/capture. Never reads saved facts. */
 export function assembleSceneAssertions(assertions: Assertion[], evidence: Evidence[], fields: ReadonlySet<string> = sceneFields): Assertion[] {

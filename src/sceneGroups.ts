@@ -28,7 +28,7 @@ export function groupSceneComponents(scene: ComponentScene): SceneGroup[] {
   const groups = new Map<string, SceneGroup>();
   for (const entry of entries) {
     const c = entry.component;
-    const key = JSON.stringify([c.kind, c.variant, c.ownerId, c.kind === 'number-token' ? c.number ?? null : null, c.ratio ?? null, c.face ?? null]);
+    const key = JSON.stringify([c.kind, c.variant, c.ownerId, c.kind === 'number-token' ? c.number ?? null : null, c.ratio ?? null, c.face ?? null, c.ownerId ? null : c.observedColor ?? null]);
     const prior = groups.get(key);
     if (prior) { prior.ids.push(...entry.ids); prior.quantity = prior.quantity === null || entry.quantity === null ? null : prior.quantity + entry.quantity; }
     else groups.set(key, { key, ...entry });

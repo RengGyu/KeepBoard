@@ -20,6 +20,7 @@ export interface SceneComponent {
   kind: SceneKind;
   variant: string | null;
   ownerId: string | null;
+  observedColor?: string | null;
   quantity: number | null;
   location: SceneLocation;
   // Normalized crop in evidenceId's photo. Independent of the illustrated board position.
@@ -312,6 +313,7 @@ function normalizeComponent(raw: Record<string, unknown>, index: number, evidenc
     id: label, kind, variant: legacyHarbor ? null : canonicalVariant(kind, raw.variant ?? (kind === 'terrain' ? raw.resource : undefined)),
     ownerId: text(raw.ownerId ?? raw.owner), quantity, location, region, evidenceId,
   };
+  if ('observedColor' in raw) component.observedColor = text(raw.observedColor)?.slice(0, 60) ?? null;
   if (kind === 'harbor') { component.ownerId = null; component.ratio = legacyHarbor ? null : finite(raw.ratio); }
   if ('number' in raw) {
     let number = finite(raw.number);
@@ -445,7 +447,8 @@ export const sceneJSONSchema = {
           kind: { type: 'STRING', enum: [...SCENE_KINDS] },
           ratio: { type: 'NUMBER', nullable: true, description: 'Harbor trade ratio 2 or 3; null if unreadable. Preserve observed mismatches for review.' },
           variant: { type: 'STRING', nullable: true, description: 'harbor: generic|lumber|brick|wool|grain|ore|null (ratio separately); terrain: forest|pasture|fields|hills|mountains|desert; resource-card: lumber|wool|grain|brick|ore|hidden; development-card: knight|victory-point|road-building|year-of-plenty|monopoly|hidden; null if unreadable.' },
-          ownerId: { type: 'STRING', nullable: true, description: 'Player id for owned pieces/cards; null for shared or unknown.' },
+          ownerId: { type: 'STRING', nullable: true, description: 'Supplied player id only when visibly identified; null when uncertain. Never infer from an id/name color word.' },
+          observedColor: { type: 'STRING', nullable: true, description: 'Color actually visible on the piece, e.g. blue or #2468ad. Independent of player.color and ownerId; null if unreadable. Never use resource-card material/terrain color as player identity.' },
           quantity: { type: 'INTEGER', nullable: true, description: 'Physical count represented by this entry; null if not countable.' },
           location: {
             type: 'OBJECT',
