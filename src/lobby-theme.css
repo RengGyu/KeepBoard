@@ -1,9 +1,6 @@
-/* 시안 B · 토요일 아침 만화 (Cartoon Lobby)
-   A bright cartoon game lobby: morning sky, drifting clouds, jelly buttons and save-slot cards
-   with springy motion. Font sizes are unchanged; only the display face changes.
-   Load after src/styles.css. */
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-
+/* Cartoon lobby theme: morning sky, floating HUD bar, jelly buttons, save-slot cards and a
+   push pin for what was kept. Layered over styles.css; font sizes are unchanged, only the
+   display face (Jua) changes. Every loop or entrance stops under reduced motion. */
 :root{
   --bg:#eaf6ff;--surface:#fff;--surface-2:#f1f8ff;--surface-3:#dcedfb;
   --line:#d3e6f6;--line-2:#b5d2ea;
@@ -22,7 +19,7 @@ body{background:linear-gradient(180deg,#8fd3ff 0,#c4e8ff 380px,var(--bg) 640px) 
 .app-bar{top:10px;margin:0 max(12px,calc((100vw - 1360px)/2 + 20px)) 0;padding:0 10px 0 18px;height:60px;border-radius:999px;background:#ffffffe6;color:var(--ink);border:0;box-shadow:0 8px 24px #2b7bea29,0 0 0 3px #ffffffb3;backdrop-filter:blur(10px)}
 .app-bar .brand,.app-bar .brand-icon{color:var(--ink)}
 .brand{font-family:var(--display);font-weight:400;letter-spacing:0}
-.brand-icon{color:var(--primary)!important;animation:hop 2.8s 1s var(--ease) infinite}
+.brand-icon{color:var(--primary)!important;animation:hop 6s 1.2s var(--ease) infinite}
 .brand-icon>span{background:var(--sun)}
 @keyframes hop{0%,82%,100%{transform:none}88%{transform:translateY(-5px) rotate(-10deg)}94%{transform:translateY(0) rotate(4deg)}}
 .app-nav{gap:4px;align-self:center}
@@ -63,9 +60,9 @@ body{background:linear-gradient(180deg,#8fd3ff 0,#c4e8ff 380px,var(--bg) 640px) 
 .home-example{background:var(--sun);color:var(--ink);border-radius:999px;box-shadow:var(--jelly),0 4px 0 #d79f00;animation:idle-bob 2.6s 1s ease-in-out infinite}
 .home-example:not(:disabled):hover{background:#ffd75c}
 @keyframes idle-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.home-games{top:20px;right:20px;width:56px;height:56px;border-radius:20px;background:#fff;color:var(--primary);border:0;box-shadow:0 8px 18px #16305c40;backdrop-filter:none;animation:hop 3.2s .6s var(--ease) infinite}
+.home-games{top:20px;right:20px;width:56px;height:56px;border-radius:20px;background:#fff;color:var(--primary);border:0;box-shadow:0 8px 18px #16305c40;backdrop-filter:none}
 .home-games{--js-ball:#ff6b8b}
-.home-games .js-ball,.home-games .js-stick{animation:stick-wiggle 2.4s .8s ease-in-out infinite}
+.home-games .js-ball,.home-games .js-stick{animation:stick-wiggle 4s 1s ease-in-out infinite}
 @keyframes stick-wiggle{0%,60%,100%{transform:none}70%{transform:rotate(-18deg)}80%{transform:rotate(16deg)}90%{transform:rotate(-6deg)}}
 .home-games b{background:var(--primary);color:#fff;box-shadow:0 0 0 3px #fff;font-family:var(--display);font-weight:400}
 
@@ -76,7 +73,7 @@ body{background:linear-gradient(180deg,#8fd3ff 0,#c4e8ff 380px,var(--bg) 640px) 
 .search-box{border:2px solid var(--line);border-radius:999px;background:#fff}
 
 /* Board cards as save slots: thick white frame, soft sky shadow, springy hover. */
-.session-card{border:0;border-radius:26px;background:#fff;box-shadow:0 0 0 6px #fff,0 14px 30px #2b7bea24;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+.session-card{overflow:visible;border:0;border-radius:26px;background:#fff;box-shadow:0 0 0 6px #fff,0 14px 30px #2b7bea24;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
 .session-card:hover{box-shadow:0 0 0 6px #fff,0 20px 40px #2b7bea38}
 .session-card:has(.session-open:not(:disabled)):hover{transform:translateY(-6px) rotate(-.8deg)}
 .session-card-image{border-radius:20px 20px 0 0;background:linear-gradient(180deg,#8fd3ff,#4aa8e8)}
@@ -102,6 +99,20 @@ body{background:linear-gradient(180deg,#8fd3ff 0,#c4e8ff 380px,var(--bg) 640px) 
 .toast{background:var(--ink);border-radius:999px}
 .board-event.has-photo{border:0;border-radius:24px;box-shadow:0 0 0 5px #fff,0 18px 40px #16305c40}
 
+/* Classic pin-board details: a push pin holds what was kept. */
+.session-card:has(.session-status.is-saved):not(:has(.restore-board))::before,.board-event.has-photo::before,.capture-start::before{
+  content:'';position:absolute;z-index:3;width:28px;height:34px;pointer-events:none;background:var(--pin) center/contain no-repeat;filter:drop-shadow(1px 3px 0 #16305c33)}
+:root{--pin:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 34'%3E%3Cpath d='M14 20v12' stroke='%238a94a6' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M8.5 9h11l-1.8 8.5h-7.4Z' fill='%23e5484d' stroke='%2316305c' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cellipse cx='14' cy='18.6' rx='7.6' ry='2.8' fill='%23c2343f' stroke='%2316305c' stroke-width='1.3'/%3E%3Cellipse cx='14' cy='8.4' rx='8.6' ry='4.6' fill='%23ff6b6b' stroke='%2316305c' stroke-width='1.3'/%3E%3Cellipse cx='11' cy='6.8' rx='3' ry='1.4' fill='%23fff' fill-opacity='.75'/%3E%3C/svg%3E")}
+.session-card:has(.session-status.is-saved):not(:has(.restore-board))::before{top:-16px;left:calc(50% - 14px);animation:pin-in .5s .25s cubic-bezier(.34,1.56,.64,1) both}
+.board-event.has-photo::before{top:-18px;left:calc(50% - 14px)}
+.board-event-save.has-photo::before{animation:pin-in .55s .35s cubic-bezier(.34,1.56,.64,1) both}
+.board-event-reopen.has-photo::before{animation:pin-out .6s .45s ease-in both}
+@keyframes pin-in{0%{opacity:0;transform:translate(10px,-18px) rotate(24deg)}70%{opacity:1;transform:translateY(2px) scaleY(.9)}100%{opacity:1;transform:none}}
+@keyframes pin-out{0%{transform:none}35%{transform:translateY(3px) scaleY(.9)}100%{opacity:0;transform:translate(14px,-26px) rotate(30deg)}}
+.capture-start{position:relative;overflow:visible}
+.capture-start img{align-self:start;border:5px solid #fff;border-radius:12px;transform:rotate(-3deg);box-shadow:0 6px 14px #16305c2e}
+.capture-start::before{top:4px;left:79px}
+
 @media(max-width:760px){
   .app-bar{top:8px;margin:0 10px;height:56px;padding:0 6px 0 14px;gap:2px}
   .app-nav>button{padding:0 8px}
@@ -115,5 +126,6 @@ body{background:linear-gradient(180deg,#8fd3ff 0,#c4e8ff 380px,var(--bg) 640px) 
   .home-head.has-photo .home-head-copy{margin:-34px 12px 0;padding:18px 18px 20px;max-width:none}
   .home-head.has-photo .home-head-copy::after{display:none}
   .home-games{top:14px;right:14px}
+  .capture-start::before{top:0;left:46px}
 }
-@media(prefers-reduced-motion:reduce){.home-games .js-ball,.home-games .js-stick,.home-head.has-photo::after,.brand-icon,.home-head-photo img,.home-head.has-photo .home-head-copy,.home-example,.home-games{animation:none}}
+@media(prefers-reduced-motion:reduce){.session-card::before,.board-event.has-photo::before,.home-games .js-ball,.home-games .js-stick,.home-head.has-photo::after,.brand-icon,.home-head-photo img,.home-head.has-photo .home-head-copy,.home-example,.home-games{animation:none}}
