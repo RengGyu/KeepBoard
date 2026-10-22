@@ -1,0 +1,108 @@
+/* 시안 A · 말판 스티커 (Paper Board)
+   Printed board-game box: cream cardboard, navy ink outlines, hard offset shadows,
+   flat print colours lifted from the approved illustrations. Font sizes are unchanged;
+   only the display face changes. Load after src/styles.css. */
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+
+:root{
+  --bg:#f4ead6;--surface:#fffaf0;--surface-2:#f7eedb;--surface-3:#efe2c6;
+  --line:#e3d4b4;--line-2:#cdb991;
+  --ink:#1d2541;--ink-2:#36405c;--muted:#6a6354;--faint:#9a8f78;
+  --primary:#2e7a4e;--primary-hover:#25663f;
+  --accent:#2e7a4e;--accent-hover:#25663f;--accent-press:#1c5232;--accent-soft:#e2efd9;--accent-ink:#22603b;
+  --sun:#f3c13a;--navy:#1d2541;--navy-2:#2a3456;
+  --ink-line:#1d2541;--hard:4px 4px 0 var(--ink-line);--hard-s:2px 2px 0 var(--ink-line);
+  --display:'Black Han Sans','Noto Sans KR',sans-serif;
+}
+body{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%231d2541' stroke-opacity='.035' stroke-width='1.6'%3E%3Cpath d='M30 14 44 22v16l-14 8-14-8V22Z'/%3E%3Crect x='104' y='96' width='26' height='26' rx='6' transform='rotate(14 117 109)'/%3E%3Ccircle cx='112' cy='104' r='1.6'/%3E%3Ccircle cx='122' cy='114' r='1.6'/%3E%3Cpath d='M118 30c4 0 7 3 7 7 0 3-2 5-4 6l3 10h-12l3-10c-2-1-4-3-4-6 0-4 3-7 7-7Z'/%3E%3Ccircle cx='40' cy='118' r='9'/%3E%3C/g%3E%3C/svg%3E"),
+  radial-gradient(#1d25410a 1px,transparent 1.2px) 0 0/18px 18px,
+  var(--bg)}
+
+/* App bar: a cardboard strip with an ink rule, not a gradient band. */
+.app-bar{background:var(--surface);color:var(--ink);border-bottom:3px solid var(--ink-line);box-shadow:0 3px 0 #1d254114}
+.app-bar .brand,.app-bar .brand-icon{color:var(--ink)}
+.brand{font-family:var(--display);font-weight:400;letter-spacing:0}
+.brand-icon{transform:rotate(-8deg);transition:transform .3s var(--ease)}
+.brand:hover .brand-icon{transform:rotate(8deg) scale(1.08)}
+.brand-icon>span{background:var(--sun)}
+.app-nav>button{color:var(--ink-2);white-space:nowrap}
+.app-nav>button:hover{color:var(--ink)}
+.app-nav>button.active{color:var(--ink);font-weight:700;border-bottom:4px solid #e0533d}
+.app-new.primary{background:var(--sun);color:var(--ink);border:2px solid var(--ink-line);box-shadow:var(--hard-s)}
+.app-new.primary:not(:disabled):hover{background:#ffd45a}
+
+/* Buttons: printed tokens that press into the table. */
+.button{border-width:2px;border-radius:12px;transition:transform .12s var(--ease),box-shadow .12s var(--ease),background .15s}
+.primary{border-color:var(--ink-line);box-shadow:var(--hard-s)}
+.secondary{border-color:var(--ink-line);background:var(--surface);box-shadow:var(--hard-s)}
+.secondary:not(:disabled):hover{background:#fff3d6;border-color:var(--ink-line)}
+.primary:not(:disabled):hover,.secondary:not(:disabled):hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink-line)}
+.button:not(:disabled):active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink-line)}
+
+/* Hero: box-lid composition. Copy sits on a calm cream label; the art takes the right side. */
+.home-head.has-photo{background:var(--surface);color:var(--ink);border:3px solid var(--ink-line);border-radius:22px;box-shadow:var(--hard);min-height:380px;padding:40px 44px}
+.home-head-photo{left:40%;border-left:3px solid var(--ink-line)}
+.home-head-photo::after{background:none}
+.home-head-photo img{object-position:60% 46%}
+.home-head.has-photo .home-head-copy{max-width:min(40%,460px)}
+.home-head .eyebrow{color:#b8452f;font-weight:700}
+.home-head h1{font-family:var(--display);font-weight:400;color:var(--ink);text-shadow:2px 2px 0 var(--sun);letter-spacing:0}
+.home-head p{color:var(--ink-2)}
+.home-head.has-photo .stat-chip{background:var(--surface);border:2px solid var(--ink-line);color:var(--ink-2);box-shadow:var(--hard-s),inset 0 -4px 0 var(--chip);backdrop-filter:none;border-radius:999px;padding:7px 14px 9px;animation:token-pop .5s var(--ease) both}
+.home-head.has-photo .stat-chip:nth-child(2){animation-delay:.08s}
+.stat-chip b{color:var(--ink)}
+.home-example{background:var(--primary);color:#fff;border:2px solid var(--ink-line);box-shadow:var(--hard-s)}
+.home-example:not(:disabled):hover{background:var(--primary-hover)}
+.home-games{top:16px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--sun);color:var(--ink);border:3px solid var(--ink-line);box-shadow:var(--hard-s);backdrop-filter:none;animation:coin-flip 1s .3s var(--ease) both}
+.home-games .js-ball,.home-games .js-stick{animation:stick-wiggle 3.6s 1.4s var(--ease) infinite}
+@keyframes stick-wiggle{0%,80%,100%{transform:none}85%{transform:rotate(-16deg)}92%{transform:rotate(12deg)}}
+.home-games b{background:#e0533d;color:#fff;box-shadow:0 0 0 2px var(--ink-line)}
+@keyframes token-pop{0%{opacity:0;transform:translateY(8px) scale(.9)}70%{transform:translateY(-2px) scale(1.03)}100%{opacity:1;transform:none}}
+@keyframes coin-flip{0%{transform:rotateY(90deg)}60%{transform:rotateY(-20deg)}100%{transform:none}}
+
+/* Filters and search: tab labels clipped to a box divider. */
+.filter-tabs{background:var(--surface);border:2px solid var(--ink-line);box-shadow:var(--hard-s);border-radius:14px}
+.filter-tabs button.active{background:var(--ink);color:#fff;box-shadow:none}
+.filter-tabs button.active>span{color:var(--sun)}
+.search-box{border:2px solid var(--ink-line);background:var(--surface)}
+
+/* Board cards: thick-edged tiles that lift and tilt like a picked-up card. */
+.session-card{border:3px solid var(--ink-line);border-radius:18px;box-shadow:var(--hard);background:var(--surface)}
+.session-card:hover{border-color:var(--ink-line);box-shadow:6px 6px 0 var(--ink-line)}
+.session-card:has(.session-open:not(:disabled)):hover{transform:translate(-2px,-3px) rotate(-.6deg)}
+.session-card-image{border-bottom:3px solid var(--ink-line);background:#7fb0cf}
+.session-status{border:2px solid var(--ink-line);box-shadow:none;font-weight:700;transform:rotate(-4deg)}
+.session-status.is-saved{background:#dff0d4;color:#1f5a35}
+.session-status.is-recording{background:var(--sun);color:var(--ink)}
+.session-card h3{font-family:var(--display);font-weight:400;letter-spacing:0}
+.session-go{color:var(--accent-ink)}
+.session-delete{border:2px solid var(--ink-line);background:var(--surface)}
+
+/* Empty boards and capture: same ink frame, no extra chrome. */
+.empty.board-empty.has-photo{border:3px solid var(--ink-line);box-shadow:var(--hard);background:var(--surface)}
+.empty-photo{border-right:3px solid var(--ink-line)}
+.empty-copy h3{font-family:var(--display);font-weight:400;letter-spacing:0}
+.capture-start{border:3px solid var(--ink-line);box-shadow:var(--hard);background:var(--surface)}
+.capture-start img{border:2px solid var(--ink-line)}
+.capture-start h2{font-family:var(--display);font-weight:400;letter-spacing:0}
+
+/* Workspace chrome only; the board canvas keeps its own colours. */
+.scene-workspace{border:2px solid var(--ink-line);box-shadow:var(--hard-s)}
+.cw-title h1{font-family:var(--display);font-weight:400;letter-spacing:0}
+.correction-workspace .owner-tabs{border-bottom:3px solid var(--ink-line)}
+.correction-workspace .owner-tabs>button.active{color:var(--ink);border-bottom:5px solid #e0533d}
+.quick-context,.simple-assets{border:2px solid var(--ink-line)!important;box-shadow:var(--hard-s)}
+.toast{background:var(--ink);border:2px solid var(--sun)}
+.board-event.has-photo{border:3px solid var(--ink-line);box-shadow:var(--hard)}
+
+@media(max-width:760px){
+  .app-bar{gap:2px}
+  .app-nav>button{padding:0 7px}
+  .home-head.has-photo{padding:0 18px 20px;min-height:0;border-radius:18px}
+  .home-head-photo{left:auto;border-left:0;border-bottom:3px solid var(--ink-line);margin:0 -18px 6px}
+  .home-head-photo::after{background:none}
+  .home-head.has-photo .home-head-copy{max-width:none}
+  .empty-photo{border-right:0;border-bottom:3px solid var(--ink-line)}
+}
+@media(prefers-reduced-motion:reduce){.home-head.has-photo .stat-chip,.home-games,.home-games .js-ball,.home-games .js-stick{animation:none}}

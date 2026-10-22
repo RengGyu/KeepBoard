@@ -544,7 +544,16 @@ svg{flex-shrink:0}
 .home-stats{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 18px}
 .stat-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px 8px 11px;border-radius:12px;background:#ffffff14;border:1px solid #ffffff26;font-size:14px;color:#c9d9f7;box-shadow:inset 3px 0 0 var(--chip)}
 .stat-chip b{font-size:18px;color:#fff;font-family:'DM Sans',sans-serif}
-.stat-all{--chip:var(--sun)}.stat-saved{--chip:#36d6b4}.stat-games{--chip:#ff7aa8}
+.stat-all{--chip:var(--sun)}.stat-saved{--chip:#36d6b4}
+.home-games{position:absolute;top:18px;right:18px;z-index:2;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#0d1b3ecc;border:1px solid #ffffff2e;color:#fff;backdrop-filter:blur(4px);box-shadow:0 6px 16px #07143355}
+.joystick-mark{display:block;overflow:visible}
+.js-base{fill:currentColor}
+.js-stick{stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.js-ball{fill:var(--js-ball,#ff5d5d);stroke:currentColor;stroke-width:1.6}
+.js-button{fill:var(--sun);stroke:currentColor;stroke-width:1.2}
+.home-games:hover .js-ball,.home-games:hover .js-stick{transform:rotate(14deg)}
+.js-ball,.js-stick{transform-origin:13px 15.5px;transition:transform .2s var(--ease)}
+.home-games b{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;display:grid;place-items:center;background:var(--sun);color:var(--navy);font-size:13px;line-height:1;font-family:'DM Sans',sans-serif;box-shadow:0 0 0 2px var(--navy)}
 .home-example{background:#fff;color:var(--navy);box-shadow:0 2px 0 #0b2a6b}
 .home-example:not(:disabled):hover{background:var(--sun)}
 .home-head-art{position:absolute;right:28px;top:50%;width:min(40%,360px);transform:translateY(-50%) rotate(-6deg);z-index:0}
