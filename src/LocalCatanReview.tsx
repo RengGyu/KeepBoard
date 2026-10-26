@@ -11,12 +11,13 @@ import {catanReviewScene} from './catanObservationReviewModel';
 import {api} from './api';
 import type {NativeObservationReview} from '../shared/observationReview';
 import type {Mutate} from './Fields';
+import {GAP_REASON,observationGaps} from '../shared/observationGaps';
 
 export function LocalCatanReview({view,source,busy,dirty,mutate,onClose,onEvidence}:{view:SessionView;source:Assertion;busy:boolean;dirty:boolean;mutate:Mutate;onClose:()=>void;onEvidence:(e:Evidence,region?:Assertion['region'])=>void}){
  const [useLocations,setUseLocations]=useState(false),[error,setError]=useState(''),[reviewDirty,setReviewDirty]=useState(false);
  const {definition,loading:definitionLoading,error:definitionError}=usePhotoDefinition(view.pack,true);
  const receipts=source.observationReceipts??[],locations=receipts.reduce((n,r)=>n+r.geometryCandidates.length,0);
- const numeric=numericReceiptSummary(receipts);
+ const numeric=numericReceiptSummary(receipts),gaps=observationGaps(source);
  const accepted=view.session.assertions.filter(a=>a.field==='board.layout'&&!a.ownerId&&a.status==='accepted').at(-1);
  const [openedBaseId]=useState(accepted?.id??null);
  const [review,setReview]=useState(()=>{try{return catanReviewScene(source,normalizeScene(accepted?.value),false);}catch{return {scene:normalizeScene(accepted?.value),placedRefs:[],unresolved:[]};}});
@@ -35,6 +36,7 @@ export function LocalCatanReview({view,source,busy,dirty,mutate,onClose,onEviden
  }
  return <Modal title={numeric.numeric?'읽은 숫자 후보 확인':'읽은 지형·숫자 확인'} onClose={onClose} wide><div className="modal-body lightweight-review">
   <p className="small muted">{numeric.numeric?`숫자 후보 ${numeric.candidates}개 · 보류 ${numeric.deferred}개. 전체 판을 읽은 결과가 아니에요. `:''}기존 도로·건물·항구는 남겨요. 읽은 값과 위치를 확인한 뒤 ‘반영’을 눌러 주세요.</p>
+  {gaps.size>0&&<p className="gap-note" role="note"><b>확인 필요</b><span>{gaps.size}개 실물</span>{[...new Set([...gaps.values()].flat().map(g=>GAP_REASON[g.reason]))].map(r=><span key={r}>{r}</span>)}<span>미배치 목록에서 눌러 직접 고쳐 주세요</span></p>}
   {definitionLoading&&<p role="status">촬영 정의를 준비하고 있어요…</p>}{definitionError&&<p role="alert">{definitionError}</p>}
   {definition&&receipts.map((r,i)=><PhotoObservationOverlay key={i} photos={view.session.evidence} request={r.request} result={r.result} geometry={r.geometryCandidates} transforms={r.transforms} definition={definition}/>)}
   {locations>0&&!useLocations&&<button className="button secondary" disabled={busy||dirty||reviewDirty} onClick={()=>{try{const next=catanReviewScene(source,normalizeScene(accepted?.value),true);setReview(next);setPreviewRevision(n=>n+1);setUseLocations(true);setPlacementFailure('');setError('');}catch(e){setPlacementFailure(e instanceof Error?e.message:'위치 후보를 확인해 주세요.');}}}>계산된 위치 {locations}개를 정정 그림에서 확인</button>}

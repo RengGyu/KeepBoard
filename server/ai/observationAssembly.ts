@@ -27,7 +27,7 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
   }else{
    const field=area.fields.find(key=>{const f=pack.fields.find(f=>f.key===key),b=runtimeBinding(pack,key);return f&&b?.editor==='component-catalog'&&(!o.componentId||b.componentIds.includes(o.componentId))&&(ownerId?f.scope==='player'&&f.visibility==='owner':f.scope==='public'&&f.visibility==='public');})??(ownerId?PHOTO_OWNER:PHOTO_PUBLIC);
    if(!runtimeBinding(pack,field))throw new Error('사진 실물의 허용 목적지 양식이 없습니다. 기존 기록은 보존됩니다.');
-   const piece:GenericPiece={id,componentId:o.componentId,variant:null,quantity:o.quantity,label:o.componentId??'미확인 실물',anchor:'',evidenceId,region};
+   const piece:GenericPiece={id,componentId:o.componentId,variant:null,quantity:o.quantity,label:o.componentId?'':'미확인 실물',anchor:'',evidenceId,region};
    if(definition.nativeBridge==='splendor'){
     const fallback:SplendorKind=o.componentId==='nobles'?'noble':o.componentId==='chips'?'token':o.componentId==='development'?o.face==='back'?'deck':o.face==='front'?'development':null:null;
     let kind=(literal(o,'kind') as SplendorKind)??fallback;

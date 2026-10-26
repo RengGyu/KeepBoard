@@ -1,10 +1,11 @@
+import {GAP_REASON} from '../shared/observationGaps';
 import {useState} from 'react';
 import type {Evidence} from '../shared/types';
 import type {ObservationRequest,ObservationResult,GeometryCandidate,PhotoDefinition,LiteralObservation} from '../shared/lightweightRecognition';
 import {mapObservationRegion,type PhotoTransform} from '../shared/photoGeometry';
 import {SCENE_KIND_LABELS,type SceneKind} from '../shared/scene';
 import './lightweight-reader.css';
-const reasons:Record<string,string>={unreadable:'읽기 어려움',occluded:'가림','out-of-frame':'사진 밖','not-present-unconfirmed':'유무 미확인','wrong-face':'앞면 아님',ambiguous:'구분 어려움',unsupported:'관측 미지원'};
+const reasons:Record<string,string>=GAP_REASON;
 const literalLabels:Record<string,string>={front:'앞면',back:'뒷면',unknown:'모름',red:'빨강',blue:'파랑',green:'초록',white:'흰색',black:'검정',orange:'주황',yellow:'노랑',gold:'금색',development:'개발 카드',noble:'귀족',token:'토큰',deck:'더미'};
 function displayLiteral(value:unknown,translate:boolean):string {
  if(value===null)return '모름';

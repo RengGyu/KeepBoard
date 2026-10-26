@@ -5,8 +5,8 @@ import {componentDefinition,emptyGameReadout,gameReadoutView,setReadoutValue} fr
 import {inputNumber} from '../../shared/readouts/presentation';
 import type {DetailValue,GameReadout,LocalFeature,PieceReference,PropertySpec,SymbolValue} from '../../shared/readouts/types';
 import './game-detail-readout.css';
-interface Props {pack:GamePack;piece:GenericPiece;record:GenericRecord;players:readonly Player[];disabled:boolean;onPatch:(change:Partial<GenericPiece>)=>void}
-export function GameDetailFields({pack,piece,record,players,disabled,onPatch}:Props){
+interface Props {pack:GamePack;piece:GenericPiece;record:GenericRecord;players:readonly Player[];disabled:boolean;onPatch:(change:Partial<GenericPiece>)=>void;gaps?:Readonly<Record<string,string>>}
+export function GameDetailFields({pack,piece,record,players,disabled,onPatch,gaps={}}:Props){
  const definition=componentDefinition(pack,piece.componentId);if(!definition)return null;
  const view=gameReadoutView(pack,piece);
  if(view.status==='invalid')return <section className="gdr-fields" aria-label={definition.name+' 상세 수정'}><p role="alert">지원하지 않는 상세 양식이에요. 기존 상세값은 유지하며 덮어쓰지 않아요. 원본을 확인하거나 이 양식을 지원하는 버전으로 열어 주세요.</p></section>;
@@ -18,7 +18,7 @@ export function GameDetailFields({pack,piece,record,players,disabled,onPatch}:Pr
    if(f.type==='marks')return <MarksField key={f.id} field={f} value={value as SymbolValue[]|null} disabled={locked} onChange={v=>set(f,v)}/>;
    if(f.type==='features')return <FeaturesField key={f.id} field={f} value={value as LocalFeature[]|null} disabled={locked} onChange={v=>set(f,v)}/>;
    if(f.type==='reference')return <ReferenceField key={f.id} field={f} value={value as PieceReference|null} piece={piece} record={record} disabled={locked} onChange={v=>set(f,v)}/>;
-   return <label key={f.id} className="gdr-field"><span>{f.label}{f.acquisition==='manual'&&<small>직접 확인</small>}</span>
+   return <label key={f.id} className={'gdr-field'+(gaps[f.id]&&value===null?' is-gap':'')}><span>{f.label}{gaps[f.id]&&value===null?<small className="gdr-gap">{gaps[f.id]}</small>:f.acquisition==='manual'&&<small>직접 확인</small>}</span>
     {f.type==='enum'?<select aria-label={f.label} disabled={locked} value={value===null?'':String(value)} onChange={e=>set(f,e.target.value===''?null:f.options!.find(o=>String(o.value)===e.target.value)!.value)}><option value="">모름</option>{f.options!.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select>:
     f.type==='boolean'?<select aria-label={f.label} disabled={locked} value={value===null?'':value?'yes':'no'} onChange={e=>set(f,e.target.value===''?null:e.target.value==='yes')}><option value="">모름</option><option value="yes">있음</option><option value="no">없음</option></select>:
     f.type==='player'?<select aria-label={f.label} disabled={locked} value={value===null?'':String(value)} onChange={e=>set(f,e.target.value||null)}><option value="">모름</option>{players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>:
