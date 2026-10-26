@@ -197,9 +197,30 @@
           "cards"
         ],
         "anchor_contract": "현재 공개 요구와 미공개 덱/버림을 분리 보관.",
-        "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면 보너스 카드 버림은 bonus-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "bonus-discard",
+        "name": "보너스 카드 버림",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+        "description": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+        "source_refs": [
+          "istanbul.art-confirmation.istanbul-rules"
+        ],
+        "confidence": "verified"
       }
     ],
     "relations": [],
@@ -318,7 +339,7 @@
         "manual",
         "physical"
       ],
-      "description": "현재 공개 요구와 미공개 덱/버림을 분리 보관. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "description": "현재 공개 요구와 미공개 덱/버림을 분리 보관. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다. 앞면 보너스 카드 버림은 bonus-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "component_ids": [
         "cards"
       ],
@@ -432,6 +453,31 @@
       "rule_ids": [],
       "source_refs": [],
       "confidence": "recommendation"
+    },
+    {
+      "id": "bonus-discard.scene",
+      "label": "보너스 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "bonus-discard"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "istanbul.art-confirmation.istanbul-rules"
+      ],
+      "confidence": "verified"
     }
   ],
   "rules": [
@@ -531,7 +577,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "city.scene"
+          "city.scene",
+          "bonus-discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -584,7 +631,8 @@
     "photographable_field_ids": [
       "city.scene",
       "wheelbarrow.scene",
-      "supply.scene"
+      "supply.scene",
+      "bonus-discard.scene"
     ],
     "must_ask_field_ids": [],
     "never_infer": [
@@ -739,6 +787,36 @@
           "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
           "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
         ]
+      },
+      {
+        "id": "bonus-discard.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "bonus-discard.scene"
+        ],
+        "area_ids": [
+          "bonus-discard"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
       }
     ],
     "privacy_policy": "owner-scoped"
@@ -752,7 +830,8 @@
       "wheelbarrow",
       "supply",
       "hand",
-      "decks"
+      "decks",
+      "bonus-discard"
     ],
     "editable_component_ids": [
       "places",

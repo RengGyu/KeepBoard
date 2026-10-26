@@ -1604,7 +1604,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/agricola.json",
-      "source_sha256": "a0327f3809605f8d0d3ef4d9a08a74fbb586b804efca178a581112b1d1d62d84",
+      "source_sha256": "381e90234df217da06548c4d77c91bf1ff30f6d1f337182d0886de93a1118e4b",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -1967,7 +1967,7 @@
             "cards"
           ],
           "anchor_contract": "라운드 행동 카드와 누적 자원, 배치된 가족을 각 공간에 연결.",
-          "description": "공용 행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "공용 행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 놓인 주요 설비 보급판도 공용 공개 정보다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -1992,7 +1992,7 @@
             "cards"
           ],
           "anchor_contract": "미사용 자원/음식과 사용 설비를 구별.",
-          "description": "개인 보유·설비의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "개인 보유·설비의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 내려놓은 직업·보조 설비도 이 개인 공개 영역에 둔다. 손에 든 카드는 hand에 남는다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -2376,7 +2376,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/anachrony.json",
-      "source_sha256": "adb8889e47b70049325298ae62297f9f0493c9f7e10d94432351411327dada5b",
+      "source_sha256": "31ccc0706faa9fa0207b1f38f923cc7cf31a974c7c59b359fd6ac00b5d5abec0",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -2735,7 +2735,7 @@
             "buildings"
           ],
           "anchor_contract": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결.",
-          "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 아직 뒤집지 않은 슈퍼프로젝트는 뒷면 그대로 두고 정체를 기록하지 않는다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -2816,6 +2816,32 @@
           "art_reference": {
             "asset_id": "common.area-zone",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "warp-hand",
+          "name": "숨겨 고른 워프 타일",
+          "scope": "player",
+          "visibility": "owner",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "resources"
+          ],
+          "anchor_contract": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다.",
+          "description": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "anachrony.art-confirmation.anachrony-primary"
+          ],
+          "confidence": "verified",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -4047,7 +4073,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/arkham-horror-3.json",
-      "source_sha256": "dd7aedf379ffbf86cfb339c60c97957b6d82359638f1e241eb8e8351980e66a9",
+      "source_sha256": "85148b4a0c2a74b1da7dde8ccd453271c0e74a2ccd45defdc4e093e9ef8b7e54",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -4417,7 +4443,7 @@
             "pieces"
           ],
           "anchor_contract": "체력/정신력·돈·단서·집중/상태와 공개 장비.",
-          "description": "조사자 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "조사자 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 상태(condition) 카드는 앞면만 공개이며, 효과가 지시하기 전에는 소유자도 뒷면을 보지 않는다(415.7).",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -4441,7 +4467,7 @@
             "cards"
           ],
           "anchor_contract": "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리.",
-          "description": "비공개 면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "비공개 면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 상태 카드 뒷면은 소유자도 모르는 숨김 정보이므로 이 영역에 기록하지 않는다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -5719,7 +5745,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/barrage.json",
-      "source_sha256": "eeb9e974a3a9427a4588764075817f97503a644ad78b60bcef01058a5aa0ac2e",
+      "source_sha256": "f47a620237a6394412aa18d25a7c2e575733ab016996359bcb5c7bd662c03ad4",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -6039,7 +6065,7 @@
             "machinery"
           ],
           "anchor_contract": "남은 시설·가용 기계·계약과 현재 돈.",
-          "description": "회사판·계약의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "회사판·계약의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 수행한 계약은 뒷면으로 개인 공급에 두며 개수는 최종 점수에 쓰인다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -13208,7 +13234,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/crew-deep-sea.json",
-      "source_sha256": "bd1a3b71ef099ef0bb5069d95eb7ce877fa70eee3c5b1afb7da905149b4393a5",
+      "source_sha256": "8debb9a644cee08777f86c642f2cee37a900dec2cc63642bf282ecf39d1d9e8a",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -13491,7 +13517,7 @@
             "cards"
           ],
           "anchor_contract": "획득한 트릭을 묶음 ID와 순서로 보존. 아직 판정 안 된 트릭은 분리.",
-          "description": "획득 트릭 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "획득 트릭 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 획득한 트릭은 뒷면으로 자기 앞에 쌓으며 가장 최근 트릭만 다시 볼 수 있다. 이전 트릭의 앞면은 펼쳐 기록하지 않는다. 임무 카드 아래 앞면으로 둔 카드는 공개다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -22870,7 +22896,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/istanbul.json",
-      "source_sha256": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
+      "source_sha256": "eb2a8fe4fc56465e68cd736854ba741c2e9d08173a276cda62ce13ecc268f102",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -23222,12 +23248,38 @@
             "cards"
           ],
           "anchor_contract": "현재 공개 요구와 미공개 덱/버림을 분리 보관.",
-          "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면 보너스 카드 버림은 bonus-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "bonus-discard",
+          "name": "보너스 카드 버림",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "stack",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "stack"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+          "description": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "istanbul.art-confirmation.istanbul-rules"
+          ],
+          "confidence": "verified",
+          "art_reference": {
+            "asset_id": "common.area-stack",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -35671,7 +35723,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/seti.json",
-      "source_sha256": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
+      "source_sha256": "9525edb48660b85ac5c602a013bb1701bc93ed810f60672ff0bbdbe76817cc75",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -36058,7 +36110,7 @@
             "cards"
           ],
           "anchor_contract": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과.",
-          "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 낸 임무와 버림은 missions·card-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -36088,6 +36140,58 @@
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "missions",
+          "name": "진행·완료 임무와 수입 카드",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+          "description": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "seti.art-confirmation.seti-rules"
+          ],
+          "confidence": "verified",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "card-discard",
+          "name": "공용 카드 버림",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "stack",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "stack"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+          "description": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "seti.art-confirmation.seti-rules"
+          ],
+          "confidence": "verified",
+          "art_reference": {
+            "asset_id": "common.area-stack",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -40302,7 +40406,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/star-wars-rebellion.json",
-      "source_sha256": "c0c416217ca12d0319081523ce0655b8a8d44674abe327437a436d2cd888c2b5",
+      "source_sha256": "168543dcfec5afb89a830437061b600c0671cd5ef9c2d83f92844206f4842b42",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -40671,6 +40775,32 @@
           "art_reference": {
             "asset_id": "common.area-zone",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "discards",
+          "name": "버림 더미",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "stack",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "stack"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다.",
+          "description": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+          ],
+          "confidence": "verified",
+          "art_reference": {
+            "asset_id": "common.area-stack",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -45327,7 +45457,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/voidfall.json",
-      "source_sha256": "e073b9bcfb8d9a847fb5331cd2bf112e385e67a824d27b8475a9ccdc77086bcf",
+      "source_sha256": "6adc4a7c9a768cd86a9d40bfcfcca1d4ef56f87b6204f62364722bcece792372",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -45730,7 +45860,7 @@
             "cards"
           ],
           "anchor_contract": "기술 종류/수준·공개 집중 카드와 사용/미사용 상태.",
-          "description": "기술·공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "기술·공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 개인 버림 더미에 앞면으로 둔 Focus 카드와 슬롯에 낸 Agenda 카드도 개인 공개 상태다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
@@ -45754,7 +45884,7 @@
             "cards"
           ],
           "anchor_contract": "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
-          "description": "선택·개인 의제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+          "description": "선택·개인 의제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 손에 든 Focus 카드와 아직 내지 않은 Agenda 카드는 본인만 안다. 낸 Agenda는 슬롯에, 사용한 Focus는 개인 버림 더미에 앞면으로 공개된다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {

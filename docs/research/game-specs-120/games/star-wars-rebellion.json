@@ -185,6 +185,27 @@
         "visible_to_roles": [
           "imperial"
         ]
+      },
+      {
+        "id": "discards",
+        "name": "버림 더미",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다.",
+        "description": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+        "source_refs": [
+          "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+        ],
+        "confidence": "verified"
       }
     ],
     "relations": [],
@@ -398,6 +419,31 @@
       "rule_ids": [],
       "source_refs": [],
       "confidence": "recommendation"
+    },
+    {
+      "id": "discards.scene",
+      "label": "버림 더미",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "discards"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+      ],
+      "confidence": "verified"
     }
   ],
   "rules": [
@@ -505,7 +551,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "galaxy.scene"
+          "galaxy.scene",
+          "discards.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -556,7 +603,8 @@
   "recognition_correction": {
     "photographable_field_ids": [
       "galaxy.scene",
-      "leaders-area.scene"
+      "leaders-area.scene",
+      "discards.scene"
     ],
     "must_ask_field_ids": [],
     "never_infer": [
@@ -681,6 +729,36 @@
           "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
           "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
         ]
+      },
+      {
+        "id": "discards.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "discards.scene"
+        ],
+        "area_ids": [
+          "discards"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
       }
     ],
     "privacy_policy": "owner-scoped"
@@ -693,7 +771,8 @@
       "galaxy",
       "leaders-area",
       "rebel-secret",
-      "imperial-secret"
+      "imperial-secret",
+      "discards"
     ],
     "editable_component_ids": [
       "units",

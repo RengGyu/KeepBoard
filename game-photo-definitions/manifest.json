@@ -1,14 +1,14 @@
 {
   "version": "game-photo-definitions-manifest-v1",
-  "contractSHA": "797e8438e2ccab25e93fea80477ea6da2e36da43a5c3429b87391250d1247a8c",
+  "contractSHA": "eef14db453fccce830db414d7cfd0dad7b0f6086d568ad4c119ff8babc657b76",
   "inputs": [
     {
       "file": "gamepacks/generated/game-essentials.json",
-      "sha256": "a3f37685870e32435ef3702840edae7334d0b49a16a0f19142ebcc8ce8780c9c"
+      "sha256": "13d4c7d2a274eab5e24a3ccedb06942794e9ca34aa73eb3c4a4bdf58a8323851"
     },
     {
       "file": "shared/capture-profiles.json",
-      "sha256": "9230211eba71cc0d909afc75db129a9d248e2fcfa965893217b6f8de9e22a5d3"
+      "sha256": "198326eff62f0849ac40bb9ef4c2f78bee822011405436811d9038e1a4defca2"
     },
     {
       "file": "shared/readouts/types.ts",
@@ -42,22 +42,22 @@
     },
     {
       "file": "shared/readouts/catalogs/03-workers-economy.json",
-      "sha256": "089593c5a159b191b5706d5603703367c6d4c823e8c64a77abf66200aa856e15"
+      "sha256": "f9143917d9fa56b604c6ad436305133901c36ff3655b21630696da16092229c3"
     },
     {
       "file": "shared/readouts/catalogs/04-hidden-social.json",
-      "sha256": "f45470179b4d1172f95e7cddd385031de3fc156cbf1c7603f27758d2f44a2506"
+      "sha256": "db569854f9f2e72f78d4519304443ae47cc614c4e77134bae8b61dfb56fa7632"
     },
     {
       "file": "shared/readouts/catalogs/05-campaign-combat.json",
-      "sha256": "c8e312af768e9771c91eb25a594f2047024c6d2ee1437386a71bda2264bffff7"
+      "sha256": "13f18bfaa1100b37995cb5722ca134cb00ec7fc70a40a4c852bf36ff58b44a28"
     },
     {
       "file": "shared/readouts/catalogs/06-maps-tracks.json",
-      "sha256": "f94b681e856cb6c9a9a6cbc2f6e4ccb1560f8191b4ccf6e257e4919181de3a70"
+      "sha256": "322ce93fea82ca227d65dd8b4ee4f8ab9fe9b5b86cd62a075a1c2967b81e5a0a"
     }
   ],
-  "indexSHA": "c25e951f03cca14f6ac5dc508390056fc1b58ac05a98dcff25f2b1ac4ec85990",
+  "indexSHA": "1225f996618a32755ea703d7d2b391a4560edd977c287dadf23523b72dd472a2",
   "coverage": {
     "games": 120,
     "nativeBridges": 3,
@@ -2235,11 +2235,18 @@
           "editor": "opaque-preserve",
           "scope": "public",
           "visibility": "public"
+        },
+        {
+          "field": "contract-piles.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
         }
       ],
       "preservationTemplateIds": [
         "spec.essentials.public-layout.public",
         "spec.essentials.public-layout.player",
+        "spec.contract-piles.preserve",
         "spec.keep.round",
         "spec.keep.turn-order"
       ],
@@ -2702,6 +2709,11 @@
         {
           "areaId": "leaders-area",
           "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discards",
+          "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
         }
       ]
@@ -3257,7 +3269,8 @@
         "turn",
         "pending",
         "note",
-        "record-note.starting-player"
+        "record-note.starting-player",
+        "warp-hand.scene"
       ],
       "physicalPreserve": [
         {
@@ -3295,6 +3308,7 @@
         "spec.pool-decks.scene.essentials-preserve",
         "spec.essentials.public-layout.public",
         "spec.essentials.public-layout.player",
+        "spec.warp-hand.preserve",
         "spec.keep.era",
         "spec.keep.loans",
         "spec.keep.workers",
@@ -3319,6 +3333,11 @@
         },
         {
           "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "warp-hand",
           "support": "manual-or-preserve",
           "accuracy": "UNMEASURED"
         }
@@ -6059,7 +6078,8 @@
         "record-note.progress",
         "turn",
         "pending",
-        "note"
+        "note",
+        "event-discard.scene"
       ],
       "physicalPreserve": [
         {
@@ -6741,6 +6761,11 @@
           "areaId": "hand",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "bonus-discard",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
         }
       ]
     },
@@ -7238,6 +7263,16 @@
         },
         {
           "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "missions",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "card-discard",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
         }

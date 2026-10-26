@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/istanbul.json",
-  "source_sha256": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
+  "source_sha256": "eb2a8fe4fc56465e68cd736854ba741c2e9d08173a276cda62ce13ecc268f102",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -367,12 +367,38 @@
         "cards"
       ],
       "anchor_contract": "현재 공개 요구와 미공개 덱/버림을 분리 보관.",
-      "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면 보너스 카드 버림은 bonus-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "bonus-discard",
+      "name": "보너스 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+      "description": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "istanbul.art-confirmation.istanbul-rules"
+      ],
+      "confidence": "verified",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

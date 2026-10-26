@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/seti.json",
-  "source_sha256": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
+  "source_sha256": "9525edb48660b85ac5c602a013bb1701bc93ed810f60672ff0bbdbe76817cc75",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -402,7 +402,7 @@
         "cards"
       ],
       "anchor_contract": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과.",
-      "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 낸 임무와 버림은 missions·card-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
@@ -432,6 +432,58 @@
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "missions",
+      "name": "진행·완료 임무와 수입 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+      "description": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "card-discard",
+      "name": "공용 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+      "description": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

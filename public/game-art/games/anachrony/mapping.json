@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/anachrony.json",
-  "source_sha256": "adb8889e47b70049325298ae62297f9f0493c9f7e10d94432351411327dada5b",
+  "source_sha256": "31ccc0706faa9fa0207b1f38f923cc7cf31a974c7c59b359fd6ac00b5d5abec0",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -374,7 +374,7 @@
         "buildings"
       ],
       "anchor_contract": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결.",
-      "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 아직 뒤집지 않은 슈퍼프로젝트는 뒷면 그대로 두고 정체를 기록하지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
@@ -455,6 +455,32 @@
       "art_reference": {
         "asset_id": "common.area-zone",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "warp-hand",
+      "name": "숨겨 고른 워프 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "resources"
+      ],
+      "anchor_contract": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다.",
+      "description": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "anachrony.art-confirmation.anachrony-primary"
+      ],
+      "confidence": "verified",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

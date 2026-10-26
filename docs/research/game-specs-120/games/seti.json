@@ -211,7 +211,7 @@
           "cards"
         ],
         "anchor_contract": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과.",
-        "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 낸 임무와 버림은 missions·card-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
         "source_refs": [],
         "confidence": "recommendation"
       },
@@ -233,6 +233,48 @@
         "description": "발견 전 종·덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "missions",
+        "name": "진행·완료 임무와 수입 카드",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+        "description": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+        "source_refs": [
+          "seti.art-confirmation.seti-rules"
+        ],
+        "confidence": "verified"
+      },
+      {
+        "id": "card-discard",
+        "name": "공용 카드 버림",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+        "description": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+        "source_refs": [
+          "seti.art-confirmation.seti-rules"
+        ],
+        "confidence": "verified"
       }
     ],
     "relations": [],
@@ -350,7 +392,7 @@
         "manual",
         "physical"
       ],
-      "description": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "description": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다. 앞면으로 낸 임무와 버림은 missions·card-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "component_ids": [
         "cards"
       ],
@@ -525,6 +567,56 @@
       "source_refs": [
         "seti.essentials.rules"
       ]
+    },
+    {
+      "id": "missions.scene",
+      "label": "진행·완료 임무와 수입 카드",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "missions"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "card-discard.scene",
+      "label": "공용 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "card-discard"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified"
     }
   ],
   "rules": [
@@ -628,7 +720,8 @@
         "field_ids": [
           "solar-system.scene",
           "signals.scene",
-          "public.scene"
+          "public.scene",
+          "card-discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -650,7 +743,8 @@
         "scope": "player",
         "visibility": "public",
         "field_ids": [
-          "computer.scene"
+          "computer.scene",
+          "missions.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -681,7 +775,9 @@
       "solar-system.scene",
       "signals.scene",
       "computer.scene",
-      "public.scene"
+      "public.scene",
+      "missions.scene",
+      "card-discard.scene"
     ],
     "must_ask_field_ids": [],
     "never_infer": [
@@ -880,6 +976,66 @@
         "notes": [
           "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
         ]
+      },
+      {
+        "id": "missions.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "missions.scene"
+        ],
+        "area_ids": [
+          "missions"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "card-discard.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "card-discard.scene"
+        ],
+        "area_ids": [
+          "card-discard"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
       }
     ],
     "privacy_policy": "owner-scoped"
@@ -894,7 +1050,9 @@
       "computer",
       "public",
       "hand",
-      "hidden"
+      "hidden",
+      "missions",
+      "card-discard"
     ],
     "editable_component_ids": [
       "system",

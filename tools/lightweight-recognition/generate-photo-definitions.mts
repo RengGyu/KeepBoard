@@ -28,7 +28,7 @@ function nativeProperty(game:string,component:string,id:string):PropertySpec {
 }
 /** The historical contract (frozen before the runtime revision) and the one reviewed revision derived from it by tools/game-runtime/revise-inputs.ts contract. Only the reviewed revision is accepted. */
 export const HISTORICAL_CONTRACT_SHA256='2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b';
-export const APPROVED_CONTRACT={revision:'gamepack-revision-20261026',sha256:'797e8438e2ccab25e93fea80477ea6da2e36da43a5c3429b87391250d1247a8c'};
+export const APPROVED_CONTRACT={revision:'gamepack-revision-20261026',sha256:'eef14db453fccce830db414d7cfd0dad7b0f6086d568ad4c119ff8babc657b76'};
 export function generateDefinitions(root:string){
  const contractFile='game-photo-definitions/contract.json',contractBytes=readFileSync(resolve(root,contractFile));
  if(sha(contractBytes)!==APPROVED_CONTRACT.sha256)throw Error('Approved contract hash changed; do not silently rebind saved games.');
