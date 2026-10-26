@@ -1,0 +1,750 @@
+{
+  "schema_version": "1.0",
+  "game_id": "barrage",
+  "name_ko": "바라지",
+  "name_en": "Barrage",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Leeghwater 등 확장 제외;연결 계산은 선택 확장",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "barrage.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "structures",
+      "name": "댐·높이·도관·발전소",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "소유자와 시설 종류, 댐 높이.",
+      "source_refs": [
+        "barrage.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "water",
+      "name": "물방울",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "댐 상류 저수와 흐르는 위치.",
+      "source_refs": [
+        "barrage.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "machinery",
+      "name": "기계·기술 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "굴착기/믹서·특허와 회전 바퀴에 묶인 상태.",
+      "source_refs": [
+        "barrage.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "engineers",
+      "name": "엔지니어·계약·돈",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "엔지니어",
+        "미완료 계약",
+        "완료 계약 뒷면",
+        "크레딧"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "회사별 엔지니어는 개인색 일꾼이며 계약은 타일, 크레딧은 값1·3·5의 공용 화폐다. 계약은 미완료/완료 면을 구별한다. 일꾼 소유색을 돈이나 계약에 적용하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "barrage.art-confirmation.barrage-rules"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "basin",
+        "name": "수로 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "structures",
+          "water"
+        ],
+        "anchor_contract": "유역 노드와 자연 수로 방향, 도관 입출구·발전소를 별개 연결로 정의.",
+        "description": "수로 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "wheel",
+        "name": "공사 바퀴",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "machinery"
+        ],
+        "anchor_contract": "바퀴 회전 기준 인덱스와 각 칸의 기계/기술 묶음.",
+        "description": "공사 바퀴의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "actions",
+        "name": "행동 공간",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "engineers"
+        ],
+        "anchor_contract": "공용/개인 행동 공간과 사용 엔지니어.",
+        "description": "행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "company",
+        "name": "회사판·계약",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "structures",
+          "engineers",
+          "machinery"
+        ],
+        "anchor_contract": "남은 시설·가용 기계·계약과 현재 돈.",
+        "description": "회사판·계약의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "basin.scene",
+      "label": "수로 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "유역 노드와 자연 수로 방향, 도관 입출구·발전소를 별개 연결로 정의. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "structures",
+        "water"
+      ],
+      "area_ids": [
+        "basin"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "wheel.scene",
+      "label": "공사 바퀴",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "바퀴 회전 기준 인덱스와 각 칸의 기계/기술 묶음. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "machinery"
+      ],
+      "area_ids": [
+        "wheel"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "actions.scene",
+      "label": "행동 공간",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공용/개인 행동 공간과 사용 엔지니어. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "engineers"
+      ],
+      "area_ids": [
+        "actions"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "company.scene",
+      "label": "회사판·계약",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "남은 시설·가용 기계·계약과 현재 돈. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "structures",
+        "engineers",
+        "machinery"
+      ],
+      "area_ids": [
+        "company"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "energy",
+      "label": "라운드 에너지",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이번 라운드 생산량과 누적 승점 별개.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "wheel-position",
+      "label": "회전 위치",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "기계가 돌아오기까지의 바퀴 상태를 사진 기준으로 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "라운드·회사",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 라운드, 회사/임원과 목표 타일.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "물 이동/발전/계약 보상/기계 배치·바퀴 회전 중 완료 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "essentials.storage-guidance"
+      ],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn-order",
+      "label": "차례 순서 트랙",
+      "description": "회사별 순서 표식의 실제 배열을 기록. 현재 라운드 에너지량과 이전 배열을 사진으로 임의 재계산해 덮어쓰지 않는다. 라운드 종료 처리 중이면 변경 전/후와 완료 여부를 pending에 남긴다.",
+      "type": "json",
+      "scope": "public",
+      "visibility": "public",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "barrage.essentials.rules"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "water",
+      "name": "물의 연결",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "댐에 저장한 물을 도관과 발전소를 통해 에너지로 이용한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "barrage.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "height",
+      "name": "높이",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "댐 높이는 저장 능력과 관계하므로 소유자만 있는 단일 건물 값으로 축약하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "barrage.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "essentials.turn-order",
+      "name": "순서 갱신 중단점",
+      "summary": "라운드 종료 순서 갱신은 명시적 실제 처리 기록이다. 열기만으로 에너지 0/새 순서로 초기화하지 않는다.",
+      "field_ids": [
+        "turn-order",
+        "energy",
+        "pending"
+      ],
+      "kind": "procedure",
+      "scope": "public",
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "barrage.essentials.rules"
+      ],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "basin.scene",
+          "actions.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "wheel.scene",
+          "company.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "basin.scene",
+      "wheel.scene",
+      "actions.scene",
+      "company.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "도관 소유권만으로 댐 물 소유권·수익, 다음 물 흐름",
+      "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다."
+    ],
+    "correction_targets": [
+      {
+        "id": "basin.edit",
+        "scope": "public",
+        "component_ids": [
+          "structures",
+          "water"
+        ],
+        "field_ids": [
+          "basin.scene"
+        ],
+        "area_ids": [
+          "basin"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "유역 노드와 자연 수로 방향, 도관 입출구·발전소를 별개 연결로 정의.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "wheel.edit",
+        "scope": "player",
+        "component_ids": [
+          "machinery"
+        ],
+        "field_ids": [
+          "wheel.scene"
+        ],
+        "area_ids": [
+          "wheel"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "바퀴 회전 기준 인덱스와 각 칸의 기계/기술 묶음.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "actions.edit",
+        "scope": "public",
+        "component_ids": [
+          "engineers"
+        ],
+        "field_ids": [
+          "actions.scene"
+        ],
+        "area_ids": [
+          "actions"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "공용/개인 행동 공간과 사용 엔지니어.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "company.edit",
+        "scope": "player",
+        "component_ids": [
+          "structures",
+          "engineers",
+          "machinery"
+        ],
+        "field_ids": [
+          "company.scene"
+        ],
+        "area_ids": [
+          "company"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "남은 시설·가용 기계·계약과 현재 돈.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "turn-order.essentials-edit",
+        "scope": "public",
+        "field_ids": [
+          "turn-order"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "basin",
+      "wheel",
+      "actions",
+      "company"
+    ],
+    "editable_component_ids": [
+      "structures",
+      "water",
+      "machinery",
+      "engineers"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "barrage.primary",
+      "title": "Barrage — 공식 자료",
+      "url": "https://craniocreations.com/products/barrage-eng",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 소개에서 댐/높이/저수, 도관·발전소, 기계·특허·엔지니어 확인. 공사 바퀴·계약·생산 정산 세부는 원문 미대조."
+    },
+    {
+      "id": "barrage.art-confirmation.barrage-rules",
+      "title": "Barrage — Core English Rulebook",
+      "url": "https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.2–3 Components; pp.7–11 Setup/Contracts; pp.15–17 Management Actions — 회사별 엔지니어는 개인색 일꾼이며 계약은 타일, 크레딧은 값1·3·5의 공용 화폐다. 계약은 미완료/완료 면을 구별한다. 일꾼 소유색을 돈이나 계약에 적용하지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    },
+    {
+      "id": "barrage.essentials.rules",
+      "title": "Barrage Core English Rulebook",
+      "url": "https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "PDF p.12 Actions; p.21 End of Round; 적용판본: 기본판; 확인범위: 행동 순서는 Energy Track의 순서 표식을 따른다. 라운드 종료 때 에너지 생산량 역순, 동률은 이전 순서를 뒤집는다. 원문/열람 한계는 docs/game-essentials/evidence.json#barrage"
+    },
+    {
+      "id": "essentials.storage-guidance",
+      "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
+      "url": null,
+      "kind": "implementation",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Leeghwater 등 새 건물·외부 공사·지도 패치 별도. 공식 상품 소개만으로 확장 규칙 포함 금지.",
+    "바퀴 회수·타인 도관 사용 비용·연결 경로와 생산 순서의 전체 원문 검증 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

@@ -1,0 +1,399 @@
+{
+  "game_id": "seven-wonders",
+  "name_ko": "세븐 원더스",
+  "name_en": "7 Wonders",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "1판 카드/기호 차이;확장·Architects 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "seven-wonders.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/seven-wonders.json",
+  "source_sha256": "c76d37bcdddaa65ff6aa1bd5c8cdb63931328911657afc2b45f553f526035aa8",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "age-cards",
+      "name": "시대 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "시대·색·건물 ID와 지은 카드/손패/버림 구분.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "건물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-building",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "책 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-book",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "방패 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-shield",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "wonder",
+      "name": "불가사의 판",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "판면과 건설 단계 아래 카드.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "불가사의 건설 구역",
+          "layers": [
+            {
+              "asset_id": "seven-wonders.wonder.wonder-stages"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "coins",
+      "name": "동전",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "개인 보유 금액.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "military",
+      "name": "군사 분쟁 표식",
+      "kind": "marker",
+      "source_confidence": "reported",
+      "source_description": "시대별 획득 승리/패배 표식.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "군사 -1",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#bc6048",
+          "label": "군사 -1",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-1fd66d2f50b2"
+            }
+          ]
+        },
+        {
+          "name": "군사 1",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#3b4541",
+          "label": "군사 1",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-military-95cd5da6d930"
+            }
+          ]
+        },
+        {
+          "name": "군사 3",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#3b4541",
+          "label": "군사 3",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-military-706ac07c5aef"
+            }
+          ]
+        },
+        {
+          "name": "군사 5",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#3b4541",
+          "label": "군사 5",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-military-42dea36b86cb"
+            }
+          ]
+        },
+        {
+          "name": "방패 표식",
+          "label": "방패 표식 · 기존 종류 미확인",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true,
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "legacy_reason": "기존 이름만으로 새 구체 유형/값/색을 확정하지 않는다. 저장 원본은 유지한다."
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "variant",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "fidelity_correction": {
+        "finding_id": "F015",
+        "source_url": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders/en/sev-en02-rules-1716388903zBEZx.pdf",
+        "source_location": "PDF pp.1–3 Elements / Setup",
+        "scope": "분쟁표식은 승패/값(-1,+1,+3,+5)의공용유형색이며 개인색설정없음.",
+        "legacy_policy": "preserve name; unresolved unless explicitly retained, no migration"
+      }
+    }
+  ],
+  "areas": [
+    {
+      "id": "city",
+      "name": "도시 건물",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "age-cards",
+        "coins",
+        "military"
+      ],
+      "anchor_contract": "색별 겹침을 허용하되 카드 ID/아이콘이 가려졌으면 미상 유지.",
+      "description": "도시 건물의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "wonder-area",
+      "name": "불가사의 단계",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "wonder",
+        "age-cards"
+      ],
+      "anchor_contract": "불가사의/앞뒷면 ID와 단계별 건설 표시. 밑에 묻힌 카드 정체는 필수 아님.",
+      "description": "불가사의 단계의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "현재 드래프트 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "age-cards"
+      ],
+      "anchor_contract": "현재 소유자와 손패 묶음을 함께 보존; 전달 전후를 자동 전환하지 않는다.",
+      "description": "현재 드래프트 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "discard",
+      "name": "버림·미사용 시대 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "age-cards"
+      ],
+      "anchor_contract": "시대별 미사용 묶음과 버린 카드 묶음 분리.",
+      "description": "버림·미사용 시대 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "도시 건물 · 구조 예시",
+    "area_id": "city",
+    "layers": [
+      {
+        "asset_id": "common.area-zone"
+      },
+      {
+        "asset_id": "common.card-shell",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-building",
+        "transform": "translate(15 29) scale(.36) translate(28 23) scale(.55)"
+      },
+      {
+        "asset_id": "common.token-shell",
+        "transform": "translate(63 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-coin",
+        "transform": "translate(63 29) scale(.36) translate(30 30) scale(.5)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "zone",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

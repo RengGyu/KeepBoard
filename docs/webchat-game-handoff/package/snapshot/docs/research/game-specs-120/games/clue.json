@@ -1,0 +1,719 @@
+{
+  "schema_version": "1.0",
+  "game_id": "clue",
+  "name_ko": "클루",
+  "name_en": "Clue / Cluedo",
+  "edition": {
+    "id": "base",
+    "name": "현행 Classic 기본판",
+    "compatibility_notes": [
+      "구판 방/인물/아트 차이;봉투 내용은 스캔으로 알아내지 않음",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "clue.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "board",
+      "name": "저택판",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "방·복도·문·비밀통로.",
+      "source_refs": [
+        "clue.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "figures",
+      "name": "용의자·무기",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "플레이어 선택 여부와 무관한 실제 말 위치.",
+      "source_refs": [
+        "clue.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "사건 카드·봉투",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "개인 손패와 누구도 보지 않은 정답 봉투.",
+      "source_refs": [
+        "clue.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "notes",
+      "name": "개인 추리표·주사위",
+      "kind": "marker",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "주사위 값과 소유자별 추리 메모.",
+      "source_refs": [
+        "clue.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "mansion",
+        "name": "저택",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "board",
+          "figures"
+        ],
+        "anchor_contract": "방 노드·문·복도 셀을 별개 유형으로 연결. 인물과 무기의 방 위치.",
+        "description": "저택의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 증거 카드",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "소유 카드와 타인에게 보여준 사실은 별도 메모.",
+        "description": "개인 증거 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "solution",
+        "name": "정답 봉투",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "봉투 존재만 기록. 소유자가 없으며 앱도 내용 추정/공개하지 않는다.",
+        "description": "정답 봉투의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private-notes",
+        "name": "추리 메모",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "notes"
+        ],
+        "anchor_contract": "사용자가 적은 확실/추측 표시의 의미를 그대로 보존.",
+        "description": "추리 메모의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "mansion.scene",
+      "label": "저택",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "방 노드·문·복도 셀을 별개 유형으로 연결. 인물과 무기의 방 위치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "board",
+        "figures"
+      ],
+      "area_ids": [
+        "mansion"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 증거 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "소유 카드와 타인에게 보여준 사실은 별도 메모. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "solution.scene",
+      "label": "정답 봉투",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "봉투 존재만 기록. 소유자가 없으며 앱도 내용 추정/공개하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "solution"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private-notes.scene",
+      "label": "추리 메모",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "사용자가 적은 확실/추측 표시의 의미를 그대로 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "notes"
+      ],
+      "area_ids": [
+        "private-notes"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "edition",
+      "label": "판면·인물 명단",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실물 상품 코드/판본을 입력하면 지도와 인물 대응. 미상 시 사진 구역 사용.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "suggestion",
+      "label": "진행 중 추리",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "공개 제안한 인물/방/무기와 답변 차례.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "shown",
+      "label": "비밀로 본 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "본 당사자가 기록할 때만. 공용 제안 메모와 분리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "eliminated",
+      "label": "추리 실패 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "boolean",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실제 최종 추리 결과를 확인한 경우만.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이동/제안/반증 순서/최종 추리 중 어디까지 진행했는지. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "essentials.storage-guidance"
+      ],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "solution",
+      "name": "세 종류 사건",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "누가·어디서·무엇으로라는 서로 다른 세 정보 범주가 있다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "clue.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "privacy",
+      "name": "추리 정보",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "봉투 내용과 개인 메모를 공용 판 사진에 포함시키지 않는 보존 설계를 적용한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 증거 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "소유 카드와 타인에게 보여준 사실은 별도 메모.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "solution.preserve",
+        "label": "정답 봉투 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "solution.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "봉투 존재만 기록. 소유자가 없으며 앱도 내용 추정/공개하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private-notes.preserve",
+        "label": "추리 메모 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private-notes.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "사용자가 적은 확실/추측 표시의 의미를 그대로 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "mansion.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "mansion.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "봉투 정답, 다른 사람이 보여준 카드, 메모에서 타인의 숨은 손패 확정",
+      "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다."
+    ],
+    "correction_targets": [
+      {
+        "id": "mansion.edit",
+        "scope": "public",
+        "component_ids": [
+          "board",
+          "figures"
+        ],
+        "field_ids": [
+          "mansion.scene"
+        ],
+        "area_ids": [
+          "mansion"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "방 노드·문·복도 셀을 별개 유형으로 연결. 인물과 무기의 방 위치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "소유 카드와 타인에게 보여준 사실은 별도 메모.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "solution.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "solution.scene"
+        ],
+        "area_ids": [
+          "solution"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "봉투 존재만 기록. 소유자가 없으며 앱도 내용 추정/공개하지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private-notes.edit",
+        "scope": "player",
+        "component_ids": [
+          "notes"
+        ],
+        "field_ids": [
+          "private-notes.scene"
+        ],
+        "area_ids": [
+          "private-notes"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "사용자가 적은 확실/추측 표시의 의미를 그대로 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "mansion",
+      "hand",
+      "solution",
+      "private-notes"
+    ],
+    "editable_component_ids": [
+      "board",
+      "figures",
+      "cards",
+      "notes"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "clue.primary",
+      "title": "Clue / Cluedo — 공식 자료",
+      "url": "https://instructions.hasbro.com/en-gb/instruction/clue-the-classic-mystery-game",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "Hasbro 38712 공식 안내에서 저택판, 용의자·무기·카드·봉투·탐정 메모·주사위와 보너스 카드 확인. 이는 특정 인쇄판이며 모든 현행 Classic의 방/인물·보너스 구성과 동일하다고 확정하지 않는다."
+    },
+    {
+      "id": "essentials.storage-guidance",
+      "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
+      "url": null,
+      "kind": "implementation",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "테마판·Liars Edition 등은 별도 지도/규칙 패치; 하나의 고정 저택으로 처리하지 않는다.",
+    "추천 현행판과 38712의 정확한 판본 차이 미확정. 방 연결·인물/보너스 규칙은 실물 코드 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

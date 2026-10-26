@@ -1,0 +1,9 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type TwilightImperium4Readout =
+  {schema:"twilight-imperium-4-v1";kind:"systems";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "planets": string | null; "anomaly": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "planets": FieldBasis | null; "anomaly": FieldBasis | null; "location": 'user' | null}}
+ | {schema:"twilight-imperium-4-v1";kind:"units";values:{"observedColor": string | null; "unitType": string | null; "owner": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "unitType": FieldBasis | null; "owner": 'user' | null; "location": 'user' | null}}
+ | {schema:"twilight-imperium-4-v1";kind:"command";values:{"observedColor": string | null; "pool": string | null; "systemTarget": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "pool": 'user' | null; "systemTarget": 'user' | null; "owner": 'user' | null}}
+ | {schema:"twilight-imperium-4-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null; "useState": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null; "useState": 'user' | null}}
+ | {schema:"twilight-imperium-4-v1";kind:"trade";values:{"observedColor": string | null; "resourceType": string | null; "resourceZone": string | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "resourceZone": 'user' | null}}
+ | {schema:"twilight-imperium-4-v1";kind:null;values:{};sources:{}};

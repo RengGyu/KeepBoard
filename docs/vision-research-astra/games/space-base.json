@@ -1,0 +1,900 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "space-base",
+  "name_ko": "스페이스 베이스",
+  "name_en": "Space Base",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Command Station 등 추가 콘텐츠 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "space-base.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/space-base.json",
+    "sha256": "6fd93fb7b528bf56c4f4b54db0a82cf501b0777b10293c0a1be8c636ac963e0c",
+    "runtime_pack_id": "space-base",
+    "runtime_pack_version": "1.0.0-essentials-2.6fd93fb7b528",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "space-base::space-base.primary",
+      "space-base::essentials.storage-guidance"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "섹터 번호·위/아래 배치 카드·효과 띠",
+  "critical_resume_distinction": "현재 함선과 배치된 함선 방향·화물/수입/승점 트랙을 분리",
+  "partitions": {
+    "common_public": [
+      "market",
+      "roll"
+    ],
+    "player_public": [
+      "sectors",
+      "tracks"
+    ],
+    "owner_private": [],
+    "do_not_infer": [
+      "decks"
+    ]
+  },
+  "areas": [
+    {
+      "id": "sectors",
+      "name": "개인 섹터",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "ships",
+        "markers"
+      ],
+      "anchor_contract": "섹터별 정박 카드와 위로 배치한 카드 묶음·방향·노출 능력·충전 부착.",
+      "description": "개인 섹터의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "sectors.scene"
+      ],
+      "source_field_ids": [
+        "sectors.scene"
+      ],
+      "allowed_component_ids": [
+        "ships",
+        "markers"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 섹터 전체 경계를 먼저 기록. 섹터별 정박 카드와 위로 배치한 카드 묶음·방향·노출 능력·충전 부착. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "섹터별 정박 카드와 위로 배치한 카드 묶음·방향·노출 능력·충전 부착.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "market",
+      "name": "조선소·식민지",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "레벨별 공개 구매 카드·식민지·보충 전 빈자리.",
+      "description": "조선소·식민지의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "market.scene"
+      ],
+      "current_manual_target_fields": [
+        "market.scene"
+      ],
+      "source_field_ids": [
+        "market.scene"
+      ],
+      "allowed_component_ids": [
+        "ships"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "조선소·식민지 전체 경계를 먼저 기록. 레벨별 공개 구매 카드·식민지·보충 전 빈자리. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "레벨별 공개 구매 카드·식민지·보충 전 빈자리.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "tracks",
+      "name": "개인 자원 트랙",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "markers"
+      ],
+      "anchor_contract": "크레딧/수입/승점은 서로 다른 트랙 ID.",
+      "description": "개인 자원 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "tracks.scene"
+      ],
+      "source_field_ids": [
+        "tracks.scene"
+      ],
+      "allowed_component_ids": [
+        "markers"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 자원 트랙 전체 경계를 먼저 기록. 크레딧/수입/승점은 서로 다른 트랙 ID. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "크레딧/수입/승점은 서로 다른 트랙 ID.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "roll",
+      "name": "공용 굴림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dice"
+      ],
+      "anchor_contract": "현재 주사위 눈과 합, 능력 수정 여부.",
+      "description": "공용 굴림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "roll.scene"
+      ],
+      "current_manual_target_fields": [
+        "roll.scene"
+      ],
+      "source_field_ids": [
+        "roll.scene"
+      ],
+      "allowed_component_ids": [
+        "dice"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "공용 굴림 전체 경계를 먼저 기록. 현재 주사위 눈과 합, 능력 수정 여부. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "현재 주사위 눈과 합, 능력 수정 여부.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "decks",
+      "name": "레벨별 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "레벨별 미공개 덱 순서와 버림 구별.",
+      "description": "레벨별 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "decks.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "레벨별 미공개 덱 순서와 버림 구별.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "ships",
+      "name": "함선·식민지 카드",
+      "kind": "card",
+      "identity_description": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "space-base::space-base.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+          "faceOnly": true
+        },
+        {
+          "id": "sectorNumber",
+          "type": "integer",
+          "label": "섹터 번호",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+          "faceOnly": true
+        },
+        {
+          "id": "mode",
+          "type": "text",
+          "label": "정박·배치 방향",
+          "acquisition": "manual",
+          "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "underCard",
+          "type": "text",
+          "label": "겹침 순서",
+          "acquisition": "manual",
+          "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "visibleAbility",
+          "type": "text",
+          "label": "보이는 빨간 능력 표기",
+          "acquisition": "visible",
+          "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+          "faceOnly": true
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "sectorNumber",
+        "mode",
+        "underCard",
+        "visibleAbility"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "sectorNumber",
+        "visibleAbility"
+      ],
+      "manual_attribute_keys": [
+        "mode",
+        "underCard"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "markers",
+      "name": "크레딧·수입·승점·충전",
+      "kind": "token",
+      "identity_description": "개인 트랙과 카드별 충전.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "space-base::space-base.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 트랙과 카드별 충전."
+        },
+        {
+          "id": "markerType",
+          "type": "text",
+          "label": "자원·점수·충전",
+          "acquisition": "visible",
+          "sourceText": "개인 트랙과 카드별 충전."
+        },
+        {
+          "id": "displayValue",
+          "type": "integer",
+          "label": "표시값",
+          "acquisition": "visible",
+          "sourceText": "개인 트랙과 카드별 충전."
+        },
+        {
+          "id": "targetCard",
+          "type": "text",
+          "label": "충전 대상 카드",
+          "acquisition": "manual",
+          "sourceText": "개인 트랙과 카드별 충전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "markerType",
+        "displayValue",
+        "targetCard"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "markerType",
+        "displayValue"
+      ],
+      "manual_attribute_keys": [
+        "targetCard"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "dice",
+      "name": "주사위",
+      "kind": "die",
+      "identity_description": "현재 개별 눈·합과 능력 변경.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "space-base::space-base.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 현재 개별 눈·합과 능력 변경."
+        },
+        {
+          "id": "dieValue",
+          "type": "integer",
+          "label": "개별 눈",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "현재 개별 눈·합과 능력 변경."
+        },
+        {
+          "id": "modifiedResult",
+          "type": "text",
+          "label": "확인한 능력 변경",
+          "acquisition": "manual",
+          "sourceText": "현재 개별 눈·합과 능력 변경. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "dieValue",
+        "modifiedResult"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "dieValue"
+      ],
+      "manual_attribute_keys": [
+        "modifiedResult"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "market.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "roll.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "decks.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "rewards",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.rewards",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "charge",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.charge",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "buy-state",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "rewards",
+      "label": "개인 보상 선택",
+      "scope": "player",
+      "visibility": "public",
+      "description": "개별 눈/합 선택·능력 발동·수령 완료 여부와 활성/비활성 플레이어."
+    },
+    {
+      "id": "charge",
+      "label": "카드별 충전",
+      "scope": "player",
+      "visibility": "public",
+      "description": "충전 수와 사용/초기화 여부를 카드 인스턴스에 연결."
+    },
+    {
+      "id": "buy-state",
+      "label": "구매 진행",
+      "scope": "public",
+      "visibility": "public",
+      "description": "구매·구함선 배치·자원 리셋·시장 보충 중 지점."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "능력 사용/굴림/모든 플레이어 보상/구매·함선 배치/보충 중 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "겹친 함선을 중복 카드로 제거, 이번 굴림 모든 수입이 처리됐다고 확정",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "decks.preserve",
+        "label": "레벨별 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "레벨별 미공개 덱 순서와 버림 구별.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "sectors.scene",
+          "tracks.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "market.scene",
+          "roll.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "기본판. Shy Pluto/Command Station 등 추가 카드·주사위/모듈은 확장 패치.",
+    "충전/녹색 능력 타이밍·주사위 분리/합 선택·식민지 처리와 종료 동률은 전수 검증 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "space-base",
+    "edition": "기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 2,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "cb1c5726475e3381a89d889a07a342e6a5ecf625075112eae5e8147e2a4cb13c",
+        "9c5b1c3c574196d33f13bcee888b85ee0558b0698b48367497042750b907ed77"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "섹터 번호·위/아래 배치 카드·효과 띠",
+    "closeups": [
+      {
+        "area_id": "sectors",
+        "name": "개인 섹터",
+        "needs": "섹터별 정박 카드와 위로 배치한 카드 묶음·방향·노출 능력·충전 부착.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "market",
+        "name": "조선소·식민지",
+        "needs": "레벨별 공개 구매 카드·식민지·보충 전 빈자리.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "tracks",
+        "name": "개인 자원 트랙",
+        "needs": "크레딧/수입/승점은 서로 다른 트랙 ID.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "roll",
+        "name": "공용 굴림",
+        "needs": "현재 주사위 눈과 합, 능력 수정 여부.",
+        "access": "public evidence"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "decks",
+        "name": "레벨별 덱",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "space-base",
+    "editionId": "base",
+    "sourceSHA": "6fd93fb7b528bf56c4f4b54db0a82cf501b0777b10293c0a1be8c636ac963e0c",
+    "status": "new",
+    "areas": [
+      {
+        "areaId": "sectors",
+        "label": "개인 섹터",
+        "fieldKeys": [
+          "sectors.scene"
+        ],
+        "componentIds": [
+          "ships",
+          "markers"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "template": "square-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "market",
+        "label": "조선소·식민지",
+        "fieldKeys": [
+          "market.scene"
+        ],
+        "componentIds": [
+          "ships"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "card-lanes",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "tracks",
+        "label": "개인 자원 트랙",
+        "fieldKeys": [
+          "tracks.scene"
+        ],
+        "componentIds": [
+          "markers"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "template": "track-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "roll",
+        "label": "공용 굴림",
+        "fieldKeys": [
+          "roll.scene"
+        ],
+        "componentIds": [
+          "dice"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "decks",
+        "label": "레벨별 덱",
+        "fieldKeys": [
+          "decks.scene"
+        ],
+        "componentIds": [
+          "ships"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "ISOLATED_FIX_VERIFIED_RENDER_PENDING",
+    "baseline_status": "NEEDS_CORRECTION",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 10,
+    "board_instance_count": 4,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [
+      {
+        "id": "V001",
+        "status": "ISOLATED_CODE_FIXED_AFTER_RENDER_PENDING",
+        "detail": "known kind=die + variant=null maps to token-shell; Sagrada actual rendered sample visually confirms coin shape",
+        "minimum_fix": "GenericPieceArt known category condition recognizes die alongside dice/cube. No face/color inference or readout mutation.",
+        "baseline_status": "CONFIRMED_SHARED_CODE_PATH",
+        "fix_evidence": "sol2-source-check.json"
+      }
+    ],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

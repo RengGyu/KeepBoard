@@ -1,0 +1,105 @@
+{
+  "status": "passed",
+  "scope": "synthetic contract/reachability review; not real recognition or browser/deployment verification",
+  "realAPICalls": 0,
+  "pack": {
+    "bytes": 52828,
+    "fields": 57,
+    "requirements": 25,
+    "derivedRules": 17,
+    "preservations": 8
+  },
+  "scanPrompt": {
+    "freshPublicBytes": 16802,
+    "freshPrivateBytes": 16015,
+    "sceneInstructionBytes": 9121,
+    "publicAllowedFields": [
+      "components.observed",
+      "board.layout",
+      "turn.diceTotal",
+      "robber.hexAnchor",
+      "player.resources.total",
+      "player.development.knightsPlayed",
+      "player.road.longestContinuousSegments",
+      "turn.actionDevelopmentCardLimitReached",
+      "awards.longestRoadHolder",
+      "awards.largestArmyHolder"
+    ],
+    "privateAllowedFields": [
+      "player.components.observed",
+      "player.resources.total",
+      "player.resources.mustDiscardHalf",
+      "player.development.handCounts",
+      "player.development.knightsPlayed",
+      "player.development.newActionCardUnavailableThisTurn",
+      "player.development.newVictoryPointCanBeRevealedToWin",
+      "player.development.qualifiesForLargestArmy",
+      "player.road.longestContinuousSegments",
+      "player.road.qualifiesForLongestRoad"
+    ],
+    "derivedTargetsAllowedPublic": [
+      "turn.actionDevelopmentCardLimitReached"
+    ],
+    "derivedTargetsAllowedPrivate": [
+      "player.development.newActionCardUnavailableThisTurn",
+      "player.development.newVictoryPointCanBeRevealedToWin",
+      "player.development.qualifiesForLargestArmy",
+      "player.road.qualifiesForLongestRoad"
+    ],
+    "withSyntheticAcceptedBoardBytes": 19954,
+    "privateHandExcludedFromPublicContext": true,
+    "transmitsFullPack": false,
+    "formalResponseSchemaInTransport": false,
+    "publicFieldDefinitionsBytes": 4780,
+    "publicFieldDefinitionsWithoutUiAndRuleMetadataBytes": 2663,
+    "sceneSchemaBytes": 4112
+  },
+  "confirmed": {
+    "purchaseTypePersistsButTurnRestrictionIncorrectlyRederived": true,
+    "fullyObservedCatalogIgnoredByCanonicalSummary": true,
+    "full19PartialFlagStillRequiresBoardAnswer": true,
+    "missingLayerCoveragePreventsExactPieceTotals": true,
+    "titleHoldersUnrecordedMakesScoreUnknown": true,
+    "changingCurrentPlayerDoesNotStartNewTurn": true,
+    "staleHiddenVPOverrideSurvivesHandCountCorrection": true,
+    "derivedOnlyBooleanAcceptedAsPhotoCandidate": true,
+    "recomputeDoesNotRotateTurnOrEpoch": true,
+    "resourceConflict": {
+      "separateTotal": 7,
+      "completeCounts": 2,
+      "returnedTotal": 7,
+      "status": "conflict"
+    },
+    "invalidTrade": {
+      "validRatio": false,
+      "messages": [
+        "수량·서로 다른 자원·한 종류의 내는 자원 비율을 확인하세요",
+        "현재 차례 미확인",
+        "거래 가능한 단계·판본을 확인하세요",
+        "판본·거래/건설 방식 미확인",
+        "남은 효과·처리 상태 미확인",
+        "자원 종류별 보유 수는 소유자 화면에서 확인하세요",
+        "광석 은행 재고 미확인",
+        "현재 확인된 항구 비율입니다. 미확인 해안·건물은 계산하지 않았습니다"
+      ]
+    }
+  },
+  "notes": [
+    "Current-player update is also used for correction; not all such updates should advance a turn. The UI lacks a separate next-turn action.",
+    "Unknown counts/scores are conservative behavior, but missing UI confirmation entry prevents resolving them.",
+    "Retaining card identity is correct; deriving current-turn restriction from lifetime=session identity without a turn predicate is the defect."
+  ],
+  "sourceSha256": {
+    "gamepacks/catan.ts": "3dd63bbe03bdbef1e36e895f0c699bb938eecb607edd61a0a0c30becdbd7df7c",
+    "gamepacks/catanProfile.ts": "d929585f6f3f43ef137b99f419c54186a766a843ff628504b665f614499c5f94",
+    "server/engine.ts": "5de5ac168dd289809e43c1c54d34d0b7892c95e060f64795a5338700061261b1",
+    "server/ai/prompt.ts": "8e6c1a988f023c6153acff3c86df8447057c2e4a71492b0f13fdf113f39e1e7e",
+    "server/ai/index.ts": "a401a32d00c6a220561654e8b637d7d4ef0959b88b431dfaf7a5eea9588e492f",
+    "shared/catanSummary.ts": "f33deb7d9a791ff36a2428eebd56d03f625ddd26411a5f5c9c930aa444205977",
+    "shared/scene.ts": "d89b4925fa2c05c42043905983c957ad7e9585bdc80712718818cacf9c3b063a",
+    "src/SessionWorkspace.tsx": "6eee4f2baf75a1a6c80e25c7080e39f7c909757c033ed5ef200cd0cbd96f2aed",
+    "src/SceneWorkspace.tsx": "e12ddef2cafec0b99ec6feaeb64fcdc45b0914a8f024c1399d299ed41cf76f95",
+    "src/SceneEditor.tsx": "01776c20ea722303f6faf8cd47696bd1548bb7bd15afdfcc6a2ef08462725fa0",
+    "src/CatanOverview.tsx": "a70bee8ed8624eabf6419fa85e14c828a725e9b6b652af99a8aca89cae86ef43"
+  }
+}

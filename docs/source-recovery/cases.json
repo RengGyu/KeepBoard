@@ -1,0 +1,3618 @@
+{
+  "as_of": "2026-10-22",
+  "purpose": "동결 자료를 변경하지 않는 근거 복구 조사",
+  "identity_policy": "원 입력에 itemID가 없으므로 game_id:review:원 finding 1-based순번을 새 추적ID로 부여. JSON pointer·원문·해시도 보존.",
+  "classification_policy": "주원인은 가장 먼저 할 후속 행동을 정한 연구 판단이며 게임 규칙의 사실 검증 등급이 아니다. 보조 원인은 중복 가능. 최초 분류와 대표사례 조사 결과를 별도 유지.",
+  "counts": {
+    "items": 50,
+    "games": 42,
+    "original_evidence": {
+      "UNCLEAR": 16,
+      "INFERRED": 21,
+      "SPEC": 13
+    },
+    "primary_causes": {
+      "clause_not_reviewed": 22,
+      "access_recovery": 8,
+      "edition_identity": 5,
+      "spec_interpretation": 6,
+      "source_not_located": 1,
+      "product_boundary": 6,
+      "source_conflict": 1,
+      "stale_tracking": 1
+    },
+    "primary_total": 50,
+    "historical_origin_403_items": 5,
+    "current_origin_403_retested": 0,
+    "representative_cases": 5,
+    "representative_items": 8,
+    "scoped_handoff_ready_items": 4,
+    "hold_after_scoped_review_items": 4,
+    "not_retested_items": 42
+  },
+  "cause_labels": {
+    "access_recovery": "접근·전달 형식 복구가 먼저",
+    "source_not_located": "필요한 상세 원문을 아직 확보하지 않음",
+    "edition_identity": "판본 식별·동등성 대조가 먼저",
+    "clause_not_reviewed": "해당 규칙 조항 미대조",
+    "spec_interpretation": "기존 명세의 표현·공개 범위 해석",
+    "source_conflict": "공식 자료 내부 충돌",
+    "product_boundary": "사진·앱의 지원 경계",
+    "stale_tracking": "보완 이력과 미확정 추적표 불일치"
+  },
+  "items": [
+    {
+      "item_id": "a-feast-for-odin:review:01",
+      "upstream_item_id": null,
+      "game_id": "a-feast-for-odin",
+      "original_ordinal": 1,
+      "name": "오딘을 위하여",
+      "item": "시작 플레이어 표식 상태 필드 없음(라운드 간 이동 여부 미대조)",
+      "item_sha256": "f05acb1a4552603d49e1334cef62c9bc447d15d75ae5d78756ab06b5565a209a",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/0/review_findings/0",
+        "docs/game-state-review/games.json#/rows/0/findings/0",
+        "docs/research/game-specs-120/games/a-feast-for-odin.json#/sources",
+        "docs/research/game-specs-120/games/a-feast-for-odin.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Norwegians 등 확장 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "a-feast-for-odin.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "규칙 검색 본문을 읽은 범위에 시작 표식 전달 조항이 없고, finding도 라운드 이동 미대조라고 명시한다.",
+      "next_action": "기존 공식 기본판 PDF의 라운드 종료/시작 표식 절만 확인한다.",
+      "relevant_field_ids": [
+        "turn"
+      ],
+      "existing_fields": [
+        {
+          "id": "turn",
+          "json_pointer": "/state_fields/7",
+          "visibility": "public",
+          "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "a-feast-for-odin.primary",
+          "title": "A Feast for Odin — 공식 자료",
+          "url": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "a-feast-for-odin:review:02",
+      "upstream_item_id": null,
+      "game_id": "a-feast-for-odin",
+      "original_ordinal": 2,
+      "name": "오딘을 위하여",
+      "item": "무기 카드 보유의 공개/비공개 구분 없음",
+      "item_sha256": "807f4bf419102c046391b9b950ccd9d356a50a4b04aca2ab40c997ab92b5fab7",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/0/review_findings/1",
+        "docs/game-state-review/games.json#/rows/0/findings/1",
+        "docs/research/game-specs-120/games/a-feast-for-odin.json#/sources",
+        "docs/research/game-specs-120/games/a-feast-for-odin.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Norwegians 등 확장 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "a-feast-for-odin.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "무기 카드 보유의 공개성 조항을 확인한 기록이 없다. 접근 차단 기록은 없다.",
+      "next_action": "무기 카드 보관·사용 절의 공개/비공개 표현을 확인하고 보유와 사용 후 상태를 구분한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "a-feast-for-odin.primary",
+          "title": "A Feast for Odin — 공식 자료",
+          "url": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "arcs:review:01",
+      "upstream_item_id": null,
+      "game_id": "arcs",
+      "original_ordinal": 1,
+      "name": "아크스",
+      "item": "법정 덱(뒷면) 남은 구성/순서 영역 없음",
+      "item_sha256": "259d28965231e72eee3e84cd7cd0f9a2a19f2b698a1a86a5623776e67b13a756",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/7/review_findings/0",
+        "docs/game-state-review/games.json#/rows/7/findings/0",
+        "docs/research/game-specs-120/games/arcs.json#/sources",
+        "docs/research/game-specs-120/games/arcs.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Blighted Reach 캠페인은 확장으로 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "arcs.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "공식 How to Play는 열렸지만 Rules Library가 JavaScript 안내만 반환했다. 보호 차단 여부는 기록되지 않았다.",
+      "next_action": "공식 라이브러리의 정상 브라우저 렌더 또는 원출판사 공개 PDF 링크 1개를 확보해 Court setup만 확인한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_JS_ONLY_RESPONSE_NOT_AUTH_DENIAL",
+        "basis": "sources:arcs.primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "arcs.primary",
+          "title": "Arcs — 공식 자료",
+          "url": "https://ledergames.com/pages/how-to-play-arcs",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 How to Play 페이지에서 Arcs 소개와 학습 영상 존재를 확인. 텍스트 규칙은 충분히 노출되지 않았고 공식 Rules Library는 JavaScript 안내만 반환했다. 아래 세부 상태는 원문 재검증이 필요한 기록 초안이다. 2022 개발 일기는 최종 규칙 근거로 사용하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "ark-nova:review:01",
+      "upstream_item_id": null,
+      "game_id": "ark-nova",
+      "original_ordinal": 1,
+      "name": "아크 노바",
+      "item": "뽑기 덱/버림 더미 영역 없음",
+      "item_sha256": "e2efa2cf02afa615578583cd140308fba8ce4bea4a196a3948a5f6e90beb28ad",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/8/review_findings/0",
+        "docs/game-state-review/games.json#/rows/8/findings/0",
+        "docs/research/game-specs-120/games/ark-nova.json#/sources",
+        "docs/research/game-specs-120/games/ark-nova.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Marine Worlds 등 확장 제외;새 지도/프로모 별도",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "ark-nova.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "상품 소개가 근거이며 뽑기/버림 설치 절은 아직 대조하지 않았다. 접근 실패 증거는 없다.",
+      "next_action": "공식 규칙 Setup의 zoo-card draw/discard 구역과 공개면을 확인한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "ark-nova.primary",
+          "title": "Ark Nova — 공식 자료",
+          "url": "https://capstone-games.com/products/ark-nova",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 소개에서 울타리/동물/보전 프로젝트, 매력·과학 명성·보전, 위치에 따라 강도가 달라지는 업그레이드 가능한 5개 행동 카드와 협회 일꾼 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "avalon:review:01",
+      "upstream_item_id": null,
+      "game_id": "avalon",
+      "original_ordinal": 1,
+      "name": "레지스탕스: 아발론",
+      "item": "악 진영끼리 서로 아는 정보가 owner로만 선언됨(역할 제한 공개 role-limited 미사용). known-information으로 기록은 가능",
+      "item_sha256": "4933195bce04f36c0eb193ab496098592920245c1553c29b817017c84ea3cdef",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/11/review_findings/0",
+        "docs/game-state-review/games.json#/rows/11/findings/0",
+        "docs/research/game-specs-120/games/avalon.json#/sources",
+        "docs/research/game-specs-120/games/avalon.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "발언 이력·추론은 사진으로 재구성 불가;현행 개별 제품 확인 필요",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "avalon.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "edition_identity",
+      "secondary_causes": [
+        "spec_interpretation",
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "선택은 원 Avalon 기본판이나 근거는 Big Box 소개다. known-information은 owner로 존재하므로 정보 자체의 완전 누락은 아니다.",
+      "next_action": "원 기본판 역할 구성과 밤의 공개 대상을 먼저 맞춘다. 역할별 예외를 대조하기 전 evil 전체 자동 공유를 만들지 않는다.",
+      "relevant_field_ids": [
+        "known-information",
+        "role.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "known-information",
+          "json_pointer": "/state_fields/5",
+          "visibility": "owner",
+          "description": "초기 안내에서 실제 알게 된 내용만 선택 기록; 시스템이 다른 역할을 추론해 채우지 않는다."
+        },
+        {
+          "id": "role.scene",
+          "json_pointer": "/state_fields/1",
+          "visibility": "owner",
+          "description": "역할/진영·그 역할에게 실제 전달된 정보만 기록. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "avalon.primary",
+          "title": "The Resistance: Avalon — 공식 자료",
+          "url": "https://indieboardsandcards.com/our-games/avalon-big-box/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Big Box 소개의 기본 설명에서 비밀 선악 진영, 원정대 투표·악의 원정 방해·멀린 암살 확인. 원 Avalon 기본판의 인원표·역할별 사전 정보와 Big Box 추가 모듈은 대조 미완료."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "azul:review:01",
+      "upstream_item_id": null,
+      "game_id": "azul",
+      "original_ordinal": 1,
+      "name": "아줄",
+      "item": "상자 뚜껑(버린 타일)이 bag.scene 숨은 영역 설명 안에 포함됨. 공개 수량인 뚜껑 타일까지 hidden으로 묶일 수 있음",
+      "item_sha256": "ea6e99cd1907ae9d52549d37552f993ef456c49083e5316452e378d92b1de2fc",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/12/review_findings/0",
+        "docs/game-state-review/games.json#/rows/12/findings/0",
+        "docs/research/game-specs-120/games/azul.json#/sources",
+        "docs/research/game-specs-120/games/azul.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "원작 기본판",
+        "compatibility_notes": [
+          "미니·언어판은 같은 게임;다른 Azul 독립작 자동 포함 안 함",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "azul.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "bag.scene 설명에 주머니와 상자 뚜껑이 함께 있다. 필드명 부재가 아니라 visibility 상속 범위의 문제다.",
+      "next_action": "공식 라운드 정리/리필 절에서 뚜껑의 면·열람 권리를 확인한 뒤 주머니와 분리할 필요를 판정한다.",
+      "relevant_field_ids": [
+        "bag.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "bag.scene",
+          "json_pointer": "/state_fields/4",
+          "visibility": "hidden",
+          "description": "미공개 타일과 버린 타일을 섞기 전 상태 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "azul.primary",
+          "title": "Azul — 공식 자료",
+          "url": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "brass-birmingham:review:01",
+      "upstream_item_id": null,
+      "game_id": "brass-birmingham",
+      "original_ordinal": 1,
+      "name": "브라스: 버밍엄",
+      "item": "공개 버림(사용 카드)이 deck.scene 숨은 묶음과 함께 기록됨 — 공개 범위 혼합",
+      "item_sha256": "065d518528acbc3f9562d5046ecc42918c56e1aa1226733fdb2c599952d70cb5",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/16/review_findings/0",
+        "docs/game-state-review/games.json#/rows/16/findings/0",
+        "docs/research/game-specs-120/games/brass-birmingham.json#/sources",
+        "docs/research/game-specs-120/games/brass-birmingham.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Retail 기본판",
+        "compatibility_notes": [
+          "Deluxe는 아트/재질 차이 메모;Lancashire는 별개 게임",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "brass-birmingham.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "deck.scene에 뽑기와 사용 카드가 묶여 있다. 공개 버림이라는 원 finding의 규칙 근거는 아직 별도 확인이 필요하다.",
+      "next_action": "공식 카드 사용·버림 절 대조 후 공개 버림/숨은 뽑기 묶음의 경계를 좁혀 제안한다.",
+      "relevant_field_ids": [
+        "deck.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "deck.scene",
+          "json_pointer": "/state_fields/4",
+          "visibility": "hidden",
+          "description": "덱 순서 및 버림 묶음 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "brass-birmingham.primary",
+          "title": "Brass: Birmingham — 공식 자료",
+          "url": "https://roxley.com/products/brass-birmingham?currency=GBP",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "Roxley 공식 Retail 소개·구성 목록에서 운하/철도 시대, 산업·링크·상인 타일, 카드, 돈, 석탄·철·맥주, 수입/승점 말 확인. 판매·연결의 모든 자원 예외는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "brass-birmingham:review:02",
+      "upstream_item_id": null,
+      "game_id": "brass-birmingham",
+      "original_ordinal": 2,
+      "name": "브라스: 버밍엄",
+      "item": "보유 돈 공개 여부 미대조",
+      "item_sha256": "45afe54171ff0e288ec2817a57a3bb98f51716a4d60a20048f9c5b9b7d06091d",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/16/review_findings/1",
+        "docs/game-state-review/games.json#/rows/16/findings/1",
+        "docs/research/game-specs-120/games/brass-birmingham.json#/sources",
+        "docs/research/game-specs-120/games/brass-birmingham.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Retail 기본판",
+        "compatibility_notes": [
+          "Deluxe는 아트/재질 차이 메모;Lancashire는 별개 게임",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "brass-birmingham.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "현재 money는 public이고 보유 현금 공개 조항은 미대조다. 돈 필드가 없다는 문제가 아니다.",
+      "next_action": "공식 money/information 절에서 현금과 이번 라운드 지출의 공개 범위를 각각 확인한다.",
+      "relevant_field_ids": [
+        "money"
+      ],
+      "existing_fields": [
+        {
+          "id": "money",
+          "json_pointer": "/state_fields/7",
+          "visibility": "public",
+          "description": "이번 라운드 지출과 현재 돈을 구별."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "brass-birmingham.primary",
+          "title": "Brass: Birmingham — 공식 자료",
+          "url": "https://roxley.com/products/brass-birmingham?currency=GBP",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "Roxley 공식 Retail 소개·구성 목록에서 운하/철도 시대, 산업·링크·상인 타일, 카드, 돈, 석탄·철·맥주, 수입/승점 말 확인. 판매·연결의 모든 자원 예외는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "calico:review:01",
+      "upstream_item_id": null,
+      "game_id": "calico",
+      "original_ordinal": 1,
+      "name": "칼리코",
+      "item": "손에 든 타일 공개 관례를 명세 스스로 미확정으로 둠",
+      "item_sha256": "b458001a5ada4497c33d266a107807dda43ebe15133b78861e0442326436b2c9",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/17/review_findings/0",
+        "docs/game-state-review/games.json#/rows/17/findings/0",
+        "docs/research/game-specs-120/games/calico.json#/sources",
+        "docs/research/game-specs-120/games/calico.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "표면 패턴 판독 난도 미검증",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "calico.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "format_recovery"
+      ],
+      "classification_basis": "기존 상품 소개만으로 손 타일 공개 관례를 확정하지 않았다. 이번 공식 PDF는 이미지형이며 열람과 조항 판정을 분리했다.",
+      "next_action": "대표 C03 참조. 손 2장/시장 3장은 확인했으나 의무 공개는 보류한다.",
+      "relevant_field_ids": [
+        "hand.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "hand.scene",
+          "json_pointer": "/state_fields/2",
+          "visibility": "owner",
+          "description": "손에 보관한 타일만. 공개 여부는 플레이 그룹 확인에 따라 조정. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C03",
+      "research_result": "HOLD_AFTER_SCOPED_REVIEW",
+      "next_route": "HUMAN_OR_NEW_PRIMARY_EVIDENCE",
+      "source_metadata": [
+        {
+          "id": "calico.primary",
+          "title": "Calico — 공식 자료",
+          "url": "https://www.alderac.com/calico",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품에서 색·무늬 패치, 개인 디자인, 손의 타일을 놓고 공개3개에서 보충, 색 단추·무늬 고양이·개인 목표 득점과 구성물 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "castles-burgundy:review:01",
+      "upstream_item_id": null,
+      "game_id": "castles-burgundy",
+      "original_ordinal": 1,
+      "name": "버건디의 성",
+      "item": "단계별로 뒷면 보관 후 공개되는 상품 타일 더미 영역 없음",
+      "item_sha256": "06a682b7c2c648d602339b0761514a7fa78aef44bd16c0a6648f3ea4d965a239",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/20/review_findings/0",
+        "docs/game-state-review/games.json#/rows/20/findings/0",
+        "docs/research/game-specs-120/games/castles-burgundy.json#/sources",
+        "docs/research/game-specs-120/games/castles-burgundy.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Special Edition 기본 모드",
+        "compatibility_notes": [
+          "상품에 포함된 Vineyards 등 확장은 초기 제외;구판 아트·번호 재확인",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "castles-burgundy.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "edition_identity",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "선택은 Special Edition 기본 모드, 인용은 Ravensburger PDF이며 판본 대응이 미확정이라고 명세가 명시한다.",
+      "next_action": "Special Edition 기본판 공식 규칙의 단계별 goods setup과 기존 PDF를 조항별 대조한다. 포함 확장은 비활성으로 둔다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "castles-burgundy.primary",
+          "title": "The Castles of Burgundy — 공식 자료",
+          "url": "https://www.ravensburger.org/spielanleitungen/ecm/Spielanleitungen/CoB_Rulebook_285x210mm%20%5B28%20pages%5D.pdf?ossl=pds_text_Spielanleitung",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본 규칙 PDF 검색 본문에서 주사위별 행동, 중앙 창고에서 타일 획득/개인 저장, 같은 색 인접 칸 설치, 상품 종류별 더미와 선박 순서 이동 확인. Special Edition 상품은 Awaken Realms에서 재설계/포도원 모듈 확인; 규칙 PDF의 판본 대응은 추가 검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "castles-mad-ludwig:review:01",
+      "upstream_item_id": null,
+      "game_id": "castles-mad-ludwig",
+      "original_ordinal": 1,
+      "name": "매드 킹 루드비히의 성",
+      "item": "돈(cash)의 공개 여부를 명세 스스로 미확인으로 두고 owner로 선언",
+      "item_sha256": "28522d7b382ba86ad9538894794d8fc4eeb3ef311f9ecd0a824adef62a4eaa06",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/21/review_findings/0",
+        "docs/game-state-review/games.json#/rows/21/findings/0",
+        "docs/research/game-specs-120/games/castles-mad-ludwig.json#/sources",
+        "docs/research/game-specs-120/games/castles-mad-ludwig.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "현행 기본 모드",
+        "compatibility_notes": [
+          "Collector/확장 구성과 기본 모드 구분",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "castles-mad-ludwig.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "edition_identity"
+      ],
+      "classification_basis": "cash는 owner로 있고, 현행2판과 구판의 공개성 차이를 미대조했다고 명시한다.",
+      "next_action": "현행2판 인쇄/언어를 고른 뒤 돈 보관·공개 조항만 찾는다. 없으면 owner가 공식 규칙이라는 주장은 보류한다.",
+      "relevant_field_ids": [
+        "cash",
+        "private.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "cash",
+          "json_pointer": "/state_fields/7",
+          "visibility": "owner",
+          "description": "실제 보유 확인값. 가격열이나 이전 구매만으로 역산하지 않는다."
+        },
+        {
+          "id": "private.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "owner",
+          "description": "개인 목표 내용과 공개성 확인이 필요한 돈은 소유자 기록으로 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "castles-mad-ludwig.primary",
+          "title": "Castles of Mad King Ludwig — 공식 자료",
+          "url": "https://beziergames.com/products/castles",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품 본문에서 Foyer 시작·방 크기/종류/위치 득점·Master Builder 가격 설정과 다른 플레이어의 구매·모든 입구 연결 시 방 완료 보상·공용/개인 목표 확인. 전 방 카드/2판 수치 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "concordia:review:01",
+      "upstream_item_id": null,
+      "game_id": "concordia",
+      "original_ordinal": 1,
+      "name": "콩코르디아",
+      "item": "돈 공개 여부를 명세 스스로 미확인으로 두고 owner로 선언",
+      "item_sha256": "09102d99257c82d5704ebe42d30bd18c03f1b7b564e9f742d3a15682c5524525",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/29/review_findings/0",
+        "docs/game-state-review/games.json#/rows/29/findings/0",
+        "docs/research/game-specs-120/games/concordia.json#/sources",
+        "docs/research/game-specs-120/games/concordia.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Venus 독립판/확장 구분;초기 원 기본판만",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "concordia.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "공식 규칙의 구성물/상품은 이미 scoped 대조했으나 돈 공개 범위는 그 확인 범위 밖이다.",
+      "next_action": "기존 공식 규칙 링크의 money/information 문구부터 확인한다. Venus를 원 기본판에 대입하지 않는다.",
+      "relevant_field_ids": [
+        "money"
+      ],
+      "existing_fields": [
+        {
+          "id": "money",
+          "json_pointer": "/state_fields/4",
+          "visibility": "owner",
+          "description": "실제 테이블 공개 관행이 미확인이라 기본 소유자 범위."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "concordia.primary",
+          "title": "Concordia — 공식 자료",
+          "url": "https://www.riograndegames.com/games/concordia/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 제품/정오표에서 개인 성격 카드 손패, Architect/Prefect/Mercator 등, Colonist 초기 규칙 문구 수정 확인. 지도·창고·생산의 세부는 기본 규칙서 추가 대조 필요."
+        },
+        {
+          "id": "concordia.art-confirmation.concordia-web",
+          "title": "Concordia English base Game Rules v1.1",
+          "url": "https://www.riograndegames.com/wp-content/uploads/2013/10/Concordia_rules_eng_1_1.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "p.1 Game Material; pp.2–3 Merchant/Prefect — 상품은 벽돌·식량·도구·포도주·직물 다섯 종류다. 개인 창고 슬롯과 세스테르티우스 화폐(1·2·5·10)를 별도로 기록한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "davinci-code:review:01",
+      "upstream_item_id": null,
+      "game_id": "davinci-code",
+      "original_ordinal": 1,
+      "name": "다빈치코드",
+      "item": "공식 상세 규칙 텍스트 미확보(명세 gaps). 수량·숫자 범위·조커 처리의 필수 상태 판정 근거 부족",
+      "item_sha256": "7d905d46652813eb4500ae85f2d4eebc7a8f55cc4de40614bd2bf9a74f45a26b",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/32/review_findings/0",
+        "docs/game-state-review/games.json#/rows/32/findings/0",
+        "docs/research/game-specs-120/games/davinci-code.json#/sources",
+        "docs/research/game-specs-120/games/davinci-code.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "비밀 숫자는 소유자 입력;통용 한글명 사용",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "davinci-code.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "source_not_located",
+      "secondary_causes": [
+        "format_recovery",
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "공식 한국 상품은 이미지/영상 중심이며 상세 규칙 텍스트를 확보하지 못했다. 403 등 차단 기록은 없다.",
+      "next_action": "상품의 정상 설명서/규칙 영상·이미지로 기본판 제품코드를 확인한다. 두 경로로도 해당 조항이 없으면 소장 규칙의 관련 면을 요청 목록에 남긴다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "davinci-code.primary",
+          "title": "Da Vinci Code / Coda — 공식 자료",
+          "url": "https://www.koreaboardgames.com/product/detail?prdCd=PD2024002346M4NG",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 한국 유통 상품에서 기본 다빈치 코드의 판본·게임 존재 확인. 상세가 이미지/영상 중심이라 숫자 배치·조커·추리 규칙 본문은 확인 못함. 세부 상태는 미검증 기록 초안."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "descent-legends-dark:review:01",
+      "upstream_item_id": null,
+      "game_id": "descent-legends-dark",
+      "original_ordinal": 1,
+      "name": "디센트: 어둠의 전설",
+      "item": "재개 핵심이 외부 앱 저장(external-save)이라 사진/명세만으로 복원 불가 — 명세가 이를 명시함",
+      "item_sha256": "929c26a1043ff077ed94d54759dffff0b20276e8470ed9d38a85d7a08015423f",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/33/review_findings/0",
+        "docs/game-state-review/games.json#/rows/33/findings/0",
+        "docs/research/game-specs-120/games/descent-legends-dark.json#/sources",
+        "docs/research/game-specs-120/games/descent-legends-dark.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "앱 저장 데이터 추출/연동 범위 아님;입체 높이 한 장 판독 한계",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "descent-legends-dark.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [],
+      "classification_basis": "명세가 외부 앱 저장 의존을 이미 적고 있다. 공개 룰북 확보만으로 앱 내부 세이브를 사진에서 만들 수는 없다.",
+      "next_action": "external-save 참조·원 앱 저장 유지 안내로 한정하고 앱 이식/복원 검증은 별도 제품 과제로 분리한다.",
+      "relevant_field_ids": [
+        "external-save"
+      ],
+      "existing_fields": [
+        {
+          "id": "external-save",
+          "json_pointer": "/state_fields/3",
+          "visibility": "public",
+          "description": "원래 앱의 캠페인/퀘스트·저장 시점 메모. 앱 재고·비밀 진행을 사진에서 생성하지 않는다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "descent-legends-dark.primary",
+          "title": "Descent: Legends of the Dark — 공식 자료",
+          "url": "https://www.fantasyflightgames.com/en/products/descent-legends-of-the-dark/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 소개에서 통합 앱·다층3D 지형·캠페인·영웅/카드 양면, ready로 카드 뒤집고 피로/조건 제거, 공격 주사위의 성공/이점/쇄도 확인. Journeys in the Dark3판이 아님을 명시."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "dobble:review:01",
+      "upstream_item_id": null,
+      "game_id": "dobble",
+      "original_ordinal": 1,
+      "name": "도블",
+      "item": "실시간 게임이라 중단 순간 재현 불가(명세 명시)",
+      "item_sha256": "6913d26af0afc477b1df687feaefeb8b0980e634d33322bab23d48abf5f7ff1d",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/35/review_findings/0",
+        "docs/game-state-review/games.json#/rows/35/findings/0",
+        "docs/research/game-specs-120/games/dobble.json#/sources",
+        "docs/research/game-specs-120/games/dobble.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Classic 기본판",
+        "compatibility_notes": [
+          "실시간 진행을 정지 사진만으로 완전 재개하지 않음",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "dobble.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [
+        "format_recovery"
+      ],
+      "classification_basis": "실시간 순간 복원 보장 불가라는 명세상의 지원 경계다. PDF 텍스트 추출 실패 기록은 별개다.",
+      "next_action": "선택 미니게임·중단 합의·실물 묶음만 기록한다. 추가 검색을 반응 순간 재현의 해결책으로 제시하지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_PDF_OPENED_NO_EXTRACTED_TEXT",
+        "basis": "sources:dobble.primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "dobble.primary",
+          "title": "Dobble / Spot It! — 공식 자료",
+          "url": "https://www.zygomatic-games.com/game/dobble/",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 Classic 상품 본문에서 두 카드 사이 공통 기호를 빠르게 찾는 구조·55카드 확인. 공식 규칙 PDF는 열렸으나 텍스트 추출이 없어 세부 미니게임은 검증하지 못함."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "dune-imperium-uprising:review:03",
+      "upstream_item_id": null,
+      "game_id": "dune-imperium-uprising",
+      "original_ordinal": 3,
+      "name": "듄 임페리움: 업라이징",
+      "item": "보유 음모 카드 장수(공개 수) 필드 없음",
+      "item_sha256": "e7e9ce30aca31a4a084583773122a7844cf8fad8267463211f0ac14ad66b294b",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/38/review_findings/2",
+        "docs/game-state-review/games.json#/rows/38/findings/2",
+        "docs/research/game-specs-120/games/dune-imperium-uprising.json#/sources",
+        "docs/research/game-specs-120/games/dune-imperium-uprising.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "독립 기본판",
+        "compatibility_notes": [
+          "원작 Imperium의 확장을 요구하지 않음;초기 1–4인 모드 권장;6인 팀전 별도",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "dune-imperium-uprising.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "spec_interpretation"
+      ],
+      "classification_basis": "로컬 공식 Uprising 규칙은 확보했고 음모 정체 비공개는 대조했다. 장수 공개 의무까지 검증된 것은 아니다.",
+      "next_action": "기존 PDF의 Intrigue 절/공식 FAQ에서 내용과 장수의 공개를 분리해 확인한다.",
+      "relevant_field_ids": [
+        "intrigue"
+      ],
+      "existing_fields": [
+        {
+          "id": "intrigue",
+          "note": "관련 개념 표기. 동일 ID의 필드는 없음; 새 필드가 필요하다는 결론은 아님."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "dune-imperium-uprising.primary",
+          "title": "Dune: Imperium – Uprising — 공식 자료",
+          "url": "https://www.asmodee.co.uk/products/dwd01015-dune-imperium-uprising",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 Uprising 소개에서 덱 구성+일꾼 배치, 군사/정치, 스파이·계약·샌드웜과 6인 팀 모드 확인. 기본1–4인과6인 별도, 5인 기본으로 확대하지 않는다."
+        },
+        {
+          "id": "dune-imperium-uprising.essentials.rules",
+          "title": "Dune Imperium Uprising Main Rulebook 23-10-12",
+          "url": "https://d19y2ttatozxjp.cloudfront.net/pdfs/DUNE_IMPERIUM_UPRISING_Main_Rulebook_23-10-12.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-22",
+          "note": "PDF p.4 Setup; pp.7–8 Intrigue/Turns; p.15 Recall; 적용판본: 독립 기본판; CHOAM/6인/Rivals 제외; 확인범위: 단계별 충돌/음모/제국 덱은 별도이며 시작 표식은 Recall에 시계방향 전달. 음모는 개인 덱 밖에서 숨기고 사용 후 공개 버림이다. 원문/열람 한계는 docs/game-essentials/evidence.json#dune-imperium-uprising"
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "eclipse-second-dawn:review:01",
+      "upstream_item_id": null,
+      "game_id": "eclipse-second-dawn",
+      "original_ordinal": 1,
+      "name": "이클립스: 두 번째 여명",
+      "item": "지도 위 뒷면 발견 타일과 고리별 미탐험 섹터 더미가 숨은 정보로 선언되지 않음(galaxy.scene 공개). 사진/공용 정정에서 정체가 드러나지 않게 하는 분류 필요",
+      "item_sha256": "86fedf1a5a2a79391f05f56364d72d73703860c8125d3eb47f7958c62ffd62bc",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/39/review_findings/0",
+        "docs/game-state-review/games.json#/rows/39/findings/0",
+        "docs/research/game-specs-120/games/eclipse-second-dawn.json#/sources",
+        "docs/research/game-specs-120/games/eclipse-second-dawn.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "2판 기본판",
+        "compatibility_notes": [
+          "2011판과 2020판 배치/컴포넌트 호환 미검증",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "eclipse-second-dawn.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "galaxy.scene는 public이며 각 실물의 앞뒷면을 표현한다. 공개된 위치와 숨은 면의 정체가 같은 공개 범위인지가 쟁점이다.",
+      "next_action": "기존 로컬 Second Dawn 규칙의 Explore/Discovery 절을 대조하고 위치·면·정체를 나눈다.",
+      "relevant_field_ids": [
+        "galaxy.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "galaxy.scene",
+          "json_pointer": "/state_fields/0",
+          "visibility": "public",
+          "description": "섹터 좌표·회전별 웜홀 변과 행성별 인구. 함선은 섹터 내부 묶음. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "eclipse-second-dawn.primary",
+          "title": "Eclipse: Second Dawn for the Galaxy — 공식 자료",
+          "url": "https://en.lautapelit.fi/product/45295/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Second Dawn 상품에서 탐험·기술 연구·함선 건조 및 섹터·청사진·함선 부품·기술·발견·평판·식민선 구성물 확인. 경제·전투 세부 규칙 미대조."
+        },
+        {
+          "id": "eclipse-second-dawn.art-confirmation.eclipse-rules",
+          "title": "Eclipse Second Dawn English rulebook 2021-04-27",
+          "url": "https://ucf9ee4ca301ab1c6c5e2f8aed8e.dl.dropboxusercontent.com/cd/0/get/DKZywIFVNxybb6Yf79kyTy86yllpYySthc3d20jpHsd6zIX6g811oXXeQmlJXW-nLFMgh3Wm60fFsl_kQMuyfLcyJ5mnNp96Cw67Gj9stoSOQ2GKZtRc0_hxxFTI6ILFMQpd2O0pAvxGApWd5vVI9-Fs/file?dl=1",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "pp.3–4 Components/Player Area; p.6 Game Concepts; p.8 Colonization — 영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "expeditions:review:01",
+      "upstream_item_id": null,
+      "game_id": "expeditions",
+      "original_ordinal": 1,
+      "name": "익스페디션",
+      "item": "공용 카드/운석 공급의 미공개 더미 영역 없음",
+      "item_sha256": "67b934a1ffa250caad45760bac42cb1e6ced75cf28deabb04d107aad394d0dd1",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/42/review_findings/0",
+        "docs/game-state-review/games.json#/rows/42/findings/0",
+        "docs/research/game-specs-120/games/expeditions.json#/sources",
+        "docs/research/game-specs-120/games/expeditions.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "독립 게임;Ironclad 재질판은 중복 계수 안 함",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "expeditions.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "상품 소개의 카드/운석 설명만 확인했고 공급 더미 설치·보충 절은 미대조다.",
+      "next_action": "공식 base setup/refresh의 공급·버림·제외 더미를 구분해 실제 누락만 제안한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "expeditions.primary",
+          "title": "Expeditions — 공식 자료",
+          "url": "https://store.stonemaiergames.com/products/expeditions",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품에서 타일 탐험·메크 이동·카드로 power/guile/일꾼 능력, 아이템/운석/퀘스트 강화·타락 제거 확인. 카드 구역 이동·refresh 세부는 원문 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "five-tribes:review:01",
+      "upstream_item_id": null,
+      "game_id": "five-tribes",
+      "original_ordinal": 1,
+      "name": "다섯 부족",
+      "item": "개인 자원 카드·동전의 공개 범위를 명세 스스로 미확인으로 두고 owner 선언",
+      "item_sha256": "b230cbf5ea48808b66288de778c2fbf71f43b7f03ab65bbd88afa534c62e94cf",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/43/review_findings/0",
+        "docs/game-state-review/games.json#/rows/43/findings/0",
+        "docs/research/game-specs-120/games/five-tribes.json#/sources",
+        "docs/research/game-specs-120/games/five-tribes.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "확장·추가 부족 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "five-tribes.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "access_history"
+      ],
+      "classification_basis": "상품 직접 열기의 timeout 기록은 있지만 공개성 조항 자체는 조사하지 않았다. 현재 차단으로 단정할 수 없다.",
+      "next_action": "공식 기본판 규칙/FAQ에서 자원 카드와 점수 역할의 동전을 따로 대조한다. 판본별 카드 교체도 확인한다.",
+      "relevant_field_ids": [
+        "private.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "private.scene",
+          "json_pointer": "/state_fields/4",
+          "visibility": "owner",
+          "description": "개인 자산의 규칙상 공개 범위를 확인할 때까지 소유자에게만 보이는 기록. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_PRODUCT_TIMEOUT",
+        "basis": "sources:five-tribes.primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "five-tribes.primary",
+          "title": "Five Tribes: The Djinns of Naqala — 공식 자료",
+          "url": "https://www.daysofwonder.com/game/fives-tribes-the-djinns-of-naqala/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품 검색 본문에서30장 타일·5색 부족 미플·플레이어 낙타·궁전/야자수·Djinn/자원 카드·차례 입찰판 확인. 직접 열기는 timeout; 미플 분배/부족 효과 세부는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "forest-shuffle:review:01",
+      "upstream_item_id": null,
+      "game_id": "forest-shuffle",
+      "original_ordinal": 1,
+      "name": "포레스트 셔플",
+      "item": "동굴 카드 장수(cave-count)를 owner로 선언 — 장수 자체의 공개 여부 미대조",
+      "item_sha256": "776898560447b354e4fbc7a93818f87fab1f56fde04d3261efde85701bc39c84",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/44/review_findings/0",
+        "docs/game-state-review/games.json#/rows/44/findings/0",
+        "docs/research/game-specs-120/games/forest-shuffle.json#/sources",
+        "docs/research/game-specs-120/games/forest-shuffle.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "원작 기본판",
+        "compatibility_notes": [
+          "Dartmoor 등 독립 후속작·확장 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "forest-shuffle.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "cave-count는 owner로 존재한다. 동굴 내용과 장수의 열람 권리를 확인하지 않았다.",
+      "next_action": "원 Forest Shuffle 동굴 조항/공식 FAQ만 확인한다. Dartmoor 규칙은 쓰지 않는다.",
+      "relevant_field_ids": [
+        "cave-count"
+      ],
+      "existing_fields": [
+        {
+          "id": "cave-count",
+          "json_pointer": "/state_fields/7",
+          "visibility": "owner",
+          "description": "알려진 수만. 동굴 카드 내용을 강제 공개하지 않는다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "forest-shuffle.primary",
+          "title": "Forest Shuffle — 공식 자료",
+          "url": "https://www.lookout-spiele.de/upload/en_forrestshuffle.html_Forest_Shuffle_175_Rules_EN_WEB_260209.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본 Forest Shuffle 규칙 검색 본문에서 숲/공터/동굴·겨울 카드, 두 장 뽑기 또는 비용을 지불해 카드 놓기·효과 처리와 공터 확인을 확인. Dartmoor 규칙은 섞지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "galaxy-trucker:review:01",
+      "upstream_item_id": null,
+      "game_id": "galaxy-trucker",
+      "original_ordinal": 1,
+      "name": "갤럭시 트러커",
+      "item": "실시간 조립 단계는 중단 재현을 보증할 수 없음(명세 명시)",
+      "item_sha256": "20af654af7692a52264aaa9385d8f772a8ac1a75d2855d2a49028cd5a3aa23b9",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/47/review_findings/0",
+        "docs/game-state-review/games.json#/rows/47/findings/0",
+        "docs/research/game-specs-120/games/galaxy-trucker.json#/sources",
+        "docs/research/game-specs-120/games/galaxy-trucker.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "현행 기본판",
+        "compatibility_notes": [
+          "실시간 조립 중보다 비행 사이 저장 우선",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "galaxy-trucker.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [],
+      "classification_basis": "2021판 실시간 조립과 타이머 동기화는 현재 제품의 지원 경계다.",
+      "next_action": "조립 중단 시점·합의된 남은 시간과 선박 사진을 별도로 저장하는 권고로 남긴다. 규칙 확인을 타이머 복원 구현으로 오인하지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "galaxy-trucker.primary",
+          "title": "Galaxy Trucker — 공식 자료",
+          "url": "https://czechgames.com/files/rules/galaxy-trucker-rules-en.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 규칙 검색 본문에서 선박 등급I/II/III·비행 카드 구성·조립 후 모험 비행을 확인.2021 상품 소개에서 실시간 조립·화물·우주선 손상 구조 확인. 세부 연결/부품 기능은 원문 추가 대조 필요."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "halligalli:review:01",
+      "upstream_item_id": null,
+      "game_id": "halligalli",
+      "original_ordinal": 1,
+      "name": "할리갈리",
+      "item": "실시간 반응 게임이라 중단 순간 재현 보장 불가(명세 명시)",
+      "item_sha256": "82f84492daa166ecee3281d99881f4747d066feccbea866f775e09c770052083",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/52/review_findings/0",
+        "docs/game-state-review/games.json#/rows/52/findings/0",
+        "docs/research/game-specs-120/games/halligalli.json#/sources",
+        "docs/research/game-specs-120/games/halligalli.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Classic 기본판",
+        "compatibility_notes": [
+          "인기도 수치 미확인;반응 순간 판정은 기록 대상 아님",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "halligalli.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [],
+      "classification_basis": "실시간 반응의 순간 재현 한계를 명세가 이미 적었다.",
+      "next_action": "반응 직후 결과가 합의된 안정 상태만 기록하도록 안내한다. 승자/반응 순서를 사진에서 추정하지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "halligalli.primary",
+          "title": "Halli Galli — 공식 자료",
+          "url": "https://www.amigo-spiele.de/halli-galli_1700_1077",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "AMIGO 공식 기본판 상품 검색 본문에서 개인 카드 더미·차례로 공개·같은 과일 합계가 정확히5일 때 종을 치는 구조 확인. 반응 우선/오타 벌칙 세부는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "hansa-teutonica:review:01",
+      "upstream_item_id": null,
+      "game_id": "hansa-teutonica",
+      "original_ordinal": 1,
+      "name": "한자 토이토니카",
+      "item": "뒷면 보너스 표식 공급(무작위 뽑기)이 숨은 영역으로 선언되지 않음",
+      "item_sha256": "2610f0760b2624f75121ccd421555b9f67875546e9fca62ea25261cba3c63a48",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/54/review_findings/0",
+        "docs/game-state-review/games.json#/rows/54/findings/0",
+        "docs/research/game-specs-120/games/hansa-teutonica.json#/sources",
+        "docs/research/game-specs-120/games/hansa-teutonica.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Big Box의 원 기본 지도 모드",
+        "compatibility_notes": [
+          "Big Box 동봉 확장 지도 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "hansa-teutonica.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "spec_interpretation"
+      ],
+      "classification_basis": "기존 bonus.scene는 public이며 설치/보유/사용 표식 설명만 있다. 공급의 뒷면 정체는 미분리다.",
+      "next_action": "대표 C04의 공식 p3 setup 근거로 숨은 공급 묶음과 공개 사용/보유를 분리하는 보완안을 인계한다.",
+      "relevant_field_ids": [
+        "bonus.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "bonus.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "public",
+          "description": "미사용·사용 완료·이번 턴 종료 때 새로 배치할 표식을 각각 보관. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C04",
+      "research_result": "SCOPED_HANDOFF_READY",
+      "next_route": "HANDOFF_NOW",
+      "source_metadata": [
+        {
+          "id": "hansa-teutonica.primary",
+          "title": "Hansa Teutonica — 공식 자료",
+          "url": "https://pegasus.de/en/NetiMedia/download?mediaId=018e5c283e69708e9b50c79cb8a8b317",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 Big Box 영문 규칙1–4쪽에서 기본 지도·도시 사무소/노선 접점·큐브/원반·5능력·개인 공급/공용 재고·밀어내기·노선 완성 행동 확인. Bank 단계의 추출 텍스트가2쪽과4쪽에서 상충하므로 고정 수치 미기입."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "hansa-teutonica:review:02",
+      "upstream_item_id": null,
+      "game_id": "hansa-teutonica",
+      "original_ordinal": 2,
+      "name": "한자 토이토니카",
+      "item": "Bank 능력 수치가 공식 PDF 안에서 상충(명세 명시)",
+      "item_sha256": "56325a6adbbcaf9bcd3a5a0aaa356fdf4297f2ae39afec74914f4b442ef0ada4",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/54/review_findings/1",
+        "docs/game-state-review/games.json#/rows/54/findings/1",
+        "docs/research/game-specs-120/games/hansa-teutonica.json#/sources",
+        "docs/research/game-specs-120/games/hansa-teutonica.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Big Box의 원 기본 지도 모드",
+        "compatibility_notes": [
+          "Big Box 동봉 확장 지도 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "hansa-teutonica.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "source_conflict",
+      "secondary_causes": [
+        "edition_identity"
+      ],
+      "classification_basis": "기존에는 PDF 추출 수치 충돌로 기록했다. 이번 인쇄면 검수에서도 영어 p2와 p3/p4가 다르다.",
+      "next_action": "대표 C04 참조. 독문/영문 도형은 3/5/7/C를 지지하지만 영문 오탈자라는 최종 확정·강제 enum은 보류한다.",
+      "relevant_field_ids": [
+        "skills.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "skills.scene",
+          "json_pointer": "/state_fields/1",
+          "visibility": "public",
+          "description": "열쇠·행동·특권·지식·은행의 노출 값과 아직 덮인 말. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C04",
+      "research_result": "HOLD_AFTER_SCOPED_REVIEW",
+      "next_route": "HUMAN_OR_NEW_PRIMARY_EVIDENCE",
+      "source_metadata": [
+        {
+          "id": "hansa-teutonica.primary",
+          "title": "Hansa Teutonica — 공식 자료",
+          "url": "https://pegasus.de/en/NetiMedia/download?mediaId=018e5c283e69708e9b50c79cb8a8b317",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 Big Box 영문 규칙1–4쪽에서 기본 지도·도시 사무소/노선 접점·큐브/원반·5능력·개인 공급/공용 재고·밀어내기·노선 완성 행동 확인. Bank 단계의 추출 텍스트가2쪽과4쪽에서 상충하므로 고정 수치 미기입."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "istanbul:review:01",
+      "upstream_item_id": null,
+      "game_id": "istanbul",
+      "original_ordinal": 1,
+      "name": "이스탄불",
+      "item": "돈 공개 범위를 명세 스스로 미확인으로 둠",
+      "item_sha256": "fb6ffe73ffc6edcd38faa5284a9b3b21937c3a151883b050497b1f7e7dc9970c",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/58/review_findings/0",
+        "docs/game-state-review/games.json#/rows/58/findings/0",
+        "docs/research/game-specs-120/games/istanbul.json#/sources",
+        "docs/research/game-specs-120/games/istanbul.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Big Box 확장 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "istanbul.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "access_history"
+      ],
+      "classification_basis": "초기 PDF 크기 제한 뒤 공식 기본판 관련 페이지를 art-confirmation에서 읽었다. 돈 공개 조항은 그 범위 밖이다.",
+      "next_action": "이미 확보한 공식 규칙의 기본판 정보 공개 절부터 읽는다. Big Box 확장 규칙을 기본판 돈 규칙으로 삼지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_SIZE_LIMIT_LATER_SCOPED_RULES_AVAILABLE",
+        "basis": "sources:istanbul.primary + istanbul.art-confirmation.istanbul-rules",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "istanbul.primary",
+          "title": "Istanbul — 공식 자료",
+          "url": "https://pegasus.de/en/Istanbul-Big-Box/55119G",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 Big Box 상품 본문에서 상인·조수·수레의 상품 운반과 루비 수집 확인. Big Box의5×5는 두 확장 포함 구성이라 기본판 지도라고 사용하지 않음. 연결된 영문 PDF는 크기 제한으로 본문 열람 실패."
+        },
+        {
+          "id": "istanbul.art-confirmation.istanbul-rules",
+          "title": "Istanbul Big Box English rules — base sections only",
+          "url": "https://cdn.pegasus.de/public/media/c5/22/4d/1717757333/4250231715532_gb.pdf?ts=1752574415",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "pp.3–4 Base Components; p.7 Setup; p.24 Bonus Cards — 보너스 카드와 모스크 타일·요구 타일은 서로 다르다. 원 초안의 막연한 보상 타일 표현은 기본판 모스크 타일로 좁힌다. 커피콩/인장 표시 확장 카드는 제외한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "journeys-middle-earth:review:01",
+      "upstream_item_id": null,
+      "game_id": "journeys-middle-earth",
+      "original_ordinal": 1,
+      "name": "반지의 제왕: 가운데땅 여정",
+      "item": "재개 핵심이 외부 앱 저장(external-save). 명세가 앱 이식 없음을 명시",
+      "item_sha256": "e5c6d30cfbf4e17da57f49cb21ee590e4d68660dfc8b536b741ff0da318709d1",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/60/review_findings/0",
+        "docs/game-state-review/games.json#/rows/60/findings/0",
+        "docs/research/game-specs-120/games/journeys-middle-earth.json#/sources",
+        "docs/research/game-specs-120/games/journeys-middle-earth.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "앱 내부 상태는 별도 세이브 필요",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "journeys-middle-earth.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [],
+      "classification_basis": "외부 앱 저장 의존과 앱 이식 미지원이 기존 명세에 있다.",
+      "next_action": "원 앱 캠페인/저장 슬롯 참조만 유지한다. 룰북 추가 수집으로 앱 저장 포맷을 확보했다고 주장하지 않는다.",
+      "relevant_field_ids": [
+        "external-save"
+      ],
+      "existing_fields": [
+        {
+          "id": "external-save",
+          "json_pointer": "/state_fields/4",
+          "visibility": "public",
+          "description": "캠페인·난도·저장 슬롯과 저장 시점을 선택 메모. 앱 데이터를 이식하지 않는다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "journeys-middle-earth.primary",
+          "title": "The Lord of the Rings: Journeys in Middle-earth — 공식 자료",
+          "url": "https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Learn to Play 검색 본문에서 앱의 캠페인·난도·저장 슬롯 선택, 캠페인 동안 유지되는 영웅/파티 확인. 스킬 덱·준비/시험 세부는 추가 대조 필요."
+        },
+        {
+          "id": "journeys-middle-earth.art-confirmation.journeys-middle-earth-primary",
+          "title": "Journeys in Middle-earth Base — Learn to Play",
+          "url": "https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "p.3 Component List; pp.5–9 Tokens/Explore; pp.12–14 Terrain — 영감/탐험과 수색/위협은 각각 양면 토큰이다. 어둠·인물·소모 표식은 별개다. 초안의 정찰을 별도 물체로 만들지 않는다. 정찰은 카드 처리이며 앱 상태와 물리 토큰 면을 구분한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "kanban-ev:review:01",
+      "upstream_item_id": null,
+      "game_id": "kanban-ev",
+      "original_ordinal": 1,
+      "name": "칸반 EV",
+      "item": "개인 목표 공개 범위를 명세 스스로 미확인으로 둠",
+      "item_sha256": "75b3063336d3ea6efd00566635e9d7329b946b892fd8f7da4c860b4f3ffe187c",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/62/review_findings/0",
+        "docs/game-state-review/games.json#/rows/62/findings/0",
+        "docs/research/game-specs-120/games/kanban-ev.json#/sources",
+        "docs/research/game-specs-120/games/kanban-ev.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Driver's Edition과 슬롯/아트 혼용 안 함",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "kanban-ev.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "상품 구성의 목표 카드는 확인했지만 개인 목표 공개 조건은 미대조다.",
+      "next_action": "Kanban EV 공식 규칙에서 목표의 종류·보유/공개 시점을 확인한다. 기존 Kanban 판을 대체 근거로 자동 사용하지 않는다.",
+      "relevant_field_ids": [
+        "private.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "private.scene",
+          "json_pointer": "/state_fields/4",
+          "visibility": "owner",
+          "description": "해당 판본에서 비공개로 둔 성과/최종 목표만 보관. 공개 범위는 별도 확인. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "kanban-ev.primary",
+          "title": "Kanban EV — 공식 자료",
+          "url": "https://www.eagle-gryphon.com/products/kanban-ev",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품 본문/구성물에서 부품 조달·조립·차량 업그레이드·재활용·Sandra 평가, 부서 교육/인증·저축 근무·회의/주기 마커·디자인/차고/목표 확인. 행동별 비용·평가 계산은 미검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "lost-cities:review:01",
+      "upstream_item_id": null,
+      "game_id": "lost-cities",
+      "original_ordinal": 1,
+      "name": "로스트 시티",
+      "item": "기본 규칙 PDF 접근 실패(명세 명시)",
+      "item_sha256": "e677389125106f8654f4798354b1c0e7e76ab18d2630a2fe0c6db54f00df2a57",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/66/review_findings/0",
+        "docs/game-state-review/games.json#/rows/66/findings/0",
+        "docs/research/game-specs-120/games/lost-cities.json#/sources",
+        "docs/research/game-specs-120/games/lost-cities.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "원작 2인 카드게임",
+        "compatibility_notes": [
+          "보드판/롤앤라이트와 구분",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "lost-cities.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "edition_identity",
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "선택 카드게임의 CDN 리디렉션 실패가 기록됐다. HTTP 코드/보호 차단 여부는 확인되지 않는다.",
+      "next_action": "Thames & Kosmos의 동일 카드게임 제품코드 또는 KOSMOS 공식 규칙 배포를 최대 두 경로로 확인한다. 동명 보드게임은 제외한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_REDIRECT_FAILURE_HTTP_UNKNOWN",
+        "basis": "sources:lost-cities.primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "lost-cities.primary",
+          "title": "Lost Cities — 공식 자료",
+          "url": "https://www.thamesandkosmos.co.uk/product/lost-cities-card-game/",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "공식 카드게임 상품에서 탐험별 카드 진행·투자·3라운드 점수와 현행6번째 탐험/고전5탐험 양면 확인. 기본 규칙 PDF는 CDN 리디렉션 접근 실패, 별도 보드게임 규칙은 사용하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "mage-knight:review:01",
+      "upstream_item_id": null,
+      "game_id": "mage-knight",
+      "original_ordinal": 1,
+      "name": "메이지 나이트",
+      "item": "지도 위 뒷면 적/유적 토큰과 미탐험 지도 타일 더미가 숨은 정보로 선언되지 않음(map-area.scene 공개)",
+      "item_sha256": "35910c1787267f45087b0f50a86fa77f54ee13d4be7d92ee899f18c7f4ffe87e",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/71/review_findings/0",
+        "docs/game-state-review/games.json#/rows/71/findings/0",
+        "docs/research/game-specs-120/games/mage-knight.json#/sources",
+        "docs/research/game-specs-120/games/mage-knight.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "원 기본판 모드",
+        "compatibility_notes": [
+          "UE 구매 구성의 확장은 제외;UE 1–5인 수치를 원판에 적용 안 함",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "mage-knight.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "edition_identity",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "확보된 Ultimate 자료와 선택 원 기본판 모드가 다르다. 자료가 전혀 없는 접근 장애가 아니다.",
+      "next_action": "기존 Ultimate 본문에서 기본 지도/토큰의 적용 범위를 표시하고 원 기본 규칙과 적 공개 조건만 대조한다. 구분 불가 절은 보류한다.",
+      "relevant_field_ids": [
+        "map-area.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "map-area.scene",
+          "json_pointer": "/state_fields/0",
+          "visibility": "public",
+          "description": "타일 ID·회전, 내부 hex와 장소/적/정복 표식. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "mage-knight.primary",
+          "title": "Mage Knight Board Game — 공식 자료",
+          "url": "https://wizkids.com/mage-knight/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본판 소개에서 탐험 지도·도시 정복·부대·평판·명성·마법·능력, 마나 수정/주사위와 카드 확인. 낮/밤·상처·부대 소진 세부는 원문 미검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "mansions-madness-2:review:01",
+      "upstream_item_id": null,
+      "game_id": "mansions-madness-2",
+      "original_ordinal": 1,
+      "name": "광기의 저택 2판",
+      "item": "재개 핵심이 외부 앱 저장(external-save)",
+      "item_sha256": "adb4af09270f18db69e62cab6384ea59200e00a8899047d145770f41e5d00d98",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/72/review_findings/0",
+        "docs/game-state-review/games.json#/rows/72/findings/0",
+        "docs/research/game-specs-120/games/mansions-madness-2.json#/sources",
+        "docs/research/game-specs-120/games/mansions-madness-2.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "2판 기본판",
+        "compatibility_notes": [
+          "앱 내부 시나리오 세이브는 별도로 필요;KeepBoard가 대체하지 않음",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "mansions-madness-2.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "product_boundary",
+      "secondary_causes": [],
+      "classification_basis": "2판 외부 앱 저장 의존이 기존 명세에 명시된다. 실물 규칙 PDF 확보와 앱 내부 상태 확보는 다르다.",
+      "next_action": "원 앱 시나리오/세이브 참조만 유지하고 앱 저장 이식은 별도 범위로 둔다.",
+      "relevant_field_ids": [
+        "external-save"
+      ],
+      "existing_fields": [
+        {
+          "id": "external-save",
+          "json_pointer": "/state_fields/4",
+          "visibility": "public",
+          "description": "앱 시나리오·저장 슬롯/기기 별칭·저장 시점만 사용자가 선택 기록. 앱 파일 읽기/변경/대체 아님."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "PRODUCT_BOUNDARY_HOLD",
+      "source_metadata": [
+        {
+          "id": "mansions-madness-2.primary",
+          "title": "Mansions of Madness: Second Edition — 공식 자료",
+          "url": "https://www.fantasyflightgames.com/product/mansions-of-madness-second-edition/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 현행 상품에서2판 협력·앱 보조/주도 시나리오와 별도 Learn to Play/Rules Reference 존재 확인. 아래 카드/지형별 필드는 기록 제안이며 앱 내부 상태를 추출하거나 이식하지 않음."
+        },
+        {
+          "id": "mansions-madness-2.art-confirmation.mansions-rules",
+          "title": "Mansions of Madness Second Edition — Learn to Play",
+          "url": "https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mansions_of_madness_second_edition_learn_to_play.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "p.3 Components; pp.13–15 Tokens/Terrain — 단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "monopoly:review:01",
+      "upstream_item_id": null,
+      "game_id": "monopoly",
+      "original_ordinal": 1,
+      "name": "모노폴리",
+      "item": "현금 공개 관례를 명세 스스로 미확인으로 두고 owner 선언",
+      "item_sha256": "3e31a4b3cc21bad7957ca5c99c96c0687373e6b90957214cabf138537086c310",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/74/review_findings/0",
+        "docs/game-state-review/games.json#/rows/74/findings/0",
+        "docs/research/game-specs-120/games/monopoly.json#/sources",
+        "docs/research/game-specs-120/games/monopoly.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Classic 기본판",
+        "compatibility_notes": [
+          "지역·테마판의 칸/화폐 차이 확인;개별 테마판 수로 부풀리지 않음",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "monopoly.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "Hasbro G0009 공식 구성/카드 순환은 읽었지만 현금 열람 조항은 검증하지 않았다.",
+      "next_action": "기존 공식 G0009 규칙의 현금 공개 문구부터 확인하고 하우스 룰을 공식 사실로 올리지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "monopoly.primary",
+          "title": "Monopoly — 공식 자료",
+          "url": "https://instructions.hasbro.com/en-us/instruction/monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "Hasbro 현행 Classic G0009 안내에서 클래식 구매·임대·거래·파산과 말/집/호텔/현금 보관 구성을 확인. 저당·감옥·경매·부채 세부는 규칙 파일 대조 전 미확인."
+        },
+        {
+          "id": "monopoly.art-confirmation.monopoly-rules",
+          "title": "Hasbro Monopoly Classic G0009 ©2025 — English instructions",
+          "url": "https://instructions.hasbro.com/api/download/G0009_en-us_monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "sheet1 Contents/Setup; sheet2 Chance and Community Chest — 지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "nemesis:review:01",
+      "upstream_item_id": null,
+      "game_id": "nemesis",
+      "original_ordinal": 1,
+      "name": "네메시스",
+      "item": "미탐험 방 타일과 방 위 뒷면 탐색 토큰이 숨은 정보로 선언되지 않음(ship.scene 공개)",
+      "item_sha256": "06c2af4f798fd2619c82fa459cb8ed136cb8fedaeb5d047b1580c354141ab74b",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/75/review_findings/0",
+        "docs/game-state-review/games.json#/rows/75/findings/0",
+        "docs/research/game-specs-120/games/nemesis.json#/sources",
+        "docs/research/game-specs-120/games/nemesis.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "원 기본판",
+        "compatibility_notes": [
+          "Lockdown/Retaliation은 독립 후속작으로 이번 목록 미계수",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "nemesis.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "ship.scene는 public이고 앞뒷면 저장을 포함한다. 방의 위치 공개와 미탐험 방 정체 공개는 별개다.",
+      "next_action": "원 Nemesis setup/exploration에서 각 토큰의 공개 시점만 확인하고 공개 위치/숨은 정체 표현으로 제안한다.",
+      "relevant_field_ids": [
+        "ship.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "ship.scene",
+          "json_pointer": "/state_fields/0",
+          "visibility": "public",
+          "description": "방 노드·통로 변·문 상태; 소음은 통로에, 화재/고장은 방에 부착. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "nemesis.primary",
+          "title": "Nemesis — 공식 자료",
+          "url": "https://awakenrealms.com/images/download/Nemesis/ENG/RULEBOOK_280x280mm_bleed3mm_28pages_PRINT.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "원 Nemesis 공식 규칙 검색 본문에서 라운드/이동/소음·슬라임·화재·고장·문/침입자 전투·오염/부상/인벤토리/방 구역을 확인. 함선 목적지·엔진의 정보 공개 범위는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "pandemic:review:01",
+      "upstream_item_id": null,
+      "game_id": "pandemic",
+      "original_ordinal": 1,
+      "name": "팬데믹",
+      "item": "공개 정보인 감염 버림 더미가 decks.scene 숨은 묶음 설명 안에 포함됨(공개 범위 혼합)",
+      "item_sha256": "6eba745a3ca288ef18151ab9fd0a1b0bf47f7fca6fcd19833f788dff32fa671e",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/79/review_findings/0",
+        "docs/game-state-review/games.json#/rows/79/findings/0",
+        "docs/research/game-specs-120/games/pandemic.json#/sources",
+        "docs/research/game-specs-120/games/pandemic.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "Legacy는 별도 독립 게임;솔로 변형 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "pandemic.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "decks.scene에 여러 더미를 묶어 hidden을 붙였다. 감염 버림이 이미 설명에 있으므로 구성물 누락이라고 다시 만들면 중복된다.",
+      "next_action": "공식 setup/infection/discard 절을 확인한 뒤 감염 뽑기·감염 버림·플레이어 더미의 공개 범위를 분리한다.",
+      "relevant_field_ids": [
+        "decks.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "decks.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "hidden",
+          "description": "덱·버림·격화용 임시 묶음을 별개 ID로 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "pandemic.primary",
+          "title": "Pandemic — 공식 자료",
+          "url": "https://images.zmangames.com/filer_public/58/b6/58b6de62-0f55-4d52-b55b-fb9b94ef63ec/zm7102_rulebook_web.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 기본 규칙 검색 본문에서 도시별 질병 큐브, 연구소, 발병/감염률, 치료 표식과 감염/도시 카드 확인. 역할 예외·손패 공개 지침은 추가 대조 대상."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "power-grid:review:01",
+      "upstream_item_id": null,
+      "game_id": "power-grid",
+      "original_ordinal": 1,
+      "name": "파워그리드",
+      "item": "플레이어 차례 순서(경매·자원 구매·건설 순서를 정함) 필드 없음",
+      "item_sha256": "0206cd2c11481bf20bc11cbdecd1acdd9d21bce3814d449115872b5a54660439",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/81/review_findings/0",
+        "docs/game-state-review/games.json#/rows/81/findings/0",
+        "docs/research/game-specs-120/games/power-grid.json#/sources",
+        "docs/research/game-specs-120/games/power-grid.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Recharged 기본판",
+        "compatibility_notes": [
+          "구판·지역 지도 차이;모든 지도 자동 지원 아님",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "power-grid.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "Rio 공식 배포의 크기 제한/HTTP403이 이전 보고에 있다. 이번에는 2F 공식 Recharged 대체 배포를 정상 확보했다.",
+      "next_action": "대표 C01: p4/5 순서 트랙의 현재 순서·처리 완료 행을 보존하는 선택 필드안을 인계한다.",
+      "relevant_field_ids": [
+        "turn",
+        "auction"
+      ],
+      "existing_fields": [
+        {
+          "id": "turn",
+          "json_pointer": "/state_fields/7",
+          "visibility": "public",
+          "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+        },
+        {
+          "id": "auction",
+          "json_pointer": "/state_fields/5",
+          "visibility": "public",
+          "description": "대상 발전소·최고 입찰·입찰자와 패스한 사람."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_ORIGIN_403_AND_TOOL_SIZE_LIMIT",
+        "basis": "docs/game-essentials/remaining.md:7",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C01",
+      "research_result": "SCOPED_HANDOFF_READY",
+      "next_route": "HANDOFF_NOW",
+      "source_metadata": [
+        {
+          "id": "power-grid.primary",
+          "title": "Power Grid — 공식 자료",
+          "url": "https://www.riograndegames.com/games/power-grid-recharged/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Recharged 소개에서 발전소 경쟁·연료 종류·도시 연결·실제 전력 공급 구분 확인. 경매/시장 정렬/Step 변화 세부는 원문 미검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "power-grid:review:02",
+      "upstream_item_id": null,
+      "game_id": "power-grid",
+      "original_ordinal": 2,
+      "name": "파워그리드",
+      "item": "뒷면 발전소 뽑기 더미와 그 안의 Step 3 카드 위치 영역 없음(market.scene은 현재/미래 줄만)",
+      "item_sha256": "2ee7fb0a2a83fca611621d4bd169d6bc268bf0605d63b56d4d7d058d6754fdc0",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/81/review_findings/1",
+        "docs/game-state-review/games.json#/rows/81/findings/1",
+        "docs/research/game-specs-120/games/power-grid.json#/sources",
+        "docs/research/game-specs-120/games/power-grid.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Recharged 기본판",
+        "compatibility_notes": [
+          "구판·지역 지도 차이;모든 지도 자동 지원 아님",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "power-grid.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "Rio 접근 문제와 함께 발전소 더미 조항이 미대조였다. market.scene는 시장 두 줄 위주다.",
+      "next_action": "대표 C01: p3 숨은 더미와 최초 Step3 위치를 확인. 현재 저장 시점의 정확한 순서는 펼쳐 알아내지 않고 물리 묶음으로 보존한다.",
+      "relevant_field_ids": [
+        "market.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "market.scene",
+          "json_pointer": "/state_fields/1",
+          "visibility": "public",
+          "description": "현재/미래 발전소 줄과 번호 순서, 연료 가격칸. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_ORIGIN_403_AND_TOOL_SIZE_LIMIT",
+        "basis": "docs/game-essentials/remaining.md:7",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C01",
+      "research_result": "SCOPED_HANDOFF_READY",
+      "next_route": "HANDOFF_NOW",
+      "source_metadata": [
+        {
+          "id": "power-grid.primary",
+          "title": "Power Grid — 공식 자료",
+          "url": "https://www.riograndegames.com/games/power-grid-recharged/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Recharged 소개에서 발전소 경쟁·연료 종류·도시 연결·실제 전력 공급 구분 확인. 경매/시장 정렬/Step 변화 세부는 원문 미검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "power-grid:review:03",
+      "upstream_item_id": null,
+      "game_id": "power-grid",
+      "original_ordinal": 3,
+      "name": "파워그리드",
+      "item": "돈 공개 지침을 명세 스스로 미확인으로 둠",
+      "item_sha256": "e7672f52236b2be0334cbc3afcda919a6155849469a16eb82860b41c55c36d4d",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/81/review_findings/2",
+        "docs/game-state-review/games.json#/rows/81/findings/2",
+        "docs/research/game-specs-120/games/power-grid.json#/sources",
+        "docs/research/game-specs-120/games/power-grid.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Recharged 기본판",
+        "compatibility_notes": [
+          "구판·지역 지도 차이;모든 지도 자동 지원 아님",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "power-grid.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "wallet.scene는 owner다. 접근 복구 뒤에도 확인한 PDF 범위에서 현금 공개 의무의 명문을 찾지 못했다.",
+      "next_action": "대표 C01: 현금 공개 조항은 별도 보류한다. 공식 관련 FAQ 또는 정확한 해당 판 설명서 문구가 생길 때만 재개한다.",
+      "relevant_field_ids": [
+        "wallet.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "wallet.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "owner",
+          "description": "확인한 돈만 소유자 범위에 기록. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_ORIGIN_403_AND_TOOL_SIZE_LIMIT",
+        "basis": "docs/game-essentials/remaining.md:7",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C01",
+      "research_result": "HOLD_AFTER_SCOPED_REVIEW",
+      "next_route": "HUMAN_OR_NEW_PRIMARY_EVIDENCE",
+      "source_metadata": [
+        {
+          "id": "power-grid.primary",
+          "title": "Power Grid — 공식 자료",
+          "url": "https://www.riograndegames.com/games/power-grid-recharged/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Recharged 소개에서 발전소 경쟁·연료 종류·도시 연결·실제 전력 공급 구분 확인. 경매/시장 정렬/Step 변화 세부는 원문 미검증."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "root:review:01",
+      "upstream_item_id": null,
+      "game_id": "root",
+      "original_ordinal": 1,
+      "name": "루트",
+      "item": "손패 장수(공개 수) 필드 없음",
+      "item_sha256": "178fe50e6ff9977126b4856b947733ad467729b8cf67c9c22f78d91e3f87f51a",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/86/review_findings/0",
+        "docs/game-state-review/games.json#/rows/86/findings/0",
+        "docs/research/game-specs-120/games/root.json#/sources",
+        "docs/research/game-specs-120/games/root.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본 4세력",
+        "compatibility_notes": [
+          "모든 세력 규칙 엔진 목표 아님;확장 세력 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "root.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "spec_interpretation"
+      ],
+      "classification_basis": "Law of Root의 다른 절은 읽었으나 손패 장수를 물으면 알려야 한다는 조항은 검증하지 않았다.",
+      "next_action": "기존 선택판 Law의 공개정보/손패 절만 확인한다. 소유자 장면의 수량 보존과 상대에게 공개할 의무를 구별한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "root.primary",
+          "title": "Root — 공식 자료",
+          "url": "https://rules.ledergames.com/?locale=en-US&printing=p16&product=root",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Law of Root p16 검색 본문 2.4–2.5/7.5/8.2–8.6/9절: 숲·공터·건물 슬롯, 지배 계산, 칙령, 지지자 비공개, 장교, 방랑자 아이템 확인. 기본 네 세력만 추출."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "rummikub:review:01",
+      "upstream_item_id": null,
+      "game_id": "rummikub",
+      "original_ordinal": 1,
+      "name": "루미큐브",
+      "item": "받침대 타일 장수(공개 수) 필드 없음 — 명세 rack.scene은 owner 전용 장면뿐",
+      "item_sha256": "a7906b44d66c041cda3b5abfefad874d7a0788d16949f45789a3cc45edf4bf08",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/87/review_findings/0",
+        "docs/game-state-review/games.json#/rows/87/findings/0",
+        "docs/research/game-specs-120/games/rummikub.json#/sources",
+        "docs/research/game-specs-120/games/rummikub.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Classic 기본 세트",
+        "compatibility_notes": [
+          "세트 크기·타일 디자인 확인;3D 받침 뒤 타일 자동 추정 금지",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "rummikub.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "spec_interpretation"
+      ],
+      "classification_basis": "rack.scene에 수량 보존이 있으므로 장수 저장 자체가 완전히 불가능하지 않다. 공개 장수라는 규칙 주장이 미검증이다.",
+      "next_action": "기존 Classic106 공식 PDF와 FAQ에서 상대 장수 열람 권리를 확인하기 전 public 필드 강제 추가를 보류한다.",
+      "relevant_field_ids": [
+        "rack.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "rack.scene",
+          "json_pointer": "/state_fields/1",
+          "visibility": "owner",
+          "description": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "rummikub.primary",
+          "title": "Rummikub — 공식 자료",
+          "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Classic 영어 규칙 검색 본문에서 그룹/런 재배열과 조커 회수·재사용, 최초 등록 전 조커 회수 제한 확인. Twist 특수 조커 규칙과 혼동하지 않는다."
+        },
+        {
+          "id": "rummikub.essentials.rules",
+          "title": "Rummikub Classic 2600 English Rules D-2600-1236-0041 120819",
+          "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-22",
+          "note": "PDF pp.1–3 Pool/Manipulation/Joker; p.4 Incomplete Runs; 적용판본: Classic106타일4받침대 부분; XP/Mini XP160타일 제외; 확인범위: 턴 내 재배열이 끝나지 않으면 기존 테이블 배치로 되돌리는 절차가 있다. 조커 회수 후 같은 턴 재사용과 최초등록 여부가 중요하다. 원문/열람 한계는 docs/game-essentials/evidence.json#rummikub"
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "rummikub:review:03",
+      "upstream_item_id": null,
+      "game_id": "rummikub",
+      "original_ordinal": 3,
+      "name": "루미큐브",
+      "item": "미공개 공급(pool) 남은 장수 필드 없음",
+      "item_sha256": "d9fd87f10aaf3e41cd158a08fa00401dda54d656371139cd88f7194f801b9388",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/87/review_findings/2",
+        "docs/game-state-review/games.json#/rows/87/findings/2",
+        "docs/research/game-specs-120/games/rummikub.json#/sources",
+        "docs/research/game-specs-120/games/rummikub.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Classic 기본 세트",
+        "compatibility_notes": [
+          "세트 크기·타일 디자인 확인;3D 받침 뒤 타일 자동 추정 금지",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "rummikub.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "spec_interpretation",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "pool.scene가 이미 있고 실물 인스턴스의 수량을 보존한다고 적혀 있다. 별도 count 필드 부재만으로 풀 누락을 확정할 수 없다.",
+      "next_action": "현재 quantity로 미상/알려진 수를 표현 가능한지 후속 구현자가 확인한다. 총수를 강제 세거나 숨은 타일을 뒤집지 않는다.",
+      "relevant_field_ids": [
+        "pool.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "pool.scene",
+          "json_pointer": "/state_fields/2",
+          "visibility": "hidden",
+          "description": "뒤집힌 타일 더미를 정체 미상으로 저장. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "rummikub.primary",
+          "title": "Rummikub — 공식 자료",
+          "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 Classic 영어 규칙 검색 본문에서 그룹/런 재배열과 조커 회수·재사용, 최초 등록 전 조커 회수 제한 확인. Twist 특수 조커 규칙과 혼동하지 않는다."
+        },
+        {
+          "id": "rummikub.essentials.rules",
+          "title": "Rummikub Classic 2600 English Rules D-2600-1236-0041 120819",
+          "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-22",
+          "note": "PDF pp.1–3 Pool/Manipulation/Joker; p.4 Incomplete Runs; 적용판본: Classic106타일4받침대 부분; XP/Mini XP160타일 제외; 확인범위: 턴 내 재배열이 끝나지 않으면 기존 테이블 배치로 되돌리는 절차가 있다. 조커 회수 후 같은 턴 재사용과 최초등록 여부가 중요하다. 원문/열람 한계는 docs/game-essentials/evidence.json#rummikub"
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "sagrada:review:01",
+      "upstream_item_id": null,
+      "game_id": "sagrada",
+      "original_ordinal": 1,
+      "name": "사그라다",
+      "item": "주사위 주머니(남은 주사위) 영역 없음",
+      "item_sha256": "3435e01036e9bae6aa16ec601141731edb82ae362a2480e7793c8a6c103f0f67",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/88/review_findings/0",
+        "docs/game-state-review/games.json#/rows/88/findings/0",
+        "docs/research/game-specs-120/games/sagrada.json#/sources",
+        "docs/research/game-specs-120/games/sagrada.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "확장 제외;작은 주사위 눈금 인식 미검증",
+          "공식 링크는 원4인 기본 규칙이다. 2026 상품의 Remastered/Deluxe와 구성·규칙 호환은 확인되지 않았다."
+        ],
+        "source_refs": [
+          "sagrada.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "edition_identity"
+      ],
+      "classification_basis": "원 기본판 주머니 설치 절을 아직 대조하지 않았고 Remastered 자동 호환도 검증되지 않았다.",
+      "next_action": "원 기본판으로 한정한 공식 setup의 bag/draw 절을 확인한다. Remastered 공급 차이는 별도 항목으로 둔다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "sagrada.primary",
+          "title": "Sagrada — 공식 자료",
+          "url": "https://floodgategames.com/Sagrada/Sagrada-Rules-Floodgate-Games-SA01.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "원 기본판 공식 규칙 검색 본문에서 창문 패턴/색·눈 제약, 주사위 드래프트, 도구·은총·공개/개인 목표와10라운드 확인. 현행 Remastered와 차이는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "sagrada:review:02",
+      "upstream_item_id": null,
+      "game_id": "sagrada",
+      "original_ordinal": 2,
+      "name": "사그라다",
+      "item": "원판/Remastered 판본 선택이 미결정(명세 명시)",
+      "item_sha256": "fc54386747b5b94ccad845ad5e88d3e6557fd90274580dc2a50d87e90aa8f703",
+      "original_status": "UNCLEAR",
+      "original_evidence": "SPEC",
+      "original_type": "basis",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/88/review_findings/1",
+        "docs/game-state-review/games.json#/rows/88/findings/1",
+        "docs/research/game-specs-120/games/sagrada.json#/sources",
+        "docs/research/game-specs-120/games/sagrada.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "확장 제외;작은 주사위 눈금 인식 미검증",
+          "공식 링크는 원4인 기본 규칙이다. 2026 상품의 Remastered/Deluxe와 구성·규칙 호환은 확인되지 않았다."
+        ],
+        "source_refs": [
+          "sagrada.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "edition_identity",
+      "secondary_causes": [],
+      "classification_basis": "원판 기준 명세에 Remastered/Deluxe 미대조가 명시돼 있다. 최신 상품이 원판과 같다는 보증은 없다.",
+      "next_action": "처음 지원할 인쇄/판본을 명시적으로 선택하고 표지·구성/개인 공급·도구 단계만 대조한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "sagrada.primary",
+          "title": "Sagrada — 공식 자료",
+          "url": "https://floodgategames.com/Sagrada/Sagrada-Rules-Floodgate-Games-SA01.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "원 기본판 공식 규칙 검색 본문에서 창문 패턴/색·눈 제약, 주사위 드래프트, 도구·은총·공개/개인 목표와10라운드 확인. 현행 Remastered와 차이는 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "scythe:review:01",
+      "upstream_item_id": null,
+      "game_id": "scythe",
+      "original_ordinal": 1,
+      "name": "사이드",
+      "item": "조우/공장 카드 미공개 더미 영역 없음",
+      "item_sha256": "d1453c3cac2a2842b8f98ba036b05f15864ef616f048e6f6ed72ff3604d3c967",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/90/review_findings/0",
+        "docs/game-state-review/games.json#/rows/90/findings/0",
+        "docs/research/game-specs-120/games/scythe.json#/sources",
+        "docs/research/game-specs-120/games/scythe.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "확장 세력·캠페인 제외;Expeditions는 독립작",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "scythe.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "상품 소개에서 조우/공장 카드는 확인했으나 숨은 공급 설치와 순서는 미대조다.",
+      "next_action": "공식 base setup의 encounter/factory 구역을 읽고 뽑기·선택후잔여·제외 더미를 구별한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "scythe.primary",
+          "title": "Scythe — 공식 자료",
+          "url": "https://aus.stonemaiergames.com/products/scythe",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품 본문에서 세력/플레이어 매트, 메크·캐릭터·일꾼·건물·기술 큐브·모집, 자원·전투/목표/조우/공장 카드, 인기·전력·동전, 라운드 없는 행동 선택 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "six-nimmt:review:01",
+      "upstream_item_id": null,
+      "game_id": "six-nimmt",
+      "original_ordinal": 1,
+      "name": "젝스님트",
+      "item": "벌점 더미 공개 관례를 명세 스스로 선택 조정으로 둠",
+      "item_sha256": "caf9310c5538c57ad8163ab0ac5fc75f588eea7c1ec1d43b9bebd65ec83567c9",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/94/review_findings/0",
+        "docs/game-state-review/games.json#/rows/94/findings/0",
+        "docs/research/game-specs-120/games/six-nimmt.json#/sources",
+        "docs/research/game-specs-120/games/six-nimmt.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "주 라운드가 짧아 초기 핵심보다 요청 대기",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "six-nimmt.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "penalty.scene owner를 그룹 선택으로 두었고 벌점 더미 열람 조항은 검증하지 않았다.",
+      "next_action": "AMIGO 원 기본판 벌점 더미 절을 확인한다. 대회·온라인 관행을 원 기본판 공개 의무로 대체하지 않는다.",
+      "relevant_field_ids": [
+        "penalty.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "penalty.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "owner",
+          "description": "개인 벌점 더미는 물리 묶음/확인 수치만. 공개 관례는 선택 조정. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "six-nimmt.primary",
+          "title": "6 nimmt! — 공식 자료",
+          "url": "https://www.amigo-spiele.de/6-nimmt_4910_1124",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품 규칙 요약에서 네 줄, 동시 비공개 선택 후 공개·낮은 숫자부터 처리, 여섯 번째 카드가 앞5장을 가져감·벌점과 라운드 종료 확인."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "stone-age:review:01",
+      "upstream_item_id": null,
+      "game_id": "stone-age",
+      "original_ordinal": 1,
+      "name": "스톤 에이지",
+      "item": "라운드마다 넘어가는 시작 플레이어 표식 필드 없음",
+      "item_sha256": "26185f96e0986606f7d95e766c3b049d80be5b64d641e7c869b8f19a253c59b7",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/105/review_findings/0",
+        "docs/game-state-review/games.json#/rows/105/findings/0",
+        "docs/research/game-specs-120/games/stone-age.json#/sources",
+        "docs/research/game-specs-120/games/stone-age.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "기념판은 동일 게임;Winter 모드 별도",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "stone-age.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "stale_tracking",
+      "secondary_causes": [
+        "spec_interpretation"
+      ],
+      "classification_basis": "동결 manifest changes에 starting-player 추가가 있고 실제 필드와 공식 p4 근거도 있다. 동일 finding만 UNCLEAR로 남았다.",
+      "next_action": "대표 C05: 새 필드를 만들지 않고 finding 종료 근거 묶음만 후속 검토자에게 인계한다.",
+      "relevant_field_ids": [
+        "starting-player",
+        "round-phase",
+        "turn"
+      ],
+      "existing_fields": [
+        {
+          "id": "starting-player",
+          "json_pointer": "/state_fields/10",
+          "visibility": "public",
+          "description": "현재 표식 보유자와 시계방향 좌석 순서. turn과 별도이며 재개로 표식을 넘기지 않는다."
+        },
+        {
+          "id": "round-phase",
+          "json_pointer": "/state_fields/11",
+          "visibility": "public",
+          "description": "일꾼 배치/일꾼 회수와 행동 해결/먹이 지급 중 실제 중단 단계. 현재 해결자와 이미 회수한 일꾼을 유지한다."
+        },
+        {
+          "id": "turn",
+          "json_pointer": "/state_fields/7",
+          "visibility": "public",
+          "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_SHELL_FAILURE_WEB_CLAUSE_ALREADY_READ",
+        "basis": "docs/game-essentials/evidence.json#/sources/17",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C05",
+      "research_result": "SCOPED_HANDOFF_READY",
+      "next_route": "HANDOFF_NOW",
+      "source_metadata": [
+        {
+          "id": "stone-age.primary",
+          "title": "Stone Age — 공식 자료",
+          "url": "https://www.hans-im-glueck.de/en/game/stone-age-2/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 현행 상품에서 개정 규칙·마을 발전, 도구/농업·자원/음식, 일꾼·건물·문명 카드·주사위 구성 확인. 세부 개정 차이는 미검증."
+        },
+        {
+          "id": "stone-age.essentials.rules",
+          "title": "Stone Age English Rulebook — publisher-linked 2023/06 file",
+          "url": "https://www.hans-im-glueck.de/wp-content/uploads/2023/06/stone_age_rules.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-22",
+          "note": "PDF p.4 Game overview/rounds; p.5 Tools; 적용판본: 공식 현재 기본판 English PDF; 웹 본문으로 열람; 확인범위: 라운드마다 시작 표식을 왼쪽으로 넘기며 배치/회수 해결/먹이 단계가 구별된다. 도구는 사용 뒤90도 돌려 라운드당 사용 상태를 표시한다. 원문/열람 한계는 docs/game-essentials/evidence.json#stone-age"
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "through-the-ages:review:01",
+      "upstream_item_id": null,
+      "game_id": "through-the-ages",
+      "original_ordinal": 1,
+      "name": "쓰루 디 에이지스",
+      "item": "민간 손패와 군사 손패를 hand.scene 하나(owner)로 묶음 — 둘의 공개 범위 차이 미분리",
+      "item_sha256": "a43cb902c34b5aaed8f150b5a5f95ee42523205a16876f1473eb1675e0427e0b",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/109/review_findings/0",
+        "docs/game-state-review/games.json#/rows/109/findings/0",
+        "docs/research/game-specs-120/games/through-the-ages.json#/sources",
+        "docs/research/game-specs-120/games/through-the-ages.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "신판 기본판",
+        "compatibility_notes": [
+          "구 A Story와 판본 구분;확장 리더 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "through-the-ages.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed",
+        "spec_interpretation"
+      ],
+      "classification_basis": "Code of Laws URL이 상품 페이지로 바뀌어 검색 색인만 읽은 기록이다. 민간/군사 정보 공개 차이는 아직 추정이다.",
+      "next_action": "CGE의 선택 신판 공식 규칙 라이브러리에서 현행 직접 PDF를 찾고 두 손패의 내용/장수/뒷면을 각각 확인한다.",
+      "relevant_field_ids": [
+        "hand.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "hand.scene",
+          "json_pointer": "/state_fields/4",
+          "visibility": "owner",
+          "description": "두 손패 종류와 선택 중 정치/군사 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "REPORTED_REDIRECT_TO_PRODUCT_NOT_RULES",
+        "basis": "sources:through-the-ages.primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "through-the-ages.primary",
+          "title": "Through the Ages: A New Story of Civilization — 공식 자료",
+          "url": "https://czechgames.com/files/rules/through-the-ages-new-story-rules-en.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 신판 Code of Laws 검색 본문에서 시대A/I/II/III/IV·차례 구조·초기 턴 예외 확인. 현재 URL은 상품 페이지로 리디렉션되어 검색 색인 본문 기준; 자원뱅크/행동/정치 세부는 전수 미대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "ticket-to-ride:review:01",
+      "upstream_item_id": null,
+      "game_id": "ticket-to-ride",
+      "original_ordinal": 1,
+      "name": "티켓 투 라이드",
+      "item": "열차 카드·목적지 티켓 장수(공개 수) 필드 없음",
+      "item_sha256": "88ef2f820205f7fa540b16c38b8ea1d50595355eceba9cdbfdeac536faffc1ed",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/110/review_findings/0",
+        "docs/game-state-review/games.json#/rows/110/findings/0",
+        "docs/research/game-specs-120/games/ticket-to-ride.json#/sources",
+        "docs/research/game-specs-120/games/ticket-to-ride.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "북미 기본판",
+        "compatibility_notes": [
+          "유럽은 독립 실행 지도 게임이며 이번 120종에 별도 계수하지 않음;북미 슬롯과 호환 주장 안 함",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "ticket-to-ride.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "edition_identity",
+      "secondary_causes": [
+        "clause_not_reviewed",
+        "spec_interpretation"
+      ],
+      "classification_basis": "북미 기본판만 선택돼 있고 인쇄가 미지정이다. 현행2025와 공식 Old Rules의 초기 티켓 수가 실제로 다르다.",
+      "next_action": "대표 C02: 판본을 먼저 묶고 공개 장수 의무는 별도 보류. 저장 중인 손패를 초기 배분 수로 교정하지 않는다.",
+      "relevant_field_ids": [
+        "hand.scene",
+        "decks.scene"
+      ],
+      "existing_fields": [
+        {
+          "id": "hand.scene",
+          "json_pointer": "/state_fields/2",
+          "visibility": "owner",
+          "description": "열차 카드 색별 수와 목적지 티켓을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        },
+        {
+          "id": "decks.scene",
+          "json_pointer": "/state_fields/3",
+          "visibility": "hidden",
+          "description": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다."
+        }
+      ],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": "C02",
+      "research_result": "HOLD_AFTER_SCOPED_REVIEW",
+      "next_route": "HUMAN_OR_NEW_PRIMARY_EVIDENCE",
+      "source_metadata": [
+        {
+          "id": "ticket-to-ride.primary",
+          "title": "Ticket to Ride — 공식 자료",
+          "url": "https://www.daysofwonder.com/game/ticket-to-ride/",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 북미 기본판 소개에서 열차 카드로 도시 간 노선 확보, 목적지 티켓과 최장 경로 보너스 확인. 세부 손패/복선 규칙은 규칙서 추가 확인 필요."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "voidfall:review:01",
+      "upstream_item_id": null,
+      "game_id": "voidfall",
+      "original_ordinal": 1,
+      "name": "보이드폴",
+      "item": "카드 선택·의제의 공개 여부를 명세 스스로 미확인으로 둠",
+      "item_sha256": "f51f4394b474aa33cb65e447f30800ef91c6ac8172b623c7832024106609fa80",
+      "original_status": "UNCLEAR",
+      "original_evidence": "UNCLEAR",
+      "original_type": "visibility",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/116/review_findings/0",
+        "docs/game-state-review/games.json#/rows/116/findings/0",
+        "docs/research/game-specs-120/games/voidfall.json#/sources",
+        "docs/research/game-specs-120/games/voidfall.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "Retail 기본판",
+        "compatibility_notes": [
+          "Galactic 재질판 중복 계수 안 함;세부 모드 확인 필요",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "voidfall.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [
+        "access_history"
+      ],
+      "classification_basis": "초기 PDF 크기 제한 뒤 official art-confirmation에서 관련 기본 자료 일부를 열었다. 카드 선택/의제 공개는 그 범위 밖이다.",
+      "next_action": "이미 확보한 최종 규칙의 Focus/Agenda 공개 시점만 대조한다. 개발일지·경쟁/협력 모드를 섞지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_SIZE_LIMIT_LATER_SCOPED_RULES_AVAILABLE",
+        "basis": "sources:voidfall.primary + voidfall.art-confirmation.voidfall-primary",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "voidfall.primary",
+          "title": "Voidfall — 공식 자료",
+          "url": "https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf",
+          "kind": "official-rules",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "최종 공식 규칙 검색 본문 Focus actions/Agenda/Trade에서2개 행동·미리 뒤집은 교역 표식의 추가 행동·같은 턴 얻은 교역 표식 뒤집기 제한, 영구 기술 효과 확인. PDF 직접 열기는 크기 제한;2022 개발일지는 최종 규칙으로 사용하지 않음."
+        },
+        {
+          "id": "voidfall.art-confirmation.voidfall-primary",
+          "title": "Voidfall Retail base — English Rulebook 2023",
+          "url": "https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "p.3 Components; pp.6–8 House Setup; pp.19–20 Resources; pp.28–29 Civilization — 가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "war-of-the-ring-2:review:01",
+      "upstream_item_id": null,
+      "game_id": "war-of-the-ring-2",
+      "original_ordinal": 1,
+      "name": "반지전쟁 2판",
+      "item": "사냥 타일 주머니(특수 타일이 추가·제거되는 숨은 뽑기 풀) 구성 영역 없음 — tracks.scene은 사냥 상자 주사위만",
+      "item_sha256": "e2fac19d0f6ad74b692128fc8de1eddf5ab68e0ff040ba3dcb01c315ecd45b21",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/117/review_findings/0",
+        "docs/game-state-review/games.json#/rows/117/findings/0",
+        "docs/research/game-specs-120/games/war-of-the-ring-2.json#/sources",
+        "docs/research/game-specs-120/games/war-of-the-ring-2.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "WOTR001 기본판",
+        "compatibility_notes": [
+          "기본 2인 우선;공식 색인 2–4인 변형·본문 접근 미확인",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "war-of-the-ring-2.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "Ares 공식 상품/다운로드403이 이전 기록에 있다. 이번 연구에서 같은 차단 경로를 재시도하지 않았다.",
+      "next_action": "Ares 정상 규칙 라이브러리나 권한 있는 현지 출판사2판 PDF를 최대 두 경로로 찾는다. 없으면 소장2판 사냥 풀 설치/추가 절을 요청 목록에 남긴다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_ORIGIN_403",
+        "basis": "docs/game-essentials/remaining.md:8",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "war-of-the-ring-2.primary",
+          "title": "War of the Ring: Second Edition — 공식 자료",
+          "url": "https://www.aresgames.eu/1518",
+          "kind": "official-faq",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 2판 변경 문서에서 사냥 주사위 배정, 원정대/동료, 타락, 전투 카드 순서와 1판 차이 확인. 전체 부품은 WOTR001 공식 상품 목록에서 확인했으나 지역 인접·정치 전체 규칙은 추가 대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "war-of-the-ring-2:review:02",
+      "upstream_item_id": null,
+      "game_id": "war-of-the-ring-2",
+      "original_ordinal": 2,
+      "name": "반지전쟁 2판",
+      "item": "진영별 인물/전략 이벤트 덱 미공개 더미 영역 없음",
+      "item_sha256": "f9708d843336f89426bb6351b6b3905783b421b31a0b58c6cffc3bed33d9cfd4",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/117/review_findings/1",
+        "docs/game-state-review/games.json#/rows/117/findings/1",
+        "docs/research/game-specs-120/games/war-of-the-ring-2.json#/sources",
+        "docs/research/game-specs-120/games/war-of-the-ring-2.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "WOTR001 기본판",
+        "compatibility_notes": [
+          "기본 2인 우선;공식 색인 2–4인 변형·본문 접근 미확인",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "war-of-the-ring-2.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "access_recovery",
+      "secondary_causes": [
+        "clause_not_reviewed"
+      ],
+      "classification_basis": "이전 Ares403과 함께 양 진영 사건 덱 설치 절이 미대조다. 1→2판 변경 문서는 기본판 전문의 대체물이 아니다.",
+      "next_action": "같은2판 기본 규칙의 사건 카드 setup만 확인한다. Card Game·1판·확장 덱을 섞지 않는다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "REPORTED_ORIGIN_403",
+        "basis": "docs/game-essentials/remaining.md:8",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "war-of-the-ring-2.primary",
+          "title": "War of the Ring: Second Edition — 공식 자료",
+          "url": "https://www.aresgames.eu/1518",
+          "kind": "official-faq",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 2판 변경 문서에서 사냥 주사위 배정, 원정대/동료, 타락, 전투 카드 순서와 1판 차이 확인. 전체 부품은 WOTR001 공식 상품 목록에서 확인했으나 지역 인접·정치 전체 규칙은 추가 대조."
+        }
+      ],
+      "upstream_changed": false
+    },
+    {
+      "item_id": "wyrmspan:review:01",
+      "upstream_item_id": null,
+      "game_id": "wyrmspan",
+      "original_ordinal": 1,
+      "name": "웜스팬",
+      "item": "용/동굴 카드 미공개 더미 영역 없음",
+      "item_sha256": "2a880704093aacceacbfb468242e65653bd3c5cdbd2649549467646451404529",
+      "original_status": "UNCLEAR",
+      "original_evidence": "INFERRED",
+      "original_type": "missing",
+      "original_needed": "선택 판본 공식 규칙의 해당 구성/설치/정보 공개·중단절차 조항 원문. 기존 추정은 미승격.",
+      "input_refs": [
+        "docs/game-essentials/manifest.json#/games/119/review_findings/0",
+        "docs/game-state-review/games.json#/rows/119/findings/0",
+        "docs/research/game-specs-120/games/wyrmspan.json#/sources",
+        "docs/research/game-specs-120/games/wyrmspan.json#/gaps"
+      ],
+      "selected_edition": {
+        "id": "base",
+        "name": "기본판",
+        "compatibility_notes": [
+          "윙스팬 확장이 아닌 독립 게임;Dragon Academy 제외",
+          "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+        ],
+        "source_refs": [
+          "wyrmspan.primary"
+        ],
+        "confidence": "reported"
+      },
+      "primary_cause": "clause_not_reviewed",
+      "secondary_causes": [],
+      "classification_basis": "공식 자원/FAQ를 scoped 대조했지만 용·동굴 카드 공급 설치는 미대조다.",
+      "next_action": "기존 공식 규칙의 용/동굴 setup과 refill 절을 읽고 공개 offer와 숨은 덱을 분리한다.",
+      "relevant_field_ids": [],
+      "existing_fields": [],
+      "existing_access_record": {
+        "state": "NO_SPECIFIC_ACCESS_FAILURE_RECORDED",
+        "basis": "상세 조항 미대조를 차단으로 해석하지 않음",
+        "label": "REPORTED_FROM_FROZEN_INPUT"
+      },
+      "representative_case_id": null,
+      "research_result": "NOT_RETESTED",
+      "next_route": "RESEARCH_NOW",
+      "source_metadata": [
+        {
+          "id": "wyrmspan.primary",
+          "title": "Wyrmspan — 공식 자료",
+          "url": "https://europe.stonemaiergames.com/products/wyrmspan",
+          "kind": "official-product",
+          "access": "search-index",
+          "checked_at": "2026-10-21",
+          "note": "공식 상품에서 세 동굴(Crimson Cavern/Golden Grotto/Amethyst Abyss), 발굴·용 유치·연쇄 능력·Dragon Guild와 구성물 확인. Wingspan과 호환되지 않는 독립 게임임을 확인."
+        },
+        {
+          "id": "wyrmspan.art-confirmation.wyrmspan-primary",
+          "title": "Wyrmspan English base — official product components and Rules & FAQ",
+          "url": "https://europe.stonemaiergames.com/products/wyrmspan",
+          "kind": "official-product",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "Coins/Tokens/Eggs/Markers; official FAQ “What exactly do I gain…” and cached-resource clarification — 알·동전과 고기/금/수정/우유 네 자원은 별개다. 카드에 저장한 고기/우유와 개인 공급을 구별한다. 동전·알은 any-resource 선택의 네 자원에 포함되지 않는다. 유형색을 플레이어 소유색으로 바꾸지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+        },
+        {
+          "id": "wyrmspan.art-confirmation.wyrmspan-support",
+          "title": "Wyrmspan base — official Rules & FAQ",
+          "url": "https://stonemaiergames.com/games/wyrmspan/rules-faq/",
+          "kind": "official-rules",
+          "access": "opened",
+          "checked_at": "2026-10-21",
+          "note": "FAQ “What exactly do I gain…”; cached-resource clarification before comments — 구성물 확인 보조 근거; 전체 규칙 검증으로 확대하지 않음."
+        }
+      ],
+      "upstream_changed": false
+    }
+  ],
+  "representative_cases": [
+    {
+      "case_id": "C01",
+      "game_id": "power-grid",
+      "item_ids": [
+        "power-grid:review:01",
+        "power-grid:review:02",
+        "power-grid:review:03"
+      ],
+      "question": "영문 배포처 접근 실패를 보호 우회 없이 해결하고, 순서·숨은 더미·현금 공개를 각각 판정할 수 있는가?",
+      "method": "기존 Rio 403은 재요청하지 않았다. 원출판사 2F Recharged 제품 페이지가 직접 연결하는 독문 규칙을 일반 HTTPS GET으로 확보했다. PDF 내용·도형을 선택판과 대조했다.",
+      "source_ids": [
+        "S01",
+        "S02"
+      ],
+      "edition_assessment": {
+        "status": "VERIFIED_SCOPED",
+        "identity": "2F 공식 Recharged 제품에 연결된 독문 기본 Germany/USA 규칙. 할인 표식·경매 망치·플러그/소켓 카드 뒷면 등 Recharged 요소 확인.",
+        "limit": "기본판 전체 또는 모든 언어/쇄의 동일성은 주장하지 않는다. Classic/Deluxe·확장 지도 특례는 이번 근거 적용 대상이 아니다."
+      },
+      "results": [
+        {
+          "item_id": "power-grid:review:01",
+          "label": "VERIFIED_SCOPED",
+          "claim_id": "PG-ORDER",
+          "finding": "PDF p4 Phase1/2와 p5 Phase3/4: 순서 트랙이 있고 경매와 구매/건설의 진행 방향이 구분된다. 현재 순서와 해당 단계 처리 완료 상태는 현재 플레이어 한 값만으로 대체되지 않는다.",
+          "handoff": "공개 순서 배열과 진행 단계/처리된 플레이어를 선택 기록으로 제안. 재개하면서 순서를 다시 계산하거나 단계를 진행하지 않는다."
+        },
+        {
+          "item_id": "power-grid:review:02",
+          "label": "VERIFIED_SCOPED",
+          "claim_id": "PG-STACK",
+          "finding": "PDF p3 Setup8–9: 공개 시장 외 뒷면 발전소 더미, 최초 설치 시 그 아래 Step3 카드가 있다. 뒷면 종류로 작은 발전소 여부가 일부 드러난다는 설명도 있다.",
+          "handoff": "시장과 뽑기 더미를 분리하고 공개된 뒷면 특징과 숨은 앞면 정체를 구별. 앱은 현재 더미를 봉인·방향·묶음으로 보존하고 내부 순서를 추정하지 않는다."
+        },
+        {
+          "item_id": "power-grid:review:03",
+          "label": "UNCLEAR",
+          "claim_id": "PG-CASH-HOLD",
+          "finding": "p2–5 및 현금/공개 관련 전체 텍스트 검색에서 보유 현금의 공개 의무를 확정할 문구를 확보하지 못했다. 접근 성공은 이 조항의 검증 완료가 아니다.",
+          "handoff": "wallet.scene의 기존 가시성을 공식 규칙이라고 승격하지 않는다. 해당 판본 공식 정보공개 FAQ/소장 규칙 조항이 있을 때 재개."
+        }
+      ],
+      "stop": "순서·더미의 좁은 조항은 인계 가능. 현금은 명문 근거 부족으로 별도 보류. 다른 언어 판본의 전체 동등성 조사로 확대하지 않음.",
+      "research_outcome": "PARTIAL_SUCCESS_TWO_CLAIMS_ONE_HOLD",
+      "estimated_followup_minutes": [
+        20,
+        40
+      ],
+      "estimate_kind": "계획 추정, 실측 아님",
+      "upstream_applied": false
+    },
+    {
+      "case_id": "C02",
+      "game_id": "ticket-to-ride",
+      "item_ids": [
+        "ticket-to-ride:review:01"
+      ],
+      "question": "북미 기본판의 어느 규칙을 적용해야 하며, 손패 장수 공개가 공식 의무인가?",
+      "method": "공식 상품 페이지의 현행 Rulebook과 Old Rules 링크를 각각 따라갔다. 구판 ZIP은 HTTP200이나 로컬35MB 한도에 걸렸고, HEAD로 76,613,492bytes임을 확인해 80MB 한도의 단회 정상 다운로드 후 영어 PDF 한 개만 추출했다. HTTP 차단으로 기록하지 않았다.",
+      "source_ids": [
+        "S03",
+        "S04",
+        "S05"
+      ],
+      "edition_assessment": {
+        "status": "VERIFIED_DIFFERENCE_TARGET_UNPINNED",
+        "identity": "현행 7201N V2, ©2025 / 공식 Old Rules ZIP의 7201-T2R-Rules-EN-20240423_LOWRES, ©2004–2024. 파일명 날짜나 ZIP 업로드 폴더를 실제 상자 발매일로 간주하지 않는다.",
+        "differences": [
+          {
+            "field": "목적지 티켓 총 구성",
+            "old": 30,
+            "current": 33,
+            "location": "각 PDF p2 Components"
+          },
+          {
+            "field": "최초 나눠주는 목적지 티켓",
+            "old": 3,
+            "current": 4,
+            "location": "각 PDF p2 Setting up the Game"
+          },
+          {
+            "field": "최초 최소 보유 티켓",
+            "old": 2,
+            "current": 2,
+            "location": "각 PDF p2 Setting up the Game"
+          }
+        ],
+        "limit": "선택 명세는 북미 기본판이라고만 되어 있으므로 사용자 실물/제품 정책의 인쇄판을 이 연구가 선택할 수 없다. 위 세 항목 외 전체 차이 대조는 하지 않았다."
+      },
+      "results": [
+        {
+          "item_id": "ticket-to-ride:review:01",
+          "label": "UNCLEAR",
+          "claim_id": "TTR-COUNT-HOLD",
+          "finding": "두 규칙의 p2–4 손패/티켓 절은 티켓 정체를 종료까지 숨기는 것을 확인한다. 그러나 열차 카드·티켓의 장수를 상대에게 반드시 공개해야 한다는 명문 근거는 확보하지 못했다.",
+          "handoff": "카드 정체·장수·공개 의무를 나눠 기록한다. optional count는 제품 선택으로 제안할 수 있지만 공식 필수값으로 만들지 않는다. 현재 손패는 최초 배분 수로 자동 교정하지 않는다."
+        }
+      ],
+      "stop": "판본 차이 확인은 성공. 실제 적용판과 장수 공개 의무는 보류. 상자 제품코드/언어, 룰북 표지·크레딧, p2 설치 문구가 있으면 판본을 연결할 수 있다. 공개 의무는 별도 공식 문구가 필요하다.",
+      "research_outcome": "EDITION_DIFFERENCE_VERIFIED_ORIGINAL_FINDING_HELD",
+      "estimated_followup_minutes": [
+        10,
+        20
+      ],
+      "estimate_kind": "위 식별자료가 주어졌을 때 조항 연결 계획 추정; 실측 아님",
+      "upstream_applied": false
+    },
+    {
+      "case_id": "C03",
+      "game_id": "calico",
+      "item_ids": [
+        "calico:review:01"
+      ],
+      "question": "조사하지 않은 손 타일 공개 관례를 공식 상품 소개 대신 규칙으로 확인할 수 있는가?",
+      "method": "AEG 상품의 Rulebook 링크에서 공식16쪽 PDF를 HTTP200으로 확보. 텍스트 추출 결과가 비어 있어 p4/5 설치 그림·문구와 p16 크레딧을 직접 시각 확인했다. AEG/Flatout 공식 검색 2개로도 별도 공개 의무 FAQ를 확보하지 못했다.",
+      "source_ids": [
+        "S06",
+        "S07"
+      ],
+      "edition_assessment": {
+        "status": "VERIFIED_SCOPED",
+        "identity": "AEG/Flatout 물리 기본 Calico, 16쪽, p16 ©2020. /2025/04 업로드 경로와 PDF2025 작성일은 새 게임 판본의 증거가 아니다.",
+        "limit": "Quilts and Cats of Calico 디지털판, 프로모·가족/제약 변형 전체 규칙에는 확대하지 않는다."
+      },
+      "results": [
+        {
+          "item_id": "calico:review:01",
+          "label": "UNCLEAR",
+          "claim_id": "CALICO-HAND-HOLD",
+          "finding": "p4/5는 개인 손2장과 공개 시장3장을 구별하고, p4 도형의 손은 뒷면으로 보인다. 이 범위에서 의무 공개/의무 비공개 문구를 직접 확보하지 못했다. 그림과 hand라는 단어만으로 전체 공개 규칙을 확정하지 않는다.",
+          "inference": "개인 정체를 보수적으로 소유자 범위에 두는 해석은 그림과 맞지만 INFERRED다.",
+          "handoff": "현재 owner를 앱의 보수적 기록 선택으로 유지하고 그룹의 공개 플레이를 선택 허용. 공식 규칙 검증 완료 표시는 하지 않는다."
+        }
+      ],
+      "stop": "자료 확보·그림 판독은 성공, 공개 의무는 미확정. 반복 검색 대신 해당 판의 공식 FAQ 또는 소장 룰북의 명시 조항을 기다린다. 그룹 관행은 세션 설정만 결정하며 공식 사실을 승격하지 않는다.",
+      "research_outcome": "ACCESS_RECOVERED_CLAIM_REMAINS_UNCLEAR",
+      "estimated_followup_minutes": [
+        10,
+        20
+      ],
+      "estimate_kind": "명시 조항이 추가될 때 계획 추정; 실측 아님",
+      "upstream_applied": false
+    },
+    {
+      "case_id": "C04",
+      "game_id": "hansa-teutonica",
+      "item_ids": [
+        "hansa-teutonica:review:01",
+        "hansa-teutonica:review:02"
+      ],
+      "question": "Bank 수치 충돌은 추출 오류인가, 인쇄 오류인가? 같은 규칙의 공급 더미 누락은 따로 해결 가능한가?",
+      "method": "Pegasus 공식 EN/DE PDF를 HTTP200으로 확보. 동일 Big Box 2te_Auflage 문서군의 영어 p2/3/4와 독어 p2를 직접 시각 대조했다. 공식 도메인 정오표 검색에서는 해당 오류를 확정하는 답변을 찾지 못했다.",
+      "source_ids": [
+        "S08",
+        "S09"
+      ],
+      "edition_assessment": {
+        "status": "SAME_DOCUMENT_FAMILY_WITH_CONFLICT",
+        "identity": "메타데이터 제목 HTBB_Rules_EN_2te_Auflage_RZ.indd / HTBB_Rules_DE_2te_Auflage_RZ.indd, 각14쪽. 선택 Big Box 기본 Hanseatic League 지도와 부품/도형 대응.",
+        "limit": "문서의 제작/수정일은 실제 소장 상자의 인쇄판을 보증하지 않는다. 모든 지도/번역의 전면 동등성은 미검증."
+      },
+      "results": [
+        {
+          "item_id": "hansa-teutonica:review:01",
+          "label": "VERIFIED_SCOPED",
+          "claim_id": "HANSA-SUPPLY",
+          "finding": "영어 p3 Game Setup은 시작 금색 표식을 설치한 뒤 나머지 보너스 표식을 섞어 뒷면 공급으로 둔다고 명시한다.",
+          "handoff": "현재 public bonus.scene의 보유/사용 표식과 뒷면 공급을 분리하는 근거로 사용. 실제 남은 정체/순서는 알려진 경우만 기록하고 뒤집어 조사하지 않는다."
+        },
+        {
+          "item_id": "hansa-teutonica:review:02",
+          "label": "VERIFIED_CONFLICT",
+          "claim_id": "HANSA-BANK-CONFLICT",
+          "finding": "영어 p2 인쇄면에는 3,4,7,C가 실제로 보인다. 같은 문서 p3 개인판 그림과 p4 Income은 3,5,7,C이며 독어 p2도 3,5,7,C다. 텍스트 추출 오류만으로 설명할 수 없다.",
+          "inference": "영어 p2의 4가 오탈자라는 판단은 강한 INFERRED. 출판사의 명시 정오표를 확보한 것은 아니다.",
+          "handoff": "사진에서 읽힌 능력 값과 출처별 주장을 보존한다. 3/5/7/C는 제안값으로 둘 수 있으나 해당 사용자 판 확인 전 허용값 제한·저장값 강제 수정은 하지 않는다."
+        }
+      ],
+      "stop": "숨은 공급은 별도 인계 가능. Bank는 실제 개인판의 은행 트랙 사진과 룰북 인쇄 식별, 또는 출판사 정오표가 있어야 충돌 종료. 출판사 문의는 보내지 않았다.",
+      "research_outcome": "ONE_CLAIM_READY_REAL_SOURCE_CONFLICT_CONFIRMED",
+      "estimated_followup_minutes": [
+        15,
+        30
+      ],
+      "estimate_kind": "자료가 주어졌을 때 계획 추정; 실측 아님",
+      "upstream_applied": false
+    },
+    {
+      "case_id": "C05",
+      "game_id": "stone-age",
+      "item_ids": [
+        "stone-age:review:01"
+      ],
+      "question": "시작 표식이 아직 미확정인 이유가 접근 실패인가, 보완 추적표의 불일치인가?",
+      "method": "현재 frozen manifest changes, 기존 scoped evidence, 실제 state_fields를 먼저 대조했다. 같은 공식 PDF를 정상 다운로드해 p4를 시각 재확인했다.",
+      "source_ids": [
+        "S10",
+        "L01"
+      ],
+      "edition_assessment": {
+        "status": "VERIFIED_SCOPED_SAME_URL_AS_EXISTING_EVIDENCE",
+        "identity": "Hans im Glück 공식 English8쪽 PDF. 이전 evidence와 같은2023/06 URL이며 실제 PDF 메타데이터는2017이다.",
+        "limit": "URL의2023을 개정판 연도로 부르지 않는다. 현행/구판 전체 차이는 미대조이며 이번 결론은 기존 선택 자료의 시작 표식에 한정."
+      },
+      "results": [
+        {
+          "item_id": "stone-age:review:01",
+          "label": "VERIFIED_TRACKING_MISMATCH",
+          "claim_id": "STONE-ALREADY-PRESENT",
+          "finding": "공식 p4는 라운드 후 시작 표식을 왼쪽으로 넘긴다. 기존 source stone-age.essentials.rules가 이 사실을 기록했고 manifest changes 및 실제 starting-player 필드도 이미 존재한다. 같은 미확정 finding의 '필드 없음' 설명과 모순된다.",
+          "handoff": "새 starting-player를 중복 추가하지 않는다. 기존 변경 claim stone-age:1과 finding ID를 연결한 추적 종료안을 별도 인계하고 감독/후속 담당자가 동결 해제 절차에서 처리한다."
+        }
+      ],
+      "stop": "이 좁은 finding은 추가 규칙 검색 없이 추적표 정리 인계 가능. 앱 재열기 기능이나 전체 규칙 검증이 완료됐다는 주장은 하지 않는다.",
+      "research_outcome": "STALE_FINDING_CONFIRMED_NO_NEW_FIELD_NEEDED",
+      "estimated_followup_minutes": [
+        5,
+        10
+      ],
+      "estimate_kind": "추적표 연결 작업 계획 추정; 실측 아님",
+      "upstream_applied": false
+    }
+  ],
+  "full_50_rule_verification": false,
+  "upstream_manifest_modified": false,
+  "product_modified_by_this_task": false
+}

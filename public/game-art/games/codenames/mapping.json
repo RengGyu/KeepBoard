@@ -1,0 +1,245 @@
+{
+  "game_id": "codenames",
+  "name_ko": "코드네임",
+  "name_en": "Codenames",
+  "edition": {
+    "id": "base",
+    "name": "현행 단어 기본판",
+    "compatibility_notes": [
+      "팀장 키를 공용으로 공개하지 않음;Duet/Pictures 별도",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "codenames.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/codenames.json",
+  "source_sha256": "ef0d8c206e6bd3573a4f6fe60776ab2758a15f00fb6c68a46dc377f9fb6b79a4",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "words",
+      "name": "단어 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "공용 단어의 현재 면과 행열.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "단어 카드 틀",
+          "layers": [
+            {
+              "asset_id": "common.preset-word-card"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "key",
+      "name": "키카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "비밀 정체와 회전. 공용 단어 사진에 포함하지 않는다.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "비밀 키카드 · 예시",
+          "layers": [
+            {
+              "asset_id": "codenames.key.key-card"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "covers",
+      "name": "요원·행인·암살자 덮개",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "이미 공개된 결과만 공용에 놓는다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "위험 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-skull",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    }
+  ],
+  "areas": [
+    {
+      "id": "words",
+      "name": "단어판",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "words",
+        "covers"
+      ],
+      "anchor_contract": "5×5 행열과 읽는 방향·단어·덮개를 별도 층으로 저장.",
+      "description": "단어판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "key",
+      "name": "비밀 키",
+      "scope": "shared-secret",
+      "visibility": "role-limited",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "key"
+      ],
+      "anchor_contract": "공용 단어판과 같은 행열 기준. 키 회전과 비밀 정체는 스파이마스터 전용.",
+      "description": "비밀 키의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "visible_to_roles": [
+        "spymaster"
+      ],
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "단어판 · 구조 예시",
+    "area_id": "words",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "common.preset-word-card",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.card-shell",
+        "transform": "translate(63 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-portrait",
+        "transform": "translate(63 29) scale(.36) translate(28 23) scale(.55)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

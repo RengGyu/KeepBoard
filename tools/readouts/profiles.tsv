@@ -1,0 +1,419 @@
+# game/component | key:type:label[:M] ; fields are optional unknown until observed or explicitly confirmed
+# t=text, i=nonnegative safe integer, s=signed safe integer, b=boolean, m=named numeric marks, p=actual player ID
+# :M = never inferred from a photo. Source meaning is linked to original component and bound state fields.
+a-feast-for-odin/goods|shape:t:조각 모양;processedFace:t:가공 상태 면;coveredSymbols:m:가린 숫자·보너스:M
+a-feast-for-odin/workers|actionSlot:t:행동칸 표기;owner:p:소유 플레이어:M
+a-feast-for-odin/boards|boardIdentity:t:본판·섬 표기;gridCell:t:확인한 격자칸:M
+a-feast-for-odin/ships|itemType:t:선박·가축·동전 종류;nominalValue:i:인쇄 액면;emigration:t:이민 상태:M
+a-feast-for-odin/cards|cardArea:t:손패·사용 구분:M
+aeons-end/mages|mageName:t:마법사 표기;breachNumber:i:균열 번호;breachState:t:균열 개방 표시;charges:i:충전 표시;preparedSpell:t:준비 주문의 균열 연결:M
+aeons-end/player-cards|cardArea:t:손패·준비·플레이·버림 구분:M;parentBreach:t:부모 균열:M;stackBoundary:t:덱·버림 경계:M
+aeons-end/nemesis|nemesisName:t:네메시스·하수인 표기;power:i:파워 표식;health:i:체력 표시
+aeons-end/turn-order|revealedLabel:t:공개된 턴순서 표기;resolved:t:이 카드의 처리 상태:M
+aeons-end/counters|counterType:t:자원·피해·체력 종류;displayValue:i:표시값;target:t:붙어 있는 대상:M
+age-of-innovation/map|terrain:t:보이는 지형;structure:t:건물 형태;connection:t:연결 양 끝:M
+age-of-innovation/identity|faction:t:세력 표기;homeTerrain:t:선택한 본거지 지형:M;abilityUsed:t:능력 처리 여부:M
+age-of-innovation/resources|resourceType:t:자원·책·파워 종류;pool:t:공급·파워 그릇:M;displayValue:s:표시값
+age-of-innovation/tiles|selectedFace:t:선택한 타일 면;tileGroup:t:기술·목표 타일 종류;useState:t:선택·사용 여부:M
+agricola/farm|spaceType:t:방·밭·목초지 형태;houseMaterial:t:집 재질;gridCell:t:농장 격자 위치:M
+agricola/people|pieceType:t:가족·울타리·마구간;owner:p:소유 플레이어:M;actionSlot:t:배치 행동칸:M
+agricola/goods|resourceType:t:재화·작물·가축 종류;storage:t:재고·밭·목초지 구분:M
+agricola/cards|cardType:t:직업·보조설비·주요설비;useState:t:손패·사용 상태:M
+akropolis/tiles|district:t:지구·광장·채석장 표기;shape:t:관측한 조각 모양;height:i:쌓인 층수:M
+akropolis/stones|itemType:t:돌·시작 표식 구분;owner:p:소유 플레이어:M
+anachrony/workers|workerType:t:일꾼 유형;fatigue:t:활성·피로 표시;exosuit:t:엑소슈트 연결:M;actionSlot:t:행동칸:M
+anachrony/buildings|buildingType:t:건물·이상현상·프로젝트;slot:t:설치 칸:M
+anachrony/resources|resourceType:t:자원·대출 표식 유형;debtTarget:t:시간 대출 대응:M
+anachrony/boards|boardType:t:패스·리더·시간선·영향판;focusPosition:t:시간 초점 위치:M;trackValue:s:보이는 트랙값
+apiary/workers|strength:i:일꾼 힘;workerZone:t:대기·행동·동면 구분:M
+apiary/tiles|tileType:t:확장·농장·개발·모집·조각·행성;slot:t:부착 칸:M
+apiary/goods|resourceType:t:재화·표식 종류;displayValue:i:표시값
+apiary/cards|cardType:t:세력·씨앗·춤;useState:t:선택·사용 상태:M
+arcs/map|systemLabel:t:시스템 표기;spaceType:t:행성·게이트;connection:t:관측 연결:M
+arcs/pieces|pieceType:t:함선·도시·요원 종류;damageState:t:보이는 손상 표시;owner:p:소유 플레이어:M;location:t:시스템·궁정 위치:M
+arcs/cards|cardArea:t:손패·선도·사용·획득 구분:M;printedSymbols:m:읽힌 카드 기호·값
+arcs/tokens|tokenType:t:자원·야망·포획·전리품;slot:t:자원·야망 칸:M;displayValue:s:표시값
+ark-nova/tiles|tileType:t:우리·특수건물 종류;footprint:t:점유 모양;flipped:b:뒤집힌 면 표시;location:t:개인 지도칸:M
+ark-nova/cards|cardType:t:동물·후원·보전프로젝트;cardArea:t:손패·설치·시장 구분:M
+ark-nova/actions|actionType:t:행동 종류;upgradedFace:t:업그레이드 면;lineupIndex:i:줄에서의 위치:M
+ark-nova/workers|workerType:t:직원 종류;workerZone:t:배치·대기 구분:M;owner:p:소유 플레이어:M
+ark-nova/tracks|trackType:t:트랙 종류;displayValue:s:보이는 트랙값
+arkham-horror-3/map|neighborhood:t:구역·거리 표기;scenario:t:사용 시나리오 표기;connection:t:타일 연결:M
+arkham-horror-3/pieces|pieceType:t:조사자·괴물카드·단서·파멸;printedValue:i:인쇄값;target:t:대상·구역:M
+arkham-horror-3/cards|cardType:t:시나리오·코덱스·조우·장비·동료·주문;cardArea:t:공개·보유·더미 구분:M
+arkham-horror-3/mythos|tokenSymbol:t:공개 신화 토큰 기호;resolution:t:뽑음·처리 중·처리 완료:M
+arkham-lcg/locations|revealedFace:t:공개·비공개 면;locationName:t:공개된 장소명;connection:t:실제 연결 관계:M
+arkham-lcg/investigators|investigator:t:조사자 표기;healthMarks:i:피해 표식;horrorMarks:i:공포 표식;exhaustion:t:준비·소진 상태:M;cardType:t:자산·적·이벤트 유형;attachedTarget:t:부착 대상:M
+arkham-lcg/tokens|tokenType:t:단서·파멸·자원·피해·공포;nominalValue:i:액면;target:t:놓인 대상:M
+arkham-lcg/decks|deckRole:t:개인·조우·버림·혼돈 주머니:M;boundary:t:묶음 경계·윗면:M
+avalon/roles|visibleRoleLabel:t:공개가 허용된 역할 표기
+avalon/cards|cardType:t:투표·원정 카드;revealedResult:t:공개된 결과 표기
+avalon/markers|markerType:t:리더·팀·원정결과·거절횟수;displayValue:i:공개 표시값;linkedPlayer:p:연결 플레이어:M
+azul/tiles|tileColor:t:타일 색·문양;tileZone:t:공장·중앙·패턴·벽·바닥:M;rowIndex:i:행 번호:M
+azul/boards|boardSide:t:선택 개인판 면;factoryLabel:t:관측 공장 구분;scoreTrack:i:보이는 점수칸
+azul/first|tokenLabel:t:시작 토큰 표기;tokenZone:t:중앙·개인 바닥줄:M
+azul/score|trackValue:i:보이는 점수칸;owner:p:소유 플레이어:M
+barrage/structures|structureType:t:기초·높이·수로·발전소;damHeight:i:보이는 댐 높이;owner:p:소유 플레이어:M
+barrage/water|basin:t:댐·상류 구역:M;waterState:t:보존할 물의 위치 설명:M
+barrage/machinery|machineType:t:굴착기·콘크리트믹서·기술타일;wheelSlot:t:건설바퀴 슬롯:M;linkedProject:t:묶인 건설:M
+barrage/engineers|itemType:t:엔지니어·계약·화폐;actionSlot:t:배치 행동칸:M;nominalValue:i:인쇄 액면
+blokus/board|gridReference:t:보드 기준 칸:M
+blokus/pieces|shape:t:한 조각의 모양;occupiedCells:t:직접 확인한 점유 칸:M;owner:p:소유 플레이어:M
+bohnanza/cards|beanType:t:공개 콩 종류;goldBack:b:금화 뒷면 표시;handOrder:t:손패 안의 이웃 순서:M
+bohnanza/fields|beanType:t:밭의 콩 종류;overlapCount:i:확인한 겹침 개수;fieldIndex:i:밭 위치:M
+brass-birmingham/industries|industryType:t:산업 종류;level:i:인쇄 레벨;flippedFace:t:앞뒤 상태;owner:p:소유 플레이어:M
+brass-birmingham/links|linkType:t:운하·철도;endpoints:t:연결 도시쌍:M;owner:p:소유 플레이어:M
+brass-birmingham/resources|resourceType:t:석탄·철·맥주 종류;origin:t:공장·시장·상인 구분:M
+brass-birmingham/cards|cardType:t:도시·산업 표기;cardArea:t:손패·버림·덱:M
+brass-birmingham/money|itemType:t:현금·수입·점수 표식;trackValue:s:보이는 트랙값;nominalValue:i:화폐 액면
+calico/patches|patchColor:t:패치 색;pattern:t:패치 문양;cell:t:개인판 칸:M
+calico/boards|borderLabel:t:테두리 표기;objective:t:배치 목표 표기;cell:t:판 격자 기준:M
+calico/scoring|itemType:t:고양이 목표·단추 토큰;printedCondition:t:인쇄 조건;acquired:t:획득 상태:M
+cascadia/habitat|habitats:t:분할 서식지 종류;wildlifeIcons:t:허용 야생동물 기호;rotation:i:직접 확인한 방향 각도:M
+cascadia/wildlife|animal:t:동물 종류;targetTile:t:놓인 서식지 타일:M
+cascadia/scoring|animal:t:대상 동물;variantLabel:t:선택한 목표 면·번호
+cascadia/nature|tokenType:t:솔방울 토큰;owner:p:소유 플레이어:M
+castles-burgundy/hexes|hexType:t:육각 타일 종류;tileColor:t:타일 색;cell:t:개인판 칸:M
+castles-burgundy/goods|goodsType:t:상품 종류;goodsZone:t:공급·보유·판매 구분:M
+castles-burgundy/dice|dieValue:i:윗면 눈;used:t:이번 굴림 사용 여부:M
+castles-burgundy/money|itemType:t:은화·일꾼·순서 표식;trackValue:i:보이는 위치값
+castles-mad-ludwig/rooms|roomType:t:방 종류;shape:t:방 모양;doors:t:보이는 출입구;completed:t:완성 처리 여부:M
+castles-mad-ludwig/market|slot:t:시장 위치:M;price:i:보이는 가격;masterBuilder:p:현재 건축가:M
+castles-mad-ludwig/money|itemType:t:화폐·점수 표식;nominalValue:i:인쇄 액면;trackValue:s:점수칸
+castles-mad-ludwig/goals|goalType:t:공개·개인 목표 구분:M;printedGoal:t:보이는 목표 내용
+caverna/tiles|tileType:t:동굴·농장·방;gridCell:t:개인판 칸:M
+caverna/dwarfs|weaponValue:i:무기 표시값;actionSlot:t:배치 행동칸:M;owner:p:소유 플레이어:M
+caverna/goods|goodsType:t:재화·동물·작물;goodsZone:t:재고·밭·동물 공간:M
+charterstone/board|charterLabel:t:구역 표기;buildingLabel:t:건물·스티커 표기;permanentState:t:확인된 영구 변경:M
+charterstone/workers|workerType:t:일꾼 종류;owner:p:소유 플레이어:M;actionSlot:t:배치 행동칸:M
+charterstone/assets|assetType:t:재화·해금 구성물 종류;unlockState:t:공개 해금 상태:M
+charterstone/records|printedEntry:t:공개된 기록 표기;confirmedChange:t:확인한 캠페인 변경:M
+clank-catacombs/tiles|tileLabel:t:타일 표기;rooms:t:방·통로·잠금·포탈;location:t:실제 연결 위치:M
+clank-catacombs/pawns|pieceType:t:플레이어·유물·죄수·성소;location:t:방·구역:M;owner:p:소유 플레이어:M
+clank-catacombs/cubes|cubeZone:t:공급·클랭크·주머니·피해 구분:M;owner:p:소유 플레이어:M
+clank-catacombs/cards|cardArea:t:개인·시장·공개 사용 구분:M;cardType:t:공개 카드 종류
+clue/board|room:t:방·복도 표기;passage:t:문·비밀통로 표기
+clue/figures|character:t:말 정체;location:t:방·복도 위치:M
+clue/cards|cardType:t:인물·도구·장소 종류;visibleTitle:t:공개가 허용된 제목
+clue/notes|recordType:t:주사위·개인 추리 구분:M;dieValue:i:보이는 주사위 눈;deduction:t:사용자 개인 추리:M
+cockroach-poker/cards|creature:t:보이는 생물;claimedCreature:t:현재 선언한 생물:M;cardArea:t:손·전달 중·공개 누적:M
+codenames/words|word:t:실제 단어;row:i:행:M;column:i:열:M;revealed:t:공개·가림 구분:M
+codenames/key|visiblePattern:t:허용된 역할 화면의 키 표기
+codenames/covers|coverType:t:공개된 팀·일반·암살 표식;wordTarget:t:덮인 단어:M
+concordia/colonists|colonistType:t:육상 인물·해상 배;owner:p:소유 플레이어:M;location:t:도시·연결선:M
+concordia/houses|pieceType:t:주택·지역 보너스;owner:p:소유 플레이어:M;location:t:도시·지역:M
+concordia/goods|goodsType:t:재화·화폐 유형;nominalValue:i:화폐 액면;storageSlot:t:보관칸:M
+concordia/cards|godSymbol:t:카드 신 기호;cardArea:t:손패·사용·시장 구분:M
+coup/roles|visibleRole:t:공개된 역할 표기;roleState:t:비공개 생존·공개 탈락 구분:M
+coup/coins|nominalValue:i:동전 액면;coinZone:t:보유·지불 중 구분:M
+crew-deep-sea/cards|suit:t:색·무늬;number:i:카드 숫자;cardType:t:플레이·임무 카드;assignee:p:임무 담당자:M
+crew-deep-sea/tokens|tokenType:t:통신·조난·선장;communication:t:상단·중앙·하단 표시:M;owner:p:소유 플레이어:M
+crew-deep-sea/log|mission:t:임무 표기;attempts:i:확인 시도 횟수:M;difficulty:t:확인 난도:M
+# aliases in builder are explicit input IDs; no new commercial identities.
+davinci-code/tiles|tileColor:t:타일 색;number:i:허용 범위에서 읽힌 숫자;position:i:줄의 위치:M;revealed:t:공개 여부:M
+descent-legends-dark/terrain|terrainType:t:지형·계단·장애물;layer:i:실제 층:M;location:t:연결 위치:M
+descent-legends-dark/figures|figureType:t:피겨 종류;instanceLabel:t:구별 표식;damage:i:피해 표시;layer:i:배치 층:M
+descent-legends-dark/cards|fatigue:i:피로 표식;status:t:부착 상태 표시;cardArea:t:카드 위치:M
+descent-legends-dark/tokens|tokenType:t:토큰·주사위 구분;shownSymbol:t:눈·기호;target:t:놓인 대상:M
+dixit/cards|illustrationCue:t:보이는 그림 특징;cardArea:t:손패·제출·공개 구분:M
+dixit/votes|voteValue:i:공개된 투표 값;voteState:t:선택 중·공개 후:M;scoreValue:i:보이는 점수값
+dobble/cards|visibleSymbols:t:보이는 기호;cardArea:t:더미·현재 카드 구분:M
+dominant-species/earth|terrain:t:육각 지형;overlay:t:툰드라 겹침;location:t:지도칸:M
+dominant-species/animals|pieceType:t:종 큐브·지배 원뿔;species:t:보이는 종 식별;location:t:지형 위치:M
+dominant-species/elements|elementType:t:원소 종류;junction:t:연결 교차점:M
+dominant-species/actions|itemType:t:행동말·카드·생존 표식;actionSlot:t:배치칸:M;useState:t:처리 상태:M
+dominion/cards|cardType:t:왕국·기본·개인 카드 종류;cardArea:t:공급·손패·플레이·버림·덱:M
+dune-imperium-uprising/agents|pieceType:t:에이전트·스파이;owner:p:소유 플레이어:M;actionSlot:t:행동·관측소 위치:M
+dune-imperium-uprising/troops|unitType:t:병력 종류;unitZone:t:주둔지·전투 구분:M;owner:p:소유 플레이어:M
+dune-imperium-uprising/cards|cardType:t:덱·음모·분쟁·시장 카드;cardArea:t:보유·공개·버림 구분:M
+dune-imperium-uprising/resources|resourceType:t:물·스파이스·솔라리·트랙;displayValue:s:표시값
+dune-imperium-uprising/leaders|leader:t:리더 표기;abilityUsed:t:리더 능력 처리 여부:M
+eclipse-second-dawn/sectors|sectorLabel:t:섹터 표기;wormholes:t:웜홀 방향 표시;planets:t:보이는 행성
+eclipse-second-dawn/ships|shipType:t:함선 종류;owner:p:소유 플레이어:M;blueprintPart:t:부품·청사진 연결:M
+eclipse-second-dawn/discs|pieceType:t:영향력 원반·인구 큐브·식민지선;shownSide:t:보이는 면;pool:t:구역·공급 위치:M
+eclipse-second-dawn/tiles|tileType:t:기술·발견·평판;tileArea:t:공개·개인 비공개 구분:M;printedValue:i:허용된 면의 인쇄값
+eldritch-horror/world|nodeLabel:t:지명·번호;nodeType:t:도시·바다·야생;ancientOneFace:t:고대의 존재 표기 면
+eldritch-horror/pieces|pieceType:t:조사자·단서·관문·괴물;instanceLabel:t:실제 구별 표기;location:t:지도칸:M
+eldritch-horror/cards|cardType:t:공개·개인·미공개 카드 구분:M;printedSymbols:m:읽힌 기호·값
+eldritch-horror/markers|markerType:t:능력치·티켓·탐험·미스터리·루머;displayValue:s:표시값;target:t:부착 대상:M
+everdell/workers|workerZone:t:대기·행동 위치:M;owner:p:소유 플레이어:M
+everdell/cards|cardType:t:동물·건물 카드 표기;cardArea:t:도시·초원·손패:M
+everdell/resources|resourceType:t:읽힌 자원 종류;storage:t:개인·공용 공급:M
+everdell/events|eventType:t:이벤트·목표·장소;claimedBy:p:직접 확인한 획득자:M
+expeditions/tiles|locationLabel:t:장소 표기;corruption:i:오염 표시;connection:t:연결 위치:M
+expeditions/mechs|mechType:t:메크·일꾼 구분;workerType:t:일꾼 종류;location:t:확인한 위치:M;owner:p:소유 플레이어:M
+expeditions/cards|cardArea:t:손패·플레이·사용 구분:M;upgradeState:t:업그레이드·완료 처리:M
+expeditions/markers|markerType:t:트랙·상태 종류;displayValue:s:표시값
+five-tribes/tiles|tileKind:t:타일 종류;printedValue:i:인쇄값;gridCell:t:격자칸:M;owner:p:소유 플레이어:M
+five-tribes/tribes|tribeColor:t:부족 색;location:t:타일 위치:M
+five-tribes/ownership|pieceType:t:낙타·궁전·야자수;owner:p:소유 플레이어:M;location:t:타일 위치:M
+five-tribes/cards|cardType:t:상품·진 카드;cardArea:t:시장·획득·지불 중:M
+five-tribes/coins|nominalValue:i:동전 액면;bidOrder:i:확인 입찰 순서:M
+forest-shuffle/cards|usedSection:t:전체·상단·하단·왼쪽·오른쪽:M;forestPosition:t:연결 나무·부착 위치:M
+forest-shuffle/cave|areaType:t:숲·동굴 보관 구분:M;storedCount:i:공개적으로 확인한 보관 개수:M
+frosthaven/map|tileLabel:t:지도 타일 표기;featureType:t:문·장애물·지형;location:t:격자 위치:M
+frosthaven/figures|instanceLabel:t:번호·구별 표식;rank:t:일반·정예;health:i:보이는 체력;location:t:칸 위치:M
+frosthaven/cards|cardType:t:능력·아이템·수정덱;cardArea:t:손패·버림·손실·지속:M
+frosthaven/outpost|buildingLabel:t:건물 표기;level:i:보이는 건물 레벨;buildingState:t:건물 상태:M;scheduled:t:일정·완료 확인:M
+frosthaven/resources|resourceType:t:자원 종류;storage:t:개인·파티 위치:M
+gaia-project/sectors|sectorLabel:t:섹터 표기;planetType:t:행성 유형;location:t:지도 배치:M
+gaia-project/structures|structureType:t:건물·가이아포머·위성;level:i:표시 레벨;owner:p:소유 플레이어:M
+gaia-project/tech|tileType:t:기술·연방·부스터;shownSide:t:보이는 면;owner:p:소유 플레이어:M
+gaia-project/resources|resourceType:t:광석·크레딧·지식·QIC·파워;powerBowl:t:파워 그릇:M;displayValue:s:보이는 수치
+galaxy-trucker/ships|partLabel:t:부품 표기;connectorShape:t:연결부 형태;cell:t:함선 격자칸:M
+galaxy-trucker/contents|contentType:t:승무원·화물·배터리 종류;parentSlot:t:부모 부품·수용칸:M
+galaxy-trucker/flight|trackPosition:i:보이는 비행칸;currentAdventure:t:공개 모험 표기;remainingEffect:t:미해결 처리:M
+galaxy-trucker/credits|itemType:t:크레딧·손실 부품;nominalValue:i:액면
+gloomhaven-jaws/map|pageLabel:t:지도책 페이지 표기;featureType:t:칸·문·장애물;location:t:실제 칸:M
+gloomhaven-jaws/figures|figureType:t:캐릭터·몬스터·소환물;instanceLabel:t:번호;rank:t:일반·정예;location:t:배치 칸:M
+gloomhaven-jaws/cards|cardType:t:능력·아이템·수정덱;cardArea:t:손패·선택·지속·버림·손실:M
+gloomhaven-jaws/state|stateType:t:체력·경험치·상태 종류;displayValue:s:표시값;target:t:대상 인스턴스:M
+gloomhaven/map|tileLabel:t:타일·방 표기;sideLabel:t:사용 면;featureType:t:문·장애물·지형;location:t:격자칸:M
+gloomhaven/figures|figureType:t:미니어처·스탠디·소환물;instanceLabel:t:번호·구별 표식;rank:t:일반·정예;location:t:배치칸:M
+gloomhaven/cards|cardType:t:캐릭터능력·아이템·몬스터능력·수정덱;cardArea:t:손패·선택·지속·버림·손실:M
+gloomhaven/markers|markerType:t:원소·라운드·주도권·체력·경험치;displayValue:s:보이는 값;target:t:연결 인스턴스:M
+gloomhaven/campaign|recordLabel:t:공개 캠페인 표기;confirmedUnlock:t:확인한 해금·완료:M
+grand-austria-hotel/rooms|roomColor:t:객실 색;roomState:t:준비·투숙 상태:M;roomCell:t:객실 위치:M
+grand-austria-hotel/guests|cardType:t:손님·직원;fulfilment:m:직접 확인한 주문 지급:M;cardArea:t:대기·투숙·손패:M
+grand-austria-hotel/dice|dieValue:i:주사위 눈;group:t:주사위 그룹:M;used:t:사용 여부:M
+grand-austria-hotel/food|foodType:t:음식·음료 종류;storage:t:재고·배달 구분:M;targetGuest:t:배달 대상:M
+great-western-trail/cattle|breed:t:품종;printedValue:i:인쇄 가치;cardArea:t:손패·덱·버림:M
+great-western-trail/pieces|pieceType:t:이동말·열차·해금 표식;owner:p:소유 플레이어:M;location:t:노선·해금칸:M
+great-western-trail/tiles|tileType:t:건물·직원·위험;location:t:시장·노선·개인판:M
+great-western-trail/money|itemType:t:화폐·임시증서·영구증서·목표;nominalValue:i:인쇄값;displayValue:s:트랙값
+halligalli/cards|fruit:t:보이는 과일;fruitCount:i:그림 안 과일 개수;cardArea:t:더미·공개 카드:M
+halligalli/bell|bellLocation:t:실제 종 위치:M;pendingReaction:t:반응·처리 중단 지점:M
+hanabi/cards|suit:t:허용된 화면에서 본 색;number:i:허용된 화면에서 본 숫자;cardArea:t:손패·불꽃·버림 구분:M
+hanabi/tokens|tokenType:t:단서·실수 토큰;tokenSide:t:보이는 면
+hansa-teutonica/tradesmen|pieceType:t:상인 큐브·판매상 원반;owner:p:소유 플레이어:M;location:t:도시·연결선 위치:M
+hansa-teutonica/board|slotType:t:사무소·노선·능력칸;slotLabel:t:칸 표기
+hansa-teutonica/bonus|bonusType:t:보너스 표식;useState:t:미처리·사용·차례끝 배치:M
+heat/cars|carColor:t:자동차 색;gear:i:보이는 기어;position:t:트랙 위치:M;owner:p:소유 플레이어:M
+heat/cards|cardType:t:속도·히트·스트레스;printedNumber:i:보이는 숫자;cardArea:t:손패·플레이·엔진·버림:M
+heat/track|circuit:t:서킷 표기;curve:t:코너 표기;direction:t:확인한 주행 방향:M
+imperial-assault/map|tileLabel:t:타일 ID 표기;tileSide:t:A·B 표시;featureType:t:벽·문·단말기·상자;location:t:격자 위치:M
+imperial-assault/figures|figureType:t:미니어처·악당 표식;instanceLabel:t:번호·기단 구별;groupLabel:t:확인한 배치 그룹:M
+imperial-assault/cards|cardType:t:카드 유형;cardArea:t:허용된 손패·공개·덱:M
+imperial-assault/tokens|markType:t:피해·스트레스·상태·위협·라운드;displayValue:s:보이는 값;target:t:부착 대상:M
+isle-of-cats/tiles|catColor:t:고양이 색;shape:t:타일 점유 모양;selectedColor:t:직접 정한 오샥스 색:M;location:t:배 칸:M
+isle-of-cats/boats|gridCell:t:실제 칸:M;roomLabel:t:방 표기;printedSymbols:t:쥐·지도 기호
+isle-of-cats/cards|cardType:t:공개·교훈·드래프트 종류;cardArea:t:손패·사용·공개 위치:M
+isle-of-cats/tokens|tokenType:t:자원·라운드·순서 표식;displayValue:i:표시값
+istanbul/places|placeLabel:t:장소 표기;placeNumber:i:인쇄 장소 번호;gridCell:t:시장 격자칸:M
+istanbul/people|personType:t:상인·조수·인물;stackLevel:i:실제 겹침 위치:M;owner:p:소유 플레이어:M
+istanbul/goods|goodsType:t:상품·루비·화폐;cartCapacity:i:보이는 수레 용량;displayValue:i:표시값
+istanbul/cards|itemType:t:보너스·모스크·수요 타일;cardArea:t:보유·공개·버림:M
+jaipur/cards|goodsType:t:상품·낙타 종류;cardArea:t:시장·손패·낙타무리:M
+jaipur/tokens|tokenType:t:상품·보너스·승리 표식;printedValue:i:공개된 면의 값;supplyPosition:t:공급 더미 순서:M
+journeys-middle-earth/tiles|tileLabel:t:지도 타일 표기;mapType:t:여정·전투 구분:M;location:t:실제 연결 위치:M
+journeys-middle-earth/figures|figureType:t:영웅·적;instanceLabel:t:그룹·깃발·기단 표기;location:t:지도 위치:M
+journeys-middle-earth/cards|cardType:t:기술·아이템·피해·공포·이득;cardArea:t:손패·공개·더미:M;printedSymbols:m:읽힌 기호·값
+journeys-middle-earth/tokens|tokenType:t:영감·탐색·기타 실제 토큰;shownSide:t:보이는 면;target:t:대상·구역:M
+just-one/cards|selectedNumber:i:선택 번호:M;cardArea:t:더미·현재·완료 구분:M
+just-one/boards|writtenWord:t:허용 범위의 필기;revealState:t:공개·가림·제외 구분:M
+kanban-ev/cars|itemType:t:차량·부품·디자인;upgradeState:t:확인한 업그레이드:M;slot:t:작업칸:M
+kanban-ev/workers|workerType:t:직원·산드라;trackValue:i:교육·인증 표시값;location:t:행동·트랙 위치:M
+kanban-ev/markers|markerType:t:자원·생산·진행 종류;displayValue:s:표시값
+kanban-ev/goals|goalType:t:목표·수요·보상 표기;completion:t:완료 처리 여부:M
+king-of-tokyo/monsters|monster:t:괴수 표기;health:i:체력 표시;points:i:점수 표시;tokyo:t:도쿄 위치:M
+king-of-tokyo/dice|dieSymbol:t:보이는 눈·기호;kept:t:이번 굴림 유지 선택:M
+king-of-tokyo/cards|cardType:t:지속·일회 카드;printedCost:i:읽힌 비용;cardArea:t:시장·보유·버림:M
+king-of-tokyo/energy|energyZone:t:개인 재고·부착 구분:M;target:t:붙은 카드:M
+kingdomino/dominoes|firstTerrain:t:첫 절반 지형;firstCrowns:i:첫 절반 왕관;secondTerrain:t:둘째 절반 지형;secondCrowns:i:둘째 절반 왕관;tileNumber:i:인쇄 번호
+kingdomino/markers|markerType:t:성·선택말;selectedRow:t:현재·다음 선택줄:M;owner:p:소유 플레이어:M
+le-havre/goods|goodsType:t:재화 종류;processedFace:t:가공 면;nominalValue:i:인쇄값
+le-havre/buildings|buildingType:t:건물·선박;occupiedBy:p:현재 점유 플레이어:M;owner:p:소유 플레이어:M
+le-havre/workers|workerType:t:말 종류;location:t:배치 장소:M;owner:p:소유 플레이어:M
+le-havre/debt|itemType:t:대출 카드·프랑 화폐;nominalValue:i:인쇄 액면
+lost-cities/cards|suit:t:색·탐험 종류;number:i:인쇄 숫자;investments:b:투자 표시;cardArea:t:손패·탐험·버림:M
+lost-cities/board|selectedSide:t:선택한 판면;laneLabel:t:중앙 색별 구역 표기
+lost-ruins-arnak/workers|workerType:t:고고학자;workerState:t:사용·대기:M;owner:p:소유 플레이어:M
+lost-ruins-arnak/sites|siteType:t:장소·수호자·우상;bonusFace:t:보이는 보너스 면;location:t:장소 위치:M
+lost-ruins-arnak/cards|cardType:t:아이템·유물·공포 등 표기;cardArea:t:손패·사용·시장·더미:M
+lost-ruins-arnak/research|pieceType:t:돋보기·노트;trackLabel:t:트랙 칸 표기;owner:p:소유 플레이어:M
+lost-ruins-arnak/resources|resourceType:t:자원·조수;assistantSide:t:조수 면;used:t:조수 사용 여부:M
+lotr-lcg/characters|characterType:t:영웅·동료;damage:i:피해 표식;exhaustion:t:준비·소진:M;participation:t:확인한 참여 상태:M
+lotr-lcg/encounter|cardArea:t:대기·활성장소·교전·퀘스트:M;cardType:t:공개 카드 종류
+lotr-lcg/attachments|target:t:부착 대상:M;attachmentRole:t:장착·그림자 구분:M
+lotr-lcg/tokens|tokenType:t:자원·피해·진행·위협;displayValue:s:표시값;target:t:대상:M
+love-letter/cards|character:t:공개된 인물;number:i:보이는 숫자;cardArea:t:손패·공개 사용·덱:M
+love-letter/tokens|tokenType:t:호감 표식;nominalValue:i:인쇄값
+machi-koro/cards|cardType:t:시설·랜드마크;activationNumber:t:활성화 숫자 표기;cardColor:t:카드 색;landmarkState:t:랜드마크 상태:M
+machi-koro/coins|nominalValue:i:동전 액면
+machi-koro/dice|dieValue:i:윗면 눈;used:t:굴림 처리 여부:M
+mage-knight/map|tileLabel:t:타일·장소 표기;cityLevel:i:보이는 도시 레벨;enemyLabel:t:공개 적 표기;location:t:실제 배치:M
+mage-knight/heroes|heroType:t:영웅·유닛;location:t:위치:M;unitState:t:준비·부상·사용 구분:M
+mage-knight/cards|cardType:t:행동·주문·유닛·기타;cardArea:t:손패·플레이·버림·부착:M;targetUnit:t:붙은 유닛:M
+mage-knight/mana|manaType:t:단기마나·크리스털·주사위;dieFace:t:보이는 주사위 면;storage:t:개인·공급 구분:M
+mage-knight/skills|itemType:t:스킬·레벨·명성·평판;displayValue:s:표시값;used:t:사용 상태:M
+mansions-madness-2/map|roomLabel:t:방 표기;featureType:t:문·벽·탐색·상호작용;location:t:실제 연결:M
+mansions-madness-2/figures|figureType:t:조사자·괴물;instanceLabel:t:기단 구별 표식;location:t:배치 위치:M
+mansions-madness-2/cards|cardType:t:아이템·주문·피해·공포·상태;cardArea:t:보유·장착·공개·가림:M
+mansions-madness-2/tokens|tokenType:t:단서·화재·어둠·바리케이드·통로;target:t:구역·대상:M;printedLabel:t:보이는 연결 표기
+marvel-champions/identities|identitySide:t:히어로·얼터에고·빌런 면;stage:i:보이는 단계;health:i:체력 표시
+marvel-champions/cards|cardType:t:동료·지원·업그레이드·조우;exhaustion:t:준비·소진:M;parent:t:부착 대상:M
+marvel-champions/tokens|tokenType:t:피해·위협·범용·가속·상태카드;nominalValue:i:인쇄값;target:t:부착 대상:M
+monopoly/board|editionLabel:t:판본 표기;spaceLabel:t:장소 표기;spaceOrder:t:확인한 진행 순서:M
+monopoly/tokens|tokenType:t:이동말·주사위;dieValue:i:주사위 눈;location:t:판 위치:M;owner:p:소유 플레이어:M
+monopoly/property|itemType:t:증서·집·호텔;mortgageFace:t:보이는 저당 면;targetProperty:t:해당 부동산:M
+monopoly/money|itemType:t:지폐·찬스·공동기금;nominalValue:i:지폐 액면;pile:t:보유·더미 구분:M
+nemesis/rooms|roomLabel:t:방 ID 표기;exploredFace:t:탐색 면;doorState:t:보이는 문 상태
+nemesis/figures|figureType:t:캐릭터·침입자;instanceLabel:t:구별 표식;wounds:i:보이는 상처;location:t:방 위치:M
+nemesis/markers|markerType:t:표식 종류;displayValue:i:표시값;target:t:붙은 대상:M
+nemesis/cards|cardType:t:손패·인벤토리·목표·오염;cardArea:t:공개·비공개 위치:M
+orleans/followers|profession:t:직업 유형;followerZone:t:주머니·시장·행동칸:M
+orleans/network|itemType:t:상품·교역소·상인;location:t:노선·도시 위치:M;owner:p:소유 플레이어:M
+orleans/development|itemType:t:기술·장소타일·시민;slot:t:설치 칸:M
+orleans/events|eventLabel:t:공개 이벤트;trackValue:i:보이는 트랙값;eventState:t:처리 지점:M
+paleo/people|personType:t:인물·도구 유형;abilities:t:보이는 능력 기호;wounds:i:상처 표식
+paleo/cards|backCue:t:공개된 뒷면 단서;cardArea:t:미공개·공개·사용 위치:M
+paleo/boards|boardType:t:자원·작업대·진행;requirements:m:읽힌 요구 기호·수치;progressValue:i:표시값
+paleo/progress|progressType:t:성공·실패;pending:t:미완료 처리:M
+pandemic-legacy-1/map|cityLabel:t:도시 표기;permanentMarks:t:공개 영구 표식;confirmedChange:t:사용자 확인 변경:M
+pandemic-legacy-1/pieces|pieceType:t:역할말·연구소·트랙 표식;displayValue:s:보이는 트랙값;location:t:도시·트랙 위치:M
+pandemic-legacy-1/cards|cardType:t:허용된 공개 카드 유형;cardArea:t:공개·손패·미개봉 구분:M
+pandemic-legacy-1/record|recordType:t:흉터·업그레이드·월별기록;confirmedEntry:t:실제 확인한 내용:M
+pandemic/pieces|pieceType:t:역할 말·연구소;location:t:도시 위치:M;owner:p:소유 플레이어:M
+pandemic/disease|diseaseColor:t:질병 색;markerType:t:큐브·치료·박멸 표시;shownSide:t:보이는 면
+pandemic/cards|cardType:t:도시·이벤트·전염병·감염;cardArea:t:손패·덱·버림:M
+patchwork/patches|shape:t:패치 모양;reflected:b:뒤집은 형태:M;buttonIncome:i:인쇄 단추 수입;timeCost:i:인쇄 시간
+patchwork/buttons|nominalValue:i:실물 단추 액면;buttonZone:t:보유·공급:M
+patchwork/markers|markerType:t:시간 말·중립 선택말;trackPosition:t:트랙·둘레 기준 위치:M;owner:p:소유 플레이어:M
+power-grid/plants|plantNumber:i:발전소 번호;fuelType:t:연료 종류;citiesPowered:i:인쇄 공급 도시 수;cardArea:t:보유·시장:M
+power-grid/fuel|fuelType:t:석탄·석유·쓰레기·우라늄;plantTarget:t:보관 발전소:M;fuelZone:t:시장·발전소:M
+power-grid/houses|cityLabel:t:도시 표기;slot:t:도시 슬롯:M;owner:p:소유 플레이어:M
+power-grid/money|nominalValue:i:지폐 액면;owner:p:소유 플레이어:M
+quacks/chips|chipColor:t:칩 색;chipNumber:i:인쇄 이동값;chipZone:t:솥·주머니·공급 구분:M;pathPosition:t:솥 경로 칸:M
+quacks/pot|potSide:t:기본·시험관 변형면;dropPosition:t:시작 방울 위치:M;ratPosition:t:쥐 표식 위치:M
+quacks/books|setLabel:t:선택한 책 세트 표기;fortuneLabel:t:공개 운세 표기;roundValue:i:라운드 표시
+quacks/goods|itemType:t:루비·플라스크·점수말·봉인;flaskSide:t:플라스크 가득·빈 면;sealFace:t:봉인 표시 면;trackValue:i:보이는 점수칸
+race-for-the-galaxy/cards|cardType:t:월드·개발·행동·상품;cardArea:t:문명·손패·선택·상품 배치:M;goodsTarget:t:상품이 놓인 카드:M
+race-for-the-galaxy/points|nominalValue:i:칩 인쇄 점수;chipZone:t:공용·개인·끝라운드 대기:M
+res-arcana/cards|cardArea:t:설치·손패·덱:M;useState:t:준비·사용 상태:M;storedEssences:m:카드 위 정수
+res-arcana/places|tileType:t:힘의 장소·마법 물품;selectedSide:t:선택한 면;useState:t:사용·교체 상태:M;storedEssences:m:타일 위 정수
+res-arcana/essences|essenceType:t:정수 종류;target:t:개인 공급·붙은 카드:M
+robinson-crusoe/island|tileLabel:t:공개 섬타일 표기;campPosition:t:캠프 위치:M;exploredState:t:공개·미공개 구분:M
+robinson-crusoe/pawns|pawnType:t:행동말·인물;assignment:t:확인한 행동 배정:M;campRelation:t:캠프 안·밖 위치:M
+robinson-crusoe/goods|goodsType:t:자원·체력·결의;goodsZone:t:현재·향후 공급:M;displayValue:s:표시값
+robinson-crusoe/cards|cardType:t:사건·발명·모험;queuePosition:i:대기줄 위치:M;resolution:t:처리 완료·미완료:M
+root/warriors|pieceType:t:전사·방랑자;faction:t:보이는 세력 유형;owner:p:소유 플레이어:M;location:t:공터·길 위치:M
+root/buildings|buildingType:t:제재소·작업장·모병소·둥지·기지;slot:t:건물 슬롯:M;owner:p:소유 플레이어:M
+root/tokens|tokenType:t:보이는 토큰 종류;location:t:공터 위치:M;owner:p:소유 플레이어:M
+root/cards|cardArea:t:손패·칙령·지지자·제작 구분:M;column:t:칙령 등 실제 열:M
+root/items|itemType:t:아이템 종류;exhausted:t:소진 여부:M;damaged:t:손상 여부:M;relationship:t:직접 확인한 세력 관계:M
+sagrada/dice|dieColor:t:주사위 색;dieValue:i:윗면 눈;dieZone:t:창문·공급·라운드 구분:M;cell:t:배치 칸:M
+sagrada/windows|patternLabel:t:패턴 표기;selectedSide:t:선택 면;cellConstraint:t:해당 칸의 인쇄 제약
+sagrada/cards|cardType:t:도구·공개목표·개인목표;cardArea:t:공개·허용 개인 위치:M
+sagrada/tokens|tokenType:t:은총 토큰;tokenZone:t:남은 공급·도구에 지불:M;targetTool:t:놓인 도구:M
+scout/cards|topNumber:i:상단 숫자;bottomNumber:i:하단 숫자;activeEnd:t:사용 중인 위아래 방향:M;handPosition:i:손패 순서:M
+scout/tokens|tokenType:t:점수·스카우트앤쇼;nominalValue:i:인쇄 점수;useState:t:사용 상태:M
+scythe/units|unitType:t:캐릭터·메크·일꾼;owner:p:소유 플레이어:M;location:t:영토 위치:M;transport:t:직접 확인한 승객·운반:M
+scythe/resources|resourceType:t:자원 종류;territory:t:자원이 놓인 영토:M
+scythe/buildings|itemType:t:건물·기술큐브·모집말;origin:t:매트 출발칸:M;location:t:지도·매트 위치:M
+scythe/cards|cardType:t:목표·조우·공장;cardArea:t:공개·허용 개인 영역:M
+scythe/tracks|trackType:t:별·전력·인기·화폐;displayValue:s:표시값;starMeaning:t:확인한 별 항목:M
+seti/system|layerLabel:t:회전층 표기;sectorLabel:t:별·행성·궤도 표기;rotationState:t:실제 층 방향:M
+seti/probes|role:t:탐사선·궤도선·착륙선 역할:M;parentSpace:t:태양계·궤도·착륙칸:M;owner:p:소유 플레이어:M
+seti/technology|itemType:t:컴퓨터·기술·신호;slot:t:설치·신호 칸:M;technologyState:t:확인한 기술 상태:M
+seti/cards|cardType:t:카드·종 정보;cardArea:t:공개·손패·미발견 구분:M
+seti/resources|resourceType:t:재고·수입·점수·라운드;displayValue:s:보이는 값
+seven-wonders-duel/cards|ageLabel:t:시대 표기;overlap:t:덮임·공개 관계:M;cardArea:t:진열·획득·버림:M
+seven-wonders-duel/wonders|wonderLabel:t:불가사의 표기;owner:p:소유 플레이어:M;constructed:t:건설 완료 여부:M
+seven-wonders-duel/progress|pieceType:t:군사말·진보·약탈 표식;trackPosition:t:위치:M;printedValue:i:표시값
+seven-wonders-duel/coins|nominalValue:i:동전 액면
+seven-wonders/age-cards|ageLabel:t:시대 표기;cardColor:t:건물 색;cardArea:t:지은 카드·손패·버림:M
+seven-wonders/wonder|selectedSide:t:판면 표기;stage:t:확인한 건설 단계:M;underCard:t:단계 아래 보존 카드:M
+seven-wonders/coins|nominalValue:i:동전 액면
+seven-wonders/military|ageLabel:t:시대 구분;resultType:t:승리·패배 표시;nominalValue:s:인쇄 점수
+six-nimmt/cards|number:i:카드 숫자;penaltyIcons:i:벌점 아이콘 수;rowIndex:i:공개 줄:M;cardArea:t:줄·손패·벌점 더미:M
+skull/discs|discType:t:공개된 꽃·해골;owner:p:소유 플레이어:M;stackPosition:i:묶음의 순서:M;discArea:t:손·쌓음·제거 구분:M
+skull/mats|successSide:t:성공 면;survival:t:생존 여부:M;houseRule:t:확인한 선택 규칙:M
+sleeping-gods/atlas|pageLabel:t:현재 페이지 표기;regionLabel:t:지역 표기;shipPosition:t:함선 위치:M
+sleeping-gods/crew|crewLabel:t:선원 표기;health:i:체력 표시;fatigue:i:피로 표시;abilities:t:장착 능력:M;controller:p:담당 플레이어:M
+sleeping-gods/enemies|enemyLabel:t:적 표기;formation:t:실제 적 배열:M;defense:t:방어칸 표기;hearts:t:심장칸 표기;damageCover:t:피해가 덮은 칸:M
+sleeping-gods/assets|assetType:t:명령·음식·재료·동전·모험·퀘스트;nominalValue:i:표시값;storage:t:공용·개인·부착 구분:M
+small-world/map|mapLabel:t:선택 지도 표기;regionType:t:지역 유형;regionLabel:t:지역 식별
+small-world/races|raceType:t:종족 표기;shownSide:t:활동·쇠퇴 면;owner:p:소유 플레이어:M
+small-world/powers|itemType:t:능력·산·요새·기타 표식;pairedRace:t:짝인 종족:M;location:t:부착 지역:M
+small-world/coins|nominalValue:i:보이는 동전 점수;coinZone:t:보유·선택 지불 중:M
+space-base/ships|sectorNumber:i:섹터 번호;mode:t:정박·배치 방향:M;underCard:t:겹침 순서:M;visibleAbility:t:보이는 빨간 능력 표기
+space-base/markers|markerType:t:자원·점수·충전;displayValue:s:표시값;targetCard:t:충전 대상 카드:M
+space-base/dice|dieValue:i:개별 눈;modifiedResult:t:확인한 능력 변경:M
+spirit-island/lands|moduleLabel:t:지도 모듈 표기;sideLabel:t:앞뒷면 표기;landNumber:i:육지 번호;location:t:모듈 배치:M
+spirit-island/figures|figureType:t:탐험가·마을·도시·다한·현신;spirit:t:현신의 정령:M;land:t:해당 땅:M
+spirit-island/markers|markerType:t:오염·공포;markerZone:t:땅·공급·획득 구분:M
+spirit-island/cards|cardType:t:능력·침략·이벤트·공포;cardArea:t:공개·대기·해결·덱 구분:M
+splendor-duel/tokens|tokenType:t:토큰 종류;tokenZone:t:보드·개인·주머니 구분:M;cell:t:보드 칸:M
+splendor-duel/cards|level:i:보이는 레벨;bonusType:t:보너스 종류;crowns:i:인쇄 왕관 수;printedPoints:i:인쇄 점수;cardArea:t:획득·예약·시장:M
+splendor-duel/privileges|privilegeZone:t:개인 보유·공용 공급:M;owner:p:소유 플레이어:M
+star-realms/cards|cardType:t:함선·기지;cardArea:t:덱·플레이·버림·기지·시장:M;outpost:t:보이는 전초기지 표시
+star-realms/authority|cardValue:s:점수 카드 표시값;owner:p:소유 플레이어:M
+star-wars-outer-rim/map|pieceType:t:구역·끝캡·순찰·접촉;sectorLabel:t:공개 구역 표기;contactColor:t:접촉 뒷면 색;contactDots:i:접촉 점 개수;location:t:지도 구역·행성·항로:M
+star-wars-outer-rim/ships|itemType:t:함선·캐릭터·개인목표;goalFace:t:보이는 목표 면;location:t:함선 위치:M;owner:p:소유 플레이어:M
+star-wars-outer-rim/cards|cardType:t:장비·화물·현상금·임무;slot:t:장착 슬롯:M;missionState:t:임무 진행 확인:M
+star-wars-outer-rim/markers|markerType:t:피해·크레딧·명성·평판;nominalValue:i:액면;trackValue:s:명성 표시;reputation:t:긍정·중립·부정 표시;target:t:인물·함선·세력 대상:M
+star-wars-rebellion/units|faction:t:진영;unitType:t:유닛 종류;spaceType:t:우주·지상 구분:M;system:t:시스템 위치:M;buildQueue:t:생산 대기칸:M
+star-wars-rebellion/leaders|leader:t:지도자 표기;leaderZone:t:미션·시스템·풀:M;captureState:t:포획·부착 여부:M
+star-wars-rebellion/cards|cardType:t:진영·임무 카드;cardArea:t:손패·공개·미공개 구분:M
+star-wars-rebellion/markers|markerType:t:충성·복종·사보타주·시간·평판;shownSide:t:보이는 면;trackValue:s:트랙 위치값;system:t:시스템 대상:M
+stone-age/workers|workerZone:t:행동·대기:M;actionSlot:t:행동칸:M;owner:p:소유 플레이어:M
+stone-age/goods|goodsType:t:목재·벽돌·돌·금·음식·도구;toolValue:i:도구 표시값
+stone-age/cards|cardArea:t:시장·개인 획득:M;printedSymbols:m:보이는 카드 기호·값
+stone-age/dice|dieValue:i:윗면 눈;toolUsed:t:직접 확인한 도구 사용:M;resolution:t:굴림 처리 지점:M
+tapestry/buildings|buildingType:t:건물 종류;buildingZone:t:수입판·수도·지도:M;cell:t:실제 배치칸:M
+tapestry/tiles|tileType:t:지도·수도·문명판;editionMark:t:보이는 판본·개정 표기;cell:t:격자 위치:M
+tapestry/cards|cardType:t:태피스트리·기술;cardArea:t:손패·시대·기술칸:M;stage:i:확인한 기술 단계:M
+tapestry/markers|trackType:t:자원·진행 트랙;displayValue:s:보이는 값
+terra-mystica/terrain|terrainType:t:현재 보이는 지형;underlying:t:확인된 인쇄 바탕:M;location:t:지도칸:M
+terra-mystica/buildings|buildingType:t:건물·다리;owner:p:소유 플레이어:M;endpoints:t:다리 양 끝:M
+terra-mystica/resources|resourceType:t:자원·파워;powerBowl:t:파워 그릇:M;displayValue:s:보이는 값
+terra-mystica/tiles|itemType:t:도시 타일·호의 타일·보너스 카드;actionMark:t:보이는 행동 표식;useState:t:획득·교체·사용 확인:M
+terraforming-mars/terrain|tileType:t:지형 종류;mapCell:t:지도칸:M;owner:p:소유 플레이어:M
+terraforming-mars/cards|cardType:t:기업·지속·사건 프로젝트;cardArea:t:손패·설치·버림:M
+terraforming-mars/cubes|cubeRole:t:소유 표식·자원 값 구분:M;observedMaterial:t:보이는 색·금속 형태;nominalValue:i:직접 확인한 재화 값:M
+terraforming-mars/boards|resourceType:t:해당 자원;stockValue:s:보유 트랙값;productionValue:s:생산 트랙값
+through-the-ages/cards|cardType:t:문명·이벤트·전술·건설;cardArea:t:카드열·손패·문명·대기:M;construction:t:건설 진행 확인:M
+through-the-ages/cubes|cubeType:t:노랑·파랑·민간행동·군사행동;pool:t:은행·일꾼·자원·행동칸:M
+through-the-ages/boards|trackType:t:은행·문화·과학·군사·행복;displayValue:s:표시값
+ticket-to-ride/map|cityLabel:t:도시명;routeColor:t:노선 색;routeLength:i:보이는 구간 수;routeEnds:t:노선 양 끝:M
+ticket-to-ride/trains|trainColor:t:보이는 기차 색;owner:p:소유 플레이어:M;route:t:점유 노선:M;segment:i:점유 구간:M
+ticket-to-ride/cards|trainType:t:색·기관차;cardArea:t:손패·진열·덱·버림:M
+ticket-to-ride/tickets|startCity:t:허용된 출발 도시;endCity:t:허용된 도착 도시;printedPoints:i:인쇄 점수
+ticket-to-ride/score|trackValue:i:보이는 점수칸;owner:p:소유 플레이어:M
+tiny-towns/resources|resourceType:t:자원 큐브 종류;cell:t:격자칸:M
+tiny-towns/buildings|buildingType:t:건물 유형;cell:t:설치칸:M;owner:p:소유 플레이어:M
+tiny-towns/cards|cardType:t:공개 건물·개인 기념물;pattern:t:보이는 건축 패턴;selected:t:이번 게임 사용 확인:M
+tiny-towns/hammer|holder:p:현재 자원 선택자:M
+twilight-imperium-4/systems|tileLabel:t:시스템 타일 표기;planets:t:보이는 행성;anomaly:t:이상현상·웜홀 표기;location:t:실제 연결 위치:M
+twilight-imperium-4/units|unitType:t:유닛 종류;owner:p:소유 플레이어:M;location:t:우주·개별행성·수송 구분:M
+twilight-imperium-4/command|pool:t:전술·전략·함대·활성화 구분:M;systemTarget:t:활성화 시스템:M;owner:p:소유 플레이어:M
+twilight-imperium-4/cards|cardType:t:행성·전략·행동·목표;cardArea:t:공개·허용 비밀·손패:M;useState:t:준비·소진·사용 여부:M
+twilight-imperium-4/trade|resourceType:t:상품·교역품;resourceZone:t:보유·공급:M
+twilight-struggle/map|countryLabel:t:국가 표기;regionLabel:t:지역 표기;battleground:t:전장국 인쇄 표시;influence:m:보이는 진영별 영향력
+twilight-struggle/markers|trackType:t:트랙 종류;faction:t:진영 표기;displayValue:s:표시값
+twilight-struggle/cards|cardArea:t:손패·헤드라인·진행·버림·제거:M;persistentEffect:t:확인한 지속 효과:M
+underwater-cities/cities|structureType:t:도시·터널·농장·담수화·연구소;upgradeState:t:보이는 업그레이드 면;location:t:설치칸·연결:M
+underwater-cities/cards|cardType:t:카드 유형;cardArea:t:손패·설치:M;used:t:사용 여부:M
+underwater-cities/boards|slotType:t:도시·메트로폴리스·행동·라운드;slotLabel:t:보이는 칸 표기;trackValue:i:트랙값
+underwater-cities/resources|resourceType:t:자원 종류;resourceZone:t:재고·지불·생산 중:M
+viticulture/workers|workerType:t:일꾼 종류;workerZone:t:사용·대기:M;owner:p:소유 플레이어:M
+viticulture/cards|cardType:t:카드 종류;cardArea:t:손패·사용·덱:M
+viticulture/vineyard|itemType:t:밭·덩굴·개인 건물;installedState:t:설치 상태:M;fieldLabel:t:밭 표기
+viticulture/goods|goodsType:t:포도·와인 등 종류;quality:i:저장칸 품질값;storage:t:저장 위치:M
+voidfall/sectors|sectorLabel:t:구역 ID 표기;sectorSide:t:보이는 타일 면;populationDie:i:인구 주사위 눈;structures:t:함대·길드·시설·오염 부착:M
+voidfall/houses|boardType:t:가문·자원다이얼·영향력다이얼;houseLabel:t:가문 표기;dialRole:t:자원·생산·영향력 구분:M;dialValue:s:보이는 다이얼값;trackValue:s:문명 트랙값
+voidfall/cards|cardType:t:집중·기술·의제;cardArea:t:선택·사용·지속·해결 중:M
+voidfall/tokens|tokenType:t:교역·진행 표식;shownSide:t:보이는 면;acquiredTurn:t:직접 확인한 획득 차례:M
+war-of-the-ring-2/armies|faction:t:진영·국가;unitType:t:정규·정예·지도자·동료;location:t:지역·원정대 위치:M
+war-of-the-ring-2/dice|dieSymbol:t:보이는 행동 눈;dieZone:t:사용가능·사용·사냥 배정:M
+war-of-the-ring-2/cards|cardType:t:이벤트·인물 능력;cardArea:t:손패·사용·공개:M
+war-of-the-ring-2/markers|markerType:t:발각·진행·국가·공성;shownSide:t:보이는 면;displayValue:s:진행값;target:t:연결 대상:M
+wingspan/birds|habitat:t:설치 서식지:M;cardArea:t:손패·설치·덱·공개:M
+wingspan/eggs|targetBird:t:부모 새 카드:M;eggColor:t:관측 장식색
+wingspan/food|itemType:t:먹이 토큰·먹이 주사위;foodSymbol:t:먹이 종류·주사위 면;foodZone:t:개인 공급·새모이통:M
+wingspan/goals|goalType:t:라운드·개인 보너스;selectedSide:t:선택한 목표 면
+wingspan/actions|cubeZone:t:남은 행동·행동줄·목표판:M;owner:p:소유 플레이어:M
+wyrmspan/cards|cardType:t:용·동굴;cardArea:t:손패·시장·발굴:M;target:t:동굴·용 연결:M
+wyrmspan/markers|markerType:t:탐험·길드·라운드;position:t:개인판·길드 위치:M;displayValue:i:표시값
+wyrmspan/resources|resourceType:t:알·동전·고기·금·수정·우유;storage:t:개인 공급·카드 위 저장:M;targetCard:t:저장된 카드:M
+dominion/zones|zoneRole:t:행동·구매·플레이·정리 위치:M;resolved:t:사용자 확인한 처리 지점:M

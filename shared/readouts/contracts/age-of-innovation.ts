@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type AgeOfInnovationReadout =
+  {schema:"age-of-innovation-v1";kind:"map";values:{"observedColor": string | null; "terrain": string | null; "structure": string | null; "connection": string | null};sources:{"observedColor": FieldBasis | null; "terrain": FieldBasis | null; "structure": FieldBasis | null; "connection": 'user' | null}}
+ | {schema:"age-of-innovation-v1";kind:"identity";values:{"face": "front" | "back" | null; "printedName": string | null; "faction": string | null; "homeTerrain": string | null; "abilityUsed": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "faction": FieldBasis | null; "homeTerrain": 'user' | null; "abilityUsed": 'user' | null}}
+ | {schema:"age-of-innovation-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "pool": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "pool": 'user' | null; "displayValue": FieldBasis | null}}
+ | {schema:"age-of-innovation-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "selectedFace": string | null; "tileGroup": string | null; "useState": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "selectedFace": FieldBasis | null; "tileGroup": FieldBasis | null; "useState": 'user' | null}}
+ | {schema:"age-of-innovation-v1";kind:null;values:{};sources:{}};

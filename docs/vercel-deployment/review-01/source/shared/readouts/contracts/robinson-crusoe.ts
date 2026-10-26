@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type RobinsonCrusoeReadout =
+  {schema:"robinson-crusoe-v1";kind:"island";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "campPosition": string | null; "exploredState": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "campPosition": 'user' | null; "exploredState": 'user' | null}}
+ | {schema:"robinson-crusoe-v1";kind:"pawns";values:{"observedColor": string | null; "pawnType": string | null; "assignment": string | null; "campRelation": string | null};sources:{"observedColor": FieldBasis | null; "pawnType": FieldBasis | null; "assignment": 'user' | null; "campRelation": 'user' | null}}
+ | {schema:"robinson-crusoe-v1";kind:"goods";values:{"observedColor": string | null; "goodsType": string | null; "goodsZone": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "goodsType": FieldBasis | null; "goodsZone": 'user' | null; "displayValue": FieldBasis | null}}
+ | {schema:"robinson-crusoe-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "queuePosition": number | null; "resolution": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "queuePosition": 'user' | null; "resolution": 'user' | null}}
+ | {schema:"robinson-crusoe-v1";kind:null;values:{};sources:{}};

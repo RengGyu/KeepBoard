@@ -1,0 +1,6370 @@
+[
+  {
+    "derivedRules": [],
+    "description": "명세에 따라 상태를 수동 기록하고 실물을 보관해 이어갑니다.",
+    "edition": "현행 기본판",
+    "fields": [
+      {
+        "acquisition": "ask",
+        "description": "정사각 격자 x/y와 90도 회전, 타일 내부 도로·도시·들판 feature ID에 미플 부착. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "map.scene",
+        "label": "성장하는 지도",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 0
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "인쇄 점수값과 소유색. 보이는 위치만으로 총점의 순환 횟수 추정 금지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "track.scene",
+        "label": "점수판",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 1
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "플레이어별 미배치 미플 수. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "supply.scene",
+        "label": "미플 공급",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 2
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "아직 연결 전인 타일과 회전 상태. 지도에 놓인 타일과 구별.",
+        "group": "essentials",
+        "key": "active-tile",
+        "label": "이번에 뽑은 타일",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "완성 지형과 미플 회수/득점 처리 중단 지점.",
+        "group": "essentials",
+        "key": "scoring",
+        "label": "미처리 점수",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "점수판 위치와 독립적으로 확인된 누적값만.",
+        "group": "essentials",
+        "key": "score-total",
+        "label": "확인 점수",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+        "group": "essentials",
+        "key": "turn",
+        "label": "누구 차례",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 6
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "타일 놓기/미플 선택/완성 지형 점수·회수 중 어디까지 했는지 보존.",
+        "group": "essentials",
+        "key": "pending",
+        "label": "중단한 지점",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 7
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+        "group": "essentials",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 8
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "carcassonne",
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "다음 타일을 노출하지 않고 실물 더미 순서 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
+        ],
+        "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
+        "externalOnly": true,
+        "id": "spec.draw.preserve",
+        "label": "뽑을 타일 보존(선택)",
+        "method": "ordered-bundle",
+        "orderSensitive": true,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      }
+    ],
+    "requirements": [],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "tiles",
+          "kind": "tile",
+          "name": "지형 타일",
+          "variants": []
+        },
+        {
+          "id": "followers",
+          "kind": "piece",
+          "name": "미플",
+          "variants": []
+        },
+        {
+          "id": "score",
+          "kind": "marker",
+          "name": "점수 말",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "map"
+          ],
+          "componentIds": [
+            "tiles",
+            "followers"
+          ],
+          "editor": "component-catalog",
+          "key": "map.scene",
+          "label": "성장하는 지도",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "map.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "track"
+          ],
+          "componentIds": [
+            "score"
+          ],
+          "editor": "component-catalog",
+          "key": "track.scene",
+          "label": "점수판",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "track.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "supply"
+          ],
+          "componentIds": [
+            "followers"
+          ],
+          "editor": "component-catalog",
+          "key": "supply.scene",
+          "label": "미플 공급",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "supply.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "draw"
+          ],
+          "componentIds": [
+            "tiles"
+          ],
+          "editor": "physical-only",
+          "key": "draw.scene",
+          "label": "뽑을 타일",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "draw.scene",
+          "visibility": "hidden"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "active-tile",
+          "label": "이번에 뽑은 타일",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "active-tile",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "scoring",
+          "label": "미처리 점수",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "scoring",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "score-total",
+          "label": "확인 점수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "score-total",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "turn",
+          "label": "누구 차례",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "turn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "pending",
+          "label": "중단한 지점",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "pending",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "note",
+          "label": "짧은 메모",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "note",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "강/수도원장 포함 상품이라도 사용 모듈을 별도 기록. 여관·성당 등 확장 타일의 효과는 기본 규칙에 합치지 않는다.",
+        "타일별 모든 지형 연결 사전과 최종 농부 득점 알고리즘은 미작성.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+          "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+          "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+        ],
+        "pendingActionFields": [
+          "pending"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [],
+      "rules": [
+        {
+          "id": "turn",
+          "kind": "procedure",
+          "label": "기본 턴",
+          "summary": "타일을 연결하고 선택적으로 새 타일에 미플을 둔 뒤 완성 지형 점수를 처리한다."
+        },
+        {
+          "id": "feature",
+          "kind": "procedure",
+          "label": "연결 지형 점유",
+          "summary": "도로의 다른 연결 부분에 미플이 있으면 새 미플 배치에 영향을 준다. 단순히 타일 하나당 한 미플이라는 제약으로 축약하지 않는다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "base",
+        "editionName": "현행 기본판",
+        "gameId": "carcassonne",
+        "schemaVersion": "1.0",
+        "sha256": "c2ab455de3831b9d600929c0fa3fd9814ff32129e590237d87edbda661e3ead1"
+      },
+      "support": {
+        "illustration": "catalog",
+        "recognition": "manual",
+        "recording": "generic",
+        "rules": "none"
+      }
+    },
+    "sources": [
+      {
+        "id": "spec.carcassonne.primary",
+        "section": "공식 v3 규칙 검색 본문에서 타일 연결, 새 타일에 미플 놓기, 도로 점유 제한, 완성 후 득점을 확인. 상품 페이지에서 도시/도로/수도원/들판 구성 확인. River/Abbot은 별도 포함 모듈.",
+        "title": "Carcassonne — 공식 자료",
+        "url": "https://images.zmangames.com/filer_public/24/b9/24b924f3-b7d0-464f-9d1d-618bd01e38a0/carcassonne_v3_rulesheet_en_revised_ab.pdf"
+      }
+    ],
+    "supportGaps": [
+      "강/수도원장 포함 상품이라도 사용 모듈을 별도 기록. 여관·성당 등 확장 타일의 효과는 기본 규칙에 합치지 않는다.",
+      "타일별 모든 지형 연결 사전과 최종 농부 득점 알고리즘은 미작성.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "카르카손",
+    "version": "1.0.0-essentials-1.c2ab455de383"
+  },
+  {
+    "derivedRules": [
+      {
+        "field": "player.development.newActionCardUnavailableThisTurn",
+        "id": "newly-bought-action-card-cannot-be-played",
+        "reason": "이번 턴에 산 기사/진보 카드는 같은 턴에 사용할 수 없습니다. 이 제한은 승점 카드 예외와 구분됩니다.",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "value": true,
+        "when": {
+          "conditions": [
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "eq",
+              "owner": "$owner",
+              "value": "knight"
+            },
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "eq",
+              "owner": "$owner",
+              "value": "progress"
+            },
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "eq",
+              "owner": "$owner",
+              "value": "mixed"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "field": "turn.actionDevelopmentCardLimitReached",
+        "id": "one-action-development-card-per-turn",
+        "reason": "기사 또는 진보 카드를 이미 하나 사용했으므로 이번 턴의 추가 행동 개발 카드 사용은 끝났습니다.",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "value": true,
+        "when": {
+          "field": "turn.actionDevelopmentCardPlayed",
+          "op": "eq",
+          "owner": "public",
+          "value": true
+        }
+      },
+      {
+        "field": "player.development.newVictoryPointCanBeRevealedToWin",
+        "id": "new-victory-point-card-winning-exception",
+        "reason": "새 승점 카드도 본인 차례에 총 10점 이상으로 승리할 때 공개할 수 있습니다. 이 기록 자체가 승리를 뜻하지는 않습니다.",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "value": true,
+        "when": {
+          "conditions": [
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "eq",
+              "owner": "$owner",
+              "value": "victory_point"
+            },
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "eq",
+              "owner": "$owner",
+              "value": "mixed"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "field": "player.road.qualifiesForLongestRoad",
+        "id": "longest-road-threshold",
+        "reason": "최장 연속 도로가 5개 이상이면 카드 보유 자격 기준을 만족합니다. 카드 보유자는 실제 상태를 따릅니다.",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "value": true,
+        "when": {
+          "field": "player.road.longestContinuousSegments",
+          "op": "gt",
+          "owner": "$owner",
+          "value": 4
+        }
+      },
+      {
+        "field": "player.development.qualifiesForLargestArmy",
+        "id": "largest-army-threshold",
+        "reason": "공개 사용한 기사가 3장 이상이면 최대 기사단 카드의 기준을 만족합니다. 카드 보유자는 실제 상태를 따릅니다.",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "value": true,
+        "when": {
+          "field": "player.development.knightsPlayed",
+          "op": "gt",
+          "owner": "$owner",
+          "value": 2
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-pending",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "기록한 미해결 효과·선택의 남은 부분부터 처리합니다. 완료한 하위 처리는 반복하지 않습니다.",
+        "when": {
+          "field": "turn.pendingEffect",
+          "op": "neq",
+          "value": "none"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-await_roll",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "현재 플레이어의 주사위 굴리기부터 이어 갑니다. 이번 턴 개발 카드 사용 기록은 유지합니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "await_roll"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-production",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "아직 지급하지 않은 사람과 자원부터 처리합니다. 이미 지급한 자원은 다시 주지 않습니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "production"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-trade",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "현재 플레이어의 거래·건설을 계속하거나 턴을 마치고 다음 플레이어에게 넘깁니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "trade"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-build",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "분리 모드는 건설을 계속하고, 통합 모드는 거래·건설을 계속합니다. 이번 턴 구매 묶음은 구분합니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "build"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-end_turn",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "남은 효과가 없다면 턴을 마치고 다음 플레이어에게 넘깁니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "end_turn"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-seven_discard",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "각 플레이어의 남은 버리기 수량부터 처리한 뒤 도둑 절차를 계속합니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "seven_discard"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-robber_move",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "도둑 이동의 남은 처리부터 이어 가고 훔치기 절차를 확인합니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_move"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-robber_steal",
+        "reason": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "value": "기록한 훔치기 절차의 남은 부분부터 이어 갑니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_steal"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-action",
+        "reason": "기록한 단계에서 도출",
+        "scope": "public",
+        "value": "남은 거래·건설 또는 개발 카드 효과부터 이어갑니다. 실제 전달을 반복하지 않습니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "action"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-setup",
+        "reason": "기록한 단계에서 도출",
+        "scope": "public",
+        "value": "현재 배치 차수·사람·다음 말과 시작 자원 지급부터 이어갑니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "setup"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "field": "resume.nextProcedure",
+        "id": "resume-finished",
+        "reason": "기록한 단계에서 도출",
+        "scope": "public",
+        "value": "확인한 승자와 최종 판을 보존합니다.",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "finished"
+            },
+            {
+              "field": "turn.pendingEffect",
+              "op": "eq",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      }
+    ],
+    "description": "기본판의 공개 보드와 현재 턴, 각 플레이어가 직접 제공하는 비공개 손패 상태를 기록합니다. 보드 좌표 대신 타일 앵커를 사용하며, 보이지 않는 정보나 과거 의도는 추측하지 않습니다.",
+    "edition": "Base Game (2025 6th edition; 2020 profile selectable)",
+    "fields": [
+      {
+        "acquisition": "observe",
+        "description": "부분 사진·카드·말을 종류와 원본 영역별로 기록합니다. 전체 판을 추측하지 않습니다.",
+        "group": "components",
+        "key": "components.observed",
+        "label": "사진 속 구성물",
+        "lifetime": "session",
+        "presentation": "scene",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "내 사진에 실제 보이는 카드·토큰을 개별 항목으로 기록합니다.",
+        "group": "components",
+        "key": "player.components.observed",
+        "label": "내 구성물",
+        "lifetime": "session",
+        "presentation": "scene",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "지형·숫자 토큰·도둑·도로·정착지·도시를 타일 앵커(예: r3c2 북쪽 꼭짓점)로 기록합니다. 사진처럼 정확한 좌표를 만들 필요는 없습니다.",
+        "group": "board",
+        "key": "board.layout",
+        "label": "19개 타일과 공개 배치",
+        "lifetime": "session",
+        "presentation": "scene",
+        "scope": "public",
+        "sourceId": "rules-setup",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "보드, 토큰, 도둑, 공개 말과 특수 카드를 실제 배치 그대로 보존합니다.",
+        "group": "board",
+        "key": "board-public-state",
+        "label": "공개 보드 상태 보존",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-setup",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "각 소유자의 자원 카드를 분리된 봉투/트레이에 보존합니다.",
+        "group": "resources",
+        "key": "player-resource-hands",
+        "label": "플레이어별 자원 손패 보존",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-turn",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 주사위를 가진 플레이어의 ID입니다.",
+        "group": "turn",
+        "key": "currentPlayer",
+        "label": "현재 플레이어",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "type": "text",
+        "ui": {
+          "level": "primary",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "기본 규칙의 주사위·도둑 해결·거래·건설·턴 종료 중 현재 단계입니다.",
+        "group": "turn",
+        "key": "turn.phase",
+        "label": "현재 턴 단계",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "주사위 굴리기 전",
+            "value": "await_roll"
+          },
+          {
+            "label": "자원 생산·지급 중",
+            "value": "production"
+          },
+          {
+            "label": "7: 자원 버리기",
+            "value": "seven_discard"
+          },
+          {
+            "label": "7/기사: 도둑 이동",
+            "value": "robber_move"
+          },
+          {
+            "label": "도둑: 자원 훔치기",
+            "value": "robber_steal"
+          },
+          {
+            "label": "거래",
+            "value": "trade"
+          },
+          {
+            "label": "건설/개발 카드 구매",
+            "value": "build"
+          },
+          {
+            "label": "턴 넘기기 전",
+            "value": "end_turn"
+          },
+          {
+            "label": "초기 배치",
+            "value": "setup"
+          },
+          {
+            "label": "행동 · 거래와 건설",
+            "value": "action"
+          },
+          {
+            "label": "게임 종료",
+            "value": "finished"
+          }
+        ],
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "두 주사위 합계(2–12)입니다. 아직 굴리지 않았다면 비워 둡니다.",
+        "group": "turn",
+        "key": "turn.diceTotal",
+        "label": "이번 주사위 합",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "production"
+                      },
+                      {
+                        "field": "turn.productionResolved",
+                        "op": "eq",
+                        "value": false
+                      }
+                    ],
+                    "op": "and"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "seven_discard"
+                  },
+                  {
+                    "conditions": [
+                      {
+                        "field": "robber.cause",
+                        "op": "eq",
+                        "value": "seven"
+                      },
+                      {
+                        "conditions": [
+                          {
+                            "field": "turn.phase",
+                            "op": "eq",
+                            "value": "robber_move"
+                          },
+                          {
+                            "field": "turn.phase",
+                            "op": "eq",
+                            "value": "robber_steal"
+                          }
+                        ],
+                        "op": "or"
+                      }
+                    ],
+                    "op": "and"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "굴림에 따른 생산이 끝났는지 기록합니다. 7이면 자원을 받지 않으므로 생산 없음이 확인되면 완료로 둡니다.",
+        "group": "turn",
+        "key": "turn.productionResolved",
+        "label": "생산 처리 완료",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "turn.phase",
+                "op": "eq",
+                "value": "production"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어가 기사 또는 진보 카드를 사용했는지 기록합니다. 사용한 행동 카드는 공개됩니다.",
+        "group": "turn",
+        "key": "turn.actionDevelopmentCardPlayed",
+        "label": "이번 턴 행동 개발 카드 사용 여부",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "await_roll"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "production"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "trade"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "build"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "action"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_move"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_steal"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "end_turn"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어가 이번 턴에 개발 카드를 구매했는지 기록합니다. 카드 종류와 정체는 공개하지 않습니다.",
+        "group": "turn",
+        "key": "turn.developmentCardBoughtThisTurn",
+        "label": "이번 턴 개발 카드 구매 여부",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "trade"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "build"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "action"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "end_turn"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "주사위 7에서 버려야 하는 플레이어들의 절차가 끝났는지 기록합니다.",
+        "group": "turn",
+        "key": "turn.sevenDiscardsResolved",
+        "label": "7의 자원 버리기 처리 완료",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_move"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_steal"
+                      }
+                    ],
+                    "op": "or"
+                  },
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "robber.cause",
+                        "op": "eq",
+                        "value": "seven"
+                      }
+                    ],
+                    "op": "or"
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "도둑이 있는 타일의 앵커 ID입니다. 좌표 대신 타일 이름/행열 ID를 사용합니다.",
+        "group": "board",
+        "key": "robber.hexAnchor",
+        "label": "현재 도둑 타일",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_move"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_steal"
+                      }
+                    ],
+                    "op": "or"
+                  },
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "robber.cause",
+                        "op": "eq",
+                        "value": "seven"
+                      }
+                    ],
+                    "op": "or"
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "7을 굴렸을 때 현재 처리 단계입니다. 7이 아니면 not_applicable입니다.",
+        "group": "turn",
+        "key": "robber.resolutionStep",
+        "label": "도둑/7 처리 단계",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "해당 없음",
+            "value": "not_applicable"
+          },
+          {
+            "label": "자원 버리기",
+            "value": "discard"
+          },
+          {
+            "label": "도둑 이동",
+            "value": "move"
+          },
+          {
+            "label": "자원 훔치기",
+            "value": "steal"
+          },
+          {
+            "label": "처리 완료",
+            "value": "complete"
+          }
+        ],
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "type": "select",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_move"
+                      },
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "robber_steal"
+                      }
+                    ],
+                    "op": "or"
+                  },
+                  {
+                    "conditions": [
+                      {
+                        "field": "turn.phase",
+                        "op": "eq",
+                        "value": "seven_discard"
+                      },
+                      {
+                        "field": "robber.cause",
+                        "op": "eq",
+                        "value": "seven"
+                      }
+                    ],
+                    "op": "or"
+                  }
+                ],
+                "op": "and"
+              },
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_move"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_steal"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 처리에서 도둑을 옮길 타일 앵커 ID입니다.",
+        "group": "turn",
+        "key": "robber.targetHexAnchor",
+        "label": "도둑 이동 목적지",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "robber.resolutionStep",
+                "op": "eq",
+                "owner": "public",
+                "value": "move"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "훔치기를 마친 경우 자원을 준 플레이어 ID입니다. 자원 종류는 공개하지 않습니다.",
+        "group": "turn",
+        "key": "robber.stolenFromPlayerId",
+        "label": "도둑에게서 자원을 빼앗긴 플레이어",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "robber.resolutionStep",
+                "op": "eq",
+                "owner": "public",
+                "value": "steal"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "소유자 본인의 벽돌·목재·양모·곡물·광석 수량을 기록합니다. 다른 플레이어 수량을 보고 추정하지 않습니다.",
+        "group": "resources",
+        "key": "player.resources.counts",
+        "label": "내 자원 손패 수량",
+        "lifetime": "session",
+        "preservationId": "player-resource-hands",
+        "scope": "player",
+        "sourceId": "rules-turn",
+        "type": "json",
+        "ui": {
+          "editor": "resource-counts",
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "소유자가 실제 카드 수를 셉니다. 7이 나오면 8장 이상인 플레이어는 절반(내림)을 버립니다.",
+        "group": "resources",
+        "key": "player.resources.total",
+        "label": "내 자원 카드 총수",
+        "lifetime": "session",
+        "preservationId": "player-resource-hands",
+        "scope": "player",
+        "sourceId": "rules-seven",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "주사위가 7이고 자원 카드가 8장 이상일 때 절반(내림)을 버려야 합니다.",
+        "group": "turn",
+        "key": "player.resources.mustDiscardHalf",
+        "label": "7에서 절반 버리기 대상",
+        "lifetime": "turn",
+        "scope": "player",
+        "sourceId": "rules-seven",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "이번 턴 구매분을 이미 포함한 미사용 전체 수량입니다. 구매 묶음을 다시 더하지 않습니다.",
+        "group": "development",
+        "key": "player.development.handCounts",
+        "label": "내 손에 든 개발 카드",
+        "lifetime": "session",
+        "preservationId": "player.development.handCounts",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "json",
+        "ui": {
+          "editor": "development-counts",
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "이번 턴 구매 카드를 기존 손패와 구분해 구매자 소유로 보존합니다.",
+        "group": "development",
+        "key": "newly-bought-development-card",
+        "label": "이번 턴에 산 개발 카드 보존",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "소유자 본인에게만 묻습니다. 구매가 없으면 none, 구매했다면 knight/progress/victory_point 중 하나를 고릅니다.",
+        "group": "turn",
+        "key": "player.development.boughtThisTurnType",
+        "label": "이번 턴에 산 개발 카드 종류",
+        "lifetime": "session",
+        "options": [
+          {
+            "label": "구매하지 않음",
+            "value": "none"
+          },
+          {
+            "label": "기사",
+            "value": "knight"
+          },
+          {
+            "label": "진보 카드",
+            "value": "progress"
+          },
+          {
+            "label": "승점 카드",
+            "value": "victory_point"
+          },
+          {
+            "label": "여러 종류의 카드를 구매함",
+            "value": "mixed"
+          }
+        ],
+        "preservationId": "newly-bought-development-card",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "select",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.developmentCardBoughtThisTurn",
+                    "op": "eq",
+                    "value": true
+                  },
+                  {
+                    "field": "currentPlayer",
+                    "op": "eq",
+                    "value": "$owner"
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "이번 턴 구매한 카드 전부의 종류·수량·구분을 기록하거나 새 카드 묶음을 따로 보관합니다. 예: 기사 1장, 승점 1장.",
+        "group": "turn",
+        "key": "player.development.boughtThisTurnIdentity",
+        "label": "이번 턴에 산 개발 카드 이름",
+        "lifetime": "session",
+        "preservationId": "newly-bought-development-card",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "currentPlayer",
+                    "op": "eq",
+                    "owner": "public",
+                    "value": "$owner"
+                  },
+                  {
+                    "field": "player.development.boughtThisTurnType",
+                    "op": "neq",
+                    "owner": "$owner",
+                    "value": "none"
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "소유자 앞에 공개된 기사 카드 수입니다. 손에 든 미사용 기사는 세지 않습니다.",
+        "group": "awards",
+        "key": "player.development.knightsPlayed",
+        "label": "내가 공개 사용한 기사 수",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "이번 턴에 산 기사/진보 카드는 같은 턴에 사용할 수 없습니다.",
+        "group": "turn",
+        "key": "player.development.newActionCardUnavailableThisTurn",
+        "label": "새 행동 개발 카드 이번 턴 사용 불가",
+        "lifetime": "turn",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "승점 카드는 새 행동 카드 제한과 구별합니다. 실제 승리 여부는 본인 차례의 총승점으로 판단합니다.",
+        "group": "turn",
+        "key": "player.development.newVictoryPointCanBeRevealedToWin",
+        "label": "새 승점 카드의 승리 선언 예외",
+        "lifetime": "turn",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "공개 사용한 기사 3장 이상으로 기준을 충족하는지 나타냅니다.",
+        "group": "derived",
+        "key": "player.development.qualifiesForLargestArmy",
+        "label": "최대 기사단 기준 충족",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "분기점에서는 가장 긴 한 갈래만 셉니다. 보드에 놓인 도로에서 현재 길이를 확인합니다.",
+        "group": "awards",
+        "key": "player.road.longestContinuousSegments",
+        "label": "내 최장 연속 도로 길이",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "연속 도로 5개 이상으로 기준을 충족하는지 나타냅니다.",
+        "group": "derived",
+        "key": "player.road.qualifiesForLongestRoad",
+        "label": "최장 도로 기준 충족",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-awards",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "observe",
+        "description": "현재 플레이어가 기사/진보 카드를 이미 하나 사용한 상태입니다.",
+        "group": "turn",
+        "key": "turn.actionDevelopmentCardLimitReached",
+        "label": "이번 턴 행동 개발 카드 제한 도달",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "실제 카드 보유자를 기록합니다. 길이만으로 동률 상태의 보유자를 추측하지 않습니다.",
+        "group": "awards",
+        "key": "awards.longestRoadHolder",
+        "label": "최장 도로 카드 보유자",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-awards",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "실제 카드 보유자를 기록합니다. 기사 수만으로 동률 상태의 보유자를 추측하지 않습니다.",
+        "group": "awards",
+        "key": "awards.largestArmyHolder",
+        "label": "최대 기사단 카드 보유자",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-awards",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "은행의 벽돌·목재·양모·곡물·광석 더미를 종류별로 분리해 보존합니다.",
+        "group": "components",
+        "key": "physical.bankResources",
+        "label": "은행 자원 카드",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-components",
+        "type": "json",
+        "ui": {
+          "editor": "resource-counts",
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "각 색상의 남은 도로·정착지·도시 조각을 기록하거나 색상별로 따로 보존합니다.",
+        "group": "components",
+        "key": "physical.availablePieces",
+        "label": "색상별 남은 구성품",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-components",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "preserve",
+        "description": "더미는 물리적으로 원래 순서를 유지하고 순서 자체는 디지털화하지 않습니다.",
+        "group": "components",
+        "key": "ordered-development-deck",
+        "label": "뒤집힌 개발 카드 더미 보존",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-components",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "플레이어가 실제로 말한 계획만 기록합니다. 말하지 않은 의도나 과거 생각은 게임 상태에서 추론하지 않습니다.",
+        "group": "private",
+        "key": "player.private.planNote",
+        "label": "내가 말한 계획 메모(선택)",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "rules-turn",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "아직 남은 처리를 선택하세요. 완료한 행동을 추측하지 않습니다.",
+        "group": "turn",
+        "key": "turn.pendingEffect",
+        "label": "아직 처리 중인 효과·절차",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "없음 · 현재 단계 계속",
+            "value": "none"
+          },
+          {
+            "label": "자원 생산·지급",
+            "value": "production"
+          },
+          {
+            "label": "거래·교환",
+            "value": "trade"
+          },
+          {
+            "label": "기사·도둑 효과",
+            "value": "knight"
+          },
+          {
+            "label": "도로 건설 카드",
+            "value": "road_building"
+          },
+          {
+            "label": "발견 카드",
+            "value": "year_of_plenty"
+          },
+          {
+            "label": "독점 카드",
+            "value": "monopoly"
+          },
+          {
+            "label": "다른 처리·선택",
+            "value": "other"
+          }
+        ],
+        "scope": "public",
+        "sourceId": "rules-development",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "예: 도로 건설 카드의 첫 도로 완료, 두 번째 도로를 놓기 전. 지급 중이면 아직 받을 사람과 자원을 적습니다.",
+        "group": "turn",
+        "key": "turn.pendingEffectDetails",
+        "label": "완료한 처리와 남은 처리",
+        "lifetime": "turn",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "type": "text",
+        "ui": {
+          "level": "primary",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.pendingEffect",
+                    "op": "neq",
+                    "value": "none"
+                  },
+                  {
+                    "field": "turn.productionResolved",
+                    "op": "eq",
+                    "value": false
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 중단 단계에 따른 절차입니다.",
+        "group": "resume",
+        "key": "resume.nextProcedure",
+        "label": "재개 후 다음 절차",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 50
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "7의 버리기를 진행 중일 때 실제로 남은 수량입니다. 이미 마쳤다면 0입니다.",
+        "group": "turn",
+        "key": "player.discard.remainingCount",
+        "label": "아직 버려야 하는 자원 수",
+        "lifetime": "turn",
+        "scope": "player",
+        "sourceId": "rules-seven",
+        "type": "number",
+        "ui": {
+          "level": "primary",
+          "order": 50,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "turn.phase",
+                "op": "eq",
+                "value": "seven_discard"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "rules",
+        "key": "rulesProfile",
+        "label": "규칙 판본",
+        "lifetime": "session",
+        "options": [
+          {
+            "label": "6판 · 2025",
+            "value": "base-6e-2025"
+          },
+          {
+            "label": "2020 규칙",
+            "value": "base-2020"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "rules",
+        "key": "tradeBuildMode",
+        "label": "거래·건설 순서",
+        "lifetime": "session",
+        "options": [
+          {
+            "label": "통합 · 거래/건설 자유 순서",
+            "value": "combined"
+          },
+          {
+            "label": "분리 · 거래 후 건설",
+            "value": "separate"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "turn.trade",
+        "label": "중단된 실제 교역",
+        "lifetime": "turn",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "level": "primary",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "robber.cause",
+        "label": "도둑 활성화 원인",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "주사위 7 · 버리기 포함",
+            "value": "seven"
+          },
+          {
+            "label": "기사 · 버리기 없음",
+            "value": "knight"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_move"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_steal"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "turn.returnPhase",
+        "label": "효과 처리 후 돌아갈 단계",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "주사위 굴리기 전",
+            "value": "await_roll"
+          },
+          {
+            "label": "자원 생산·지급 중",
+            "value": "production"
+          },
+          {
+            "label": "7: 자원 버리기",
+            "value": "seven_discard"
+          },
+          {
+            "label": "7/기사: 도둑 이동",
+            "value": "robber_move"
+          },
+          {
+            "label": "도둑: 자원 훔치기",
+            "value": "robber_steal"
+          },
+          {
+            "label": "거래",
+            "value": "trade"
+          },
+          {
+            "label": "건설/개발 카드 구매",
+            "value": "build"
+          },
+          {
+            "label": "턴 넘기기 전",
+            "value": "end_turn"
+          },
+          {
+            "label": "초기 배치",
+            "value": "setup"
+          },
+          {
+            "label": "행동 · 거래와 건설",
+            "value": "action"
+          },
+          {
+            "label": "게임 종료",
+            "value": "finished"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_move"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "robber_steal"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "turn.productionRemaining",
+        "label": "남은 자원 지급·은행 부족",
+        "lifetime": "turn",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "production"
+                  },
+                  {
+                    "field": "turn.productionResolved",
+                    "op": "eq",
+                    "value": false
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "setup.round",
+        "label": "초기 배치 차수 · 1 또는 2",
+        "lifetime": "turn",
+        "scope": "public",
+        "type": "number",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "turn.phase",
+                "op": "eq",
+                "value": "setup"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "setup.step",
+        "label": "초기 배치 다음 처리",
+        "lifetime": "turn",
+        "options": [
+          {
+            "label": "마을 놓기",
+            "value": "settlement"
+          },
+          {
+            "label": "해당 마을의 도로 놓기",
+            "value": "road"
+          },
+          {
+            "label": "둘째 마을의 시작 자원 지급",
+            "value": "starting_resources"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "turn.phase",
+                "op": "eq",
+                "value": "setup"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "rules",
+        "key": "setup.seatOrderConfirmed",
+        "label": "좌석이 실제 턴 순서인가요",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "boolean",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "field": "turn.phase",
+                "op": "eq",
+                "value": "setup"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "turn",
+        "key": "setup.startingResourcesResolvedByPlayer",
+        "label": "둘째 마을 시작 자원 지급 완료",
+        "lifetime": "turn",
+        "scope": "player",
+        "type": "boolean",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "setup"
+                  },
+                  {
+                    "field": "setup.round",
+                    "op": "eq",
+                    "value": 2
+                  }
+                ],
+                "op": "and"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "rules",
+        "key": "game.status",
+        "label": "게임 진행/종료",
+        "lifetime": "session",
+        "options": [
+          {
+            "label": "진행 중",
+            "value": "playing"
+          },
+          {
+            "label": "종료 확인",
+            "value": "finished"
+          }
+        ],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "rules",
+        "key": "game.winnerPlayerId",
+        "label": "확인한 승자",
+        "lifetime": "session",
+        "options": [],
+        "scope": "public",
+        "type": "select",
+        "ui": {
+          "level": "primary",
+          "order": 30,
+          "showWhen": {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "field": "game.status",
+                    "op": "eq",
+                    "value": "finished"
+                  },
+                  {
+                    "field": "turn.phase",
+                    "op": "eq",
+                    "value": "finished"
+                  }
+                ],
+                "op": "or"
+              }
+            ],
+            "op": "or"
+          }
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "physical",
+        "key": "player.pieces.remaining",
+        "label": "실제 남은 도로·마을·도시",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 60
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "physical",
+        "key": "physical.standardSupplyConfirmed",
+        "label": "기본 공급량·누락 없음 확인",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 60
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "development",
+        "key": "player.score.hiddenVictoryPoints",
+        "label": "내 비공개 승점 카드 수",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 60
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구매 턴·종류별 수 또는 정체 미상의 실물 묶음을 보존합니다. 전체 손패에 다시 더하지 않습니다.",
+        "group": "development",
+        "key": "player.development.purchaseBatches",
+        "label": "구매 카드 묶음 · 전체 손패의 부분집합",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "level": "detail",
+          "order": 60
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "확인한 실제 상태를 기록합니다. 모르면 비워 두세요.",
+        "group": "development",
+        "key": "player.development.unusedTotal",
+        "label": "확인한 미사용 개발 카드 총수",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "level": "detail",
+          "order": 60
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "catan-base",
+    "placement": {
+      "slots": [
+        {
+          "kind": "road",
+          "locationTypes": [
+            "edge",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "settlement",
+          "locationTypes": [
+            "vertex",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "city",
+          "locationTypes": [
+            "vertex",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "terrain",
+          "locationTypes": [
+            "hex",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "number-token",
+          "locationTypes": [
+            "hex",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "robber",
+          "locationTypes": [
+            "hex",
+            "unplaced"
+          ]
+        },
+        {
+          "kind": "harbor",
+          "locationTypes": [
+            "edge",
+            "unplaced"
+          ]
+        }
+      ],
+      "topology": "catan-base"
+    },
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "항구의 해안 변·종류·비율과 두 접점을 유지합니다. 미확인 항구를 채워 넣지 않습니다.",
+          "말의 소유·위치·관계가 원본 또는 배치 기록에 남았는지 확인합니다.",
+          "타일·숫자 토큰·색상별 말을 구분된 칸에 넣고 위치를 적습니다.",
+          "기록하지 못한 관계는 분해하지 않고 실제 배치나 별도 묶음으로 유지합니다."
+        ],
+        "description": "바다 프레임·항구와 육지 → 숫자 → 건물·도로·도둑 순으로 원본과 맞춰 복원합니다.",
+        "id": "board-public-state",
+        "label": "공개 보드와 보드 위 말",
+        "restoreAfter": [],
+        "scope": "public",
+        "visualFields": [
+          "board.layout",
+          "components.observed",
+          "robber.hexAnchor"
+        ]
+      },
+      {
+        "conditions": [
+          "벽돌·목재·양모·곡물·광석 카드를 소유자별로 따로 둡니다.",
+          "숨은 손패는 해당 플레이어만 열 수 있도록 닫힌 봉투/트레이를 사용합니다.",
+          "복원할 때는 공개 보드 상태를 맞춘 뒤 각 봉투를 소유자에게 돌려주고 종류별 수량을 대조합니다."
+        ],
+        "description": "각 플레이어의 자원 카드를 색상/소유자별로 분리한 봉투나 작은 트레이에 넣습니다. 손패를 한데 섞지 않습니다.",
+        "id": "player-resource-hands",
+        "label": "플레이어별 자원 손패",
+        "restoreAfter": [
+          "board-public-state",
+          "physical.bankResources",
+          "ordered-development-deck"
+        ],
+        "scope": "player"
+      },
+      {
+        "conditions": [
+          "기사·진보·승점 카드를 현재 소유자별로 나눠 둡니다.",
+          "카드를 공개하거나 다시 섞지 않습니다. 현재 손패 카드 수/종류를 확인할 수 있으면 소유자만 기록합니다.",
+          "복원할 때는 공개 보드 상태를 맞춘 뒤 기존 카드를 소유자에게 돌려주고 승점 카드는 계속 뒤집어 둡니다."
+        ],
+        "description": "턴 시작 전에 보유하던 개발 카드는 소유자별 불투명 봉투에 넣고, 다른 플레이어 카드와 섞지 않습니다.",
+        "id": "player.development.handCounts",
+        "label": "기존 개발 카드 손패",
+        "restoreAfter": [
+          "board-public-state",
+          "physical.bankResources",
+          "ordered-development-deck"
+        ],
+        "scope": "player"
+      },
+      {
+        "conditions": [
+          "이번 턴 구매 카드를 기존 손패와 분리하고 구매 플레이어와 턴 ID를 연결합니다.",
+          "카드 정체를 다른 플레이어에게 공개하지 않습니다.",
+          "복원할 때는 기존 개발 카드를 맞춘 뒤 새 카드를 구매자에게 돌려주고 기사/진보 카드는 이번 턴에 사용하지 않습니다."
+        ],
+        "description": "이번 턴 구매분을 전체 미사용 손패 안에서 구분하고, 이미 전체 수량에 포함된 부분집합으로 보관합니다. 턴이 바뀌어도 카드 정체를 버리지 않습니다.",
+        "id": "newly-bought-development-card",
+        "label": "이번 턴에 새로 산 개발 카드",
+        "restoreAfter": [
+          "player.development.handCounts"
+        ],
+        "scope": "player",
+        "when": {
+          "conditions": [
+            {
+              "conditions": [
+                {
+                  "field": "turn.developmentCardBoughtThisTurn",
+                  "op": "eq",
+                  "owner": "public",
+                  "value": true
+                },
+                {
+                  "field": "currentPlayer",
+                  "op": "eq",
+                  "owner": "public",
+                  "value": "$owner"
+                }
+              ],
+              "op": "and"
+            },
+            {
+              "conditions": [
+                {
+                  "field": "player.development.purchaseBatches",
+                  "op": "exists",
+                  "owner": "$owner"
+                },
+                {
+                  "field": "player.development.purchaseBatches",
+                  "op": "neq",
+                  "owner": "$owner",
+                  "value": []
+                }
+              ],
+              "op": "and"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "conditions": [
+          "더미를 기존 보관 위치에 뒤집어 두고, 폐기 카드와 분리합니다.",
+          "카드를 세거나 펼쳐 순서를 노출하지 않습니다.",
+          "복원할 때 공개 보드 상태를 맞춘 뒤 같은 더미를 같은 방향과 순서로 둡니다."
+        ],
+        "description": "개발 카드 더미를 원래 순서 그대로 뒤집어 둡니다. 순서를 디지털로 읽거나 기록하지 않습니다.",
+        "id": "ordered-development-deck",
+        "label": "뒤집힌 개발 카드 더미",
+        "restoreAfter": [
+          "board-public-state"
+        ],
+        "scope": "public"
+      },
+      {
+        "conditions": [
+          "벽돌·목재·양모·곡물·광석 더미를 각각 별도 칸에 둡니다.",
+          "은행 카드와 플레이어 손패를 같은 봉투에 넣지 않습니다.",
+          "복원할 때 공개 보드 상태를 맞춘 뒤 다섯 자원 더미를 은행 위치에 되돌립니다."
+        ],
+        "description": "은행의 다섯 자원 더미를 종류별로 나눠 지정된 보관함에 둡니다.",
+        "id": "physical.bankResources",
+        "label": "은행 자원 카드 더미",
+        "restoreAfter": [
+          "board-public-state"
+        ],
+        "scope": "public"
+      },
+      {
+        "conditions": [
+          "미사용 조각은 색상·종류별로 구분합니다.",
+          "보드에서 회수한 말과 미사용 말을 구분해 보관합니다.",
+          "공개 배치를 먼저 복원한 뒤 미사용 조각을 소유자에게 돌려줍니다."
+        ],
+        "description": "각 색상의 남은 도로·정착지·도시를 색상별 칸에 보관합니다.",
+        "id": "physical.availablePieces",
+        "label": "색상별 남은 도로·정착지·도시 조각",
+        "restoreAfter": [
+          "board-public-state"
+        ],
+        "scope": "public"
+      },
+      {
+        "conditions": [
+          "공개 기사 수와 소유자 구분을 유지합니다.",
+          "사용한 카드를 남은 덱이나 손패에 섞지 않습니다."
+        ],
+        "description": "사용한 기사·진보 카드를 소유자별로 묶어 미사용 손패·남은 덱과 구분합니다.",
+        "id": "played-development-cards",
+        "label": "사용한 개발 카드",
+        "restoreAfter": [
+          "board-public-state"
+        ],
+        "scope": "player"
+      },
+      {
+        "conditions": [
+          "바다 프레임·항구와 육지 → 숫자 → 건물·도로·도둑 순으로 원본과 맞춰 복원합니다.",
+          "항구의 해안 변·종류·비율과 두 접점을 유지합니다. 미확인 항구를 채워 넣지 않습니다.",
+          "말의 소유·위치·관계가 원본 또는 배치 기록에 남았는지 확인합니다.",
+          "타일·숫자 토큰·색상별 말을 구분된 칸에 넣고 위치를 적습니다.",
+          "기록하지 못한 관계는 분해하지 않고 실제 배치나 별도 묶음으로 유지합니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.board-public-state",
+        "label": "공개 보드와 보드 위 말",
+        "method": "photo",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "각 플레이어의 자원 카드를 색상/소유자별로 분리한 봉투나 작은 트레이에 넣습니다. 손패를 한데 섞지 않습니다.",
+          "벽돌·목재·양모·곡물·광석 카드를 소유자별로 따로 둡니다.",
+          "숨은 손패는 해당 플레이어만 열 수 있도록 닫힌 봉투/트레이를 사용합니다.",
+          "복원할 때는 공개 보드 상태를 맞춘 뒤 각 봉투를 소유자에게 돌려주고 종류별 수량을 대조합니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.player-resource-hands",
+        "label": "플레이어별 자원 손패",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.board-public-state",
+          "spec.physical.bankResources",
+          "spec.ordered-development-deck"
+        ],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      },
+      {
+        "conditions": [
+          "턴 시작 전에 보유하던 개발 카드는 소유자별 불투명 봉투에 넣고, 다른 플레이어 카드와 섞지 않습니다.",
+          "기사·진보·승점 카드를 현재 소유자별로 나눠 둡니다.",
+          "카드를 공개하거나 다시 섞지 않습니다. 현재 손패 카드 수/종류를 확인할 수 있으면 소유자만 기록합니다.",
+          "복원할 때는 공개 보드 상태를 맞춘 뒤 기존 카드를 소유자에게 돌려주고 승점 카드는 계속 뒤집어 둡니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.player.development.handCounts",
+        "label": "기존 개발 카드 손패",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.board-public-state",
+          "spec.physical.bankResources",
+          "spec.ordered-development-deck"
+        ],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      },
+      {
+        "conditions": [
+          "이번 턴 구매분을 전체 미사용 손패 안에서 구분하고, 이미 전체 수량에 포함된 부분집합으로 보관합니다. 턴이 바뀌어도 카드 정체를 버리지 않습니다.",
+          "이번 턴 구매 카드를 기존 손패와 분리하고 구매 플레이어와 턴 ID를 연결합니다.",
+          "카드 정체를 다른 플레이어에게 공개하지 않습니다.",
+          "복원할 때는 기존 개발 카드를 맞춘 뒤 새 카드를 구매자에게 돌려주고 기사/진보 카드는 이번 턴에 사용하지 않습니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.newly-bought-development-card",
+        "label": "이번 턴에 새로 산 개발 카드",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.player.development.handCounts"
+        ],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      },
+      {
+        "conditions": [
+          "개발 카드 더미를 원래 순서 그대로 뒤집어 둡니다. 순서를 디지털로 읽거나 기록하지 않습니다.",
+          "더미를 기존 보관 위치에 뒤집어 두고, 폐기 카드와 분리합니다.",
+          "카드를 세거나 펼쳐 순서를 노출하지 않습니다.",
+          "복원할 때 공개 보드 상태를 맞춘 뒤 같은 더미를 같은 방향과 순서로 둡니다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
+        ],
+        "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
+        "externalOnly": false,
+        "id": "spec.ordered-development-deck",
+        "label": "뒤집힌 개발 카드 더미",
+        "method": "ordered-bundle",
+        "orderSensitive": true,
+        "restoreAfter": [
+          "spec.board-public-state"
+        ],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "은행의 다섯 자원 더미를 종류별로 나눠 지정된 보관함에 둡니다.",
+          "벽돌·목재·양모·곡물·광석 더미를 각각 별도 칸에 둡니다.",
+          "은행 카드와 플레이어 손패를 같은 봉투에 넣지 않습니다.",
+          "복원할 때 공개 보드 상태를 맞춘 뒤 다섯 자원 더미를 은행 위치에 되돌립니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.physical.bankResources",
+        "label": "은행 자원 카드 더미",
+        "method": "count",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.board-public-state"
+        ],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "각 색상의 남은 도로·정착지·도시를 색상별 칸에 보관합니다.",
+          "미사용 조각은 색상·종류별로 구분합니다.",
+          "보드에서 회수한 말과 미사용 말을 구분해 보관합니다.",
+          "공개 배치를 먼저 복원한 뒤 미사용 조각을 소유자에게 돌려줍니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.physical.availablePieces",
+        "label": "색상별 남은 도로·정착지·도시 조각",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.board-public-state"
+        ],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "사용한 기사·진보 카드를 소유자별로 묶어 미사용 손패·남은 덱과 구분합니다.",
+          "공개 기사 수와 소유자 구분을 유지합니다.",
+          "사용한 카드를 남은 덱이나 손패에 섞지 않습니다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.played-development-cards",
+        "label": "사용한 개발 카드",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [
+          "spec.board-public-state"
+        ],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      }
+    ],
+    "requirements": [
+      {
+        "fields": [
+          "board.layout"
+        ],
+        "id": "need-board-layout",
+        "priority": 100,
+        "reason": "타일 앵커를 이용해 공개 보드와 놓인 말을 복원합니다.",
+        "scope": "public",
+        "sourceId": "rules-setup"
+      },
+      {
+        "fields": [
+          "currentPlayer",
+          "turn.phase"
+        ],
+        "id": "need-turn-player-and-phase",
+        "priority": 100,
+        "reason": "현재 턴의 소유자와 진행 단계를 알아야 턴별 질문을 적용할 수 있습니다.",
+        "scope": "public",
+        "sourceId": "rules-turn"
+      },
+      {
+        "fields": [
+          "turn.diceTotal"
+        ],
+        "id": "need-dice-after-roll",
+        "priority": 90,
+        "reason": "주사위 값은 생산과 7 처리 여부를 결정합니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "when": {
+          "conditions": [
+            {
+              "conditions": [
+                {
+                  "field": "turn.phase",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "turn.productionResolved",
+                  "op": "eq",
+                  "value": false
+                }
+              ],
+              "op": "and"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "seven_discard"
+            },
+            {
+              "conditions": [
+                {
+                  "field": "robber.cause",
+                  "op": "eq",
+                  "value": "seven"
+                },
+                {
+                  "conditions": [
+                    {
+                      "field": "turn.phase",
+                      "op": "eq",
+                      "value": "robber_move"
+                    },
+                    {
+                      "field": "turn.phase",
+                      "op": "eq",
+                      "value": "robber_steal"
+                    }
+                  ],
+                  "op": "or"
+                }
+              ],
+              "op": "and"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "fields": [
+          "turn.productionResolved"
+        ],
+        "id": "need-production-resolution",
+        "priority": 85,
+        "reason": "굴림 이후 단계라면 생산이 처리되었는지 확인합니다.",
+        "scope": "public",
+        "sourceId": "rules-turn",
+        "when": {
+          "field": "turn.phase",
+          "op": "eq",
+          "value": "production"
+        }
+      },
+      {
+        "fields": [
+          "player.resources.counts",
+          "player.resources.total"
+        ],
+        "id": "need-player-resource-hands",
+        "priority": 95,
+        "reason": "손패는 소유자별 비공개 상태로 보존하고, 7에서 버릴 카드 수를 판단하는 데 총수가 필요합니다.",
+        "scope": "player",
+        "sourceId": "rules-seven"
+      },
+      {
+        "fields": [
+          "turn.sevenDiscardsResolved",
+          "robber.resolutionStep",
+          "robber.hexAnchor"
+        ],
+        "id": "need-seven-resolution",
+        "priority": 100,
+        "reason": "7이면 생산이 없고, 자원 버리기와 도둑 이동 절차를 완료해야 합니다.",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "when": {
+          "conditions": [
+            {
+              "conditions": [
+                {
+                  "field": "turn.phase",
+                  "op": "eq",
+                  "value": "seven_discard"
+                },
+                {
+                  "field": "turn.phase",
+                  "op": "eq",
+                  "value": "robber_move"
+                },
+                {
+                  "field": "turn.phase",
+                  "op": "eq",
+                  "value": "robber_steal"
+                }
+              ],
+              "op": "or"
+            },
+            {
+              "conditions": [
+                {
+                  "field": "turn.phase",
+                  "op": "eq",
+                  "value": "seven_discard"
+                },
+                {
+                  "field": "robber.cause",
+                  "op": "eq",
+                  "value": "seven"
+                }
+              ],
+              "op": "or"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "fields": [
+          "robber.targetHexAnchor"
+        ],
+        "id": "need-robber-destination",
+        "priority": 90,
+        "reason": "도둑을 옮기는 중이면 목적지 타일 앵커를 기록합니다.",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "when": {
+          "field": "robber.resolutionStep",
+          "op": "eq",
+          "owner": "public",
+          "value": "move"
+        }
+      },
+      {
+        "fields": [
+          "robber.stolenFromPlayerId"
+        ],
+        "id": "need-robber-victim",
+        "priority": 75,
+        "reason": "훔치기를 마친 뒤 자원을 준 플레이어를 기록합니다.",
+        "scope": "public",
+        "sourceId": "rules-seven",
+        "when": {
+          "field": "robber.resolutionStep",
+          "op": "eq",
+          "owner": "public",
+          "value": "steal"
+        }
+      },
+      {
+        "fields": [
+          "turn.actionDevelopmentCardPlayed"
+        ],
+        "id": "need-action-card-play-status",
+        "priority": 80,
+        "reason": "기사/진보 카드는 턴마다 하나의 사용 제한이 있습니다.",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "await_roll"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "production"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "trade"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "build"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "action"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_move"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_steal"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "end_turn"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "fields": [
+          "turn.developmentCardBoughtThisTurn"
+        ],
+        "id": "need-purchase-status",
+        "priority": 80,
+        "reason": "이번 턴 구매 여부를 공개 사건으로 확인하고, 카드 정체는 소유자 범위에 둡니다.",
+        "scope": "public",
+        "sourceId": "rules-development",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "trade"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "build"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "action"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "end_turn"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "fields": [
+          "player.development.boughtThisTurnType"
+        ],
+        "id": "need-bought-card-type",
+        "priority": 85,
+        "reason": "구매한 플레이어 본인만 카드 종류를 기록합니다.",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.developmentCardBoughtThisTurn",
+              "op": "eq",
+              "value": true
+            },
+            {
+              "field": "currentPlayer",
+              "op": "eq",
+              "value": "$owner"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "fields": [
+          "player.development.boughtThisTurnIdentity"
+        ],
+        "id": "need-bought-card-identity",
+        "priority": 60,
+        "reason": "구매한 카드가 확인되는 경우에만 이름을 추가합니다.",
+        "scope": "player",
+        "sourceId": "rules-development",
+        "when": {
+          "conditions": [
+            {
+              "field": "currentPlayer",
+              "op": "eq",
+              "owner": "public",
+              "value": "$owner"
+            },
+            {
+              "field": "player.development.boughtThisTurnType",
+              "op": "neq",
+              "owner": "$owner",
+              "value": "none"
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "fields": [
+          "awards.longestRoadHolder",
+          "awards.largestArmyHolder"
+        ],
+        "id": "need-public-award-holders",
+        "priority": 55,
+        "reason": "실제 특수 카드 보유자를 확인해 동률/인계 상태를 그대로 보존합니다.",
+        "scope": "public",
+        "sourceId": "rules-awards"
+      },
+      {
+        "fields": [
+          "player.road.longestContinuousSegments",
+          "player.development.knightsPlayed"
+        ],
+        "id": "need-award-eligibility-counts",
+        "priority": 45,
+        "reason": "현재 도로 길이와 공개 기사 수가 기준 이상인지 확인할 때 사용합니다.",
+        "scope": "player",
+        "sourceId": "rules-awards"
+      },
+      {
+        "fields": [
+          "turn.pendingEffect"
+        ],
+        "id": "need-pending-effect",
+        "priority": 99,
+        "reason": "같은 배치라도 처리 중인 효과에 따라 재개 절차가 달라집니다.",
+        "scope": "public"
+      },
+      {
+        "fields": [
+          "turn.pendingEffectDetails"
+        ],
+        "id": "need-pending-details",
+        "priority": 99,
+        "reason": "이미 마친 행동을 반복하지 않고 남은 처리부터 이어 갑니다.",
+        "scope": "public",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.pendingEffect",
+              "op": "neq",
+              "value": "none"
+            },
+            {
+              "field": "turn.productionResolved",
+              "op": "eq",
+              "value": false
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "fields": [
+          "player.development.handCounts"
+        ],
+        "id": "need-development-hand",
+        "priority": 70,
+        "reason": "기존 개발 카드를 기록하거나 소유자별 실물 묶음으로 유지합니다.",
+        "scope": "player"
+      },
+      {
+        "fields": [
+          "ordered-development-deck"
+        ],
+        "id": "need-ordered-deck",
+        "priority": 80,
+        "reason": "찍지 않은 더미 내부 순서는 실물 묶음으로 보존합니다.",
+        "scope": "public"
+      },
+      {
+        "fields": [
+          "player.discard.remainingCount"
+        ],
+        "id": "need-discard-remaining",
+        "priority": 100,
+        "reason": "현재 손패로 이미 버린 수량을 추측하지 않고 실제 남은 처리만 확인합니다.",
+        "scope": "player",
+        "when": {
+          "field": "turn.phase",
+          "op": "eq",
+          "value": "seven_discard"
+        }
+      },
+      {
+        "fields": [
+          "rulesProfile",
+          "tradeBuildMode"
+        ],
+        "id": "need-profile",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "public"
+      },
+      {
+        "fields": [
+          "robber.cause",
+          "turn.returnPhase",
+          "robber.resolutionStep"
+        ],
+        "id": "need-robber-origin",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "public",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_move"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "robber_steal"
+            }
+          ],
+          "op": "or"
+        }
+      },
+      {
+        "fields": [
+          "setup.round",
+          "setup.step",
+          "setup.seatOrderConfirmed"
+        ],
+        "id": "need-setup",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "public",
+        "when": {
+          "field": "turn.phase",
+          "op": "eq",
+          "value": "setup"
+        }
+      },
+      {
+        "fields": [
+          "setup.startingResourcesResolvedByPlayer"
+        ],
+        "id": "need-starting-resources",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "player",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "setup"
+            },
+            {
+              "field": "setup.round",
+              "op": "eq",
+              "value": 2
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "fields": [
+          "turn.productionRemaining"
+        ],
+        "id": "need-production-remaining",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "public",
+        "when": {
+          "conditions": [
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "production"
+            },
+            {
+              "field": "turn.productionResolved",
+              "op": "eq",
+              "value": false
+            }
+          ],
+          "op": "and"
+        }
+      },
+      {
+        "fields": [
+          "game.winnerPlayerId"
+        ],
+        "id": "need-finished",
+        "priority": 95,
+        "reason": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다.",
+        "scope": "public",
+        "when": {
+          "conditions": [
+            {
+              "field": "game.status",
+              "op": "eq",
+              "value": "finished"
+            },
+            {
+              "field": "turn.phase",
+              "op": "eq",
+              "value": "finished"
+            }
+          ],
+          "op": "or"
+        }
+      }
+    ],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "terrain",
+          "kind": "terrain",
+          "name": "지형",
+          "variants": [
+            {
+              "id": "forest",
+              "name": "forest"
+            },
+            {
+              "id": "pasture",
+              "name": "pasture"
+            },
+            {
+              "id": "fields",
+              "name": "fields"
+            },
+            {
+              "id": "hills",
+              "name": "hills"
+            },
+            {
+              "id": "mountains",
+              "name": "mountains"
+            },
+            {
+              "id": "desert",
+              "name": "desert"
+            }
+          ]
+        },
+        {
+          "id": "number-token",
+          "kind": "number-token",
+          "name": "숫자 토큰",
+          "variants": []
+        },
+        {
+          "id": "road",
+          "kind": "road",
+          "name": "도로",
+          "variants": []
+        },
+        {
+          "id": "settlement",
+          "kind": "settlement",
+          "name": "마을",
+          "variants": []
+        },
+        {
+          "id": "city",
+          "kind": "city",
+          "name": "도시",
+          "variants": []
+        },
+        {
+          "id": "robber",
+          "kind": "robber",
+          "name": "도둑",
+          "variants": []
+        },
+        {
+          "id": "resource-card",
+          "kind": "resource-card",
+          "name": "자원 카드",
+          "variants": [
+            {
+              "id": "lumber",
+              "name": "lumber"
+            },
+            {
+              "id": "wool",
+              "name": "wool"
+            },
+            {
+              "id": "grain",
+              "name": "grain"
+            },
+            {
+              "id": "brick",
+              "name": "brick"
+            },
+            {
+              "id": "ore",
+              "name": "ore"
+            },
+            {
+              "id": "hidden",
+              "name": "hidden"
+            }
+          ]
+        },
+        {
+          "id": "development-card",
+          "kind": "development-card",
+          "name": "개발 카드",
+          "variants": [
+            {
+              "id": "knight",
+              "name": "knight"
+            },
+            {
+              "id": "victory-point",
+              "name": "victory-point"
+            },
+            {
+              "id": "road-building",
+              "name": "road-building"
+            },
+            {
+              "id": "year-of-plenty",
+              "name": "year-of-plenty"
+            },
+            {
+              "id": "monopoly",
+              "name": "monopoly"
+            },
+            {
+              "id": "hidden",
+              "name": "hidden"
+            }
+          ]
+        },
+        {
+          "id": "token",
+          "kind": "token",
+          "name": "표식·특수 카드",
+          "variants": [
+            {
+              "id": "longest-road",
+              "name": "longest-road"
+            },
+            {
+              "id": "largest-army",
+              "name": "largest-army"
+            },
+            {
+              "id": "harbor",
+              "name": "harbor"
+            },
+            {
+              "id": "building-cost",
+              "name": "building-cost"
+            }
+          ]
+        },
+        {
+          "id": "deck",
+          "kind": "deck",
+          "name": "카드 더미",
+          "variants": [
+            {
+              "id": "development",
+              "name": "development"
+            },
+            {
+              "id": "lumber",
+              "name": "lumber"
+            },
+            {
+              "id": "wool",
+              "name": "wool"
+            },
+            {
+              "id": "grain",
+              "name": "grain"
+            },
+            {
+              "id": "brick",
+              "name": "brick"
+            },
+            {
+              "id": "ore",
+              "name": "ore"
+            }
+          ]
+        },
+        {
+          "id": "container",
+          "kind": "container",
+          "name": "보관 용기",
+          "variants": [
+            {
+              "id": "box",
+              "name": "box"
+            },
+            {
+              "id": "tray",
+              "name": "tray"
+            },
+            {
+              "id": "bag",
+              "name": "bag"
+            }
+          ]
+        },
+        {
+          "id": "harbor",
+          "kind": "harbor",
+          "name": "항구",
+          "variants": [
+            {
+              "id": "generic",
+              "name": "generic"
+            },
+            {
+              "id": "lumber",
+              "name": "lumber"
+            },
+            {
+              "id": "brick",
+              "name": "brick"
+            },
+            {
+              "id": "wool",
+              "name": "wool"
+            },
+            {
+              "id": "grain",
+              "name": "grain"
+            },
+            {
+              "id": "ore",
+              "name": "ore"
+            }
+          ]
+        },
+        {
+          "id": "unknown",
+          "kind": "unknown",
+          "name": "미확인 부품",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "board"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "components.observed",
+          "label": "사진 속 구성물",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "components.observed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.components.observed",
+          "label": "내 구성물",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.components.observed",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "board"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "board.layout",
+          "label": "19개 타일과 공개 배치",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "board.layout",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "board-public-state",
+          "label": "공개 보드 상태 보존",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "board-public-state",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player-resource-hands",
+          "label": "플레이어별 자원 손패 보존",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player-resource-hands",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "currentPlayer",
+          "label": "현재 플레이어",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "currentPlayer",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.phase",
+          "label": "현재 턴 단계",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.phase",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.diceTotal",
+          "label": "이번 주사위 합",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.diceTotal",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.productionResolved",
+          "label": "생산 처리 완료",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.productionResolved",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.actionDevelopmentCardPlayed",
+          "label": "이번 턴 행동 개발 카드 사용 여부",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.actionDevelopmentCardPlayed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.developmentCardBoughtThisTurn",
+          "label": "이번 턴 개발 카드 구매 여부",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.developmentCardBoughtThisTurn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.sevenDiscardsResolved",
+          "label": "7의 자원 버리기 처리 완료",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.sevenDiscardsResolved",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "robber.hexAnchor",
+          "label": "현재 도둑 타일",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "robber.hexAnchor",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "robber.resolutionStep",
+          "label": "도둑/7 처리 단계",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "robber.resolutionStep",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "robber.targetHexAnchor",
+          "label": "도둑 이동 목적지",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "robber.targetHexAnchor",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "robber.stolenFromPlayerId",
+          "label": "도둑에게서 자원을 빼앗긴 플레이어",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "robber.stolenFromPlayerId",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.resources.counts",
+          "label": "내 자원 손패 수량",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.resources.counts",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.resources.total",
+          "label": "내 자원 카드 총수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.resources.total",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.resources.mustDiscardHalf",
+          "label": "7에서 절반 버리기 대상",
+          "lifetime": "turn",
+          "scope": "player",
+          "sourceId": "player.resources.mustDiscardHalf",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.handCounts",
+          "label": "내 손에 든 개발 카드",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.handCounts",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "newly-bought-development-card",
+          "label": "이번 턴에 산 개발 카드 보존",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "newly-bought-development-card",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.boughtThisTurnType",
+          "label": "이번 턴에 산 개발 카드 종류",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.boughtThisTurnType",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.boughtThisTurnIdentity",
+          "label": "이번 턴에 산 개발 카드 이름",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.boughtThisTurnIdentity",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.knightsPlayed",
+          "label": "내가 공개 사용한 기사 수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.knightsPlayed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.newActionCardUnavailableThisTurn",
+          "label": "새 행동 개발 카드 이번 턴 사용 불가",
+          "lifetime": "turn",
+          "scope": "player",
+          "sourceId": "player.development.newActionCardUnavailableThisTurn",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.newVictoryPointCanBeRevealedToWin",
+          "label": "새 승점 카드의 승리 선언 예외",
+          "lifetime": "turn",
+          "scope": "player",
+          "sourceId": "player.development.newVictoryPointCanBeRevealedToWin",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.qualifiesForLargestArmy",
+          "label": "최대 기사단 기준 충족",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.qualifiesForLargestArmy",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.road.longestContinuousSegments",
+          "label": "내 최장 연속 도로 길이",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.road.longestContinuousSegments",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.road.qualifiesForLongestRoad",
+          "label": "최장 도로 기준 충족",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.road.qualifiesForLongestRoad",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.actionDevelopmentCardLimitReached",
+          "label": "이번 턴 행동 개발 카드 제한 도달",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.actionDevelopmentCardLimitReached",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "awards.longestRoadHolder",
+          "label": "최장 도로 카드 보유자",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "awards.longestRoadHolder",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "awards.largestArmyHolder",
+          "label": "최대 기사단 카드 보유자",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "awards.largestArmyHolder",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "physical.bankResources",
+          "label": "은행 자원 카드",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "physical.bankResources",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "physical.availablePieces",
+          "label": "색상별 남은 구성품",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "physical.availablePieces",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "ordered-development-deck",
+          "label": "뒤집힌 개발 카드 더미 보존",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "ordered-development-deck",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.private.planNote",
+          "label": "내가 말한 계획 메모(선택)",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.private.planNote",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.pendingEffect",
+          "label": "아직 처리 중인 효과·절차",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.pendingEffect",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.pendingEffectDetails",
+          "label": "완료한 처리와 남은 처리",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.pendingEffectDetails",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "resume.nextProcedure",
+          "label": "재개 후 다음 절차",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "resume.nextProcedure",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.discard.remainingCount",
+          "label": "아직 버려야 하는 자원 수",
+          "lifetime": "turn",
+          "scope": "player",
+          "sourceId": "player.discard.remainingCount",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "rulesProfile",
+          "label": "규칙 판본",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "rulesProfile",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "tradeBuildMode",
+          "label": "거래·건설 순서",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "tradeBuildMode",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.trade",
+          "label": "중단된 실제 교역",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.trade",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "robber.cause",
+          "label": "도둑 활성화 원인",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "robber.cause",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.returnPhase",
+          "label": "효과 처리 후 돌아갈 단계",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.returnPhase",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "turn.productionRemaining",
+          "label": "남은 자원 지급·은행 부족",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "turn.productionRemaining",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "setup.round",
+          "label": "초기 배치 차수 · 1 또는 2",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "setup.round",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "setup.step",
+          "label": "초기 배치 다음 처리",
+          "lifetime": "turn",
+          "scope": "public",
+          "sourceId": "setup.step",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "setup.seatOrderConfirmed",
+          "label": "좌석이 실제 턴 순서인가요",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "setup.seatOrderConfirmed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "setup.startingResourcesResolvedByPlayer",
+          "label": "둘째 마을 시작 자원 지급 완료",
+          "lifetime": "turn",
+          "scope": "player",
+          "sourceId": "setup.startingResourcesResolvedByPlayer",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "game.status",
+          "label": "게임 진행/종료",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "game.status",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "game.winnerPlayerId",
+          "label": "확인한 승자",
+          "lifetime": "session",
+          "optionSource": "players",
+          "scope": "public",
+          "sourceId": "game.winnerPlayerId",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.pieces.remaining",
+          "label": "실제 남은 도로·마을·도시",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.pieces.remaining",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "physical.standardSupplyConfirmed",
+          "label": "기본 공급량·누락 없음 확인",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "physical.standardSupplyConfirmed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.score.hiddenVictoryPoints",
+          "label": "내 비공개 승점 카드 수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.score.hiddenVictoryPoints",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.purchaseBatches",
+          "label": "구매 카드 묶음 · 전체 손패의 부분집합",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.purchaseBatches",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "player.development.unusedTotal",
+          "label": "확인한 미사용 개발 카드 총수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "player.development.unusedTotal",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "이 팩은 기본판 3–4인 게임만 다룹니다. 5–6인 확장과 Seafarers, Cities & Knights 등 확장은 포함하지 않습니다.",
+        "상대 플레이어의 숨은 자원·개발 카드 내용은 추정하지 않습니다. 소유자 본인이 제공한 비공개 값만 기록합니다.",
+        "개발 카드 더미는 실물 순서를 그대로 유지합니다. 뒤집힌 더미의 순서는 디지털화하거나 검증하지 않습니다.",
+        "동률 시 특수 카드 보유와 도둑/자원 버리기 절차의 진행 단계는 실제 테이블 상태를 관찰해 기록합니다. 과거 의도나 미기록 행동은 추론하지 않습니다.",
+        "항구는 관측/직접 확인한 해안 변만 기록합니다. 부분 관측으로 누락 항구·실제 재고·과거 타이틀 보유자를 추정하지 않습니다.",
+        "이 어댑터는 기존 상세 계약을 새 연구 형식으로 표현한다. 새 형식의 제품 실행기/인식 품질/규칙 사실성을 검증한 것은 아니다.",
+        "5–6인, 항해사, 도시와 기사 등은 별도 패치. 가변 육각/선박/새 개인 상태는 기존 19칸 좌표에 억지 매핑하지 않는다.",
+        "6판/구판 항구 아트·배치와 숫자 배치 방식 차이. 상세 근거는 기존 카탄 연구를 참조.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+        "상세 참조는 구현솔이 제공한 독립 연구 형식의 스냅샷이다. 원래 제품 팩을 이 작업에서 변경하거나 새로 규칙 검증하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "Full hand counts and purchase subsets are not added twice. Purchase-turn limitation needs the recorded purchase turn; missing legacy turn is unknown.",
+          "The current UI uses optional recording mode; declarative requirements here do not activate missing forms.",
+          "57필드·25조건부 요구·17도출·8보존은 기존 상세 계약 참조다. 현재 앱의 선택 기록 방침을 유지하며 질문 완료를 저장 조건으로 만들지 않는다.",
+          "turn/round lifetime은 데이터 의미이며 재열기 시 초기화 명령이 아니다."
+        ],
+        "pendingActionFields": [
+          "turn.phase",
+          "turn.pendingEffect",
+          "turn.pendingEffectDetails"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [],
+      "rules": [
+        {
+          "id": "requirement.need-board-layout",
+          "kind": "requirement",
+          "label": "need-board-layout",
+          "summary": "타일 앵커를 이용해 공개 보드와 놓인 말을 복원합니다."
+        },
+        {
+          "id": "requirement.need-turn-player-and-phase",
+          "kind": "requirement",
+          "label": "need-turn-player-and-phase",
+          "summary": "현재 턴의 소유자와 진행 단계를 알아야 턴별 질문을 적용할 수 있습니다."
+        },
+        {
+          "id": "requirement.need-dice-after-roll",
+          "kind": "requirement",
+          "label": "need-dice-after-roll",
+          "summary": "주사위 값은 생산과 7 처리 여부를 결정합니다."
+        },
+        {
+          "id": "requirement.need-production-resolution",
+          "kind": "requirement",
+          "label": "need-production-resolution",
+          "summary": "굴림 이후 단계라면 생산이 처리되었는지 확인합니다."
+        },
+        {
+          "id": "requirement.need-player-resource-hands",
+          "kind": "requirement",
+          "label": "need-player-resource-hands",
+          "summary": "손패는 소유자별 비공개 상태로 보존하고, 7에서 버릴 카드 수를 판단하는 데 총수가 필요합니다."
+        },
+        {
+          "id": "requirement.need-seven-resolution",
+          "kind": "requirement",
+          "label": "need-seven-resolution",
+          "summary": "7이면 생산이 없고, 자원 버리기와 도둑 이동 절차를 완료해야 합니다."
+        },
+        {
+          "id": "requirement.need-robber-destination",
+          "kind": "requirement",
+          "label": "need-robber-destination",
+          "summary": "도둑을 옮기는 중이면 목적지 타일 앵커를 기록합니다."
+        },
+        {
+          "id": "requirement.need-robber-victim",
+          "kind": "requirement",
+          "label": "need-robber-victim",
+          "summary": "훔치기를 마친 뒤 자원을 준 플레이어를 기록합니다."
+        },
+        {
+          "id": "requirement.need-action-card-play-status",
+          "kind": "requirement",
+          "label": "need-action-card-play-status",
+          "summary": "기사/진보 카드는 턴마다 하나의 사용 제한이 있습니다."
+        },
+        {
+          "id": "requirement.need-purchase-status",
+          "kind": "requirement",
+          "label": "need-purchase-status",
+          "summary": "이번 턴 구매 여부를 공개 사건으로 확인하고, 카드 정체는 소유자 범위에 둡니다."
+        },
+        {
+          "id": "requirement.need-bought-card-type",
+          "kind": "requirement",
+          "label": "need-bought-card-type",
+          "summary": "구매한 플레이어 본인만 카드 종류를 기록합니다."
+        },
+        {
+          "id": "requirement.need-bought-card-identity",
+          "kind": "requirement",
+          "label": "need-bought-card-identity",
+          "summary": "구매한 카드가 확인되는 경우에만 이름을 추가합니다."
+        },
+        {
+          "id": "requirement.need-public-award-holders",
+          "kind": "requirement",
+          "label": "need-public-award-holders",
+          "summary": "실제 특수 카드 보유자를 확인해 동률/인계 상태를 그대로 보존합니다."
+        },
+        {
+          "id": "requirement.need-award-eligibility-counts",
+          "kind": "requirement",
+          "label": "need-award-eligibility-counts",
+          "summary": "현재 도로 길이와 공개 기사 수가 기준 이상인지 확인할 때 사용합니다."
+        },
+        {
+          "id": "requirement.need-pending-effect",
+          "kind": "requirement",
+          "label": "need-pending-effect",
+          "summary": "같은 배치라도 처리 중인 효과에 따라 재개 절차가 달라집니다."
+        },
+        {
+          "id": "requirement.need-pending-details",
+          "kind": "requirement",
+          "label": "need-pending-details",
+          "summary": "이미 마친 행동을 반복하지 않고 남은 처리부터 이어 갑니다."
+        },
+        {
+          "id": "requirement.need-development-hand",
+          "kind": "requirement",
+          "label": "need-development-hand",
+          "summary": "기존 개발 카드를 기록하거나 소유자별 실물 묶음으로 유지합니다."
+        },
+        {
+          "id": "requirement.need-ordered-deck",
+          "kind": "requirement",
+          "label": "need-ordered-deck",
+          "summary": "찍지 않은 더미 내부 순서는 실물 묶음으로 보존합니다."
+        },
+        {
+          "id": "requirement.need-discard-remaining",
+          "kind": "requirement",
+          "label": "need-discard-remaining",
+          "summary": "현재 손패로 이미 버린 수량을 추측하지 않고 실제 남은 처리만 확인합니다."
+        },
+        {
+          "id": "requirement.need-profile",
+          "kind": "requirement",
+          "label": "need-profile",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "requirement.need-robber-origin",
+          "kind": "requirement",
+          "label": "need-robber-origin",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "requirement.need-setup",
+          "kind": "requirement",
+          "label": "need-setup",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "requirement.need-starting-resources",
+          "kind": "requirement",
+          "label": "need-starting-resources",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "requirement.need-production-remaining",
+          "kind": "requirement",
+          "label": "need-production-remaining",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "requirement.need-finished",
+          "kind": "requirement",
+          "label": "need-finished",
+          "summary": "중단 지점의 실제 남은 작업과 확인 범위를 보존합니다."
+        },
+        {
+          "id": "derived.newly-bought-action-card-cannot-be-played",
+          "kind": "derived",
+          "label": "newly-bought-action-card-cannot-be-played",
+          "summary": "이번 턴에 산 기사/진보 카드는 같은 턴에 사용할 수 없습니다. 이 제한은 승점 카드 예외와 구분됩니다. 실행기 조건: 구매 assertion의 turnInstanceId가 현재 턴과 같을 때만 적용한다. 구매 턴 미상은 추측하지 않는다."
+        },
+        {
+          "id": "derived.one-action-development-card-per-turn",
+          "kind": "derived",
+          "label": "one-action-development-card-per-turn",
+          "summary": "기사 또는 진보 카드를 이미 하나 사용했으므로 이번 턴의 추가 행동 개발 카드 사용은 끝났습니다."
+        },
+        {
+          "id": "derived.new-victory-point-card-winning-exception",
+          "kind": "derived",
+          "label": "new-victory-point-card-winning-exception",
+          "summary": "새 승점 카드도 본인 차례에 총 10점 이상으로 승리할 때 공개할 수 있습니다. 이 기록 자체가 승리를 뜻하지는 않습니다. 실행기 조건: 구매 assertion의 turnInstanceId가 현재 턴과 같을 때만 적용한다. 구매 턴 미상은 추측하지 않는다."
+        },
+        {
+          "id": "derived.longest-road-threshold",
+          "kind": "derived",
+          "label": "longest-road-threshold",
+          "summary": "최장 연속 도로가 5개 이상이면 카드 보유 자격 기준을 만족합니다. 카드 보유자는 실제 상태를 따릅니다."
+        },
+        {
+          "id": "derived.largest-army-threshold",
+          "kind": "derived",
+          "label": "largest-army-threshold",
+          "summary": "공개 사용한 기사가 3장 이상이면 최대 기사단 카드의 기준을 만족합니다. 카드 보유자는 실제 상태를 따릅니다."
+        },
+        {
+          "id": "derived.resume-pending",
+          "kind": "derived",
+          "label": "resume-pending",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-await_roll",
+          "kind": "derived",
+          "label": "resume-await_roll",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-production",
+          "kind": "derived",
+          "label": "resume-production",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-trade",
+          "kind": "derived",
+          "label": "resume-trade",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-build",
+          "kind": "derived",
+          "label": "resume-build",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-end_turn",
+          "kind": "derived",
+          "label": "resume-end_turn",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-seven_discard",
+          "kind": "derived",
+          "label": "resume-seven_discard",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-robber_move",
+          "kind": "derived",
+          "label": "resume-robber_move",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-robber_steal",
+          "kind": "derived",
+          "label": "resume-robber_steal",
+          "summary": "확인한 중단 단계와 남은 처리에서 도출한 다음 절차입니다."
+        },
+        {
+          "id": "derived.resume-action",
+          "kind": "derived",
+          "label": "resume-action",
+          "summary": "기록한 단계에서 도출"
+        },
+        {
+          "id": "derived.resume-setup",
+          "kind": "derived",
+          "label": "resume-setup",
+          "summary": "기록한 단계에서 도출"
+        },
+        {
+          "id": "derived.resume-finished",
+          "kind": "derived",
+          "label": "resume-finished",
+          "summary": "기록한 단계에서 도출"
+        },
+        {
+          "id": "layers",
+          "kind": "procedure",
+          "label": "배치층",
+          "summary": "도로는 변, 마을·도시는 꼭짓점에 놓인다. 도둑과 숫자는 지형과 공존한다. 6판 5–9쪽의 배치 구분을 기록 모델에 반영."
+        },
+        {
+          "id": "upgrade",
+          "kind": "procedure",
+          "label": "도시와 항구",
+          "summary": "도시는 자기 마을을 대체하며 항구 교역은 해당 항구의 마을/도시 소유와 관계한다. 저장 정정은 실제 건설·거래 실행이 아니다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "current-pack-2.0.0",
+        "editionName": "Base Game (2025 6th edition; 2020 profile selectable)",
+        "gameId": "catan",
+        "schemaVersion": "1.0",
+        "sha256": "51a3a1dd68fe5689a8741fd9e3bca31a0a924284524950ebb4824961caee5d61"
+      },
+      "support": {
+        "illustration": "native",
+        "recognition": "native",
+        "recording": "native",
+        "rules": "native-partial"
+      }
+    },
+    "sources": [
+      {
+        "id": "rules-setup",
+        "section": "Game Components, Setting Up the Game, Starting Map; pp. 1–3",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-turn",
+        "section": "Turn Overview and Trade/Build; pp. 3–4",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-seven",
+        "section": "Rolling a 7 and Activating the Robber; Game Rules p. 4",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-development",
+        "section": "Playing Development Cards; Game Rules p. 4; Almanac: Development Cards, p. 7",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-awards",
+        "section": "Longest Road and Largest Army; Almanac pp. 8–9",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-components",
+        "section": "Game Components and component supply; pp. 1, 3",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "rules-sixth",
+        "section": "pp. 6–12: action, trade, development, setup",
+        "title": "CATAN — The Game, 6th edition (2025)",
+        "url": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf"
+      },
+      {
+        "id": "rules-faq",
+        "section": "Resource Cards / Development Cards / Trade / Victory Conditions",
+        "title": "CATAN official Basegame FAQ",
+        "url": "https://www.catan.com/faq/basegame"
+      },
+      {
+        "id": "spec.current-pack",
+        "section": "Read-only adapter of gamepacks/catan.ts 2.0.0, shared/scene contract. Not a new official-rule verification.",
+        "title": "Current local Catan pack and scene contract (implementation reference)",
+        "url": null
+      },
+      {
+        "id": "spec.rules-setup",
+        "section": "Inherited citation, not reopened in this task: Game Components, Setting Up the Game, Starting Map; pp. 1–3",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-turn",
+        "section": "Inherited citation, not reopened in this task: Turn Overview and Trade/Build; pp. 3–4",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-seven",
+        "section": "Inherited citation, not reopened in this task: Rolling a 7 and Activating the Robber; Game Rules p. 4",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-development",
+        "section": "Inherited citation, not reopened in this task: Playing Development Cards; Game Rules p. 4; Almanac: Development Cards, p. 7",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-awards",
+        "section": "Inherited citation, not reopened in this task: Longest Road and Largest Army; Almanac pp. 8–9",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-components",
+        "section": "Inherited citation, not reopened in this task: Game Components and component supply; pp. 1, 3",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
+      },
+      {
+        "id": "spec.rules-sixth",
+        "section": "Inherited citation, not reopened in this task: pp. 6–12: action, trade, development, setup",
+        "title": "CATAN — The Game, 6th edition (2025)",
+        "url": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf"
+      },
+      {
+        "id": "spec.rules-faq",
+        "section": "Inherited citation, not reopened in this task: Resource Cards / Development Cards / Trade / Victory Conditions",
+        "title": "CATAN official Basegame FAQ",
+        "url": "https://www.catan.com/faq/basegame"
+      },
+      {
+        "id": "spec.catan.primary",
+        "section": "이전 직접 조사 docs/catan-placement-research.md 및 catan-information-priority-research.md의 6판 규칙 5–12쪽/FAQ 검증을 재사용. 이번 패키지에서 원문을 다시 조회하지 않았다. 배치·항구·공개/비공개 상태와 앱 정정 정책은 별개.",
+        "title": "CATAN — 공식 자료",
+        "url": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf"
+      }
+    ],
+    "supportGaps": [
+      "이 팩은 기본판 3–4인 게임만 다룹니다. 5–6인 확장과 Seafarers, Cities & Knights 등 확장은 포함하지 않습니다.",
+      "상대 플레이어의 숨은 자원·개발 카드 내용은 추정하지 않습니다. 소유자 본인이 제공한 비공개 값만 기록합니다.",
+      "개발 카드 더미는 실물 순서를 그대로 유지합니다. 뒤집힌 더미의 순서는 디지털화하거나 검증하지 않습니다.",
+      "동률 시 특수 카드 보유와 도둑/자원 버리기 절차의 진행 단계는 실제 테이블 상태를 관찰해 기록합니다. 과거 의도나 미기록 행동은 추론하지 않습니다.",
+      "항구는 관측/직접 확인한 해안 변만 기록합니다. 부분 관측으로 누락 항구·실제 재고·과거 타이틀 보유자를 추정하지 않습니다.",
+      "이 어댑터는 기존 상세 계약을 새 연구 형식으로 표현한다. 새 형식의 제품 실행기/인식 품질/규칙 사실성을 검증한 것은 아니다.",
+      "5–6인, 항해사, 도시와 기사 등은 별도 패치. 가변 육각/선박/새 개인 상태는 기존 19칸 좌표에 억지 매핑하지 않는다.",
+      "6판/구판 항구 아트·배치와 숫자 배치 방식 차이. 상세 근거는 기존 카탄 연구를 참조.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "상세 참조는 구현솔이 제공한 독립 연구 형식의 스냅샷이다. 원래 제품 팩을 이 작업에서 변경하거나 새로 규칙 검증하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "CATAN",
+    "version": "2.0.0-essentials-1.51a3a1dd68fe"
+  },
+  {
+    "derivedRules": [],
+    "description": "명세에 따라 상태를 수동 기록하고 실물을 보관해 이어갑니다.",
+    "edition": "현행 단어 기본판",
+    "fields": [
+      {
+        "acquisition": "ask",
+        "description": "5×5 행열과 읽는 방향·단어·덮개를 별도 층으로 저장. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "words.scene",
+        "label": "단어판",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 0
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+        "group": "essentials",
+        "key": "record-note.teams",
+        "label": "역할·팀 · 확인 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 1
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+        "group": "essentials",
+        "key": "record-note.clue",
+        "label": "현재 힌트 · 확인 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 2
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+        "group": "essentials",
+        "key": "record-note.revealed",
+        "label": "공개 결과 · 확인 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+        "group": "essentials",
+        "key": "turn",
+        "label": "누구 차례",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "힌트 전달/팀 논의/칸 선택·결과 공개/턴 넘김 중 지점.",
+        "group": "essentials",
+        "key": "pending",
+        "label": "중단한 지점",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+        "group": "essentials",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 6
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "codenames",
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "공용 단어판과 같은 행열 기준. 키 회전과 비밀 정체는 스파이마스터 전용.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": true,
+        "id": "spec.key.preserve",
+        "label": "비밀 키 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "role-limited"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.key-map",
+        "label": "키 대응 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "role-limited"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.teams",
+        "label": "역할·팀 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.clue",
+        "label": "현재 힌트 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.revealed",
+        "label": "공개 결과 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "public"
+      }
+    ],
+    "requirements": [],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "words",
+          "kind": "card",
+          "name": "단어 카드",
+          "variants": []
+        },
+        {
+          "id": "key",
+          "kind": "card",
+          "name": "키카드",
+          "variants": []
+        },
+        {
+          "id": "covers",
+          "kind": "card",
+          "name": "요원·행인·암살자 덮개",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "words"
+          ],
+          "componentIds": [
+            "words",
+            "covers"
+          ],
+          "editor": "component-catalog",
+          "key": "words.scene",
+          "label": "단어판",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "words.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "key"
+          ],
+          "componentIds": [
+            "key"
+          ],
+          "editor": "physical-only",
+          "key": "key.scene",
+          "label": "비밀 키",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "key.scene",
+          "visibility": "role-limited"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "physical-only",
+          "key": "key-map",
+          "label": "키 대응",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "key-map",
+          "visibility": "role-limited"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "opaque-preserve",
+          "key": "teams",
+          "label": "역할·팀",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "teams",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "record-note.teams",
+          "label": "역할·팀",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "teams:note",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "opaque-preserve",
+          "key": "clue",
+          "label": "현재 힌트",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "clue",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "record-note.clue",
+          "label": "현재 힌트",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "clue:note",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "opaque-preserve",
+          "key": "revealed",
+          "label": "공개 결과",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "revealed",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "record-note.revealed",
+          "label": "공개 결과",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "revealed:note",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "turn",
+          "label": "누구 차례",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "turn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "pending",
+          "label": "중단한 지점",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "pending",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "note",
+          "label": "짧은 메모",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "note",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "단어 기본판. Duet/Pictures는 별도 키/역할 계약; 언어·2025판 단어 목록은 같은 세션에서 임의 번역하지 않는다.",
+        "추가 추리·0/무제한 힌트·2/3인 변형과2025 개정 차이는 전체 검증 미완료.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+          "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+          "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+        ],
+        "pendingActionFields": [
+          "pending"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [
+        {
+          "id": "spymaster",
+          "name": "스파이마스터"
+        },
+        {
+          "id": "operative",
+          "name": "추리하는 팀원"
+        }
+      ],
+      "rules": [
+        {
+          "id": "secret-key",
+          "kind": "procedure",
+          "label": "키의 공개 범위",
+          "summary": "키카드는 양 팀 스파이마스터가 보며 추리하는 팀원에게 보여주지 않는다."
+        },
+        {
+          "id": "grid",
+          "kind": "procedure",
+          "label": "방향 대응",
+          "summary": "키카드의 방향과 공용 단어판의 행열 대응을 고정한다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "base",
+        "editionName": "현행 단어 기본판",
+        "gameId": "codenames",
+        "schemaVersion": "1.0",
+        "sha256": "14bc0bfbde31cdf0443165a3a44c5a974922b33c9f190207c9531cfce60274dc"
+      },
+      "support": {
+        "illustration": "catalog",
+        "recognition": "manual",
+        "recording": "generic",
+        "rules": "none"
+      }
+    },
+    "sources": [
+      {
+        "id": "spec.codenames.primary",
+        "section": "공식 규칙 검색 본문에서25개5×5 단어, 키카드의 방향·두 스파이마스터에게만 공개, 양 팀 요원·행인·암살자 대응 확인. 2025판 단어 목록은 별도 판본 식별 필요.",
+        "title": "Codenames — 공식 자료",
+        "url": "https://czechgames.com/files/rules/codenames-rules-en.pdf"
+      }
+    ],
+    "supportGaps": [
+      "단어 기본판. Duet/Pictures는 별도 키/역할 계약; 언어·2025판 단어 목록은 같은 세션에서 임의 번역하지 않는다.",
+      "추가 추리·0/무제한 힌트·2/3인 변형과2025 개정 차이는 전체 검증 미완료.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "코드네임",
+    "version": "1.0.0-essentials-1.14bc0bfbde31"
+  },
+  {
+    "derivedRules": [],
+    "description": "명세에 따라 상태를 수동 기록하고 실물을 보관해 이어갑니다.",
+    "edition": "기본판",
+    "fields": [
+      {
+        "acquisition": "ask",
+        "description": "색별1~5 진행과 실제 내려놓은 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "fireworks.scene",
+        "label": "공용 불꽃",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 0
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "색·숫자별 실제 버린 카드 인스턴스. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "discard.scene",
+        "label": "공개 버림",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 1
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "단서/실수 표식의 각 면과 수. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "tokens.scene",
+        "label": "공용 표식",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 2
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+        "group": "essentials",
+        "key": "record-note.clues",
+        "label": "이미 받은 힌트 · 확인 메모",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+        "group": "essentials",
+        "key": "record-note.final-turns",
+        "label": "마지막 턴 상태 · 확인 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "기본5색과 다색 변형, 사용하는 판본/그룹 약속을 선택 기록.",
+        "group": "essentials",
+        "key": "variant",
+        "label": "색·의사소통 변형",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+        "group": "essentials",
+        "key": "turn",
+        "label": "누구 차례",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 6
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "힌트 전달/카드 내기·버리기/표식 변경/새 카드 뽑기/마지막 턴 중 지점.",
+        "group": "essentials",
+        "key": "pending",
+        "label": "중단한 지점",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 7
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+        "group": "essentials",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 8
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "hanabi",
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": true,
+        "id": "spec.hand.preserve",
+        "label": "자기에게 숨겨진 손패 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "own-hidden"
+      },
+      {
+        "conditions": [
+          "미공개 순서와 덱 소진 여부. 뒤집어 기록하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
+        ],
+        "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
+        "externalOnly": true,
+        "id": "spec.deck.preserve",
+        "label": "뽑기 덱 보존(선택)",
+        "method": "ordered-bundle",
+        "orderSensitive": true,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.clues",
+        "label": "이미 받은 힌트 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "내용을 펼치거나 JSON으로 입력하지 마세요.",
+          "기존 순서·방향과 봉인 상태를 유지하세요."
+        ],
+        "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+        "externalOnly": true,
+        "id": "spec.keep.final-turns",
+        "label": "마지막 턴 상태 · 실물 보관",
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "public"
+      }
+    ],
+    "requirements": [],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "cards",
+          "kind": "card",
+          "name": "불꽃 카드",
+          "variants": []
+        },
+        {
+          "id": "tokens",
+          "kind": "token",
+          "name": "단서·실수 표식",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "physical-only",
+          "key": "hand.scene",
+          "label": "자기에게 숨겨진 손패",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "hand.scene",
+          "visibility": "own-hidden"
+        },
+        {
+          "areaIds": [
+            "fireworks"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "fireworks.scene",
+          "label": "공용 불꽃",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "fireworks.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "discard"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "discard.scene",
+          "label": "공개 버림",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "discard.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "deck"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "physical-only",
+          "key": "deck.scene",
+          "label": "뽑기 덱",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "deck.scene",
+          "visibility": "hidden"
+        },
+        {
+          "areaIds": [
+            "tokens"
+          ],
+          "componentIds": [
+            "tokens"
+          ],
+          "editor": "component-catalog",
+          "key": "tokens.scene",
+          "label": "공용 표식",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "tokens.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "opaque-preserve",
+          "key": "clues",
+          "label": "이미 받은 힌트",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "clues",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "record-note.clues",
+          "label": "이미 받은 힌트",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "clues:note",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "opaque-preserve",
+          "key": "final-turns",
+          "label": "마지막 턴 상태",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "final-turns",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "record-note.final-turns",
+          "label": "마지막 턴 상태",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "final-turns:note",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "variant",
+          "label": "색·의사소통 변형",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "variant",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "turn",
+          "label": "누구 차례",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "turn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "pending",
+          "label": "중단한 지점",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "pending",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "note",
+          "label": "짧은 메모",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "note",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "기본5색 기준. 다색·Deluxe/다른 출판사 판본은 카드 구성과 힌트 규칙을 구분한다.",
+        "이 공식 판본은 해당 색/숫자0장 힌트를 허용한다. 다른 언어판의 금지 여부를 같은 규칙으로 단정하지 않는다.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+          "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+          "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+        ],
+        "pendingActionFields": [
+          "pending"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [],
+      "rules": [
+        {
+          "id": "own-hidden",
+          "kind": "procedure",
+          "label": "자기만 못 보는 손패",
+          "summary": "자기 카드 앞면은 보지 않고 다른 참가자의 카드 앞면을 볼 수 있다."
+        },
+        {
+          "id": "fireworks",
+          "kind": "procedure",
+          "label": "색별 순차 배치",
+          "summary": "기본 불꽃은 색별1부터5까지 순차적으로 쌓는다."
+        },
+        {
+          "id": "last-turn",
+          "kind": "procedure",
+          "label": "덱 소진 후",
+          "summary": "마지막 카드를 뽑으면 해당 플레이어를 포함해 각 참가자에게 마지막 턴이 남는다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "base",
+        "editionName": "기본판",
+        "gameId": "hanabi",
+        "schemaVersion": "1.0",
+        "sha256": "267246e952a988c23448429dd221d27edb754474b14bf1ba7a3358bfd4560dc5"
+      },
+      "support": {
+        "illustration": "catalog",
+        "recognition": "manual",
+        "recording": "generic",
+        "rules": "none"
+      }
+    },
+    "sources": [
+      {
+        "id": "spec.hanabi.primary",
+        "section": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분.",
+        "title": "Hanabi — 공식 자료",
+        "url": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf"
+      }
+    ],
+    "supportGaps": [
+      "기본5색 기준. 다색·Deluxe/다른 출판사 판본은 카드 구성과 힌트 규칙을 구분한다.",
+      "이 공식 판본은 해당 색/숫자0장 힌트를 허용한다. 다른 언어판의 금지 여부를 같은 규칙으로 단정하지 않는다.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "하나비",
+    "version": "1.0.0-essentials-1.267246e952a9"
+  },
+  {
+    "derivedRules": [],
+    "description": "공용 묶음과 타일 순서, 각자의 받침대를 사진과 함께 기록합니다. 재배열 중인 판과 모르는 타일도 그대로 저장합니다. 사진의 초록 인쇄색도 그대로 구분합니다.",
+    "edition": "Classic 기본 세트",
+    "fields": [
+      {
+        "acquisition": "observe",
+        "description": "각 타일의 개별 ID·색·1~13/조커·묶음 안 순서와 따로 놓은 타일을 기록합니다.",
+        "group": "table",
+        "key": "table.scene",
+        "label": "공용 묶음",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "visibility": "public"
+      },
+      {
+        "acquisition": "observe",
+        "description": "내 타일의 실제 줄 순서와 중복 사본을 따로 보존합니다. 가려진 값은 모름으로 둡니다.",
+        "group": "rack",
+        "key": "rack.scene",
+        "label": "내 받침대",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "사진으로 추측하지 않고 알고 있는 차례만 선택합니다.",
+        "group": "context",
+        "key": "currentPlayer",
+        "label": "누구 차례인가요?",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "player",
+          "level": "primary",
+          "order": 1
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "기존 묶음만으로 과거 등록 여부를 추측하지 않습니다.",
+        "group": "context",
+        "key": "opened",
+        "label": "최초 등록을 했나요?",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "boolean",
+        "ui": {
+          "level": "detail",
+          "order": 2
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "아직 정리 중인 묶음·조커·남은 행동을 선택적으로 기록합니다. 열기만으로 턴이나 제한시간이 진행되지 않습니다.",
+        "group": "context",
+        "key": "pending",
+        "label": "재배열 중단 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "진행 중 조합과 합의한 시간제한 메모. 재열기로 패널티 자동 적용 금지.",
+        "group": "essentials",
+        "key": "timer",
+        "label": "재배열 중단",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "라운드 종료 후 확인된 값만.",
+        "group": "essentials",
+        "key": "score",
+        "label": "라운드 점수",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 6
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+        "group": "essentials",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 7
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "rummikub",
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.rack.preserve",
+        "label": "개인 타일 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      },
+      {
+        "conditions": [
+          "뒤집힌 타일 더미를 정체 미상으로 저장.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": true,
+        "id": "spec.pool.preserve",
+        "label": "미공개 공급 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      }
+    ],
+    "requirements": [],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "numbers",
+          "kind": "tile",
+          "name": "숫자 타일",
+          "variants": []
+        },
+        {
+          "id": "jokers",
+          "kind": "tile",
+          "name": "조커",
+          "variants": []
+        },
+        {
+          "id": "racks",
+          "kind": "board",
+          "name": "개인 받침대",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "table"
+          ],
+          "componentIds": [
+            "numbers",
+            "jokers"
+          ],
+          "editor": "native",
+          "key": "table.scene",
+          "label": "공용 묶음",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "table.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "rack"
+          ],
+          "componentIds": [
+            "numbers",
+            "jokers",
+            "racks"
+          ],
+          "editor": "native",
+          "key": "rack.scene",
+          "label": "개인 타일",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "rack.scene",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "pool"
+          ],
+          "componentIds": [
+            "numbers",
+            "jokers"
+          ],
+          "editor": "physical-only",
+          "key": "pool.scene",
+          "label": "미공개 공급",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "pool.scene",
+          "visibility": "hidden"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "opened",
+          "label": "최초 등록 상태",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "opened",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "timer",
+          "label": "재배열 중단",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "timer",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "score",
+          "label": "라운드 점수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "score",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "currentPlayer",
+          "label": "누구 차례",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "turn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "native",
+          "key": "pending",
+          "label": "중단한 지점",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "pending",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "note",
+          "label": "짧은 메모",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "note",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "Twist/Xpress는 특수 조커/주사위 등 별도 프로필. Classic에 자동 추가하지 않는다.",
+        "Classic 인쇄별 시간제한/조커 세부 문구와 한국어판은 추가 대조 필요.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+          "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+          "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+        ],
+        "pendingActionFields": [
+          "pending"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [],
+      "rules": [
+        {
+          "id": "joker",
+          "kind": "procedure",
+          "label": "조커 재배열",
+          "summary": "조커를 회수한 뒤 같은 턴 새 묶음에 재사용하는 규칙이 있어 임시 조커 위치도 보존한다."
+        },
+        {
+          "id": "meld",
+          "kind": "procedure",
+          "label": "최초 등록",
+          "summary": "최초 등록 여부는 이후 조커 활용에 영향을 주는 별도 상태다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "base",
+        "editionName": "Classic 기본 세트",
+        "gameId": "rummikub",
+        "schemaVersion": "1.0",
+        "sha256": "82bf00b8cfd23fc5caf5708561af187d22614820b112a7ca29c0e175401ce311"
+      },
+      "support": {
+        "illustration": "native",
+        "recognition": "native",
+        "recording": "native",
+        "rules": "none"
+      }
+    },
+    "sources": [
+      {
+        "id": "rummikub-classic",
+        "section": "기존 연구명세의 Classic 기본 세트·묶음/런·최초 등록·조커. 인쇄별 상세 차이는 별도 확인.",
+        "title": "Rummikub Classic 공식 규칙",
+        "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf"
+      },
+      {
+        "id": "spec.rummikub.primary",
+        "section": "공식 Classic 영어 규칙 검색 본문에서 그룹/런 재배열과 조커 회수·재사용, 최초 등록 전 조커 회수 제한 확인. Twist 특수 조커 규칙과 혼동하지 않는다.",
+        "title": "Rummikub — 공식 자료",
+        "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf"
+      }
+    ],
+    "supportGaps": [
+      "Classic만 지원하며 Twist/Xpress 특수 타일·별도 규칙은 포함하지 않습니다.",
+      "묶음의 합법성·최초 등록 점수·조커 회수·시간제한·패널티·점수·자동 턴 진행은 판정하지 않습니다.",
+      "미공개 공급의 정체·가려진 받침대·중복 사진 속 동일 실물을 추측하지 않습니다. 미확인 값은 그대로 저장합니다.",
+      "Twist/Xpress는 특수 조커/주사위 등 별도 프로필. Classic에 자동 추가하지 않는다.",
+      "Classic 인쇄별 시간제한/조커 세부 문구와 한국어판은 추가 대조 필요.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "루미큐브",
+    "version": "1.0.0-essentials-1.82bf00b8cfd2"
+  },
+  {
+    "derivedRules": [],
+    "description": "명세에 따라 상태를 수동 기록하고 실물을 보관해 이어갑니다.",
+    "edition": "북미 기본판",
+    "fields": [
+      {
+        "acquisition": "ask",
+        "description": "도시 ID와 평행 노선 각각의 ID, 색/길이/열차 소유자. 열차 개별 위치와 노선 소유를 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "map-area.scene",
+        "label": "도시·노선",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 0
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "진열 자릿수는 실제 사진 기준, 보충 전 빈칸 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "market.scene",
+        "label": "공개 열차 카드",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 1
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "열차 카드 색별 수와 목적지 티켓을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "group": "essentials",
+        "key": "hand.scene",
+        "label": "개인 카드·티켓",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 2
+        },
+        "visibility": "owner"
+      },
+      {
+        "acquisition": "ask",
+        "description": "점수판 표시와 최종 티켓 득실은 별도.",
+        "group": "essentials",
+        "key": "score",
+        "label": "확인 점수",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "실제로 남은 말 수; 사진 밖 말은 null.",
+        "group": "essentials",
+        "key": "remaining-trains",
+        "label": "남은 열차",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "number",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "종료가 선언됐는지와 아직 차례가 남은 사람은 수동 확인.",
+        "group": "essentials",
+        "key": "final-round",
+        "label": "마지막 차례 상태",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 5
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+        "group": "essentials",
+        "key": "turn",
+        "label": "누구 차례",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 6
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "카드 선택·노선 확보·티켓 선택 중인 작업과 공개 카드 보충 전 상태를 기록.",
+        "group": "essentials",
+        "key": "pending",
+        "label": "중단한 지점",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 7
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+        "group": "essentials",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "text",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 8
+        },
+        "visibility": "public"
+      }
+    ],
+    "id": "ticket-to-ride",
+    "preservationTemplates": [
+      {
+        "conditions": [
+          "열차 카드 색별 수와 목적지 티켓을 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.hand.preserve",
+        "label": "개인 카드·티켓 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "owner"
+      },
+      {
+        "conditions": [
+          "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
+        ],
+        "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
+        "externalOnly": true,
+        "id": "spec.decks.preserve",
+        "label": "뽑기·버림 보존(선택)",
+        "method": "ordered-bundle",
+        "orderSensitive": true,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      }
+    ],
+    "requirements": [],
+    "runtime": {
+      "adapterVersion": "essentials-1",
+      "components": [
+        {
+          "id": "map",
+          "kind": "board",
+          "name": "북미 지도",
+          "variants": []
+        },
+        {
+          "id": "trains",
+          "kind": "piece",
+          "name": "열차 말",
+          "variants": []
+        },
+        {
+          "id": "cards",
+          "kind": "card",
+          "name": "열차 카드",
+          "variants": []
+        },
+        {
+          "id": "tickets",
+          "kind": "card",
+          "name": "목적지 티켓",
+          "variants": []
+        },
+        {
+          "id": "score",
+          "kind": "marker",
+          "name": "점수 말",
+          "variants": []
+        }
+      ],
+      "fieldBindings": [
+        {
+          "areaIds": [
+            "map-area"
+          ],
+          "componentIds": [
+            "map",
+            "trains"
+          ],
+          "editor": "component-catalog",
+          "key": "map-area.scene",
+          "label": "도시·노선",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "map-area.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "market"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "market.scene",
+          "label": "공개 열차 카드",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "market.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hand"
+          ],
+          "componentIds": [
+            "cards",
+            "tickets"
+          ],
+          "editor": "component-catalog",
+          "key": "hand.scene",
+          "label": "개인 카드·티켓",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "hand.scene",
+          "visibility": "owner"
+        },
+        {
+          "areaIds": [
+            "decks"
+          ],
+          "componentIds": [
+            "cards",
+            "tickets"
+          ],
+          "editor": "physical-only",
+          "key": "decks.scene",
+          "label": "뽑기·버림",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "decks.scene",
+          "visibility": "hidden"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "score",
+          "label": "확인 점수",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "score",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "remaining-trains",
+          "label": "남은 열차",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "remaining-trains",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "final-round",
+          "label": "마지막 차례 상태",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "final-round",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "turn",
+          "label": "누구 차례",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "turn",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "pending",
+          "label": "중단한 지점",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "pending",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [],
+          "componentIds": [],
+          "editor": "scalar",
+          "key": "note",
+          "label": "짧은 메모",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "note",
+          "visibility": "public"
+        }
+      ],
+      "gaps": [
+        "유럽·다른 독립 지도판은 별도 지도 프로필; 지도 확장은 기본 게임과 요구 부품을 별도 연결.",
+        "복선의 인원별 사용 제한, 기관차 선택 예외, 종료 순서는 원문 규칙서 미대조.",
+        "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+      ],
+      "privatePolicy": "pin-before-content",
+      "resume": {
+        "mustAskFieldIds": [],
+        "notes": [
+          "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+          "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+          "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+        ],
+        "pendingActionFields": [
+          "pending"
+        ],
+        "requiredFieldIds": []
+      },
+      "roles": [],
+      "rules": [
+        {
+          "id": "routes",
+          "kind": "procedure",
+          "label": "노선 확보",
+          "summary": "색이 맞는 열차 카드로 도시를 잇는 노선을 확보한다."
+        },
+        {
+          "id": "goals",
+          "kind": "procedure",
+          "label": "목표와 보너스",
+          "summary": "목적지 연결과 최장 연속 경로는 별도의 점수 요소다. 사진만으로 전체 점수를 확정하지 않는다."
+        },
+        {
+          "id": "record-only",
+          "kind": "constraint",
+          "label": "원상태 보존",
+          "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+        }
+      ],
+      "source": {
+        "editionId": "base",
+        "editionName": "북미 기본판",
+        "gameId": "ticket-to-ride",
+        "schemaVersion": "1.0",
+        "sha256": "8b843f1b08e4aac6022c813fccc4a74c1ebad709c0d20438960787c5d8be97d1"
+      },
+      "support": {
+        "illustration": "catalog",
+        "recognition": "manual",
+        "recording": "generic",
+        "rules": "none"
+      }
+    },
+    "sources": [
+      {
+        "id": "spec.ticket-to-ride.primary",
+        "section": "공식 북미 기본판 소개에서 열차 카드로 도시 간 노선 확보, 목적지 티켓과 최장 경로 보너스 확인. 세부 손패/복선 규칙은 규칙서 추가 확인 필요.",
+        "title": "Ticket to Ride — 공식 자료",
+        "url": "https://www.daysofwonder.com/game/ticket-to-ride/"
+      }
+    ],
+    "supportGaps": [
+      "유럽·다른 독립 지도판은 별도 지도 프로필; 지도 확장은 기본 게임과 요구 부품을 별도 연결.",
+      "복선의 인원별 사용 제한, 기관차 선택 예외, 종료 순서는 원문 규칙서 미대조.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+    ],
+    "title": "티켓 투 라이드",
+    "version": "1.0.0-essentials-1.8b843f1b08e4"
+  }
+]

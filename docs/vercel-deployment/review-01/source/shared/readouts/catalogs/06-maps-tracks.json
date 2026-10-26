@@ -1,0 +1,6190 @@
+{
+  "age-of-innovation": {
+    "gameId": "age-of-innovation",
+    "runtimePackId": "age-of-innovation",
+    "schema": "age-of-innovation-v1",
+    "editionId": "base",
+    "sourceSHA": "8e6e7852b320eb2e66871b2734956c5b385463a6e6a161b011c2d2977260be6d",
+    "packVersion": "1.0.0-essentials-2.8e6e7852b320",
+    "title": "혁신의 시대",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "지형·건물·다리",
+        "kind": "piece",
+        "description": "본토 지형 변환·건물 종류/소유·연결. 다리 세부는 추가 대조.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 본토 지형 변환·건물 종류/소유·연결. 다리 세부는 추가 대조."
+          },
+          {
+            "id": "terrain",
+            "type": "text",
+            "label": "보이는 지형",
+            "acquisition": "visible",
+            "sourceText": "본토 지형 변환·건물 종류/소유·연결. 다리 세부는 추가 대조."
+          },
+          {
+            "id": "structure",
+            "type": "text",
+            "label": "건물 형태",
+            "acquisition": "visible",
+            "sourceText": "본토 지형 변환·건물 종류/소유·연결. 다리 세부는 추가 대조."
+          },
+          {
+            "id": "connection",
+            "type": "text",
+            "label": "연결 양 끝",
+            "acquisition": "manual",
+            "sourceText": "본토 지형 변환·건물 종류/소유·연결. 다리 세부는 추가 대조. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "identity",
+        "name": "세력·고향·궁전 능력",
+        "kind": "tile",
+        "description": "개별 선택된 세력·고향 지형·능력을 한 이름으로 합치지 않음.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개별 선택된 세력·고향 지형·능력을 한 이름으로 합치지 않음.",
+            "faceOnly": true
+          },
+          {
+            "id": "faction",
+            "type": "text",
+            "label": "세력 표기",
+            "acquisition": "visible",
+            "sourceText": "개별 선택된 세력·고향 지형·능력을 한 이름으로 합치지 않음.",
+            "faceOnly": true
+          },
+          {
+            "id": "homeTerrain",
+            "type": "text",
+            "label": "선택한 본거지 지형",
+            "acquisition": "manual",
+            "sourceText": "개별 선택된 세력·고향 지형·능력을 한 이름으로 합치지 않음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "abilityUsed",
+            "type": "text",
+            "label": "능력 처리 여부",
+            "acquisition": "manual",
+            "sourceText": "개별 선택된 세력·고향 지형·능력을 한 이름으로 합치지 않음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "도구·학자·돈·권능·책",
+        "kind": "token",
+        "description": "자원 종류·책의 학문별 종류와 권능 위치.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 자원 종류·책의 학문별 종류와 권능 위치."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "자원·책·파워 종류",
+            "acquisition": "visible",
+            "sourceText": "자원 종류·책의 학문별 종류와 권능 위치."
+          },
+          {
+            "id": "pool",
+            "type": "text",
+            "label": "공급·파워 그릇",
+            "acquisition": "manual",
+            "sourceText": "자원 종류·책의 학문별 종류와 권능 위치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "자원 종류·책의 학문별 종류와 권능 위치."
+          }
+        ]
+      },
+      {
+        "id": "tiles",
+        "name": "혁신·도시·보너스",
+        "kind": "tile",
+        "description": "선택 타일·사용/미사용 면·라운드 목표. 도시/보너스 세부는 미대조.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택 타일·사용/미사용 면·라운드 목표. 도시/보너스 세부는 미대조.",
+            "faceOnly": true
+          },
+          {
+            "id": "selectedFace",
+            "type": "text",
+            "label": "선택한 타일 면",
+            "acquisition": "visible",
+            "sourceText": "선택 타일·사용/미사용 면·라운드 목표. 도시/보너스 세부는 미대조.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileGroup",
+            "type": "text",
+            "label": "기술·목표 타일 종류",
+            "acquisition": "visible",
+            "sourceText": "선택 타일·사용/미사용 면·라운드 목표. 도시/보너스 세부는 미대조.",
+            "faceOnly": true
+          },
+          {
+            "id": "useState",
+            "type": "text",
+            "label": "선택·사용 여부",
+            "acquisition": "manual",
+            "sourceText": "선택 타일·사용/미사용 면·라운드 목표. 도시/보너스 세부는 미대조. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "arcs": {
+    "gameId": "arcs",
+    "runtimePackId": "arcs",
+    "schema": "arcs-v1",
+    "editionId": "base",
+    "sourceSHA": "9c69a814486011410f5f3ae98d3b7f495b3628b0436a5a39383b2d6c117813e2",
+    "packVersion": "1.0.0-essentials-2.9c69a8144860",
+    "title": "아크스",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "항성계 지도",
+        "kind": "board",
+        "description": "구역/항성계와 행성·게이트 기준점.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "구역/항성계와 행성·게이트 기준점."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "구역/항성계와 행성·게이트 기준점."
+          },
+          {
+            "id": "systemLabel",
+            "type": "text",
+            "label": "시스템 표기",
+            "acquisition": "visible",
+            "sourceText": "구역/항성계와 행성·게이트 기준점."
+          },
+          {
+            "id": "spaceType",
+            "type": "text",
+            "label": "행성·게이트",
+            "acquisition": "visible",
+            "sourceText": "구역/항성계와 행성·게이트 기준점."
+          },
+          {
+            "id": "connection",
+            "type": "text",
+            "label": "관측 연결",
+            "acquisition": "manual",
+            "sourceText": "구역/항성계와 행성·게이트 기준점. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "pieces",
+        "name": "함선·도시·우주항·요원",
+        "kind": "piece",
+        "description": "소유자·위치·피해 상태와 법정 요원.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 소유자·위치·피해 상태와 법정 요원."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "함선·도시·요원 종류",
+            "acquisition": "visible",
+            "sourceText": "소유자·위치·피해 상태와 법정 요원."
+          },
+          {
+            "id": "damageState",
+            "type": "text",
+            "label": "보이는 손상 표시",
+            "acquisition": "visible",
+            "sourceText": "소유자·위치·피해 상태와 법정 요원."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "소유자·위치·피해 상태와 법정 요원. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "시스템·궁정 위치",
+            "acquisition": "manual",
+            "sourceText": "소유자·위치·피해 상태와 법정 요원. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "행동·법정 카드",
+        "kind": "card",
+        "description": "손패·리드 카드·사용 카드·획득 카드.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패·리드 카드·사용 카드·획득 카드.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·선도·사용·획득 구분",
+            "acquisition": "manual",
+            "sourceText": "손패·리드 카드·사용 카드·획득 카드. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "printedSymbols",
+            "type": "marks",
+            "label": "읽힌 카드 기호·값",
+            "acquisition": "visible",
+            "sourceText": "손패·리드 카드·사용 카드·획득 카드.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "자원·야망·전리품",
+        "kind": "token",
+        "description": "자원 슬롯·야망 표식·포로와 전리품을 구별.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 자원 슬롯·야망 표식·포로와 전리품을 구별."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "자원·야망·포획·전리품",
+            "acquisition": "visible",
+            "sourceText": "자원 슬롯·야망 표식·포로와 전리품을 구별."
+          },
+          {
+            "id": "slot",
+            "type": "text",
+            "label": "자원·야망 칸",
+            "acquisition": "manual",
+            "sourceText": "자원 슬롯·야망 표식·포로와 전리품을 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "자원 슬롯·야망 표식·포로와 전리품을 구별."
+          }
+        ]
+      }
+    ]
+  },
+  "ark-nova": {
+    "gameId": "ark-nova",
+    "runtimePackId": "ark-nova",
+    "schema": "ark-nova-v1",
+    "editionId": "base",
+    "sourceSHA": "918de2fc75df261242ec06af1eb711f7387b57c059f9a978df46eab0b88fa462",
+    "packVersion": "1.0.0-essentials-2.918de2fc75df",
+    "title": "아크 노바",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "tiles",
+        "name": "울타리·동물원 타일",
+        "kind": "tile",
+        "description": "타일 모양·방향·사용 면과 개인 지도 점유.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "타일 모양·방향·사용 면과 개인 지도 점유.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileType",
+            "type": "text",
+            "label": "우리·특수건물 종류",
+            "acquisition": "visible",
+            "sourceText": "타일 모양·방향·사용 면과 개인 지도 점유.",
+            "faceOnly": true
+          },
+          {
+            "id": "footprint",
+            "type": "text",
+            "label": "점유 모양",
+            "acquisition": "visible",
+            "sourceText": "타일 모양·방향·사용 면과 개인 지도 점유.",
+            "faceOnly": true
+          },
+          {
+            "id": "flipped",
+            "type": "boolean",
+            "label": "뒤집힌 면 표시",
+            "acquisition": "visible",
+            "sourceText": "타일 모양·방향·사용 면과 개인 지도 점유.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "개인 지도칸",
+            "acquisition": "manual",
+            "sourceText": "타일 모양·방향·사용 면과 개인 지도 점유. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "동물·후원·프로젝트 카드",
+        "kind": "card",
+        "description": "손패/설치/공개 진열/프로젝트 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패/설치/공개 진열/프로젝트 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "동물·후원·보전프로젝트",
+            "acquisition": "visible",
+            "sourceText": "손패/설치/공개 진열/프로젝트 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·설치·시장 구분",
+            "acquisition": "manual",
+            "sourceText": "손패/설치/공개 진열/프로젝트 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "actions",
+        "name": "행동 카드",
+        "kind": "card",
+        "description": "종류, 현재 줄 위치와 업그레이드 면.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "종류, 현재 줄 위치와 업그레이드 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "actionType",
+            "type": "text",
+            "label": "행동 종류",
+            "acquisition": "visible",
+            "sourceText": "종류, 현재 줄 위치와 업그레이드 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "upgradedFace",
+            "type": "text",
+            "label": "업그레이드 면",
+            "acquisition": "visible",
+            "sourceText": "종류, 현재 줄 위치와 업그레이드 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "lineupIndex",
+            "type": "integer",
+            "label": "줄에서의 위치",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "종류, 현재 줄 위치와 업그레이드 면. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "workers",
+        "name": "협회 일꾼·협력 표식",
+        "kind": "piece",
+        "description": "협회 행동 및 개인 사용/대기 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 협회 행동 및 개인 사용/대기 상태."
+          },
+          {
+            "id": "workerType",
+            "type": "text",
+            "label": "직원 종류",
+            "acquisition": "visible",
+            "sourceText": "협회 행동 및 개인 사용/대기 상태."
+          },
+          {
+            "id": "workerZone",
+            "type": "text",
+            "label": "배치·대기 구분",
+            "acquisition": "manual",
+            "sourceText": "협회 행동 및 개인 사용/대기 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "협회 행동 및 개인 사용/대기 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tracks",
+        "name": "점수·명성·자원 표식",
+        "kind": "marker",
+        "description": "서로 다른 트랙의 값.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 서로 다른 트랙의 값."
+          },
+          {
+            "id": "trackType",
+            "type": "text",
+            "label": "트랙 종류",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 트랙의 값."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "보이는 트랙값",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 트랙의 값."
+          }
+        ]
+      }
+    ]
+  },
+  "clank-catacombs": {
+    "gameId": "clank-catacombs",
+    "runtimePackId": "clank-catacombs",
+    "schema": "clank-catacombs-v1",
+    "editionId": "base",
+    "sourceSHA": "ee7bf4f8c755c7b9b50eed66763c9158a36a277d3a467d0aa4acaa6d3bdb9d81",
+    "packVersion": "1.0.0-essentials-2.ee7bf4f8c755",
+    "title": "클랭크! 카타콤",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "tiles",
+        "name": "던전 타일",
+        "kind": "tile",
+        "description": "방·통로·잠금·포털과 회전.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "방·통로·잠금·포털과 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileLabel",
+            "type": "text",
+            "label": "타일 표기",
+            "acquisition": "visible",
+            "sourceText": "방·통로·잠금·포털과 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "rooms",
+            "type": "text",
+            "label": "방·통로·잠금·포탈",
+            "acquisition": "visible",
+            "sourceText": "방·통로·잠금·포털과 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "실제 연결 위치",
+            "acquisition": "manual",
+            "sourceText": "방·통로·잠금·포털과 회전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "pawns",
+        "name": "플레이어 말·보물",
+        "kind": "piece",
+        "description": "플레이어 위치와 유물/죄수/성소 표식.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 플레이어 위치와 유물/죄수/성소 표식."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "플레이어·유물·죄수·성소",
+            "acquisition": "visible",
+            "sourceText": "플레이어 위치와 유물/죄수/성소 표식."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "방·구역",
+            "acquisition": "manual",
+            "sourceText": "플레이어 위치와 유물/죄수/성소 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "플레이어 위치와 유물/죄수/성소 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cubes",
+        "name": "클랭크·드래곤·유령 큐브",
+        "kind": "token",
+        "description": "공급/소음 구역/주머니/피해 위치별 구별.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 공급/소음 구역/주머니/피해 위치별 구별."
+          },
+          {
+            "id": "cubeZone",
+            "type": "text",
+            "label": "공급·클랭크·주머니·피해 구분",
+            "acquisition": "manual",
+            "sourceText": "공급/소음 구역/주머니/피해 위치별 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "공급/소음 구역/주머니/피해 위치별 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "던전·개인 덱 카드",
+        "kind": "card",
+        "description": "진열/손패/사용/버림/덱.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "진열/손패/사용/버림/덱.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "개인·시장·공개 사용 구분",
+            "acquisition": "manual",
+            "sourceText": "진열/손패/사용/버림/덱. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "공개 카드 종류",
+            "acquisition": "visible",
+            "sourceText": "진열/손패/사용/버림/덱.",
+            "faceOnly": true
+          }
+        ]
+      }
+    ]
+  },
+  "dominant-species": {
+    "gameId": "dominant-species",
+    "runtimePackId": "dominant-species",
+    "schema": "dominant-species-v1",
+    "editionId": "base",
+    "sourceSHA": "ccdeff34e476b3a26588bdb5a24a5ee98a03e91104edfcc22eae6a78c98f9012",
+    "packVersion": "1.0.0-essentials-2.ccdeff34e476",
+    "title": "도미넌트 스피시즈",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "earth",
+        "name": "지형·툰드라",
+        "kind": "tile",
+        "description": "확장되는 육각 지형과 툰드라 덮개.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "확장되는 육각 지형과 툰드라 덮개.",
+            "faceOnly": true
+          },
+          {
+            "id": "terrain",
+            "type": "text",
+            "label": "육각 지형",
+            "acquisition": "visible",
+            "sourceText": "확장되는 육각 지형과 툰드라 덮개.",
+            "faceOnly": true
+          },
+          {
+            "id": "overlay",
+            "type": "text",
+            "label": "툰드라 겹침",
+            "acquisition": "visible",
+            "sourceText": "확장되는 육각 지형과 툰드라 덮개.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지도칸",
+            "acquisition": "manual",
+            "sourceText": "확장되는 육각 지형과 툰드라 덮개. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "animals",
+        "name": "종 말·지배 원뿔",
+        "kind": "piece",
+        "description": "종의 개체 수와 지배 판정을 서로 다른 말로 기록.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종의 개체 수와 지배 판정을 서로 다른 말로 기록."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "종 큐브·지배 원뿔",
+            "acquisition": "visible",
+            "sourceText": "종의 개체 수와 지배 판정을 서로 다른 말로 기록."
+          },
+          {
+            "id": "species",
+            "type": "text",
+            "label": "보이는 종 식별",
+            "acquisition": "visible",
+            "sourceText": "종의 개체 수와 지배 판정을 서로 다른 말로 기록."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지형 위치",
+            "acquisition": "manual",
+            "sourceText": "종의 개체 수와 지배 판정을 서로 다른 말로 기록. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "elements",
+        "name": "원소 원반",
+        "kind": "token",
+        "description": "동물판 및 여러 지형이 공유하는 접점의 원소.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 동물판 및 여러 지형이 공유하는 접점의 원소."
+          },
+          {
+            "id": "elementType",
+            "type": "text",
+            "label": "원소 종류",
+            "acquisition": "visible",
+            "sourceText": "동물판 및 여러 지형이 공유하는 접점의 원소."
+          },
+          {
+            "id": "junction",
+            "type": "text",
+            "label": "연결 교차점",
+            "acquisition": "manual",
+            "sourceText": "동물판 및 여러 지형이 공유하는 접점의 원소. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "actions",
+        "name": "행동 말·지배 카드",
+        "kind": "piece",
+        "description": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "행동말·카드·생존 표식",
+            "acquisition": "visible",
+            "sourceText": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "actionSlot",
+            "type": "text",
+            "label": "배치칸",
+            "acquisition": "manual",
+            "sourceText": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "useState",
+            "type": "text",
+            "label": "처리 상태",
+            "acquisition": "manual",
+            "sourceText": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "dune-imperium-uprising": {
+    "gameId": "dune-imperium-uprising",
+    "runtimePackId": "dune-imperium-uprising",
+    "schema": "dune-imperium-uprising-v1",
+    "editionId": "base",
+    "sourceSHA": "3a4971e4836f92ddb0db8e1708fc0022c6715eed970f117442915a33f94ab7cd",
+    "packVersion": "1.0.0-essentials-2.3a4971e4836f",
+    "title": "듄 임페리움: 업라이징",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "agents",
+        "name": "에이전트·스파이",
+        "kind": "piece",
+        "description": "행동 장소의 에이전트와 감시 위치의 스파이를 구별.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 행동 장소의 에이전트와 감시 위치의 스파이를 구별."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "에이전트·스파이",
+            "acquisition": "visible",
+            "sourceText": "행동 장소의 에이전트와 감시 위치의 스파이를 구별."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "행동 장소의 에이전트와 감시 위치의 스파이를 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "actionSlot",
+            "type": "text",
+            "label": "행동·관측소 위치",
+            "acquisition": "manual",
+            "sourceText": "행동 장소의 에이전트와 감시 위치의 스파이를 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "troops",
+        "name": "병력·샌드웜",
+        "kind": "piece",
+        "description": "주둔군과 전투 투입 구역, 소유자.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 주둔군과 전투 투입 구역, 소유자."
+          },
+          {
+            "id": "unitType",
+            "type": "text",
+            "label": "병력 종류",
+            "acquisition": "visible",
+            "sourceText": "주둔군과 전투 투입 구역, 소유자."
+          },
+          {
+            "id": "unitZone",
+            "type": "text",
+            "label": "주둔지·전투 구분",
+            "acquisition": "manual",
+            "sourceText": "주둔군과 전투 투입 구역, 소유자. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "주둔군과 전투 투입 구역, 소유자. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "덱·음모·충돌 카드",
+        "kind": "card",
+        "description": "개인 덱 카드와 음모, 공용 충돌/진열을 분리.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 덱 카드와 음모, 공용 충돌/진열을 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "덱·음모·분쟁·시장 카드",
+            "acquisition": "visible",
+            "sourceText": "개인 덱 카드와 음모, 공용 충돌/진열을 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "보유·공개·버림 구분",
+            "acquisition": "manual",
+            "sourceText": "개인 덱 카드와 음모, 공용 충돌/진열을 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "자원·영향력 표식",
+        "kind": "token",
+        "description": "물·스파이스·솔라리와 트랙 표식.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 물·스파이스·솔라리와 트랙 표식."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "물·스파이스·솔라리·트랙",
+            "acquisition": "visible",
+            "sourceText": "물·스파이스·솔라리와 트랙 표식."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "물·스파이스·솔라리와 트랙 표식."
+          }
+        ]
+      },
+      {
+        "id": "leaders",
+        "name": "지도자·목표·계약",
+        "kind": "board",
+        "description": "지도자 ID, 획득/사용 상태.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지도자 ID, 획득/사용 상태."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지도자 ID, 획득/사용 상태."
+          },
+          {
+            "id": "leader",
+            "type": "text",
+            "label": "리더 표기",
+            "acquisition": "visible",
+            "sourceText": "지도자 ID, 획득/사용 상태."
+          },
+          {
+            "id": "abilityUsed",
+            "type": "text",
+            "label": "리더 능력 처리 여부",
+            "acquisition": "manual",
+            "sourceText": "지도자 ID, 획득/사용 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "eclipse-second-dawn": {
+    "gameId": "eclipse-second-dawn",
+    "runtimePackId": "eclipse-second-dawn",
+    "schema": "eclipse-second-dawn-v1",
+    "editionId": "base",
+    "sourceSHA": "a93a7db2c286112d4500d37e4eaad0466505dccd6719366c6d13e1b4d316e1ad",
+    "packVersion": "1.0.0-essentials-2.a93a7db2c286",
+    "title": "이클립스: 두 번째 여명",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "sectors",
+        "name": "섹터 타일",
+        "kind": "tile",
+        "description": "섹터 ID·회전·웜홀·행성.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전·웜홀·행성.",
+            "faceOnly": true
+          },
+          {
+            "id": "sectorLabel",
+            "type": "text",
+            "label": "섹터 표기",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전·웜홀·행성.",
+            "faceOnly": true
+          },
+          {
+            "id": "wormholes",
+            "type": "text",
+            "label": "웜홀 방향 표시",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전·웜홀·행성.",
+            "faceOnly": true
+          },
+          {
+            "id": "planets",
+            "type": "text",
+            "label": "보이는 행성",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전·웜홀·행성.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "ships",
+        "name": "함선·부품",
+        "kind": "piece",
+        "description": "함선 종류/소유자와 개인 청사진의 부품.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 함선 종류/소유자와 개인 청사진의 부품."
+          },
+          {
+            "id": "shipType",
+            "type": "text",
+            "label": "함선 종류",
+            "acquisition": "visible",
+            "sourceText": "함선 종류/소유자와 개인 청사진의 부품."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "함선 종류/소유자와 개인 청사진의 부품. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "blueprintPart",
+            "type": "text",
+            "label": "부품·청사진 연결",
+            "acquisition": "manual",
+            "sourceText": "함선 종류/소유자와 개인 청사진의 부품. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "discs",
+        "name": "영향력·인구·식민선",
+        "kind": "token",
+        "description": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "영향력 원반·인구 큐브·식민지선",
+            "acquisition": "visible",
+            "sourceText": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "pool",
+            "type": "text",
+            "label": "구역·공급 위치",
+            "acquisition": "manual",
+            "sourceText": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tiles",
+        "name": "기술·발견·평판",
+        "kind": "tile",
+        "description": "공개 연구/발견과 비공개 평판 묶음.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "공개 연구/발견과 비공개 평판 묶음.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileType",
+            "type": "text",
+            "label": "기술·발견·평판",
+            "acquisition": "visible",
+            "sourceText": "공개 연구/발견과 비공개 평판 묶음.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileArea",
+            "type": "text",
+            "label": "공개·개인 비공개 구분",
+            "acquisition": "manual",
+            "sourceText": "공개 연구/발견과 비공개 평판 묶음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "printedValue",
+            "type": "integer",
+            "label": "허용된 면의 인쇄값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "공개 연구/발견과 비공개 평판 묶음.",
+            "faceOnly": true
+          }
+        ]
+      }
+    ]
+  },
+  "expeditions": {
+    "gameId": "expeditions",
+    "runtimePackId": "expeditions",
+    "schema": "expeditions-v1",
+    "editionId": "base",
+    "sourceSHA": "7055630727025fde86d1e2a83949bff05f5e4746f3a4db1bc698dfb721ac516b",
+    "packVersion": "1.0.0-essentials-2.705563072702",
+    "title": "익스페디션",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "tiles",
+        "name": "탐험 장소·타락",
+        "kind": "tile",
+        "description": "장소 ID·앞뒤·타락 표식과 연결.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "장소 ID·앞뒤·타락 표식과 연결.",
+            "faceOnly": true
+          },
+          {
+            "id": "locationLabel",
+            "type": "text",
+            "label": "장소 표기",
+            "acquisition": "visible",
+            "sourceText": "장소 ID·앞뒤·타락 표식과 연결.",
+            "faceOnly": true
+          },
+          {
+            "id": "corruption",
+            "type": "integer",
+            "label": "오염 표시",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "장소 ID·앞뒤·타락 표식과 연결.",
+            "faceOnly": true
+          },
+          {
+            "id": "connection",
+            "type": "text",
+            "label": "연결 위치",
+            "acquisition": "manual",
+            "sourceText": "장소 ID·앞뒤·타락 표식과 연결. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "mechs",
+        "name": "메크·일꾼",
+        "kind": "piece",
+        "description": "메크 소유/위치와 카드에 배치한 색 일꾼.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 메크 소유/위치와 카드에 배치한 색 일꾼."
+          },
+          {
+            "id": "mechType",
+            "type": "text",
+            "label": "메크·일꾼 구분",
+            "acquisition": "visible",
+            "sourceText": "메크 소유/위치와 카드에 배치한 색 일꾼."
+          },
+          {
+            "id": "workerType",
+            "type": "text",
+            "label": "일꾼 종류",
+            "acquisition": "visible",
+            "sourceText": "메크 소유/위치와 카드에 배치한 색 일꾼."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "확인한 위치",
+            "acquisition": "manual",
+            "sourceText": "메크 소유/위치와 카드에 배치한 색 일꾼. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "메크 소유/위치와 카드에 배치한 색 일꾼. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "인물·퀘스트·아이템·운석",
+        "kind": "card",
+        "description": "손패/플레이·강화/완료 등 실제 구역.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패/플레이·강화/완료 등 실제 구역.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·플레이·사용 구분",
+            "acquisition": "manual",
+            "sourceText": "손패/플레이·강화/완료 등 실제 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "upgradeState",
+            "type": "text",
+            "label": "업그레이드·완료 처리",
+            "acquisition": "manual",
+            "sourceText": "손패/플레이·강화/완료 등 실제 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "파워·기지·돈·영광",
+        "kind": "token",
+        "description": "서로 다른 수치와 완료 표식.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 서로 다른 수치와 완료 표식."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "트랙·상태 종류",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 수치와 완료 표식."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 수치와 완료 표식."
+          }
+        ]
+      }
+    ]
+  },
+  "five-tribes": {
+    "gameId": "five-tribes",
+    "runtimePackId": "five-tribes",
+    "schema": "five-tribes-v1",
+    "editionId": "base",
+    "sourceSHA": "4ecd95ce5cbff1e8308279a20ad63f068032126075145925f58f2384a619b61e",
+    "packVersion": "1.0.0-essentials-2.4ecd95ce5cbf",
+    "title": "다섯 부족",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "tiles",
+        "name": "나칼라 타일",
+        "kind": "tile",
+        "description": "타일ID·종류·격자 배치·소유 표시.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "타일ID·종류·격자 배치·소유 표시.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileKind",
+            "type": "text",
+            "label": "타일 종류",
+            "acquisition": "visible",
+            "sourceText": "타일ID·종류·격자 배치·소유 표시.",
+            "faceOnly": true
+          },
+          {
+            "id": "printedValue",
+            "type": "integer",
+            "label": "인쇄값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "타일ID·종류·격자 배치·소유 표시.",
+            "faceOnly": true
+          },
+          {
+            "id": "gridCell",
+            "type": "text",
+            "label": "격자칸",
+            "acquisition": "manual",
+            "sourceText": "타일ID·종류·격자 배치·소유 표시. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "타일ID·종류·격자 배치·소유 표시. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tribes",
+        "name": "다섯 부족 미플",
+        "kind": "piece",
+        "description": "노랑/빨강/파랑/초록/흰색은 부족 종류이며 플레이어 소유색과 별개.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 노랑/빨강/파랑/초록/흰색은 부족 종류이며 플레이어 소유색과 별개."
+          },
+          {
+            "id": "tribeColor",
+            "type": "text",
+            "label": "부족 색",
+            "acquisition": "visible",
+            "sourceText": "노랑/빨강/파랑/초록/흰색은 부족 종류이며 플레이어 소유색과 별개."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "타일 위치",
+            "acquisition": "manual",
+            "sourceText": "노랑/빨강/파랑/초록/흰색은 부족 종류이며 플레이어 소유색과 별개. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "ownership",
+        "name": "낙타·궁전·야자수",
+        "kind": "piece",
+        "description": "플레이어 낙타와 타일의 시설.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 플레이어 낙타와 타일의 시설."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "낙타·궁전·야자수",
+            "acquisition": "visible",
+            "sourceText": "플레이어 낙타와 타일의 시설."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "플레이어 낙타와 타일의 시설. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "타일 위치",
+            "acquisition": "manual",
+            "sourceText": "플레이어 낙타와 타일의 시설. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "Djinn·자원 카드",
+        "kind": "card",
+        "description": "시장·개인 획득·지불/판매 중 카드.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "시장·개인 획득·지불/판매 중 카드.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "상품·진 카드",
+            "acquisition": "visible",
+            "sourceText": "시장·개인 획득·지불/판매 중 카드.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "시장·획득·지불 중",
+            "acquisition": "manual",
+            "sourceText": "시장·개인 획득·지불/판매 중 카드. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "coins",
+        "name": "동전·차례 표식",
+        "kind": "token",
+        "description": "차례 입찰·순서와 보유 돈.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 차례 입찰·순서와 보유 돈."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "동전 액면",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "차례 입찰·순서와 보유 돈."
+          },
+          {
+            "id": "bidOrder",
+            "type": "integer",
+            "label": "확인 입찰 순서",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "차례 입찰·순서와 보유 돈. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "gaia-project": {
+    "gameId": "gaia-project",
+    "runtimePackId": "gaia-project",
+    "schema": "gaia-project-v1",
+    "editionId": "base",
+    "sourceSHA": "ef1f77b1041ce91252800aa4ad9514b075bb596784ec3652f8d0d1e2155908cd",
+    "packVersion": "1.0.0-essentials-2.ef1f77b1041c",
+    "title": "가이아 프로젝트",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "sectors",
+        "name": "섹터·행성",
+        "kind": "tile",
+        "description": "섹터 ID·회전과 행성 종류.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전과 행성 종류.",
+            "faceOnly": true
+          },
+          {
+            "id": "sectorLabel",
+            "type": "text",
+            "label": "섹터 표기",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전과 행성 종류.",
+            "faceOnly": true
+          },
+          {
+            "id": "planetType",
+            "type": "text",
+            "label": "행성 유형",
+            "acquisition": "visible",
+            "sourceText": "섹터 ID·회전과 행성 종류.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지도 배치",
+            "acquisition": "manual",
+            "sourceText": "섹터 ID·회전과 행성 종류. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "structures",
+        "name": "건물·가이아포머·위성",
+        "kind": "piece",
+        "description": "건물 레벨, 변환 중 가이아포머, 연방 연결 위성.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 건물 레벨, 변환 중 가이아포머, 연방 연결 위성."
+          },
+          {
+            "id": "structureType",
+            "type": "text",
+            "label": "건물·가이아포머·위성",
+            "acquisition": "visible",
+            "sourceText": "건물 레벨, 변환 중 가이아포머, 연방 연결 위성."
+          },
+          {
+            "id": "level",
+            "type": "integer",
+            "label": "표시 레벨",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "건물 레벨, 변환 중 가이아포머, 연방 연결 위성."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "건물 레벨, 변환 중 가이아포머, 연방 연결 위성. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tech",
+        "name": "기술·연방·보너스",
+        "kind": "tile",
+        "description": "기술 소유/면, 연방 타일과 라운드 보너스.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "기술 소유/면, 연방 타일과 라운드 보너스.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileType",
+            "type": "text",
+            "label": "기술·연방·부스터",
+            "acquisition": "visible",
+            "sourceText": "기술 소유/면, 연방 타일과 라운드 보너스.",
+            "faceOnly": true
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "기술 소유/면, 연방 타일과 라운드 보너스.",
+            "faceOnly": true
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "기술 소유/면, 연방 타일과 라운드 보너스. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "자원·파워",
+        "kind": "token",
+        "description": "광석·돈·지식·QIC와 각 파워 구역.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 광석·돈·지식·QIC와 각 파워 구역."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "광석·크레딧·지식·QIC·파워",
+            "acquisition": "visible",
+            "sourceText": "광석·돈·지식·QIC와 각 파워 구역."
+          },
+          {
+            "id": "powerBowl",
+            "type": "text",
+            "label": "파워 그릇",
+            "acquisition": "manual",
+            "sourceText": "광석·돈·지식·QIC와 각 파워 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "보이는 수치",
+            "acquisition": "visible",
+            "sourceText": "광석·돈·지식·QIC와 각 파워 구역."
+          }
+        ]
+      }
+    ]
+  },
+  "heat": {
+    "gameId": "heat",
+    "runtimePackId": "heat",
+    "schema": "heat-v1",
+    "editionId": "base",
+    "sourceSHA": "ab623840f14b9ec715e6720a0c9eac16be202c8f6f0efea60bb652f1f9c59bd3",
+    "packVersion": "1.0.0-essentials-2.ab623840f14b",
+    "title": "히트: 질주의 열기",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cars",
+        "name": "경주차·기어 말",
+        "kind": "piece",
+        "description": "차량 소유자, 트랙 칸과 기어 위치.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 차량 소유자, 트랙 칸과 기어 위치."
+          },
+          {
+            "id": "carColor",
+            "type": "text",
+            "label": "자동차 색",
+            "acquisition": "visible",
+            "sourceText": "차량 소유자, 트랙 칸과 기어 위치."
+          },
+          {
+            "id": "gear",
+            "type": "integer",
+            "label": "보이는 기어",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "차량 소유자, 트랙 칸과 기어 위치."
+          },
+          {
+            "id": "position",
+            "type": "text",
+            "label": "트랙 위치",
+            "acquisition": "manual",
+            "sourceText": "차량 소유자, 트랙 칸과 기어 위치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "차량 소유자, 트랙 칸과 기어 위치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "속도·열·스트레스 카드",
+        "kind": "card",
+        "description": "기본판 구성 목록은 Speed72장·Heat48장·Stress37장을 명시한다. 세 종류를 구분하는 대표형으로 제한한다. 손패/덱/버림/엔진의 이동 세부는 이번 상품 본문만으로 추가 확정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "기본판 구성 목록은 Speed72장·Heat48장·Stress37장을 명시한다. 세 종류를 구분하는 대표형으로 제한한다. 손패/덱/버림/엔진의 이동 세부는 이번 상품 본문만으로 추가 확정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "속도·히트·스트레스",
+            "acquisition": "visible",
+            "sourceText": "기본판 구성 목록은 Speed72장·Heat48장·Stress37장을 명시한다. 세 종류를 구분하는 대표형으로 제한한다. 손패/덱/버림/엔진의 이동 세부는 이번 상품 본문만으로 추가 확정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "printedNumber",
+            "type": "integer",
+            "label": "보이는 숫자",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "기본판 구성 목록은 Speed72장·Heat48장·Stress37장을 명시한다. 세 종류를 구분하는 대표형으로 제한한다. 손패/덱/버림/엔진의 이동 세부는 이번 상품 본문만으로 추가 확정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·플레이·엔진·버림",
+            "acquisition": "manual",
+            "sourceText": "기본판 구성 목록은 Speed72장·Heat48장·Stress37장을 명시한다. 세 종류를 구분하는 대표형으로 제한한다. 손패/덱/버림/엔진의 이동 세부는 이번 상품 본문만으로 추가 확정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "track",
+        "name": "서킷·개인판",
+        "kind": "board",
+        "description": "서킷 ID, 방향·커브와 개인 기어/엔진 구역.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "서킷 ID, 방향·커브와 개인 기어/엔진 구역."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "서킷 ID, 방향·커브와 개인 기어/엔진 구역."
+          },
+          {
+            "id": "circuit",
+            "type": "text",
+            "label": "서킷 표기",
+            "acquisition": "visible",
+            "sourceText": "서킷 ID, 방향·커브와 개인 기어/엔진 구역."
+          },
+          {
+            "id": "curve",
+            "type": "text",
+            "label": "코너 표기",
+            "acquisition": "visible",
+            "sourceText": "서킷 ID, 방향·커브와 개인 기어/엔진 구역."
+          },
+          {
+            "id": "direction",
+            "type": "text",
+            "label": "확인한 주행 방향",
+            "acquisition": "manual",
+            "sourceText": "서킷 ID, 방향·커브와 개인 기어/엔진 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "king-of-tokyo": {
+    "gameId": "king-of-tokyo",
+    "runtimePackId": "king-of-tokyo",
+    "schema": "king-of-tokyo-v1",
+    "editionId": "base",
+    "sourceSHA": "f85e6965fdedae7f65abde51b718820430b55adc81b9508f99c5f9f0fd998eb8",
+    "packVersion": "1.0.0-essentials-2.f85e6965fded",
+    "title": "킹 오브 도쿄",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "monsters",
+        "name": "괴수·개인판",
+        "kind": "piece",
+        "description": "괴수 identity·도쿄 안팎·체력/승점.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 괴수 identity·도쿄 안팎·체력/승점."
+          },
+          {
+            "id": "monster",
+            "type": "text",
+            "label": "괴수 표기",
+            "acquisition": "visible",
+            "sourceText": "괴수 identity·도쿄 안팎·체력/승점."
+          },
+          {
+            "id": "health",
+            "type": "integer",
+            "label": "체력 표시",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "괴수 identity·도쿄 안팎·체력/승점."
+          },
+          {
+            "id": "points",
+            "type": "integer",
+            "label": "점수 표시",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "괴수 identity·도쿄 안팎·체력/승점."
+          },
+          {
+            "id": "tokyo",
+            "type": "text",
+            "label": "도쿄 위치",
+            "acquisition": "manual",
+            "sourceText": "괴수 identity·도쿄 안팎·체력/승점. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "dice",
+        "name": "주사위",
+        "kind": "die",
+        "description": "숫자·에너지·공격·하트 기호와 킵/재굴림 대상.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 숫자·에너지·공격·하트 기호와 킵/재굴림 대상."
+          },
+          {
+            "id": "dieSymbol",
+            "type": "text",
+            "label": "보이는 눈·기호",
+            "acquisition": "visible",
+            "sourceText": "숫자·에너지·공격·하트 기호와 킵/재굴림 대상."
+          },
+          {
+            "id": "kept",
+            "type": "text",
+            "label": "이번 굴림 유지 선택",
+            "acquisition": "manual",
+            "sourceText": "숫자·에너지·공격·하트 기호와 킵/재굴림 대상. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "파워 카드",
+        "kind": "card",
+        "description": "Keep/Discard·시장/보유/버림·비용.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "Keep/Discard·시장/보유/버림·비용.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "지속·일회 카드",
+            "acquisition": "visible",
+            "sourceText": "Keep/Discard·시장/보유/버림·비용.",
+            "faceOnly": true
+          },
+          {
+            "id": "printedCost",
+            "type": "integer",
+            "label": "읽힌 비용",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "Keep/Discard·시장/보유/버림·비용.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "시장·보유·버림",
+            "acquisition": "manual",
+            "sourceText": "Keep/Discard·시장/보유/버림·비용. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "energy",
+        "name": "에너지·상태 토큰",
+        "kind": "token",
+        "description": "개인 에너지와 카드에 붙인 특수 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 에너지와 카드에 붙인 특수 상태."
+          },
+          {
+            "id": "energyZone",
+            "type": "text",
+            "label": "개인 재고·부착 구분",
+            "acquisition": "manual",
+            "sourceText": "개인 에너지와 카드에 붙인 특수 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "target",
+            "type": "text",
+            "label": "붙은 카드",
+            "acquisition": "manual",
+            "sourceText": "개인 에너지와 카드에 붙인 특수 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "lost-ruins-arnak": {
+    "gameId": "lost-ruins-arnak",
+    "runtimePackId": "lost-ruins-arnak",
+    "schema": "lost-ruins-arnak-v1",
+    "editionId": "base",
+    "sourceSHA": "add095935a7a5abe981b5d9c1d500e2410b2417ba3e50462dc4c2e53971eabc0",
+    "packVersion": "1.0.0-essentials-2.add095935a7a",
+    "title": "아르낙의 잊혀진 유적",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "workers",
+        "name": "고고학자",
+        "kind": "piece",
+        "description": "사용/대기와 방문 장소.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 사용/대기와 방문 장소."
+          },
+          {
+            "id": "workerType",
+            "type": "text",
+            "label": "고고학자",
+            "acquisition": "visible",
+            "sourceText": "사용/대기와 방문 장소."
+          },
+          {
+            "id": "workerState",
+            "type": "text",
+            "label": "사용·대기",
+            "acquisition": "manual",
+            "sourceText": "사용/대기와 방문 장소. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "사용/대기와 방문 장소. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "sites",
+        "name": "장소·수호자·우상",
+        "kind": "tile",
+        "description": "장소 위 수호자와 획득 우상, 보너스 사용 면.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "장소 위 수호자와 획득 우상, 보너스 사용 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "siteType",
+            "type": "text",
+            "label": "장소·수호자·우상",
+            "acquisition": "visible",
+            "sourceText": "장소 위 수호자와 획득 우상, 보너스 사용 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "bonusFace",
+            "type": "text",
+            "label": "보이는 보너스 면",
+            "acquisition": "visible",
+            "sourceText": "장소 위 수호자와 획득 우상, 보너스 사용 면.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "장소 위치",
+            "acquisition": "manual",
+            "sourceText": "장소 위 수호자와 획득 우상, 보너스 사용 면. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "도구·유물·공포 카드",
+        "kind": "card",
+        "description": "구매/사용/손패/덱/제거 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "구매/사용/손패/덱/제거 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "아이템·유물·공포 등 표기",
+            "acquisition": "visible",
+            "sourceText": "구매/사용/손패/덱/제거 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·사용·시장·더미",
+            "acquisition": "manual",
+            "sourceText": "구매/사용/손패/덱/제거 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "research",
+        "name": "연구 말·보너스",
+        "kind": "marker",
+        "description": "돋보기/공책과 연구 트랙.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 돋보기/공책과 연구 트랙."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "돋보기·노트",
+            "acquisition": "visible",
+            "sourceText": "돋보기/공책과 연구 트랙."
+          },
+          {
+            "id": "trackLabel",
+            "type": "text",
+            "label": "트랙 칸 표기",
+            "acquisition": "visible",
+            "sourceText": "돋보기/공책과 연구 트랙."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "돋보기/공책과 연구 트랙. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "자원·조수",
+        "kind": "token",
+        "description": "인쇄 종류별 수량과 조수 면/사용 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 인쇄 종류별 수량과 조수 면/사용 상태."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "자원·조수",
+            "acquisition": "visible",
+            "sourceText": "인쇄 종류별 수량과 조수 면/사용 상태."
+          },
+          {
+            "id": "assistantSide",
+            "type": "text",
+            "label": "조수 면",
+            "acquisition": "visible",
+            "sourceText": "인쇄 종류별 수량과 조수 면/사용 상태."
+          },
+          {
+            "id": "used",
+            "type": "text",
+            "label": "조수 사용 여부",
+            "acquisition": "manual",
+            "sourceText": "인쇄 종류별 수량과 조수 면/사용 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "monopoly": {
+    "gameId": "monopoly",
+    "runtimePackId": "monopoly",
+    "schema": "monopoly-v1",
+    "editionId": "base",
+    "sourceSHA": "82ef725b60a9d2fb021c5d074ffe305d0f6b375e6f8764c6355d09d4036ded34",
+    "packVersion": "1.0.0-essentials-2.82ef725b60a9",
+    "title": "모노폴리",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "board",
+        "name": "재산·이동 보드",
+        "kind": "board",
+        "description": "지역별 판 이름·칸 순서와 출발 방향.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지역별 판 이름·칸 순서와 출발 방향."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지역별 판 이름·칸 순서와 출발 방향."
+          },
+          {
+            "id": "editionLabel",
+            "type": "text",
+            "label": "판본 표기",
+            "acquisition": "visible",
+            "sourceText": "지역별 판 이름·칸 순서와 출발 방향."
+          },
+          {
+            "id": "spaceLabel",
+            "type": "text",
+            "label": "장소 표기",
+            "acquisition": "visible",
+            "sourceText": "지역별 판 이름·칸 순서와 출발 방향."
+          },
+          {
+            "id": "spaceOrder",
+            "type": "text",
+            "label": "확인한 진행 순서",
+            "acquisition": "manual",
+            "sourceText": "지역별 판 이름·칸 순서와 출발 방향. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "플레이어 말·주사위",
+        "kind": "piece",
+        "description": "현재 칸·굴린 주사위와 말 identity.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 현재 칸·굴린 주사위와 말 identity."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "이동말·주사위",
+            "acquisition": "visible",
+            "sourceText": "현재 칸·굴린 주사위와 말 identity."
+          },
+          {
+            "id": "dieValue",
+            "type": "integer",
+            "label": "주사위 눈",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "현재 칸·굴린 주사위와 말 identity."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "판 위치",
+            "acquisition": "manual",
+            "sourceText": "현재 칸·굴린 주사위와 말 identity. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "현재 칸·굴린 주사위와 말 identity. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "property",
+        "name": "소유권·집·호텔",
+        "kind": "card",
+        "description": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "증서·집·호텔",
+            "acquisition": "visible",
+            "sourceText": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "mortgageFace",
+            "type": "text",
+            "label": "보이는 저당 면",
+            "acquisition": "visible",
+            "sourceText": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "targetProperty",
+            "type": "text",
+            "label": "해당 부동산",
+            "acquisition": "manual",
+            "sourceText": "소유권 카드·집·호텔은 별개다. 카드의 담보 면과 부동산별 집/호텔 수를 기록한다. G0009 인쇄는 집32·호텔12·소유권28장을 명시하며 다른 지역 부동산 명칭까지 고정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "money",
+        "name": "현금·기회·공동기금",
+        "kind": "token",
+        "description": "지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "지폐·찬스·공동기금",
+            "acquisition": "visible",
+            "sourceText": "지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "지폐 액면",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "pile",
+            "type": "text",
+            "label": "보유·더미 구분",
+            "acquisition": "manual",
+            "sourceText": "지폐, 기회 카드, 공동기금 카드는 다른 물체다. 뽑은 카드는 일반적으로 더미 맨 아래로 돌아가므로 더미 순서와 보유 탈옥 카드를 구분한다. 개인 현금과 은행을 합치지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "quacks": {
+    "gameId": "quacks",
+    "runtimePackId": "quacks",
+    "schema": "quacks-v1",
+    "editionId": "base",
+    "sourceSHA": "0ed54775a771acc576a0d6e5a330a1bded8d4cfcbde84a9891f34980c2d9c517",
+    "packVersion": "1.0.0-essentials-2.0ed54775a771",
+    "title": "크베들린부르크의 돌팔이 약장수",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "chips",
+        "name": "재료 칩",
+        "kind": "token",
+        "description": "색/숫자·주머니/이번 솥/구매 공급.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 색/숫자·주머니/이번 솥/구매 공급."
+          },
+          {
+            "id": "chipColor",
+            "type": "text",
+            "label": "칩 색",
+            "acquisition": "visible",
+            "sourceText": "색/숫자·주머니/이번 솥/구매 공급."
+          },
+          {
+            "id": "chipNumber",
+            "type": "integer",
+            "label": "인쇄 이동값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "색/숫자·주머니/이번 솥/구매 공급."
+          },
+          {
+            "id": "chipZone",
+            "type": "text",
+            "label": "솥·주머니·공급 구분",
+            "acquisition": "manual",
+            "sourceText": "색/숫자·주머니/이번 솥/구매 공급. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "pathPosition",
+            "type": "text",
+            "label": "솥 경로 칸",
+            "acquisition": "manual",
+            "sourceText": "색/숫자·주머니/이번 솥/구매 공급. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "pot",
+        "name": "솥·시작 방울·쥐",
+        "kind": "board",
+        "description": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "potSide",
+            "type": "text",
+            "label": "기본·시험관 변형면",
+            "acquisition": "visible",
+            "sourceText": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "dropPosition",
+            "type": "text",
+            "label": "시작 방울 위치",
+            "acquisition": "manual",
+            "sourceText": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "ratPosition",
+            "type": "text",
+            "label": "쥐 표식 위치",
+            "acquisition": "manual",
+            "sourceText": "솥 개인판은 기본면과 시험관 변형면이 있다. 시작 방울과 쥐 표식은 별개이며 경로 위치를 구별한다. 재료칩의 숫자는 이동값이므로 놓인 칩 개수/수량과 혼동하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "books",
+        "name": "재료책·운세",
+        "kind": "card",
+        "description": "선택 책 세트·현재 운세와 라운드.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택 책 세트·현재 운세와 라운드.",
+            "faceOnly": true
+          },
+          {
+            "id": "setLabel",
+            "type": "text",
+            "label": "선택한 책 세트 표기",
+            "acquisition": "visible",
+            "sourceText": "선택 책 세트·현재 운세와 라운드.",
+            "faceOnly": true
+          },
+          {
+            "id": "fortuneLabel",
+            "type": "text",
+            "label": "공개 운세 표기",
+            "acquisition": "visible",
+            "sourceText": "선택 책 세트·현재 운세와 라운드.",
+            "faceOnly": true
+          },
+          {
+            "id": "roundValue",
+            "type": "integer",
+            "label": "라운드 표시",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "선택 책 세트·현재 운세와 라운드.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "goods",
+        "name": "루비·플라스크·점수",
+        "kind": "token",
+        "description": "루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "루비·플라스크·점수말·봉인",
+            "acquisition": "visible",
+            "sourceText": "루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "flaskSide",
+            "type": "text",
+            "label": "플라스크 가득·빈 면",
+            "acquisition": "visible",
+            "sourceText": "루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "sealFace",
+            "type": "text",
+            "label": "봉인 표시 면",
+            "acquisition": "visible",
+            "sourceText": "루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "trackValue",
+            "type": "integer",
+            "label": "보이는 점수칸",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "루비·양면 플라스크·개인 점수 표식은 별개다. 플라스크 가득/빈 면, 점수 트랙 위치 및0/50 봉인의 면을 저장한다. 루비는 공용 유형색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          }
+        ]
+      }
+    ]
+  },
+  "root": {
+    "gameId": "root",
+    "runtimePackId": "root",
+    "schema": "root-v1",
+    "editionId": "base",
+    "sourceSHA": "104a6a3bca60df9111352722abd2a13f16859e8918be862680e34a22093693ac",
+    "packVersion": "1.0.0-essentials-2.104a6a3bca60",
+    "title": "루트",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "warriors",
+        "name": "전사·방랑자",
+        "kind": "piece",
+        "description": "전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "전사·방랑자",
+            "acquisition": "visible",
+            "sourceText": "전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다."
+          },
+          {
+            "id": "faction",
+            "type": "text",
+            "label": "보이는 세력 유형",
+            "acquisition": "visible",
+            "sourceText": "전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "공터·길 위치",
+            "acquisition": "manual",
+            "sourceText": "전사와 방랑자 말은 지배 계산에서 같은 종류가 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "buildings",
+        "name": "세력 건물",
+        "kind": "tile",
+        "description": "제재소·작업장·모병소·둥지·기지.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "제재소·작업장·모병소·둥지·기지.",
+            "faceOnly": true
+          },
+          {
+            "id": "buildingType",
+            "type": "text",
+            "label": "제재소·작업장·모병소·둥지·기지",
+            "acquisition": "visible",
+            "sourceText": "제재소·작업장·모병소·둥지·기지.",
+            "faceOnly": true
+          },
+          {
+            "id": "slot",
+            "type": "text",
+            "label": "건물 슬롯",
+            "acquisition": "manual",
+            "sourceText": "제재소·작업장·모병소·둥지·기지. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "제재소·작업장·모병소·둥지·기지. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "공감·목재·성채",
+        "kind": "token",
+        "description": "건물 슬롯을 차지하지 않는 토큰.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 건물 슬롯을 차지하지 않는 토큰."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "보이는 토큰 종류",
+            "acquisition": "visible",
+            "sourceText": "건물 슬롯을 차지하지 않는 토큰."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "공터 위치",
+            "acquisition": "manual",
+            "sourceText": "건물 슬롯을 차지하지 않는 토큰. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "건물 슬롯을 차지하지 않는 토큰. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "공용 카드",
+        "kind": "card",
+        "description": "손패·칙령·지지자·제작 카드 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패·칙령·지지자·제작 카드 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·칙령·지지자·제작 구분",
+            "acquisition": "manual",
+            "sourceText": "손패·칙령·지지자·제작 카드 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "column",
+            "type": "text",
+            "label": "칙령 등 실제 열",
+            "acquisition": "manual",
+            "sourceText": "손패·칙령·지지자·제작 카드 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "items",
+        "name": "아이템·관계",
+        "kind": "token",
+        "description": "방랑자 아이템의 소진/손상 및 세력별 관계.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 방랑자 아이템의 소진/손상 및 세력별 관계."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "아이템 종류",
+            "acquisition": "visible",
+            "sourceText": "방랑자 아이템의 소진/손상 및 세력별 관계."
+          },
+          {
+            "id": "exhausted",
+            "type": "text",
+            "label": "소진 여부",
+            "acquisition": "manual",
+            "sourceText": "방랑자 아이템의 소진/손상 및 세력별 관계. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "damaged",
+            "type": "text",
+            "label": "손상 여부",
+            "acquisition": "manual",
+            "sourceText": "방랑자 아이템의 소진/손상 및 세력별 관계. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "relationship",
+            "type": "text",
+            "label": "직접 확인한 세력 관계",
+            "acquisition": "manual",
+            "sourceText": "방랑자 아이템의 소진/손상 및 세력별 관계. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "scythe": {
+    "gameId": "scythe",
+    "runtimePackId": "scythe",
+    "schema": "scythe-v1",
+    "editionId": "base",
+    "sourceSHA": "1454014dc2374000ea7da5f396c3cfe139ed95d0c717880e63c8ffd4b1efeec6",
+    "packVersion": "1.0.0-essentials-2.1454014dc237",
+    "title": "사이드",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "units",
+        "name": "캐릭터·메크·일꾼",
+        "kind": "piece",
+        "description": "종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모."
+          },
+          {
+            "id": "unitType",
+            "type": "text",
+            "label": "캐릭터·메크·일꾼",
+            "acquisition": "visible",
+            "sourceText": "종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "영토 위치",
+            "acquisition": "manual",
+            "sourceText": "종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "transport",
+            "type": "text",
+            "label": "직접 확인한 승객·운반",
+            "acquisition": "manual",
+            "sourceText": "종류·소유자와 지도 위치, 승객/운반 상태는 모르면 메모. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "자원",
+        "kind": "token",
+        "description": "영토에 놓인 종류별 자원. 플레이어 재산 총수만으로 축약하지 않는다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 영토에 놓인 종류별 자원. 플레이어 재산 총수만으로 축약하지 않는다."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "자원 종류",
+            "acquisition": "visible",
+            "sourceText": "영토에 놓인 종류별 자원. 플레이어 재산 총수만으로 축약하지 않는다."
+          },
+          {
+            "id": "territory",
+            "type": "text",
+            "label": "자원이 놓인 영토",
+            "acquisition": "manual",
+            "sourceText": "영토에 놓인 종류별 자원. 플레이어 재산 총수만으로 축약하지 않는다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "buildings",
+        "name": "건물·업그레이드·모집",
+        "kind": "piece",
+        "description": "지도 건물과 매트에서 옮긴 기술 큐브/모집 말.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 지도 건물과 매트에서 옮긴 기술 큐브/모집 말."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "건물·기술큐브·모집말",
+            "acquisition": "visible",
+            "sourceText": "지도 건물과 매트에서 옮긴 기술 큐브/모집 말."
+          },
+          {
+            "id": "origin",
+            "type": "text",
+            "label": "매트 출발칸",
+            "acquisition": "manual",
+            "sourceText": "지도 건물과 매트에서 옮긴 기술 큐브/모집 말. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지도·매트 위치",
+            "acquisition": "manual",
+            "sourceText": "지도 건물과 매트에서 옮긴 기술 큐브/모집 말. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "전투·목표·조우·공장",
+        "kind": "card",
+        "description": "개인 비공개와 획득한 공개 공장 카드 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 비공개와 획득한 공개 공장 카드 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "목표·조우·공장",
+            "acquisition": "visible",
+            "sourceText": "개인 비공개와 획득한 공개 공장 카드 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "공개·허용 개인 영역",
+            "acquisition": "manual",
+            "sourceText": "개인 비공개와 획득한 공개 공장 카드 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tracks",
+        "name": "별·인기·전력·동전",
+        "kind": "marker",
+        "description": "달성 별과 현재 트랙/돈 값.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 달성 별과 현재 트랙/돈 값."
+          },
+          {
+            "id": "trackType",
+            "type": "text",
+            "label": "별·전력·인기·화폐",
+            "acquisition": "visible",
+            "sourceText": "달성 별과 현재 트랙/돈 값."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "달성 별과 현재 트랙/돈 값."
+          },
+          {
+            "id": "starMeaning",
+            "type": "text",
+            "label": "확인한 별 항목",
+            "acquisition": "manual",
+            "sourceText": "달성 별과 현재 트랙/돈 값. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "seti": {
+    "gameId": "seti",
+    "runtimePackId": "seti",
+    "schema": "seti-v1",
+    "editionId": "base",
+    "sourceSHA": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
+    "packVersion": "1.0.0-essentials-2.65c3c718faf8",
+    "title": "세티",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "system",
+        "name": "태양계 원판·섹터판",
+        "kind": "board",
+        "description": "여러 회전층과 별/행성·궤도 공간.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "여러 회전층과 별/행성·궤도 공간."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "여러 회전층과 별/행성·궤도 공간."
+          },
+          {
+            "id": "layerLabel",
+            "type": "text",
+            "label": "회전층 표기",
+            "acquisition": "visible",
+            "sourceText": "여러 회전층과 별/행성·궤도 공간."
+          },
+          {
+            "id": "sectorLabel",
+            "type": "text",
+            "label": "별·행성·궤도 표기",
+            "acquisition": "visible",
+            "sourceText": "여러 회전층과 별/행성·궤도 공간."
+          },
+          {
+            "id": "rotationState",
+            "type": "text",
+            "label": "실제 층 방향",
+            "acquisition": "manual",
+            "sourceText": "여러 회전층과 별/행성·궤도 공간. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "probes",
+        "name": "탐사선·궤도선·착륙선",
+        "kind": "piece",
+        "description": "같은 플레이어색 피겨가 태양계에서는 탐사선, 행성판 궤도에서는 궤도선, 행성 착륙칸에서는 착륙선이 된다. 다른 실물 조각 세 종류로 복제하지 않고 동일 에셋과 역할/부착 위치를 구분한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 같은 플레이어색 피겨가 태양계에서는 탐사선, 행성판 궤도에서는 궤도선, 행성 착륙칸에서는 착륙선이 된다. 다른 실물 조각 세 종류로 복제하지 않고 동일 에셋과 역할/부착 위치를 구분한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "role",
+            "type": "enum",
+            "label": "탐사선·궤도선·착륙선 역할",
+            "acquisition": "manual",
+            "sourceText": "같은 플레이어색 피겨가 태양계에서는 탐사선, 행성판 궤도에서는 궤도선, 행성 착륙칸에서는 착륙선이 된다. 다른 실물 조각 세 종류로 복제하지 않고 동일 에셋과 역할/부착 위치를 구분한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다.",
+            "options": [
+              {
+                "value": "probe",
+                "label": "탐사선"
+              },
+              {
+                "value": "orbiter",
+                "label": "궤도선"
+              },
+              {
+                "value": "lander",
+                "label": "착륙선"
+              }
+            ]
+          },
+          {
+            "id": "parentSpace",
+            "type": "text",
+            "label": "태양계·궤도·착륙칸",
+            "acquisition": "manual",
+            "sourceText": "같은 플레이어색 피겨가 태양계에서는 탐사선, 행성판 궤도에서는 궤도선, 행성 착륙칸에서는 착륙선이 된다. 다른 실물 조각 세 종류로 복제하지 않고 동일 에셋과 역할/부착 위치를 구분한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "같은 플레이어색 피겨가 태양계에서는 탐사선, 행성판 궤도에서는 궤도선, 행성 착륙칸에서는 착륙선이 된다. 다른 실물 조각 세 종류로 복제하지 않고 동일 에셋과 역할/부착 위치를 구분한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "technology",
+        "name": "기술·데이터·신호",
+        "kind": "token",
+        "description": "개인 컴퓨터 슬롯·관측 신호·기술 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 컴퓨터 슬롯·관측 신호·기술 상태."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "컴퓨터·기술·신호",
+            "acquisition": "visible",
+            "sourceText": "개인 컴퓨터 슬롯·관측 신호·기술 상태."
+          },
+          {
+            "id": "slot",
+            "type": "text",
+            "label": "설치·신호 칸",
+            "acquisition": "manual",
+            "sourceText": "개인 컴퓨터 슬롯·관측 신호·기술 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "technologyState",
+            "type": "text",
+            "label": "확인한 기술 상태",
+            "acquisition": "manual",
+            "sourceText": "개인 컴퓨터 슬롯·관측 신호·기술 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "임무·외계종 카드",
+        "kind": "card",
+        "description": "공개 카드·개인 손패와 발견 전 종 정보.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "공개 카드·개인 손패와 발견 전 종 정보.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "카드·종 정보",
+            "acquisition": "visible",
+            "sourceText": "공개 카드·개인 손패와 발견 전 종 정보.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "공개·손패·미발견 구분",
+            "acquisition": "manual",
+            "sourceText": "공개 카드·개인 손패와 발견 전 종 정보. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "크레딧·에너지·진행",
+        "kind": "token",
+        "description": "자원·수입·점수·라운드 기록.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 자원·수입·점수·라운드 기록."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "재고·수입·점수·라운드",
+            "acquisition": "visible",
+            "sourceText": "자원·수입·점수·라운드 기록."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "보이는 값",
+            "acquisition": "visible",
+            "sourceText": "자원·수입·점수·라운드 기록."
+          }
+        ]
+      }
+    ]
+  },
+  "small-world": {
+    "gameId": "small-world",
+    "runtimePackId": "small-world",
+    "schema": "small-world-v1",
+    "editionId": "base",
+    "sourceSHA": "92552f07f86429a11448fdaf2e6f1d2c5a2b5d73743d44b894c13be3da3caf4b",
+    "packVersion": "1.0.0-essentials-2.92552f07f864",
+    "title": "스몰 월드",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "지역 지도",
+        "kind": "board",
+        "description": "선택 인원용 지도·지역 종류·인접 관계.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택 인원용 지도·지역 종류·인접 관계."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택 인원용 지도·지역 종류·인접 관계."
+          },
+          {
+            "id": "mapLabel",
+            "type": "text",
+            "label": "선택 지도 표기",
+            "acquisition": "visible",
+            "sourceText": "선택 인원용 지도·지역 종류·인접 관계."
+          },
+          {
+            "id": "regionType",
+            "type": "text",
+            "label": "지역 유형",
+            "acquisition": "visible",
+            "sourceText": "선택 인원용 지도·지역 종류·인접 관계."
+          },
+          {
+            "id": "regionLabel",
+            "type": "text",
+            "label": "지역 식별",
+            "acquisition": "visible",
+            "sourceText": "선택 인원용 지도·지역 종류·인접 관계."
+          }
+        ]
+      },
+      {
+        "id": "races",
+        "name": "종족 타일·토큰",
+        "kind": "piece",
+        "description": "현재 활동/쇠퇴한 종족의 면과 플레이어 연결.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 현재 활동/쇠퇴한 종족의 면과 플레이어 연결."
+          },
+          {
+            "id": "raceType",
+            "type": "text",
+            "label": "종족 표기",
+            "acquisition": "visible",
+            "sourceText": "현재 활동/쇠퇴한 종족의 면과 플레이어 연결."
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "활동·쇠퇴 면",
+            "acquisition": "visible",
+            "sourceText": "현재 활동/쇠퇴한 종족의 면과 플레이어 연결."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "현재 활동/쇠퇴한 종족의 면과 플레이어 연결. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "powers",
+        "name": "능력 배지·시설",
+        "kind": "token",
+        "description": "종족과 짝인 능력·지역의 산/요새/기타 표식.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종족과 짝인 능력·지역의 산/요새/기타 표식."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "능력·산·요새·기타 표식",
+            "acquisition": "visible",
+            "sourceText": "종족과 짝인 능력·지역의 산/요새/기타 표식."
+          },
+          {
+            "id": "pairedRace",
+            "type": "text",
+            "label": "짝인 종족",
+            "acquisition": "manual",
+            "sourceText": "종족과 짝인 능력·지역의 산/요새/기타 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "부착 지역",
+            "acquisition": "manual",
+            "sourceText": "종족과 짝인 능력·지역의 산/요새/기타 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "coins",
+        "name": "승점 동전",
+        "kind": "token",
+        "description": "획득 점수의 물리 동전과 선택 시 지불 중 동전.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 획득 점수의 물리 동전과 선택 시 지불 중 동전."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "보이는 동전 점수",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "획득 점수의 물리 동전과 선택 시 지불 중 동전."
+          },
+          {
+            "id": "coinZone",
+            "type": "text",
+            "label": "보유·선택 지불 중",
+            "acquisition": "manual",
+            "sourceText": "획득 점수의 물리 동전과 선택 시 지불 중 동전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "space-base": {
+    "gameId": "space-base",
+    "runtimePackId": "space-base",
+    "schema": "space-base-v1",
+    "editionId": "base",
+    "sourceSHA": "6fd93fb7b528bf56c4f4b54db0a82cf501b0777b10293c0a1be8c636ac963e0c",
+    "packVersion": "1.0.0-essentials-2.6fd93fb7b528",
+    "title": "스페이스 베이스",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "ships",
+        "name": "함선·식민지 카드",
+        "kind": "card",
+        "description": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+            "faceOnly": true
+          },
+          {
+            "id": "sectorNumber",
+            "type": "integer",
+            "label": "섹터 번호",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+            "faceOnly": true
+          },
+          {
+            "id": "mode",
+            "type": "text",
+            "label": "정박·배치 방향",
+            "acquisition": "manual",
+            "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "underCard",
+            "type": "text",
+            "label": "겹침 순서",
+            "acquisition": "manual",
+            "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "visibleAbility",
+            "type": "text",
+            "label": "보이는 빨간 능력 표기",
+            "acquisition": "visible",
+            "sourceText": "섹터 번호·정박/배치 방향과 중첩된 빨간 능력.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "크레딧·수입·승점·충전",
+        "kind": "token",
+        "description": "개인 트랙과 카드별 충전.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 트랙과 카드별 충전."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "자원·점수·충전",
+            "acquisition": "visible",
+            "sourceText": "개인 트랙과 카드별 충전."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "개인 트랙과 카드별 충전."
+          },
+          {
+            "id": "targetCard",
+            "type": "text",
+            "label": "충전 대상 카드",
+            "acquisition": "manual",
+            "sourceText": "개인 트랙과 카드별 충전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "dice",
+        "name": "주사위",
+        "kind": "die",
+        "description": "현재 개별 눈·합과 능력 변경.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 현재 개별 눈·합과 능력 변경."
+          },
+          {
+            "id": "dieValue",
+            "type": "integer",
+            "label": "개별 눈",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "현재 개별 눈·합과 능력 변경."
+          },
+          {
+            "id": "modifiedResult",
+            "type": "text",
+            "label": "확인한 능력 변경",
+            "acquisition": "manual",
+            "sourceText": "현재 개별 눈·합과 능력 변경. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "spirit-island": {
+    "gameId": "spirit-island",
+    "runtimePackId": "spirit-island",
+    "schema": "spirit-island-v1",
+    "editionId": "base",
+    "sourceSHA": "f720340d932e00467ec099c74b576c0885f5d1290c5f0459314d215b4b8c5ec3",
+    "packVersion": "1.0.0-essentials-2.f720340d932e",
+    "title": "정령섬",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "lands",
+        "name": "섬 보드",
+        "kind": "board",
+        "description": "모듈 ID와 앞뒷면·회전·육지 번호.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "모듈 ID와 앞뒷면·회전·육지 번호."
+          },
+          {
+            "id": "sideLabel",
+            "type": "text",
+            "label": "앞뒷면 표기",
+            "acquisition": "visible",
+            "sourceText": "모듈 ID와 앞뒷면·회전·육지 번호."
+          },
+          {
+            "id": "moduleLabel",
+            "type": "text",
+            "label": "지도 모듈 표기",
+            "acquisition": "visible",
+            "sourceText": "모듈 ID와 앞뒷면·회전·육지 번호."
+          },
+          {
+            "id": "landNumber",
+            "type": "integer",
+            "label": "육지 번호",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "모듈 ID와 앞뒷면·회전·육지 번호."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "모듈 배치",
+            "acquisition": "manual",
+            "sourceText": "모듈 ID와 앞뒷면·회전·육지 번호. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "figures",
+        "name": "침략자·다한·현신",
+        "kind": "piece",
+        "description": "탐험가/마을/도시/다한/정령별 현신을 구별.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 탐험가/마을/도시/다한/정령별 현신을 구별."
+          },
+          {
+            "id": "figureType",
+            "type": "text",
+            "label": "탐험가·마을·도시·다한·현신",
+            "acquisition": "visible",
+            "sourceText": "탐험가/마을/도시/다한/정령별 현신을 구별."
+          },
+          {
+            "id": "spirit",
+            "type": "text",
+            "label": "현신의 정령",
+            "acquisition": "manual",
+            "sourceText": "탐험가/마을/도시/다한/정령별 현신을 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "land",
+            "type": "text",
+            "label": "해당 땅",
+            "acquisition": "manual",
+            "sourceText": "탐험가/마을/도시/다한/정령별 현신을 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "오염·공포·에너지",
+        "kind": "token",
+        "description": "땅 위 오염과 보드 공급, 공포 풀과 획득량.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 땅 위 오염과 보드 공급, 공포 풀과 획득량."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "오염·공포",
+            "acquisition": "visible",
+            "sourceText": "땅 위 오염과 보드 공급, 공포 풀과 획득량."
+          },
+          {
+            "id": "markerZone",
+            "type": "text",
+            "label": "땅·공급·획득 구분",
+            "acquisition": "manual",
+            "sourceText": "땅 위 오염과 보드 공급, 공포 풀과 획득량. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "능력·침략·공포 카드",
+        "kind": "card",
+        "description": "공개·대기·이미 해결 상태와 덱 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "공개·대기·이미 해결 상태와 덱 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "능력·침략·이벤트·공포",
+            "acquisition": "visible",
+            "sourceText": "공개·대기·이미 해결 상태와 덱 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "공개·대기·해결·덱 구분",
+            "acquisition": "manual",
+            "sourceText": "공개·대기·이미 해결 상태와 덱 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "star-wars-outer-rim": {
+    "gameId": "star-wars-outer-rim",
+    "runtimePackId": "star-wars-outer-rim",
+    "schema": "star-wars-outer-rim-v1",
+    "editionId": "base",
+    "sourceSHA": "70f1e093e1aed21eb2a8822fa7eebb4219be65c8e477954eb6132d82e9a8ac57",
+    "packVersion": "1.0.0-essentials-2.70f1e093e1ae",
+    "title": "스타워즈: 아우터 림",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "은하 구역·접촉 표식",
+        "kind": "board",
+        "description": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "pieceType",
+            "type": "text",
+            "label": "구역·끝캡·순찰·접촉",
+            "acquisition": "visible",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "sectorLabel",
+            "type": "text",
+            "label": "공개 구역 표기",
+            "acquisition": "visible",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "contactColor",
+            "type": "text",
+            "label": "접촉 뒷면 색",
+            "acquisition": "visible",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "contactDots",
+            "type": "integer",
+            "label": "접촉 점 개수",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지도 구역·행성·항로",
+            "acquisition": "manual",
+            "sourceText": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "ships",
+        "name": "함선·캐릭터",
+        "kind": "piece",
+        "description": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 플레이어 위치·함선/캐릭터 카드와 개인 목표 면."
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "함선·캐릭터·개인목표",
+            "acquisition": "visible",
+            "sourceText": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면."
+          },
+          {
+            "id": "goalFace",
+            "type": "text",
+            "label": "보이는 목표 면",
+            "acquisition": "visible",
+            "sourceText": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "함선 위치",
+            "acquisition": "manual",
+            "sourceText": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "승무원·장비·화물·직업·현상금",
+        "kind": "card",
+        "description": "슬롯별 장착과 진행 중 임무.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "슬롯별 장착과 진행 중 임무.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "장비·화물·현상금·임무",
+            "acquisition": "visible",
+            "sourceText": "슬롯별 장착과 진행 중 임무.",
+            "faceOnly": true
+          },
+          {
+            "id": "slot",
+            "type": "text",
+            "label": "장착 슬롯",
+            "acquisition": "manual",
+            "sourceText": "슬롯별 장착과 진행 중 임무. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "missionState",
+            "type": "text",
+            "label": "임무 진행 확인",
+            "acquisition": "manual",
+            "sourceText": "슬롯별 장착과 진행 중 임무. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "피해·돈·명성·평판",
+        "kind": "token",
+        "description": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "피해·크레딧·명성·평판",
+            "acquisition": "visible",
+            "sourceText": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "액면",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "trackValue",
+            "type": "integer",
+            "label": "명성 표시",
+            "acquisition": "visible",
+            "sourceText": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "reputation",
+            "type": "text",
+            "label": "긍정·중립·부정 표시",
+            "acquisition": "visible",
+            "sourceText": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "target",
+            "type": "text",
+            "label": "인물·함선·세력 대상",
+            "acquisition": "manual",
+            "sourceText": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "star-wars-rebellion": {
+    "gameId": "star-wars-rebellion",
+    "runtimePackId": "star-wars-rebellion",
+    "schema": "star-wars-rebellion-v1",
+    "editionId": "base",
+    "sourceSHA": "c0c416217ca12d0319081523ce0655b8a8d44674abe327437a436d2cd888c2b5",
+    "packVersion": "1.0.0-essentials-2.c0c416217ca1",
+    "title": "스타워즈: 리벨리온",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "units",
+        "name": "우주·지상 유닛",
+        "kind": "piece",
+        "description": "진영/유닛 종류, 시스템 내 우주/지상 구역.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 진영/유닛 종류, 시스템 내 우주/지상 구역."
+          },
+          {
+            "id": "faction",
+            "type": "text",
+            "label": "진영",
+            "acquisition": "visible",
+            "sourceText": "진영/유닛 종류, 시스템 내 우주/지상 구역."
+          },
+          {
+            "id": "unitType",
+            "type": "text",
+            "label": "유닛 종류",
+            "acquisition": "visible",
+            "sourceText": "진영/유닛 종류, 시스템 내 우주/지상 구역."
+          },
+          {
+            "id": "spaceType",
+            "type": "text",
+            "label": "우주·지상 구분",
+            "acquisition": "manual",
+            "sourceText": "진영/유닛 종류, 시스템 내 우주/지상 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "system",
+            "type": "text",
+            "label": "시스템 위치",
+            "acquisition": "manual",
+            "sourceText": "진영/유닛 종류, 시스템 내 우주/지상 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "buildQueue",
+            "type": "text",
+            "label": "생산 대기칸",
+            "acquisition": "manual",
+            "sourceText": "진영/유닛 종류, 시스템 내 우주/지상 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "leaders",
+        "name": "지도자·포로 링",
+        "kind": "piece",
+        "description": "미션·시스템·풀 및 포획/부착 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 미션·시스템·풀 및 포획/부착 상태."
+          },
+          {
+            "id": "leader",
+            "type": "text",
+            "label": "지도자 표기",
+            "acquisition": "visible",
+            "sourceText": "미션·시스템·풀 및 포획/부착 상태."
+          },
+          {
+            "id": "leaderZone",
+            "type": "text",
+            "label": "미션·시스템·풀",
+            "acquisition": "manual",
+            "sourceText": "미션·시스템·풀 및 포획/부착 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "captureState",
+            "type": "text",
+            "label": "포획·부착 여부",
+            "acquisition": "manual",
+            "sourceText": "미션·시스템·풀 및 포획/부착 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "미션·탐사·목표",
+        "kind": "card",
+        "description": "진영 손패와 공개/미공개 임무.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "진영 손패와 공개/미공개 임무.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "진영·임무 카드",
+            "acquisition": "visible",
+            "sourceText": "진영 손패와 공개/미공개 임무.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·공개·미공개 구분",
+            "acquisition": "manual",
+            "sourceText": "진영 손패와 공개/미공개 임무. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "충성·사보타주·트랙",
+        "kind": "marker",
+        "description": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "충성·복종·사보타주·시간·평판",
+            "acquisition": "visible",
+            "sourceText": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "trackValue",
+            "type": "integer",
+            "label": "트랙 위치값",
+            "acquisition": "visible",
+            "sourceText": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "system",
+            "type": "text",
+            "label": "시스템 대상",
+            "acquisition": "manual",
+            "sourceText": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "tapestry": {
+    "gameId": "tapestry",
+    "runtimePackId": "tapestry",
+    "schema": "tapestry-v1",
+    "editionId": "base",
+    "sourceSHA": "be619e2e54e87bc53ba267d69300eac9da2da9790dc16f646fa8eff6773dd62f",
+    "packVersion": "1.0.0-essentials-2.be619e2e54e8",
+    "title": "태피스트리",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "buildings",
+        "name": "수입 건물·랜드마크·전초기지",
+        "kind": "piece",
+        "description": "수입판 공급과 수도/지도 배치.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 수입판 공급과 수도/지도 배치."
+          },
+          {
+            "id": "buildingType",
+            "type": "text",
+            "label": "건물 종류",
+            "acquisition": "visible",
+            "sourceText": "수입판 공급과 수도/지도 배치."
+          },
+          {
+            "id": "buildingZone",
+            "type": "text",
+            "label": "수입판·수도·지도",
+            "acquisition": "manual",
+            "sourceText": "수입판 공급과 수도/지도 배치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "cell",
+            "type": "text",
+            "label": "실제 배치칸",
+            "acquisition": "manual",
+            "sourceText": "수입판 공급과 수도/지도 배치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tiles",
+        "name": "영토·수도·문명판",
+        "kind": "board",
+        "description": "실제 지도면·개인 수도 격자·개정 문명판.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "실제 지도면·개인 수도 격자·개정 문명판."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "실제 지도면·개인 수도 격자·개정 문명판."
+          },
+          {
+            "id": "tileType",
+            "type": "text",
+            "label": "지도·수도·문명판",
+            "acquisition": "visible",
+            "sourceText": "실제 지도면·개인 수도 격자·개정 문명판."
+          },
+          {
+            "id": "editionMark",
+            "type": "text",
+            "label": "보이는 판본·개정 표기",
+            "acquisition": "visible",
+            "sourceText": "실제 지도면·개인 수도 격자·개정 문명판."
+          },
+          {
+            "id": "cell",
+            "type": "text",
+            "label": "격자 위치",
+            "acquisition": "manual",
+            "sourceText": "실제 지도면·개인 수도 격자·개정 문명판. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "태피스트리·기술·함정",
+        "kind": "card",
+        "description": "손패·시대 칸·기술 단계·공개/가림.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패·시대 칸·기술 단계·공개/가림.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "태피스트리·기술",
+            "acquisition": "visible",
+            "sourceText": "손패·시대 칸·기술 단계·공개/가림.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·시대·기술칸",
+            "acquisition": "manual",
+            "sourceText": "손패·시대 칸·기술 단계·공개/가림. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "stage",
+            "type": "integer",
+            "label": "확인한 기술 단계",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "손패·시대 칸·기술 단계·공개/가림. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "자원·진보·점수",
+        "kind": "token",
+        "description": "트랙별 위치와 현재 자원.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 트랙별 위치와 현재 자원."
+          },
+          {
+            "id": "trackType",
+            "type": "text",
+            "label": "자원·진행 트랙",
+            "acquisition": "visible",
+            "sourceText": "트랙별 위치와 현재 자원."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "보이는 값",
+            "acquisition": "visible",
+            "sourceText": "트랙별 위치와 현재 자원."
+          }
+        ]
+      }
+    ]
+  },
+  "terra-mystica": {
+    "gameId": "terra-mystica",
+    "runtimePackId": "terra-mystica",
+    "schema": "terra-mystica-v1",
+    "editionId": "base",
+    "sourceSHA": "82ad4dda1a1a773b10b2c2180b4bad503bda87720c813a5e64ac12252ebf962d",
+    "packVersion": "1.0.0-essentials-2.82ad4dda1a1a",
+    "title": "테라 미스티카",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "terrain",
+        "name": "지형 타일",
+        "kind": "tile",
+        "description": "실제 변환된 지형과 인쇄 기본 지형.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "실제 변환된 지형과 인쇄 기본 지형.",
+            "faceOnly": true
+          },
+          {
+            "id": "terrainType",
+            "type": "text",
+            "label": "현재 보이는 지형",
+            "acquisition": "visible",
+            "sourceText": "실제 변환된 지형과 인쇄 기본 지형.",
+            "faceOnly": true
+          },
+          {
+            "id": "underlying",
+            "type": "text",
+            "label": "확인된 인쇄 바탕",
+            "acquisition": "manual",
+            "sourceText": "실제 변환된 지형과 인쇄 기본 지형. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지도칸",
+            "acquisition": "manual",
+            "sourceText": "실제 변환된 지형과 인쇄 기본 지형. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "buildings",
+        "name": "건물·다리",
+        "kind": "piece",
+        "description": "종류·소유자, 다리 양 끝.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종류·소유자, 다리 양 끝."
+          },
+          {
+            "id": "buildingType",
+            "type": "text",
+            "label": "건물·다리",
+            "acquisition": "visible",
+            "sourceText": "종류·소유자, 다리 양 끝."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "종류·소유자, 다리 양 끝. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "endpoints",
+            "type": "text",
+            "label": "다리 양 끝",
+            "acquisition": "manual",
+            "sourceText": "종류·소유자, 다리 양 끝. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "name": "일꾼·돈·성직자·파워",
+        "kind": "token",
+        "description": "서로 다른 공급과 파워 그릇.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 서로 다른 공급과 파워 그릇."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "자원·파워",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 공급과 파워 그릇."
+          },
+          {
+            "id": "powerBowl",
+            "type": "text",
+            "label": "파워 그릇",
+            "acquisition": "manual",
+            "sourceText": "서로 다른 공급과 파워 그릇. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "보이는 값",
+            "acquisition": "visible",
+            "sourceText": "서로 다른 공급과 파워 그릇."
+          }
+        ]
+      },
+      {
+        "id": "tiles",
+        "name": "도시·호의·보너스",
+        "kind": "tile",
+        "description": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "itemType",
+            "type": "text",
+            "label": "도시 타일·호의 타일·보너스 카드",
+            "acquisition": "visible",
+            "sourceText": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "actionMark",
+            "type": "text",
+            "label": "보이는 행동 표식",
+            "acquisition": "visible",
+            "sourceText": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "useState",
+            "type": "text",
+            "label": "획득·교체·사용 확인",
+            "acquisition": "manual",
+            "sourceText": "도시 타일, 타원 호의 타일, 두루마리 모양 보너스 카드는 다른 구성물이다. 도시/호의 획득과 보너스 카드 교체·사용 행동 표식을 구별한다. 원 초안의 획득/사용 면은 모든 타일의 공통 양면 규칙이 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "terraforming-mars": {
+    "gameId": "terraforming-mars",
+    "runtimePackId": "terraforming-mars",
+    "schema": "terraforming-mars-v1",
+    "editionId": "base",
+    "sourceSHA": "4c3fbe578e648d7e529f685254e682635c8450d8c69c2b73bfeda71dde4304cd",
+    "packVersion": "1.0.0-essentials-2.4c3fbe578e64",
+    "title": "테라포밍 마스",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "terrain",
+        "name": "도시·녹지·바다 타일",
+        "kind": "tile",
+        "description": "타일 종류와 지도 칸, 소유 표식.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "타일 종류와 지도 칸, 소유 표식.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileType",
+            "type": "text",
+            "label": "지형 종류",
+            "acquisition": "visible",
+            "sourceText": "타일 종류와 지도 칸, 소유 표식.",
+            "faceOnly": true
+          },
+          {
+            "id": "mapCell",
+            "type": "text",
+            "label": "지도칸",
+            "acquisition": "manual",
+            "sourceText": "타일 종류와 지도 칸, 소유 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "타일 종류와 지도 칸, 소유 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "기업·프로젝트",
+        "kind": "card",
+        "description": "기업과 설치/사건/손패 프로젝트 구분.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "기업과 설치/사건/손패 프로젝트 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "기업·지속·사건 프로젝트",
+            "acquisition": "visible",
+            "sourceText": "기업과 설치/사건/손패 프로젝트 구분.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·설치·버림",
+            "acquisition": "manual",
+            "sourceText": "기업과 설치/사건/손패 프로젝트 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cubes",
+        "name": "플레이어·자원 큐브",
+        "kind": "token",
+        "description": "소유색 표식과 금속값 자원 큐브 구별.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 소유색 표식과 금속값 자원 큐브 구별."
+          },
+          {
+            "id": "cubeRole",
+            "type": "text",
+            "label": "소유 표식·자원 값 구분",
+            "acquisition": "manual",
+            "sourceText": "소유색 표식과 금속값 자원 큐브 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "observedMaterial",
+            "type": "text",
+            "label": "보이는 색·금속 형태",
+            "acquisition": "visible",
+            "sourceText": "소유색 표식과 금속값 자원 큐브 구별."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "직접 확인한 재화 값",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "소유색 표식과 금속값 자원 큐브 구별. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "boards",
+        "name": "개인 자원판",
+        "kind": "board",
+        "description": "보유량과 생산량 별도 트랙.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "보유량과 생산량 별도 트랙."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "보유량과 생산량 별도 트랙."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "해당 자원",
+            "acquisition": "visible",
+            "sourceText": "보유량과 생산량 별도 트랙."
+          },
+          {
+            "id": "stockValue",
+            "type": "integer",
+            "label": "보유 트랙값",
+            "acquisition": "visible",
+            "sourceText": "보유량과 생산량 별도 트랙."
+          },
+          {
+            "id": "productionValue",
+            "type": "integer",
+            "label": "생산 트랙값",
+            "acquisition": "visible",
+            "sourceText": "보유량과 생산량 별도 트랙."
+          }
+        ]
+      }
+    ]
+  },
+  "through-the-ages": {
+    "gameId": "through-the-ages",
+    "runtimePackId": "through-the-ages",
+    "schema": "through-the-ages-v1",
+    "editionId": "base",
+    "sourceSHA": "8230eb1cbc8f878e08825f16821f81c848c74eb932dc5efe0770d4ef02f723fd",
+    "packVersion": "1.0.0-essentials-2.8230eb1cbc8f",
+    "title": "쓰루 디 에이지스",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "기술·지도자·불가사의·군사 카드",
+        "kind": "card",
+        "description": "개인 문명·카드열·손패·이벤트/전술·건설 진행.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 문명·카드열·손패·이벤트/전술·건설 진행.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "문명·이벤트·전술·건설",
+            "acquisition": "visible",
+            "sourceText": "개인 문명·카드열·손패·이벤트/전술·건설 진행.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "카드열·손패·문명·대기",
+            "acquisition": "manual",
+            "sourceText": "개인 문명·카드열·손패·이벤트/전술·건설 진행. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "construction",
+            "type": "text",
+            "label": "건설 진행 확인",
+            "acquisition": "manual",
+            "sourceText": "개인 문명·카드열·손패·이벤트/전술·건설 진행. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cubes",
+        "name": "일꾼·자원·행동 큐브",
+        "kind": "token",
+        "description": "노랑/파랑·민간/군사 행동의 서로 다른 구역.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 노랑/파랑·민간/군사 행동의 서로 다른 구역."
+          },
+          {
+            "id": "cubeType",
+            "type": "text",
+            "label": "노랑·파랑·민간행동·군사행동",
+            "acquisition": "visible",
+            "sourceText": "노랑/파랑·민간/군사 행동의 서로 다른 구역."
+          },
+          {
+            "id": "pool",
+            "type": "text",
+            "label": "은행·일꾼·자원·행동칸",
+            "acquisition": "manual",
+            "sourceText": "노랑/파랑·민간/군사 행동의 서로 다른 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "boards",
+        "name": "개인판·트랙",
+        "kind": "board",
+        "description": "노랑/파랑 은행·자원/행동·문화/과학/군사/행복.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "노랑/파랑 은행·자원/행동·문화/과학/군사/행복."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "노랑/파랑 은행·자원/행동·문화/과학/군사/행복."
+          },
+          {
+            "id": "trackType",
+            "type": "text",
+            "label": "은행·문화·과학·군사·행복",
+            "acquisition": "visible",
+            "sourceText": "노랑/파랑 은행·자원/행동·문화/과학/군사/행복."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "노랑/파랑 은행·자원/행동·문화/과학/군사/행복."
+          }
+        ]
+      }
+    ]
+  },
+  "ticket-to-ride": {
+    "gameId": "ticket-to-ride",
+    "runtimePackId": "ticket-to-ride",
+    "schema": "ticket-to-ride-v1",
+    "editionId": "base",
+    "sourceSHA": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
+    "packVersion": "1.0.0-essentials-2.9b65a4586519",
+    "title": "티켓 투 라이드",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "북미 지도",
+        "kind": "board",
+        "description": "도시와 색/길이가 있는 노선.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "도시와 색/길이가 있는 노선."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "도시와 색/길이가 있는 노선."
+          },
+          {
+            "id": "cityLabel",
+            "type": "text",
+            "label": "도시명",
+            "acquisition": "visible",
+            "sourceText": "도시와 색/길이가 있는 노선."
+          },
+          {
+            "id": "routeColor",
+            "type": "text",
+            "label": "노선 색",
+            "acquisition": "visible",
+            "sourceText": "도시와 색/길이가 있는 노선."
+          },
+          {
+            "id": "routeLength",
+            "type": "integer",
+            "label": "보이는 구간 수",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "도시와 색/길이가 있는 노선."
+          },
+          {
+            "id": "routeEnds",
+            "type": "text",
+            "label": "노선 양 끝",
+            "acquisition": "manual",
+            "sourceText": "도시와 색/길이가 있는 노선. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "trains",
+        "name": "열차 말",
+        "kind": "piece",
+        "description": "노선별 소유색과 점유 구간.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 노선별 소유색과 점유 구간."
+          },
+          {
+            "id": "trainColor",
+            "type": "text",
+            "label": "보이는 기차 색",
+            "acquisition": "visible",
+            "sourceText": "노선별 소유색과 점유 구간."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "노선별 소유색과 점유 구간. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "route",
+            "type": "text",
+            "label": "점유 노선",
+            "acquisition": "manual",
+            "sourceText": "노선별 소유색과 점유 구간. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "segment",
+            "type": "integer",
+            "label": "점유 구간",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "노선별 소유색과 점유 구간. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "열차 카드",
+        "kind": "card",
+        "description": "색·기관차, 손패/공개 진열/덱/버림 분리.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "색·기관차, 손패/공개 진열/덱/버림 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "trainType",
+            "type": "text",
+            "label": "색·기관차",
+            "acquisition": "visible",
+            "sourceText": "색·기관차, 손패/공개 진열/덱/버림 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·진열·덱·버림",
+            "acquisition": "manual",
+            "sourceText": "색·기관차, 손패/공개 진열/덱/버림 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tickets",
+        "name": "목적지 티켓",
+        "kind": "card",
+        "description": "연결 도시쌍과 점수. 비공개 보존 설계.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "연결 도시쌍과 점수. 비공개 보존 설계.",
+            "faceOnly": true
+          },
+          {
+            "id": "startCity",
+            "type": "text",
+            "label": "허용된 출발 도시",
+            "acquisition": "visible",
+            "sourceText": "연결 도시쌍과 점수. 비공개 보존 설계.",
+            "faceOnly": true
+          },
+          {
+            "id": "endCity",
+            "type": "text",
+            "label": "허용된 도착 도시",
+            "acquisition": "visible",
+            "sourceText": "연결 도시쌍과 점수. 비공개 보존 설계.",
+            "faceOnly": true
+          },
+          {
+            "id": "printedPoints",
+            "type": "integer",
+            "label": "인쇄 점수",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "연결 도시쌍과 점수. 비공개 보존 설계.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "score",
+        "name": "점수 말",
+        "kind": "marker",
+        "description": "누적 노선 점수와 최종 보너스 구분.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 누적 노선 점수와 최종 보너스 구분."
+          },
+          {
+            "id": "trackValue",
+            "type": "integer",
+            "label": "보이는 점수칸",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "누적 노선 점수와 최종 보너스 구분."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "누적 노선 점수와 최종 보너스 구분. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "twilight-imperium-4": {
+    "gameId": "twilight-imperium-4",
+    "runtimePackId": "twilight-imperium-4",
+    "schema": "twilight-imperium-4-v1",
+    "editionId": "base",
+    "sourceSHA": "4f113cb5b291037b6f37e5ba774fcf2fdcd1fa3fdc4eb380ba4023ca7e5a6d01",
+    "packVersion": "1.0.0-essentials-2.4f113cb5b291",
+    "title": "트와일라잇 임페리움 4판",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "systems",
+        "name": "시스템 타일",
+        "kind": "tile",
+        "description": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileLabel",
+            "type": "text",
+            "label": "시스템 타일 표기",
+            "acquisition": "visible",
+            "sourceText": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "planets",
+            "type": "text",
+            "label": "보이는 행성",
+            "acquisition": "visible",
+            "sourceText": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "anomaly",
+            "type": "text",
+            "label": "이상현상·웜홀 표기",
+            "acquisition": "visible",
+            "sourceText": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+            "faceOnly": true
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "실제 연결 위치",
+            "acquisition": "manual",
+            "sourceText": "행성·이상현상·웜홀 포함 타일 ID와 회전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "units",
+        "name": "함선·지상군·시설",
+        "kind": "piece",
+        "description": "우주 공간/개별 행성/수송 상태와 소유자.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 우주 공간/개별 행성/수송 상태와 소유자."
+          },
+          {
+            "id": "unitType",
+            "type": "text",
+            "label": "유닛 종류",
+            "acquisition": "visible",
+            "sourceText": "우주 공간/개별 행성/수송 상태와 소유자."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "우주 공간/개별 행성/수송 상태와 소유자. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "우주·개별행성·수송 구분",
+            "acquisition": "manual",
+            "sourceText": "우주 공간/개별 행성/수송 상태와 소유자. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "command",
+        "name": "지휘·지배 토큰",
+        "kind": "token",
+        "description": "전술/전략/함대 풀 및 시스템 활성화 표식.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 전술/전략/함대 풀 및 시스템 활성화 표식."
+          },
+          {
+            "id": "pool",
+            "type": "text",
+            "label": "전술·전략·함대·활성화 구분",
+            "acquisition": "manual",
+            "sourceText": "전술/전략/함대 풀 및 시스템 활성화 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "systemTarget",
+            "type": "text",
+            "label": "활성화 시스템",
+            "acquisition": "manual",
+            "sourceText": "전술/전략/함대 풀 및 시스템 활성화 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "전술/전략/함대 풀 및 시스템 활성화 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "행성·기술·전략·목표",
+        "kind": "card",
+        "description": "소유·준비/소진·공개/비밀 및 전략 사용 여부.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "소유·준비/소진·공개/비밀 및 전략 사용 여부.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "행성·전략·행동·목표",
+            "acquisition": "visible",
+            "sourceText": "소유·준비/소진·공개/비밀 및 전략 사용 여부.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "공개·허용 비밀·손패",
+            "acquisition": "manual",
+            "sourceText": "소유·준비/소진·공개/비밀 및 전략 사용 여부. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "useState",
+            "type": "text",
+            "label": "준비·소진·사용 여부",
+            "acquisition": "manual",
+            "sourceText": "소유·준비/소진·공개/비밀 및 전략 사용 여부. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "trade",
+        "name": "상품·교역품",
+        "kind": "token",
+        "description": "상품과 교역품은 구별되는 수량.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 상품과 교역품은 구별되는 수량."
+          },
+          {
+            "id": "resourceType",
+            "type": "text",
+            "label": "상품·교역품",
+            "acquisition": "visible",
+            "sourceText": "상품과 교역품은 구별되는 수량."
+          },
+          {
+            "id": "resourceZone",
+            "type": "text",
+            "label": "보유·공급",
+            "acquisition": "manual",
+            "sourceText": "상품과 교역품은 구별되는 수량. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "twilight-struggle": {
+    "gameId": "twilight-struggle",
+    "runtimePackId": "twilight-struggle",
+    "schema": "twilight-struggle-v1",
+    "editionId": "base",
+    "sourceSHA": "2f0e2bc0968b3e46cead0d8393ae44983960da656624a4f2d1dc397454bc914e",
+    "packVersion": "1.0.0-essentials-2.2f0e2bc0968b",
+    "title": "황혼의 투쟁",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "map",
+        "name": "국가·연결 지도",
+        "kind": "board",
+        "description": "국가ID·지역·전장국·인접과 양 진영 영향력.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          },
+          {
+            "id": "countryLabel",
+            "type": "text",
+            "label": "국가 표기",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          },
+          {
+            "id": "regionLabel",
+            "type": "text",
+            "label": "지역 표기",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          },
+          {
+            "id": "battleground",
+            "type": "text",
+            "label": "전장국 인쇄 표시",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          },
+          {
+            "id": "influence",
+            "type": "marks",
+            "label": "보이는 진영별 영향력",
+            "acquisition": "visible",
+            "sourceText": "국가ID·지역·전장국·인접과 양 진영 영향력."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "영향력·DEFCON·군사·우주·점수",
+        "kind": "token",
+        "description": "공용/진영별 트랙을 분리.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 공용/진영별 트랙을 분리."
+          },
+          {
+            "id": "trackType",
+            "type": "text",
+            "label": "트랙 종류",
+            "acquisition": "visible",
+            "sourceText": "공용/진영별 트랙을 분리."
+          },
+          {
+            "id": "faction",
+            "type": "text",
+            "label": "진영 표기",
+            "acquisition": "visible",
+            "sourceText": "공용/진영별 트랙을 분리."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "표시값",
+            "acquisition": "visible",
+            "sourceText": "공용/진영별 트랙을 분리."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "사건·득점·China 카드",
+        "kind": "card",
+        "description": "손패·헤드라인·진행·버림/제거·지속 효과.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패·헤드라인·진행·버림/제거·지속 효과.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·헤드라인·진행·버림·제거",
+            "acquisition": "manual",
+            "sourceText": "손패·헤드라인·진행·버림/제거·지속 효과. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "persistentEffect",
+            "type": "text",
+            "label": "확인한 지속 효과",
+            "acquisition": "manual",
+            "sourceText": "손패·헤드라인·진행·버림/제거·지속 효과. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "voidfall": {
+    "gameId": "voidfall",
+    "runtimePackId": "voidfall",
+    "schema": "voidfall-v1",
+    "editionId": "base",
+    "sourceSHA": "e073b9bcfb8d9a847fb5331cd2bf112e385e67a824d27b8475a9ccdc77086bcf",
+    "packVersion": "1.0.0-essentials-2.e073b9bcfb8d",
+    "title": "보이드폴",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "sectors",
+        "name": "구역·인구·설치물",
+        "kind": "tile",
+        "description": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "sectorLabel",
+            "type": "text",
+            "label": "구역 ID 표기",
+            "acquisition": "visible",
+            "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "sectorSide",
+            "type": "text",
+            "label": "보이는 타일 면",
+            "acquisition": "visible",
+            "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "populationDie",
+            "type": "integer",
+            "label": "인구 주사위 눈",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+            "faceOnly": true
+          },
+          {
+            "id": "structures",
+            "type": "text",
+            "label": "함대·길드·시설·오염 부착",
+            "acquisition": "manual",
+            "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "houses",
+        "name": "가문·트랙·자원",
+        "kind": "board",
+        "description": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "boardType",
+            "type": "text",
+            "label": "가문·자원다이얼·영향력다이얼",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "houseLabel",
+            "type": "text",
+            "label": "가문 표기",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "dialRole",
+            "type": "text",
+            "label": "자원·생산·영향력 구분",
+            "acquisition": "manual",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "dialValue",
+            "type": "integer",
+            "label": "보이는 다이얼값",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "trackValue",
+            "type": "integer",
+            "label": "문명 트랙값",
+            "acquisition": "visible",
+            "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "집중·의제·기술 카드",
+        "kind": "card",
+        "description": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "집중·기술·의제",
+            "acquisition": "visible",
+            "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "선택·사용·지속·해결 중",
+            "acquisition": "manual",
+            "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "교역·오염·진행",
+        "kind": "token",
+        "description": "교역 표식의 면/획득 턴과 공용 진행.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 교역 표식의 면/획득 턴과 공용 진행."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "교역·진행 표식",
+            "acquisition": "visible",
+            "sourceText": "교역 표식의 면/획득 턴과 공용 진행."
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "교역 표식의 면/획득 턴과 공용 진행."
+          },
+          {
+            "id": "acquiredTurn",
+            "type": "text",
+            "label": "직접 확인한 획득 차례",
+            "acquisition": "manual",
+            "sourceText": "교역 표식의 면/획득 턴과 공용 진행. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "war-of-the-ring-2": {
+    "gameId": "war-of-the-ring-2",
+    "runtimePackId": "war-of-the-ring-2",
+    "schema": "war-of-the-ring-2-v1",
+    "editionId": "base",
+    "sourceSHA": "9d088ad8e4e66220554f14e4a44207144a3a13928d419d1a850621e296be82f2",
+    "packVersion": "1.0.0-essentials-2.9d088ad8e4e6",
+    "title": "반지전쟁 2판",
+    "batch": "06-maps-tracks",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "armies",
+        "name": "군대·지도자·인물",
+        "kind": "piece",
+        "description": "진영·국가·정규/정예/지도자, 원정대 동료.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 진영·국가·정규/정예/지도자, 원정대 동료."
+          },
+          {
+            "id": "faction",
+            "type": "text",
+            "label": "진영·국가",
+            "acquisition": "visible",
+            "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료."
+          },
+          {
+            "id": "unitType",
+            "type": "text",
+            "label": "정규·정예·지도자·동료",
+            "acquisition": "visible",
+            "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "지역·원정대 위치",
+            "acquisition": "manual",
+            "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "dice",
+        "name": "행동·전투 주사위",
+        "kind": "die",
+        "description": "사용 가능/사용/사냥 배정과 눈.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 사용 가능/사용/사냥 배정과 눈."
+          },
+          {
+            "id": "dieSymbol",
+            "type": "text",
+            "label": "보이는 행동 눈",
+            "acquisition": "visible",
+            "sourceText": "사용 가능/사용/사냥 배정과 눈."
+          },
+          {
+            "id": "dieZone",
+            "type": "text",
+            "label": "사용가능·사용·사냥 배정",
+            "acquisition": "manual",
+            "sourceText": "사용 가능/사용/사냥 배정과 눈. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "사건·인물 카드",
+        "kind": "card",
+        "description": "손패·사용·공개 인물 능력.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패·사용·공개 인물 능력.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "이벤트·인물 능력",
+            "acquisition": "visible",
+            "sourceText": "손패·사용·공개 인물 능력.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·사용·공개",
+            "acquisition": "manual",
+            "sourceText": "손패·사용·공개 인물 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "원정대·타락·정치",
+        "kind": "marker",
+        "description": "발각 면·진행값·국가 상태·공성 표시.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 발각 면·진행값·국가 상태·공성 표시."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "발각·진행·국가·공성",
+            "acquisition": "visible",
+            "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+          },
+          {
+            "id": "shownSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "진행값",
+            "acquisition": "visible",
+            "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+          },
+          {
+            "id": "target",
+            "type": "text",
+            "label": "연결 대상",
+            "acquisition": "manual",
+            "sourceText": "발각 면·진행값·국가 상태·공성 표시. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  }
+}

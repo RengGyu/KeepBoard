@@ -1,0 +1,9 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type BrassBirminghamReadout =
+  {schema:"brass-birmingham-v1";kind:"industries";values:{"face": "front" | "back" | null; "printedName": string | null; "industryType": string | null; "level": number | null; "flippedFace": string | null; "owner": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "industryType": FieldBasis | null; "level": FieldBasis | null; "flippedFace": FieldBasis | null; "owner": 'user' | null}}
+ | {schema:"brass-birmingham-v1";kind:"links";values:{"face": "front" | "back" | null; "printedName": string | null; "linkType": string | null; "endpoints": string | null; "owner": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "linkType": FieldBasis | null; "endpoints": 'user' | null; "owner": 'user' | null}}
+ | {schema:"brass-birmingham-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "origin": string | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "origin": 'user' | null}}
+ | {schema:"brass-birmingham-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"brass-birmingham-v1";kind:"money";values:{"observedColor": string | null; "itemType": string | null; "trackValue": number | null; "nominalValue": number | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "trackValue": FieldBasis | null; "nominalValue": FieldBasis | null}}
+ | {schema:"brass-birmingham-v1";kind:null;values:{};sources:{}};

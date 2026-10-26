@@ -1,0 +1,163 @@
+{
+  "version": "lightweight-review-r1-r3-fix-v1",
+  "at": "2026-10-24T14:53:03.447540+00:00",
+  "status": "FIXED_SCOPED_FROZEN_PENDING_UI_INTEGRATION_REVIEW",
+  "stageRoot": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-lightweight-recognition-vyzn4xm9/app",
+  "baselineFrozenSourceDigest": "b6d882c783468884c511906218978303b0007041d7e777a88b95990fe813bcf0",
+  "deltaDigest": "5ebca32f1d63e1b2a39519b4221ecdb97477076095e56c777fff5f8f3afda511",
+  "changedFiles": [
+    {
+      "path": "shared/observationReview.ts",
+      "preimageSHA256": null,
+      "postimageSHA256": "5d25066677a529dc8cf326ca8aa5902f09998d2ff8f24b2c76c9ba616e70720b"
+    },
+    {
+      "path": "server/observationReview.ts",
+      "preimageSHA256": null,
+      "postimageSHA256": "503abf2994a48825505ee79b9cf631dd4852b6fe78cfdb3e22f546a760f5eb37"
+    },
+    {
+      "path": "server/analysisTask.ts",
+      "preimageSHA256": "b636e373bc4b79fc1084f7fc3937040adf18355b4ff8d968a5d81f6a6a4fe08c",
+      "postimageSHA256": "ddd5828036d0acf4772dc3c0053f45bc399f49ac7574d4068c3e631cd2282d09"
+    },
+    {
+      "path": "server/ai/observationAssembly.ts",
+      "preimageSHA256": "4b8a73f88aea9a9627f5456a3f616b32ec0c9b81a223d65ad23f77116b8deafd",
+      "postimageSHA256": "871bbb5832180f592be9a36c9ced59dbd524155c7ad61316aa716d58c53b5f6e"
+    },
+    {
+      "path": "server/engine.ts",
+      "preimageSHA256": "0da01dec8149874d156f3c9251350514642b6c09e2034616fab4aa5b7d265cbe",
+      "postimageSHA256": "1497b77dca018d0f9da0fb3e913336e195ab6d85ac2a939080f114e104338860"
+    },
+    {
+      "path": "server/index.ts",
+      "preimageSHA256": "33e34bb56549990306e70b4ede6ffccfbecc0ec059c932dca2ee775126a84ccc",
+      "postimageSHA256": "cc458b8b41a6f95379ed36a3dec6bc918fcece21847b6c5ed3e9cc32a7167fe9"
+    },
+    {
+      "path": "shared/splendor.ts",
+      "preimageSHA256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8",
+      "postimageSHA256": "13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1"
+    },
+    {
+      "path": "tests/lightweight-recognition-assembly.test.ts",
+      "preimageSHA256": "bbd342905832acfca184229ec2938404ad727ea070fc01b9f7689eb5eccdcca1",
+      "postimageSHA256": "b96e03bc21bdee035c676721443e3b1906a15316f1e0d43d5ec80807d93e3fbf"
+    },
+    {
+      "path": "tests/lightweight-recognition-api.test.ts",
+      "preimageSHA256": "7953e1797cb12ca4614d2035803f794553b5896c7fc155946bc3ca314ebb35bc",
+      "postimageSHA256": "f6882738cc7cab8c3f7ea3cba00218d6dcc88d5042aa00cd176217241c762b22"
+    },
+    {
+      "path": "tests/lightweight-recognition-review.test.ts",
+      "preimageSHA256": null,
+      "postimageSHA256": "3e02e8c7fa004ba3e8f0feac5a3fb43bc57de67a89f40b38aa4156e71db9a8bb"
+    },
+    {
+      "path": "tests/lightweight-recognition-splendor.test.ts",
+      "preimageSHA256": null,
+      "postimageSHA256": "254d9ed22a237582bfcb788a714aea0b21278ec157042cf799c151c346db2f9c"
+    },
+    {
+      "path": "tools/lightweight-recognition/preview.mts",
+      "preimageSHA256": "028bed154263ec90a20c8169126ff274a3d50d7da2fdf41f101a5f1e9cc3b88a",
+      "postimageSHA256": "b3b04edc2028d389be1ad5e69fcc012406fd266ad82731acea724c8a0ba9fa38"
+    }
+  ],
+  "reviewed28NonTargetDrift": [],
+  "oldManifestPreserved": true,
+  "D1D2": {
+    "jsonSHA256": "1c87dd049ccf27d35feb4dc97333f418c920e560d0a9bb06f621f799b0ea2a16",
+    "mdSHA256": "f8da159fed870cce6f9edd8880b1d072509cf993e26da44b0d1361a878cf2aa2",
+    "expectedJsonSHA256": "1c87dd049ccf27d35feb4dc97333f418c920e560d0a9bb06f621f799b0ea2a16",
+    "expectedMdSHA256": "f8da159fed870cce6f9edd8880b1d072509cf993e26da44b0d1361a878cf2aa2",
+    "privateArtifactDrift": [],
+    "additionalModelCalls": 0,
+    "defaultReaderChanges": 0
+  },
+  "R1": {
+    "before": "Different-photo candidates contained copied accepted objects; same-photo merge remapped original IDs; directpartial accept replaced accepted.",
+    "after": "Fresh-only candidates; no premerge/remap. Existing-state whole apply needs explicit native review/CAS or existing typed link API. Other pending local candidates remain, whole reviewed source consumed, rawreceipt retained.",
+    "samePhotoAdditionalBoundary": "Accepted components.observed protected even before board.layout exists.",
+    "evidence": "HTTP RED3freshonly failures, plus samephoto directaccept200 RED; after HTTP tests allGREEN. Rummikub two-tile group order+loose/manual values retained through review/save/resume. Typed repeat link idempotent."
+  },
+  "R3": {
+    "before": "Assembler ignored observed kind; unknown-face development level2 threw downstream; face/kind conflict preferred face.",
+    "after": "Observed kind honored; development family kindnull/level1..3 allowed exactly. Known cross-field conflict defers only incompatible attrs with ref/attribute/reason; raw unchanged. All envelope/type/domain/front-only validation remains strict.",
+    "evidence": "RED2 pure assembly failures then3pureGREEN plus unknownkind/level2 actualaccept-save-resume-exportGREEN."
+  },
+  "UIContract": {
+    "path": "shared/observationReview.ts",
+    "sha256": "5d25066677a529dc8cf326ca8aa5902f09998d2ff8f24b2c76c9ba616e70720b",
+    "route": "PATCH /api/sessions/:id",
+    "field": "answers[].observationReview",
+    "shape": {
+      "version": "native-observation-review-v1",
+      "sourceAssertionId": "current local candidate ID",
+      "expectedBaselineAssertionId": "accepted destination ID at draft start, or null"
+    },
+    "response": "existing SessionView",
+    "CAS": "Existing storage revision/room expectedRevisions still required; source existence/owner/native target and baseline ID rechecked;409 preserves draft/no automatic rebase.",
+    "targets": "Catan board.layout from components.observed|board.layout, Rummikub table.scene/rack.scene sameowner; typed use component-links."
+  },
+  "verification": {
+    "focused": {
+      "passed": 51,
+      "exit": 0,
+      "log": "docs/lightweight-recognition/review-fix-focused-final.json"
+    },
+    "typecheck": {
+      "command": "node_modules/.bin/tsc --noEmit",
+      "exit": 0
+    },
+    "fullSuiteBuild": "Not run; final integrated freeze owns broad checks",
+    "initialUITypeErrors": "UI-owned nullable callback errors reported to supervisor; latest tsc0 after UI worker correction."
+  },
+  "preview": {
+    "base": "http://127.0.0.1:51328",
+    "pid": 2139,
+    "store": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-lightweight-mock-6OlnDg",
+    "syntheticOnly": true,
+    "modelCalls": 0,
+    "sessions": [
+      {
+        "game": "catan-base",
+        "sessionId": "e0681193-5b86-488a-81c1-8443d08cf0c2",
+        "url": "http://127.0.0.1:51328/?session=e0681193-5b86-488a-81c1-8443d08cf0c2"
+      },
+      {
+        "game": "splendor",
+        "sessionId": "4e4cbab5-ad9e-4f79-8586-f5c5e3904f96",
+        "url": "http://127.0.0.1:51328/?session=4e4cbab5-ad9e-4f79-8586-f5c5e3904f96"
+      }
+    ],
+    "reviewSessions": [
+      {
+        "game": "catan-base",
+        "sessionId": "67a487d3-7d32-4ff6-94e8-02b08d9a6d7b",
+        "url": "http://127.0.0.1:51328/?session=67a487d3-7d32-4ff6-94e8-02b08d9a6d7b",
+        "candidateObjects": 4,
+        "sourceImage": "Synthetic1pxPNG; not a real board photo",
+        "frame": true
+      },
+      {
+        "game": "rummikub",
+        "sessionId": "b55c59af-fc70-49ae-afad-ee46aaa696e5",
+        "url": "http://127.0.0.1:51328/?session=b55c59af-fc70-49ae-afad-ee46aaa696e5",
+        "candidateObjects": 2,
+        "sourceImage": "Synthetic1pxPNG; not a real board photo",
+        "frame": false
+      }
+    ],
+    "backendLoadedAt": "2026-10-24T14:46:46.315Z",
+    "injection": "createApp({localReader:PreviewReader,analyzer:keyless manual fixture,ui:true}); test-only subclass in tools/lightweight-recognition/preview.mts; no model endpoint contacted"
+  },
+  "previewSourceDifference": {
+    "path": "server/observationReview.ts",
+    "description": "Preview loaded immediately before final one-line same-source-field guard edge correction. Seeded CUA sessions have destination baseline and explicit review flow, unaffected. No further restart during Sol1 CUA."
+  },
+  "ownership": "Backend/shared/test corrections frozen and returned; src untouched; shared product/deploy0; runtime PID97187 not touched."
+}

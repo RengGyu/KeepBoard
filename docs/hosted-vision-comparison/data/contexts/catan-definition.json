@@ -1,0 +1,250 @@
+{
+  "version": "keepboard-visible-reading-context-v1",
+  "gameId": "catan",
+  "pack": {
+    "id": "catan-base",
+    "version": "2.0.0-essentials-2.51a3a1dd68fe",
+    "editionId": "current-pack-2.0.0",
+    "sourceSHA": "51a3a1dd68fe5689a8741fd9e3bca31a0a924284524950ebb4824961caee5d61"
+  },
+  "knowledgeStatus": "Game-definition category lookup, NOT an observation of this photo or verified complete rules.",
+  "areas": [
+    {
+      "id": "board",
+      "partition": "common_public",
+      "componentIds": [
+        "terrain",
+        "number-token",
+        "road",
+        "settlement",
+        "city",
+        "robber",
+        "harbor",
+        "token",
+        "unknown"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "terrain",
+      "name": "지형",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        },
+        {
+          "id": "variant",
+          "label": "인쇄 종류",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "number-token",
+      "name": "숫자 토큰",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        },
+        {
+          "id": "number",
+          "label": "인쇄 숫자",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "road",
+      "name": "도로",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "settlement",
+      "name": "마을",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "city",
+      "name": "도시",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "robber",
+      "name": "도둑",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "token",
+      "name": "표식·특수 카드",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        },
+        {
+          "id": "variant",
+          "label": "인쇄 종류",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "harbor",
+      "name": "항구",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        },
+        {
+          "id": "variant",
+          "label": "인쇄 종류",
+          "type": "enum"
+        },
+        {
+          "id": "ratio",
+          "label": "교환 비율",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "unknown",
+      "name": "미확인 부품",
+      "visibleProperties": [
+        {
+          "id": "observedColor",
+          "label": "관측 색",
+          "type": "text"
+        },
+        {
+          "id": "quantity",
+          "label": "실물 수량",
+          "type": "integer"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    }
+  ],
+  "instructions": [
+    "Read visible printed information literally; unknown remains null.",
+    "Do not complete a standard inventory or infer an unobserved component from game rules.",
+    "Game categories are retrieved context, not pixel evidence. Do not infer owner, turn, hidden cards or legal state.",
+    "Return source locations from the supplied original image; game-board placement is a separate candidate."
+  ]
+}

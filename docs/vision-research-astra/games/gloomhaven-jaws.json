@@ -1,0 +1,940 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "gloomhaven-jaws",
+  "name_ko": "글룸헤이븐: 사자의 턱",
+  "name_en": "Gloomhaven: Jaws of the Lion",
+  "edition": {
+    "id": "base",
+    "name": "독립 기본판",
+    "compatibility_notes": [
+      "원작 Gloomhaven 불필요;전체 카드 효과 해석 없이 사진·수동 값",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "gloomhaven-jaws.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/gloomhaven-jaws.json",
+    "sha256": "a675ecec24d7ac23c96021a225d1cae11bc57d3b7a288257cea5fa4a37bd8437",
+    "runtime_pack_id": "gloomhaven-jaws",
+    "runtime_pack_version": "1.0.0-essentials-2.a675ecec24d7",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "gloomhaven-jaws::gloomhaven-jaws.primary",
+      "gloomhaven-jaws::essentials.storage-guidance"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "시나리오 책 쪽/육각판과 몬스터 번호, 캐릭터 상태",
+  "critical_resume_distinction": "체력/경험·활성/버림/소실·아이템 방향을 보존; 미공개 방/선택 비추론",
+  "partitions": {
+    "common_public": [
+      "battle"
+    ],
+    "player_public": [
+      "character"
+    ],
+    "owner_private": [
+      "hand"
+    ],
+    "do_not_infer": [
+      "decks"
+    ]
+  },
+  "areas": [
+    {
+      "id": "battle",
+      "name": "시나리오 육각판",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "map",
+        "figures",
+        "state"
+      ],
+      "anchor_contract": "책 ID·쪽수·hex 좌표와 몬스터 번호. 여러 책 페이지 연결을 별도 기준점으로 저장.",
+      "description": "시나리오 육각판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "battle.scene"
+      ],
+      "current_manual_target_fields": [
+        "battle.scene"
+      ],
+      "source_field_ids": [
+        "battle.scene"
+      ],
+      "allowed_component_ids": [
+        "map",
+        "figures",
+        "state"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "시나리오 육각판 전체 경계를 먼저 기록. 책 ID·쪽수·hex 좌표와 몬스터 번호. 여러 책 페이지 연결을 별도 기준점으로 저장. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "책 ID·쪽수·hex 좌표와 몬스터 번호. 여러 책 페이지 연결을 별도 기준점으로 저장.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "character",
+      "name": "캐릭터 공개 구역",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "state"
+      ],
+      "anchor_contract": "활성 카드·아이템 방향/사용 표시, 체력·경험.",
+      "description": "캐릭터 공개 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "character.scene"
+      ],
+      "source_field_ids": [
+        "character.scene"
+      ],
+      "allowed_component_ids": [
+        "cards",
+        "state"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "캐릭터 공개 구역 전체 경계를 먼저 기록. 활성 카드·아이템 방향/사용 표시, 체력·경험. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "활성 카드·아이템 방향/사용 표시, 체력·경험.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "hand",
+      "name": "능력 선택·전투 목표",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "선택 전/선택 후 공개 전 카드와 비밀 목표.",
+      "description": "능력 선택·전투 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "hand.scene"
+      ],
+      "current_manual_target_fields": [
+        "hand.scene"
+      ],
+      "source_field_ids": [
+        "hand.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "능력 선택·전투 목표 전체 경계를 먼저 기록. 선택 전/선택 후 공개 전 카드와 비밀 목표. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "선택 전/선택 후 공개 전 카드와 비밀 목표.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "decks",
+      "name": "보정·몬스터 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "각 소유자/몬스터 종류별 덱과 버림, 섞기 전 상태.",
+      "description": "보정·몬스터 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "decks.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "각 소유자/몬스터 종류별 덱과 버림, 섞기 전 상태.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "map",
+      "name": "시나리오 책·지형",
+      "kind": "board",
+      "identity_description": "책 페이지 ID와 공개한 영역.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "gloomhaven-jaws::gloomhaven-jaws.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "printedName",
+          "label": "읽히는 판 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "책 페이지 ID와 공개한 영역."
+        },
+        {
+          "id": "sideLabel",
+          "label": "사용 면 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "책 페이지 ID와 공개한 영역."
+        },
+        {
+          "id": "pageLabel",
+          "type": "text",
+          "label": "지도책 페이지 표기",
+          "acquisition": "visible",
+          "sourceText": "책 페이지 ID와 공개한 영역."
+        },
+        {
+          "id": "featureType",
+          "type": "text",
+          "label": "칸·문·장애물",
+          "acquisition": "visible",
+          "sourceText": "책 페이지 ID와 공개한 영역."
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "label": "실제 칸",
+          "acquisition": "manual",
+          "sourceText": "책 페이지 ID와 공개한 영역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "printedName",
+        "sideLabel",
+        "pageLabel",
+        "featureType",
+        "location"
+      ],
+      "visible_attribute_keys": [
+        "printedName",
+        "sideLabel",
+        "pageLabel",
+        "featureType"
+      ],
+      "manual_attribute_keys": [
+        "location"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "figures",
+      "name": "캐릭터·몬스터·표식",
+      "kind": "piece",
+      "identity_description": "종류·번호·일반/정예, 문·보물·장애물 등 실제 표시.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "gloomhaven-jaws::gloomhaven-jaws.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종류·번호·일반/정예, 문·보물·장애물 등 실제 표시."
+        },
+        {
+          "id": "figureType",
+          "type": "text",
+          "label": "캐릭터·몬스터·소환물",
+          "acquisition": "visible",
+          "sourceText": "종류·번호·일반/정예, 문·보물·장애물 등 실제 표시."
+        },
+        {
+          "id": "instanceLabel",
+          "type": "text",
+          "label": "번호",
+          "acquisition": "visible",
+          "sourceText": "종류·번호·일반/정예, 문·보물·장애물 등 실제 표시."
+        },
+        {
+          "id": "rank",
+          "type": "text",
+          "label": "일반·정예",
+          "acquisition": "visible",
+          "sourceText": "종류·번호·일반/정예, 문·보물·장애물 등 실제 표시."
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "label": "배치 칸",
+          "acquisition": "manual",
+          "sourceText": "종류·번호·일반/정예, 문·보물·장애물 등 실제 표시. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "figureType",
+        "instanceLabel",
+        "rank",
+        "location"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "figureType",
+        "instanceLabel",
+        "rank"
+      ],
+      "manual_attribute_keys": [
+        "location"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "cards",
+      "name": "능력·아이템·보정 카드",
+      "kind": "card",
+      "identity_description": "손패/선택/활성/버림/소실과 보정 덱 분리.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "gloomhaven-jaws::gloomhaven-jaws.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "손패/선택/활성/버림/소실과 보정 덱 분리.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardType",
+          "type": "text",
+          "label": "능력·아이템·수정덱",
+          "acquisition": "visible",
+          "sourceText": "손패/선택/활성/버림/소실과 보정 덱 분리.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardArea",
+          "type": "text",
+          "label": "손패·선택·지속·버림·손실",
+          "acquisition": "manual",
+          "sourceText": "손패/선택/활성/버림/소실과 보정 덱 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "cardType",
+        "cardArea"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "cardType"
+      ],
+      "manual_attribute_keys": [
+        "cardArea"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "state",
+      "name": "체력·경험·상태·원소",
+      "kind": "marker",
+      "identity_description": "개별 인스턴스에 연결되는 수치/효과.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "gloomhaven-jaws::gloomhaven-jaws.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개별 인스턴스에 연결되는 수치/효과."
+        },
+        {
+          "id": "stateType",
+          "type": "text",
+          "label": "체력·경험치·상태 종류",
+          "acquisition": "visible",
+          "sourceText": "개별 인스턴스에 연결되는 수치/효과."
+        },
+        {
+          "id": "displayValue",
+          "type": "integer",
+          "label": "표시값",
+          "acquisition": "visible",
+          "sourceText": "개별 인스턴스에 연결되는 수치/효과."
+        },
+        {
+          "id": "target",
+          "type": "text",
+          "label": "대상 인스턴스",
+          "acquisition": "manual",
+          "sourceText": "개별 인스턴스에 연결되는 수치/효과. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "stateType",
+        "displayValue",
+        "target"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "stateType",
+        "displayValue"
+      ],
+      "manual_attribute_keys": [
+        "target"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "battle.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "hand.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "decks.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "scenario",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "initiative",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.initiative",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "health",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.health",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "campaign",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.campaign",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "progress",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.progress",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "scenario",
+      "label": "시나리오·튜토리얼",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 번호/난이도와 도입된 튜토리얼 규칙 범위."
+    },
+    {
+      "id": "initiative",
+      "label": "현재 순서",
+      "scope": "public",
+      "visibility": "public",
+      "description": "공개된 순서와 이미 행동한 캐릭터/몬스터 번호."
+    },
+    {
+      "id": "health",
+      "label": "체력·상태",
+      "scope": "public",
+      "visibility": "public",
+      "description": "각 인스턴스 ID별 값과 상태; 같은 몬스터 종류라도 합치지 않는다."
+    },
+    {
+      "id": "campaign",
+      "label": "캠페인 기록",
+      "scope": "public",
+      "visibility": "public",
+      "description": "완료/열린 시나리오·선택·상점/레벨 기록. 미해금 내용은 별도 숨김."
+    },
+    {
+      "id": "progress",
+      "label": "개인 성장",
+      "scope": "player",
+      "visibility": "public",
+      "description": "경험·금화·특혜·보유 아이템; 시나리오 내 경험과 캠페인 누적 구별."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "선택 공개/이니셔티브/능력 상하단/몬스터 번호별 행동/라운드 정리 중 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "공개 전 선택 카드·전투 목표·열지 않은 방/캠페인 내용",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "능력 선택·전투 목표 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "선택 전/선택 후 공개 전 카드와 비밀 목표.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "보정·몬스터 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "각 소유자/몬스터 종류별 덱과 버림, 섞기 전 상태.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "battle.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "character.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "원작/Frosthaven의 클래스 가져오기는 호환 규칙 패치가 필요. 본문은 Jaws 기본 네 클래스 중심.",
+    "능력/보정 카드의 정확한 묶음 공개성 및 모든 상태 만료 시점은 원문 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    },
+    {
+      "id": "HEX-ORIENTATION",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "GenericPlacement.rotation은0/90/180/270만 지원한다. 실제60도 회전/육각 연결 재현과 다르다. 원본과 수동 방향을 남기고 필요한 게임에만60도·칸/부모 대응을 추가한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "gloomhaven-jaws",
+    "edition": "독립 기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 0,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "partial",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "bd021fecd451bd788cbc1c38385be5d96666503e1a532885ee7d730d511a56cd",
+        "6ef7af76feca402cad6564c6a0c77b9c7fd3da39b820512abf5df7214a58bf24"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "시나리오 책 쪽/육각판과 몬스터 번호, 캐릭터 상태",
+    "closeups": [
+      {
+        "area_id": "battle",
+        "name": "시나리오 육각판",
+        "needs": "책 ID·쪽수·hex 좌표와 몬스터 번호. 여러 책 페이지 연결을 별도 기준점으로 저장.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "character",
+        "name": "캐릭터 공개 구역",
+        "needs": "활성 카드·아이템 방향/사용 표시, 체력·경험.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "hand",
+        "name": "능력 선택·전투 목표",
+        "needs": "선택 전/선택 후 공개 전 카드와 비밀 목표.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "decks",
+        "name": "보정·몬스터 덱",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "gloomhaven-jaws",
+    "editionId": "base",
+    "sourceSHA": "a675ecec24d7ac23c96021a225d1cae11bc57d3b7a288257cea5fa4a37bd8437",
+    "status": "reuse",
+    "areas": [
+      {
+        "areaId": "battle",
+        "label": "시나리오 육각판",
+        "fieldKeys": [
+          "battle.scene"
+        ],
+        "componentIds": [
+          "map",
+          "figures",
+          "state"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "template": "hex-mat",
+        "status": "reuse",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": "map"
+      },
+      {
+        "areaId": "character",
+        "label": "캐릭터 공개 구역",
+        "fieldKeys": [
+          "character.scene"
+        ],
+        "componentIds": [
+          "cards",
+          "state"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "hand",
+        "label": "능력 선택·전투 목표",
+        "fieldKeys": [
+          "hand.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "decks",
+        "label": "보정·몬스터 덱",
+        "fieldKeys": [
+          "decks.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 11,
+    "board_instance_count": 3,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

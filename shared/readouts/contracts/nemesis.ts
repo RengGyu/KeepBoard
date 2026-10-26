@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type NemesisReadout =
+  {schema:"nemesis-v1";kind:"rooms";values:{"printedName": string | null; "sideLabel": string | null; "roomLabel": string | null; "exploredFace": string | null; "doorState": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "roomLabel": FieldBasis | null; "exploredFace": FieldBasis | null; "doorState": FieldBasis | null}}
+ | {schema:"nemesis-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "wounds": number | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "wounds": FieldBasis | null; "location": 'user' | null}}
+ | {schema:"nemesis-v1";kind:"markers";values:{"observedColor": string | null; "markerType": string | null; "displayValue": number | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "markerType": FieldBasis | null; "displayValue": FieldBasis | null; "target": 'user' | null}}
+ | {schema:"nemesis-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"nemesis-v1";kind:null;values:{};sources:{}};

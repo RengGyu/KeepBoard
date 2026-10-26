@@ -1,0 +1,10 @@
+[Unit]
+Description=Check KeepBoard short-lived IP certificate every 12 hours
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+RandomizedDelaySec=1800
+Persistent=true
+
+[Install]
+WantedBy=timers.target

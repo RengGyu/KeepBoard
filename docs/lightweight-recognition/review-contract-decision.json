@@ -1,0 +1,222 @@
+{
+  "version": "lightweight-review-contract-decision-v1",
+  "at": "2026-10-24T14:30:42.240309+00:00",
+  "status": "DECISIONS_READY_NOT_IMPLEMENTED",
+  "scope": {
+    "source": "current isolated stage, not deployed; ongoing implementation",
+    "productWrites": 0,
+    "modelCalls": 0,
+    "testRuns": 0,
+    "D1D2Changed": false,
+    "newProductDecisionRequired": false
+  },
+  "sourceEvidence": [
+    {
+      "path": "server/ai/observationAssembly.ts",
+      "sha256": "4b8a73f88aea9a9627f5456a3f616b32ec0c9b81a223d65ad23f77116b8deafd",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "server/analysisTask.ts",
+      "sha256": "b636e373bc4b79fc1084f7fc3937040adf18355b4ff8d968a5d81f6a6a4fe08c",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "server/index.ts",
+      "sha256": "33e34bb56549990306e70b4ede6ffccfbecc0ec059c932dca2ee775126a84ccc",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "server/engine.ts",
+      "sha256": "0da01dec8149874d156f3c9251350514642b6c09e2034616fab4aa5b7d265cbe",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "server/componentLinking.ts",
+      "sha256": "d020f5368da813f8459875029ba7825da1b79b6724ded95c4cb6079fa107e1d7",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "shared/componentLinking.ts",
+      "sha256": "8e20267a63d266904922b4515762516287a88c19918e03aeab3f00b19bb107ea",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "server/observationReceipts.ts",
+      "sha256": "5d0b36f4558e8228bb4d3be4fbc77055bbc80a5db8aa8ee7c45a4a5195845818",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/catanObservationReviewModel.ts",
+      "sha256": "0829c1f241cb822b48d881c30dc8b570aa44e6c0b95f5177be93174a884ac580",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/LocalCatanReview.tsx",
+      "sha256": "b6ee1a1b0a3a9da1faf407a41ea1b190039ff7b81cb5765f6f3b33bb46ee429b",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "shared/boardRecording.ts",
+      "sha256": "69450268cfda084c0e63158f91cb1d9e295e88906651842ed01b8504e1c6cc51",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "shared/sceneMoves.ts",
+      "sha256": "00b647250e7807cad48aee0eb7be9659aaa39fe7f308a97375ae691d79a68a58",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/RummikubWorkspace.tsx",
+      "sha256": "19c30809d7ad9b1b504b5e066469023e846897450fcdcf6698ad27ce6f0f9c88",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/rummikubSavePolicy.ts",
+      "sha256": "af8f54c470f1da2877bf826568130e8e33dcf5aaf663dc87f1d9eb46a14a4f4a",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "shared/splendor.ts",
+      "sha256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "shared/lightweightRecognition.ts",
+      "sha256": "fde69a4868713350e48f8ec42f73df4116bc8777fb46294e7255989b0809003b",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/SplendorEditor.tsx",
+      "sha256": "b5182b2be0411cf624c6c40b4a9754c11ab6cc042a0baf7084daf82e2d7eb8b7",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "src/SplendorReadout.tsx",
+      "sha256": "dae338d19d2ac1b18aeed78eee4e3733403cff170516bc3eeda0f5590ee90890",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    },
+    {
+      "path": "game-photo-definitions/index.json",
+      "sha256": "c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60",
+      "evidence": "VERIFIED static read; behavior not executed here"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "R1",
+      "title": "새 관측 후보와 기존 확정 상태를 분리하고 적용 때만 합친다",
+      "observed": [
+        "preservePartialCandidate concatenates accepted into new candidate by evidenceId/region; another photo cannot match that key.",
+        "linkComponents expects candidate IDs not already present in target and uses explicit linkOrigin for idempotence.",
+        "accept endpoint replaces same-field accepted; setAnswer also removes same-field candidates. Removing merge alone would therefore lose unseen state on direct acceptance."
+      ],
+      "owner": {
+        "Sol2": [
+          "server/analysisTask.ts:commitAnalysisTask",
+          "server/ai/observationAssembly.ts:preservePartialCandidate",
+          "server/index.ts:assertion accept",
+          "server/engine.ts:setAnswer (only local partial candidate application boundary as needed)",
+          "server/componentLinking.ts:linkComponents (reuse existing behavior)",
+          "server/observationReceipts.ts:receiptsForValue"
+        ],
+        "Sol1": [
+          "src/ComponentLinkDialog.tsx (reuse)",
+          "src/RummikubWorkspace.tsx",
+          "src/rummikubSavePolicy.ts",
+          "src/LocalCatanReview.tsx"
+        ]
+      },
+      "contract": [
+        "commitAnalysisTask stores only fresh request observations. Remove preservePartialCandidate from commit and its source/ID remapping. Never copy accepted objects/old receipts into a new observation candidate. Original provider response and ObservationReceipt.result remain unchanged.",
+        "Keep accepted assertions intact while a scan completes and while user reviews. New candidate UUIDs are observation identities, never cross-photo physical identities. Same colour/value/region or the same printed card is insufficient to match existing objects.",
+        "Typed/Splendor: use existing ComponentLinkDialog/linkComponents to explicitly add selected observed pieces to a chosen destination; preserve unrelated accepted pieces and their user corrections. Repeated same assertionId+pieceId uses existing linkOrigin idempotence. Across a new photo, user selects truly additional pieces; do not automatically replace a supposed same physical piece. Correct an existing item in its existing editor when that is intended.",
+        "Catan: LocalCatanReview builds a separate draft from accepted board plus fresh observations; R2 controls safe geometry. Existing candidate receipt is not rewritten to look like this draft.",
+        "Rummikub native has no generic link API. Smallest UI addition is one explicit “기존 판과 함께 정정” action preparing a draft from accepted groups/order/IDs/loose plus this fresh candidate as separate loose tiles. Keep groups and edits unchanged; no automatic sequence matching or group creation. This deliberately adds observation candidates for user correction, not an assertion they are new physical tiles. Existing move/delete/undo supports clearing repeats before explicit final save.",
+        "For local partial candidates with existing accepted state, direct whole-value accept/top-save must not silently replace accepted. Route to existing link/review action; guard the same backend accept case. A local Rummikub candidate-only dirty draft also cannot bypass this through answers; prepare the baseline-inclusive review before enabling its save path. An empty baseline can accept a valid first partial record normally.",
+        "Final reviewed native scene is an explicit edited snapshot, so intentional manual removal is allowed; do not globally union old objects back in server setAnswer. Pin/recheck baseline assertion/revision before applying (existing CAS pattern), preserve original receipts for included source objects. Never silently rebase a dirty draft.",
+        "Unselected typed candidates remain available through existing unlinkedComponentPieces. Native review includes unresolved fresh observations as loose/unplaced until user removes or fixes them; do not lose them merely because geometry failed. If a native implementation offers subset apply rather than whole review, it must also retain residual candidate projections; immutable raw receipt alone is not a pending-item UI."
+      ],
+      "regressions": [
+        "Accepted manually corrected old object A + different-photo fresh B: commit candidate contains only B, accepted A unchanged; explicit selected link adds B once and repeat is idempotent.",
+        "Same original ID carried from accepted must never be inserted into fresh candidate to trip target duplicate-ID conflict; source/evidence links remain correct.",
+        "Rummikub old ordered group + loose/manual edits survive rescan, review, save/reopen; fresh duplicates remain distinct until user removes them. Candidate-only accept and automatic photo preparation cannot erase old tiles.",
+        "Dirty or stale accepted baseline blocks that save without discarding draft; first scan into empty baseline remains usable."
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "기하 후보는 항목별·순서 독립적으로 처리한다",
+      "observed": [
+        "catanReviewScene loops over moveSceneComponent and throws on first rejection.",
+        "moveSceneComponent rejects unplaced quantity null and occupied destination; mergeBoardObservation can replace an existing same-layer slot when incoming is placed."
+      ],
+      "owner": {
+        "Sol1": [
+          "src/catanObservationReviewModel.ts:catanReviewScene",
+          "src/LocalCatanReview.tsx"
+        ],
+        "Sol2": [
+          "shared/boardRecording.ts / shared/sceneMoves.ts only if a narrow helper is needed; preserve manual move/swap semantics"
+        ]
+      },
+      "contract": [
+        "Return review result {scene, placedRefs, unresolved:[{observationRef,reason}]} instead of throwing for a per-object placement rejection. Continue independent items; actual invalid source/frame/version or stale baseline remains hard failure.",
+        "Before moving anything, group proposed destinations by canonical slot plus exclusiveLayer; buildings share layer, terrain/number/robber coexist. Multiple distinct incoming observations competing for the same exclusive slot: defer ALL contenders; no first-wins loop-order result. Conflicting multiple destinations for one observation are also deferred.",
+        "Accepted occupied same-layer target is unresolved for this automatic review step, even if incoming is unique. Do not let mergeBoardObservation overwrite a manually corrected accepted item merely because geometry points there. The user can choose a manual correction/replacement using existing editor; the automatic helper does not swap or delete old state.",
+        "For this geometry batch only, quantity must already be exactly1 to place a loose object. null/0/>1 remains unchanged and unplaced with a reason; do not set1, split bundles, or infer a count to satisfy move validation. Existing manual split/move remains unchanged.",
+        "Use a separate incoming working copy; apply each unambiguous free-slot proposal through existing move semantics, keep any rejection unplaced, then combine with baseline without overwriting occupied layers. Original candidate and its receipt are unchanged. Stable ref/ID mapping must survive review/save.",
+        "Normal partial result is saveable: show a short count such as “배치 3개 · 위치 확인 2개”, keep unresolved visible and editable. All-unresolved still permits manual review/save. Remove the broad placementFailure gate for these ordinary per-item issues; retain dirty/stale/source checks and do not recompute over manual corrections."
+      ],
+      "regressions": [
+        "Three independent free-slot items plus one quantity-null item: valid three place, null item stays unplaced, no exception for whole batch.",
+        "Two incoming objects claim same exclusive slot in either iteration order: both unresolved; a third independent target still places. Terrain+number on same hex do not conflict.",
+        "An accepted manually corrected number occupying target stays unchanged, new observation stays unplaced; explicit manual action still supports existing swap/correction.",
+        "Return result, undo and save/reopen preserve all unresolved objects and receipts; wrong/stale frame does not get treated as a harmless unknown."
+      ]
+    },
+    {
+      "id": "R3",
+      "title": "스플렌더 종류·단계는 관측대로 유지하고 의미 충돌만 보류한다",
+      "observed": [
+        "Generated development permits visible kind=development|deck and level=1|2|3 independent of faceOnly.",
+        "Assembler ignores observed kind and chooses from face; unknown face yields null kind then observed level causes downstream strict readout throw.",
+        "Current Splendor validator ties level to kind although componentId already identifies card family."
+      ],
+      "owner": {
+        "Sol2": [
+          "server/ai/observationAssembly.ts:Splendor branch",
+          "shared/splendor.ts:validateSplendorObservation (narrow level rule only)"
+        ],
+        "Sol1": [
+          "src/SplendorEditor.tsx / src/SplendorReadout.tsx only if needed to keep unknown-kind card level visible/editable; no redesign"
+        ]
+      },
+      "contract": [
+        "Honor explicit observed kind when allowed by componentId and not in conflict with observed face. Missing kind may use existing unambiguous face-to-front/back readout fallback; unknown face must not force a kind. No stack count is inferred from back-face display kind.",
+        "When componentId=development and kind is null, a valid independently observed level1/2/3 may remain level: allow that exact combination in validateSplendorObservation. The type already permits null kind; no new global schema/domain. Level never implies kind, front face, owner or purchase state. Other component families still reject a non-null level.",
+        "If explicit kind and known face conflict in current front-card/back-deck semantics, mark effective kind unresolved; keep valid family-level information, defer kind-dependent incompatible values. Do not silently prefer face or explicit kind as truth. User chooses kind in existing editor.",
+        "Distinguish valid-but-unrepresentable cross-field combinations from malformed data. Build a separate projected Splendor readout, retaining only compatible observed properties. Deferred attributes become null in the projected readout, with ref+attribute+reason in existing result warnings/summary; original values remain unchanged in ObservationReceipt.result. Do not mutate raw or claim the whole item was read correctly.",
+        "Unsupported combinations in one otherwise allowed observation must not discard independent valid objects in the same response. Handle these known semantic cases explicitly; do not catch every validation error and return success. Preserve the unresolved object/region for correction when representable.",
+        "Keep envelope/source/owner/definition/panel checks, property allowlist, types/domains and front-only constraints strict. For example unknown-face observed front-only cost/points remains invalid at that boundary; it is not this valid-level assembly bug. This decision does not authorize blanket salvage of malformed or out-of-scope provider input.",
+        "Known0 remains0, unknown remainsnull; missing cost colours are unknown rather than0. Keep kind selection and any restored deferred attribute as explicit user correction, never infer it from game rules."
+      ],
+      "regressions": [
+        "development + face unknown + observed kind development + level2: keep kind development and level2; no inferred face.",
+        "development + face unknown + unknown kind + level2: kindnull/level2 survives validation, display/review and save/reopen.",
+        "Explicit deck conflicting with front-card face: unresolved kind, valid family level retained, incompatible attributes deferred with source ref; a separate valid chip/noble in the same response survives.",
+        "Noble with level, out-of-domain level4, front-only value on unknown/back face and wrong-owner source keep strict rejection; unknown/zero are never interchanged."
+      ]
+    }
+  ],
+  "implementationOrder": [
+    "Sol2 remove candidate premerge AND protect existing-state direct-accept path in the same patch; coordinate Sol1 native draft save change before enabling it.",
+    "Sol1 implement deterministic per-observation Catan review result without modifying model data or manual move semantics.",
+    "Sol2 implement Splendor projection and narrow independent-level rule; Sol1 verify existing unknown-kind display/correction path."
+  ],
+  "constraints": [
+    "No new reconciliation engine, cross-photo identity inference, new model call or D1/D2 file change.",
+    "No tests were executed in this decision task. Listed regression cases are implementer acceptance instructions, not passing evidence.",
+    "Ordinary reversible choices resolved; no additional product approval needed."
+  ]
+}

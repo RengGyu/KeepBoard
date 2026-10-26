@@ -1,0 +1,33 @@
+{
+  "realAIcalls": 0,
+  "networkCalls": 0,
+  "results": [
+    {
+      "check": "independent instance stale session CAS",
+      "state": "PASS"
+    },
+    {
+      "check": "PIN token/lock shared across independent instances",
+      "state": "PASS"
+    },
+    {
+      "check": "same intent dispatch reuse + batch redelivery claim",
+      "state": "PASS",
+      "dispatches": 1,
+      "syntheticProviderCalls": 1,
+      "realAIcalls": 0
+    },
+    {
+      "check": "unrelated owner preserved + explicit candidate status + replay receipt",
+      "state": "PASS"
+    },
+    {
+      "check": "same room creation request across independent instances",
+      "state": "FAIL",
+      "expectedRooms": 1,
+      "actualRooms": 2,
+      "distinctReturnedIds": 2,
+      "source": "server/index.ts:264 check-then-create; pure semantic reproduction, NOT HTTP integration"
+    }
+  ]
+}

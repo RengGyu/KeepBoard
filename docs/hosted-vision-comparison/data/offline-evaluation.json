@@ -1,0 +1,52 @@
+{
+  "version": "keepboard-hosted-vision-offline-evaluation-v1",
+  "modelInputAllowed": false,
+  "cases": [
+    {
+      "imageId": "catan-corpus-development",
+      "privateGTPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/kb-catan-independent-gt-g8mi5z76/ground-truth.json",
+      "sha256": "9ef0cac2418cd7d233a595f3981122c1efb8e0a65499b2441f75aacec1c17c02",
+      "schemaRole": "independent-number-observation-gt",
+      "targetPointer": "/objects",
+      "annotatedNumeralTargets": 18,
+      "GTValueAndLocationSource": "Existing immutable manual annotation; no values copied here.",
+      "coverage": "Numeral tokens on island only; not exhaustive printed text OCR, not component-label/location GT for this comparison.",
+      "componentLocationGT": "UNKNOWN_UNSCORED",
+      "heldout": false
+    },
+    {
+      "imageId": "catan-user-development",
+      "privateGTPath": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-recognition-gt-4games/user-catan-gt.json",
+      "sha256": "61ee4343effc494d988a5098ba19f49431fa0e0f678fa2fb82439987cb0c48f6",
+      "schemaRole": "user-catan-board-gt",
+      "targetPointer": "/tiles",
+      "annotatedNumeralTargets": 18,
+      "GTValueAndLocationSource": "Existing immutable manual annotation; no values copied here.",
+      "coverage": "Numeral tokens on island only; not exhaustive printed text OCR, not component-label/location GT for this comparison.",
+      "componentLocationGT": "UNKNOWN_UNSCORED",
+      "heldout": false
+    }
+  ],
+  "taskMapping": {
+    "ocr-with-region": "Same all-visible-printed-text task for both providers; evaluate only the pre-annotated digit subset against numeral GT.",
+    "component-location": "Preserve labels/locations/native outputs; no new component GT or accuracy score."
+  },
+  "matching": {
+    "coordinateConversion": "Provider-declared source image coordinate system to original image; quad_1000 divided by1000 then width/height, preserving quadrilateral. No inferred boxes, clamping or frame correction.",
+    "sourceCorrespondence": "Unique spatial containment of frozen target center in source quadrilateral; ambiguous many-to-one/one-to-many stays ambiguous. No closest-value/label matching.",
+    "values": "Compare a uniquely localized observed numeral to the existing GT literal/number. Preserve raw string. Conservative whitespace-only normalization; multi-token/invalid/unreadable stays unknown or ambiguous, not0.",
+    "separateCounts": [
+      "correct",
+      "wrong",
+      "unknown",
+      "missing_annotated_target",
+      "ambiguous",
+      "raw_unmatched_text",
+      "raw_unmatched_numerals",
+      "invalid_or_unlocalized_output"
+    ],
+    "unmatchedPolicy": "Raw OCR covers unannotated text/card/legend numerals too. Unmatched is NOT automatically a physical false positive. Offline source/scope adjudication required; retain unannotated legitimate, localization miss, ambiguous, or confirmed hallucination separately.",
+    "scopeLimit": "Do not force inventory counts, silently split one OCR box into multiple locations, repair6/9 from game balance, or treat saved/native corrected state as raw model accuracy."
+  },
+  "isolation": "Never pass this sidecar, GT paths/values/target counts, previous predictions/errors, or confirmed evaluation frame to provider request construction."
+}

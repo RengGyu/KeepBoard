@@ -1,0 +1,2 @@
+import type {AnalysisJob} from '../shared/analysisJobs';
+export function analysisJobMessage(job:AnalysisJob){switch(job.state){case 'queued':return '서버에서 사진 읽기를 준비해요. 나갔다 와도 확인할 수 있어요.';case 'running':return '서버에서 사진을 읽고 있어요. 나갔다 와도 계속돼요.';case 'completed':return job.mode==='manual'?'사진을 보관했어요. AI 연결 후 읽을 수 있어요.':job.candidateCount?'사진 읽기를 마쳤어요. 결과를 확인해 주세요.':'확인할 새 후보가 없어요. 원본은 남아 있어요.';case 'stale':return '기록이 바뀌어 결과를 적용하지 않았어요. 원본은 남아 있어요.';case 'interrupted':return '서버 재시작으로 작업이 중단됐어요. 자동으로 다시 읽지 않았어요.';default:return '사진 읽기에 실패했어요. 원본은 남아 있어요.';}}

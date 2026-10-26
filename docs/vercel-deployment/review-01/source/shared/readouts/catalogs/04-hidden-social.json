@@ -1,0 +1,1382 @@
+{
+  "avalon": {
+    "gameId": "avalon",
+    "runtimePackId": "avalon",
+    "schema": "avalon-v1",
+    "editionId": "base",
+    "sourceSHA": "2227f0ecf3351684f213d810631ada1e86bfef1591fa94107706b73e844666b6",
+    "packVersion": "1.0.0-essentials-2.2227f0ecf335",
+    "title": "레지스탕스: 아발론",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "roles",
+        "name": "역할·충성 카드",
+        "kind": "card",
+        "description": "개인 비밀 역할과 진영.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 비밀 역할과 진영.",
+            "faceOnly": true
+          },
+          {
+            "id": "visibleRoleLabel",
+            "type": "text",
+            "label": "공개가 허용된 역할 표기",
+            "acquisition": "visible",
+            "sourceText": "개인 비밀 역할과 진영.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "투표·원정 카드",
+        "kind": "card",
+        "description": "승인/거부와 성공/실패 제출을 별도 처리.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "승인/거부와 성공/실패 제출을 별도 처리.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "투표·원정 카드",
+            "acquisition": "visible",
+            "sourceText": "승인/거부와 성공/실패 제출을 별도 처리.",
+            "faceOnly": true
+          },
+          {
+            "id": "revealedResult",
+            "type": "text",
+            "label": "공개된 결과 표기",
+            "acquisition": "visible",
+            "sourceText": "승인/거부와 성공/실패 제출을 별도 처리.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "markers",
+        "name": "리더·원정·추적 표식",
+        "kind": "token",
+        "description": "리더·팀 후보·성공/실패·연속 거부 수.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 리더·팀 후보·성공/실패·연속 거부 수."
+          },
+          {
+            "id": "markerType",
+            "type": "text",
+            "label": "리더·팀·원정결과·거절횟수",
+            "acquisition": "visible",
+            "sourceText": "리더·팀 후보·성공/실패·연속 거부 수."
+          },
+          {
+            "id": "displayValue",
+            "type": "integer",
+            "label": "공개 표시값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "리더·팀 후보·성공/실패·연속 거부 수."
+          },
+          {
+            "id": "linkedPlayer",
+            "type": "player",
+            "label": "연결 플레이어",
+            "acquisition": "manual",
+            "sourceText": "리더·팀 후보·성공/실패·연속 거부 수. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "clue": {
+    "gameId": "clue",
+    "runtimePackId": "clue",
+    "schema": "clue-v1",
+    "editionId": "base",
+    "sourceSHA": "04f78d8b00cecb3cd74963a8b03630ba067427f86d05c197a679ed9006c36d21",
+    "packVersion": "1.0.0-essentials-2.04f78d8b00ce",
+    "title": "클루",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "board",
+        "name": "저택판",
+        "kind": "board",
+        "description": "방·복도·문·비밀통로.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "방·복도·문·비밀통로."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "방·복도·문·비밀통로."
+          },
+          {
+            "id": "room",
+            "type": "text",
+            "label": "방·복도 표기",
+            "acquisition": "visible",
+            "sourceText": "방·복도·문·비밀통로."
+          },
+          {
+            "id": "passage",
+            "type": "text",
+            "label": "문·비밀통로 표기",
+            "acquisition": "visible",
+            "sourceText": "방·복도·문·비밀통로."
+          }
+        ]
+      },
+      {
+        "id": "figures",
+        "name": "용의자·무기",
+        "kind": "piece",
+        "description": "플레이어 선택 여부와 무관한 실제 말 위치.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 플레이어 선택 여부와 무관한 실제 말 위치."
+          },
+          {
+            "id": "character",
+            "type": "text",
+            "label": "말 정체",
+            "acquisition": "visible",
+            "sourceText": "플레이어 선택 여부와 무관한 실제 말 위치."
+          },
+          {
+            "id": "location",
+            "type": "text",
+            "label": "방·복도 위치",
+            "acquisition": "manual",
+            "sourceText": "플레이어 선택 여부와 무관한 실제 말 위치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "cards",
+        "name": "사건 카드·봉투",
+        "kind": "card",
+        "description": "개인 손패와 누구도 보지 않은 정답 봉투.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 손패와 누구도 보지 않은 정답 봉투.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "인물·도구·장소 종류",
+            "acquisition": "visible",
+            "sourceText": "개인 손패와 누구도 보지 않은 정답 봉투.",
+            "faceOnly": true
+          },
+          {
+            "id": "visibleTitle",
+            "type": "text",
+            "label": "공개가 허용된 제목",
+            "acquisition": "visible",
+            "sourceText": "개인 손패와 누구도 보지 않은 정답 봉투.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "notes",
+        "name": "개인 추리표·주사위",
+        "kind": "marker",
+        "description": "주사위 값과 소유자별 추리 메모.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 주사위 값과 소유자별 추리 메모."
+          },
+          {
+            "id": "recordType",
+            "type": "text",
+            "label": "주사위·개인 추리 구분",
+            "acquisition": "manual",
+            "sourceText": "주사위 값과 소유자별 추리 메모. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "dieValue",
+            "type": "integer",
+            "label": "보이는 주사위 눈",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "주사위 값과 소유자별 추리 메모."
+          },
+          {
+            "id": "deduction",
+            "type": "text",
+            "label": "사용자 개인 추리",
+            "acquisition": "manual",
+            "sourceText": "주사위 값과 소유자별 추리 메모. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "cockroach-poker": {
+    "gameId": "cockroach-poker",
+    "runtimePackId": "cockroach-poker",
+    "schema": "cockroach-poker-v1",
+    "editionId": "base",
+    "sourceSHA": "aed599abd90cebf8976eb9decacd4ebe5f459b5046654a6ba494e5e84780668b",
+    "packVersion": "1.0.0-essentials-2.aed599abd90c",
+    "title": "바퀴벌레 포커",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "생물 카드",
+        "kind": "card",
+        "description": "실제 생물 정체·현재 주장·공개 수령/손패 구역.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "실제 생물 정체·현재 주장·공개 수령/손패 구역.",
+            "faceOnly": true
+          },
+          {
+            "id": "creature",
+            "type": "text",
+            "label": "보이는 생물",
+            "acquisition": "visible",
+            "sourceText": "실제 생물 정체·현재 주장·공개 수령/손패 구역.",
+            "faceOnly": true
+          },
+          {
+            "id": "claimedCreature",
+            "type": "text",
+            "label": "현재 선언한 생물",
+            "acquisition": "manual",
+            "sourceText": "실제 생물 정체·현재 주장·공개 수령/손패 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손·전달 중·공개 누적",
+            "acquisition": "manual",
+            "sourceText": "실제 생물 정체·현재 주장·공개 수령/손패 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "codenames": {
+    "gameId": "codenames",
+    "runtimePackId": "codenames",
+    "schema": "codenames-v1",
+    "editionId": "base",
+    "sourceSHA": "ef0d8c206e6bd3573a4f6fe60776ab2758a15f00fb6c68a46dc377f9fb6b79a4",
+    "packVersion": "1.0.0-essentials-2.ef0d8c206e6b",
+    "title": "코드네임",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "words",
+        "name": "단어 카드",
+        "kind": "card",
+        "description": "공용 단어의 현재 면과 행열.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "공용 단어의 현재 면과 행열.",
+            "faceOnly": true
+          },
+          {
+            "id": "word",
+            "type": "text",
+            "label": "실제 단어",
+            "acquisition": "visible",
+            "sourceText": "공용 단어의 현재 면과 행열.",
+            "faceOnly": true
+          },
+          {
+            "id": "row",
+            "type": "integer",
+            "label": "행",
+            "acquisition": "manual",
+            "min": 1,
+            "sourceText": "공용 단어의 현재 면과 행열. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다.",
+            "max": 5
+          },
+          {
+            "id": "column",
+            "type": "integer",
+            "label": "열",
+            "acquisition": "manual",
+            "min": 1,
+            "sourceText": "공용 단어의 현재 면과 행열. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다.",
+            "max": 5
+          },
+          {
+            "id": "revealed",
+            "type": "text",
+            "label": "공개·가림 구분",
+            "acquisition": "manual",
+            "sourceText": "공용 단어의 현재 면과 행열. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "key",
+        "name": "키카드",
+        "kind": "card",
+        "description": "비밀 정체와 회전. 공용 단어 사진에 포함하지 않는다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "비밀 정체와 회전. 공용 단어 사진에 포함하지 않는다.",
+            "faceOnly": true
+          },
+          {
+            "id": "visiblePattern",
+            "type": "text",
+            "label": "허용된 역할 화면의 키 표기",
+            "acquisition": "visible",
+            "sourceText": "비밀 정체와 회전. 공용 단어 사진에 포함하지 않는다.",
+            "faceOnly": true
+          }
+        ]
+      },
+      {
+        "id": "covers",
+        "name": "요원·행인·암살자 덮개",
+        "kind": "card",
+        "description": "이미 공개된 결과만 공용에 놓는다.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "이미 공개된 결과만 공용에 놓는다.",
+            "faceOnly": true
+          },
+          {
+            "id": "coverType",
+            "type": "text",
+            "label": "공개된 팀·일반·암살 표식",
+            "acquisition": "visible",
+            "sourceText": "이미 공개된 결과만 공용에 놓는다.",
+            "faceOnly": true
+          },
+          {
+            "id": "wordTarget",
+            "type": "text",
+            "label": "덮인 단어",
+            "acquisition": "manual",
+            "sourceText": "이미 공개된 결과만 공용에 놓는다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "coup": {
+    "gameId": "coup",
+    "runtimePackId": "coup",
+    "schema": "coup-v1",
+    "editionId": "base",
+    "sourceSHA": "82b468b25dda98bd5ff5d756e09479fd4f44847b4171d184714f6e6add74630e",
+    "packVersion": "1.0.0-essentials-2.82b468b25dda",
+    "title": "쿠",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "roles",
+        "name": "인물·영향력 카드",
+        "kind": "card",
+        "description": "살아 있는 비공개 카드와 잃어 공개한 카드.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "살아 있는 비공개 카드와 잃어 공개한 카드.",
+            "faceOnly": true
+          },
+          {
+            "id": "visibleRole",
+            "type": "text",
+            "label": "공개된 역할 표기",
+            "acquisition": "visible",
+            "sourceText": "살아 있는 비공개 카드와 잃어 공개한 카드.",
+            "faceOnly": true
+          },
+          {
+            "id": "roleState",
+            "type": "text",
+            "label": "비공개 생존·공개 탈락 구분",
+            "acquisition": "manual",
+            "sourceText": "살아 있는 비공개 카드와 잃어 공개한 카드. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "coins",
+        "name": "동전",
+        "kind": "token",
+        "description": "개인 보유와 지불 중 동전.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 보유와 지불 중 동전."
+          },
+          {
+            "id": "nominalValue",
+            "type": "integer",
+            "label": "동전 액면",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "개인 보유와 지불 중 동전."
+          },
+          {
+            "id": "coinZone",
+            "type": "text",
+            "label": "보유·지불 중 구분",
+            "acquisition": "manual",
+            "sourceText": "개인 보유와 지불 중 동전. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "crew-deep-sea": {
+    "gameId": "crew-deep-sea",
+    "runtimePackId": "crew-deep-sea",
+    "schema": "crew-deep-sea-v1",
+    "editionId": "base",
+    "sourceSHA": "bd1a3b71ef099ef0bb5069d95eb7ce877fa70eee3c5b1afb7da905149b4393a5",
+    "packVersion": "1.0.0-essentials-2.bd1a3b71ef09",
+    "title": "크루: 심해의 모험",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "트릭 카드·태스크",
+        "kind": "card",
+        "description": "개인 손패·진행 중 트릭·임무 카드와 담당자.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "개인 손패·진행 중 트릭·임무 카드와 담당자.",
+            "faceOnly": true
+          },
+          {
+            "id": "suit",
+            "type": "text",
+            "label": "색·무늬",
+            "acquisition": "visible",
+            "sourceText": "개인 손패·진행 중 트릭·임무 카드와 담당자.",
+            "faceOnly": true
+          },
+          {
+            "id": "number",
+            "type": "integer",
+            "label": "카드 숫자",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "개인 손패·진행 중 트릭·임무 카드와 담당자.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardType",
+            "type": "text",
+            "label": "플레이·임무 카드",
+            "acquisition": "visible",
+            "sourceText": "개인 손패·진행 중 트릭·임무 카드와 담당자.",
+            "faceOnly": true
+          },
+          {
+            "id": "assignee",
+            "type": "player",
+            "label": "임무 담당자",
+            "acquisition": "manual",
+            "sourceText": "개인 손패·진행 중 트릭·임무 카드와 담당자. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "통신·지휘관 표식",
+        "kind": "token",
+        "description": "소나 토큰·조난 신호 토큰·선장 표식을 구별한다. 소나 토큰은 사용 면 및 공개 카드의 위/중간/아래 위치가 정보다. 선장은 잠수함4 보유자로 정해진다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 소나 토큰·조난 신호 토큰·선장 표식을 구별한다. 소나 토큰은 사용 면 및 공개 카드의 위/중간/아래 위치가 정보다. 선장은 잠수함4 보유자로 정해진다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "통신·조난·선장",
+            "acquisition": "visible",
+            "sourceText": "소나 토큰·조난 신호 토큰·선장 표식을 구별한다. 소나 토큰은 사용 면 및 공개 카드의 위/중간/아래 위치가 정보다. 선장은 잠수함4 보유자로 정해진다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+          },
+          {
+            "id": "communication",
+            "type": "text",
+            "label": "상단·중앙·하단 표시",
+            "acquisition": "manual",
+            "sourceText": "소나 토큰·조난 신호 토큰·선장 표식을 구별한다. 소나 토큰은 사용 면 및 공개 카드의 위/중간/아래 위치가 정보다. 선장은 잠수함4 보유자로 정해진다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "소나 토큰·조난 신호 토큰·선장 표식을 구별한다. 소나 토큰은 사용 면 및 공개 카드의 위/중간/아래 위치가 정보다. 선장은 잠수함4 보유자로 정해진다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "log",
+        "name": "임무 로그북",
+        "kind": "sheet",
+        "description": "현재 임무·시도·난도 조건.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "현재 임무·시도·난도 조건."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "현재 임무·시도·난도 조건."
+          },
+          {
+            "id": "mission",
+            "type": "text",
+            "label": "임무 표기",
+            "acquisition": "visible",
+            "sourceText": "현재 임무·시도·난도 조건."
+          },
+          {
+            "id": "attempts",
+            "type": "integer",
+            "label": "확인 시도 횟수",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "현재 임무·시도·난도 조건. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "difficulty",
+            "type": "text",
+            "label": "확인 난도",
+            "acquisition": "manual",
+            "sourceText": "현재 임무·시도·난도 조건. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "davinci-code": {
+    "gameId": "davinci-code",
+    "runtimePackId": "davinci-code",
+    "schema": "davinci-code-v1",
+    "editionId": "base",
+    "sourceSHA": "f6f7cc94d289032072499c5dc0ecd9aaa9bb9ad63be2af506d3f5692973f3d47",
+    "packVersion": "1.0.0-essentials-2.f6f7cc94d289",
+    "title": "다빈치코드",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "tiles",
+        "name": "흑백 숫자·조커 타일",
+        "kind": "tile",
+        "description": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "tileColor",
+            "type": "text",
+            "label": "타일 색",
+            "acquisition": "visible",
+            "sourceText": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "number",
+            "type": "integer",
+            "label": "허용 범위에서 읽힌 숫자",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리.",
+            "faceOnly": true
+          },
+          {
+            "id": "position",
+            "type": "integer",
+            "label": "줄의 위치",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "revealed",
+            "type": "text",
+            "label": "공개 여부",
+            "acquisition": "manual",
+            "sourceText": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "dixit": {
+    "gameId": "dixit",
+    "runtimePackId": "dixit",
+    "schema": "dixit-v1",
+    "editionId": "base",
+    "sourceSHA": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+    "packVersion": "1.0.0-essentials-2.3536bf279979",
+    "title": "딕싯",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "그림 카드",
+        "kind": "card",
+        "description": "실물 그림/크롭 ID와 제출·손패·덱 구역.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "실물 그림/크롭 ID와 제출·손패·덱 구역.",
+            "faceOnly": true
+          },
+          {
+            "id": "illustrationCue",
+            "type": "text",
+            "label": "보이는 그림 특징",
+            "acquisition": "visible",
+            "sourceText": "실물 그림/크롭 ID와 제출·손패·덱 구역.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·제출·공개 구분",
+            "acquisition": "manual",
+            "sourceText": "실물 그림/크롭 ID와 제출·손패·덱 구역. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "votes",
+        "name": "투표 다이얼·말·점수판",
+        "kind": "piece",
+        "description": "개인 비공개 선택과 공개된 투표·점수.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 비공개 선택과 공개된 투표·점수."
+          },
+          {
+            "id": "voteValue",
+            "type": "integer",
+            "label": "공개된 투표 값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "개인 비공개 선택과 공개된 투표·점수."
+          },
+          {
+            "id": "voteState",
+            "type": "text",
+            "label": "선택 중·공개 후",
+            "acquisition": "manual",
+            "sourceText": "개인 비공개 선택과 공개된 투표·점수. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "scoreValue",
+            "type": "integer",
+            "label": "보이는 점수값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "개인 비공개 선택과 공개된 투표·점수."
+          }
+        ]
+      }
+    ]
+  },
+  "hanabi": {
+    "gameId": "hanabi",
+    "runtimePackId": "hanabi",
+    "schema": "hanabi-v1",
+    "editionId": "base",
+    "sourceSHA": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+    "packVersion": "1.0.0-essentials-2.b9f638a79062",
+    "title": "하나비",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "불꽃 카드",
+        "kind": "card",
+        "description": "색·숫자·손패/불꽃/버림/덱 위치.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "색·숫자·손패/불꽃/버림/덱 위치.",
+            "faceOnly": true
+          },
+          {
+            "id": "suit",
+            "type": "text",
+            "label": "허용된 화면에서 본 색",
+            "acquisition": "visible",
+            "sourceText": "색·숫자·손패/불꽃/버림/덱 위치.",
+            "faceOnly": true
+          },
+          {
+            "id": "number",
+            "type": "integer",
+            "label": "허용된 화면에서 본 숫자",
+            "acquisition": "visible",
+            "min": 1,
+            "sourceText": "색·숫자·손패/불꽃/버림/덱 위치.",
+            "faceOnly": true,
+            "max": 5
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "손패·불꽃·버림 구분",
+            "acquisition": "manual",
+            "sourceText": "색·숫자·손패/불꽃/버림/덱 위치. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "단서·실수 표식",
+        "kind": "token",
+        "description": "사용 가능한 단서와 실수 상태.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 사용 가능한 단서와 실수 상태."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "단서·실수 토큰",
+            "acquisition": "visible",
+            "sourceText": "사용 가능한 단서와 실수 상태."
+          },
+          {
+            "id": "tokenSide",
+            "type": "text",
+            "label": "보이는 면",
+            "acquisition": "visible",
+            "sourceText": "사용 가능한 단서와 실수 상태."
+          }
+        ]
+      }
+    ]
+  },
+  "jaipur": {
+    "gameId": "jaipur",
+    "runtimePackId": "jaipur",
+    "schema": "jaipur-v1",
+    "editionId": "base",
+    "sourceSHA": "021ae745519b7289af48b6dec8de04b80fb0d8120b2578e414bee0b86688884f",
+    "packVersion": "1.0.0-essentials-2.021ae745519b",
+    "title": "자이푸르",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "상품·낙타 카드",
+        "kind": "card",
+        "description": "상품 종류·시장/손패·개인 낙타 무리.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "상품 종류·시장/손패·개인 낙타 무리.",
+            "faceOnly": true
+          },
+          {
+            "id": "goodsType",
+            "type": "text",
+            "label": "상품·낙타 종류",
+            "acquisition": "visible",
+            "sourceText": "상품 종류·시장/손패·개인 낙타 무리.",
+            "faceOnly": true
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "시장·손패·낙타무리",
+            "acquisition": "manual",
+            "sourceText": "상품 종류·시장/손패·개인 낙타 무리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "tokens",
+        "name": "상품·보너스·낙타·인장",
+        "kind": "token",
+        "description": "종류별 공급 순서와 획득한 비공개 점수·라운드 승리.",
+        "fields": [
+          {
+            "id": "observedColor",
+            "label": "사진에서 본 색·재질",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 종류별 공급 순서와 획득한 비공개 점수·라운드 승리."
+          },
+          {
+            "id": "tokenType",
+            "type": "text",
+            "label": "상품·보너스·승리 표식",
+            "acquisition": "visible",
+            "sourceText": "종류별 공급 순서와 획득한 비공개 점수·라운드 승리."
+          },
+          {
+            "id": "printedValue",
+            "type": "integer",
+            "label": "공개된 면의 값",
+            "acquisition": "visible",
+            "min": 0,
+            "sourceText": "종류별 공급 순서와 획득한 비공개 점수·라운드 승리."
+          },
+          {
+            "id": "supplyPosition",
+            "type": "text",
+            "label": "공급 더미 순서",
+            "acquisition": "manual",
+            "sourceText": "종류별 공급 순서와 획득한 비공개 점수·라운드 승리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "just-one": {
+    "gameId": "just-one",
+    "runtimePackId": "just-one",
+    "schema": "just-one-v1",
+    "editionId": "base",
+    "sourceSHA": "bf9d3ef0bd93395912705d434efd0bee3abe12c1377240d0ff8d611792a50406",
+    "packVersion": "1.0.0-essentials-2.bf9d3ef0bd93",
+    "title": "저스트 원",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "cards",
+        "name": "단어 카드",
+        "kind": "card",
+        "description": "선택 번호·현재 카드·남은/성공/실패 묶음.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음.",
+            "faceOnly": true
+          },
+          {
+            "id": "selectedNumber",
+            "type": "integer",
+            "label": "선택 번호",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "cardArea",
+            "type": "text",
+            "label": "더미·현재·완료 구분",
+            "acquisition": "manual",
+            "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "boards",
+        "name": "힌트 보드",
+        "kind": "board",
+        "description": "작성한 단어와 공개/취소 상태.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "작성한 단어와 공개/취소 상태."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "작성한 단어와 공개/취소 상태."
+          },
+          {
+            "id": "writtenWord",
+            "type": "text",
+            "label": "허용 범위의 필기",
+            "acquisition": "visible",
+            "sourceText": "작성한 단어와 공개/취소 상태."
+          },
+          {
+            "id": "revealState",
+            "type": "text",
+            "label": "공개·가림·제외 구분",
+            "acquisition": "manual",
+            "sourceText": "작성한 단어와 공개/취소 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  },
+  "skull": {
+    "gameId": "skull",
+    "runtimePackId": "skull",
+    "schema": "skull-v1",
+    "editionId": "base",
+    "sourceSHA": "07c63ec84e66bce986308e1f78f194839207806ec6ce4bf8200ca007af108f3a",
+    "packVersion": "1.0.0-essentials-2.07c63ec84e66",
+    "title": "스컬",
+    "batch": "04-hidden-social",
+    "sourceVerification": "attachment-only",
+    "components": [
+      {
+        "id": "discs",
+        "name": "꽃·해골 디스크",
+        "kind": "tile",
+        "description": "소유자·정체·개인 손/쌓은 위치·제거 상태.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "소유자·정체·개인 손/쌓은 위치·제거 상태.",
+            "faceOnly": true
+          },
+          {
+            "id": "discType",
+            "type": "text",
+            "label": "공개된 꽃·해골",
+            "acquisition": "visible",
+            "sourceText": "소유자·정체·개인 손/쌓은 위치·제거 상태.",
+            "faceOnly": true
+          },
+          {
+            "id": "owner",
+            "type": "player",
+            "label": "소유 플레이어",
+            "acquisition": "manual",
+            "sourceText": "소유자·정체·개인 손/쌓은 위치·제거 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "stackPosition",
+            "type": "integer",
+            "label": "묶음의 순서",
+            "acquisition": "manual",
+            "min": 0,
+            "sourceText": "소유자·정체·개인 손/쌓은 위치·제거 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "discArea",
+            "type": "text",
+            "label": "손·쌓음·제거 구분",
+            "acquisition": "manual",
+            "sourceText": "소유자·정체·개인 손/쌓은 위치·제거 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "mats",
+        "name": "개인 매트·Last Chance",
+        "kind": "board",
+        "description": "성공 면·생존 상태와 현행 선택 규칙 표식.",
+        "fields": [
+          {
+            "id": "printedName",
+            "label": "읽히는 판 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "성공 면·생존 상태와 현행 선택 규칙 표식."
+          },
+          {
+            "id": "sideLabel",
+            "label": "사용 면 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "성공 면·생존 상태와 현행 선택 규칙 표식."
+          },
+          {
+            "id": "successSide",
+            "type": "text",
+            "label": "성공 면",
+            "acquisition": "visible",
+            "sourceText": "성공 면·생존 상태와 현행 선택 규칙 표식."
+          },
+          {
+            "id": "survival",
+            "type": "text",
+            "label": "생존 여부",
+            "acquisition": "manual",
+            "sourceText": "성공 면·생존 상태와 현행 선택 규칙 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          },
+          {
+            "id": "houseRule",
+            "type": "text",
+            "label": "확인한 선택 규칙",
+            "acquisition": "manual",
+            "sourceText": "성공 면·생존 상태와 현행 선택 규칙 표식. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      }
+    ]
+  }
+}

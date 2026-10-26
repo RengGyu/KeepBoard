@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type StarWarsRebellionReadout =
+  {schema:"star-wars-rebellion-v1";kind:"units";values:{"observedColor": string | null; "faction": string | null; "unitType": string | null; "spaceType": string | null; "system": string | null; "buildQueue": string | null};sources:{"observedColor": FieldBasis | null; "faction": FieldBasis | null; "unitType": FieldBasis | null; "spaceType": 'user' | null; "system": 'user' | null; "buildQueue": 'user' | null}}
+ | {schema:"star-wars-rebellion-v1";kind:"leaders";values:{"observedColor": string | null; "leader": string | null; "leaderZone": string | null; "captureState": string | null};sources:{"observedColor": FieldBasis | null; "leader": FieldBasis | null; "leaderZone": 'user' | null; "captureState": 'user' | null}}
+ | {schema:"star-wars-rebellion-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"star-wars-rebellion-v1";kind:"markers";values:{"observedColor": string | null; "markerType": string | null; "shownSide": string | null; "trackValue": number | null; "system": string | null};sources:{"observedColor": FieldBasis | null; "markerType": FieldBasis | null; "shownSide": FieldBasis | null; "trackValue": FieldBasis | null; "system": 'user' | null}}
+ | {schema:"star-wars-rebellion-v1";kind:null;values:{};sources:{}};

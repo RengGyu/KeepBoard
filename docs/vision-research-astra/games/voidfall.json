@@ -1,0 +1,1032 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "voidfall",
+  "name_ko": "보이드폴",
+  "name_en": "Voidfall",
+  "edition": {
+    "id": "base",
+    "name": "Retail 기본판",
+    "compatibility_notes": [
+      "Galactic 재질판 중복 계수 안 함;세부 모드 확인 필요",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "voidfall.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/voidfall.json",
+    "sha256": "e073b9bcfb8d9a847fb5331cd2bf112e385e67a824d27b8475a9ccdc77086bcf",
+    "runtime_pack_id": "voidfall",
+    "runtime_pack_version": "1.0.0-essentials-2.e073b9bcfb8d",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "voidfall::voidfall.primary",
+      "voidfall::voidfall.art-confirmation.voidfall-primary",
+      "voidfall::essentials.storage-guidance",
+      "inherited::voidfall.art-confirmation.voidfall-primary"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "시나리오 육각/함대와 가문 다이얼·기술",
+  "critical_resume_distinction": "공간함대/시설·부패/인구/생산과 주기·비밀 계획 분리",
+  "partitions": {
+    "common_public": [
+      "galaxy",
+      "cycle"
+    ],
+    "player_public": [
+      "house",
+      "technology"
+    ],
+    "owner_private": [
+      "plans"
+    ],
+    "do_not_infer": []
+  },
+  "areas": [
+    {
+      "id": "galaxy",
+      "name": "시나리오 구역",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "sectors",
+        "tokens"
+      ],
+      "anchor_contract": "구역ID·회전·인접·소유자·인구 주사위값·함대 종류/전력·시설/오염의 부모 구역.",
+      "description": "시나리오 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "galaxy.scene"
+      ],
+      "current_manual_target_fields": [
+        "galaxy.scene"
+      ],
+      "source_field_ids": [
+        "galaxy.scene"
+      ],
+      "allowed_component_ids": [
+        "sectors",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "시나리오 구역 전체 경계를 먼저 기록. 구역ID·회전·인접·소유자·인구 주사위값·함대 종류/전력·시설/오염의 부모 구역. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "구역ID·회전·인접·소유자·인구 주사위값·함대 종류/전력·시설/오염의 부모 구역.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "house",
+      "name": "가문 보드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "houses",
+        "tokens"
+      ],
+      "anchor_contract": "가문ID·생산량과 저장량·문명 트랙·권능/교역 표식의 면.",
+      "description": "가문 보드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "house.scene"
+      ],
+      "source_field_ids": [
+        "house.scene"
+      ],
+      "allowed_component_ids": [
+        "houses",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "가문 보드 전체 경계를 먼저 기록. 가문ID·생산량과 저장량·문명 트랙·권능/교역 표식의 면. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "가문ID·생산량과 저장량·문명 트랙·권능/교역 표식의 면.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "technology",
+      "name": "기술·공개 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "기술 종류/수준·공개 집중 카드와 사용/미사용 상태.",
+      "description": "기술·공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "technology.scene"
+      ],
+      "source_field_ids": [
+        "technology.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "기술·공개 카드 전체 경계를 먼저 기록. 기술 종류/수준·공개 집중 카드와 사용/미사용 상태. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "기술 종류/수준·공개 집중 카드와 사용/미사용 상태.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "plans",
+      "name": "선택·개인 의제",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
+      "description": "선택·개인 의제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "plans.scene"
+      ],
+      "current_manual_target_fields": [
+        "plans.scene"
+      ],
+      "source_field_ids": [
+        "plans.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "선택·개인 의제 전체 경계를 먼저 기록. 공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "cycle",
+      "name": "주기·시나리오 목표",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "선택 모드·공개 사건·주기/라운드·시나리오 목표/추가 위기 정보.",
+      "description": "주기·시나리오 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "cycle.scene"
+      ],
+      "current_manual_target_fields": [
+        "cycle.scene"
+      ],
+      "source_field_ids": [
+        "cycle.scene"
+      ],
+      "allowed_component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "주기·시나리오 목표 전체 경계를 먼저 기록. 선택 모드·공개 사건·주기/라운드·시나리오 목표/추가 위기 정보. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "선택 모드·공개 사건·주기/라운드·시나리오 목표/추가 위기 정보.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "sectors",
+      "name": "구역·인구·설치물",
+      "kind": "tile",
+      "identity_description": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "voidfall::voidfall.art-confirmation.voidfall-primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "sectorLabel",
+          "type": "text",
+          "label": "구역 ID 표기",
+          "acquisition": "visible",
+          "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "sectorSide",
+          "type": "text",
+          "label": "보이는 타일 면",
+          "acquisition": "visible",
+          "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "populationDie",
+          "type": "integer",
+          "label": "인구 주사위 눈",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "structures",
+          "type": "text",
+          "label": "함대·길드·시설·오염 부착",
+          "acquisition": "manual",
+          "sourceText": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "sectorLabel",
+        "sectorSide",
+        "populationDie",
+        "structures"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "sectorLabel",
+        "sectorSide",
+        "populationDie"
+      ],
+      "manual_attribute_keys": [
+        "structures"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "houses",
+      "name": "가문·트랙·자원",
+      "kind": "board",
+      "identity_description": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "voidfall::voidfall.art-confirmation.voidfall-primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "printedName",
+          "label": "읽히는 판 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "sideLabel",
+          "label": "사용 면 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "boardType",
+          "type": "text",
+          "label": "가문·자원다이얼·영향력다이얼",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "houseLabel",
+          "type": "text",
+          "label": "가문 표기",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "dialRole",
+          "type": "text",
+          "label": "자원·생산·영향력 구분",
+          "acquisition": "manual",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "dialValue",
+          "type": "integer",
+          "label": "보이는 다이얼값",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "trackValue",
+          "type": "integer",
+          "label": "문명 트랙값",
+          "acquisition": "visible",
+          "sourceText": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "printedName",
+        "sideLabel",
+        "boardType",
+        "houseLabel",
+        "dialRole",
+        "dialValue",
+        "trackValue"
+      ],
+      "visible_attribute_keys": [
+        "printedName",
+        "sideLabel",
+        "boardType",
+        "houseLabel",
+        "dialValue",
+        "trackValue"
+      ],
+      "manual_attribute_keys": [
+        "dialRole"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "cards",
+      "name": "집중·의제·기술 카드",
+      "kind": "card",
+      "identity_description": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "voidfall::voidfall.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardType",
+          "type": "text",
+          "label": "집중·기술·의제",
+          "acquisition": "visible",
+          "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardArea",
+          "type": "text",
+          "label": "선택·사용·지속·해결 중",
+          "acquisition": "manual",
+          "sourceText": "선택·사용한 집중과 지속 기술·해결 중 의제. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "cardType",
+        "cardArea"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "cardType"
+      ],
+      "manual_attribute_keys": [
+        "cardArea"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "tokens",
+      "name": "교역·오염·진행",
+      "kind": "token",
+      "identity_description": "교역 표식의 면/획득 턴과 공용 진행.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "voidfall::voidfall.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 교역 표식의 면/획득 턴과 공용 진행."
+        },
+        {
+          "id": "tokenType",
+          "type": "text",
+          "label": "교역·진행 표식",
+          "acquisition": "visible",
+          "sourceText": "교역 표식의 면/획득 턴과 공용 진행."
+        },
+        {
+          "id": "shownSide",
+          "type": "text",
+          "label": "보이는 면",
+          "acquisition": "visible",
+          "sourceText": "교역 표식의 면/획득 턴과 공용 진행."
+        },
+        {
+          "id": "acquiredTurn",
+          "type": "text",
+          "label": "직접 확인한 획득 차례",
+          "acquisition": "manual",
+          "sourceText": "교역 표식의 면/획득 턴과 공용 진행. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "tokenType",
+        "shownSide",
+        "acquiredTurn"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "tokenType",
+        "shownSide"
+      ],
+      "manual_attribute_keys": [
+        "acquiredTurn"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "galaxy.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "cycle.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "plans.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "mode",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "focus",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.focus",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "trade-age",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.trade-age",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "resources",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.resources",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "mode",
+      "label": "시나리오·게임 모드",
+      "scope": "public",
+      "visibility": "public",
+      "description": "경쟁/협력/솔로와 시나리오ID. 서로 다른 모드 절차를 같은 턴 규칙으로 강제하지 않는다."
+    },
+    {
+      "id": "focus",
+      "label": "집중 행동 진행",
+      "scope": "player",
+      "visibility": "public",
+      "description": "이번 집중 카드·선택 행동·완료 순서·사전 교역 뒤집기 여부와 남은 행동."
+    },
+    {
+      "id": "trade-age",
+      "label": "교역 획득·사용 상태",
+      "scope": "player",
+      "visibility": "public",
+      "description": "표식별 면·이번 턴 획득 여부와 지불/뒤집기 완료 여부."
+    },
+    {
+      "id": "resources",
+      "label": "자원·생산·부패",
+      "scope": "player",
+      "visibility": "public",
+      "description": "보유량과 생산량을 별도로 저장. 오염/기술 변형은 확인값만."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "집중·의제 선택/교역 뒤집기/각 행동·전투/의제/주기 사건·유지 중 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "함대 피규어 수만으로 전력 확정, 교역 표식 사진만으로 획득 턴 추정",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "plans.preserve",
+        "label": "선택·개인 의제 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "plans.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "galaxy.scene",
+          "cycle.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "house.scene",
+          "technology.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "Voidfall 기본 상자의 선택 모드/시나리오. 가문·시나리오·추가 콘텐츠는 해당 모드에 의존하는 패치.",
+    "함대·전투·오염·생산/유지·기술/의제 공개성·협력 위기 및 시나리오 승패 조건은 공식 전문 추가 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    },
+    {
+      "id": "HEX-ORIENTATION",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "GenericPlacement.rotation은0/90/180/270만 지원한다. 실제60도 회전/육각 연결 재현과 다르다. 원본과 수동 방향을 남기고 필요한 게임에만60도·칸/부모 대응을 추가한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "voidfall",
+    "edition": "Retail 기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 2,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "1586f34c3879fec6114431326b653238dd9595a2f8e55ed2d1e942070daed5fc",
+        "3a27ac0703a54b2887549acba221264d606bc0f15b675064d4cc360489f5c645"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "시나리오 육각/함대와 가문 다이얼·기술",
+    "closeups": [
+      {
+        "area_id": "galaxy",
+        "name": "시나리오 구역",
+        "needs": "구역ID·회전·인접·소유자·인구 주사위값·함대 종류/전력·시설/오염의 부모 구역.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "house",
+        "name": "가문 보드",
+        "needs": "가문ID·생산량과 저장량·문명 트랙·권능/교역 표식의 면.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "technology",
+        "name": "기술·공개 카드",
+        "needs": "기술 종류/수준·공개 집중 카드와 사용/미사용 상태.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "plans",
+        "name": "선택·개인 의제",
+        "needs": "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "cycle",
+        "name": "주기·시나리오 목표",
+        "needs": "선택 모드·공개 사건·주기/라운드·시나리오 목표/추가 위기 정보.",
+        "access": "public evidence"
+      }
+    ],
+    "do_not_collect": [],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "voidfall",
+    "editionId": "base",
+    "sourceSHA": "e073b9bcfb8d9a847fb5331cd2bf112e385e67a824d27b8475a9ccdc77086bcf",
+    "status": "reuse",
+    "areas": [
+      {
+        "areaId": "galaxy",
+        "label": "시나리오 구역",
+        "fieldKeys": [
+          "galaxy.scene"
+        ],
+        "componentIds": [
+          "sectors",
+          "tokens"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "template": "hex-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "house",
+        "label": "가문 보드",
+        "fieldKeys": [
+          "house.scene"
+        ],
+        "componentIds": [
+          "houses",
+          "tokens"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "template": "track-mat",
+        "status": "reuse",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": "houses"
+      },
+      {
+        "areaId": "technology",
+        "label": "기술·공개 카드",
+        "fieldKeys": [
+          "technology.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "plans",
+        "label": "선택·개인 의제",
+        "fieldKeys": [
+          "plans.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "cycle",
+        "label": "주기·시나리오 목표",
+        "fieldKeys": [
+          "cycle.scene"
+        ],
+        "componentIds": [
+          "cards",
+          "tokens"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "card-lanes",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 20,
+    "board_instance_count": 5,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

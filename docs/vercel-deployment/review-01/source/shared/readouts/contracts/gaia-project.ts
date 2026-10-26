@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type GaiaProjectReadout =
+  {schema:"gaia-project-v1";kind:"sectors";values:{"face": "front" | "back" | null; "printedName": string | null; "sectorLabel": string | null; "planetType": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "sectorLabel": FieldBasis | null; "planetType": FieldBasis | null; "location": 'user' | null}}
+ | {schema:"gaia-project-v1";kind:"structures";values:{"observedColor": string | null; "structureType": string | null; "level": number | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "structureType": FieldBasis | null; "level": FieldBasis | null; "owner": 'user' | null}}
+ | {schema:"gaia-project-v1";kind:"tech";values:{"face": "front" | "back" | null; "printedName": string | null; "tileType": string | null; "shownSide": string | null; "owner": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileType": FieldBasis | null; "shownSide": FieldBasis | null; "owner": 'user' | null}}
+ | {schema:"gaia-project-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "powerBowl": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "powerBowl": 'user' | null; "displayValue": FieldBasis | null}}
+ | {schema:"gaia-project-v1";kind:null;values:{};sources:{}};

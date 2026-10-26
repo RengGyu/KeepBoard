@@ -1,0 +1,145 @@
+{
+  "baseline": "5598415fffdf1a86968095487d879867b8dd43f54cc0b9dfc23c50856c27139d",
+  "status": "PASS_CONFIRMED_BASELINE_GAPS",
+  "checks": [
+    {
+      "name": "Splendor purchased capture remains tray after existing apply path",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "splendor",
+      "allowedFields": [
+        "__photo.public"
+      ],
+      "existingApplyDestination": "__photo.public",
+      "createsPurchasedHoldings": false,
+      "createsBonusSummary": false
+    },
+    {
+      "name": "chosen owner is representable and public snapshot/resume preserves typed identity/null/0",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "splendor",
+      "manualTarget": "player.scene/p1",
+      "preserved": [
+        "piece ID",
+        "readout",
+        "quantity",
+        "null versus 0",
+        "crop",
+        "evidence"
+      ],
+      "saveMethod": "synthetic JSON snapshot + real resumeSnapshot; no HTTP"
+    },
+    {
+      "name": "owner-private destination works, private source cannot become public state",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "splendor",
+      "privateSourcePublicationRejected": true,
+      "privateRecordRestored": true
+    },
+    {
+      "name": "public supply tokens have no dedicated public destination in current Splendor pack",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "splendor",
+      "knownRole": "공급 / source description explicitly distinguishes supply from holdings",
+      "chipTargets": [
+        "player.scene"
+      ],
+      "publicSupplyTargetAbsent": true
+    },
+    {
+      "name": "wingspan: inaccessible public/player photo destination but manual field roundtrip",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "wingspan",
+      "field": "habitats.scene",
+      "photoCannotTarget": true,
+      "manualTargetRoundtrip": true,
+      "duplicatesAndOrderPreserved": true,
+      "zeroAndUnknownPreserved": true
+    },
+    {
+      "name": "azul: inaccessible public/player photo destination but manual field roundtrip",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "azul",
+      "field": "pattern.scene",
+      "photoCannotTarget": true,
+      "manualTargetRoundtrip": true,
+      "duplicatesAndOrderPreserved": true,
+      "zeroAndUnknownPreserved": true
+    },
+    {
+      "name": "monopoly: inaccessible public/player photo destination but manual field roundtrip",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "monopoly",
+      "field": "ownership.scene",
+      "photoCannotTarget": true,
+      "manualTargetRoundtrip": true,
+      "duplicatesAndOrderPreserved": true,
+      "zeroAndUnknownPreserved": true
+    },
+    {
+      "name": "scout: inaccessible public/player photo destination but manual field roundtrip",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "scout",
+      "field": "score.scene",
+      "photoCannotTarget": true,
+      "manualTargetRoundtrip": true,
+      "duplicatesAndOrderPreserved": true,
+      "zeroAndUnknownPreserved": true
+    },
+    {
+      "name": "Carcassonne manual owner/attachment exists within same record; partial move must respect relation",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "carcassonne",
+      "manualOwnerAndAttachmentSaved": true,
+      "relationBreakingPartialMoveRejected": true
+    },
+    {
+      "name": "room public/player content is server-visible but no readonly/public renderer path",
+      "status": "VERIFIED",
+      "method": "actual React renderToStaticMarkup; no browser/CSS/click claims",
+      "gameId": "wingspan",
+      "retainedInServerView": true,
+      "renderedInRoomPublic": false,
+      "renderedInSingleDevicePublic": true
+    },
+    {
+      "name": "native Rummikub owns rack independently from tile color; duplicate/order snapshot roundtrip",
+      "status": "VERIFIED",
+      "method": "executed pure frozen functions; synthetic data",
+      "gameId": "rummikub",
+      "preserved": [
+        "rack owner",
+        "physical duplicate IDs",
+        "7/13",
+        "group order",
+        "tile color"
+      ]
+    },
+    {
+      "name": "native Catan per-piece owner remains on public scene and survives snapshot/resume",
+      "status": "VERIFIED",
+      "method": "native model/answer/JSON snapshot/resume, not actual photo or browser",
+      "gameId": "catan",
+      "perPieceOwnerRetained": true
+    }
+  ],
+  "checksCount": 12,
+  "networkCalls": 0,
+  "AIcalls": 0,
+  "StoreReads": 0,
+  "originalPhotoReads": 0,
+  "productWrites": 0,
+  "notChecked": [
+    "HTTP/API handlers not executed",
+    "No actual DOM/CSS/mobile gesture/click evidence",
+    "No all-game commercial-rule or photo-accuracy certification"
+  ]
+}

@@ -1,0 +1,203 @@
+--- a/src/SessionWorkspace.tsx
++++ b/src/SessionWorkspace.tsx
+@@ -6,6 +6,7 @@
+ import {PhotoCaptureGuide,captureGuideText} from './PhotoCaptureGuide';
+ import {captureProfile,captureAreas,type CaptureTarget} from '../shared/photoCapture';
+ import {analysisJobMessage} from './analysisJobMessage';
++import {numericJobMessage} from './numericReaderStatus';
+ import {activeAnalysisJob,type AnalysisJob} from '../shared/analysisJobs';
+ import { useEffect, useRef, useState } from 'react';
+ import { ArrowLeft, Camera, Hexagon, ImagePlus, LockKeyhole, Plus, Save, Users } from 'lucide-react';
+@@ -58,6 +59,8 @@
+   const [captureAreaId,setCaptureAreaId]=useState('');
+   const [localCaptureAreaId,setLocalCaptureAreaId]=useState('');
+   const [readerMode,setReaderMode]=useState<'existing'|'local'>('existing');
++  const [localTask,setLocalTask]=useState<LocalReaderSelection['task']>();
++  const [localInputMode,setLocalInputMode]=useState<NonNullable<LocalReaderSelection['inputMode']>>('original');
+   const [readers,setReaders]=useState<LocalReaderCapabilities|null>(null);
+   const [frame,setFrame]=useState<ConfirmedPhotoFrame|null>(null),[framePhoto,setFramePhoto]=useState<{photo:Evidence;sha:string}|null>(null);
+   const {definition,loading:definitionLoading,error:definitionError}=usePhotoDefinition(view.pack,readerMode==='local');
+@@ -65,12 +68,13 @@
+   const localAreas=definition?.areas.filter(a=>ownerId?a.partition==='owner_private':a.partition!=='owner_private')??[];
+   const localArea=localAreas.find(a=>a.id===localCaptureAreaId)||(!localCaptureAreaId?localAreas.find(a=>definition&&observablePhotoArea(definition,a))??localAreas[0]:undefined);
+   const supportedLocalArea=!!definition&&!!localArea&&observablePhotoArea(definition,localArea);
+-  const localEnabled=localAvailable&&supportedLocalArea&&!definitionLoading&&!definitionError;
++  const numberCapability=readers?.readers.find(r=>r.kind==='local-observation-v1')?.tasks?.find(t=>t.task==='catan-numerals-v1');
++  const numericScope=view.pack.id==='catan-base'&&definition?.nativeBridge==='catan'&&definition.gameId==='catan'&&definition.gameId===view.pack.runtime?.source?.gameId&&!ownerId&&localArea?.id==='board'&&localArea.partition==='common_public';
+   const canUseCatanFrame=readerMode==='local'&&view.pack.id==='catan-base'&&!ownerId&&localArea?.id==='board'&&localArea.partition==='common_public';
+   useEffect(()=>{let active=true;api.recognitionReaders().then(r=>{if(active)setReaders(r);},()=>{if(active)setReaders(null);});return()=>{active=false;};},[session.id]);
+   const [pendingRead,setPendingRead]=useState<Pick<BatchReadout,'context'|'evidenceIds'|'captureTarget'|'reader'|'readingMode'>|null>(null);
+   const scopedPending=pendingRead?.context.sessionId===session.id&&pendingRead.context.ownerId===ownerId?pendingRead:null;
+-  useEffect(()=>{setCaptureAreaId('');setLocalCaptureAreaId('');setPendingRead(null);setFrame(null);setFramePhoto(null);},[session.id,ownerId]);
++  useEffect(()=>{setCaptureAreaId('');setLocalCaptureAreaId('');setLocalTask(undefined);setLocalInputMode('original');setPendingRead(null);setFrame(null);setFramePhoto(null);},[session.id,ownerId]);
+   const [lastScan, setLastScan] = useState<BatchReadout | null>(null);
+   const analysisInFlight = useRef(new Set<string>());
+   const [serverJob,setServerJob]=useState<AnalysisJob|null>(null);
+@@ -118,8 +122,8 @@
+   function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture', useFrame=false): RunningCapture {
+     setLastScan(null);
+     const profile=captureProfile(view.pack),area=captureAreas(view.pack,capturedOwner).find(a=>a.id===(readerMode==='local'?localArea?.id:captureAreaId));
+-    const reader:LocalReaderSelection|undefined=readerMode==='local'&&definition&&localArea&&supportedLocalArea?{kind:'local-observation-v1',definitionSHA:definition.definitionSHA,areaId:localArea.id,...(useFrame&&canUseCatanFrame&&currentFrame?{frame:currentFrame,inputMode:'original' as const}:{})}:undefined;
+-    return {reader,readingMode:readerMode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: readerMode==='local'?localEnabled:!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner) }) };
++    const reader:LocalReaderSelection|undefined=readerMode==='local'&&definition&&localArea&&supportedLocalArea?{kind:'local-observation-v1',definitionSHA:definition.definitionSHA,areaId:localArea.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...(useFrame&&canUseCatanFrame&&currentFrame?{frame:currentFrame}:{})}:undefined;
++    return {reader,readingMode:readerMode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: readerMode==='local'?localEnabled&&(!localTask||localInputMode!=='catan-atlas'||useFrame):!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner) }) };
+   }
+   function openCamera(options?: { ownerId?: string; purpose?: 'capture' | 'restore' }) {
+     setCameraRun(newCaptureRun(options ? options.ownerId : ownerId, options?.purpose));
+@@ -150,6 +154,7 @@
+   async function readStoredPhotos() {
+     setWorking(true);
+     try {
++      if(readerMode==='local'&&!localEnabled)throw new Error('선택한 로컬 판독기·촬영 부분·현재 사진의 기준점을 확인해 주세요. 원본은 보관돼요.');
+       await flush(PHOTO_INPUT_SAVE_OPTIONS);
+       const run = newCaptureRun(ownerId,'capture',true);
+       const photos=readingPhotos;
+@@ -221,6 +226,7 @@
+   const savedFrames=session.assertions.flatMap(a=>a.observationReceipts??[]).map(r=>r.frame).filter((f):f is ConfirmedPhotoFrame=>!!f);
+   const latestPhoto=readingPhotos.at(-1);
+   const currentFrame=[frame,...savedFrames.reverse()].find(f=>f?.sourceEvidenceId===latestPhoto?.id&&f?.definitionSHA===definition?.definitionSHA)??null;
++  const localEnabled=supportedLocalArea&&!definitionLoading&&!definitionError&&(localTask?numericScope&&!!numberCapability?.available&&!!numberCapability.profile&&(localInputMode!=='catan-atlas'||!!currentFrame):localAvailable);
+   const hasPhotos = session.evidence.some(item => item.kind !== 'note' && (ownerId ? item.ownerId === ownerId : !item.ownerId));
+   return <div className={`correction-workspace${view.pack.id === 'rummikub' ? ' rummikub-session' : generic ? ' board-record-session' : ''}`}>
+     <header className="correction-heading"><button className="icon-button cw-back" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={22}/></button><div className="cw-title"><div className="cw-title-line"><h1>{session.name}</h1>{onNewBoard && view.pack.id !== 'rummikub' && !generic && <button className="button secondary small-button cw-new-board" aria-label="새 보드 만들기" disabled={locked} onClick={onNewBoard}><Plus size={17}/>새 보드</button>}</div><p>{view.pack.title} · {session.players.length}명 · {savedLabel}</p></div>
+@@ -232,12 +238,12 @@
+     {ownerId&&<PrivatePin key={`${ownerId}:${privateLocked}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} beforeChange={flush}/>}
+     {readonlyPublic?<RoomPublicBoard view={view}/>:!privateLocked&&<div className="cw-grid">
+       <div className="cw-main">
+-        <LightweightReaderControls mode={readerMode} onMode={setReaderMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/>
+-        <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={readerMode==='local'?localArea?.id??localCaptureAreaId:captureAreaId} onChange={readerMode==='local'?setLocalCaptureAreaId:setCaptureAreaId} disabled={locked||!!cameraRun}/>
++        <LightweightReaderControls mode={readerMode} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/>
++        <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={readerMode==='local'?localArea?.id??localCaptureAreaId:captureAreaId} onChange={readerMode==='local'?id=>{setLocalCaptureAreaId(id);setLocalTask(undefined);setLocalInputMode('original');}:setCaptureAreaId} disabled={locked||!!cameraRun}/>
+         {scopedPending&&<section className="panel" aria-label="사진 상태 확인"><p>이 {scopedPending.evidenceIds.length}장은 같은 멈춘 판을 찍은 사진인가요?</p><div className="button-row"><button className="button primary" disabled={locked} onClick={()=>fire(analyzeBatch(scopedPending,true))}>네, 함께 읽기</button><button className="button secondary" disabled={locked} onClick={()=>fire(analyzeBatch({...scopedPending,context:{...scopedPending.context,id:crypto.randomUUID()},evidenceIds:scopedPending.evidenceIds.slice(-1)}))}>마지막 한 장만 읽기</button><button className="button text" onClick={()=>setPendingRead(null)}>지금은 사진만 보관</button></div></section>}
+-        {visibleJob&&<p className="scan-readout" role="status">{jobConnectionLost&&activeAnalysisJob(visibleJob)?'상태 연결을 기다리고 있어요. 서버 작업은 계속돼요.':analysisJobMessage(visibleJob)}</p>}
++        {visibleJob&&<p className="scan-readout" role="status">{jobConnectionLost&&activeAnalysisJob(visibleJob)?'상태 연결을 기다리고 있어요. 서버 작업은 계속돼요.':numericJobMessage(visibleJob)||analysisJobMessage(visibleJob)}</p>}
+         {gallery && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
+-        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode==='local'?'로컬 판독기를 사용할 수 없어 사진만 보관했어요.':!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '확인한 사진 후보를 적용했어요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
++        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode==='local'?(lastScan.reader?.task&&lastScan.reader.inputMode==='catan-atlas'?'사진을 보관했어요. 새 원본의 기준점을 확인한 뒤 숫자만 읽기를 눌러 주세요.':'로컬 판독기를 사용할 수 없어 사진만 보관했어요.'):!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '확인한 사진 후보를 적용했어요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
+         {view.pack.id !== 'rummikub' && !generic && !hasPhotos && !gallery && !cameraRun && <section className="capture-start" aria-label="첫 사진 찍기"><img src={BRAND_IMAGES.captureGuide} alt="" width={900} height={900} loading="lazy" decoding="async"/><div><h2>{personalRummikub ? '내 받침대를 한 장 찍어 두세요' : personalCatan ? '내 카드를 한 장 찍어 두세요' : '판을 위에서 한 장 찍어 주세요'}</h2><p>{personalRummikub ? '숫자와 색이 보이게 찍어 주세요.' : personalCatan ? '손패와 개인 카드가 보이게 찍어 주세요.' : generic?'사진을 남기고 상태는 직접 기록해요.':'판 전체가 들어오게 찍으면 그림으로 바꿔 고칠 수 있어요.'}</p><div className="button-row"><button className="button primary" disabled={locked} onClick={() => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()))}><Camera size={18}/>{captureLabel}</button><button className="button secondary" disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/>{uploadLabel}</button></div></div></section>}
+         {personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
+         {view.pack.id === 'rummikub' ? <RummikubWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })} hasPhotos={hasPhotos} captureLabel={captureLabel} onCapture={gallery || cameraRun ? undefined : () => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()))} onOpenPublic={() => fire(changeOwner(undefined))} onReread={(readerMode==='local'?localEnabled:status?.configured) && currentPhotos.length > 0 && !(visibleJob&&activeAnalysisJob(visibleJob)) ? () => fire(readStoredPhotos()) : undefined}/>
+--- a/src/LightweightReaderControls.tsx
++++ b/src/LightweightReaderControls.tsx
+@@ -1,12 +1,17 @@
+ import './lightweight-reader.css';
++import type {LocalReaderSelection,LocalReaderTaskCapability} from '../shared/lightweightRecognition';
+ /** UI state only; selecting local does not write provider credentials or change the existing default. */
+-export function LightweightReaderControls({mode,onMode,available,availabilityMessage,busy,hasDefinition,definitionLoading=false,definitionError='',supportedArea=true,hasPhotos,onRead,onFrame,frameConfirmed,existingAvailable=true,showReadButton=true}:{mode:'existing'|'local';onMode:(mode:'existing'|'local')=>void;available:boolean;availabilityMessage?:string;busy:boolean;hasDefinition:boolean;definitionLoading?:boolean;definitionError?:string;supportedArea?:boolean;hasPhotos:boolean;onRead:()=>void;onFrame?:()=>void;frameConfirmed?:boolean;existingAvailable?:boolean;showReadButton?:boolean}){
+- const local=mode==='local',enabled=local?available&&hasDefinition&&supportedArea&&!definitionLoading&&!definitionError:existingAvailable;
+- const selector=available||local,read=hasPhotos&&showReadButton;
++export function LightweightReaderControls({mode,onMode,available,availabilityMessage,busy,hasDefinition,definitionLoading=false,definitionError='',supportedArea=true,hasPhotos,onRead,onFrame,frameConfirmed,existingAvailable=true,showReadButton=true,numericScope=false,task,onTask,numberCapability,inputMode='original',onInputMode}:{mode:'existing'|'local';onMode:(mode:'existing'|'local')=>void;available:boolean;availabilityMessage?:string;busy:boolean;hasDefinition:boolean;definitionLoading?:boolean;definitionError?:string;supportedArea?:boolean;hasPhotos:boolean;onRead:()=>void;onFrame?:()=>void;frameConfirmed?:boolean;existingAvailable?:boolean;showReadButton?:boolean;numericScope?:boolean;task?:LocalReaderSelection['task'];onTask?:(task:LocalReaderSelection['task'])=>void;numberCapability?:LocalReaderTaskCapability;inputMode?:LocalReaderSelection['inputMode'];onInputMode?:(mode:NonNullable<LocalReaderSelection['inputMode']>)=>void}){
++ const local=mode==='local',numeric=local&&task==='catan-numerals-v1',numberReady=!!numberCapability?.available&&!!numberCapability.profile;
++ const enabled=local?(numeric?numericScope&&numberReady&&(inputMode!=='catan-atlas'||!!frameConfirmed):available)&&hasDefinition&&supportedArea&&!definitionLoading&&!definitionError:existingAvailable;
++ const selector=available||numberReady||local,read=hasPhotos&&showReadButton;
+  if(!selector&&!read)return null;
+  return <section className="lightweight-reader" aria-label="사진 판독기">{selector&&<label className="field">사진 읽기 방식<select aria-label="사진 읽기 방식" value={mode} disabled={busy} onChange={e=>onMode(e.target.value==='local'?'local':'existing')}><option value="existing">기존 AI</option><option value="local">로컬 경량 판독</option></select></label>}
+- {local?<p role="status">로컬 판독은 이번 촬영 단계의 마지막 원본 한 장을 읽어요. {definitionLoading?'촬영 정의를 준비하고 있어요…':definitionError||(!hasDefinition?'이 저장본의 판본·촬영 정의가 일치하지 않아 로컬 판독을 시작하지 않아요.':!supportedArea?'이 촬영 부분은 수동 기록·실물 보관만 지원해요.':available?'로컬 판독기 연결됨 · 읽은 후보는 확인 후 반영해요.':availabilityMessage||'로컬 판독기에 연결할 수 없어요.')} 원본은 보관돼요.</p>:!existingAvailable&&read&&<p role="status">기존 AI 미연결 · 원본은 보관돼요.</p>}
+- {hasPhotos&&<div className="button-row">{local&&onFrame&&<button className="button secondary" disabled={busy||!hasDefinition||!supportedArea||definitionLoading||!!definitionError} onClick={onFrame}>{frameConfirmed?'사진 위치 다시 맞추기':'사진 위치 맞추기'}</button>}{read&&<button className="button secondary" disabled={busy||!enabled} onClick={onRead}>사진 읽기</button>}</div>}
++ {local&&numericScope&&<><label className="field">판독할 항목<select aria-label="판독할 항목" value={task??'general'} disabled={busy} onChange={e=>onTask?.(e.target.value==='catan-numerals-v1'?'catan-numerals-v1':undefined)}><option value="general">일반 로컬 판독</option><option value="catan-numerals-v1">카탄 숫자만 읽기</option></select></label>{numeric&&<label className="field">숫자 판독 입력<select aria-label="숫자 판독 입력" value={inputMode} disabled={busy} onChange={e=>onInputMode?.(e.target.value==='catan-atlas'?'catan-atlas':'original')}><option value="original">원본으로 읽기</option><option value="catan-atlas">맞춘 판으로 읽기 (기준점 필요)</option></select></label>}</>}
++ {numeric&&(!numericScope||!numberReady)&&<p role="status">{!numericScope?'현재 게임·공용 판에서는 숫자 전용 판독을 사용할 수 없어요.':numberCapability?.reason||'숫자 전용 판독기가 준비되지 않았어요.'}</p>}
++ {numeric&&inputMode==='catan-atlas'&&!frameConfirmed&&<p role="status">맞춘 판으로 읽으려면 현재 사진의 기준점을 먼저 확인해 주세요.</p>}
++ {local?<p role="status">로컬 판독은 이번 촬영 단계의 마지막 원본 한 장을 읽어요. {definitionLoading?'촬영 정의를 준비하고 있어요…':definitionError||(!hasDefinition?'이 저장본의 판본·촬영 정의가 일치하지 않아 로컬 판독을 시작하지 않아요.':!supportedArea?'이 촬영 부분은 수동 기록·실물 보관만 지원해요.':(numeric?numberReady:available)?'로컬 판독기 연결됨 · 읽은 후보는 확인 후 반영해요.':availabilityMessage||'로컬 판독기에 연결할 수 없어요.')} 원본은 보관돼요.</p>:!existingAvailable&&read&&<p role="status">기존 AI 미연결 · 원본은 보관돼요.</p>}
++ {hasPhotos&&<div className="button-row">{local&&onFrame&&<button className="button secondary" disabled={busy||!hasDefinition||!supportedArea||definitionLoading||!!definitionError} onClick={onFrame}>{frameConfirmed?'사진 위치 다시 맞추기':'사진 위치 맞추기'}</button>}{read&&<button className="button secondary" disabled={busy||!enabled} onClick={onRead}>{numeric?'숫자만 읽기':'사진 읽기'}</button>}</div>}
+  {local&&onFrame&&<p className="small muted">{frameConfirmed?'기준점을 확인했어요. 계산된 위치도 반영 전에 확인해 주세요.':'위치를 맞추지 않으면 읽은 값은 미배치 후보로 남아요.'}</p>}
+  </section>;
+ }
+--- a/src/LocalCatanReview.tsx
++++ b/src/LocalCatanReview.tsx
+@@ -1,3 +1,4 @@
++import {numericReceiptSummary} from './numericReaderStatus';
+ import {useState} from 'react';
+ import type {Assertion,Evidence,SessionView} from '../shared/types';
+ import {normalizeScene,type ComponentScene} from '../shared/scene';
+@@ -15,6 +16,7 @@
+  const [useLocations,setUseLocations]=useState(false),[error,setError]=useState(''),[reviewDirty,setReviewDirty]=useState(false);
+  const {definition,loading:definitionLoading,error:definitionError}=usePhotoDefinition(view.pack,true);
+  const receipts=source.observationReceipts??[],locations=receipts.reduce((n,r)=>n+r.geometryCandidates.length,0);
++ const numeric=numericReceiptSummary(receipts);
+  const accepted=view.session.assertions.filter(a=>a.field==='board.layout'&&!a.ownerId&&a.status==='accepted').at(-1);
+  const [openedBaseId]=useState(accepted?.id??null);
+  const [review,setReview]=useState(()=>{try{return catanReviewScene(source,normalizeScene(accepted?.value),false);}catch{return {scene:normalizeScene(accepted?.value),placedRefs:[],unresolved:[]};}});
+@@ -31,8 +33,8 @@
+   if(value.components.filter(c=>c.kind==='robber'&&c.quantity!==0).length>1){const message='도둑이 여러 개 기록돼 있어요. 기존 위치를 지우지 않도록 저장을 보류했어요. 후보와 기존 기록 중 중복을 직접 삭제하거나 수량을 정리한 뒤 반영해 주세요.';setError(message);throw Error(message);}
+   try{const observationReview:NativeObservationReview={version:'native-observation-review-v1',sourceAssertionId:source.id,expectedBaselineAssertionId:openedBaseId};await mutate(()=>api.update(view.session.id,{answers:sceneAnswers('board.layout',value,undefined,view.pack.fields).map(a=>a.field==='board.layout'?{...a,observationReview}:a)}));onClose();}catch(e){setError(e instanceof Error?e.message:'후보를 반영하지 못했어요.');throw e;}
+  }
+- return <Modal title="읽은 지형·숫자 확인" onClose={onClose} wide><div className="modal-body lightweight-review">
+-  <p className="small muted">기존 도로·건물·항구는 남겨요. 읽은 값과 위치를 확인한 뒤 ‘반영’을 눌러 주세요.</p>
++ return <Modal title={numeric.numeric?'읽은 숫자 후보 확인':'읽은 지형·숫자 확인'} onClose={onClose} wide><div className="modal-body lightweight-review">
++  <p className="small muted">{numeric.numeric?`숫자 후보 ${numeric.candidates}개 · 보류 ${numeric.deferred}개. 전체 판을 읽은 결과가 아니에요. `:''}기존 도로·건물·항구는 남겨요. 읽은 값과 위치를 확인한 뒤 ‘반영’을 눌러 주세요.</p>
+   {definitionLoading&&<p role="status">촬영 정의를 준비하고 있어요…</p>}{definitionError&&<p role="alert">{definitionError}</p>}
+   {definition&&receipts.map((r,i)=><PhotoObservationOverlay key={i} photos={view.session.evidence} request={r.request} result={r.result} geometry={r.geometryCandidates} transforms={r.transforms} definition={definition}/>)}
+   {locations>0&&!useLocations&&<button className="button secondary" disabled={busy||dirty||reviewDirty} onClick={()=>{try{const next=catanReviewScene(source,normalizeScene(accepted?.value),true);setReview(next);setPreviewRevision(n=>n+1);setUseLocations(true);setPlacementFailure('');setError('');}catch(e){setPlacementFailure(e instanceof Error?e.message:'위치 후보를 확인해 주세요.');}}}>계산된 위치 {locations}개를 정정 그림에서 확인</button>}
+--- a/src/SceneWorkspace.tsx
++++ b/src/SceneWorkspace.tsx
+@@ -1,3 +1,4 @@
++import {numericReceiptSummary} from './numericReaderStatus';
+ import {LocalCatanReview} from './LocalCatanReview';
+ import {localCatanCandidates} from './catanObservationReviewModel';
+ import type {RummikubSaveOptions} from './rummikubSavePolicy';
+@@ -33,7 +34,7 @@
+   const recording = recordedScene(view, field.key, assertion, ownerId);
+   const otherFields = fields.filter(item => item.key === field.key || view.session.assertions.some(a => a.field === item.key && a.ownerId === ownerId));
+   return <section className="scene-workspace" aria-label={catalogOnly ? '개인 사진과 카드' : '그림 고치기'}><div className="section-heading"><h3>{catalogOnly ? '개인 사진과 카드' : ownerId ? '내 부품' : '공용 보드'}</h3>{otherFields.length > 1 && <select aria-label="다른 부품 보기" value={field.key} disabled={busy} onChange={event => { const key = event.target.value; fire((async () => { await saveEditor.current?.(); setFieldKey(key); setShowSaved(false); })()); }}>{otherFields.map(item => <option key={item.key} value={item.key}>{item.key === 'board.layout' ? '전체 판' : item.key === 'components.observed' ? '사진 속 부품' : item.key === 'player.components.observed' ? '내 부품' : item.label}</option>)}</select>}</div>
+-    {localCandidates.length>0&&<div className="lightweight-reader" aria-label="로컬 판독 후보"><p>읽은 후보 {localCandidates.length}건 · 아직 반영하지 않았어요.</p>{localCandidates.map(a=><button className="button secondary" key={a.id} disabled={busy} onClick={()=>setReviewSource(a)}>지형·숫자 후보 확인</button>)}</div>}
++    {localCandidates.length>0&&<div className="lightweight-reader" aria-label="로컬 판독 후보"><p>읽은 후보 {localCandidates.length}건 · 아직 반영하지 않았어요.</p>{localCandidates.map(a=><button className="button secondary" key={a.id} disabled={busy} onClick={()=>setReviewSource(a)}>{numericReceiptSummary(a.observationReceipts).numeric?'숫자 후보 확인':'지형·숫자 후보 확인'}</button>)}</div>}
+     {reviewSource&&<LocalCatanReview view={view} source={reviewSource} busy={busy} dirty={dirty} mutate={mutate} onClose={()=>setReviewSource(null)} onEvidence={onEvidence}/>}
+     {accepted && candidate && <div className="scene-result-choice"><span>{showSaved ? catalogOnly ? '저장한 카드 목록' : '저장한 그림' : catalogOnly ? '새 사진에서 읽은 부품' : '새 사진에서 읽은 그림'}</span><button className="button text small-button" disabled={busy || dirty} onClick={() => { setShowSaved(!showSaved); }}>{showSaved ? '새 사진 결과 보기' : catalogOnly ? '이전 목록 보기' : '이전 그림 보기'}</button></div>}
+     <SceneEditor key={`${view.session.id}:${ownerId || 'public'}:${field.key}:${showSaved ? 'saved' : 'latest'}`} game={view.pack.id} value={recording.scene} ownerId={ownerId} catalogOnly={catalogOnly} players={view.session.players} evidence={evidence} busy={busy} onDirtyChange={setDirty} forceSave={recording.forceSave} onReadyToSave={save => { saveEditor.current = save; onReadyToSave?.(save?async options=>{if(options?.acceptCandidate===false&&!dirty)return;await save();}:null); }} onEvidence={(id, region) => { const source = evidence.find(item => item.id === id); if (source) onEvidence(source, region); }} onSave={scene => mutate(() => api.update(view.session.id, { answers: sceneAnswers(recording.fieldKey, scene, ownerId, view.pack.fields) }))}/>
+--- a/tests/lightweight-reader-ui.test.ts
++++ b/tests/lightweight-reader-ui.test.ts
+@@ -145,3 +145,32 @@
+   }finally{ui.dispose();}
+  }}finally{api.update=old;}
+ });
++
++test('numeric task is separately unavailable and atlas cannot read without a confirmed frame',()=>{
++ const base={mode:'local' as const,onMode(){},available:true,busy:false,hasDefinition:true,hasPhotos:true,onRead(){},numericScope:true,task:'catan-numerals-v1' as const,onTask(){},inputMode:'original' as const,onInputMode(){}};
++ const unavailable=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,numberCapability:{task:'catan-numerals-v1',available:false,reason:'합성 pin 미확인',profile:null}}));assert.match(unavailable,/합성 pin 미확인/);assert.match(unavailable,/<button[^>]*disabled[^>]*>숫자만 읽기/);
++ const profile:any={id:'catan-numerals-v1'},noFrame=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,inputMode:'catan-atlas',numberCapability:{task:'catan-numerals-v1',available:true,profile}}));assert.match(noFrame,/기준점을 먼저 확인/);assert.match(noFrame,/<button[^>]*disabled[^>]*>숫자만 읽기/);
++ const wrong=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,numericScope:false,numberCapability:{task:'catan-numerals-v1',available:true,profile}}));assert.doesNotMatch(wrong,/aria-label="판독할 항목"/);assert.match(wrong,/<button[^>]*disabled[^>]*>숫자만 읽기/);
++});
++test('workspace explicitly sends task and original or atlas independently of frame, without client task profile',async()=>{
++ const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts');const {photoDefinitionFor,loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();const f=candidateFixture();Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const frame=f.source.observationReceipts[0].frame;frame.definitionSHA=photoDefinitionFor(f.view.pack)!.definitionSHA;
++ const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob};let bodies:any[]=[];
++ api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'local-observation-v1',available:true,cloudSupported:false,identity:null,tasks:[{task:'catan-numerals-v1',available:true,profile:{id:'catan-numerals-v1'} as any}]}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}});api.startAnalysisJob=async(_id,body)=>{bodies.push(body);return{job:{id:'job-'+bodies.length,sessionId:f.view.session.id,state:'completed',evidenceIds:body.evidenceIds,captureEpoch:'epoch',createdAt:'',updatedAt:''}};};
++ const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}});try{await new Promise(r=>setTimeout(r,0));ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('local');ui.render();await new Promise(r=>setTimeout(r,0));ui.render();let c=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(c.props.numericScope,true);c.props.onTask('catan-numerals-v1');ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onRead();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(bodies[0].reader.task,'catan-numerals-v1');assert.equal(bodies[0].reader.inputMode,'original');assert.equal(bodies[0].reader.frame,frame);assert(!('taskProfile'in bodies[0].reader));
++ find(ui.tree,n=>n.type===LightweightReaderControls).props.onInputMode('catan-atlas');ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onRead();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(bodies[1].reader.inputMode,'catan-atlas');assert.equal(bodies[1].reader.task,'catan-numerals-v1');assert.equal(bodies[1].reader.frame,frame);
++ find(ui.tree,n=>n.type===LightweightReaderControls).props.onTask(undefined);ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onRead();await new Promise(r=>setTimeout(r,0));assert(!bodies[2].reader.task);assert.equal(bodies[2].reader.inputMode,'original');
++ }finally{ui.dispose();api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;}
++});
++
++// Receipt-based labels must not infer success from the currently selected control.
++test('numeric receipt status distinguishes no candidates and deferred output without relabeling old jobs',async()=>{
++ const {numericJobMessage,numericReceiptSummary}=await import('../src/numericReaderStatus.ts');const f=candidateFixture();const receipt=structuredClone(f.source.observationReceipts[0]);receipt.taskProfile={id:'catan-numerals-v1'} as any;receipt.nativeWire={id:'qwen-number-grounding-v1',result:{items:[]},deferred:[{ref:'unread',reason:'unreadable'}]};receipt.result.observations=[];
++ const job:any={id:'numeric',state:'completed',taskProfile:receipt.taskProfile,observationReceipts:[receipt]};assert.match(numericJobMessage(job)!,/적용할 수 있는 숫자 후보가 없어요.*보류 1개/);assert.equal(numericReceiptSummary([receipt]).candidates,0);assert.equal(numericJobMessage({...job,taskProfile:undefined,observationReceipts:[]}),undefined);assert.match(numericJobMessage({...job,state:'running'})!,/숫자 후보.*전체 판.*아니에요/);assert.match(numericJobMessage({...job,observationReceipts:[]})!,/영수증을 확인하지 못했어요/);
++ receipt.result.observations=[{ref:'literal',imageIndex:0,panelRef:null,componentId:'number-token',bbox:null,face:'front',quantity:1,rotationDegrees:null,properties:{number:{state:'observed',value:5}},referenceCandidates:[]}];assert.match(numericJobMessage(job)!,/숫자 후보 1개 · 보류 1개/);
++ const {LocalCatanReview}=await import('../src/LocalCatanReview.tsx');const source={...f.source,observationReceipts:[receipt]};const ui=mount(LocalCatanReview,{view:{...f.view,session:{...f.view.session,assertions:[...f.view.session.assertions.filter((a:any)=>a.id!==source.id),source]}},source,busy:false,dirty:false,mutate:async()=>{},onClose(){},onEvidence(){}});try{assert.equal(ui.tree.props.title,'읽은 숫자 후보 확인');assert.match(renderToStaticMarkup(ui.tree),/숫자 후보/);}finally{ui.dispose();}
++});
++
++test('numeric raw read callback cannot bypass absent task capability or an unconfirmed atlas frame',async()=>{
++ const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob};let calls=0;api.analysisJobs=async()=>({jobs:[]});api.startAnalysisJob=async()=>{calls++;throw Error('must not start');};
++ try{for(const available of [false,true]){api.recognitionReaders=async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'local-observation-v1',available:true,cloudSupported:false,identity:null,...(available?{tasks:[{task:'catan-numerals-v1',available:true,profile:{id:'catan-numerals-v1'} as any}]}:{})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}});const f=candidateFixture();f.source.observationReceipts[0].frame=null;Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[]});const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}});try{await new Promise(r=>setTimeout(r,0));ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('local');ui.render();await new Promise(r=>setTimeout(r,0));ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onTask('catan-numerals-v1');ui.render();if(available){find(ui.tree,n=>n.type===LightweightReaderControls).props.onInputMode('catan-atlas');ui.render();}find(ui.tree,n=>n.type===LightweightReaderControls).props.onRead();await new Promise(r=>setTimeout(r,0));assert.equal(calls,0);}finally{ui.dispose();}}}finally{api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;}
++});
+--- /dev/null
++++ b/src/numericReaderStatus.ts
+@@ -0,0 +1,19 @@
++import type {AnalysisJob} from '../shared/analysisJobs';
++import type {ObservationReceipt} from '../shared/lightweightRecognition';
++
++export function numericReceiptSummary(receipts:ObservationReceipt[]=[]){
++ const numeric=receipts.filter(r=>r.taskProfile?.id==='catan-numerals-v1');
++ return {numeric:numeric.length>0,candidates:numeric.reduce((n,r)=>n+r.result.observations.length,0),deferred:numeric.reduce((n,r)=>n+(r.nativeWire?.deferred.length??0),0)};
++}
++/** Label the persisted job intent, never the controls' current selection. */
++export function numericJobMessage(job:AnalysisJob):string|undefined{
++ const summary=numericReceiptSummary(job.observationReceipts);
++ if(job.taskProfile?.id!=='catan-numerals-v1'&&!summary.numeric)return;
++ if(job.state==='queued')return '숫자 판독 작업을 기다리고 있어요.';
++ if(job.state==='running')return '숫자 후보를 읽고 있어요. 전체 판을 판독하는 작업은 아니에요.';
++ if(job.state==='failed')return '숫자 읽기에 실패했어요. 원본과 기존 판은 그대로예요.';
++ if(job.state==='stale')return '숫자 판독 중 기록이 바뀌어 반영하지 않았어요. 현재 초안은 그대로예요.';
++ if(job.state==='interrupted')return '숫자 판독 작업이 중단됐어요. 자동으로 다시 요청하지 않아요.';
++ if(!summary.numeric)return '숫자 읽기는 끝났지만 결과 영수증을 확인하지 못했어요. 기존 판은 그대로예요.';
++ return summary.candidates?`숫자 후보 ${summary.candidates}개 · 보류 ${summary.deferred}개. 확인·정정 후 명시적으로 반영해 주세요.`:`적용할 수 있는 숫자 후보가 없어요. 보류 ${summary.deferred}개 · 원본과 기존 판은 그대로예요.`;
++}

@@ -1,0 +1,160 @@
+{
+  "schema": "argon-deepseek-comparison-v1",
+  "status": "AWAITING_EXACT_RUNNER_REVIEW",
+  "realCalls": 0,
+  "privateDirectory": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-argon-deepseek-byclQ1",
+  "sourceManifestPath": "/Users/jeonggyuju/Project_folder/KeepBoard/docs/game-state-linking/integration/source-manifest.json",
+  "sourceDigest": "0255142408c9035805725fdb74c2a93b9679c81458acd18f2358c9240d8cfe7d",
+  "astraCardPath": "/Users/jeonggyuju/Project_folder/KeepBoard/docs/recognition-research-astra/experiment-card.json",
+  "astraCardSHA": "1e794eb9f52b946911a68c87b15cba0ae1f6799a30bc6338be0862f1848770ee",
+  "maxAttemptsIncludingFailures": 6,
+  "automaticRetries": 0,
+  "maxInputTokens": 32768,
+  "maxOutputTokensIncludingThinking": 32768,
+  "maximumTheoreticalUSD": 1.327104,
+  "hardCapUSD": 1.4,
+  "ratesPerMillion": {
+    "deepseek": {
+      "input": 0.3,
+      "cachedInput": 0.006,
+      "output": 1.2
+    },
+    "argon": {
+      "input": 2,
+      "cachedInput": 0.1,
+      "output": 10
+    }
+  },
+  "reservationPerRequestUSD": {
+    "deepseek": 0.049152,
+    "argon": 0.393216
+  },
+  "order": [
+    {
+      "sequence": 1,
+      "gameId": "catan",
+      "model": "argon"
+    },
+    {
+      "sequence": 2,
+      "gameId": "catan",
+      "model": "deepseek"
+    },
+    {
+      "sequence": 3,
+      "gameId": "splendor",
+      "model": "deepseek"
+    },
+    {
+      "sequence": 4,
+      "gameId": "splendor",
+      "model": "argon"
+    },
+    {
+      "sequence": 5,
+      "gameId": "sagrada",
+      "model": "argon"
+    },
+    {
+      "sequence": 6,
+      "gameId": "sagrada",
+      "model": "deepseek"
+    }
+  ],
+  "providers": {
+    "argon": {
+      "model": "gemini-4-argon",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/interactions",
+      "thinkingLevel": "high",
+      "resolution": "high",
+      "maxOutputTokens": 32768,
+      "store": false,
+      "background": false,
+      "stream": false,
+      "serviceTier": "standard",
+      "responseFormat": {
+        "type": "text",
+        "mime_type": "application/json"
+      }
+    },
+    "deepseek": {
+      "model": "deepseek-flash",
+      "endpoint": "https://api.deepseek.com/responses",
+      "effort": "high",
+      "detail": "high",
+      "maxOutputTokens": 32768,
+      "store": false,
+      "stream": false,
+      "responseFormat": {
+        "type": "json_object"
+      }
+    }
+  },
+  "cases": [
+    {
+      "gameId": "catan",
+      "imagePath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-catan-user-diagnosis-t68bb0vj/public-photo.jpeg",
+      "imageSHA": "82a495688f1130cbab488b4f30a736c915e32bb8059d4a393042c5456f929e22",
+      "imageBytes": 224368,
+      "mimeType": "image/jpeg",
+      "promptPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-argon-deepseek-byclQ1/catan.prompt.txt",
+      "promptSHA": "4ce9cafbb1ada90bfad62e9a5d4de822869664ba20eedfcb57234c76dfb936c4",
+      "promptBytes": 1399,
+      "inputTokenConservativeBound": 11639,
+      "GTPath": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-recognition-gt-4games/user-catan-gt.json",
+      "GTSHA": "61ee4343effc494d988a5098ba19f49431fa0e0f678fa2fb82439987cb0c48f6"
+    },
+    {
+      "gameId": "splendor",
+      "imagePath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-corpus/originals/210fe11683641690c26cdf41070c9b0f6eed1e950a4358a5cf81b06e9d37503f.jpg",
+      "imageSHA": "210fe11683641690c26cdf41070c9b0f6eed1e950a4358a5cf81b06e9d37503f",
+      "imageBytes": 101983,
+      "mimeType": "image/jpeg",
+      "promptPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-argon-deepseek-byclQ1/splendor.prompt.txt",
+      "promptSHA": "4f9e3a534d3616eb3046394b44944397f822c24b25dd671770c9a49cebc671e8",
+      "promptBytes": 1705,
+      "inputTokenConservativeBound": 11945,
+      "GTPath": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-recognition-gt-4games/splendor-gt.json",
+      "GTSHA": "f9992ae439cff6e7b302fa3e0ee53f760f4edfae5a69f2cbd8d128f515820f73"
+    },
+    {
+      "gameId": "sagrada",
+      "imagePath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-corpus/originals/1d7d90e29e7fa9555598e72f2f5efe6fad030692793faa5a0414c39e3d87afb6.jpg",
+      "imageSHA": "1d7d90e29e7fa9555598e72f2f5efe6fad030692793faa5a0414c39e3d87afb6",
+      "imageBytes": 79380,
+      "mimeType": "image/jpeg",
+      "promptPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-argon-deepseek-byclQ1/sagrada.prompt.txt",
+      "promptSHA": "b6e8b9a0db0d6b0abaabb7febeb99e8be31742f59383f56384a0956155510853",
+      "promptBytes": 1154,
+      "inputTokenConservativeBound": 11394,
+      "GTPath": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-recognition-gt-4games/sagrada-gt.json",
+      "GTSHA": "53d50b83e71b3c840f885f6400b15e9a5795c7e984c856c56026acaf4421f3e5"
+    }
+  ],
+  "evaluationSpecPath": "/Users/jeonggyuju/Project_folder/KeepBoard/docs/photo-observation-ab/evaluation-spec.json",
+  "evaluationSpecSHA": "31d8870ce6b2097622a7ddddd84b2be27fac54c33f01daca2c7f1061e5956cb0",
+  "scoring": {
+    "freeze_before_sending": [
+      "GT bytes/SHA unchanged; do not pass GT, annotated images, answers, counts or evaluated coordinates into prompts.",
+      "Existing known attributes only. Catan terrain19 + numeral18; robber/object presence reported separately. Splendor preGT market bonus and points only where preGT has a definite value/confidence, noble points separately; costs UNKNOWN unless already fixed individually. Sagrada occupied-die color17 + top-face17.",
+      "Denominator is preGT known physical attributes, not output length. Report correct/wrong/null-or-missing/ambiguous matching and false-positive objects separately. Do not treat an omitted property as 0.",
+      "Match physical object from source box/location/visible relative description, independently of predicted value. Identical values do not establish identity. No silent coordinate shifts or GT-driven output permutation. If ambiguous, report unmatched. For backward comparability also report prior reviewer correspondence separately from strict box matching.",
+      "Never score Sagrada manual cell/dieZone as missing visual values. No board-slot scoring in B; spatial support is box correspondence only.",
+      "Timing is request start to complete response, plus upstream and normalization if measured. Report input/output/reasoning usage, calculated peak cost, actual errors and all attempts. No mean accuracy claims across all120 games."
+    ],
+    "decision_rule": "Diagnostic support for simpler extraction only if a case has more correct known attributes without more wrong values or false-positive objects, and coverage/matching does not decrease. Otherwise mixed/no gain/UNCLEAR. One sample per condition cannot establish reliability or release readiness.",
+    "no_claims": [
+      "No model weights/vision encoder causality from one A/B.",
+      "No B normalization or app success unless separately implemented and tested.",
+      "No latency guarantees, per-game general accuracy or global120 accuracy."
+    ]
+  },
+  "inputBound": "Prompt UTF8 bytes +10240 conservative image/framing reservation; not official tokenization guarantee; check actual usage and stop on absent/exceeded.",
+  "limits": [
+    "Same high label does not mean equal computation or internal image resolution.",
+    "Different provider APIs/JSON modes are explicit, no native app normalization/save claim.",
+    "Three photos, one sample/model: no general accuracy guarantee.",
+    "No fallback model/API, no hidden retry or continuation."
+  ],
+  "privateAdapterPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-argon-deepseek-byclQ1/adapter.mts"
+}

@@ -1,0 +1,886 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "war-of-the-ring-2",
+  "name_ko": "반지전쟁 2판",
+  "name_en": "War of the Ring: Second Edition",
+  "edition": {
+    "id": "base",
+    "name": "WOTR001 기본판",
+    "compatibility_notes": [
+      "기본 2인 우선;공식 색인 2–4인 변형·본문 접근 미확인",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "war-of-the-ring-2.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/war-of-the-ring-2.json",
+    "sha256": "9d088ad8e4e66220554f14e4a44207144a3a13928d419d1a850621e296be82f2",
+    "runtime_pack_id": "war-of-the-ring-2",
+    "runtime_pack_version": "1.0.0-essentials-2.9d088ad8e4e6",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "war-of-the-ring-2::war-of-the-ring-2.primary",
+      "war-of-the-ring-2::essentials.storage-guidance"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "지역 경계·군대 종류와 원정대/정치/사냥 트랙",
+  "critical_resume_distinction": "같은 지역 인물/부대, 사냥 배정과 가용 행동 주사위·정치 상태 분리",
+  "partitions": {
+    "common_public": [
+      "middle-earth",
+      "tracks"
+    ],
+    "player_public": [
+      "pool"
+    ],
+    "owner_private": [
+      "hand"
+    ],
+    "do_not_infer": []
+  },
+  "areas": [
+    {
+      "id": "middle-earth",
+      "name": "지역 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "armies",
+        "markers"
+      ],
+      "anchor_contract": "지역 ID·국경, 성채 안 공성군과 바깥 군대를 별개 부착 구역으로 보존.",
+      "description": "지역 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "middle-earth.scene"
+      ],
+      "current_manual_target_fields": [
+        "middle-earth.scene"
+      ],
+      "source_field_ids": [
+        "middle-earth.scene"
+      ],
+      "allowed_component_ids": [
+        "armies",
+        "markers"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "지역 지도 전체 경계를 먼저 기록. 지역 ID·국경, 성채 안 공성군과 바깥 군대를 별개 부착 구역으로 보존. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "지역 ID·국경, 성채 안 공성군과 바깥 군대를 별개 부착 구역으로 보존.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "tracks",
+      "name": "원정대·정치·사냥",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "markers",
+        "dice"
+      ],
+      "anchor_contract": "원정대 진척/타락/발각, 정치 트랙, 사냥 상자 주사위.",
+      "description": "원정대·정치·사냥의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "tracks.scene"
+      ],
+      "current_manual_target_fields": [
+        "tracks.scene"
+      ],
+      "source_field_ids": [
+        "tracks.scene"
+      ],
+      "allowed_component_ids": [
+        "markers",
+        "dice"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "원정대·정치·사냥 전체 경계를 먼저 기록. 원정대 진척/타락/발각, 정치 트랙, 사냥 상자 주사위. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "원정대 진척/타락/발각, 정치 트랙, 사냥 상자 주사위.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "hand",
+      "name": "진영 사건 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "군사/인물 덱 손패와 전투 선택 전 카드.",
+      "description": "진영 사건 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "hand.scene"
+      ],
+      "current_manual_target_fields": [
+        "hand.scene"
+      ],
+      "source_field_ids": [
+        "hand.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "진영 사건 손패 전체 경계를 먼저 기록. 군사/인물 덱 손패와 전투 선택 전 카드. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "군사/인물 덱 손패와 전투 선택 전 카드.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "pool",
+      "name": "가용 주사위·인물",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dice",
+        "armies",
+        "cards"
+      ],
+      "anchor_contract": "가용 눈과 이미 사용한 주사위, 분리된 동료/소환 상태.",
+      "description": "가용 주사위·인물의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "pool.scene"
+      ],
+      "source_field_ids": [
+        "pool.scene"
+      ],
+      "allowed_component_ids": [
+        "dice",
+        "armies",
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "가용 주사위·인물 전체 경계를 먼저 기록. 가용 눈과 이미 사용한 주사위, 분리된 동료/소환 상태. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "가용 눈과 이미 사용한 주사위, 분리된 동료/소환 상태.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "armies",
+      "name": "군대·지도자·인물",
+      "kind": "piece",
+      "identity_description": "진영·국가·정규/정예/지도자, 원정대 동료.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "war-of-the-ring-2::war-of-the-ring-2.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 진영·국가·정규/정예/지도자, 원정대 동료."
+        },
+        {
+          "id": "faction",
+          "type": "text",
+          "label": "진영·국가",
+          "acquisition": "visible",
+          "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료."
+        },
+        {
+          "id": "unitType",
+          "type": "text",
+          "label": "정규·정예·지도자·동료",
+          "acquisition": "visible",
+          "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료."
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "label": "지역·원정대 위치",
+          "acquisition": "manual",
+          "sourceText": "진영·국가·정규/정예/지도자, 원정대 동료. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "faction",
+        "unitType",
+        "location"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "faction",
+        "unitType"
+      ],
+      "manual_attribute_keys": [
+        "location"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "dice",
+      "name": "행동·전투 주사위",
+      "kind": "die",
+      "identity_description": "사용 가능/사용/사냥 배정과 눈.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "war-of-the-ring-2::war-of-the-ring-2.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 사용 가능/사용/사냥 배정과 눈."
+        },
+        {
+          "id": "dieSymbol",
+          "type": "text",
+          "label": "보이는 행동 눈",
+          "acquisition": "visible",
+          "sourceText": "사용 가능/사용/사냥 배정과 눈."
+        },
+        {
+          "id": "dieZone",
+          "type": "text",
+          "label": "사용가능·사용·사냥 배정",
+          "acquisition": "manual",
+          "sourceText": "사용 가능/사용/사냥 배정과 눈. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "dieSymbol",
+        "dieZone"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "dieSymbol"
+      ],
+      "manual_attribute_keys": [
+        "dieZone"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "cards",
+      "name": "사건·인물 카드",
+      "kind": "card",
+      "identity_description": "손패·사용·공개 인물 능력.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "war-of-the-ring-2::war-of-the-ring-2.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "손패·사용·공개 인물 능력.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardType",
+          "type": "text",
+          "label": "이벤트·인물 능력",
+          "acquisition": "visible",
+          "sourceText": "손패·사용·공개 인물 능력.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardArea",
+          "type": "text",
+          "label": "손패·사용·공개",
+          "acquisition": "manual",
+          "sourceText": "손패·사용·공개 인물 능력. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "cardType",
+        "cardArea"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "cardType"
+      ],
+      "manual_attribute_keys": [
+        "cardArea"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "markers",
+      "name": "원정대·타락·정치",
+      "kind": "marker",
+      "identity_description": "발각 면·진행값·국가 상태·공성 표시.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "war-of-the-ring-2::war-of-the-ring-2.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 발각 면·진행값·국가 상태·공성 표시."
+        },
+        {
+          "id": "markerType",
+          "type": "text",
+          "label": "발각·진행·국가·공성",
+          "acquisition": "visible",
+          "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+        },
+        {
+          "id": "shownSide",
+          "type": "text",
+          "label": "보이는 면",
+          "acquisition": "visible",
+          "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+        },
+        {
+          "id": "displayValue",
+          "type": "integer",
+          "label": "진행값",
+          "acquisition": "visible",
+          "sourceText": "발각 면·진행값·국가 상태·공성 표시."
+        },
+        {
+          "id": "target",
+          "type": "text",
+          "label": "연결 대상",
+          "acquisition": "manual",
+          "sourceText": "발각 면·진행값·국가 상태·공성 표시. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "markerType",
+        "shownSide",
+        "displayValue",
+        "target"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "markerType",
+        "shownSide",
+        "displayValue"
+      ],
+      "manual_attribute_keys": [
+        "target"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "middle-earth.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "tracks.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "hand.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "phase",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "previous-hunt",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "ring-state",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.ring-state",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "phase",
+      "label": "턴·행동 진행",
+      "scope": "public",
+      "visibility": "public",
+      "description": "사냥 배정/굴림/행동 선택/전투 라운드 등 지점."
+    },
+    {
+      "id": "previous-hunt",
+      "label": "이전 턴 사냥 관련 값",
+      "scope": "public",
+      "visibility": "public",
+      "description": "이번 사냥 배정에 필요한 이전 턴 사실을 알고 있을 때만 기록."
+    },
+    {
+      "id": "ring-state",
+      "label": "원정대 상태",
+      "scope": "public",
+      "visibility": "public",
+      "description": "안내자·남은 동료·타락·진행/발각. 위치를 과거 이동으로 추정하지 않는다."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "사냥 피해/동료 희생/발각, 전투 카드 공개·피해·후퇴·공성 중 미해결 부분. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "진영 손패·다음 사냥 토큰·원정대 이동 이력",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "진영 사건 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "군사/인물 덱 손패와 전투 선택 전 카드.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "middle-earth.scene",
+          "tracks.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "pool.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "Lords/Warriors/Kings/Sieges는 별도 인물·토큰·주사위 패치. 카드게임과 분리.",
+    "정치·공성·원정대 위치/발각 전체 규칙과 3–4인 팀 정보 공유는 추가 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    },
+    {
+      "id": "GRAPH-RELATION",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "평면xy는 연결/방향/가림을 자동 표현하지 않는다. 원본의 변/방/노선ID와 수동 메모를 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "war-of-the-ring-2",
+    "edition": "WOTR001 기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 0,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "partial",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "fbaca46c34b66a2aa3aa52194def3ad417305179aa9c55646bc89041c14611ff",
+        "023b4598f56a9b5d00a08cc940582a5c589b71cdc4d7d819121770f3b8b495d0"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "지역 경계·군대 종류와 원정대/정치/사냥 트랙",
+    "closeups": [
+      {
+        "area_id": "middle-earth",
+        "name": "지역 지도",
+        "needs": "지역 ID·국경, 성채 안 공성군과 바깥 군대를 별개 부착 구역으로 보존.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "tracks",
+        "name": "원정대·정치·사냥",
+        "needs": "원정대 진척/타락/발각, 정치 트랙, 사냥 상자 주사위.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "hand",
+        "name": "진영 사건 손패",
+        "needs": "군사/인물 덱 손패와 전투 선택 전 카드.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "pool",
+        "name": "가용 주사위·인물",
+        "needs": "가용 눈과 이미 사용한 주사위, 분리된 동료/소환 상태.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      }
+    ],
+    "do_not_collect": [],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "war-of-the-ring-2",
+    "editionId": "base",
+    "sourceSHA": "9d088ad8e4e66220554f14e4a44207144a3a13928d419d1a850621e296be82f2",
+    "status": "source-pending",
+    "areas": [
+      {
+        "areaId": "middle-earth",
+        "label": "지역 지도",
+        "fieldKeys": [
+          "middle-earth.scene"
+        ],
+        "componentIds": [
+          "armies",
+          "markers"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "template": "free-table",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "tracks",
+        "label": "원정대·정치·사냥",
+        "fieldKeys": [
+          "tracks.scene"
+        ],
+        "componentIds": [
+          "markers",
+          "dice"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "template": "track-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "hand",
+        "label": "진영 사건 손패",
+        "fieldKeys": [
+          "hand.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "pool",
+        "label": "가용 주사위·인물",
+        "fieldKeys": [
+          "pool.scene"
+        ],
+        "componentIds": [
+          "dice",
+          "armies",
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "ISOLATED_FIX_VERIFIED_RENDER_PENDING",
+    "baseline_status": "NEEDS_CORRECTION",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 15,
+    "board_instance_count": 4,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [
+      {
+        "id": "V001",
+        "status": "ISOLATED_CODE_FIXED_AFTER_RENDER_PENDING",
+        "detail": "known kind=die + variant=null maps to token-shell; Sagrada actual rendered sample visually confirms coin shape",
+        "minimum_fix": "GenericPieceArt known category condition recognizes die alongside dice/cube. No face/color inference or readout mutation.",
+        "baseline_status": "CONFIRMED_SHARED_CODE_PATH",
+        "fix_evidence": "sol2-source-check.json"
+      }
+    ],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

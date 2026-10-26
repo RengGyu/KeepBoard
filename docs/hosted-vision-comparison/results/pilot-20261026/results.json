@@ -1,0 +1,307 @@
+{
+  "status": "PARTIAL_COMPARISON_BLOCKED_BY_GEMINI_PROJECT_SPEND_CAP",
+  "attemptsUsed": 4,
+  "maximumAttempts": 6,
+  "remainingUnused": 2,
+  "automaticRetries": 0,
+  "furtherCallsAuthorized": false,
+  "manifestSHA256": "70196537a28496797bd8c3f0f1b241a4c69c8dfa65a757bd8d2f9bacea5b7bbb",
+  "runnerSHA256": "7255c93b10aabe3494752a5f9097bf832402debfc9257eca4fe2f34aca883741",
+  "focusedTests": {
+    "passed": 20,
+    "failed": 0,
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 tests/hosted-vision-benchmark.test.py",
+    "logSHA256": "8c045ab677caeeb30ddfc0affc95f6cfe0d4470f310af9f6ecdcda3c06dc8119"
+  },
+  "credentialParser": {
+    "before": {
+      "completeTokenPreserved": false,
+      "extractionAmbiguous": false,
+      "parserRepairNecessary": true
+    },
+    "after": {
+      "completeTokenPreserved": true,
+      "extractionAmbiguous": false,
+      "parserRepairNecessary": false
+    },
+    "noKeyValuesOrHashesRecorded": true,
+    "originalUploadsWritten": false
+  },
+  "geminiFailures": [
+    {
+      "httpStatus": 400,
+      "status": "INVALID_ARGUMENT",
+      "reason": "API_KEY_INVALID",
+      "cause": "VERIFIED benchmark parser truncated complete supplied token; not a model-quality result",
+      "fieldViolations": []
+    },
+    {
+      "httpStatus": 429,
+      "status": "RESOURCE_EXHAUSTED",
+      "message": "Your project has exceeded its monthly spending cap.",
+      "actionURL": "https://ai.studio/spend",
+      "cause": "Provider reports project monthly spending cap; balance/actual billing not inspected; no settings changed",
+      "fieldViolations": [],
+      "retryInfo": null
+    }
+  ],
+  "florenceOCREvaluation": {
+    "task": "ocr-with-region",
+    "scope": "18 frozen board numeral centers only; not exhaustive all-text",
+    "denominator": 18,
+    "counts": {
+      "correct": 1,
+      "wrong": 0,
+      "unknown": 0,
+      "missing_annotated_target": 17,
+      "ambiguous": 0
+    },
+    "rawObservationCount": 1,
+    "rawUnmatchedText": 0,
+    "rawUnmatchedNumerals": 0,
+    "unmatchedIsAutomaticallyFalsePositive": false,
+    "matching": "reciprocal unique source-polygon containment of frozen centers; value-independent",
+    "gtSHA256": "61ee4343effc494d988a5098ba19f49431fa0e0f678fa2fb82439987cb0c48f6",
+    "gtSourceSHAEqualsPlan": true,
+    "limitation": "Frozen targets use tile centerPx; does not establish token-boundary IoU accuracy"
+  },
+  "componentLocation": {
+    "observations": 3,
+    "nativeLabels": [
+      "desk",
+      "person",
+      "plate"
+    ],
+    "GT": "UNKNOWN_UNSCORED",
+    "meaning": "Generic categories; no demonstrated game-piece identity or whole-state extraction"
+  },
+  "conditionsNotRun": [
+    "Gemini photos-only component-location: stopped after corrected OCR HTTP429",
+    "Gemini game-context component-location: stopped after corrected OCR HTTP429",
+    "Gemini game-context OCR: omitted-budget after initial failed attempt"
+  ],
+  "billing": {
+    "actualUSD": null,
+    "actualBilledCredits": null,
+    "florenceEstimatedCredits": 0.0009222870878875255,
+    "estimateBasis": "provider response processing time /500sec percredit; not verified billed duration",
+    "GeminiUsage": null,
+    "accountTier": "UNKNOWN",
+    "billingChanges": false
+  },
+  "limitations": [
+    "One previously evaluated development photo; no independent generalization claim",
+    "No Gemini model output; cannot determine cross-provider winner or context benefit",
+    "No OD GT; no component accuracy score",
+    "Florence native finish and resolved weight revision not exposed",
+    "No additional reference images supplied; text game context planned but not executed"
+  ],
+  "batches": [
+    {
+      "privateRoot": "/private/tmp/keepboard-hosted-vision-pilot-v2",
+      "planSHA256": "53de1597ea36b527bec5dea7ce99ea111b589ca24d2627af5b09f79ab7bf0557",
+      "status": "STOPPED",
+      "attempts": 1,
+      "results": [
+        {
+          "condition": "photos-only",
+          "credentialEchoRedacted": false,
+          "errorType": "ValueError",
+          "httpStatus": 400,
+          "id": "catan-gemini-ocr-with-region-photos",
+          "provider": "gemini",
+          "rawResponseSHA256": "d86810fbfbcfcadfff4cb6562767251c9f811a5be1ab78794cf0db0ddc4daf10",
+          "reason": "Request/response failed validation; inspect private raw if present. No repair or retry.",
+          "status": "FAILED",
+          "storedResponseSHA256": "d86810fbfbcfcadfff4cb6562767251c9f811a5be1ab78794cf0db0ddc4daf10",
+          "task": "ocr-with-region",
+          "wallMs": 657.2693330235779
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-pilot-v2/catan-gemini-ocr-with-region-photos.attempt.json",
+          "sha256": "6a0edd49e23ce950b4775802ed31db4412b4044229b74693b9daca3fb14dfe82",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-pilot-v2/catan-gemini-ocr-with-region-photos.response.json",
+          "sha256": "d86810fbfbcfcadfff4cb6562767251c9f811a5be1ab78794cf0db0ddc4daf10",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-pilot-v2/execute.claim.json",
+          "sha256": "452e70a2fff4fa46fe7b97230ba427fc262070e98e8db6973f49994843337147",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-pilot-v2/plan.json",
+          "sha256": "037a26a403b3e581b7473293c12c9cbb83a498b89ad9705e5931e4cd477a8bc4",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-pilot-v2/result.json",
+          "sha256": "c4ad8e16bcaed28799d9f9819adc469d140af48b61588d5b8527d7ee02699f88",
+          "mode": "0600"
+        }
+      ]
+    },
+    {
+      "privateRoot": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run",
+      "planSHA256": "faa718d12c1a0aab7443fe4dd905b8343ec9f5981db32c31e06058741d37af52",
+      "status": "COMPLETED",
+      "attempts": 2,
+      "results": [
+        {
+          "completion": "UNKNOWN_NATIVE_FINISH_NOT_EXPOSED",
+          "condition": "photos-only",
+          "credentialEchoRedacted": false,
+          "httpStatus": 200,
+          "id": "catan-florence-ocr-with-region-photos",
+          "observationCount": 1,
+          "provider": "florence",
+          "rawResponseSHA256": "4aeb7466270da513e753d73f5e7bc9acea50853bf432ab529f8c09bad6ab11e8",
+          "resolvedModel": null,
+          "status": "PARSED",
+          "storedResponseSHA256": "4aeb7466270da513e753d73f5e7bc9acea50853bf432ab529f8c09bad6ab11e8",
+          "task": "ocr-with-region",
+          "usageAndCost": {
+            "billedCredits": null,
+            "billedUSD": null,
+            "estimateBasis": "provider processing time/500 only when supplied; billed execution duration and credit dollar value UNKNOWN; wall time is not billing",
+            "estimatedCredits": 0.00025479496270418165,
+            "estimatedUSD": null,
+            "providerProcessingSeconds": 0.12739748135209084,
+            "wallMs": 8241.812624968588
+          },
+          "wallMs": 8241.812624968588
+        },
+        {
+          "completion": "UNKNOWN_NATIVE_FINISH_NOT_EXPOSED",
+          "condition": "photos-only",
+          "credentialEchoRedacted": false,
+          "httpStatus": 200,
+          "id": "catan-florence-component-location-photos",
+          "observationCount": 3,
+          "provider": "florence",
+          "rawResponseSHA256": "29bfedb5395d0aafb6956e993466315d1ab7ffa7cc11c6651a8ac3ecbb2c8595",
+          "resolvedModel": null,
+          "status": "PARSED",
+          "storedResponseSHA256": "29bfedb5395d0aafb6956e993466315d1ab7ffa7cc11c6651a8ac3ecbb2c8595",
+          "task": "component-location",
+          "usageAndCost": {
+            "billedCredits": null,
+            "billedUSD": null,
+            "estimateBasis": "provider processing time/500 only when supplied; billed execution duration and credit dollar value UNKNOWN; wall time is not billing",
+            "estimatedCredits": 0.0006674921251833439,
+            "estimatedUSD": null,
+            "providerProcessingSeconds": 0.33374606259167194,
+            "wallMs": 2429.8443340230733
+          },
+          "wallMs": 2429.8443340230733
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-component-location-photos.attempt.json",
+          "sha256": "91a4aeab2540d5ca97bbb0d3dc02d714c494e010f2d085e5dd8e8647b68aa45c",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-component-location-photos.observations.json",
+          "sha256": "487417cba855c9759d7f13449bcf3fd46f600e91ddf03d6c76fa78dbaf4dee28",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-component-location-photos.response.json",
+          "sha256": "29bfedb5395d0aafb6956e993466315d1ab7ffa7cc11c6651a8ac3ecbb2c8595",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-ocr-with-region-photos.attempt.json",
+          "sha256": "b3b4e8c6f0bff46d5ff512a0d690f3d4f80f214a52ed722d21192cf8a1d47b1b",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-ocr-with-region-photos.observations.json",
+          "sha256": "bb8f3947ced28d78f3150cc242e044b63d86d998c8020fb532e23f24b75e410e",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/catan-florence-ocr-with-region-photos.response.json",
+          "sha256": "4aeb7466270da513e753d73f5e7bc9acea50853bf432ab529f8c09bad6ab11e8",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/execute.claim.json",
+          "sha256": "c5b0543de64d24f2031ba93dc4ca57ac0e4c028f8aeb239e661a50b6484371f7",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/ocr-evaluation.json",
+          "sha256": "9a61458dab85e3c2828a2deb3a1b2973141fc4db1ef18b0c5bf705289a03d078",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/plan.json",
+          "sha256": "4f7df1f832bf0ba039915b0ffb6c36075c447d9e6e2234bf699e7f5e37f72470",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-florence-subset-v1/run/result.json",
+          "sha256": "269893b048b33edf1ceb0703bc5198cda0ca7f4fcf16aa020be91d757d7f4f35",
+          "mode": "0600"
+        }
+      ]
+    },
+    {
+      "privateRoot": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run",
+      "planSHA256": "2b182a017f2cd1a53c2bdc4df5f3ff48374f62becdd29540947ac29e54e10282",
+      "status": "STOPPED",
+      "attempts": 1,
+      "results": [
+        {
+          "condition": "photos-only",
+          "credentialEchoRedacted": false,
+          "errorType": "ValueError",
+          "httpStatus": 429,
+          "id": "catan-gemini-ocr-with-region-photos",
+          "provider": "gemini",
+          "rawResponseSHA256": "1d39adf90f11cd108a95342492039d217d9265d1d7f1ad8b757eeee8f1c34d7e",
+          "reason": "Request/response failed validation; inspect private raw if present. No repair or retry.",
+          "status": "FAILED",
+          "storedResponseSHA256": "1d39adf90f11cd108a95342492039d217d9265d1d7f1ad8b757eeee8f1c34d7e",
+          "task": "ocr-with-region",
+          "wallMs": 675.4209999926388
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run/catan-gemini-ocr-with-region-photos.attempt.json",
+          "sha256": "68142b7ecb492423290351358fe1f7c6ac7ce5b98b15a3140b4873db13958870",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run/catan-gemini-ocr-with-region-photos.response.json",
+          "sha256": "1d39adf90f11cd108a95342492039d217d9265d1d7f1ad8b757eeee8f1c34d7e",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run/execute.claim.json",
+          "sha256": "9ba0d10092b367854d6409dc87c90b1fca30392ad49d62dd30c64cac42fc0d7f",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run/plan.json",
+          "sha256": "d229fc6a52df9dd398ee5fa9b1037784cc9caf2cc5a1237258024b0d06b9f826",
+          "mode": "0600"
+        },
+        {
+          "path": "/private/tmp/keepboard-hosted-vision-gemini-recovery-v1/run/result.json",
+          "sha256": "b6f6cd3b01f31bae7cd55cd0f8ac52bbd4097c789d3b651287a8681e01fe356a",
+          "mode": "0600"
+        }
+      ]
+    }
+  ]
+}

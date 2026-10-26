@@ -1,0 +1,87 @@
+{
+  "kind": "WIP_CLOUD_HANDOFF_NOT_RELEASE",
+  "checkedAtUTC": "2026-10-26T07:42:38.745767+00:00",
+  "branch": "handoff/claude-gamepacks-ui-20261026",
+  "tests": {
+    "command": "npm test",
+    "exitCode": 1,
+    "tests": 690,
+    "pass": 685,
+    "fail": 5,
+    "failed": [
+      {
+        "name": "119/522 exact IDs/edition/source/component/field/template references, no rummikub, hidden areas not-needed",
+        "file": "tests/game-board-visuals-mapping.test.ts:4:1"
+      },
+      {
+        "name": "generation deterministic and existing asset bytes unchanged",
+        "file": "tests/game-board-visuals-mapping.test.ts:9:1"
+      },
+      {
+        "name": "all 120 data records retain IDs, scopes, unknown-save policy and inspectable provenance",
+        "file": "tests/game-essentials-data.test.ts:9:1"
+      },
+      {
+        "name": "final 120 runtime packs match frozen source bytes, pinned edition/bindings, and deterministic generator",
+        "file": "tests/game-essentials-runtime-final.test.ts:16:1"
+      },
+      {
+        "name": "regenerated art source hashes match with only the exact approved F001 description correction",
+        "file": "tests/game-essentials-runtime-final.test.ts:28:1"
+      }
+    ],
+    "logSHA256": "2346ec0cfb232b6da17022bfe34ecfd201523f72d5b843a24d0ace8ec212631c",
+    "scope": "Observed before handoff; failures are source/catalog and historical freeze mismatches after partial rules-source edits."
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "warnings": [
+      "large client bundle"
+    ]
+  },
+  "currentWork": {
+    "hallmarkVersion": "2.0.0",
+    "uiRedesignImplemented": false,
+    "geminiFrontendConnected": false,
+    "newLiveGeminiProductCalls": 0,
+    "changedSourceGames": [
+      "a-feast-for-odin",
+      "akropolis",
+      "arkham-lcg",
+      "concordia",
+      "dixit",
+      "grand-austria-hotel",
+      "pandemic-legacy-1",
+      "splendor"
+    ],
+    "runtimeRegenerationApplied": false,
+    "fullRulesVerifiedAll120": false
+  },
+  "sourceHashes": {
+    "server/ai/geminiGameReader.ts": "a669683b3e2b8dcbfd1c3ec60a3405a683c60ee11a05eb23f26e0e1575627813",
+    "server/hostedObservation.ts": "aedeab507300efa3960b597f16b515ac0d60c435a9f8d303497780e8a190954d",
+    "server/index.ts": "c92d327801da58b1a6e402664c2a0f7c123d9dc4c0e3c403b0bd8d16848c34e1",
+    "shared/lightweightRecognition.ts": "1f985fe0879b972d6961c976f4929a791537d4103a8a9acededfeffaafce6846",
+    "shared/types.ts": "19d80330946c976443a591b61e52f8aecc47d89975c5792ee1c48880b521f24b",
+    "tools/game-runtime/revise-capture.ts": "682d4d1a432d39981b6a6bb3676aa4a18aebf6cc24b939169feaf52e9ab0c84c",
+    "tools/game-runtime/revise-inputs.ts": "93c7737e9631053c20dad93a86253a174b9a1c5e0a0556de473b324435f6e89b",
+    "tools/readouts/generate.py": "419f6425eed260b13118da2671f5e0a880390c48195b6433bad060b5f552574c"
+  },
+  "excludedFromPush": [
+    ".keepboard runtime/API settings",
+    "external API upload files",
+    "private original/GT/review assets outside repository",
+    "downloaded PDFs and local inspection screenshots",
+    "cache/archives/build output"
+  ],
+  "sourceSchemaValidation": {
+    "games": 120,
+    "invalid": 0,
+    "factualRuleVerification": false
+  }
+}

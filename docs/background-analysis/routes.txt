@@ -1,0 +1,47 @@
+  const analysisJobs=new AnalysisJobs(store.root);
+  const digest=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
+  function analyzeRequest(req:Request,body:any):Request{const copy=Object.create(req);Object.defineProperty(copy,'path',{value:`/api/sessions/${req.params.id}/analyze`});copy.body=body;return copy;}
+  function scopeVersion(s:Session,p:GamePack,owner?:string){return digest({pack:[p.id,p.version,p.runtime?.source.sha256],turn:s.turnInstanceId,players:s.players,notes:s.notes[owner??'public'],assertions:s.assertions.filter(a=>owner?a.ownerId===owner:!privateField(p,a.field))});}
+  async function jobScope(req:Request,s:Session,owner?:string){
+    if(owner&&!s.players.some(p=>p.id===owner))throw new HttpError('플레이어를 찾을 수 없어요.',404);
+    if(s.room){const a=rooms.actor(req,s);if(owner&&owner!==a.playerId)throw new rooms.RoomError('내 사진 읽기 작업만 볼 수 있어요.');}
+    await pins.require(s.id,owner,credential(req));
+  }
+  app.get('/api/sessions/:id/analysis-jobs',async(req,res)=>{const {session}=await sessionFor(req.params.id),owner=req.query.ownerId;if(owner!==undefined&&typeof owner!=='string')throw new HttpError('개인 영역을 확인하세요.');await jobScope(req,session,owner);res.json({jobs:await analysisJobs.list(session.id,owner)});});
+  app.post('/api/sessions/:id/analysis-jobs',async(req,res)=>{
+    const body=req.body??{};if(typeof body.requestId!=='string'||!/^[-a-zA-Z0-9_]{1,100}$/.test(body.requestId)||!Array.isArray(body.evidenceIds)||body.evidenceIds.length<1||body.evidenceIds.length>6||body.evidenceIds.some((id:unknown)=>typeof id!=='string')||new Set(body.evidenceIds).size!==body.evidenceIds.length||!['capture','restore'].includes(body.purpose??'capture')||body.instruction!==undefined&&(typeof body.instruction!=='string'||body.instruction.length>2000))throw new HttpError('사진 읽기 작업과 원본을 확인하세요.');
+    if(body.ownerId!==undefined&&typeof body.ownerId!=='string')throw new HttpError('개인 영역을 확인하세요.');
+    const auth=analyzeRequest(req,body);
+    const job=await queued(req.params.id,async()=>{
+      const {session,pack}=await sessionFor(req.params.id),owner=body.ownerId as string|undefined;await jobScope(req,session,owner);await authorizeMutation(auth,session,pack);
+      if(body.expectedCaptureEpoch!==session.captureEpoch)throw new HttpError('촬영 단계가 바뀌었어요. 원본은 유지됩니다.',409);
+      const evidence=session.evidence.filter(e=>body.evidenceIds.includes(e.id));if(evidence.length!==body.evidenceIds.length||evidence.some(e=>e.kind!=='photo'||e.scope!==(owner?'player':'public')||e.ownerId!==owner))throw new HttpError('같은 영역의 저장된 사진만 읽을 수 있어요.');
+      const input=session.room?rooms.roomInput(session,pack,rooms.actor(req,session),await pins.allowed(session.id,credential(req)),await pins.owners(session.id),!owner):redactSession(session,pack,new Set(session.players.filter(p=>p.id!==owner).map(p=>p.id)),new Set());
+      const epoch=session.captureEpoch,version=scopeVersion(session,pack,owner),source=digest(evidence),pin=await pins.configurationStamp(session.id,owner),signature=digest([owner??null,epoch,[...body.evidenceIds].sort(),body.purpose??'capture',body.instruction??'']);
+      const prepared={session:structuredClone(input),pack:structuredClone(pack),evidence:structuredClone(evidence),purpose:body.purpose??'capture',instruction:body.instruction};
+      return analysisJobs.start({sessionId:session.id,...(owner?{ownerId:owner}:{}),evidenceIds:[...body.evidenceIds],captureEpoch:epoch,requestId:body.requestId,signature},async()=>{
+        const result=await analyzer(prepared);
+        return queued(session.id,async()=>{
+          const {session:current,pack:nowPack}=await sessionFor(session.id);
+          if(current.captureEpoch!==epoch||scopeVersion(current,nowPack,owner)!==version||await pins.configurationStamp(current.id,owner)!==pin||digest(current.evidence.filter(e=>body.evidenceIds.includes(e.id)))!==source)throw new AnalysisJobError('기록이 바뀌었어요.',409);
+          if(current.room)rooms.authorizeRoom(auth,current,nowPack);
+          if(owner&&!current.players.some(p=>p.id===owner))throw new AnalysisJobError('플레이어가 바뀌었어요.',409);
+          const ids=new Set(evidence.map(e=>e.id)),next:Assertion[]=[];
+          for(const a of result.assertions){const f=nowPack.fields.find(f=>f.key===a.field);if(!f||a.value===null)continue;
+            const allowed=current.room?fieldScope(nowPack,a.field,a.ownerId)===(owner??'public'):owner?f.scope==='player'&&a.ownerId===owner:f.scope==='public'&&!a.ownerId||f.scope==='player'&&f.visibility==='public'&&current.players.some(p=>p.id===a.ownerId);
+            if(!allowed||!a.evidenceIds.length||a.evidenceIds.some(id=>!ids.has(id)))throw new AnalysisJobError('결과 범위를 확인하세요.');
+            validateValue(f,a.value);let value=a.value;if(recognitionCapability(nowPack).mode==='assisted')value=genericCandidateValue(value,nowPack,a.field,evidence.filter(e=>a.evidenceIds.includes(e.id)),a.ownerId);
+            if(nowPack.runtime?.fieldBindings.some(b=>b.key===a.field&&b.editor==='component-catalog'))value=validateComponentRecord(current,nowPack,a.field,value,a.ownerId,a.evidenceIds) as unknown as Value;
+            rooms.refsAllowed(value,ids);next.push({...a,value,id:randomUUID(),basis:'observation',status:'candidate',turnInstanceId:current.turnInstanceId,updatedAt:new Date().toISOString()});
+          }
+          for(const a of next)appendGenericObservation(current,nowPack,a);
+          if(prepared.purpose==='restore')current.stage='restore';
+          // Summary remains scoped; detailed errors/status never contain provider/user text.
+          current.analysisSummary=result.summary;current.analysisSummaryOwnerId=owner??null;
+          if(current.room)rooms.bump(current,new Set([owner??'public']));
+          activity(current,'analyze','서버 사진 읽기 완료');await store.saveSession(current);
+          return {state:'completed' as const,candidateCount:next.length,mode:result.mode};
+        });
+      });
+    });res.status(202).json({job});
+  });

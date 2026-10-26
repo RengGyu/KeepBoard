@@ -1,16 +1,24 @@
+import {captureFields,capturePrompt} from '../../shared/photoCapture.ts';
 import type { Evidence, GamePack, Session } from '../../shared/types.ts';
+import { observableFields, observationDefinition } from './fields.ts';
 import { sceneObservationInstructions } from './scenePrompt.ts';
+import { rummikubObservationPrompt } from './rummikubPrompt.ts';
+import {recognitionCapability} from '../../shared/recognition.ts';
+import {genericObservationPrompt} from './generic.ts';
 
 export function observationPrompt(session: Session, pack: GamePack, evidence: Evidence[], instruction?: string, purpose = 'capture') {
   const ownerId = evidence[0]?.ownerId;
-  const fields = pack.fields.filter(f => f.acquisition === 'observe' && (f.scope === (ownerId ? 'player' : 'public') || (!ownerId && f.scope === 'player' && f.visibility === 'public')));
+  if(recognitionCapability(pack).mode==='assisted')return genericObservationPrompt(session,pack,evidence,instruction,purpose);
+  if (pack.id === 'rummikub') return capturePrompt(pack,evidence)+'\n'+rummikubObservationPrompt({ evidence, ownerId, instruction }) + (purpose === 'restore' ? '\n현재 복원 테이블만 관측하세요. 저장본의 값을 새 사진에서 확인한 사실처럼 복사하지 마세요.' : '');
+  const fields = captureFields(pack,evidence,observableFields(pack)).filter(f => (f.scope === (ownerId ? 'player' : 'public') || (!ownerId && f.scope === 'player' && f.visibility === 'public')));
   const known = session.assertions.filter(a => a.status === 'accepted' && (!a.ownerId || a.ownerId === ownerId || pack.fields.find(f=>f.key===a.field)?.visibility === 'public'));
   return `You are KeepBoard's board-game evidence reader. Respond in Korean, strictly as JSON.
+${capturePrompt(pack,evidence)}
 Game: ${pack.title}, edition: ${pack.edition}, pack ${pack.version}.
 Task: ${purpose === 'restore' ? 'Read the CURRENT restored table for comparison with a saved state. Do not copy expected values as observations.' : 'Read only facts actually visible in the attached original photographs.'}
 Photos in order: ${JSON.stringify(evidence.map(e => ({ id: e.id, label: e.label, ownerId: e.ownerId, capturedAt: e.capturedAt, captureEpoch: e.captureEpoch })))}
-Photos from the same captureEpoch are multiple views of ONE static table state, not a timeline of game actions. Do not infer moves or elapsed game turns from camera motion. Read this batch jointly and do not count a visible physical piece again merely because it appears in another photo. Preserve accepted values as context only: return candidates for user confirmation, never an instruction to overwrite accepted state.
-Allowed field definitions: ${JSON.stringify(fields)}
+Multiple photographs in this request have been explicitly confirmed as ONE paused table state, not a timeline. captureEpoch alone is not physical-state confirmation. Do not infer moves or elapsed game turns from camera motion. Read this batch jointly and do not count a visible physical piece again merely because it appears in another photo. Preserve accepted values as context only: return candidates for user confirmation, never an instruction to overwrite accepted state.
+Allowed field definitions: ${JSON.stringify(fields.map(observationDefinition))}
 Players: ${JSON.stringify(session.players)}
 Existing accepted context (not proof of what a new photo shows): ${JSON.stringify(known.map(a => ({ field: a.field, value: a.value, ownerId: a.ownerId })))}
 User requested focus: ${instruction || 'Find visible components, counts, positions, directions, attachments, and coverage gaps.'}

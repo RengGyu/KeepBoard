@@ -1,0 +1,100 @@
+{
+  "version": "game-vision-nine-physical-contract-v1",
+  "frozenAt": "2026-10-26T05:35:10.342901+00:00",
+  "index": {
+    "path": "docs/game-vision-nine-20261026/data/index.json",
+    "sha256": "619c0ff3f6145867b71d9030aaf1efa535ead6fa42185cfa9e71cfdd0e20c331"
+  },
+  "physicalSchema": {
+    "version": "game-literal-gt-v2",
+    "array": "objects",
+    "keys": [
+      "id",
+      "componentId",
+      "bboxPx",
+      "attributes",
+      "valueScorable",
+      "locationScorable",
+      "readability",
+      "uncertainty"
+    ],
+    "bboxPxOrder": [
+      "xmin",
+      "ymin",
+      "xmax",
+      "ymax"
+    ],
+    "coordinates": "Original source pixels; EXIF orientation1, no rotation; manual 750x1000 inspection coordinates mechanically scaled to 1170x1560.",
+    "terrainAttributes": {
+      "terrain": "legacy vocabulary below, no per-image answers in repo"
+    },
+    "numberAttributes": {
+      "number": "integer when directly legible, otherwise null"
+    },
+    "robberAttributes": {
+      "kind": "robber"
+    },
+    "terrainAliasToWire": {
+      "wood": "forest",
+      "sheep": "pasture",
+      "wheat": "fields",
+      "brick": "hills",
+      "ore": "mountains",
+      "desert": "desert"
+    },
+    "valueScorable": "terrain/number literal directly legible in that source => true; occluded unreadable number => attributes.number=null and false. Robber is kind/location only: valueScorable=false, kindScorable=true.",
+    "readability": "readability.value=legible|unobservable-occluded; extent=visible|partially-occluded; clippedEdges=[]|[left]|[right]. A partially occluded but legible value remains scorable.",
+    "clipping": "Clipped physical objects retained using visible image-bounded envelope. Missing off-image contour is not completed.",
+    "unknownLocation": "All retained objects have a manually distinguishable envelope; covered disc outlines have wider explicit uncertainty."
+  },
+  "matchingPolicy": {
+    "status": "SUPERVISOR_ACCEPTED_FIXED_BEFORE_NEW_OUTPUTS",
+    "method": "Geometry-only reciprocal unique maximum IoU >= 0.25. A correspondence requires each box to be the unique maximum-IoU partner of the other; values and kind are not used to select or break matches. GT polygon is reduced to its axis-aligned envelope for box-to-box comparison.",
+    "minimumIoU": 0.25,
+    "predictionBoxOrder": "box_1000=[ymin,xmin,ymax,xmax] converted once by width/height, no clipping/answer-driven adjustment",
+    "ties": "Any tied maximum or non-reciprocal/visually indeterminate correspondence => AMBIGUOUS; values and kind are not used to break matches.",
+    "nullBoxes": "unlocalized; no nearest matching by printed value",
+    "reportSeparately": [
+      "matched literal correctness",
+      "localization unmatched/missing/extra",
+      "unknown attributes",
+      "ambiguous correspondence",
+      "continuous IoU",
+      "continuous center error in original-image pixels"
+    ],
+    "limitation": "Approximate manual envelopes, foreground occlusion and neighboring hex bbox overlap; not precision masks. Center-only containment is not the primary matcher.",
+    "thresholdMeaning": "0.25 is a correspondence threshold, not a service pass mark."
+  },
+  "matchingPolicySource": {
+    "path": "docs/game-vision-comparison-20261026/data/contract.json",
+    "sha256": "9cad28fe007851911e4e838a30e8df180b1f6428d5b3f07c3d71846b9638e1ab",
+    "policyUnchanged": true
+  },
+  "annotationMethod": {
+    "inspectedEachOriginal": true,
+    "overlaysDirectlyViewed": 9,
+    "type": "Manual approximate axis-aligned physical-object envelopes, not segmentation masks",
+    "crossPhotoValueCompletion": false,
+    "crossViewCoordinatesTransferred": false,
+    "modelPredictionBoxesViewed": false,
+    "numberUnit": "whole printed disc, not glyph",
+    "terrainUnit": "physical hex envelope, including portions occluded by discs/pieces; adjacent hex envelopes overlap",
+    "robberUnit": "physical dark piece silhouette envelope",
+    "privatePermission": "directory0700/files0600"
+  },
+  "uploadAuthority": "Exact nine user attachments; explicit current user Gemini comparison request. Bounded comparison transmission authorized; no redistribution or training rights granted. No transmission performed by this task.",
+  "modelInputs": "Source images only with supervisor-owned frozen D1 task. This index/contract/GT/overlay is evaluation metadata, not model context. No per-image answers/counts are to enter prompts.",
+  "limitations": [
+    "Approximate extents, not precise masks",
+    "Some out-of-frame terrain",
+    "Two number values obscured by robber are null",
+    "Exact photographed printing unverified",
+    "Same board/session sequence; not nine independent scenes or heldout-board accuracy"
+  ],
+  "newCalls": {
+    "API": 0,
+    "AI": 0,
+    "OCR": 0
+  },
+  "productChanges": 0
+}

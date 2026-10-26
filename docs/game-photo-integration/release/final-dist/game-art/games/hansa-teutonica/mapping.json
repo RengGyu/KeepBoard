@@ -1,0 +1,395 @@
+{
+  "game_id": "hansa-teutonica",
+  "name_ko": "한자 토이토니카",
+  "name_en": "Hansa Teutonica",
+  "edition": {
+    "id": "base",
+    "name": "Big Box의 원 기본 지도 모드",
+    "compatibility_notes": [
+      "Big Box 동봉 확장 지도 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "hansa-teutonica.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/hansa-teutonica.json",
+  "source_sha256": "05afa4666c37cab35e9b68563809ef727a6ef227c0c85e690b19e167a0ebd4dc",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "tradesmen",
+      "name": "상인 큐브·상인 원반",
+      "kind": "piece",
+      "source_confidence": "verified",
+      "source_description": "Trader 큐브와 Merchant 원반을 형태로 구분하고 번역명 차이는 별칭으로 대응.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "큐브",
+          "layers": [
+            {
+              "asset_id": "common.cube"
+            }
+          ]
+        },
+        {
+          "name": "원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "board",
+      "name": "지도·개인 책상",
+      "kind": "board",
+      "source_confidence": "verified",
+      "source_description": "도시·사무소·노선과 능력별 노출 슬롯.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "교역망 · 예시",
+          "layers": [
+            {
+              "asset_id": "hansa-teutonica.board.trade-network"
+            }
+          ]
+        },
+        {
+          "name": "개인 능력 책상 예시",
+          "layers": [
+            {
+              "asset_id": "hansa-teutonica.board.office-desk"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "bonus",
+      "name": "보너스 표식",
+      "kind": "token",
+      "source_confidence": "verified",
+      "source_description": "노선 보너스·개인 미사용/사용·턴 종료 배치 대기.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "교역소 추가",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "교역소 추가",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-9d14ccb3924e"
+            }
+          ]
+        },
+        {
+          "name": "교역소 교환",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "교역소 교환",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-4e17a3cbc7af"
+            }
+          ]
+        },
+        {
+          "name": "상인 3개 이동",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "상인 3개 이동",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-279dc6688ac5"
+            }
+          ]
+        },
+        {
+          "name": "능력 개발",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "능력 개발",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-1681bab168d9"
+            }
+          ]
+        },
+        {
+          "name": "행동 +3",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "행동 +3",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-734c8edd4845"
+            }
+          ]
+        },
+        {
+          "name": "행동 +4",
+          "color_role": "fixed-semantic",
+          "owner_color_supported": false,
+          "color": "#a8b1b3",
+          "label": "행동 +4",
+          "layers": [
+            {
+              "asset_id": "common.fidelity-coin-d3805dfe4b25"
+            }
+          ]
+        },
+        {
+          "name": "별 표식",
+          "label": "별 표식 · 기존 종류 미확인",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true,
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "legacy_reason": "기존 이름만으로 새 구체 유형/값/색을 확정하지 않는다. 저장 원본은 유지한다."
+        },
+        {
+          "name": "flag 표식",
+          "label": "flag 표식 · 기존 종류 미확인",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true,
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "legacy_reason": "기존 이름만으로 새 구체 유형/값/색을 확정하지 않는다. 저장 원본은 유지한다."
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "variant",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "fidelity_correction": {
+        "finding_id": "F005",
+        "source_url": "https://pegasus.de/en/NetiMedia/download?mediaId=018e5c283e69708e9b50c79cb8a8b317",
+        "source_location": "PDF pp.1–3 Components / Setup",
+        "scope": "bonus marker는 공용 유형그림 표식(시작용 금색 포함)이며 개인색 Trader/Merchant와 다르다.",
+        "legacy_policy": "preserve name; unresolved unless explicitly retained, no migration"
+      }
+    }
+  ],
+  "areas": [
+    {
+      "id": "network",
+      "name": "도시·교역 노선",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "board",
+        "tradesmen",
+        "bonus"
+      ],
+      "anchor_contract": "도시ID 안 사무소의 순서·색·원형/사각형, 노선ID 안 연결점 번호. 원반/큐브의 소유자를 별도 저장.",
+      "description": "도시·교역 노선의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "skills",
+      "name": "개인 능력",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "board",
+        "tradesmen"
+      ],
+      "anchor_contract": "열쇠·행동·특권·지식·은행의 노출 값과 아직 덮인 말.",
+      "description": "개인 능력의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "supply",
+      "name": "개인 공급·공용 재고",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tradesmen"
+      ],
+      "anchor_contract": "같은 색 말도 즉시 사용 가능한 개인 공급과 공용 재고를 분리.",
+      "description": "개인 공급·공용 재고의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "bonus",
+      "name": "개인 보너스",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "bonus"
+      ],
+      "anchor_contract": "미사용·사용 완료·이번 턴 종료 때 새로 배치할 표식을 각각 보관.",
+      "description": "개인 보너스의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "tracks",
+      "name": "승점·완성 도시",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "tradesmen",
+        "board"
+      ],
+      "anchor_contract": "각 승점과 공용 완성 도시 트랙 위치.",
+      "description": "승점·완성 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "도시·교역 노선 · 구조 예시",
+    "area_id": "network",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "common.cube",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "hansa-teutonica.board.trade-network",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

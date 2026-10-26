@@ -1,0 +1,845 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "splendor",
+  "name_ko": "스플렌더",
+  "name_en": "Splendor",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판",
+    "compatibility_notes": [
+      "리프레시 아트는 같은 게임 판본;Duel은 독립 게임으로 별도 행",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "splendor.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/splendor.json",
+    "sha256": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+    "runtime_pack_id": "splendor",
+    "runtime_pack_version": "1.0.0-essentials-2.c3ee02f2da3a",
+    "runtime_match": false
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "native-or-specialized",
+    "official_scoped_checks_this_task": [
+      {
+        "source": "splendor.rules-current",
+        "section": "publisher rulebook Setup / Actions / Purchased cards",
+        "scope": "central six-color token supply vs each player's held tokens and purchased cards"
+      }
+    ],
+    "inherited_evidence_ids": [
+      "splendor::splendor.primary",
+      "splendor::essentials.storage-guidance"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": true
+  },
+  "capture_focus": "카드 비용 하단·보너스 상단·점수까지 한 카드 전체",
+  "critical_resume_distinction": "개발 비용/영구 보너스/귀족 요구/실물 토큰 수를 다른 값으로 유지",
+  "partitions": {
+    "common_public": [
+      "market",
+      "noble-area",
+      "chip-supply"
+    ],
+    "player_public": [
+      "player"
+    ],
+    "owner_private": [
+      "reserve"
+    ],
+    "do_not_infer": [
+      "decks"
+    ]
+  },
+  "areas": [
+    {
+      "id": "market",
+      "name": "레벨별 공개 카드",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "레벨별 줄과 각 카드 자리, 보충 전 빈자리 유지.",
+      "description": "레벨별 공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "market.scene"
+      ],
+      "current_manual_target_fields": [
+        "market.scene"
+      ],
+      "source_field_ids": [
+        "market.scene"
+      ],
+      "allowed_component_ids": [
+        "development"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "레벨별 공개 카드 전체 경계를 먼저 기록. 레벨별 줄과 각 카드 자리, 보충 전 빈자리 유지. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "레벨별 줄과 각 카드 자리, 보충 전 빈자리 유지.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "noble-area",
+      "name": "공개 귀족",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "nobles"
+      ],
+      "anchor_contract": "귀족 ID와 후보/소유자 구역.",
+      "description": "공개 귀족의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "noble-area.scene"
+      ],
+      "current_manual_target_fields": [
+        "noble-area.scene"
+      ],
+      "source_field_ids": [
+        "noble-area.scene"
+      ],
+      "allowed_component_ids": [
+        "nobles"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "공개 귀족 전체 경계를 먼저 기록. 귀족 ID와 후보/소유자 구역. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "귀족 ID와 후보/소유자 구역.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "player",
+      "name": "구매 카드·토큰",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "chips",
+        "development",
+        "nobles"
+      ],
+      "anchor_contract": "보너스 색별 카드더미와 개별 카드 식별을 함께 유지.",
+      "description": "구매 카드·토큰의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "player.scene"
+      ],
+      "source_field_ids": [
+        "player.scene"
+      ],
+      "allowed_component_ids": [
+        "chips",
+        "development",
+        "nobles"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "구매 카드·토큰 전체 경계를 먼저 기록. 보너스 색별 카드더미와 개별 카드 식별을 함께 유지. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "보너스 색별 카드더미와 개별 카드 식별을 함께 유지.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "reserve",
+      "name": "예약 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
+      "description": "예약 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "reserve.scene"
+      ],
+      "current_manual_target_fields": [
+        "reserve.scene"
+      ],
+      "source_field_ids": [
+        "reserve.scene"
+      ],
+      "allowed_component_ids": [
+        "development"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "예약 카드 전체 경계를 먼저 기록. 예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "decks",
+      "name": "레벨별 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "레벨별 남은 덱과 위아래 방향을 실물 보존.",
+      "description": "레벨별 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "decks.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "레벨별 남은 덱과 위아래 방향을 실물 보존.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "chip-supply",
+      "name": "공용 보석·금 공급",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "chips"
+      ],
+      "anchor_contract": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다.",
+      "description": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "splendor.rules-current"
+      ],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "chip-supply.scene"
+      ],
+      "allowed_component_ids": [
+        "chips"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
+      "capture_access": "public evidence; explicit owner binding for player areas",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "accepted values and original photo retained; unknown remains unknown",
+        "render_basis": "manual record surface until regenerated runtime pack"
+      },
+      "official_rule_status": "SCOPED_SOURCE_REVIEW; pending regenerated runtime pack"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "chips",
+      "name": "보석·금 토큰",
+      "kind": "token",
+      "identity_description": "색 종류와 보유/공급 구분.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "splendor::splendor.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "development",
+      "name": "개발 카드",
+      "kind": "card",
+      "identity_description": "레벨·비용·보너스 색·명성, 구매/예약 상태.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "splendor::splendor.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "nobles",
+      "name": "귀족 타일",
+      "kind": "tile",
+      "identity_description": "공개 후보와 획득한 플레이어.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "splendor::splendor.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": {
+    "schema": "splendor-v1",
+    "source_file": "shared/splendor.ts",
+    "visible_attributes": [
+      "kind",
+      "points",
+      "bonus",
+      "cost",
+      "requirements",
+      "color",
+      "level"
+    ],
+    "manual_or_bounded_geometry": "outer quantity는 실물 수. 카드 비용·귀족 요구·보너스·토큰은 독립. 인쇄되지 않은 레벨/총점/소유자 추정 금지."
+  },
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "market.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "noble-area.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "reserve.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "decks.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "prestige",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "bonus",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.bonus",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "ending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "prestige",
+      "label": "확인 명성",
+      "scope": "player",
+      "visibility": "public",
+      "description": "보이는 명성과 확인한 총값을 구별."
+    },
+    {
+      "id": "bonus",
+      "label": "영구 보너스",
+      "scope": "player",
+      "visibility": "public",
+      "description": "구매 카드의 색별 할인 수. 보유 토큰과 합산하지 않는다."
+    },
+    {
+      "id": "ending",
+      "label": "종료 라운드",
+      "scope": "public",
+      "visibility": "public",
+      "description": "종료 조건에 도달했다는 선언과 남은 차례만 수동 입력."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "구매/예약/귀족 처리/토큰 반환 중 미완료 지점만 기록. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "예약 카드, 보석 수만으로 가능한 구매, 아직 지급되지 않은 귀족",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "reserve.preserve",
+        "label": "예약 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "reserve.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "레벨별 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "레벨별 남은 덱과 위아래 방향을 실물 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "market.scene",
+          "noble-area.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "player.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "도시 확장은 별도 모듈 패치; Splendor Duel은 독립 게임. 리프레시판/구판 아트 대응 별도.",
+    "토큰 한도와 귀족 선택 시점, 예약 공개 이력 처리의 세부 규칙은 원문 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "splendor",
+    "edition": "현행 기본판",
+    "status": "DIRECT_REVIEWED_PARTIAL",
+    "corpus_availability": {
+      "provided_image_rows": 3,
+      "producer_usable_yes_rows": 2,
+      "candidate_image_rows": 4,
+      "retained_image_rows": 4,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "210fe11683641690c26cdf41070c9b0f6eed1e950a4358a5cf81b06e9d37503f",
+        "25c3ba99150e52870a9c40f360d0581a191ed1f64cc8344031f951f449584e3f",
+        "565a82f1d73675fc81caef88508f609c777d0a3d0c29ef499744452086543f71"
+      ],
+      "directly_reviewed_sha256": [
+        "25c3ba99150e52870a9c40f360d0581a191ed1f64cc8344031f951f449584e3f",
+        "210fe11683641690c26cdf41070c9b0f6eed1e950a4358a5cf81b06e9d37503f"
+      ]
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "카드 비용 하단·보너스 상단·점수까지 한 카드 전체",
+    "closeups": [
+      {
+        "area_id": "market",
+        "name": "레벨별 공개 카드",
+        "needs": "레벨별 줄과 각 카드 자리, 보충 전 빈자리 유지.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "noble-area",
+        "name": "공개 귀족",
+        "needs": "귀족 ID와 후보/소유자 구역.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "player",
+        "name": "구매 카드·토큰",
+        "needs": "보너스 색별 카드더미와 개별 카드 식별을 함께 유지.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "reserve",
+        "name": "예약 카드",
+        "needs": "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "decks",
+        "name": "레벨별 덱",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "splendor",
+    "editionId": "base",
+    "sourceSHA": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+    "status": "new",
+    "areas": [
+      {
+        "areaId": "market",
+        "label": "레벨별 공개 카드",
+        "fieldKeys": [
+          "market.scene"
+        ],
+        "componentIds": [
+          "development"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "grid",
+        "template": "square-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "noble-area",
+        "label": "공개 귀족",
+        "fieldKeys": [
+          "noble-area.scene"
+        ],
+        "componentIds": [
+          "nobles"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "player",
+        "label": "구매 카드·토큰",
+        "fieldKeys": [
+          "player.scene"
+        ],
+        "componentIds": [
+          "chips",
+          "development",
+          "nobles"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "reserve",
+        "label": "예약 카드",
+        "fieldKeys": [
+          "reserve.scene"
+        ],
+        "componentIds": [
+          "development"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "decks",
+        "label": "레벨별 덱",
+        "fieldKeys": [
+          "decks.scene"
+        ],
+        "componentIds": [
+          "development"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 6,
+    "board_instance_count": 4,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

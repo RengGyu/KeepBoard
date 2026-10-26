@@ -1,0 +1,764 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "just-one",
+  "name_ko": "저스트 원",
+  "name_en": "Just One",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "즉석 힌트/발언은 사진·메모;기본 우선 제작 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "just-one.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/just-one.json",
+    "sha256": "bf9d3ef0bd93395912705d434efd0bee3abe12c1377240d0ff8d611792a50406",
+    "runtime_pack_id": "just-one",
+    "runtime_pack_version": "1.0.0-essentials-2.bf9d3ef0bd93",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "just-one::just-one.primary",
+      "just-one::essentials.storage-guidance"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "현재 공개된 힌트만",
+  "critical_resume_distinction": "정답·탈락시킨 힌트·아직 비공개 작성은 공개 촬영에서 제외",
+  "partitions": {
+    "common_public": [
+      "clues"
+    ],
+    "player_public": [],
+    "owner_private": [
+      "writing"
+    ],
+    "do_not_infer": [
+      "answer",
+      "deck"
+    ]
+  },
+  "areas": [
+    {
+      "id": "answer",
+      "name": "이번 정답",
+      "scope": "shared-secret",
+      "visibility": "role-limited",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "현재 단어 카드·선택 번호. 추리자에게 카드 앞면이 보이지 않는다.",
+      "description": "이번 정답의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "visible_to_roles": [
+        "clue-giver"
+      ],
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "answer.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "현재 단어 카드·선택 번호. 추리자에게 카드 앞면이 보이지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "writing",
+      "name": "개인 작성 힌트",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "boards"
+      ],
+      "anchor_contract": "비교 전 자기 힌트 원문만.",
+      "description": "개인 작성 힌트의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "writing.scene"
+      ],
+      "current_manual_target_fields": [
+        "writing.scene"
+      ],
+      "source_field_ids": [
+        "writing.scene"
+      ],
+      "allowed_component_ids": [
+        "boards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 작성 힌트 전체 경계를 먼저 기록. 비교 전 자기 힌트 원문만. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "비교 전 자기 힌트 원문만.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "clues",
+      "name": "공개된 힌트",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "boards"
+      ],
+      "anchor_contract": "추리자에게 실제 보여준 힌트만; 취소된 원문은 넣지 않는다.",
+      "description": "공개된 힌트의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "clues.scene"
+      ],
+      "current_manual_target_fields": [
+        "clues.scene"
+      ],
+      "source_field_ids": [
+        "clues.scene"
+      ],
+      "allowed_component_ids": [
+        "boards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "공개된 힌트 전체 경계를 먼저 기록. 추리자에게 실제 보여준 힌트만; 취소된 원문은 넣지 않는다. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "추리자에게 실제 보여준 힌트만; 취소된 원문은 넣지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "deck",
+      "name": "남은 카드",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "남은 덱과 성공/실패/포기 구역을 분리.",
+      "description": "남은 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "deck.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "남은 덱과 성공/실패/포기 구역을 분리.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "cards",
+      "name": "단어 카드",
+      "kind": "card",
+      "identity_description": "선택 번호·현재 카드·남은/성공/실패 묶음.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "just-one::just-one.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음.",
+          "faceOnly": true
+        },
+        {
+          "id": "selectedNumber",
+          "type": "integer",
+          "label": "선택 번호",
+          "acquisition": "manual",
+          "min": 0,
+          "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "cardArea",
+          "type": "text",
+          "label": "더미·현재·완료 구분",
+          "acquisition": "manual",
+          "sourceText": "선택 번호·현재 카드·남은/성공/실패 묶음. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "selectedNumber",
+        "cardArea"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName"
+      ],
+      "manual_attribute_keys": [
+        "selectedNumber",
+        "cardArea"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "boards",
+      "name": "힌트 보드",
+      "kind": "board",
+      "identity_description": "작성한 단어와 공개/취소 상태.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "just-one::just-one.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "printedName",
+          "label": "읽히는 판 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "작성한 단어와 공개/취소 상태."
+        },
+        {
+          "id": "sideLabel",
+          "label": "사용 면 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "작성한 단어와 공개/취소 상태."
+        },
+        {
+          "id": "writtenWord",
+          "type": "text",
+          "label": "허용 범위의 필기",
+          "acquisition": "visible",
+          "sourceText": "작성한 단어와 공개/취소 상태."
+        },
+        {
+          "id": "revealState",
+          "type": "text",
+          "label": "공개·가림·제외 구분",
+          "acquisition": "manual",
+          "sourceText": "작성한 단어와 공개/취소 상태. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "printedName",
+        "sideLabel",
+        "writtenWord",
+        "revealState"
+      ],
+      "visible_attribute_keys": [
+        "printedName",
+        "sideLabel",
+        "writtenWord"
+      ],
+      "manual_attribute_keys": [
+        "revealState"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "clues.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "writing.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "answer.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "deck.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "roles",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.roles",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "progress",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.progress",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "cancelled",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "roles",
+      "label": "현재 역할",
+      "scope": "public",
+      "visibility": "public",
+      "description": "이번 추리자와 나머지 힌트 작성자 역할 매핑."
+    },
+    {
+      "id": "progress",
+      "label": "진행·점수",
+      "scope": "public",
+      "visibility": "public",
+      "description": "사용한 카드·성공 수와 아직 처리 안 된 결과."
+    },
+    {
+      "id": "cancelled",
+      "label": "취소 여부",
+      "scope": "player",
+      "visibility": "owner",
+      "description": "내 힌트의 취소/유효 여부. 취소된 단어를 공용에 다시 노출하지 않는다."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "단어 번호 선택/힌트 작성/비교·취소/추리/결과 처리 중 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "추리자에게 정답·취소된 힌트, 같은 뜻인지 여부를 자동 판정해 원문 삭제",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "answer.preserve",
+        "label": "이번 정답 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "field_ids": [
+          "answer.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "현재 단어 카드·선택 번호. 추리자에게 카드 앞면이 보이지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation",
+        "visible_to_roles": [
+          "clue-giver"
+        ]
+      },
+      {
+        "id": "writing.preserve",
+        "label": "개인 작성 힌트 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "writing.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "비교 전 자기 힌트 원문만.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "deck.preserve",
+        "label": "남은 카드 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "deck.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "남은 덱과 성공/실패/포기 구역을 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "clues.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "기본 Just One의 언어판/단어 목록을 식별. 추가 단어는 카드 ID 범위 확장이지 새 게임 규칙이 아니다.",
+    "동일·어근·철자·금지 힌트 판정과3인 특례는 원문 추가 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "just-one",
+    "edition": "기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 3,
+      "producer_usable_yes_rows": 1,
+      "candidate_image_rows": 6,
+      "retained_image_rows": 6,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "36eee61da8fc723a3b0e3adef399f6152cbb400850d4fc73ed6d3d56452e81a6",
+        "1aa77ad5560745dbc4109bc1bedb18c4f4d266be1a5764744d108a8412e177f4",
+        "7658ed3961fa9d77c9f29233a5232a8bc9fdf668271037f086937730698a0bdf"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "현재 공개된 힌트만",
+    "closeups": [
+      {
+        "area_id": "writing",
+        "name": "개인 작성 힌트",
+        "needs": "비교 전 자기 힌트 원문만.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "clues",
+        "name": "공개된 힌트",
+        "needs": "추리자에게 실제 보여준 힌트만; 취소된 원문은 넣지 않는다.",
+        "access": "public evidence"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "answer",
+        "name": "이번 정답",
+        "reason": "role-limited"
+      },
+      {
+        "area_id": "deck",
+        "name": "남은 카드",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "just-one",
+    "editionId": "base",
+    "sourceSHA": "bf9d3ef0bd93395912705d434efd0bee3abe12c1377240d0ff8d611792a50406",
+    "status": "reuse",
+    "areas": [
+      {
+        "areaId": "answer",
+        "label": "이번 정답",
+        "fieldKeys": [
+          "answer.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "topology": "zone",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "writing",
+        "label": "개인 작성 힌트",
+        "fieldKeys": [
+          "writing.scene"
+        ],
+        "componentIds": [
+          "boards"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "reuse",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": "boards"
+      },
+      {
+        "areaId": "clues",
+        "label": "공개된 힌트",
+        "fieldKeys": [
+          "clues.scene"
+        ],
+        "componentIds": [
+          "boards"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "reuse",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": "boards"
+      },
+      {
+        "areaId": "deck",
+        "label": "남은 카드",
+        "fieldKeys": [
+          "deck.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 2,
+    "board_instance_count": 2,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

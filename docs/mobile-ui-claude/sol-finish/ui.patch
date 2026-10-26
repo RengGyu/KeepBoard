@@ -1,0 +1,381 @@
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -146,7 +146,7 @@
+     <main className={`main-content ${view ? 'in-session' : ''}`}>
+       {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
+       {loading ? <div className="loading-screen" role="status"><LoaderMark size={32}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <div className="home">
+-        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className="home-head has-photo"><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
++        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className={`home-head has-photo${liveSessions.length?' has-boards':''}`}><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
+         <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><div className="board-tools"><label className="search-box"><Search size={17}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={15}/></button>}</label><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={18}/></button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details></div></div>
+         {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
+           const pack = packs.find(item => item.id === session.gamePackId);
+--- /dev/null
++++ b/src/ComponentLinkDialog.tsx
+@@ -0,0 +1,56 @@
++import {useEffect,useMemo,useState} from 'react';
++import {Check,LockKeyhole} from 'lucide-react';
++import type {Assertion,SessionView} from '../shared/types';
++import type {GenericPiece} from '../shared/genericRecord';
++import {runtimeBinding} from '../shared/gameEssentials';
++import {componentRecord,componentTargetKey,unlinkedComponentPieces,type ComponentLinkOptions,type ComponentLinkTarget} from '../shared/componentLinking';
++import {api} from './api';
++import {fire,type Mutate} from './Fields';
++import {GenericPieceArt} from './GenericPieceArt';
++import {SplendorReadout} from './SplendorReadout';
++import {SplendorFields,isSplendor,splendorView} from './SplendorEditor';
++import {Modal} from './ui';
++
++/** Pick pieces from a candidate (add) or an applied record (move), choose where they belong, optionally correct read values, then apply explicitly. */
++export function ComponentLinkDialog({view,source,initialIds=[],initialTarget,busy,dirtyTarget,mutate,onClose}:{view:SessionView;source:Assertion;initialIds?:string[];initialTarget?:{field:string;ownerId?:string};busy:boolean;dirtyTarget:(field:string,ownerId?:string)=>boolean;mutate:Mutate;onClose:()=>void}){
++ const {session,pack}=view,move=source.status==='accepted',splendor=isSplendor(pack);
++ const pieces=useMemo(()=>move?componentRecord(source)?.pieces??[]:unlinkedComponentPieces(session,source),[source,session.assertions]);
++ const [ids,setIds]=useState<string[]>(initialIds.filter(id=>pieces.some(p=>p.id===id)));
++ const [options,setOptions]=useState<ComponentLinkOptions|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState('');
++ const [targetKey,setTargetKey]=useState(initialTarget?componentTargetKey(initialTarget.field,initialTarget.ownerId):''),[clear,setClear]=useState(false),[corrections,setCorrections]=useState<Record<string,GenericPiece>>({}),[editing,setEditing]=useState<string|null>(null);
++ const selected=pieces.filter(p=>ids.includes(p.id));
++ // Leaving the selection drops its open correction form; a target or selection change asks for placement consent again.
++ useEffect(()=>{if(editing&&!ids.includes(editing))setEditing(null);setClear(false);},[ids.join(',')]);
++ useEffect(()=>setClear(false),[targetKey]);
++ useEffect(()=>{if(!ids.length){setOptions(null);return;}let alive=true;setLoading(true);setError('');
++  api.componentLinkOptions(session.id,source.id,ids).then(o=>{if(!alive)return;setOptions(o);if(!o.targets.some(t=>componentTargetKey(t.field,t.ownerId)===targetKey))setTargetKey('');},e=>{if(alive){setOptions(null);setError(e instanceof Error?e.message:'연결할 곳을 불러오지 못했어요.');}}).finally(()=>{if(alive)setLoading(false);});
++  return()=>{alive=false;};},[ids.join(','),source.id]);
++ const target=options?.targets.find(t=>componentTargetKey(t.field,t.ownerId)===targetKey);
++ const targets=(options?.targets??[]).filter(t=>!(move&&t.field===source.field&&t.ownerId===source.ownerId));
++ const misplaced=!!target&&selected.some(p=>p.placement&&!runtimeBinding(pack,target.field)?.areaIds.includes(p.placement.areaId));
++ const name=(p:GenericPiece)=>p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인';
++ const toggle=(id:string)=>setIds(list=>list.includes(id)?list.filter(x=>x!==id):[...list,id]);
++ async function apply(){
++  if(!target||!options)return;
++  if(dirtyTarget(target.field,target.ownerId)||move&&dirtyTarget(source.field,source.ownerId)){setError('연결할 곳에 저장하지 않은 수정이 있어요. 먼저 기록하거나 되돌린 뒤 연결해 주세요.');return;}
++  const corrected=Object.keys(corrections).length?selected.map(p=>corrections[p.id]??p):undefined;
++  try{await mutate(()=>api.linkComponents(session.id,{sourceAssertionId:source.id,pieceIds:ids,target:{field:target.field,...(target.ownerId?{ownerId:target.ownerId}:{})},expectedTargetAssertionId:options.targetVersions[componentTargetKey(target.field,target.ownerId)]??null,...(corrected?{corrections:corrected}:{}),...(misplaced&&clear?{clearPlacement:true}:{})}),move?'선택한 실물을 옮겼어요':'선택한 실물을 연결했어요');onClose();}
++  catch(e){setError(e instanceof Error?e.message:'연결하지 못했어요. 기존 기록은 그대로예요.');}
++ }
++ const groups=[...new Set(targets.map(t=>t.ownerName??'공용'))];
++ return <Modal title={move?'다른 곳으로 옮기기':'실물 연결'} onClose={onClose}><div className="modal-body cl-dialog">
++  <section><div className="cl-head"><h3>{move?'옮길 실물':'연결할 실물'} <span className="muted">{ids.length}/{pieces.length}</span></h3><button type="button" className="button text small-button" disabled={busy||!pieces.length} onClick={()=>setIds(ids.length===pieces.length?[]:pieces.map(p=>p.id))}>{ids.length===pieces.length?'선택 해제':'모두 선택'}</button></div>
++   {pieces.length?<div className="cl-pieces">{pieces.map(p=><button type="button" key={p.id} className={ids.includes(p.id)?'selected':''} aria-pressed={ids.includes(p.id)} disabled={busy} onClick={()=>toggle(p.id)}>{splendor?<SplendorReadout {...splendorView(corrections[p.id]??p)}/>:<span className="cl-piece"><GenericPieceArt pack={pack} piece={p} size={44}/><span>{name(p)}</span><small>{p.quantity===null?'수량 ?':`${p.quantity}개`}</small></span>}{ids.includes(p.id)&&<Check size={16} className="cl-check" aria-hidden="true"/>}</button>)}</div>:<p className="small muted">남은 실물이 없어요.</p>}
++  </section>
++  {ids.length>0&&<section><h3>어디에 {move?'옮길까요':'둘까요'}</h3>
++   {loading?<p className="small muted" role="status">연결할 곳을 찾는 중…</p>:targets.length?groups.map(g=><div key={g} className="cl-group"><span className="cl-group-name">{g}</span><div className="cl-targets">{targets.filter(t=>(t.ownerName??'공용')===g).map(t=>{const key=componentTargetKey(t.field,t.ownerId);return <button type="button" key={key} aria-pressed={targetKey===key} disabled={busy} onClick={()=>{setTargetKey(key);setError('');}}>{t.visibility==='owner'&&<LockKeyhole size={14} aria-label="개인"/>}{t.label}</button>;})}</div></div>):!error&&<p className="small muted">선택한 실물을 둘 수 있는 곳이 없어요. 선택을 바꿔 보세요.</p>}
++  </section>}
++  {selected.length>0&&<details className="cl-correct" open={!!editing}><summary>읽은 값 고치기 · 선택</summary>
++   <div className="cl-correct-list">{selected.map(p=><button type="button" key={p.id} aria-pressed={editing===p.id} onClick={()=>setEditing(editing===p.id?null:p.id)}>{name(corrections[p.id]??p)}{corrections[p.id]?' · 고침':''}</button>)}</div>
++   {editing&&selected.some(x=>x.id===editing)&&(()=>{const p=corrections[editing]??selected.find(x=>x.id===editing)!;const patch=(c:Partial<GenericPiece>)=>setCorrections(m=>({...m,[editing]:{...p,...c}}));return <div className="cl-correct-form">{splendor&&<SplendorFields piece={p} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={p.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label></div>;})()}
++  </details>}
++  {misplaced&&<label className="cl-consent"><input type="checkbox" checked={clear} disabled={busy} onChange={e=>setClear(e.target.checked)}/>판 위치가 이 영역과 맞지 않아요. 미배치로 옮기기(원래 위치는 연결 기록에 남아요)</label>}
++  {error&&<p className="inline-error" role="alert">{error}</p>}
++  <div className="cl-actions"><button type="button" className="button secondary" onClick={onClose}>닫기</button><button type="button" className="button primary" disabled={busy||!target||loading||misplaced&&!clear} onClick={()=>fire(apply())}>{move?'옮기기':'연결'}{target?` · ${target.ownerName?target.ownerName+' ':''}${target.label}`:''}</button></div>
++ </div></Modal>;
++}
+--- a/src/GameBoardRecord.tsx
++++ b/src/GameBoardRecord.tsx
+@@ -35,7 +35,7 @@
+  return <div className="gb-record">
+   <div className="gb-toolbar">{areas.length>1?<label className="gb-area-label">영역<select aria-label="판 영역" value={area.areaId} onChange={e=>setAreaId(e.target.value)}>{areas.map(a=><option key={a.areaId} value={a.areaId}>{a.label}</option>)}</select></label>:<span className="small muted">기록 배치</span>}<div className="button-row">{!readonly&&<button className="icon-button" aria-label="배치 되돌리기" disabled={busy||!history.current.length} onClick={()=>onChange?.(history.current.pop()!)}><Undo2 size={17}/></button>}<button className="button secondary small-button" onClick={()=>setFull(true)}><Maximize2 size={16}/>크게 보기</button></div></div>
+   {!compatible&&visual&&<p className="small muted">이전 기록 · 위치는 그대로 보존돼요.</p>}
+-  {board(area)}
++  {placed.length||piece?board(area):<p className="gb-surface-empty" role="note" aria-label={area.label+' · 수동 기록 배치'}>{unplaced.length&&!readonly?'아래에서 구성물을 고르면 판에 놓을 수 있어요':'아직 판에 놓인 구성물이 없어요'}</p>}
+   <CarcassonneLayoutPreview pack={pack} record={record} renderArt={art} disabled={busy} onSelect={id=>{onSelect?.(id);if(!readonly)setEdit(true);}}/>
+   {splendor&&record.pieces.length>0&&<div className="gb-cards" aria-label={`카드로 보기 · ${record.pieces.length}개`}>{record.pieces.map(p=><button type="button" key={p.id} className={selected===p.id?'selected':''} aria-pressed={selected===p.id} disabled={busy} onClick={()=>{onSelect?.(p.id);if(!readonly)setEdit(true);}}><SplendorReadout {...splendorView(p)}/></button>)}</div>}
+   {!splendor&&unplaced.length>0&&<div className="gb-tray" aria-label="미배치 구성물"><span className="small muted">미배치</span><div>{unplaced.map(p=>item(p,false))}</div></div>}
+--- a/src/GameEssentials.tsx
++++ b/src/GameEssentials.tsx
+@@ -18,14 +18,17 @@
+ import {recognitionCapability} from '../shared/recognition';
+ import {GenericPieceArt} from './GenericPieceArt';
+ import {genericDraftConflict,preferredPublicBoard} from './genericDraft';
+-import {SplendorReadout} from './SplendorReadout';
++import {SplendorReadout,GEM_ORDER,GEM_NAMES,Gem} from './SplendorReadout';
++import {ComponentLinkDialog} from './ComponentLinkDialog';
++import {componentRecord,latestComponentAssertion,unlinkedComponentPieces} from '../shared/componentLinking';
++import {splendorBonusSummary} from '../shared/splendor';
+ import {SplendorFields,isSplendor,readoutForComponent,splendorView} from './SplendorEditor';
+ 
+ interface Props {view:SessionView;ownerId?:string;busy:boolean;mutate:Mutate;onEvidence:(e:Evidence,region?:Assertion['region'])=>void;onReadyToSave?:(save:(()=>Promise<void>)|null)=>void}
+ export function GameEssentials({view,ownerId,busy,mutate,onEvidence,onReadyToSave}:Props){
+  const {pack,session}=view,runtime=pack.runtime,saves=useRef(new Map<string,()=>Promise<void>>());
+  const [boardKey,setBoardKey]=useState(()=>preferredPublicBoard(pack.fields.filter(f=>f.scope===(ownerId?'player':'public')&&runtimeBinding(pack,f.key)?.editor==='component-catalog'),session,'',ownerId)?.key??''),[boardError,setBoardError]=useState('');
+- const [review,setReview]=useState<Assertion|null>(null),[expanded,setExpanded]=useState<string[]>([]);
++ const [review,setReview]=useState<Assertion|null>(null),[expanded,setExpanded]=useState<string[]>([]),[link,setLink]=useState<{source:Assertion;ids?:string[];target?:{field:string;ownerId?:string}}|null>(null);
+  useEffect(()=>{onReadyToSave?.(async()=>{for(const save of [...saves.current.values()])await save();});return()=>onReadyToSave?.(null);});
+  if(!runtime)return null;
+  const generic=runtime.support.recording==='generic';
+@@ -34,7 +37,8 @@
+  const boardFields=fields.filter(f=>runtimeBinding(pack,f.key)?.editor==='component-catalog');
+  const activeBoard=boardFields.find(f=>f.key===boardKey)??boardFields[0];
+  const allCandidates=session.assertions.filter(a=>a.ownerId===ownerId&&a.status==='candidate'&&fields.some(f=>f.key===a.field));
+- const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates);
++ const linkedCount=allCandidates.reduce((n,a)=>n+(componentRecord(a)?.pieces.length??0)-unlinkedComponentPieces(session,a).length,0);
++ const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates.filter(a=>!componentRecord(a)||unlinkedComponentPieces(session,a).length>0));
+  async function applyCandidate(a:Assertion,value:Value){if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
+  const questions=view.questions.filter(q=>q.ownerId===ownerId&&fields.some(f=>f.key===q.field));
+  const first=new Set([...questions.map(q=>q.field),...runtime.resume.pendingActionFields,...fields.filter(f=>f.key==='turn'||runtimeBinding(pack,f.key)?.editor==='component-catalog').map(f=>f.key)]);
+@@ -42,17 +46,20 @@
+   const accepted=session.assertions.filter(a=>a.field===field.key&&a.ownerId===subject&&a.status==='accepted').at(-1);
+   const save=(value:Value)=>mutate(()=>api.update(session.id,{answers:[{field:field.key,ownerId:subject,value}]}));
+   const ready=(fn:(()=>Promise<void>)|null)=>{if(fn)saves.current.set(`${subject??'public'}:${field.key}`,fn);else saves.current.delete(`${subject??'public'}:${field.key}`);};
+-  return runtimeBinding(pack,field.key)?.editor==='component-catalog'?<GenericComponents key={field.key} view={view} field={field} ownerId={subject} value={accepted?.value} onSave={save} busy={busy} onReadyToSave={ready} onEvidence={onEvidence}/>:<FieldEditor key={field.key} field={{...field,id:`essential-${subject??'public'}-${field.key}`,description:'',reason:generic?'':questions.find(q=>q.field===field.key)?.reason??''}} value={accepted?.value} busy={busy} onSave={save} onReadyToSave={ready}/>;
++  return runtimeBinding(pack,field.key)?.editor==='component-catalog'?<GenericComponents key={field.key} view={view} field={field} ownerId={subject} value={accepted?.value} onSave={save} busy={busy} onReadyToSave={ready} onEvidence={onEvidence} onMove={accepted&&componentRecord(accepted)?id=>setLink({source:accepted,ids:[id]}):undefined}/>:<FieldEditor key={field.key} field={{...field,id:`essential-${subject??'public'}-${field.key}`,description:'',reason:generic?'':questions.find(q=>q.field===field.key)?.reason??''}} value={accepted?.value} busy={busy} onSave={save} onReadyToSave={ready}/>;
+  };
+ function candidateView(a:Assertion){const f=fields.find(f=>f.key===a.field)!;const record=a.value&&typeof a.value==='object'&&!Array.isArray(a.value)&&a.value.version==='game-component-record-v1'?a.value as unknown as GenericRecord:null;
+   if(!record)return <CandidateRow key={a.id} assertion={a} field={f} owner={ownerId?'내 기록':'공용'} busy={busy} onAccept={()=>fire(applyCandidate(a,a.value))} onEdit={value=>applyCandidate(a,value)} onEvidence={()=>{const e=session.evidence.find(e=>e.id===a.evidenceIds[0]);if(e)onEvidence(e,a.region);}}/>;
+-  const open=expanded.includes(a.id),limit=open?record.pieces.length:6,splendor=isSplendor(pack);
+-  return <article key={a.id}><strong>{f.label} · {record.pieces.length}항목</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
+-   <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{record.pieces.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
+-   {record.pieces.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${record.pieces.length})`}</button>}
+-   <button className="button primary small-button" disabled={busy} onClick={()=>setReview(a)}>후보 확인·수정</button></article>;}
++  const rest=unlinkedComponentPieces(session,a);if(!rest.length)return null;
++  const open=expanded.includes(a.id),limit=open?rest.length:6,splendor=isSplendor(pack);
++  return <article key={a.id}><strong>{f.label} · {rest.length<record.pieces.length?`남은 ${rest.length}/${record.pieces.length}항목`:`${record.pieces.length}항목`}</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
++   <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{rest.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
++   {rest.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${rest.length})`}</button>}
++   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
+  const items=session.preservations.filter(p=>p.ownerId===ownerId&&p.templateId.startsWith('spec.'));
+  return <section className="game-essentials" aria-label="게임별 기록과 보관"><header><h3>{generic?'게임 기록':'이어갈 기록·보관'}</h3>{generic&&<p className="small muted">{recognitionCapability(pack).mode==='assisted'?'사진 보조 인식 · 확인 후 적용':'수동 기록 · 사진 관측 미지원'}</p>}</header>
++  {linkedCount>0&&<p className="small muted">사진 실물 {linkedCount}개 연결됨</p>}
++  {ownerId&&<PurchasedBonus view={view} ownerId={ownerId}/>}
+   {candidates.length>0&&<section className="generic-candidates" aria-label="사진에서 찾은 후보"><h4>사진에서 찾은 후보 · {candidates.length}개 영역</h4>{candidates.map(a=>candidateView(a))}{olderCandidates.length>0&&<details className="generic-older"><summary>이전 후보 {olderCandidates.length}개</summary>{olderCandidates.map(a=>candidateView(a))}</details>}</section>}
+   {questions.length>0&&<p className="essentials-ask">확인할 기록 {questions.length}개 · 모르면 비워 둬도 돼요.</p>}
+   {ownerId&&generic&&<PublicBoardOverview view={view} busy={busy}/>}
+@@ -64,6 +71,8 @@
+   {runtime.fieldBindings.some(b=>(b.editor==='physical-only'||b.editor==='opaque-preserve')&&b.scope===(ownerId?'player':'public'))&&<p className="small muted">입력할 수 없는 상태는 실물 그대로 보관하세요. 비밀 내용은 입력하지 않아요.</p>}
+   {items.length>0&&<details open={generic}><summary>실물 보관·복원 {items.length}개</summary>{restoreOrder(items).map(item=><PreservationItem key={item.id} item={item} onReadyToSave={save=>{const key=`preservation:${item.id}`;if(save)saves.current.set(key,save);else saves.current.delete(key);}} owner={ownerId?session.players.find(p=>p.id===ownerId)?.name??'개인':'공용'} busy={busy} restoring={session.stage==='restore'} onChange={body=>mutate(()=>api.preservation(session.id,item.id,body))}/>)}</details>}
+   {latestSnapshot(session,ownerId??'public')&&<details><summary>저장 기록 복원 +</summary><p className="small muted">{ownerId?'내 기록만 복원해요. 공개 기록과 다른 사람 기록은 그대로예요.':'공개 기록만 복원해요. 개인 기록은 그대로예요.'}</p><button className="button secondary small-button" disabled={busy} onClick={()=>fire((async()=>{for(const save of [...saves.current.values()])await save();await mutate(()=>api.resume(session.id,ownerId?'owner':'public',ownerId),'선택한 범위의 저장 기록을 열었어요');})())}>{ownerId?'내 저장 기록 복원':'공개 저장 기록 복원'}</button></details>}
++  {session.room&&<RoomPublicHoldings view={view} ownerId={ownerId} busy={busy}/>}
++  {link&&<ComponentLinkDialog view={view} source={link.source} initialIds={link.ids} initialTarget={link.target} busy={busy} mutate={mutate} dirtyTarget={(field,owner)=>saves.current.has(`${owner??'public'}:${field}`)} onClose={()=>setLink(null)}/>}
+   {review&&<Modal title="사진 후보 확인" wide onClose={()=>setReview(null)}><div className="modal-body"><p className="small muted">확인한 이 영역만 교체해요. 다른 기록은 그대로예요.</p><GenericComponents key={review.id} review view={view} field={fields.find(f=>f.key===review.field)!} ownerId={ownerId} value={review.value} onSave={value=>applyCandidate(review,value)} busy={busy} onEvidence={onEvidence}/></div></Modal>}
+  </section>;
+ }
+@@ -75,7 +84,7 @@
+  const latest=list.filter(a=>!list.some(b=>b!==a&&key(b)===key(a)&&newer(b,a)));
+  return {latest,older:list.filter(a=>!latest.includes(a))};
+ }
+-function GenericComponents({view,field,ownerId,value,onSave,busy,onReadyToSave,onEvidence,review=false}:Omit<Props,'mutate'>&{field:FieldDefinition;value?:Value;onSave:(v:Value)=>Promise<void>;review?:boolean}){
++function GenericComponents({view,field,ownerId,value,onSave,busy,onReadyToSave,onEvidence,review=false,onMove}:Omit<Props,'mutate'>&{onMove?:(pieceId:string)=>void;field:FieldDefinition;value?:Value;onSave:(v:Value)=>Promise<void>;review?:boolean}){
+  const incoming=value&&typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1'?value as unknown as GenericRecord:emptyGenericRecord();
+  const opaque=value!=null&&!(typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1');
+  const [scene,setScene]=useState(incoming),[base,setBase]=useState(JSON.stringify(incoming)),[mapping,setMapping]=useState<ArtMapping>();
+@@ -92,7 +101,7 @@
+  const patch=(change:Partial<GenericPiece>)=>setScene(s=>({...s,pieces:s.pieces.map(p=>p.id===selected?{...p,...change}:p)}));
+  if(opaque)return <div><strong>{field.label}</strong><p className="small muted">기존 기록은 그대로 보존돼요. 여기서는 고칠 수 없어요.</p></div>;
+  return <section className="generic-components" aria-label={field.label}><h4>{field.label}</h4>
+- <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label><label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}</div></div>}/>
++ <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>{!isSplendor(view.pack)&&<label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>}{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}{onMove&&!review&&<button className="button text small-button" disabled={busy||dirty||!JSON.parse(base).pieces?.some((x:GenericPiece)=>x.id===piece.id)} title={dirty?'먼저 기록한 뒤 옮길 수 있어요':undefined} onClick={()=>onMove(piece.id)}>다른 곳으로 옮기기</button>}</div></div>}/>
+  <button className="button secondary small-button" disabled={busy||!dirty&&!review} onClick={()=>fire(save())}>{review?'이 후보 적용':'구성물 기록'}</button>{conflict&&<button className="button text small-button" disabled={busy} onClick={()=>{setScene(incoming);setBase(JSON.stringify(incoming));setMessage('최신 기록을 열었어요');}}>초안 버리고 최신 기록</button>}{message&&<p role="status">{message}</p>}</section>;
+ }
+ function PublicBoardOverview({view,busy}:{view:SessionView;busy:boolean}){
+@@ -103,3 +112,17 @@
+  const record=value&&typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1'?value as unknown as GenericRecord:null;
+  return <details className="gb-public-overview"><summary>공용 기록</summary>{fields.length>1&&<select aria-label="공용 기록 영역" value={field.key} onChange={e=>setKey(e.target.value)}>{fields.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select>}{record?<GameBoardRecord pack={view.pack} fieldKey={field.key} record={record} busy={busy} readonly/>:<p>아직 기록한 구성물이 없어요.</p>}</details>;
+ }
++
++/** Room: other players' public records, read-only. Owner-private fields, photos and PIN state are never shown here. */
++export function RoomPublicHoldings({view,ownerId,busy}:{view:SessionView;ownerId?:string;busy:boolean}){
++ const {pack,session}=view,fields=pack.fields.filter(f=>f.scope==='player'&&(f.visibility??'public')==='public'&&runtimeBinding(pack,f.key)?.editor==='component-catalog');
++ const rows=session.players.filter(p=>p.id!==ownerId).map(p=>({player:p,records:fields.map(f=>({field:f,record:componentRecord(latestComponentAssertion(session,f.key,p.id))})).filter(r=>r.record?.pieces.length),bonus:splendorBonusSummary(session,pack,p.id)})).filter(r=>r.records.length);
++ if(!rows.length)return null;
++ return <section className="room-public-holdings" aria-label="다른 플레이어 공개 기록"><h4>{ownerId?'다른 플레이어 공개 기록':'플레이어 공개 기록'}</h4>{rows.map(({player,records,bonus})=><details key={player.id}><summary><span>{player.name}</span>{bonus&&<span className="rph-bonus" aria-label={`${bonus.label}: ${GEM_ORDER.map(g=>`${GEM_NAMES[g]} ${bonus.bonus[g]??'?'}`).join(', ')}`}>{GEM_ORDER.map(g=><span key={g}><Gem color={g} size={14}/>{bonus.bonus[g]??'?'}</span>)}</span>}<span className="small muted">{records.reduce((n,r)=>n+r.record!.pieces.length,0)}개</span></summary>
++  {records.map(({field,record})=><div key={field.key} className="rph-field"><span className="small muted">{field.label}</span><GameBoardRecord pack={pack} fieldKey={field.key} record={record!} busy={busy} readonly/></div>)}</details>)}</section>;
++}
++
++function PurchasedBonus({view,ownerId}:{view:SessionView;ownerId:string}){
++ const summary=splendorBonusSummary(view.session,view.pack,ownerId);if(!summary)return null;
++ return <section className="purchased-bonus" aria-label={summary.label}><strong>{summary.label}</strong><div className="rph-bonus" aria-label={GEM_ORDER.map(g=>`${GEM_NAMES[g]} ${summary.bonus[g]??'?'}`).join(', ')}>{GEM_ORDER.map(g=><span key={g}><Gem color={g} size={18}/>{summary.bonus[g]??'?'}</span>)}</div>{!summary.complete&&<p className="small muted">확인하지 않은 카드가 있어요.</p>}</section>;
++}
+--- a/src/PhotoCaptureGuide.tsx
++++ b/src/PhotoCaptureGuide.tsx
+@@ -11,5 +11,6 @@
+ export function PhotoCaptureGuide({pack,ownerId,areaId,onChange,disabled}:{pack:GamePack;ownerId?:string;areaId:string;onChange:(id:string)=>void;disabled?:boolean}){
+  const profile=captureProfile(pack);if(!profile)return null;
+  const areas=captureAreas(pack,ownerId),selected=areas.find(a=>a.id===areaId);
+- return <section className="panel" aria-label="게임별 촬영 안내"><h3>{pack.title} · {ownerId?'본인 사진':'공용 사진'}</h3><p>{captureGuideText(pack)}</p><label className="field">촬영할 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label>{selected&&<p>{captureGuideText(pack,selected)}</p>}<p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></section>;
++ // The current target stays visible in the summary; the picker and guidance open on demand so the board starts higher on phones.
++ return <section className="panel capture-guide" aria-label="게임별 촬영 안내"><details className="capture-guide-help"><summary>{ownerId?'본인 사진':'공용 사진'} · 찍을 부분: <b>{selected?.name??'전체'}</b></summary><label className="field capture-guide-target">찍을 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label><p>{captureGuideText(pack,selected)}</p><p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></details></section>;
+ }
+--- a/src/RoomEntry.tsx
++++ b/src/RoomEntry.tsx
+@@ -14,10 +14,11 @@
+ import {PlayerRows} from './Dialogs';
+ import {creationPlayers} from './creationPlayers';
+ import {preferredPublicBoard} from './genericDraft';
++import {RoomPublicHoldings} from './GameEssentials';
+ const COLORS=['#c65d4b','#6285aa','#d5a44d','#78967a','#997ba6','#b68a64'];
+ export function RoomPublicBoard({view}:{view:SessionView}){const [key,setKey]=useState('');const fields=view.pack.fields.filter(f=>f.scope==='public'),boards=fields.filter(f=>view.pack.runtime?.fieldBindings.some(b=>b.key===f.key&&b.editor==='component-catalog')),field=preferredPublicBoard(boards,view.session,key);const pick=pickRummikubSource(view.session.assertions.filter(a=>a.field==='table.scene'&&!a.ownerId)),source=pick.candidate??pick.accepted,scene=source?normalizeRummikubDetailed(source.value).scene:null;
+  return <section className="room-public" aria-label="공용 보드 읽기 전용"><h3>공용 보드 <span className="small muted">보기 전용</span></h3>{view.pack.id==='rummikub'?scene?<div className="rt-board" style={boardStyle(28)}><RummikubBoardView scene={scene} rack={false}/></div>:<p>방장이 공용판을 기록하면 여기에 보여요.</p>:view.pack.runtime?.support.recording==='generic'?<>{boards.length>1&&<label>공용 영역<select value={field?.key} onChange={e=>setKey(e.target.value)}>{boards.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select></label>}{field&&(()=>{const a=view.session.assertions.filter(a=>a.field===field.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<GameBoardRecord pack={view.pack} fieldKey={field.key} record={a.value as unknown as GenericRecord} readonly busy={false}/>:<p>아직 기록한 구성물이 없어요.</p>;})()}</>:<div inert className="room-readonly"><SceneWorkspace view={view} busy mutate={async()=>{throw new Error('공용판은 보기 전용이에요.');}} onEvidence={()=>{}}/></div>}
+- {fields.filter(f=>f.type!=='json').map(f=>{const a=view.session.assertions.filter(a=>a.field===f.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<p key={f.key}><strong>{f.label}</strong> · {previewValue(a.value,f,view.session.players)}</p>:null;})}{view.session.notes.public&&<p>{view.session.notes.public}</p>}</section>;
++ {fields.filter(f=>f.type!=='json').map(f=>{const a=view.session.assertions.filter(a=>a.field===f.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<p key={f.key}><strong>{f.label}</strong> · {previewValue(a.value,f,view.session.players)}</p>:null;})}{view.session.notes.public&&<p>{view.session.notes.public}</p>}<RoomPublicHoldings view={view} ownerId={view.roomAccess?.playerId} busy={false}/></section>;
+ }
+ export function RoomEntry({packs,joining,initialInvite='',onClose,onCreated}:{packs:GameCatalogEntry[];joining:boolean;initialInvite?:string;onClose:()=>void;onCreated:(v:SessionView)=>Promise<void>}){
+  const [mode,setMode]=useState<'single'|'invite'>('single');
+--- a/src/RummikubWorkspace.tsx
++++ b/src/RummikubWorkspace.tsx
+@@ -82,7 +82,7 @@
+  const zoomIndex=ZOOMS.indexOf(zoom as typeof ZOOMS[number]);
+  const baseTile=rack?42:28;
+  return <section className="rt-workspace" aria-label={rack?'내 루미큐브 받침대':'루미큐브 공용판'}>
+-  {rack&&publicScene?.recognized&&<div className="rt-overview"><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</div>}
++  {rack&&publicScene?.recognized&&<details className="rt-overview"><summary>공용판 보기</summary><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</details>}
+   <header className="rt-heading"><h3>{rack?'내 받침대':'공용판'}</h3><div className="button-row">
+    {source&&source.status!=='accepted'&&!showAccepted&&accepted&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(true)}>이전 기록 보기</button>}
+    {showAccepted&&candidate&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(false)}>새 사진 결과 보기</button>}
+--- a/src/api.ts
++++ b/src/api.ts
+@@ -1,4 +1,5 @@
+ import {upload} from '@vercel/blob/client';
++import type {ComponentLinkOptions,ComponentLinkRequest} from '../shared/componentLinking';
+ import type {AnalysisJob} from '../shared/analysisJobs';
+ import type {GameCatalogEntry} from '../shared/gameEssentials';
+ import type { AISettings, AIStatus, GamePack, Player, Session, SessionView, Stage, Value } from '../shared/types';
+@@ -61,6 +62,8 @@
+   },
+   removeEvidence: (id: string, evidenceId: string) => request<SessionView>(`/sessions/${id}/evidence/${evidenceId}`, 'DELETE'),
+   startAnalysisJob:(id:string,body:{requestId:string;evidenceIds:string[];expectedCaptureEpoch:string;scope:'public'|'owner';ownerId?:string;purpose?:'capture'|'restore';instruction?:string;captureTarget?:import('../shared/photoCapture').CaptureTarget;sameStaticState?:boolean})=>request<{job:AnalysisJob}>(`/sessions/${id}/analysis-jobs`,'POST',body),
++  componentLinkOptions:(id:string,assertionId:string,pieceIds:string[])=>request<ComponentLinkOptions>(`/sessions/${id}/component-links/${encodeURIComponent(assertionId)}?pieceIds=${pieceIds.map(encodeURIComponent).join(',')}`),
++  linkComponents:(id:string,body:ComponentLinkRequest)=>request<SessionView>(`/sessions/${id}/component-links`,'POST',body),
+   analysisJobs:(id:string,ownerId?:string)=>request<{jobs:AnalysisJob[]}>(`/sessions/${id}/analysis-jobs${ownerId?'?ownerId='+encodeURIComponent(ownerId):''}`),
+   analyze: (id: string, body: { purpose?: 'capture' | 'restore'; instruction?: string; sameStaticState?:boolean; evidenceIds?: string[]; expectedCaptureEpoch?: string }) => request<SessionView>(`/sessions/${id}/analyze`, 'POST', body),
+   accept: (id: string, assertionId: string) => request<SessionView>(`/sessions/${id}/assertions/${assertionId}/accept`, 'POST', {}),
+--- a/src/correction-workspace.css
++++ b/src/correction-workspace.css
+@@ -166,3 +166,10 @@
+   .rummikub-session .rt-overview{margin-bottom:8px;padding-bottom:8px}
+   .rummikub-session .rt-heading{margin-bottom:6px}
+ }
++
++/* Phones: the sticky bottom bar is the one save button (this beat `.button{display:inline-flex}` on load order before). */
++@media(max-width:900px){.cw-actions .cw-save-top{display:none}}
++.capture-guide{display:flex;flex-direction:column;gap:6px}
++.capture-guide-target{margin:0}
++.capture-guide-help>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++.capture-guide-help p{margin:4px 0}
+--- a/src/game-board-record.css
++++ b/src/game-board-record.css
+@@ -25,3 +25,12 @@
+ .gb-cards>button .splendor-readout{max-width:none}
+ .gb-cards>button.selected .splendor-readout{border-color:var(--accent);box-shadow:inset 0 46px 0 var(--sr-tint),0 0 0 2px var(--accent)}
+ .gb-cards>button:focus-visible{outline-offset:2px}
++
++/* Empty placement board collapses to one line; it opens as soon as a piece is placed or selected. */
++.gb-surface-empty{margin:4px 0;padding:10px 12px;border:1.5px dashed var(--line-2);border-radius:12px;font-size:13px;color:var(--muted);text-align:center}
++@media(max-width:600px){
++ /* Visible labels on the header actions (save moved to the sticky bottom bar on phones). */
++ .board-record-session .cw-actions .button>span{display:inline}
++ .board-record-session .cw-actions .button{gap:4px;font-size:13px}
++}
++@media(max-width:380px){.board-record-session .cw-actions .button{flex-direction:column;gap:2px;min-height:52px;font-size:12px}}
+--- a/src/game-essentials.css
++++ b/src/game-essentials.css
+@@ -4,3 +4,27 @@
+ .generic-candidate-cards>.splendor-readout{max-width:none}
+ .generic-older>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
+ .sr-original>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++/* Candidate actions sit on one row; link dialog and room read-only holdings. */
++.generic-candidate-actions{gap:8px}.generic-candidate-actions>.button{flex:1 1 140px}
++.cl-dialog{display:flex;flex-direction:column;gap:14px}.cl-dialog h3{font-size:16px;margin:0 0 8px}
++.cl-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.cl-head h3{margin:0}
++.cl-pieces{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
++.cl-pieces>button{position:relative;display:flex;justify-content:center;padding:0;border:0;background:transparent;border-radius:14px;min-height:44px}
++.cl-pieces>button .splendor-readout{max-width:none}
++.cl-pieces>button.selected .splendor-readout,.cl-pieces>button.selected .cl-piece{outline:3px solid var(--accent);outline-offset:1px}
++.cl-piece{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:6px;border:2px solid var(--line-2);border-radius:12px;background:var(--surface);font-size:13px}
++.cl-check{position:absolute;top:4px;right:4px;color:#fff;background:var(--accent);border-radius:50%;padding:2px}
++.cl-group{margin-bottom:8px}.cl-group-name{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
++.cl-targets{display:flex;flex-wrap:wrap;gap:6px}
++.cl-targets>button,.cl-correct-list>button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 12px;border:2px solid var(--line-2);border-radius:12px;background:var(--surface);font-size:14px;font-weight:600;color:var(--ink)}
++.cl-targets>button[aria-pressed=true],.cl-correct-list>button[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}
++.cl-correct>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++.cl-correct-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.cl-correct-form{display:flex;flex-direction:column;gap:10px}
++.cl-consent{display:flex;align-items:flex-start;gap:8px;font-size:14px;font-weight:500;color:var(--ink-2)}.cl-consent input{margin-top:2px}
++.cl-actions{display:flex;gap:8px;position:sticky;bottom:0;padding:10px 0 max(4px,env(safe-area-inset-bottom));background:var(--surface)}.cl-actions>.button{flex:1}.cl-actions>.button.primary{flex:2;white-space:normal}
++.room-public-holdings{margin:12px 0}.room-public-holdings>h4{margin-bottom:6px}
++.room-public-holdings details>summary{min-height:44px;display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;flex-wrap:wrap}
++.rph-bonus{display:inline-flex;gap:6px;font-size:13px;font-weight:700}.rph-bonus>span{display:inline-flex;align-items:center;gap:2px}
++.rph-field{margin:6px 0}
++
++.purchased-bonus{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}.purchased-bonus .rph-bonus{display:flex;gap:12px}.purchased-bonus .rph-bonus>span{display:inline-flex;align-items:center;gap:4px}
+--- a/src/lobby-theme.css
++++ b/src/lobby-theme.css
+@@ -129,3 +129,27 @@
+   .capture-start::before{top:0;left:46px}
+ }
+ @media(prefers-reduced-motion:reduce){.session-card::before,.board-event.has-photo::before,.home-games .js-ball,.home-games .js-stick,.home-head.has-photo::after,.brand-icon,.home-head-photo img,.home-head.has-photo .home-head-copy,.home-example,.home-games{animation:none}}
++
++/* Phones with saved boards: shorter stage photo, no repeated counts (the filter tabs show them), smaller example button. */
++@media(max-width:760px){
++  .home-head.has-boards .home-head-photo{height:120px}
++  .home-head.has-boards .home-head-copy{margin-top:-24px;padding:14px 16px 16px}
++  .home-head.has-boards .home-head-copy>p,.home-head.has-boards .home-stats{display:none}
++  .home-head.has-boards .home-example{width:auto;min-height:44px;margin-top:10px;padding:8px 16px;font-size:14px}
++}
++
++/* Returning mobile users can open a named board without scrolling past a full cover. */
++@media(max-width:760px){
++ .home-head.has-boards .home-head-photo{height:76px}
++ .home-head.has-boards .home-head-copy{margin-top:-18px;padding:10px 16px}
++ .home-head.has-boards .home-example{margin-top:4px}
++ .session-open{flex-direction:row;align-items:stretch;min-height:128px}
++ .session-card-image{width:92px;flex:0 0 92px;aspect-ratio:auto;border-radius:20px 0 0 20px}
++ .session-card-image img[src$=".svg"]{padding:8px}
++ .session-card-body{min-width:0;padding:12px 44px 12px 12px}
++ .session-card h3{overflow-wrap:anywhere}
++ .session-card-footer{flex-wrap:wrap;gap:8px}
++ .session-status{top:auto;bottom:6px;left:4px;display:flex;font-size:13px;margin:0;padding:4px 6px;gap:3px}
++ .session-card:has(.session-status.is-saved)::before{display:none}
++ .session-card:has(.session-open:not(:disabled)):hover{transform:none}
++}
+--- a/src/rummikub-workspace.css
++++ b/src/rummikub-workspace.css
+@@ -23,7 +23,7 @@
+ .rt-rack-row{position:relative;display:flex;justify-content:center;padding:0 6px calc(var(--rt-tile)*.5)}
+ .rt-rack-row>.rt-meld{position:relative;flex-wrap:wrap;justify-content:center;gap:2px}
+ .rt-ledge{position:absolute;left:0;right:0;bottom:0;width:100%;height:calc(var(--rt-tile)*1.3);display:block}
+-.rt-rack .rt-add-group{align-self:center;min-height:40px}
++.rt-rack .rt-add-group{align-self:center;min-height:44px}
+ .rt-aside{display:flex;align-items:center;gap:10px}.rt-aside>span{font-size:13px;color:var(--muted,#5d6b82)}
+ .rt-overview{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line,#dce2df)}
+ .rt-overview .rt-heading h3{font-size:15px}
+@@ -63,3 +63,5 @@
+ .rt-notes{margin-top:12px}.rt-notes summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:13px;color:var(--muted,#66736d)}.rt-notes label{display:block;font-size:13px}.rt-notes textarea{width:100%;min-height:72px}.rt-notes p{font-size:13px;margin:6px 0}
+ @media(max-width:600px){.rt-workspace{padding:12px}}
+ @media(prefers-reduced-motion:reduce){.rt-meld{transition:none}}
++
++.rt-overview>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600}
+--- a/src/ui.tsx
++++ b/src/ui.tsx
+@@ -1,4 +1,5 @@
+ import { useEffect, useId, useRef, type ReactNode } from 'react';
++import { createPortal } from 'react-dom';
+ import { ArrowRight, X } from 'lucide-react';
+ import type { Value } from '../shared/types';
+ import { ComponentArt } from './ComponentArt';
+@@ -29,12 +30,14 @@
+     document.addEventListener('keydown', handler);
+     return () => { document.body.style.overflow = overflow; document.removeEventListener('keydown', handler); prior?.focus(); };
+   }, []);
+-  return <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
++  const dialog = <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+     <div className={`modal ${wide ? 'modal-wide' : ''}`} ref={panel} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId}>
+       <header className="modal-header"><h2 id={titleId}>{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><X size={21}/></button></header>
+       {children}
+     </div>
+   </div>;
++  // On body: a dialog rendered inside .main-content (its own stacking context) sat under the sticky app bar.
++  return typeof document === 'undefined' ? dialog : createPortal(dialog, document.body);
+ }
+ 
+ // A player's colour as that game's own piece; games without piece art keep a plain colour chip.
+--- /dev/null
++++ b/tests/component-linking-ui.test.ts
+@@ -0,0 +1,11 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {register} from 'node:module';import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';
++import {effectiveRecognitionPack} from '../shared/recognition';import type {GamePack,SessionView} from '../shared/types';
++register('../docs/board-story/feedback/skip-css.mjs',import.meta.url);(globalThis as any).window={addEventListener(){}};
++const {GameEssentials}=await import('../src/GameEssentials');const {RoomPublicBoard}=await import('../src/RoomEntry');
++const pack=effectiveRecognitionPack(JSON.parse(readFileSync('gamepacks/generated/game-essentials.json','utf8')).find((p:GamePack)=>p.id==='splendor'));
++const piece={id:'card',componentId:'development',variant:null,quantity:1,label:'합성',anchor:'',evidenceId:null,region:null,readout:{schema:'splendor-v1',kind:'development',points:0,bonus:'blue',cost:null,requirements:null,color:null,level:1}};
++const record=(p:any=piece)=>({version:'game-component-record-v1',pieces:[p]});
++function fixture(){return {pack,session:{id:'synthetic-ui',gamePackId:pack.id,gamePackVersion:pack.version,players:[{id:'p1',name:'합성 하나',color:'#3978bd'},{id:'p2',name:'합성 둘',color:'#e56b5d'}],assertions:[{id:'holdings',field:'player.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:[],value:record(),updatedAt:'now'},{id:'private',field:'reserve.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:[],value:record({...piece,id:'secret',readout:{...piece.readout,points:9,bonus:'black'}}),updatedAt:'now'}],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[],derived:[],differences:[],ready:true,progress:{resolved:0,total:0}} as unknown as SessionView;}
++test('self purchased bonus is visible and excludes reserved card bonuses',()=>{const view=fixture();const html=renderToStaticMarkup(React.createElement(GameEssentials,{view,ownerId:'p1',busy:false,mutate:async()=>{},onEvidence(){}}));assert(html.includes('기록한 구매 카드 보너스'));assert(html.includes('파랑 1'));assert(!html.includes('검정 1'));});
++test('room member public board displays other public holdings read-only without private cards',()=>{const view=fixture();view.session.room={version:'room-v1',capacity:2,hostPlayerId:'p1',revisions:{public:0,p1:0,p2:0,roster:0}};view.roomAccess={role:'member',playerId:'p2',revisions:{public:0,p2:0,roster:0}};const html=renderToStaticMarkup(React.createElement(RoomPublicBoard,{view}));assert(html.includes('다른 플레이어 공개 기록'));assert(html.includes('합성 하나'));assert(html.includes('파랑 1'));assert(!html.includes('9점'));assert(!html.includes('다른 곳으로 옮기기'));});
++test('fully linked photo pieces are marked processed rather than presented as empty pending candidate areas',()=>{const view=fixture();view.session.assertions=view.session.assertions.filter(a=>a.field!=='reserve.scene');view.session.assertions.push({id:'photo-candidate',field:'__photo.public',status:'candidate',basis:'observation',value:record(),evidenceIds:[],updatedAt:'now'} as any);(view.session.assertions[0].value as any).pieces[0]={...piece,linkOrigin:{assertionId:'photo-candidate',pieceId:'card',field:'__photo.public'}};const html=renderToStaticMarkup(React.createElement(GameEssentials,{view,busy:false,mutate:async()=>{},onEvidence(){}}));assert(!html.includes('사진에서 찾은 후보 ·'));assert(html.includes('사진 실물 1개 연결됨'));});

@@ -1,0 +1,49 @@
+{
+  "scope": "Narrative home imagery and contextual board feedback in the actual product",
+  "workers": [
+    "구현솔: home story, game covers",
+    "구현솔2: feedback, capture guide, player indicators"
+  ],
+  "root_integration": [
+    "App initial loading uses decorative LoaderMark with one parent status message",
+    "Saved snapshot opened successfully from list or initial session URL triggers reopen event counter",
+    "Owner/PIN remount and unsaved board opening do not trigger reopen event"
+  ],
+  "verified": {
+    "npm_test": {
+      "passed": 176,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "npm_run_build": {
+      "includes": "tsc --noEmit and vite build",
+      "exit_code": 0,
+      "latest_after_final_app_hooks": true
+    },
+    "feedback_synthetic_ssr": "passed",
+    "home_and_covers_ssr": "passed",
+    "synthetic_photo_inspected": true
+  },
+  "source_review": {
+    "home_motion_groups": 3,
+    "home_duration_ms": 10000,
+    "home_repeat": false,
+    "save_and_reopen_duration_ms": 800,
+    "reduced_motion_static_rules": true,
+    "actual_evidence_image_takes_precedence_over_cover": true,
+    "save_effect_only_after_successful_flush_and_commit": true
+  },
+  "unverified": [
+    "390/1440 rendered layout, overflow and tap targets",
+    "Actual browser save/reopen clicks and animation timing",
+    "Reduced motion playback on device"
+  ],
+  "browser_blocker": "CUA returned no browsers/apps and native pipe startup failed in supervisor and worker sessions",
+  "preview": "http://127.0.0.1:4392",
+  "production_deployed": false,
+  "limits": [
+    "Synthetic photo is a staged illustration, not a verified scan-recognition result",
+    "CSS and SSR checks do not establish rendered browser behavior",
+    "Existing backend, private data and game-art originals were not changed by this task"
+  ]
+}

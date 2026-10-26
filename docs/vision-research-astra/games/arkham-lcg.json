@@ -1,0 +1,1129 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "arkham-lcg",
+  "name_ko": "아컴호러 카드게임",
+  "name_en": "Arkham Horror: The Card Game",
+  "edition": {
+    "id": "base",
+    "name": "2026 Chapter Two 기본판 AHC100",
+    "compatibility_notes": [
+      "기존 연구 AHC60 2021판은 별도 프로필;기본 상자 밖 카드 무한 지원 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "arkham-lcg.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/arkham-lcg.json",
+    "sha256": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+    "runtime_pack_id": "arkham-lcg",
+    "runtime_pack_version": "1.0.0-essentials-2.df44ab4683ab",
+    "runtime_match": false
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [
+      {
+        "source": "arkham-lcg.current-rulebook",
+        "section": "Types of Actions > Play",
+        "scope": "asset in public investigator play area versus owner hand and event discard"
+      },
+      {
+        "source": "arkham-lcg.current-reference",
+        "section": "Discard Piles",
+        "scope": "face-up open-information player discard, order retained"
+      }
+    ],
+    "inherited_evidence_ids": [
+      "arkham-lcg::arkham-lcg.primary",
+      "arkham-lcg::arkham-lcg.art-confirmation.arkham-lcg-2026-rules",
+      "arkham-lcg::arkham-lcg.essentials.rules",
+      "arkham-lcg::essentials.storage-guidance",
+      "inherited::arkham-lcg.art-confirmation.arkham-lcg-2026-rules",
+      "inherited::arkham-lcg.essentials.rules"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": true
+  },
+  "capture_focus": "장소 연결 아이콘과 조사자 자산·교전 근접",
+  "critical_resume_distinction": "위치 인접과 교전/부착, 소진·피해·공포·사용량 분리; 2026 AHC100 판본 고정",
+  "partitions": {
+    "common_public": [
+      "map"
+    ],
+    "player_public": [
+      "play",
+      "discard"
+    ],
+    "owner_private": [
+      "hand"
+    ],
+    "do_not_infer": [
+      "hidden"
+    ]
+  },
+  "areas": [
+    {
+      "id": "map",
+      "name": "장소 연결",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "locations",
+        "investigators",
+        "tokens"
+      ],
+      "anchor_contract": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지.",
+      "description": "장소 연결의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "map.scene"
+      ],
+      "current_manual_target_fields": [
+        "map.scene"
+      ],
+      "source_field_ids": [
+        "map.scene"
+      ],
+      "allowed_component_ids": [
+        "locations",
+        "investigators",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "장소 연결 전체 경계를 먼저 기록. 장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "play",
+      "name": "조사자 플레이 영역",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "investigators",
+        "tokens",
+        "decks"
+      ],
+      "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
+      "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "play.scene"
+      ],
+      "source_field_ids": [
+        "play.scene"
+      ],
+      "allowed_component_ids": [
+        "investigators",
+        "tokens",
+        "decks"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "조사자 플레이 영역 전체 경계를 먼저 기록. 자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "hand",
+      "name": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "decks"
+      ],
+      "anchor_contract": "미공개 카드와 선택 중 카드를 분리.",
+      "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "hand.scene"
+      ],
+      "current_manual_target_fields": [
+        "hand.scene"
+      ],
+      "source_field_ids": [
+        "hand.scene"
+      ],
+      "allowed_component_ids": [
+        "decks"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 손패 전체 경계를 먼저 기록. 미공개 카드와 선택 중 카드를 분리. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "미공개 카드와 선택 중 카드를 분리.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "hidden",
+      "name": "조우·플레이어 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "decks",
+        "locations"
+      ],
+      "anchor_contract": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+      "description": "조우·플레이어 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "hidden.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "discard",
+      "name": "각 조사자의 공개 버림더미",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "decks"
+      ],
+      "anchor_contract": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+      "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "arkham-lcg.current-reference"
+      ],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "discard.scene"
+      ],
+      "allowed_component_ids": [
+        "decks"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
+      "capture_access": "public evidence; explicit owner binding for player areas",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "accepted values and original photo retained; unknown remains unknown",
+        "render_basis": "manual record surface until regenerated runtime pack"
+      },
+      "official_rule_status": "SCOPED_SOURCE_REVIEW; pending regenerated runtime pack"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "locations",
+      "name": "장소·막·주요사건",
+      "kind": "card",
+      "identity_description": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "arkham-lcg::arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "revealedFace",
+          "type": "text",
+          "label": "공개·비공개 면",
+          "acquisition": "visible",
+          "sourceText": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "locationName",
+          "type": "text",
+          "label": "공개된 장소명",
+          "acquisition": "visible",
+          "sourceText": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "connection",
+          "type": "text",
+          "label": "실제 연결 관계",
+          "acquisition": "manual",
+          "sourceText": "2026 코어의 장소는 공개/미공개 양면이며 연결 토큰으로 인접을 나타낸다. 막과 주요사건은 서로 다른 진행 덱이다. 뒷면을 일반 카드 뒷면으로 바꾸지 않고 해당 상태를 별도로 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "revealedFace",
+        "locationName",
+        "connection"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "revealedFace",
+        "locationName"
+      ],
+      "manual_attribute_keys": [
+        "connection"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "investigators",
+      "name": "조사자·자산·적",
+      "kind": "card",
+      "identity_description": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "arkham-lcg::arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "investigator",
+          "type": "text",
+          "label": "조사자 표기",
+          "acquisition": "visible",
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "healthMarks",
+          "type": "integer",
+          "label": "피해 표식",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "horrorMarks",
+          "type": "integer",
+          "label": "공포 표식",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "exhaustion",
+          "type": "text",
+          "label": "준비·소진 상태",
+          "acquisition": "manual",
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "cardType",
+          "type": "text",
+          "label": "자산·적·이벤트 유형",
+          "acquisition": "visible",
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "attachedTarget",
+          "type": "text",
+          "label": "부착 대상",
+          "acquisition": "manual",
+          "sourceText": "조사자 카드·미니카드·양면 조사자 토큰과 자산·적 카드는 별개다. 위치·교전/부착 관계와 준비/소진 방향을 기록한다. 전체 카드 앞면 목록은 확인 범위가 아니다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "investigator",
+        "healthMarks",
+        "horrorMarks",
+        "exhaustion",
+        "cardType",
+        "attachedTarget"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "investigator",
+        "healthMarks",
+        "horrorMarks",
+        "cardType"
+      ],
+      "manual_attribute_keys": [
+        "exhaustion",
+        "attachedTarget"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "tokens",
+      "name": "단서·파멸·자원·피해·공포",
+      "kind": "token",
+      "identity_description": "단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "arkham-lcg::arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "tokenType",
+          "type": "text",
+          "label": "단서·파멸·자원·피해·공포",
+          "acquisition": "visible",
+          "sourceText": "단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "nominalValue",
+          "type": "integer",
+          "label": "액면",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "target",
+          "type": "text",
+          "label": "놓인 대상",
+          "acquisition": "manual",
+          "sourceText": "단서/파멸은 양면 토큰이며 자원·피해·공포는 다른 종류다. 표시값과 놓인 대상 카드를 함께 보존한다. 단서/파멸 1·3, 자원1·3·5, 피해/공포1·3 표기가 있다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "tokenType",
+        "nominalValue",
+        "target"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "tokenType",
+        "nominalValue"
+      ],
+      "manual_attribute_keys": [
+        "target"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "decks",
+      "name": "플레이어·조우·혼돈",
+      "kind": "card",
+      "identity_description": "플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "arkham-lcg::arkham-lcg.art-confirmation.arkham-lcg-2026-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "deckRole",
+          "type": "text",
+          "label": "개인·조우·버림·혼돈 주머니",
+          "acquisition": "manual",
+          "sourceText": "플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "boundary",
+          "type": "text",
+          "label": "묶음 경계·윗면",
+          "acquisition": "manual",
+          "sourceText": "플레이어 덱·조우 덱·버림과 혼돈 주머니는 서로 다르다. 혼돈 표식은 카드가 아닌 토큰이다. 막/주요사건과 덱의 순서 및 비공개 정체를 외형으로 추정하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "deckRole",
+        "boundary"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName"
+      ],
+      "manual_attribute_keys": [
+        "deckRole",
+        "boundary"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "map.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "hand.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "hidden.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "chapter",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "phase",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.phase",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "values",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.values",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "campaign-log",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.campaign-log",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "test",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.test",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "lead-investigator",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "chaos-bag",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.chaos-bag",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "scenario-progress",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.scenario-progress",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "chapter",
+      "label": "캠페인·판본",
+      "scope": "public",
+      "visibility": "public",
+      "description": "2026 Chapter Two와 캠페인 ID; 2016/2021 코어 자동 대체 금지."
+    },
+    {
+      "id": "phase",
+      "label": "라운드·행동",
+      "scope": "public",
+      "visibility": "public",
+      "description": "단계와 조사자별 남은 행동/턴 완료 여부."
+    },
+    {
+      "id": "values",
+      "label": "조사자 수치",
+      "scope": "player",
+      "visibility": "public",
+      "description": "체력/정신력 피해, 단서·자원과 지속 효과."
+    },
+    {
+      "id": "campaign-log",
+      "label": "캠페인 기록",
+      "scope": "public",
+      "visibility": "public",
+      "description": "해금/선택/트라우마·경험 등 공개한 기록만 보존."
+    },
+    {
+      "id": "test",
+      "label": "진행 중 테스트",
+      "scope": "public",
+      "visibility": "public",
+      "description": "시도한 행동·대상·공개한 토큰과 아직 해결 전 단계."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "행동/기능 테스트/적 처리/막 진행 중 이미 해결한 부분과 남은 선택. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    },
+    {
+      "id": "lead-investigator",
+      "label": "선임 조사자",
+      "scope": "public",
+      "visibility": "public",
+      "description": "선임 조사자 ID와 플레이어 순서. 현재 행동 조사자와 구별한다."
+    },
+    {
+      "id": "chaos-bag",
+      "label": "혼돈 주머니 구성·실물 보존",
+      "scope": "public",
+      "visibility": "public",
+      "description": "시나리오/캠페인에 적용 중인 난이도와 확인된 토큰 다중집합 또는 봉인 묶음 참조. 이미 뽑아 해결 중인 토큰은 test에 따로 기록. 모르는 구성은 열거나 수량을 가정하지 않는다."
+    },
+    {
+      "id": "scenario-progress",
+      "label": "막·의제·파멸 진행",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 공개 막/의제 카드 ID·면·놓인 단서와 파멸, 다른 카드 위 파멸의 부착 대상, 진행 처리 여부를 기록. 미공개 다음 면은 읽지 않는다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "조우 덱·혼돈 주머니에서 다음에 뽑을 것, 시나리오 뒤쪽 이야기",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "미공개 카드와 선택 중 카드를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hidden.preserve",
+        "label": "조우·플레이어 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "hidden.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "map.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "play.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "chaos-bag.essentials-preserve",
+        "label": "혼돈 주머니 봉인 보존(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "chaos-bag"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "사용 중인 혼돈 주머니를 다른 토큰 공급/제외분과 섞지 않고 주머니째 봉인한다.",
+          "주머니 ID·봉인 여부·보관 위치와 확인한 난이도/캠페인 참조만 기록한다. 구성 미상이어도 열어 확인하지 않고 그대로 저장 가능.",
+          "이미 뽑아 해결 중인 토큰은 test의 참조와 별개로 구분하고 재개로 다시 뽑거나 주머니 구성을 초기화하지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "arkham-lcg.essentials.rules",
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "게임 전체 카드 수집은 하지 않는다. 캠페인/조우 세트 의존성과 덱 목록을 참조 ID로 연결하고 새 코어/구 코어 대체표는 별도 검증.",
+    "2026 AHC100 공식 규칙 PDF는 확보했고 선임 조사자/혼돈 주머니/막·의제·파멸의 인용 절을 확인했다. 그 밖의 시나리오별 배치·공개성·카드별 타이밍의 완전 대조와 최신 Grimoire 대조는 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    },
+    {
+      "id": "GRAPH-RELATION",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "평면xy는 연결/방향/가림을 자동 표현하지 않는다. 원본의 변/방/노선ID와 수동 메모를 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "arkham-lcg",
+    "edition": "2026 Chapter Two 기본판 AHC100",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 0,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "partial",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "311fa2d676f31bb1da65a283dbed845d6efa3d09c13dfb21df770c3f4ba2bf0f",
+        "a1d02dc5e087f8873ffa7f03e18a744ce08b17d85c69ca4c7c9b81bf2178fcd0"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "장소 연결 아이콘과 조사자 자산·교전 근접",
+    "closeups": [
+      {
+        "area_id": "map",
+        "name": "장소 연결",
+        "needs": "장소 ID와 연결 아이콘, 조사자/적의 장소 및 교전 대상. 거리만으로 연결 추정 금지.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "play",
+        "name": "조사자 플레이 영역",
+        "needs": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "hand",
+        "name": "개인 손패",
+        "needs": "미공개 카드와 선택 중 카드를 분리.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "hidden",
+        "name": "조우·플레이어 덱",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "arkham-lcg",
+    "editionId": "base",
+    "sourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+    "status": "source-pending",
+    "areas": [
+      {
+        "areaId": "map",
+        "label": "장소 연결",
+        "fieldKeys": [
+          "map.scene"
+        ],
+        "componentIds": [
+          "locations",
+          "investigators",
+          "tokens"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "template": "free-table",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "play",
+        "label": "조사자 플레이 영역",
+        "fieldKeys": [
+          "play.scene"
+        ],
+        "componentIds": [
+          "investigators",
+          "tokens"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "hand",
+        "label": "개인 손패",
+        "fieldKeys": [
+          "hand.scene"
+        ],
+        "componentIds": [
+          "decks"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "hidden",
+        "label": "조우·플레이어 덱",
+        "fieldKeys": [
+          "hidden.scene"
+        ],
+        "componentIds": [
+          "decks",
+          "locations"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 18,
+    "board_instance_count": 3,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

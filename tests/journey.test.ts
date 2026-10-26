@@ -1,3 +1,4 @@
+import {catanPack} from '../gamepacks/catan.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -22,7 +23,7 @@ test('Catan example can answer, preserve, save, reload, export/import and resume
     return result;
   };
   try {
-    let view: SessionView = await call('/api/sessions', 'POST', { name: '카탄 흐름 확인', example: true });
+    let view: SessionView = await call('/api/sessions', 'POST', { name: '카탄 흐름 확인', gamePackVersion: catanPack.version, example: true });
     const route = `/api/sessions/${view.session.id}`;
     const turn = view.session.turnInstanceId;
     const epoch = view.session.captureEpoch;

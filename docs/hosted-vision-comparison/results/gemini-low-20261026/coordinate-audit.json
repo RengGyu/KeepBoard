@@ -1,0 +1,60 @@
+{
+  "status": "VERIFIED_COORDINATE_LINEAGE_NO_AXIS_SWAP",
+  "inputDimensions": {
+    "width": 850,
+    "height": 637
+  },
+  "inputAndGTSourceSHAEqual": true,
+  "GT_SHA256": "61ee4343effc494d988a5098ba19f49431fa0e0f678fa2fb82439987cb0c48f6",
+  "requestConvention": "x1,y1,x2,y2,x3,y3,x4,y4 normalized 0..1000 relative TARGET",
+  "parserConvention": "quad even indices=x/1000, odd=y/1000; no reorder/rotation; pixel x=normalized x*850,y=normalized y*637",
+  "selectedExamples": [
+    {
+      "rawIndex": 18,
+      "literal": "6.",
+      "rawQuad1000": [
+        204,
+        420,
+        219,
+        434,
+        212,
+        442,
+        198,
+        429
+      ],
+      "normalizedExactlyRawDiv1000": true,
+      "pixelBBox": {
+        "x": 168.3,
+        "y": 267.54,
+        "width": 17.85,
+        "height": 14.014
+      },
+      "visualCheck": "Box lies in sea/board edge, not printed numeral token; localization error already in model raw"
+    },
+    {
+      "rawIndex": 19,
+      "literal": "12",
+      "rawQuad1000": [
+        663,
+        422,
+        687,
+        440,
+        679,
+        452,
+        656,
+        434
+      ],
+      "normalizedExactlyRawDiv1000": true,
+      "pixelBBox": {
+        "x": 557.6,
+        "y": 268.814,
+        "width": 26.35,
+        "height": 19.11
+      },
+      "visualCheck": "Box is far from visible sole 12 token at approximately367,430; localization error already in model raw"
+    }
+  ],
+  "conclusion": "Frozen tile center mismatch can affect marginal matching, but does not explain these distant boxes. These two errors originate in model output coordinates, not normalization axis/order. No GT/value rematching performed.",
+  "scoreUnchanged": true,
+  "additionalCalls": 0
+}

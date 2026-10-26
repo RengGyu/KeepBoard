@@ -1,0 +1,727 @@
+{
+  "status": "SCOPED_DEVELOPMENT_COMPARISON_COMPLETED",
+  "experiment": "game-vision-20261026-v1",
+  "attemptsUsed": 4,
+  "attemptCap": 6,
+  "remainingUnspent": 2,
+  "automaticRetries": 0,
+  "successfulInferenceRequests": 3,
+  "failedSchemaRequest": 1,
+  "sourceSHA256": "82a495688f1130cbab488b4f30a736c915e32bb8059d4a393042c5456f929e22",
+  "GT": {
+    "version": "game-literal-gt-v2",
+    "SHA256": "9ea4c49f2c752cc688259611a7b57e304bdb2bb9edaa07ea64de5b6b7176ff84",
+    "contractSHA256": "9cad28fe007851911e4e838a30e8df180b1f6428d5b3f07c3d71846b9638e1ab",
+    "counts": {
+      "localizableObjects": {
+        "terrain": 19,
+        "number-token": 18,
+        "robber": 1
+      },
+      "legibleTerrainLabels": 19,
+      "legiblePrintedTokenValues": 18,
+      "legibleRobberKinds": 1,
+      "unknownValues": 0,
+      "preciseSegmentationMasks": 0
+    },
+    "notInPayload": true,
+    "approximateEnvelopesNotSegmentationMasks": true,
+    "independentHoldout": false
+  },
+  "evaluationPolicy": {
+    "centerError": "Euclidean pixels between physical bbox centers",
+    "matching": "geometry-only reciprocal unique maximum IoU without kind filtering; ties ambiguous; kind and attributes scored after matching",
+    "minimumIoU": 0.25,
+    "notServicePassThreshold": true,
+    "version": "physical-iou-v1"
+  },
+  "conditions": [
+    {
+      "id": "D1",
+      "provider": "gemini",
+      "context": false,
+      "httpStatus": 200,
+      "completion": [
+        "STOP"
+      ],
+      "resolvedModel": "gemini-3.8-flash",
+      "documentedDeepSeekRevision": null,
+      "backendRevisionExposed": false,
+      "observationCount": 38,
+      "wallMs": 13594.39520793967,
+      "usageAndCost": {
+        "billedCredits": null,
+        "billedUSD": null,
+        "estimateBasis": "2026-10-26 standard paid list rates USD0.75/M input,3.75/M output incl thinking; account tier/cache/actual invoice not known",
+        "estimatedCredits": null,
+        "estimatedUSD": 0.007014,
+        "providerUsage": {
+          "candidatesTokenCount": 1617,
+          "promptTokenCount": 1267,
+          "totalTokenCount": 2884
+        },
+        "wallMs": 0
+      },
+      "score": {
+        "counts": {
+          "ambiguous": 0,
+          "correct": 38,
+          "missing": 0,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "denominator": 38,
+        "perKind": {
+          "terrain": {
+            "denominator": 19,
+            "correct": 19,
+            "wrong": 0,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.7007803475510213,
+              0.7304808136004853,
+              0.6927869565217388,
+              0.7464407142069874,
+              0.6901751622653208,
+              0.7147446440559818,
+              0.8132049127640035,
+              0.8738033236761344,
+              0.8102789554579026,
+              0.8593730195714352,
+              0.7204109433962259,
+              0.8018181818181817,
+              0.9217317300592788,
+              0.8576041216141501,
+              0.7936351561458014,
+              0.8068584905660375,
+              0.9048697076894429,
+              0.8521340711462447,
+              0.861437459640221
+            ],
+            "centerErrorsPx": [
+              7.979137312391605,
+              2.052310222651536,
+              5.997415610077409,
+              4.344699759477046,
+              5.091214221578226,
+              10.129147607276733,
+              3.4800711558817223,
+              4.213556811056391,
+              2.6300922512337888,
+              5.135330588190012,
+              4.931764491538488,
+              3.6204441716452243,
+              1.6417289666689847,
+              2.680937522584215,
+              3.462766560136502,
+              5.092185090901497,
+              0.2650853636095568,
+              3.259988343537394,
+              1.0014301024035577
+            ],
+            "meanIoU": 0.7975036164077155,
+            "meanCenterErrorPx": 4.053121376465257
+          },
+          "number-token": {
+            "denominator": 18,
+            "correct": 18,
+            "wrong": 0,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.7419803278688515,
+              0.8486400000000014,
+              0.7855176164114631,
+              0.8883164062500007,
+              0.8186828125000005,
+              0.7330400000000001,
+              0.8304369230769234,
+              0.8799105160826093,
+              0.8272179386184157,
+              0.8247473684210531,
+              0.7586050796582782,
+              0.878642424242425,
+              0.8900547945205508,
+              0.8460156250000028,
+              0.9245672574213588,
+              0.8991248354619541,
+              0.8150095952492604,
+              0.8545407073740436
+            ],
+            "centerErrorsPx": [
+              0.3859222719667676,
+              0.8899999999999985,
+              2.163013002734856,
+              0.8172914106975583,
+              0.3027214065770795,
+              1.2968615963162606,
+              0.3621449985849127,
+              1.2262091991173385,
+              1.7618967762045499,
+              1.1429611760685432,
+              1.1350247794651736,
+              0.7012481729031245,
+              0.7527921359844036,
+              0.9309415932270282,
+              0.7419105404292244,
+              1.0311008680046514,
+              1.2596229594605672,
+              1.132265538643722
+            ],
+            "meanIoU": 0.8358361237865107,
+            "meanCenterErrorPx": 1.0018849125769866
+          },
+          "robber": {
+            "denominator": 1,
+            "correct": 1,
+            "wrong": 0,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.8931905384531413
+            ],
+            "centerErrorsPx": [
+              0.6804999999999889
+            ],
+            "meanIoU": 0.8931905384531413,
+            "meanCenterErrorPx": 0.6804999999999889
+          }
+        },
+        "unmatchedObservations": 0,
+        "unlocalized": 0
+      },
+      "projectionAudit": {
+        "rawToNormalizedCount": 38,
+        "projectedCount": 38,
+        "attributesAndSourceRegionUnchanged": true,
+        "noProductIntegrationClaim": true
+      },
+      "privateResultRoot": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3",
+      "rawSHA256": "db85d5d188ed6fbc82cfa6b723abf67aab9dccae325048864b8b069290e31699"
+    },
+    {
+      "id": "D2",
+      "provider": "gemini",
+      "context": true,
+      "httpStatus": 200,
+      "completion": [
+        "STOP"
+      ],
+      "resolvedModel": "gemini-3.8-flash",
+      "documentedDeepSeekRevision": null,
+      "backendRevisionExposed": false,
+      "observationCount": 38,
+      "wallMs": 18976.691666059196,
+      "usageAndCost": {
+        "billedCredits": null,
+        "billedUSD": null,
+        "estimateBasis": "2026-10-26 standard paid list rates USD0.75/M input,3.75/M output incl thinking; account tier/cache/actual invoice not known",
+        "estimatedCredits": null,
+        "estimatedUSD": 0.01161825,
+        "providerUsage": {
+          "candidatesTokenCount": 2645,
+          "promptTokenCount": 2266,
+          "totalTokenCount": 4911
+        },
+        "wallMs": 0
+      },
+      "score": {
+        "counts": {
+          "ambiguous": 0,
+          "correct": 36,
+          "missing": 0,
+          "unknown": 0,
+          "wrong": 2
+        },
+        "denominator": 38,
+        "perKind": {
+          "terrain": {
+            "denominator": 19,
+            "correct": 18,
+            "wrong": 1,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.7546341463414632,
+              0.6870859137826348,
+              0.7289396739130434,
+              0.7787697366641602,
+              0.6627254502547039,
+              0.7375183291978374,
+              0.8102314625562747,
+              0.849130846329992,
+              0.830052787424669,
+              0.8790627881026842,
+              0.7947476415094334,
+              0.8561079545454545,
+              0.8750374786405918,
+              0.8149346290768369,
+              0.7772893911340958,
+              0.7818396226415091,
+              0.8575898622230496,
+              0.7555928853754937,
+              0.7883866639760143
+            ],
+            "centerErrorsPx": [
+              3.475814149231792,
+              2.805879051206599,
+              6.140103337892636,
+              7.904294228455817,
+              8.665495960993844,
+              8.189821808195816,
+              5.071206094214681,
+              5.050633623615923,
+              3.5034683172536267,
+              3.023311967032174,
+              4.172386037988306,
+              1.6906523149364692,
+              0.4163964457100784,
+              5.1218939124116964,
+              3.3961542956702657,
+              2.9333724618602077,
+              4.226015528840345,
+              3.700968150362829,
+              3.2872925409826013
+            ],
+            "meanIoU": 0.7905093296678917,
+            "meanCenterErrorPx": 4.356587380360827
+          },
+          "number-token": {
+            "denominator": 18,
+            "correct": 17,
+            "wrong": 1,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.8868983606557365,
+              0.7961730318337064,
+              0.8205332760578103,
+              0.8883164062500007,
+              0.8655390625000006,
+              0.7558703703703704,
+              0.8606509108175101,
+              0.8415799164753976,
+              0.8272179386184157,
+              0.8683315789473691,
+              0.7791079196490422,
+              0.8632954133586839,
+              0.8860481086057126,
+              0.8648159722222252,
+              0.8615809840899717,
+              0.9064626262137121,
+              0.7958551587408812,
+              0.9105465465465498
+            ],
+            "centerErrorsPx": [
+              0.38592227196676593,
+              2.192623371671479,
+              1.8490284611114156,
+              0.8172914106975583,
+              1.0138584713854206,
+              1.178875417506058,
+              1.231771488548119,
+              1.5599311683532644,
+              1.7618967762045499,
+              0.4539977973514641,
+              1.0920880230091332,
+              1.7102891568387022,
+              0.9944069840864489,
+              0.25355275585168546,
+              1.6463733628797443,
+              1.3970042949110637,
+              2.033109748636366,
+              0.9431192925606714
+            ],
+            "meanIoU": 0.8488235323307276,
+            "meanCenterErrorPx": 1.2508411251983282
+          },
+          "robber": {
+            "denominator": 1,
+            "correct": 1,
+            "wrong": 0,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.8822374344099561
+            ],
+            "centerErrorsPx": [
+              0.9120000000000126
+            ],
+            "meanIoU": 0.8822374344099561,
+            "meanCenterErrorPx": 0.9120000000000126
+          }
+        },
+        "unmatchedObservations": 0,
+        "unlocalized": 0
+      },
+      "projectionAudit": {
+        "rawToNormalizedCount": 38,
+        "projectedCount": 38,
+        "attributesAndSourceRegionUnchanged": true,
+        "noProductIntegrationClaim": true
+      },
+      "privateResultRoot": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3",
+      "rawSHA256": "11082c095ff40dca90192853275affca6a62d67b79a6b59120e5fb61008fdcae"
+    },
+    {
+      "id": "D3",
+      "provider": "deepseek",
+      "context": true,
+      "httpStatus": 200,
+      "completion": "completed",
+      "resolvedModel": "deepseek-flash",
+      "documentedDeepSeekRevision": "DeepSeek-V4.1-Flash-1017",
+      "backendRevisionExposed": false,
+      "observationCount": 38,
+      "wallMs": 89275.45175002888,
+      "usageAndCost": {
+        "billedUSD": null,
+        "estimateBasis": "Peak cache-miss list rate0.3/M input,1.2/M output; may overestimate offpeak/cache hits; actual bill UNKNOWN",
+        "estimatedUSD": 0.021141899999999998,
+        "providerUsage": {
+          "input_tokens": 1741,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 17183,
+          "output_tokens_details": {
+            "reasoning_tokens": 15973
+          },
+          "total_tokens": 18924
+        }
+      },
+      "score": {
+        "counts": {
+          "ambiguous": 0,
+          "correct": 23,
+          "missing": 5,
+          "unknown": 0,
+          "wrong": 10
+        },
+        "denominator": 38,
+        "perKind": {
+          "terrain": {
+            "denominator": 19,
+            "correct": 14,
+            "wrong": 5,
+            "unknown": 0,
+            "missing": 0,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.7522237281096991,
+              0.6519068607519171,
+              0.6356945837737534,
+              0.7865580645999415,
+              0.6835525159429645,
+              0.6509201905521734,
+              0.6022783093096827,
+              0.44063154833547075,
+              0.661769548704615,
+              0.6492224530986604,
+              0.5079774231757034,
+              0.4632983588669442,
+              0.792683944764994,
+              0.8303481859633138,
+              0.766117809885865,
+              0.6693354836696557,
+              0.5996188909016725,
+              0.6306099604743086,
+              0.3844965328963475
+            ],
+            "centerErrorsPx": [
+              9.37015193313322,
+              12.042206909449776,
+              15.38733752960533,
+              8.491015604743646,
+              13.039982707043787,
+              16.881653384665846,
+              20.074866724339707,
+              32.26442897759084,
+              14.941419017282122,
+              15.208122903567046,
+              25.330147675250597,
+              33.73100585885331,
+              8.780642359759328,
+              5.7339233732236075,
+              9.412565072816198,
+              16.058973348256092,
+              12.258361034412383,
+              6.098289944730389,
+              40.33516303735489
+            ],
+            "meanIoU": 0.639960231251457,
+            "meanCenterErrorPx": 16.6021188103199
+          },
+          "number-token": {
+            "denominator": 18,
+            "correct": 9,
+            "wrong": 5,
+            "unknown": 0,
+            "missing": 4,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [
+              0.5585099425607366,
+              0.3893781481005333,
+              0.41892742462083193,
+              0.28229693162698294,
+              0.4199514644821007,
+              0.3360518034226942,
+              0.3137226560318522,
+              0.4117692753270215,
+              0.5501439469825821,
+              0.35838370008817566,
+              0.7111159271343241,
+              0.5380461766593333,
+              0.8573292717780001,
+              0.5850546213330047
+            ],
+            "centerErrorsPx": [
+              6.556838434032085,
+              11.252231823065168,
+              10.496693955717666,
+              16.227483507925694,
+              9.949975678362193,
+              14.141300514804223,
+              16.03852614799753,
+              12.876360209702167,
+              8.607507203017635,
+              15.360431764764908,
+              4.603645186154066,
+              8.916233790115639,
+              1.8444186753554888,
+              7.61078839542931
+            ],
+            "meanIoU": 0.4807629492962981,
+            "meanCenterErrorPx": 10.320173949031698
+          },
+          "robber": {
+            "denominator": 1,
+            "correct": 0,
+            "wrong": 0,
+            "unknown": 0,
+            "missing": 1,
+            "ambiguous": 0,
+            "kindWrong": 0,
+            "IoUs": [],
+            "centerErrorsPx": [],
+            "meanIoU": null,
+            "meanCenterErrorPx": null
+          }
+        },
+        "unmatchedObservations": 5,
+        "unlocalized": 0
+      },
+      "projectionAudit": {
+        "rawToNormalizedCount": 38,
+        "projectedCount": 38,
+        "attributesAndSourceRegionUnchanged": true,
+        "noProductIntegrationClaim": true
+      },
+      "privateResultRoot": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run",
+      "rawSHA256": "8039aeb30d4051023450c48516cd2c201811fef7547c4c85b67290ed1819cf59"
+    }
+  ],
+  "schemaCompatibilityRecovery": {
+    "originalAttempt": 3,
+    "httpStatus": 400,
+    "errorType": "invalid_request_error",
+    "sanitizedMessage": "Invalid json schema: field type: unknown variant array, expected one of string, number, integer, boolean, null",
+    "originalRawSHA256": "5e2eb1a4e0b80b0f7ffcf18373c1800b2d87409bac45b23a3a8066fe7fdcb92c",
+    "cause": "nullable array type:[array,null] rejected by DeepSeek native schema parser",
+    "repair": "only DeepSeek box schema representation changed to anyOf(array,null), same semantics/client validator",
+    "explicitRecoveryAttempt": 4,
+    "automaticRetry": false,
+    "GeminiBodiesUnchanged": true,
+    "sourceMeasuredSHA256": "a4c01fa1847978005aaa1d4b5b5a77a03658b616f39aafea3928ac19502475d4",
+    "sourceRecoverySHA256": "46f9230db1d53d94b32f01c87b3eb78d983830b6ebe63392c4b803298271c400"
+  },
+  "environmentRepair": {
+    "preSendLocalGuardStopped": true,
+    "modelAttemptsConsumed": 0,
+    "cause": "prepare created experiment parent0755 via nested mkdir",
+    "repair": "owned fresh experiment only0700; keys untouched; source unchanged during initial measurement",
+    "reusablePrepareFix": "create experiment0700 before nested out; offline regression passed",
+    "rejectedCommand": "one recovery tool command with CA path typo was rejected before execution; correct pre-existing CA bundle used, no additional model attempt"
+  },
+  "estimatedSuccessfulRequestsUSD": 0.03977415,
+  "actualBilledUSD": null,
+  "failedRequestBilling": "UNKNOWN, not asserted free",
+  "priceBasis": "Gemini standard paid list .75/M input,3.75/M output; DeepSeek peak cache-miss .3/M input,1.2/M output; actual tier/offpeak/cache/invoice may differ",
+  "notRun": {
+    "D4": "no source-bound independently confirmed frame supplied; no frame inferred from GT",
+    "holdouts": "no newly authorized independent photo/GT",
+    "productDefaultSwitch": "not performed",
+    "hostedProductJobIdentity": "not implemented; only source-bound offline field projection tested"
+  },
+  "interpretation": [
+    "D1 matched all38 selected physical targets with correct visible attributes in this single development photo",
+    "D2 context did not improve this sample: one fields->pasture and one4->2 error; cannot infer general context harm from one draw",
+    "D3 recovered native schema successfully but has10 matched attribute errors and5 localization nonmatches",
+    "No whole-board/building/road/harbor/private-state accuracy claim",
+    "Same semantic task/context between D2/D3; API/internal image tokenization/reasoning effort not identical",
+    "Approximate GT boundaries/foreground occlusion limit geometric precision; .25 is evaluation matching policy, not product pass threshold"
+  ],
+  "artifacts": [
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/attempt-1.json",
+      "sha256": "8e78c127fd498f3ec5f808bd7effc1ea57b7f943f4fcc8db249b0f475bfdd9b1",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/attempt-2.json",
+      "sha256": "f61713cca8ccd5b4dfea1ed3ee6e96548c8d0a9ffb6678dea7e770ed02d7470c",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/attempt-3.json",
+      "sha256": "d41c15336b0f990affab09a0a78fbe5834092cc05072089c9e05548f60e17024",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/attempt-4.json",
+      "sha256": "fe2213f9b5168b925857927ba8f4facbcaac97d97ca2f086a557d031fd0173d3",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D1.attempt.json",
+      "sha256": "76981f4c36f923230f4f9a9bcd06cc7e381926f7e08a11e95d74f5f09b1355e2",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D1.evaluation.json",
+      "sha256": "e112d0088484ef9ec4d02d912dfc4998fe3813945079c79d5dd3e1feafaca09a",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D1.literal-projection.json",
+      "sha256": "f74cb1857893eea28166862ddc8dcd9df151293acc29347c75c8dfba4f47e118",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D1.observations.json",
+      "sha256": "9d19a1596b9c14c46aeb5dcfca4448fc5b9e69bfef94881d7ae9c393ab2b0e47",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D1.response.json",
+      "sha256": "db85d5d188ed6fbc82cfa6b723abf67aab9dccae325048864b8b069290e31699",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D2.attempt.json",
+      "sha256": "252cf6012a06816d24f15cb5a49e4a279689f5724eadc81d87826422acb9f61a",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D2.evaluation.json",
+      "sha256": "275d1828ac6917ab59723a1499c269d596fff57f2095041486c59815d64569dc",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D2.literal-projection.json",
+      "sha256": "bfd108868fc9327523c93f5ecc2665fd71d73c87f74badb205f44ed41c034a24",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D2.observations.json",
+      "sha256": "a8f8eb7f195bd04681eb039f3443a31b262f93d126c5176e24deafe80acd8313",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D2.response.json",
+      "sha256": "11082c095ff40dca90192853275affca6a62d67b79a6b59120e5fb61008fdcae",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D3.attempt.json",
+      "sha256": "c901f8f9856375212992714e41385a4499f0632af214dc595a24067d2260b7a1",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/D3.response.json",
+      "sha256": "5e2eb1a4e0b80b0f7ffcf18373c1800b2d87409bac45b23a3a8066fe7fdcb92c",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/execute.claim.json",
+      "sha256": "39b4610fe05a1c4d69b20ee498af11b52fcf14b1b92a818c5555926bac934ff7",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/plan.json",
+      "sha256": "9647553b1b5547b307592f634a2a45759a7a93f796268e779b5c92cacdde0e24",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/batch-d1-d3/result.json",
+      "sha256": "61b9202ae5010e16dafe34e63d4f74bc943aa9ee644db99a8d1f09e69e640be4",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/budget.json",
+      "sha256": "65a77e9a5a9a872a1abb92826d028f69429d27fbe77d76fd6acdb8a516401b1d",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/manifest.json",
+      "sha256": "baf684e21fa92d1c36da4dadf4af05d5aa94ae76e9a4a097f413bd2c80d10551",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/D3.attempt.json",
+      "sha256": "7e0ff80b74a7242a450fea801a0d1888186cb4345d57972fb9d146a8f463aba8",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/D3.evaluation.json",
+      "sha256": "d03c5e03da6e298df01f619d480d78b081eafc4cba5b9836dceda375113c7adb",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/D3.literal-projection.json",
+      "sha256": "0612dd5b2c1b30a5bf29eba19139e3e8b238a404edc5ff29d4a45cc6f0a7bb7f",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/D3.observations.json",
+      "sha256": "a1b4c7aa403dfc550e5b3734156082a7b9b35fd377f29604d2878fb85c68a289",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/D3.response.json",
+      "sha256": "8039aeb30d4051023450c48516cd2c201811fef7547c4c85b67290ed1819cf59",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/execute.claim.json",
+      "sha256": "526bec6b967cda181861c31e52d721d7c6784d4df30201bbb91804503e306bf1",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/plan.json",
+      "sha256": "0699d9d9144f7e591725c15bfadbb6ffd610c358bea320f202c42cf1304953b6",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/run/result.json",
+      "sha256": "eb196706f5880ef651d547dcf310510cc063e1f7053325acdf0dbea9519aecbd",
+      "mode": "0600"
+    }
+  ],
+  "timingFieldAuthority": "Use each condition.wallMs as measured client elapsed. Gemini usageAndCost.wallMs=0 is an inherited cost-helper placeholder, not elapsed time; original evidence kept unchanged."
+}

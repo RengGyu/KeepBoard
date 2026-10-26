@@ -1,0 +1,631 @@
+{
+  "baseline": {
+    "quality": "not-evaluable",
+    "reason": "HTTP 200 but application requestJSON failed before returning raw parsed JSON; no baseline output retained; no retry."
+  },
+  "lightweight": {
+    "returnedComponents": 67,
+    "terrainCorrect": 19,
+    "terrainTotal": 19,
+    "readableNumbersCorrect": 18,
+    "readableNumbersTotal": 18,
+    "terrainAnchorInsideCrop": 19,
+    "certainPieceMatches": 29,
+    "frozenPieceDenominator": 30,
+    "matchedPieceAnchorInsideCrop": 29,
+    "matchedPlayerColorCorrect": 28,
+    "matchedPlayerColorEvaluated": 28,
+    "harborFrozenLabelsMatching": 3,
+    "harborFrozenLabelsCompared": 4,
+    "harborRatioCorrect": 4,
+    "allReturnedCropsReferToProvidedPhoto": true,
+    "confirmedCorrectionCount": null,
+    "additionalReviewCandidates": 2
+  },
+  "reviewCandidates": [
+    {
+      "outputId": "blue-road-2",
+      "type": "possible physical duplicate",
+      "observed": "separate road above blue-city-2",
+      "human": "appears to be tall part of blue building; independent road vs molded building cannot be established confidently from this single image",
+      "action": "inspect before accepting/counting",
+      "basis": "supplementary post-output human zoom of original; no change to frozen truth"
+    },
+    {
+      "outputId": "white-road-3",
+      "type": "ambiguous white object",
+      "observed": "white road along forest8/pasture10",
+      "human": "enlargement may show a raised white road; border vs piece unresolved, not a proven false addition",
+      "action": "inspect or leave candidate uncertain",
+      "basis": "supplementary post-output original inspection"
+    }
+  ],
+  "groundTruthCaveat": {
+    "harborBottom": "Frozen wool label is questionable: post-output zoom looks like a yellow tied grain sheaf. Do not call this proven model error or 3/4 harbor accuracy; retain raw frozen comparison and exclude this label from reliable scoring.",
+    "id": "white-road-2",
+    "frozen": "road around (532,365)",
+    "review": "Post-output zoom shows tile border/part of adjacent white building, not a separately certain road. Original frozen list is retained unchanged. Thus 29/30 is not one proven model omission. Treat valid certain subset as 29; do not claim exhaustive recall.",
+    "reviewedSubsetMatches": "29/29, exploratory post-review subset; not primary preregistered metric"
+  },
+  "outsideCommonBoardScope": [
+    "card-knight-left",
+    "card-cost-bottom-left",
+    "card-cost-top",
+    "card-cost-right",
+    "card-special-top-right",
+    "card-open-top-right-1"
+  ],
+  "unscored": [
+    "confirmed correction count / exhaustive false positives",
+    "bottom harbor resource after human-baseline concern",
+    "settlement vs city",
+    "other five harbor labels/contacts",
+    "canonical slots",
+    "unmatched small white components",
+    "private states/turn",
+    "complete piece precision and recall",
+    "UI corrections/time"
+  ],
+  "terrain": [
+    {
+      "truthId": "r1c1",
+      "outputId": "hex-r1-1",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r1c2",
+      "outputId": "hex-r1-2",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r1c3",
+      "outputId": "hex-r1-3",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r2c1",
+      "outputId": "hex-r2-1",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r2c2",
+      "outputId": "hex-r2-2",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r2c3",
+      "outputId": "hex-r2-3",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r2c4",
+      "outputId": "hex-r2-4",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r3c1",
+      "outputId": "hex-r3-1",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r3c2",
+      "outputId": "hex-r3-2",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r3c3",
+      "outputId": "hex-r3-3",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r3c4",
+      "outputId": "hex-r3-4",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r3c5",
+      "outputId": "hex-r3-5",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r4c1",
+      "outputId": "hex-r4-1",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r4c2",
+      "outputId": "hex-r4-2",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r4c3",
+      "outputId": "hex-r4-3",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r4c4",
+      "outputId": "hex-r4-4",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r5c1",
+      "outputId": "hex-r5-1",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r5c2",
+      "outputId": "hex-r5-2",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "r5c3",
+      "outputId": "hex-r5-3",
+      "kindCorrect": true,
+      "variantCorrect": true,
+      "numberCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    }
+  ],
+  "pieces": [
+    {
+      "truthId": "blue-building-1",
+      "outputId": "blue-city-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-building-2",
+      "outputId": "blue-city-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-building-3",
+      "outputId": "blue-city-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-building-4",
+      "outputId": "blue-city-4",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-building-5",
+      "outputId": "blue-settlement-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-road-1",
+      "outputId": "blue-road-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-road-2",
+      "outputId": "blue-road-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-road-3",
+      "outputId": "blue-road-4",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-road-4",
+      "outputId": "blue-road-5",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "blue-road-5",
+      "outputId": "blue-road-6",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-building-1",
+      "outputId": "red-city-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-building-2",
+      "outputId": "red-city-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-building-3",
+      "outputId": "red-city-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-road-1",
+      "outputId": "red-road-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-road-2",
+      "outputId": "red-road-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "red-road-3",
+      "outputId": "red-road-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-building-1",
+      "outputId": "yellow-city-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-building-2",
+      "outputId": "yellow-city-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-building-3",
+      "outputId": "yellow-city-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-1",
+      "outputId": "yellow-road-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-2",
+      "outputId": "yellow-road-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-3",
+      "outputId": "yellow-road-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-4",
+      "outputId": "yellow-road-4",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-5",
+      "outputId": "yellow-road-5",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "yellow-road-6",
+      "outputId": "yellow-road-6",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "white-building-1",
+      "outputId": "white-settlement-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "white-building-2",
+      "outputId": "white-settlement-3",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "white-road-1",
+      "outputId": "white-road-2",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": true,
+      "ownerCorrect": true,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    },
+    {
+      "truthId": "white-road-2",
+      "outputId": null,
+      "found": false,
+      "kindCorrect": false,
+      "colorCorrect": null,
+      "ownerCorrect": null,
+      "sourceCorrect": false,
+      "cropContainsHumanAnchor": false,
+      "quantityCorrect": false
+    },
+    {
+      "truthId": "robber-1",
+      "outputId": "robber-1",
+      "found": true,
+      "kindCorrect": true,
+      "colorCorrect": null,
+      "ownerCorrect": null,
+      "sourceCorrect": true,
+      "cropContainsHumanAnchor": true,
+      "quantityCorrect": true
+    }
+  ],
+  "harbors": [
+    {
+      "truthId": "harbor-lower-left",
+      "outputId": "harbor-9",
+      "expectedResource": "lumber",
+      "observedResource": "lumber",
+      "resourceCorrect": true,
+      "ratioCorrect": true,
+      "cropContainsHumanAnchor": true
+    },
+    {
+      "truthId": "harbor-bottom",
+      "outputId": "harbor-7",
+      "expectedResource": "wool",
+      "observedResource": "grain",
+      "resourceCorrect": false,
+      "ratioCorrect": true,
+      "cropContainsHumanAnchor": true
+    },
+    {
+      "truthId": "harbor-lower-right",
+      "outputId": "harbor-5",
+      "expectedResource": "brick",
+      "observedResource": "brick",
+      "resourceCorrect": true,
+      "ratioCorrect": true,
+      "cropContainsHumanAnchor": true
+    },
+    {
+      "truthId": "harbor-bottom-right",
+      "outputId": "harbor-6",
+      "expectedResource": null,
+      "observedResource": null,
+      "resourceCorrect": true,
+      "ratioCorrect": true,
+      "cropContainsHumanAnchor": true
+    }
+  ]
+}

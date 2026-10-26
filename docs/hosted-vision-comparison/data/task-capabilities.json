@@ -1,0 +1,29 @@
+{
+  "version": "keepboard-hosted-task-context-roles-v1",
+  "status": "Preparation contract; exact deployed model/task availability verified by Sol2 runner, no live call here.",
+  "tasks": [
+    {
+      "task": "ocr-with-region",
+      "objective": "All visible printed text with original image regions; same task across providers.",
+      "gemini": "Text+image task; optional independently sourced category context in separate condition.",
+      "florence": "Fixed OCR_WITH_REGION; arbitrary rule prompt is not equivalent/supported context.",
+      "evaluation": "Digit subset on annotated numeral tokens only; other legitimate text unannotated."
+    },
+    {
+      "task": "component-location",
+      "objective": "Visible physical object/component labels+source locations, uncertainty retained.",
+      "gemini": "Label+quad task; category context may help naming, remains inference.",
+      "florence": "Fixed OD label+bbox task; exact board-game taxonomy/domain support UNKNOWN until measured.",
+      "evaluation": "Label/location GT UNKNOWN; outputs unscored."
+    },
+    {
+      "task": "rule-context-interpretation",
+      "objective": "Connect independently sourced categories/rule summaries to observed candidates without claiming legal state.",
+      "gemini": "Separate context-assisted condition, never game inventory completion.",
+      "florence": "N/A for fixed OCR/OD; external deterministic lookup can annotate recognized literals, not infer hidden state or rules.",
+      "evaluation": "Not a six-run accuracy metric; no rule-reasoning GT."
+    }
+  ],
+  "references": "No image references attached. Candidate real photos remain blocked pending rights/edition identity; display SVG not photographic truth.",
+  "fairness": "Photos-only pair compares common supported tasks. Gemini-context change is within-Gemini, not a matched Florence rule-context condition or a whole-state comparison."
+}

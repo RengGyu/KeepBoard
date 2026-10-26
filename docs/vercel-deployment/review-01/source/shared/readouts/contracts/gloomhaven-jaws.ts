@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type GloomhavenJawsReadout =
+  {schema:"gloomhaven-jaws-v1";kind:"map";values:{"printedName": string | null; "sideLabel": string | null; "pageLabel": string | null; "featureType": string | null; "location": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "pageLabel": FieldBasis | null; "featureType": FieldBasis | null; "location": 'user' | null}}
+ | {schema:"gloomhaven-jaws-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "rank": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "rank": FieldBasis | null; "location": 'user' | null}}
+ | {schema:"gloomhaven-jaws-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"gloomhaven-jaws-v1";kind:"state";values:{"observedColor": string | null; "stateType": string | null; "displayValue": number | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "stateType": FieldBasis | null; "displayValue": FieldBasis | null; "target": 'user' | null}}
+ | {schema:"gloomhaven-jaws-v1";kind:null;values:{};sources:{}};

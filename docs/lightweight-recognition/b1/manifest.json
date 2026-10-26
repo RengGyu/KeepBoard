@@ -1,0 +1,41 @@
+{
+  "version": "B1-typed-normal-save-fix-v1",
+  "at": "2026-10-24T15:07:10.541690+00:00",
+  "stageRoot": "/private/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-lightweight-recognition-vyzn4xm9/app",
+  "status": "GREEN_FROZEN",
+  "changedFiles": [
+    {
+      "path": "server/observationReview.ts",
+      "preimageSHA256": "503abf2994a48825505ee79b9cf631dd4852b6fe78cfdb3e22f546a760f5eb37",
+      "postimageSHA256": "0ceaca5635597c749caba23e1a5225394246aefa35830094935c7af099171be7"
+    },
+    {
+      "path": "tests/lightweight-recognition-b1.test.ts",
+      "preimageSHA256": null,
+      "postimageSHA256": "62563ea8922b88240182ce2cc81d1089b391484a317aea26491f52c5147acb18"
+    }
+  ],
+  "patchSHA256": "7cbac39d6f31edddc9ab79442abf3f80355929a180135dfeb9cd5c4783b7fc2f",
+  "R1R3OtherFileDrift": [],
+  "before": "Both same-field linked accepted edit and first empty-baseline subset re-edit returned409. After initial guard distinction, ordinary save also consumed the link replay source, producing404 on replay.",
+  "after": "Guard compares incoming candidate identity keys against server-owned current accepted keys. Only newly introduced pending keys require review/link. Client linkOrigin is not consulted. Normal edits preserve pending source projections and replay; explicit native review/first whole acceptance still consumes their source.",
+  "verification": {
+    "focusedPassed": 11,
+    "focusedExit": 0,
+    "log": "docs/lightweight-recognition/b1/focused.json",
+    "typecheckExit": 0,
+    "typecheckLog": "docs/lightweight-recognition/b1/typecheck.json",
+    "HTTP": [
+      "Explicit same-field link then quantity edit-save-resume succeeds; repeated link remains idempotent",
+      "First candidate subset save then re-edit-save-resume succeeds; original candidate and receipts preserved",
+      "New pending whole overwrite remains409; forged client linkOrigin not accepted",
+      "Existing native review CAS/receipts and room/PIN/link restore regressions pass"
+    ]
+  },
+  "newModelCalls": 0,
+  "serverRestarts": 0,
+  "sharedProductApply": 0,
+  "D1D2JsonSHA256": "1c87dd049ccf27d35feb4dc97333f418c920e560d0a9bb06f621f799b0ea2a16",
+  "D1D2MdSHA256": "f8da159fed870cce6f9edd8880b1d072509cf993e26da44b0d1361a878cf2aa2",
+  "followup": "B1 delta frozen separately before approved compact-reader implementation; no preview restart during frame work."
+}

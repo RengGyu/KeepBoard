@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type TerraMysticaReadout =
+  {schema:"terra-mystica-v1";kind:"terrain";values:{"face": "front" | "back" | null; "printedName": string | null; "terrainType": string | null; "underlying": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "terrainType": FieldBasis | null; "underlying": 'user' | null; "location": 'user' | null}}
+ | {schema:"terra-mystica-v1";kind:"buildings";values:{"observedColor": string | null; "buildingType": string | null; "owner": string | null; "endpoints": string | null};sources:{"observedColor": FieldBasis | null; "buildingType": FieldBasis | null; "owner": 'user' | null; "endpoints": 'user' | null}}
+ | {schema:"terra-mystica-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "powerBowl": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "powerBowl": 'user' | null; "displayValue": FieldBasis | null}}
+ | {schema:"terra-mystica-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "itemType": string | null; "actionMark": string | null; "useState": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "itemType": FieldBasis | null; "actionMark": FieldBasis | null; "useState": 'user' | null}}
+ | {schema:"terra-mystica-v1";kind:null;values:{};sources:{}};

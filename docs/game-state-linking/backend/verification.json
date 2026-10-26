@@ -1,0 +1,73 @@
+{
+  "status": "BACKEND_SCOPED_PASS_PENDING_UI_INTEGRATION",
+  "sourceDigest": "470f6b5cfdc1f7cfbe1eb0010a72f320e77939d7565da5c35383722f2400a2f1",
+  "patchSHA256": "93f4d00ba2040c4e688faf651c2a9f600b13366993150165d30731868918a093",
+  "productFrozen": true,
+  "changedFiles": 14,
+  "productFiles": 10,
+  "newTests": 4,
+  "srcEdits": 0,
+  "rawSpecsArtPacksEdits": 0,
+  "aiCalls": 0,
+  "productionWrites": 0,
+  "sourceDrift": [],
+  "checks": [
+    {
+      "command": "node --import tsx --test tests/component-linking.test.ts",
+      "exit": 0,
+      "passed": 7,
+      "scope": "link/retry/remaining pieces/move/bonus/null/provenance/attachments/placement/partial restore"
+    },
+    {
+      "command": "node --import tsx --test tests/component-linking-supply.test.ts",
+      "exit": 0,
+      "passed": 1,
+      "scope": "source-pinned additive supply overlay, chip-only/idempotent"
+    },
+    {
+      "command": "KEEPBOARD_LINK_MATRIX_OUT=<report path> node --import tsx --test tests/component-linking-catalog.test.ts",
+      "exit": 0,
+      "passed": 1,
+      "gameRows": 120,
+      "generic": 118,
+      "nativeRetained": 2,
+      "destinations": 443,
+      "componentDestinationCases": 747,
+      "scope": "real link/record validators, independent BlobStore/MemoryObjects clients, serialize/reopen/resume"
+    },
+    {
+      "command": "node --import tsx --test --test-reporter=spec tests/component-linking-api.test.ts tests/rummikub-runtime-integration.test.ts tests/catan-information-api.test.ts",
+      "exit": 0,
+      "passed": 9,
+      "scope": "synthetic HTTP; link+PIN/rooms2, nativeCatan1, nativeRummikub6"
+    },
+    {
+      "command": "node --import tsx --test tests/game-essentials-runtime-turn-resume.test.ts",
+      "exit": 0,
+      "passed": 3,
+      "scope": "existing HTTP turn restore; first sandbox EPERM resolved by authorized loopback rerun"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --noEmit",
+      "exit": 0,
+      "scope": "final frozen backend + new test files"
+    }
+  ],
+  "additionalChecks": {
+    "supportingPureCasesPassed": 25,
+    "scope": "Catan/model/native; Splendor UI render primitives; generic normalization and readout edit boundaries in focused batch",
+    "notWholeAppUI": true
+  },
+  "pending": [
+    "Claude src integration + dirty draft/read-only peer display",
+    "combined full suite/type/separate-outDir build",
+    "same-project preview actual UI/API and final deployment after supervisor target confirmation",
+    "proposed six-call accuracy/ROI pilot not authorized or executed"
+  ],
+  "limitations": [
+    "all-game cases test declared component scene transport with unknown typed values, not full game rules or real-photo accuracy",
+    "native records are not converted to generic scenes",
+    "hidden/unrepresentable components and scalar-backed components remain separate; no blanket new field creation",
+    "partial restore that would recreate a moved explicit origin is rejected without mutating current state"
+  ]
+}

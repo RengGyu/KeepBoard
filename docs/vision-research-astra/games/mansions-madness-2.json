@@ -1,0 +1,911 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "mansions-madness-2",
+  "name_ko": "광기의 저택 2판",
+  "name_en": "Mansions of Madness: Second Edition",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "앱 내부 시나리오 세이브는 별도로 필요;KeepBoard가 대체하지 않음",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "mansions-madness-2.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/mansions-madness-2.json",
+    "sha256": "5e98fdb7aa03a2151123c8056442051f394334c678aa8abb8b713450fc5507ca",
+    "runtime_pack_id": "mansions-madness-2",
+    "runtime_pack_version": "1.0.0-essentials-2.5e98fdb7aa03",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "mansions-madness-2::mansions-madness-2.primary",
+      "mansions-madness-2::mansions-madness-2.art-confirmation.mansions-rules",
+      "mansions-madness-2::essentials.storage-guidance",
+      "inherited::mansions-madness-2.art-confirmation.mansions-rules"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "공개 방 타일·문/벽과 조사자/몬스터",
+  "critical_resume_distinction": "실물 상태와 필수 외부 앱 시나리오 상태는 별도 보존, 앱 복원 보증 금지",
+  "partitions": {
+    "common_public": [
+      "map"
+    ],
+    "player_public": [
+      "player"
+    ],
+    "owner_private": [
+      "private"
+    ],
+    "do_not_infer": [
+      "decks"
+    ]
+  },
+  "areas": [
+    {
+      "id": "map",
+      "name": "공개 저택",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "map",
+        "figures",
+        "tokens"
+      ],
+      "anchor_contract": "타일ID/면/회전·공간·벽·문과 인물/괴물/탐색 표식.",
+      "description": "공개 저택의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "map.scene"
+      ],
+      "current_manual_target_fields": [
+        "map.scene"
+      ],
+      "source_field_ids": [
+        "map.scene"
+      ],
+      "allowed_component_ids": [
+        "map",
+        "figures",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "공개 저택 전체 경계를 먼저 기록. 타일ID/면/회전·공간·벽·문과 인물/괴물/탐색 표식. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "타일ID/면/회전·공간·벽·문과 인물/괴물/탐색 표식.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "player",
+      "name": "조사자 공개 상태",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "인물·물품·공개된 피해/공포·상태와 단서.",
+      "description": "조사자 공개 상태의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "player.scene"
+      ],
+      "source_field_ids": [
+        "player.scene"
+      ],
+      "allowed_component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "조사자 공개 상태 전체 경계를 먼저 기록. 인물·물품·공개된 피해/공포·상태와 단서. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "인물·물품·공개된 피해/공포·상태와 단서.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "private",
+      "name": "개인 비공개 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지.",
+      "description": "개인 비공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "private.scene"
+      ],
+      "current_manual_target_fields": [
+        "private.scene"
+      ],
+      "source_field_ids": [
+        "private.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 비공개 카드 전체 경계를 먼저 기록. 비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "decks",
+      "name": "실물 카드 더미",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "종류별 덱/버림/미해결 뒷면 카드 묶음.",
+      "description": "실물 카드 더미의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "decks.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "종류별 덱/버림/미해결 뒷면 카드 묶음.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "map",
+      "name": "방 타일·문·탐색 표식",
+      "kind": "tile",
+      "identity_description": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "mansions-madness-2::mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "roomLabel",
+          "type": "text",
+          "label": "방 표기",
+          "acquisition": "visible",
+          "sourceText": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "featureType",
+          "type": "text",
+          "label": "문·벽·탐색·상호작용",
+          "acquisition": "visible",
+          "sourceText": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "label": "실제 연결",
+          "acquisition": "manual",
+          "sourceText": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "roomLabel",
+        "featureType",
+        "location"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "roomLabel",
+        "featureType"
+      ],
+      "manual_attribute_keys": [
+        "location"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "figures",
+      "name": "조사자·괴물",
+      "kind": "piece",
+      "identity_description": "조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "mansions-madness-2::mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "figureType",
+          "type": "text",
+          "label": "조사자·괴물",
+          "acquisition": "visible",
+          "sourceText": "조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "instanceLabel",
+          "type": "text",
+          "label": "기단 구별 표식",
+          "acquisition": "visible",
+          "sourceText": "조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "label": "배치 위치",
+          "acquisition": "manual",
+          "sourceText": "조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "figureType",
+        "instanceLabel",
+        "location"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "figureType",
+        "instanceLabel"
+      ],
+      "manual_attribute_keys": [
+        "location"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "cards",
+      "name": "물품·주문·상태·피해·공포",
+      "kind": "card",
+      "identity_description": "일반/고유 아이템·주문·상태·피해·공포는 별도 카드군이다. 피해/공포의 공개/비공개 면과 주문의 뒤집힘, 개인 보유/부착을 구분한다. 뒷면 내용은 펼쳐 수집하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "mansions-madness-2::mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "일반/고유 아이템·주문·상태·피해·공포는 별도 카드군이다. 피해/공포의 공개/비공개 면과 주문의 뒤집힘, 개인 보유/부착을 구분한다. 뒷면 내용은 펼쳐 수집하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardType",
+          "type": "text",
+          "label": "아이템·주문·피해·공포·상태",
+          "acquisition": "visible",
+          "sourceText": "일반/고유 아이템·주문·상태·피해·공포는 별도 카드군이다. 피해/공포의 공개/비공개 면과 주문의 뒤집힘, 개인 보유/부착을 구분한다. 뒷면 내용은 펼쳐 수집하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+          "faceOnly": true
+        },
+        {
+          "id": "cardArea",
+          "type": "text",
+          "label": "보유·장착·공개·가림",
+          "acquisition": "manual",
+          "sourceText": "일반/고유 아이템·주문·상태·피해·공포는 별도 카드군이다. 피해/공포의 공개/비공개 면과 주문의 뒤집힘, 개인 보유/부착을 구분한다. 뒷면 내용은 펼쳐 수집하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "cardType",
+        "cardArea"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "cardType"
+      ],
+      "manual_attribute_keys": [
+        "cardArea"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "tokens",
+      "name": "단서·화재·어둠·상태",
+      "kind": "token",
+      "identity_description": "단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "verified",
+      "spec_source_refs": [
+        "mansions-madness-2::mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "tokenType",
+          "type": "text",
+          "label": "단서·화재·어둠·바리케이드·통로",
+          "acquisition": "visible",
+          "sourceText": "단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        },
+        {
+          "id": "target",
+          "type": "text",
+          "label": "구역·대상",
+          "acquisition": "manual",
+          "sourceText": "단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "printedLabel",
+          "type": "text",
+          "label": "보이는 연결 표기",
+          "acquisition": "visible",
+          "sourceText": "단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "tokenType",
+        "target",
+        "printedLabel"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "tokenType",
+        "printedLabel"
+      ],
+      "manual_attribute_keys": [
+        "target"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "map.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "private.scene",
+        "scope": "player",
+        "visibility": "owner"
+      },
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "decks.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "external-save",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "phase",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.phase",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "known-monsters",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.known-monsters",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "external-save",
+      "label": "원래 앱 저장 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "앱 시나리오·저장 슬롯/기기 별칭·저장 시점만 사용자가 선택 기록. 앱 파일 읽기/변경/대체 아님."
+    },
+    {
+      "id": "phase",
+      "label": "조사자·신화 단계",
+      "scope": "public",
+      "visibility": "public",
+      "description": "활동한 조사자·남은 행동·앱에서 처리 중인 선택/퍼즐의 공개 설명."
+    },
+    {
+      "id": "known-monsters",
+      "label": "공개 괴물 상태",
+      "scope": "public",
+      "visibility": "public",
+      "description": "실제로 화면/실물에 표시된 값만. 숨은 능력·타이머는 모름 유지."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "조사자 행동/시험·피해/퍼즐·상호작용/신화·괴물 단계의 실제 앱 중단 문맥. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "앱의 숨은 사건·타이머·퍼즐 정답, 비공개 광기 내용",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "개인 비공개 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "실물 카드 더미 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "종류별 덱/버림/미해결 뒷면 카드 묶음.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "map.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "player.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "2판 기본 시나리오·구성.1판 전환킷/각 확장/DLC는 실제 활성 상자·시나리오를 따로 식별.",
+    "원래 앱 저장 포맷·중간 저장 제약과 실물 카드 공개 규칙은 미검증. 앱 재개 연동 기능은 구현/시험하지 않았다.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "mansions-madness-2",
+    "edition": "2판 기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 1,
+      "candidate_image_rows": 2,
+      "retained_image_rows": 2,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "b7f3abf6d4176b9abacbfd06bc5a77d7485d236a090727fd31246239acbda63f",
+        "e14aa10872600952a64875a5cfb3a366e2740dd182da941326fa951d5e33676a"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "공개 방 타일·문/벽과 조사자/몬스터",
+    "closeups": [
+      {
+        "area_id": "map",
+        "name": "공개 저택",
+        "needs": "타일ID/면/회전·공간·벽·문과 인물/괴물/탐색 표식.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "player",
+        "name": "조사자 공개 상태",
+        "needs": "인물·물품·공개된 피해/공포·상태와 단서.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "private",
+        "name": "개인 비공개 카드",
+        "needs": "비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "decks",
+        "name": "실물 카드 더미",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "mansions-madness-2",
+    "editionId": "base",
+    "sourceSHA": "5e98fdb7aa03a2151123c8056442051f394334c678aa8abb8b713450fc5507ca",
+    "status": "new",
+    "areas": [
+      {
+        "areaId": "map",
+        "label": "공개 저택",
+        "fieldKeys": [
+          "map.scene"
+        ],
+        "componentIds": [
+          "map",
+          "figures",
+          "tokens"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "grid",
+        "template": "square-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "player",
+        "label": "조사자 공개 상태",
+        "fieldKeys": [
+          "player.scene"
+        ],
+        "componentIds": [
+          "cards",
+          "tokens"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "private",
+        "label": "개인 비공개 카드",
+        "fieldKeys": [
+          "private.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "decks",
+        "label": "실물 카드 더미",
+        "fieldKeys": [
+          "decks.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "template": "card-lanes",
+        "status": "not-needed",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 20,
+    "board_instance_count": 3,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

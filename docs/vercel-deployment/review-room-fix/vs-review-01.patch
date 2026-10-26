@@ -1,0 +1,56 @@
+--- review-01/server/index.ts
++++ current/server/index.ts
+@@ -2,7 +2,7 @@
+ import {BlobStore} from './blobStore.ts';
+ import {Readable} from 'node:stream';
+ import {CloudJobs} from './cloudJobs.ts';
+-import type {Objects} from './objects.ts';
++import {ConflictError,type Objects} from './objects.ts';
+ import {digest,scopeVersion,taskTarget,commitAnalysisTask,type AnalysisTask} from './analysisTask.ts';
+ import {validateCaptureTarget,validateCaptureObservation,validateStaticPhotos} from '../shared/photoCapture.ts';
+ import express, { type ErrorRequestHandler, type Request } from 'express';
+@@ -80,6 +80,7 @@
+ }
+ 
+ export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>} } = {}) {
++  if(cloud){const run=analyzer;analyzer=input=>run({...input,readImage:async e=>{const b=await store.readEvidence(e);return {mimeType:b.mimeType,data:b.data.toString('base64')};}});}
+   const app = express();
+   const uploads=cloud?new CloudUploads(cloud.objects):undefined;
+   if(cloud)app.use((_req,res,next)=>{const json=res.json.bind(res);res.json=((value:unknown)=>{const bytes=Buffer.from(JSON.stringify(value));if(bytes.length<2*1024*1024)return json(value);res.setHeader('Content-Type','application/json; charset=utf-8');res.removeHeader('Content-Length');Readable.from((function*(){for(let i=0;i<bytes.length;i+=65536)yield bytes.subarray(i,i+65536);})()).pipe(res);return res;}) as typeof res.json;next();});
+@@ -232,7 +233,7 @@
+     await store.saveSession(session);
+     res.status(201).json(view);
+   });
+-  async function createSession(body:any) {
++  async function createSession(body:any,stableId?:string) {
+     const requestedId=body.gamePackId??catanPack.id;
+     const sourcePack=body.gamePackVersion?((await packs()).find(pack=>pack.id===requestedId&&pack.version===body.gamePackVersion)??legacyPack(requestedId,body.gamePackVersion)):(await packs()).find(pack=>pack.id===requestedId);
+     if (!sourcePack) throw new HttpError('게임팩을 찾을 수 없습니다.', 404);
+@@ -240,7 +241,7 @@
+     const pack = structuredClone(sourcePack);
+     bindPlayers(pack, players);bindRuntimePlayers(pack,players);
+     const at = new Date().toISOString();
+-    const session: Session = { id: randomUUID(), name: typeof body.name === 'string' && body.name.trim() ? body.name.trim() : `${pack.title} 이어하기`, createdAt: at, updatedAt: at, gamePackId: pack.id, gamePackVersion: pack.version, gamePack: structuredClone(pack), captureEpoch: randomUUID(), turnInstanceId: randomUUID(), stage: 'capture', players, evidence: [], assertions: [], preservations: [], snapshots: [], notes: {}, activity: [], example: body.example === true };
++    const session: Session = { id: stableId??randomUUID(), name: typeof body.name === 'string' && body.name.trim() ? body.name.trim() : `${pack.title} 이어하기`, createdAt: at, updatedAt: at, gamePackId: pack.id, gamePackVersion: pack.version, gamePack: structuredClone(pack), captureEpoch: randomUUID(), turnInstanceId: randomUUID(), stage: 'capture', players, evidence: [], assertions: [], preservations: [], snapshots: [], notes: {}, activity: [], example: body.example === true };
+     if(body._room)session.room=body._room;
+     if (body.recordingMode === 'simple' && pack.id === 'catan-base') session.recordingMode = 'simple';
+     if (session.example) {
+@@ -261,7 +262,9 @@
+   async function invited(req:Request){const key=req.ip??'local',old=inviteAttempts.get(key);if(old&&old.until>Date.now()&&old.count>=20)throw new rooms.RoomError('잠시 후 다시 참가해 주세요.',429);const input=req.body?.invite;if(typeof input!=='string'||input.length>100)throw new rooms.RoomError('초대 링크나 코드를 확인해 주세요.',400);const code=input.replace(/-/g,'').toUpperCase();const s=(await store.listSessions()).find(s=>{const r=rooms.record(s);return r&&(r.invite.token===input||r.invite.code===code);});if(!s){inviteAttempts.set(key,{count:old&&old.until>Date.now()?old.count+1:1,until:Date.now()+60000});throw new rooms.RoomError('초대 링크나 코드를 확인해 주세요.',404);}return s;}
+   const roomOrigin=(req:Request)=>{const origin=req.get('origin');const hosts=[req.get('host'),req.get('x-forwarded-host')?.split(',')[0].trim()];if(!origin||!hosts.includes(new URL(origin).host))throw new rooms.RoomError('같은 앱에서 요청해 주세요.');};
+   app.post('/api/rooms/device',(req,res)=>{roomOrigin(req);rooms.ensureDevice(req,res);res.json({ok:true});});
+-  app.post('/api/rooms',async(req,res)=>{roomOrigin(req);const view=await queued('rooms:create',async()=>{const hash=rooms.deviceHash(req);if(!hash)throw new rooms.RoomError('참가 정보를 먼저 준비해 주세요.');const previous=(await store.listSessions(true)).find(s=>rooms.record(s)?.members.some(m=>m.hash===hash&&m.role==='host')&&rooms.record(s)?.createRequestId===req.body?.clientRequestId);if(previous)return recompute(previous,(await storedPack(previous))!);const me={id:randomUUID(),...rooms.profile(req.body?.me)},room=rooms.newRoom(req,req.body?.capacity,me.id,req.body?.clientRequestId);while((await store.listSessions(true)).some(s=>rooms.record(s)?.invite.code===room.invite.code))room.invite=rooms.newRoom(req,room.capacity,me.id,req.body.clientRequestId).invite;return createSession({...req.body,players:[me],example:false,recordingMode:'simple',_room:room});});res.status(201).json(view);});
++  app.post('/api/rooms',async(req,res)=>{roomOrigin(req);const view=await queued('rooms:create',async()=>{const hash=rooms.deviceHash(req);if(!hash)throw new rooms.RoomError('참가 정보를 먼저 준비해 주세요.');const previous=(await store.listSessions(true)).find(s=>rooms.record(s)?.members.some(m=>m.hash===hash&&m.role==='host')&&rooms.record(s)?.createRequestId===req.body?.clientRequestId);if(previous)return recompute(previous,(await storedPack(previous))!);const me={id:randomUUID(),...rooms.profile(req.body?.me)},room=rooms.newRoom(req,req.body?.capacity,me.id,req.body?.clientRequestId);while((await store.listSessions(true)).some(s=>rooms.record(s)?.invite.code===room.invite.code))room.invite=rooms.newRoom(req,room.capacity,me.id,req.body.clientRequestId).invite;const stableId=cloud?'room-'+digest([hash,room.createRequestId]):undefined;
++      try{return await createSession({...req.body,players:[me],example:false,recordingMode:'simple',_room:room},stableId);}
++      catch(error){if(!(error instanceof ConflictError)||!stableId)throw error;const winner=await store.getSession(stableId);if(!winner||rooms.record(winner)?.createRequestId!==room.createRequestId||!rooms.record(winner)?.members.some(m=>m.hash===hash&&m.role==='host'))throw error;return recompute(winner,(await storedPack(winner))!);}});res.status(201).json(view);});
+   app.post('/api/rooms/preview',async(req,res)=>{roomOrigin(req);const s=await invited(req),pack=await storedPack(s);res.json({game:pack!.title,edition:pack!.edition,name:s.name,capacity:s.room!.capacity,remaining:s.room!.capacity-s.players.length,joined:rooms.record(s)!.members.some(m=>m.hash===rooms.deviceHash(req))});});
+   app.post('/api/rooms/join',async(req,res)=>{roomOrigin(req);const found=await invited(req);const view=await queued(found.id,async()=>{const {session,pack}=await sessionFor(found.id);rooms.join(req,session,req.body);bindPlayers(pack,session.players);bindRuntimePlayers(pack,session.players);const v=recompute(session,pack);await store.saveSession(session);return v;});res.json(view);});
+   app.get('/api/rooms/:id/invite',async(req,res)=>{const {session}=await sessionFor(req.params.id);if(rooms.actor(req,session).role!=='host')throw new rooms.RoomError('방장만 초대 정보를 볼 수 있어요.');res.json(rooms.record(session)!.invite);});
+@@ -383,6 +386,7 @@
+   });
+ 
+   app.post('/api/sessions/:id/analyze', async (req, res) => {
++    if(cloud)throw new HttpError('사진 읽기 작업 API로 요청해 주세요. 사진과 기존 기록은 유지됩니다.',409);
+     const initial=await sessionFor(req.params.id);
+     if(initial.session.room){
+       const prepared=await queued(initial.session.id,async()=>{

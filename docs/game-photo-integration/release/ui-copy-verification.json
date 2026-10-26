@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "name": "ui-copy-focused",
+      "command": "node --import tsx --test tests/photo-capture-ui.test.ts tests/background-analysis-ui.test.ts tests/photo-capture-contract.test.ts",
+      "exit": 0
+    },
+    {
+      "name": "typecheck",
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exit": 0
+    },
+    {
+      "name": "separate-build",
+      "command": "node node_modules/vite/bin/vite.js build --outDir /Users/jeonggyuju/Project_folder/KeepBoard/docs/game-photo-integration/release/validated-dist",
+      "exit": 0
+    }
+  ],
+  "tests": 14,
+  "fullSuiteRepeated": false,
+  "previousFullSuite": {
+    "tests": 588,
+    "exit": 0,
+    "sourceDigest": "ecb937282bf255371b499cddc752fe997da5f6d5bbc0f09094e89d44b4021a70"
+  },
+  "servedPreviewDistModifiedOnceBeforeSeparateBuild": true
+}

@@ -1,0 +1,439 @@
+--- a/src/catanObservationReviewModel.ts
++++ b/src/catanObservationReviewModel.ts
+@@ -1,16 +1,55 @@
+ import type {Assertion,SessionView} from '../shared/types';
+ import type {ComponentScene} from '../shared/scene';
+-import {normalizeScene} from '../shared/scene';
++import {normalizeScene,resolveSlotId,CATAN_TOPOLOGY,type SceneLocation} from '../shared/scene';
+ import {mergeBoardObservation} from '../shared/boardRecording';
+-import {moveSceneComponent} from '../shared/sceneMoves';
++import {moveSceneComponent,exclusiveLayer,slotOccupants} from '../shared/sceneMoves';
++import {validatePhotoFrame} from '../shared/photoGeometry';
+ export function localCatanCandidates(view:SessionView){
+  if(view.pack.id!=='catan-base')return [];
+  const board=view.session.assertions.filter(a=>a.field==='board.layout'&&!a.ownerId&&a.status==='accepted').at(-1);
+  return view.session.assertions.filter(a=>!a.ownerId&&a.status==='candidate'&&a.observationReceipts?.length&&['board.layout','components.observed'].includes(a.field)&&(!board||a.updatedAt>board.updatedAt));
+ }
+-/** Consume computed geometry only after the user's explicit review action. No coordinate solver here. */
+-export function catanReviewScene(source:Assertion,base:ComponentScene,useLocations:boolean){
+- let incoming=normalizeScene(source.value);
+- if(useLocations){for(const receipt of source.observationReceipts??[]){for(const candidate of receipt.geometryCandidates){const id=receipt.componentRefs[candidate.observationRef];if(!id)continue;const result=moveSceneComponent(incoming,id,candidate.locationCandidate,{intent:'correct'});if(result.status==='rejected')throw Error(result.message);incoming=result.scene;}}}
+- return mergeBoardObservation(base,incoming);
++export interface CatanReviewResult {scene:ComponentScene;placedRefs:string[];unresolved:{observationRef:string;reason:string}[]}
++/** Geometry only prepares an explicit review copy; competing observations never win by iteration order. */
++export function catanReviewScene(source:Assertion,base:ComponentScene,useLocations:boolean):CatanReviewResult {
++ const raw=source.value;if(!raw||typeof raw!=='object'||Array.isArray(raw)||raw.version!==2||!Array.isArray(raw.components))throw Error('사진 후보 장면의 버전·원본 형식을 확인해 주세요.');
++ const incoming=normalizeScene(raw);
++ if(incoming.components.some(c=>base.components.some(b=>b.id===c.id)))throw Error('새 사진 후보와 기존 기록의 ID가 겹쳐요. 원본 후보를 다시 확인해 주세요.');
++ // A fresh observation is not a confirmed board position, even if its projection carries a location.
++ incoming.components=incoming.components.map(c=>({...c,location:{type:'unplaced',id:null}}));
++ const refs=new Map<string,string>(),proposals=new Map<string,Map<string,SceneLocation>>(),reasons=new Map<string,string>();
++ for(const receipt of source.observationReceipts??[]){
++  for(const [ref,id]of Object.entries(receipt.componentRefs)){if(refs.has(ref)&&refs.get(ref)!==id)throw Error('사진 후보의 원본 연결이 바뀌었어요.');refs.set(ref,id);}
++  if(!useLocations||!receipt.geometryCandidates.length)continue;
++  const {request,frame}=receipt,image=request.images[0],transform=receipt.transforms?.find(t=>t.transformId===image?.transformId);
++  if(!frame||request.gameId!=='catan'||request.geometryFrameId!==frame.frameId||!image)throw Error('사진 frame/좌표 대응을 확인하세요.');
++  validatePhotoFrame(frame,{evidenceId:image.evidenceId,sourceSHA:transform?.sourceSHA??image.sha256,definitionSHA:request.definitionSHA});
++  for(const candidate of receipt.geometryCandidates){
++   const {observationRef:ref,locationCandidate:location}=candidate,id=receipt.componentRefs[ref];
++   if(candidate.frameId!==frame.frameId||candidate.method!=='confirmed-frame'||candidate.status!=='candidate'||!id||!incoming.components.some(c=>c.id===id))throw Error('사진 frame/후보 연결을 확인하세요.');
++   const canonical=resolveSlotId(location.type,location.id);
++   if(!canonical||!CATAN_TOPOLOGY.byId[location.type].has(canonical))throw Error('사진 후보의 좌표를 확인하세요.');
++   const targets=proposals.get(ref)??new Map<string,SceneLocation>();targets.set(`${location.type}:${canonical}`,{type:location.type,id:canonical});proposals.set(ref,targets);
++  }
++ }
++ const claims=new Map<string,Set<string>>();
++ for(const [ref,targets]of proposals){
++  if(targets.size!==1)reasons.set(ref,'한 실물에 서로 다른 위치 후보가 있어요.');
++  const c=incoming.components.find(c=>c.id===refs.get(ref))!,layer=exclusiveLayer(c.kind);
++  if(!layer){reasons.set(ref,'이 구성물의 판 위치는 직접 확인해 주세요.');continue;}
++  for(const location of targets.values()){const key=`${layer}:${location.type}:${location.id}`,contenders=claims.get(key)??new Set<string>();contenders.add(ref);claims.set(key,contenders);}
++ }
++ for(const contenders of claims.values())if(contenders.size>1)for(const ref of contenders)reasons.set(ref,'같은 자리를 가리키는 실물이 여러 개예요. 모두 위치 확인이 필요해요.');
++ let scene=incoming;const placedRefs:string[]=[],unresolved:CatanReviewResult['unresolved']=[];
++ for(const c of incoming.components){
++  const ref=[...refs].find(([,id])=>id===c.id)?.[0]??c.id,targets=proposals.get(ref),location=targets?.size===1?[...targets.values()][0]:null;
++  let reason=reasons.get(ref);
++  if(!useLocations||!location)reason??='위치 후보가 없어 직접 확인이 필요해요.';
++  else if(c.quantity!==1)reason??='수량을 1개로 확인한 뒤 위치를 정해 주세요. 모름·0·묶음은 미배치로 남겨요.';
++  else if(slotOccupants(base,c,location).length)reason??='기존 기록이 이 자리를 쓰고 있어요. 기존 값은 그대로 두고 직접 정정해 주세요.';
++  if(!reason&&location){const result=moveSceneComponent(scene,c.id,location,{intent:'correct'});if(result.status==='rejected')reason=result.message;else{scene=result.scene;placedRefs.push(ref);}}
++  if(reason)unresolved.push({observationRef:ref,reason});
++ }
++ const projected=mergeBoardObservation({...base,components:[]},scene);
++ return {scene:{...projected,components:[...structuredClone(base.components),...projected.components]},placedRefs,unresolved};
+ }
+--- a/src/LocalCatanReview.tsx
++++ b/src/LocalCatanReview.tsx
+@@ -8,6 +8,7 @@
+ import {usePhotoDefinition} from './photoDefinitions';
+ import {catanReviewScene} from './catanObservationReviewModel';
+ import {api} from './api';
++import type {NativeObservationReview} from '../shared/observationReview';
+ import type {Mutate} from './Fields';
+ 
+ export function LocalCatanReview({view,source,busy,dirty,mutate,onClose,onEvidence}:{view:SessionView;source:Assertion;busy:boolean;dirty:boolean;mutate:Mutate;onClose:()=>void;onEvidence:(e:Evidence,region?:Assertion['region'])=>void}){
+@@ -16,28 +17,29 @@
+  const receipts=source.observationReceipts??[],locations=receipts.reduce((n,r)=>n+r.geometryCandidates.length,0);
+  const accepted=view.session.assertions.filter(a=>a.field==='board.layout'&&!a.ownerId&&a.status==='accepted').at(-1);
+  const [openedBaseId]=useState(accepted?.id??null);
+- const [scene,setScene]=useState<ComponentScene>(()=>catanReviewScene(source,normalizeScene(accepted?.value),false));
++ const [review,setReview]=useState(()=>{try{return catanReviewScene(source,normalizeScene(accepted?.value),false);}catch{return {scene:normalizeScene(accepted?.value),placedRefs:[],unresolved:[]};}});
+  const [previewRevision,setPreviewRevision]=useState(0),[placementFailure,setPlacementFailure]=useState('');
+  let currentPlacementError='';
+- if(useLocations)try{catanReviewScene(source,normalizeScene(accepted?.value),true);}catch(e){currentPlacementError=e instanceof Error?e.message:'위치 후보를 계산하지 못했어요.';}
++ try{catanReviewScene(source,normalizeScene(accepted?.value),locations>0);}catch(e){currentPlacementError=e instanceof Error?e.message:'위치 후보를 계산하지 못했어요.';}
+  const placementError=placementFailure||currentPlacementError;
+  async function save(value:ComponentScene){
+-  if(placementError)throw Error('위치 후보를 반영할 수 없어요. 현재 초안은 유지됩니다. 위치를 직접 정정할지 선택해 주세요.');
++  if(placementError)throw Error('위치 후보를 반영할 수 없어요. 현재 초안은 유지됩니다. 원본·기준점을 다시 확인해 주세요.');
+   if(!view.session.assertions.some(a=>a.id===source.id))throw Error('사진 후보가 바뀌었어요. 현재 정정 초안은 남아 있으니 새 후보를 확인한 뒤 적용해 주세요.');
+   if(dirty)throw Error('보드에 저장하지 않은 수정이 있어요. 먼저 반영하거나 되돌린 뒤 후보를 적용해 주세요.');
+   const latest=view.session.assertions.filter(a=>a.field==='board.layout'&&!a.ownerId&&a.status==='accepted').at(-1);
+   if((latest?.id??null)!==openedBaseId)throw Error('보드 기록이 바뀌었어요. 새 기록을 확인한 뒤 적용해 주세요.');
+-  try{await mutate(()=>api.update(view.session.id,{answers:sceneAnswers('board.layout',value,undefined,view.pack.fields)}));onClose();}catch(e){setError(e instanceof Error?e.message:'후보를 반영하지 못했어요.');throw e;}
++  try{const observationReview:NativeObservationReview={version:'native-observation-review-v1',sourceAssertionId:source.id,expectedBaselineAssertionId:openedBaseId};await mutate(()=>api.update(view.session.id,{answers:sceneAnswers('board.layout',value,undefined,view.pack.fields).map(a=>a.field==='board.layout'?{...a,observationReview}:a)}));onClose();}catch(e){setError(e instanceof Error?e.message:'후보를 반영하지 못했어요.');throw e;}
+  }
+  return <Modal title="읽은 지형·숫자 확인" onClose={onClose} wide><div className="modal-body lightweight-review">
+   <p className="small muted">기존 도로·건물·항구는 남겨요. 읽은 값과 위치를 확인한 뒤 ‘반영’을 눌러 주세요.</p>
+   {definitionLoading&&<p role="status">촬영 정의를 준비하고 있어요…</p>}{definitionError&&<p role="alert">{definitionError}</p>}
+   {definition&&receipts.map((r,i)=><PhotoObservationOverlay key={i} photos={view.session.evidence} request={r.request} result={r.result} geometry={r.geometryCandidates} transforms={r.transforms} definition={definition}/>)}
+-  {locations>0&&!useLocations&&<button className="button secondary" disabled={busy||dirty||reviewDirty} onClick={()=>{try{const next=catanReviewScene(source,normalizeScene(accepted?.value),true);setScene(next);setPreviewRevision(n=>n+1);setUseLocations(true);setPlacementFailure('');setError('');}catch(e){setPlacementFailure(e instanceof Error?e.message:'위치 후보를 확인해 주세요.');}}}>계산된 위치 {locations}개를 정정 그림에서 확인</button>}
++  {locations>0&&!useLocations&&<button className="button secondary" disabled={busy||dirty||reviewDirty} onClick={()=>{try{const next=catanReviewScene(source,normalizeScene(accepted?.value),true);setReview(next);setPreviewRevision(n=>n+1);setUseLocations(true);setPlacementFailure('');setError('');}catch(e){setPlacementFailure(e instanceof Error?e.message:'위치 후보를 확인해 주세요.');}}}>계산된 위치 {locations}개를 정정 그림에서 확인</button>}
+   {reviewDirty&&!useLocations&&locations>0&&<p className="small muted">정정 중인 값이 있어 위치 후보로 화면을 교체하지 않아요. 직접 자리를 옮기거나 되돌린 뒤 확인해 주세요.</p>}
+-  <p role="status">{placementError?'위치 후보 계산에 실패했어요. 현재 정정 초안은 남아 있고 반영은 차단했어요.':useLocations?'위치 후보를 그림에 올렸어요. 틀린 자리는 옮기거나 교환해 주세요.':'위치 미확정 · 읽은 값이 있어도 아직 보드 칸을 확정하지 않았어요.'}</p>
+-  {placementError&&<div role="alert"><p>{placementError}</p><button className="button secondary" onClick={()=>{setUseLocations(false);setPlacementFailure('');}}>현재 초안 유지하고 위치 직접 정정</button></div>}
++  <p role="status">{placementError?'위치 후보 계산에 실패했어요. 현재 정정 초안은 남아 있고 반영은 차단했어요.':useLocations?`배치 ${review.placedRefs.length}개 · 위치 확인 ${review.unresolved.length}개. 미배치 실물도 고치거나 그대로 반영할 수 있어요.`:'위치 미확정 · 읽은 값이 있어도 아직 보드 칸을 확정하지 않았어요.'}</p>
++  {placementError&&<div role="alert"><p>{placementError}</p></div>}
++  {useLocations&&review.unresolved.length>0&&<details><summary>위치 확인이 필요한 실물 {review.unresolved.length}개</summary>{review.unresolved.map((u,i)=><p className="small muted" key={u.observationRef}>실물 {i+1} · {u.reason}</p>)}</details>}
+   {error&&<p role="alert">{error}</p>}{dirty&&<p role="alert">보드에 저장하지 않은 수정이 있어요. 그 초안을 먼저 반영하거나 되돌려 주세요.</p>}
+-  <SceneEditor key={`${source.id}:${previewRevision}`} value={scene} players={view.session.players} busy={busy||dirty} evidence={view.session.evidence} game={view.pack.id} forceSave onDirtyChange={setReviewDirty} onSave={save} onEvidence={(id,region)=>{const e=view.session.evidence.find(p=>p.id===id);if(e)onEvidence(e,region);}}/>
++  <SceneEditor key={`${source.id}:${previewRevision}`} value={review.scene} players={view.session.players} busy={busy||dirty} evidence={view.session.evidence} game={view.pack.id} forceSave onDirtyChange={setReviewDirty} onSave={save} onEvidence={(id,region)=>{const e=view.session.evidence.find(p=>p.id===id);if(e)onEvidence(e,region);}}/>
+  </div></Modal>;
+ }
+--- a/src/RummikubWorkspace.tsx
++++ b/src/RummikubWorkspace.tsx
+@@ -1,3 +1,4 @@
++import type {NativeObservationReview,ObservationReviewAnswer} from '../shared/observationReview';
+ import {useEffect,useMemo,useRef,useState,type ReactNode} from 'react';
+ import {createPortal} from 'react-dom';
+ import {Camera,Check,Minus,Plus,Trash2,Undo2,ArrowLeft,ArrowRight,Image as ImageIcon,Maximize2} from 'lucide-react';
+@@ -7,7 +8,7 @@
+ import {Modal} from './ui';
+ import {api} from './api';
+ import {fire,type Mutate} from './Fields';
+-import {rummikubDraftAnswers,type RummikubSaveOptions} from './rummikubSavePolicy';
++import {rummikubDraftAnswers,prepareRummikubReview,type RummikubSaveOptions} from './rummikubSavePolicy';
+ import './rummikub-workspace.css';
+ 
+ const keyOf=(scene:RummikubScene)=>JSON.stringify(scene);
+@@ -22,6 +23,7 @@
+  const assertions=view.session.assertions.filter(a=>a.field===field&&a.ownerId===ownerId);
+  const {accepted,candidate}=pickRummikubSource(assertions);
+  const [showAccepted,setShowAccepted]=useState(false);
++ const [review,setReview]=useState<{context:string;marker:NativeObservationReview;sourceKey:string}|null>(null);
+  const source=showAccepted?accepted??candidate:candidate??accepted;
+  const incoming=useMemo(()=>source?normalizeRummikubDetailed(source.value,{ownerId,evidenceIds:evidence.map(e=>e.id)}):{scene:emptyRummikub(ownerId),recognized:true,warnings:[] as string[]},[source?.value,context,evidenceKey]);
+  const incomingKey=keyOf(incoming.scene);
+@@ -36,10 +38,13 @@
+  const [focus,setFocus]=useState<string|null>(null),[full,setFull]=useState(false),[zoom,setZoom]=useState<number>(1.5);
+  // Personal screen shows the shared table above the owner's own rack; other players' racks are never included.
+  const publicPick=pickRummikubSource(ownerId?view.session.assertions.filter(a=>a.field===rummikubField()&&!a.ownerId):[]);
+- const publicSource=publicPick.candidate??publicPick.accepted;
++ const publicSource=publicPick.accepted??publicPick.candidate;
+  const publicScene=useMemo(()=>publicSource?normalizeRummikubDetailed(publicSource.value,{evidenceIds:rummikubSourceEvidence(view.session.evidence).map(e=>e.id)}):null,[publicSource?.value,evidenceKey]);
+  const scene=state.history.present,dirty=keyOf(scene)!==state.base;
+- const forceSave=!!source&&source.status!=='accepted'&&!showAccepted&&incoming.recognized;
++ const acceptedScene=accepted?normalizeRummikubDetailed(accepted.value,{ownerId,evidenceIds:evidence.map(e=>e.id)}):null;
++ const needsReview=!!candidate?.observationReceipts?.length&&!!acceptedScene?.recognized&&allRummikubTiles(acceptedScene.scene).length>0;
++ const reviewing=review?.context===context?review:null;
++ const forceSave=!!reviewing||!!source&&source.status!=='accepted'&&!showAccepted&&incoming.recognized&&!needsReview;
+  const contextDirty=ownerId?opened!==openedBase:pending!==pendingBase;
+  const privacyLocked=!!ownerId&&!!view.privacy?.protectedOwnerIds.includes(ownerId)&&!view.privacy?.unlockedOwnerIds.includes(ownerId);
+  const all=allRummikubTiles(scene),selected=all.find(t=>t.id===selectedId);
+@@ -48,19 +53,26 @@
+  const blocked=busy||saving||privacyLocked||state.context!==context;
+  const inFlight=useRef<Promise<void>|null>(null);
+  useEffect(()=>{
+-  if(state.context!==context){setState({context,history:{past:[],present:incoming.scene},base:incomingKey});setSelectedId(null);setAdding(false);setFocus(null);setFull(false);setOpened(openedBase);setPending(pendingBase);setShowAccepted(false);setError('');return;}
+-  if(!dirty&&incoming.recognized&&incomingKey!==state.base)setState({context,history:{past:[],present:incoming.scene},base:incomingKey});
++  if(state.context!==context){setState({context,history:{past:[],present:incoming.scene},base:incomingKey});setSelectedId(null);setAdding(false);setFocus(null);setFull(false);setOpened(openedBase);setPending(pendingBase);setShowAccepted(false);setReview(null);setError('');return;}
++  if(!reviewing&&!dirty&&incoming.recognized&&incomingKey!==state.base)setState({context,history:{past:[],present:incoming.scene},base:incomingKey});
+  },[context,incomingKey]);
+  useEffect(()=>{if(!contextDirty){setOpened(openedBase);setPending(pendingBase);}},[openedBase,pendingBase]);
+  function change(cmd:RummikubCommand){if(blocked)return;try{const history=recordRummikub(state.history,cmd);setState({...state,history});setError('');setSaved(false);}catch(reason){setError(reason instanceof Error?reason.message:'타일을 바꾸지 못했어요.');}}
++ function startReview(){
++  if(blocked||dirty||contextDirty||!candidate||!acceptedScene?.recognized)return;
++  try{const fresh=normalizeRummikubDetailed(candidate.value,{ownerId,evidenceIds:evidence.map(e=>e.id)});if(!fresh.recognized)throw Error('새 타일 기록 형식을 확인해 주세요.');const combined=prepareRummikubReview(acceptedScene.scene,fresh.scene);setReview({context,marker:{version:'native-observation-review-v1',sourceAssertionId:candidate.id,expectedBaselineAssertionId:accepted?.id??null},sourceKey:JSON.stringify(candidate.value)});setState({context,history:{past:[],present:combined},base:keyOf(combined)});setSelectedId(null);setFocus(null);setError('');setSaved(false);}catch(e){setError(e instanceof Error?e.message:'기존 판과 함께 정정하지 못했어요.');}
++ }
+  async function flush(options:RummikubSaveOptions={}){
+   if(inFlight.current)return inFlight.current;
+   if(privacyLocked||state.context!==context)throw new Error('개인 영역을 다시 열어 주세요.');
+-  const snapshot=scene,answers=rummikubDraftAnswers({scene:snapshot,ownerId,dirty,candidate:forceSave,opened:{value:opened,saved:openedBase},pending:{value:pending,saved:pendingBase}},options);
++  const snapshot=scene;let answers:ObservationReviewAnswer[];
++  try{answers=rummikubDraftAnswers({scene:snapshot,ownerId,dirty,candidate:forceSave,requiresReview:needsReview&&!showAccepted,observationReview:reviewing?.marker,opened:{value:opened,saved:openedBase},pending:{value:pending,saved:pendingBase}},options);
+   if(!answers.length)return;
++  if(reviewing&&answers.some(a=>a.field===field)&&((accepted?.id??null)!==reviewing.marker.expectedBaselineAssertionId||candidate?.id!==reviewing.marker.sourceAssertionId||JSON.stringify(candidate.value)!==reviewing.sourceKey))throw Error('기존 판이나 새 사진 후보가 바뀌었어요. 현재 정정 초안은 유지됩니다. 새 기록을 확인해 주세요.');
+   if(!incoming.recognized)throw new Error('기존 타일 기록 형식을 확인해 주세요.');
++  }catch(reason){setError(reason instanceof Error?reason.message:'정정 초안을 저장하지 못했어요.');throw reason;}
+   setSaving(true);setError('');
+-  const task=(async()=>{try{await mutate(()=>api.update(view.session.id,{answers}));setState(current=>({...current,base:keyOf(snapshot)}));setSaved(true);}catch(reason){setError(reason instanceof Error?reason.message:'타일을 기록하지 못했어요. 다시 저장해 주세요.');throw reason;}finally{setSaving(false);inFlight.current=null;}})();
++  const task=(async()=>{try{await mutate(()=>api.update(view.session.id,{answers}));setState(current=>({...current,base:keyOf(snapshot)}));setReview(null);setSaved(true);}catch(reason){setError(reason instanceof Error?reason.message:'타일을 기록하지 못했어요. 다시 저장해 주세요.');throw reason;}finally{setSaving(false);inFlight.current=null;}})();
+   inFlight.current=task;return task;
+  }
+  useEffect(()=>{onReadyToSave?.(!privacyLocked&&(dirty||forceSave||contextDirty)?flush:null);return()=>onReadyToSave?.(null);});
+@@ -78,14 +90,15 @@
+  function addTile(){const id=crypto.randomUUID();change({type:'add',tile:{...draft,id},groupId:target||null});setSelectedId(id);setAdding(false);}
+  function patch(patch:Partial<Omit<RummikubTile,'id'>>){if(selected)change({type:'edit',tileId:selected.id,patch});else setDraft(d=>({...d,...patch}));}
+  const editing=selected??draft;
+- const status=dirty||contextDirty?'고친 내용이 있어요':forceSave?'사진에서 읽은 후보예요 · 저장하면 기록돼요':saved?'저장했어요':'';
++ const status=needsReview&&!reviewing&&!showAccepted?'새 사진 결과예요 · 기존 판과 함께 정정한 뒤 반영해 주세요':reviewing&&!dirty?'기존 판과 새 사진 후보를 함께 확인 중이에요 · 중복 실물은 직접 빼고 저장해 주세요':dirty||contextDirty?'고친 내용이 있어요':forceSave?'사진에서 읽은 후보예요 · 저장하면 기록돼요':saved?'저장했어요':'';
+  const zoomIndex=ZOOMS.indexOf(zoom as typeof ZOOMS[number]);
+  const baseTile=rack?42:28;
+  return <section className="rt-workspace" aria-label={rack?'내 루미큐브 받침대':'루미큐브 공용판'}>
+   {rack&&publicScene?.recognized&&<details className="rt-overview"><summary>공용판 보기</summary><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</details>}
++  {needsReview&&!reviewing&&<button className="button secondary small-button" disabled={blocked||dirty||contextDirty} onClick={startReview}>기존 판과 함께 정정</button>}
+   <header className="rt-heading"><h3>{rack?'내 받침대':'공용판'}</h3><div className="button-row">
+-   {source&&source.status!=='accepted'&&!showAccepted&&accepted&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(true)}>이전 기록 보기</button>}
+-   {showAccepted&&candidate&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(false)}>새 사진 결과 보기</button>}
++   {source&&source.status!=='accepted'&&!showAccepted&&accepted&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>{setReview(null);setShowAccepted(true);}}>이전 기록 보기</button>}
++   {showAccepted&&candidate&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>{setReview(null);setShowAccepted(false);}}>새 사진 결과 보기</button>}
+    {onReread&&<button className="button text small-button" disabled={blocked} onClick={onReread}>다시 읽기</button>}
+    <button className="icon-button" aria-label="타일 변경 되돌리기" disabled={blocked||!state.history.past.length} onClick={()=>{setState({...state,history:undoRummikub(state.history)});setError('');setSaved(false);}}><Undo2 size={18}/></button>
+    {all.length>0&&<button className="button secondary small-button" disabled={blocked} onClick={()=>setFull(true)}><Maximize2 size={16}/>크게 보기</button>}
+--- a/src/rummikubSavePolicy.ts
++++ b/src/rummikubSavePolicy.ts
+@@ -1,18 +1,25 @@
+-import type {Value} from '../shared/types';
+-import {rummikubAnswers,type RummikubScene} from '../shared/rummikub';
++import type {NativeObservationReview,ObservationReviewAnswer} from '../shared/observationReview';
++import {rummikubAnswers,allRummikubTiles,type RummikubScene} from '../shared/rummikub';
+ 
+ export interface RummikubSaveOptions {acceptCandidate?:boolean}
+ export const PHOTO_INPUT_SAVE_OPTIONS:RummikubSaveOptions={acceptCandidate:false};
+ export interface RummikubDraftInput {
+- scene:RummikubScene;ownerId?:string;dirty:boolean;candidate:boolean;
++ scene:RummikubScene;ownerId?:string;dirty:boolean;candidate:boolean;requiresReview?:boolean;observationReview?:NativeObservationReview;
+  opened:{value:string;saved:string};pending:{value:string;saved:string};
+ }
+ /** Photo acquisition may preserve edits, but is not confirmation of an untouched AI candidate. */
+ export function rummikubDraftAnswers(input:RummikubDraftInput,options:RummikubSaveOptions={}){
+  const {scene,ownerId,dirty,candidate,opened,pending}=input;
+- const answers:{field:string;value:Value;ownerId?:string}[]=[];
+- if(dirty||(candidate&&options.acceptCandidate!==false))answers.push(...rummikubAnswers(scene,ownerId));
++ const answers:ObservationReviewAnswer[]=[];
++ if(dirty||(candidate&&options.acceptCandidate!==false)){if(input.requiresReview&&!input.observationReview)throw Error('기존 판과 함께 정정을 선택한 뒤 새 사진 결과를 반영해 주세요. 초안은 남아 있어요.');answers.push(...rummikubAnswers(scene,ownerId).map(a=>input.observationReview?{...a,observationReview:input.observationReview}:a));}
+  if(ownerId&&opened.value!==opened.saved)answers.push({field:'opened',ownerId,value:opened.value===''?null:opened.value==='true'});
+  if(!ownerId&&pending.value!==pending.saved)answers.push({field:'pending',value:pending.value||null});
+  return answers;
+ }
++
++/** An explicit review draft, not physical identity matching: fresh observations stay loose for correction. */
++export function prepareRummikubReview(base:RummikubScene,fresh:RummikubScene):RummikubScene {
++ if(base.ownerId!==fresh.ownerId)throw Error('같은 소유 범위의 타일만 함께 정정할 수 있어요.');
++ const ids=new Set(allRummikubTiles(base).map(t=>t.id));if(allRummikubTiles(fresh).some(t=>ids.has(t.id)))throw Error('새 사진 후보와 기존 타일 ID가 겹쳐요. 원본 후보를 확인해 주세요.');
++ return {...structuredClone(base),coverage:'partial',loose:[...structuredClone(base.loose),...structuredClone(allRummikubTiles(fresh))]};
++}
+--- a/src/GameEssentials.tsx
++++ b/src/GameEssentials.tsx
+@@ -39,7 +39,7 @@
+  const allCandidates=session.assertions.filter(a=>a.ownerId===ownerId&&a.status==='candidate'&&fields.some(f=>f.key===a.field));
+  const linkedCount=allCandidates.reduce((n,a)=>n+(componentRecord(a)?.pieces.length??0)-unlinkedComponentPieces(session,a).length,0);
+  const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates.filter(a=>!componentRecord(a)||unlinkedComponentPieces(session,a).length>0));
+- async function applyCandidate(a:Assertion,value:Value){if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
++ async function applyCandidate(a:Assertion,value:Value){if(componentRecord(a)&&latestComponentAssertion(session,a.field,a.ownerId))throw new Error('기존 기록이 있어요. 실물 연결에서 선택한 후보를 더하거나 기존 기록을 직접 정정해 주세요. 현재 초안은 유지됩니다.');if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
+  const questions=view.questions.filter(q=>q.ownerId===ownerId&&fields.some(f=>f.key===q.field));
+  const first=new Set([...questions.map(q=>q.field),...runtime.resume.pendingActionFields,...fields.filter(f=>f.key==='turn'||runtimeBinding(pack,f.key)?.editor==='component-catalog').map(f=>f.key)]);
+  const render=(field:FieldDefinition,subject=ownerId)=>{
+@@ -55,7 +55,7 @@
+   return <article key={a.id}><strong>{f.label} · {rest.length<record.pieces.length?`남은 ${rest.length}/${record.pieces.length}항목`:`${record.pieces.length}항목`}</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
+    <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{rest.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
+    {rest.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${rest.length})`}</button>}
+-   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
++   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>latestComponentAssertion(session,a.field,a.ownerId)?setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}}):setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
+  const items=session.preservations.filter(p=>p.ownerId===ownerId&&p.templateId.startsWith('spec.'));
+  return <section className="game-essentials" aria-label="게임별 기록과 보관"><header><h3>{generic?'게임 기록':'이어갈 기록·보관'}</h3>{generic&&<p className="small muted">{recognitionCapability(pack).mode==='assisted'?'사진 보조 인식 · 확인 후 적용':'수동 기록 · 사진 관측 미지원'}</p>}</header>
+   {linkedCount>0&&<p className="small muted">사진 실물 {linkedCount}개 연결됨</p>}
+--- a/src/SplendorEditor.tsx
++++ b/src/SplendorEditor.tsx
+@@ -23,7 +23,7 @@
+ 
+ /** Editable starting point: the stored readout, else what the helper could read (becomes structured only when the user edits). */
+ function current(piece:GenericPiece):Readout{
+- if(piece.readout?.schema==='splendor-v1'&&piece.readout.kind!==null)return piece.readout as SplendorObservation;
++ if(piece.readout?.schema==='splendor-v1'&&(piece.readout.kind!==null||piece.componentId==='development'))return piece.readout as SplendorObservation;
+  const r=read(piece);
+  if(r.kind==='unknown')return emptySplendorObservation(KIND_BY_COMPONENT[piece.componentId??'']??null);
+  return {schema:'splendor-v1',kind:r.kind,points:r.points,bonus:r.bonus,cost:r.cost,requirements:r.requirements,color:r.color,level:r.level};
+@@ -50,7 +50,7 @@
+ /** Dedicated inputs for points / bonus / cost / noble requirement / token colour. null (모름) and 0 stay distinct. */
+ export function SplendorFields({piece,disabled,onPatch}:{piece:GenericPiece;disabled:boolean;onPatch:(change:Partial<GenericPiece>)=>void}){
+  const r=current(piece),set=(change:Partial<Readout>)=>onPatch({readout:{...r,...change}});
+- const card=r.kind==='development'||r.kind==='deck';
++ const card=piece.componentId==='development'||r.kind==='development'||r.kind==='deck';
+  return <div className="sr-edit">
+   {piece.componentId==='development'&&<div className="sr-edit-kind" role="group" aria-label="카드 종류"><button type="button" aria-pressed={r.kind==='development'} disabled={disabled} onClick={()=>onPatch({readout:{...emptySplendorObservation('development'),level:r.level}})}>앞면 카드</button><button type="button" aria-pressed={r.kind==='deck'} disabled={disabled} onClick={()=>onPatch({readout:{...emptySplendorObservation('deck'),level:r.level}})}>뒷면 더미</button></div>}
+   {card&&<div className="sr-edit-kind" role="group" aria-label="레벨">{([1,2,3] as const).map(l=><button type="button" key={l} aria-pressed={r.level===l} disabled={disabled} onClick={()=>set({level:l})}>{l}레벨</button>)}<button type="button" aria-pressed={r.level===null} disabled={disabled} onClick={()=>set({level:null})}>모름</button></div>}
+--- a/src/SplendorReadout.tsx
++++ b/src/SplendorReadout.tsx
+@@ -94,7 +94,7 @@
+  else if(kind==='noble')body=<><div className="sr-top"><Points points={points}/></div>{size!=='mini'&&<span className="sr-need-label">필요 보너스</span>}<Counts counts={requirements} variant="need" label="필요" size={size}/></>;
+  else if(kind==='token')body=<><span className="sr-coin"><Gem color={color} size={size==='detail'?44:size==='mini'?22:34}/></span><span className="sr-qty">{quantity===null?<><Check/>개</>:<><b>{quantity}</b>개</>}</span></>;
+  else if(kind==='deck')body=<><span className="sr-back"><Dots level={level}/></span>{level?<span className="sr-caption">{level}레벨 더미</span>:<span className="sr-caption"><Check/>레벨</span>}</>;
+- else body=<><span className="sr-back is-unknown">?</span><span className="sr-caption">종류 확인 필요</span></>;
++ else body=<><span className="sr-back is-unknown">?</span><span className="sr-caption">{level?`${level}레벨 · `:''}종류 확인 필요</span></>;
+  return <div className={`splendor-readout is-${kind} is-${size}`} style={{'--sr-tint':`var(--sr-${tint})`} as CSSProperties} role="img" aria-label={describeSplendor(props)}>
+   {body}
+   {many&&<span className="sr-many">×{quantity}</span>}
+--- a/src/api.ts
++++ b/src/api.ts
+@@ -1,3 +1,4 @@
++import type {ObservationReviewAnswer} from '../shared/observationReview';
+ import type {LocalReaderSelection,LocalReaderCapabilities} from '../shared/lightweightRecognition';
+ import {upload} from '@vercel/blob/client';
+ import type {ComponentLinkOptions,ComponentLinkRequest} from '../shared/componentLinking';
+@@ -54,7 +55,7 @@
+   settings: (settings: AISettings) => request<AIStatus>('/settings', 'PUT', settings),
+   create: (body: { recordingMode?: 'simple'; name?: string; example?: boolean; gamePackId?: string; gamePackVersion?:string; players?: Player[] }) => request<SessionView>('/sessions', 'POST', { ...body, recordingMode: 'simple' }),
+   session: (id: string) => request<SessionView>(`/sessions/${id}`),
+-  update: (id: string, body: { name?: string; stage?: Stage; players?: Player[]; notes?: Record<string, string>; assertions?: unknown[]; answers?: { field: string; value: Value; ownerId?: string }[] }) => request<SessionView>(`/sessions/${id}`, 'PATCH', body),
++  update: (id: string, body: { name?: string; stage?: Stage; players?: Player[]; notes?: Record<string, string>; assertions?: unknown[]; answers?: ObservationReviewAnswer[] }) => request<SessionView>(`/sessions/${id}`, 'PATCH', body),
+   evidence: async (id: string, body: { dataUrl: string; label?: string; scope?: 'public' | 'player'; ownerId?: string; width?: number; height?: number; captureTarget?: import('../shared/photoCapture').CaptureTarget; sourceEvidenceId?: string; expectedCaptureEpoch?: string }) => {
+     if(!(await cloudStorage()).directPrivateUpload)return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',body);
+     const file=await (await fetch(body.dataUrl)).blob(),{dataUrl,...meta}=body;
+--- a/tests/lightweight-reader-ui.test.ts
++++ b/tests/lightweight-reader-ui.test.ts
+@@ -7,7 +7,7 @@
+ // Actual React component events/effects, intentionally not a DOM or browser substitute.
+ function mount(component:any,props:any){
+  const internals=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,slots:any[]=[];let cursor=0,tree:any,pending:(()=>void)[]=[];
+- const dispatcher={useState(value:any){const i=cursor++;if(!(i in slots))slots[i]=typeof value==='function'?value():value;return [slots[i],(next:any)=>slots[i]=typeof next==='function'?next(slots[i]):next];},useRef(value:any){const i=cursor++;return slots[i]??={current:value};},useEffect(effect:()=>any,deps?:any[]){const i=cursor++,old=slots[i];if(!old||!deps||deps.some((v,j)=>!Object.is(v,old.deps?.[j])))pending.push(()=>{old?.cleanup?.();slots[i]={deps,cleanup:effect()};});}};
++ const dispatcher={useMemo(fn:any){return fn();},useState(value:any){const i=cursor++;if(!(i in slots))slots[i]=typeof value==='function'?value():value;return [slots[i],(next:any)=>slots[i]=typeof next==='function'?next(slots[i]):next];},useRef(value:any){const i=cursor++;return slots[i]??={current:value};},useEffect(effect:()=>any,deps?:any[]){const i=cursor++,old=slots[i];if(!old||!deps||deps.some((v,j)=>!Object.is(v,old.deps?.[j])))pending.push(()=>{old?.cleanup?.();slots[i]={deps,cleanup:effect()};});}};
+  const render=()=>{cursor=0;pending=[];const previous=internals.H;internals.H=dispatcher;try{tree=component(props);}finally{internals.H=previous;}for(const effect of pending)effect();return tree;};render();return{render,get tree(){return tree;},dispose(){for(const slot of slots)slot?.cleanup?.();}};
+ }
+ function nodes(t:any):any[]{if(!t||typeof t!=='object')return[];if(Array.isArray(t))return t.flatMap(nodes);return[t,...nodes(t.props?.children)];}
+@@ -40,17 +40,17 @@
+  let mode:any;const ui=mount(LightweightReaderControls,{mode:'existing',onMode:(m:any)=>mode=m,available:true,busy:false,hasDefinition:true,onRead(){},hasPhotos:true});find(ui.tree,n=>n.type==='select').props.onChange({target:{value:'local'}});assert.equal(mode,'local');
+ });
+ const {localCatanCandidates,catanReviewScene}=await import('../src/catanObservationReviewModel.ts');
+-const {createComponent}=await import('../shared/scene.ts');
++const {createComponent,CATAN_TOPOLOGY}=await import('../shared/scene.ts');
+ const {catalogPacks}=await import('../gamepacks/catalog.ts');
+ const {SceneWorkspace}=await import('../src/SceneWorkspace.tsx');const {SceneEditor}=await import('../src/SceneEditor.tsx');
+ const {LocalCatanReview}=await import('../src/LocalCatanReview.tsx');
+-function candidateFixture(){const empty={version:2 as const,coverage:'partial' as const,components:[]};const road=createComponent(empty,'road',{id:'old-road',quantity:1,ownerId:'red',location:{type:'edge',id:'r1c1.NE'}}),city=createComponent(empty,'city',{id:'old-city',quantity:1,ownerId:'red',location:{type:'vertex',id:'r1c1.N'}}),harbor=createComponent(empty,'harbor',{id:'old-harbor',quantity:1,variant:'generic',ratio:3,location:{type:'edge',id:'r1c1.W'}});const base={...empty,components:[road,city,harbor]};const piece=createComponent(empty,'terrain',{id:'new-terrain',variant:null,quantity:1,evidenceId:'photo',region:{x:.1,y:.1,width:.1,height:.1}});const source:any={id:'local',field:'components.observed',ownerId:undefined,status:'candidate',updatedAt:'2026-01-02',evidenceIds:['photo'],value:{...empty,components:[piece]},observationReceipts:[{request:{images:[{evidenceId:'photo',inputId:'original',transformId:null}]},result:{observations:[]},componentRefs:{literal:'new-terrain'},geometryCandidates:[{observationRef:'literal',frameId:'confirmed',locationCandidate:{type:'hex',id:'r1c1'},method:'confirmed-frame',status:'candidate'}]}]};const view:any={pack:catalogPacks.find(p=>p.id==='catan-base'),session:{id:'synthetic-local-ui',assertions:[{id:'accepted',status:'accepted',field:'board.layout',evidenceIds:[],updatedAt:'2026-01-01',value:base},source],players:[],evidence:[photo],snapshots:[],preservations:[]}};return{base,source,view};}
++function candidateFixture(){const empty={version:2 as const,coverage:'partial' as const,components:[]};const road=createComponent(empty,'road',{id:'old-road',quantity:1,ownerId:'red',location:{type:'edge',id:'r1c1.NE'}}),city=createComponent(empty,'city',{id:'old-city',quantity:1,ownerId:'red',location:{type:'vertex',id:'r1c1.N'}}),harbor=createComponent(empty,'harbor',{id:'old-harbor',quantity:1,variant:'generic',ratio:3,location:{type:'edge',id:'r1c1.W'}});const base={...empty,components:[road,city,harbor]};const piece=createComponent(empty,'terrain',{id:'new-terrain',variant:null,quantity:1,evidenceId:'photo',region:{x:.1,y:.1,width:.1,height:.1}});const source:any={id:'local',field:'components.observed',ownerId:undefined,status:'candidate',updatedAt:'2026-01-02',evidenceIds:['photo'],value:{...empty,components:[piece]},observationReceipts:[{frame:{frameId:'confirmed',sourceEvidenceId:'photo',sourceSHA:'a'.repeat(64),definitionSHA:'b'.repeat(64),coordinateSpace:'normalized-photo/catan-topology',orientation:0,confirmedByUser:true,correspondences:['r1c1','r1c3','r5c1','r5c3'].map(id=>{const p=CATAN_TOPOLOGY.byId.hex.get(id)!;return{canonicalTopologyId:id,canonicalPoint:{x:p.x,y:p.y},photoPointNormalized:{x:(p.x+3)/6,y:(p.y+3)/6}};})},request:{gameId:'catan',definitionSHA:'b'.repeat(64),geometryFrameId:'confirmed',images:[{evidenceId:'photo',inputId:'original',sha256:'a'.repeat(64),transformId:null}]},result:{observations:[]},componentRefs:{literal:'new-terrain'},geometryCandidates:[{observationRef:'literal',frameId:'confirmed',locationCandidate:{type:'hex',id:'r1c1'},method:'confirmed-frame',status:'candidate'}]}]};const view:any={pack:catalogPacks.find(p=>p.id==='catan-base'),session:{id:'synthetic-local-ui',assertions:[{id:'accepted',status:'accepted',field:'board.layout',evidenceIds:[],updatedAt:'2026-01-01',value:base},source],players:[],evidence:[photo],snapshots:[],preservations:[]}};return{base,source,view};}
+ test('explicit geometry action changes only the review copy; unknown terrain stays unknown, accepted roads/buildings/harbors survive',()=>{
+- const f=candidateFixture(),before=JSON.stringify(f.source),baseBefore=JSON.stringify(f.base);const uncertain=structuredClone(f.source);uncertain.value.components[0].quantity=null;assert.throws(()=>catanReviewScene(uncertain,f.base,true),/수량을 먼저 확인/);const loose=catanReviewScene(f.source,f.base,false),placed=catanReviewScene(f.source,f.base,true);
+- assert.equal(loose.components.find(c=>c.id==='new-terrain')!.location.type,'unplaced');assert.deepEqual(placed.components.find(c=>c.id==='new-terrain')!.location,{type:'hex',id:'r1c1'});assert.equal(placed.components.find(c=>c.id==='new-terrain')!.variant,null);
+- for(const p of f.base.components)assert.deepEqual(placed.components.find(c=>c.id===p.id),p);
++ const f=candidateFixture(),before=JSON.stringify(f.source),baseBefore=JSON.stringify(f.base);const uncertain=structuredClone(f.source);uncertain.value.components[0].quantity=null;assert.equal(catanReviewScene(uncertain,f.base,true).unresolved.length,1);const loose=catanReviewScene(f.source,f.base,false),placed=catanReviewScene(f.source,f.base,true);
++ assert.equal(loose.scene.components.find(c=>c.id==='new-terrain')!.location.type,'unplaced');assert.deepEqual(placed.scene.components.find(c=>c.id==='new-terrain')!.location,{type:'hex',id:'r1c1'});assert.equal(placed.scene.components.find(c=>c.id==='new-terrain')!.variant,null);
++ for(const p of f.base.components)assert.deepEqual(placed.scene.components.find(c=>c.id===p.id),p);
+  assert.equal(JSON.stringify(f.source),before);assert.equal(JSON.stringify(f.base),baseBefore);
+- assert.equal(localCatanCandidates(f.view).length,1);f.view.session.assertions.push({id:'confirmed-board',field:'board.layout',status:'accepted',updatedAt:'2026-01-03',value:placed});assert.equal(localCatanCandidates(f.view).length,0);
++ assert.equal(localCatanCandidates(f.view).length,1);f.view.session.assertions.push({id:'confirmed-board',field:'board.layout',status:'accepted',updatedAt:'2026-01-03',value:placed.scene});assert.equal(localCatanCandidates(f.view).length,0);
+ });
+ test('local Catan candidates are discoverable but absent from ordinary editor/top-save value; dirty board cannot be overwritten by review',async()=>{
+  const f=candidateFixture();let save:any,writes=0;
+@@ -72,11 +72,11 @@
+  f.view.session.assertions=f.view.session.assertions.filter((a:any)=>a.id!==f.source.id);ui.render();assert(find(ui.tree,n=>n.type===SceneEditor),'actual editor remains in the review tree');await assert.rejects(find(ui.tree,n=>n.type===SceneEditor).props.onSave(f.base),/후보가 바뀌/);
+ });
+ 
+-test('geometry failure after preview is visible, blocks apply, and preserves editor identity/value until explicit manual continuation',async()=>{
++test('invalid frame after preview is a hard failure, blocks apply, and preserves manual editor identity/value',async()=>{
+  const f=candidateFixture();let writes=0;const ui=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:false,mutate:async()=>{writes++;},onClose(){},onEvidence(){}});
+  find(ui.tree,n=>n.type==='button'&&Array.isArray(n.props.children)&&n.props.children.join('').startsWith('계산된 위치')).props.onClick();ui.render();const preview=find(ui.tree,n=>n.type===SceneEditor);preview.props.onDirtyChange(true);ui.render();
+- f.source.observationReceipts[0].geometryCandidates[0].locationCandidate.id='no-such-hex';ui.render();const preserved=find(ui.tree,n=>n.type===SceneEditor);assert.equal(preserved.key,preview.key);assert.deepEqual(preserved.props.value,preview.props.value);assert(nodes(ui.tree).some(n=>n.props?.role==='status'&&String(n.props.children).includes('실패')));await assert.rejects(preserved.props.onSave(f.base),/위치 후보를 반영할 수 없/);assert.equal(writes,0);
+- find(ui.tree,n=>n.type==='button'&&n.props.children==='현재 초안 유지하고 위치 직접 정정').props.onClick();ui.render();assert.equal(find(ui.tree,n=>n.type===SceneEditor).key,preview.key);assert.deepEqual(find(ui.tree,n=>n.type===SceneEditor).props.value,preview.props.value);ui.dispose();
++ f.source.observationReceipts[0].frame.sourceSHA='c'.repeat(64);ui.render();const preserved=find(ui.tree,n=>n.type===SceneEditor);assert.equal(preserved.key,preview.key);assert.deepEqual(preserved.props.value,preview.props.value);assert(nodes(ui.tree).some(n=>n.props?.role==='status'&&String(n.props.children).includes('실패')));await assert.rejects(preserved.props.onSave(f.base),/위치 후보를 반영할 수 없/);assert.equal(writes,0);
++ assert(!nodes(ui.tree).some(n=>n.type==='button'&&n.props.children==='현재 초안 유지하고 위치 직접 정정'));ui.dispose();
+ });
+ test('original observation display localizes face/colors and preserves literal raw values',async()=>{
+  const {PhotoObservationOverlay}=await import('../src/PhotoObservationOverlay.tsx');const {loadPhotoDefinitions,photoDefinitionFor}=await import('../src/photoDefinitions.ts');const {catalogPacks}=await import('../gamepacks/catalog.ts');await loadPhotoDefinitions();const definition=photoDefinitionFor(catalogPacks.find(p=>p.id==='catan-base')!)!;
+@@ -104,3 +104,31 @@
+  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx');const {RummikubWorkspace}=await import('../src/RummikubWorkspace.tsx');const {api}=await import('../src/api.ts');const f=candidateFixture();f.view.pack=catalogPacks.find(p=>p.id==='rummikub');Object.assign(f.view.session,{name:'합성',captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const old=api.analysisJobs,readers=api.recognitionReaders;api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({version:'local-reader-capabilities-v1',readers:[],definitions:{version:'game-photo-definitions-v1',count:120,indexSHA:''}});
+  const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},onBack(){},setOwnerId:async()=>{},onToast(){},mutate:async()=>{}});try{const controls=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(controls.props.showReadButton,false);assert(!renderToStaticMarkup(React.createElement(controls.type,controls.props)).includes('사진 읽기</button>'));assert.equal(typeof find(ui.tree,n=>n.type===RummikubWorkspace).props.onReread,'function');}finally{ui.dispose();api.analysisJobs=old;api.recognitionReaders=readers;}
+ });
++
++test('unresolved local Catan item remains saveable in the explicit baseline-pinned draft; API failure keeps editor draft',async()=>{
++ const f=candidateFixture();f.source.value.components[0].quantity=null;const {api}=await import('../src/api.ts'),old=api.update;let request:any,fail=false;api.update=async(_id,body)=>{request=body;if(fail)throw Error('409 synthetic stale');return f.view;};
++ const ui=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:false,mutate:async(task:any)=>task(),onClose(){},onEvidence(){}});
++ try{find(ui.tree,n=>n.type==='button'&&Array.isArray(n.props.children)&&n.props.children.join('').startsWith('계산된 위치')).props.onClick();ui.render();const editor=find(ui.tree,n=>n.type===SceneEditor);assert.equal(editor.props.value.components.find((c:any)=>c.id==='new-terrain').location.type,'unplaced');assert(nodes(ui.tree).some(n=>n.props?.role==='status'&&String(n.props.children).includes('배치 0개 · 위치 확인 1개')));await editor.props.onSave(editor.props.value);assert.deepEqual(request.answers.find((a:any)=>a.field==='board.layout').observationReview,{version:'native-observation-review-v1',sourceAssertionId:f.source.id,expectedBaselineAssertionId:'accepted'});fail=true;editor.props.onDirtyChange(true);ui.render();await assert.rejects(find(ui.tree,n=>n.type===SceneEditor).props.onSave(editor.props.value),/409/);ui.render();assert.equal(find(ui.tree,n=>n.type===SceneEditor).key,editor.key);assert.deepEqual(find(ui.tree,n=>n.type===SceneEditor).props.value,editor.props.value);}finally{ui.dispose();api.update=old;}
++});
++test('native Rummikub explicit review retains baseline/order and blocks stale/dirty saves without discarding its draft',async()=>{
++ const {RummikubWorkspace}=await import('../src/RummikubWorkspace.tsx'),{RummikubBoardView}=await import('../src/RummikubBoard.tsx'),{emptyRummikub,createRummikubTile}=await import('../shared/rummikub.ts'),{api}=await import('../src/api.ts');const old=api.update;let request:any,flush:any;
++ const base=emptyRummikub();base.groups=[{id:'ordered',label:'직접 정정',tiles:[createRummikubTile('old',{number:8,color:'blue',note:'수동'})]}];base.loose=[createRummikubTile('old-loose',{number:3,color:'red'})];const fresh=emptyRummikub();fresh.loose=[createRummikubTile('new',{kind:'unknown',number:null,color:null})];
++ const accepted:any={id:'old-record',field:'table.scene',status:'accepted',value:base,evidenceIds:[],updatedAt:'2026-01-01'},candidate:any={id:'new-record',field:'table.scene',status:'candidate',value:fresh,evidenceIds:[],updatedAt:'2026-01-02',observationReceipts:[{}]};const props:any={view:{session:{id:'synthetic-rummi',assertions:[accepted,candidate],evidence:[]}},busy:false,mutate:async(task:any)=>task(),onEvidence(){},onReadyToSave:(fn:any)=>flush=fn};api.update=async(_id,body)=>{request=body;return props.view;};
++ const ui=mount(RummikubWorkspace,props);try{
++  assert.equal(flush,null,'pristine candidate-only draft is not registered as whole-state save');find(ui.tree,n=>n.type==='button'&&n.props.children==='기존 판과 함께 정정').props.onClick();ui.render();const shown=find(ui.tree,n=>n.type===RummikubBoardView).props.scene;assert.deepEqual(shown.groups,base.groups);assert.deepEqual(shown.loose.map((t:any)=>t.id),['old-loose','new']);await (flush as any)();assert.deepEqual(request.answers[0].observationReview,{version:'native-observation-review-v1',sourceAssertionId:'new-record',expectedBaselineAssertionId:'old-record'});
++  // Re-open review then change through the actual add-group control; a concurrent base cannot silently rebase it.
++  ui.render();find(ui.tree,n=>n.type==='button'&&n.props.children==='기존 판과 함께 정정').props.onClick();ui.render();find(ui.tree,n=>n.type===RummikubBoardView).props.onAddGroup();ui.render();const dirty=JSON.stringify(find(ui.tree,n=>n.type===RummikubBoardView).props.scene);props.view.session.assertions.push({...accepted,id:'concurrent',updatedAt:'2026-01-03'});ui.render();await assert.rejects((flush as any)(),/기존 판이나 새 사진 후보가 바뀌/);ui.render();assert.equal(JSON.stringify(find(ui.tree,n=>n.type===RummikubBoardView).props.scene),dirty);// Portal-only error presentation is checked in CUA, not this hook harness.
++ }finally{ui.dispose();api.update=old;}
++});
++
++test('typed candidate review routes through explicit component linking when its field already has accepted objects',async()=>{
++ const {GameEssentials}=await import('../src/GameEssentials.tsx'),{ComponentLinkDialog}=await import('../src/ComponentLinkDialog.tsx');const pack=catalogPacks.find(p=>p.id==='splendor')!;
++ const piece=(id:string)=>({id,componentId:'development',variant:null,quantity:1,label:'合成',anchor:'',evidenceId:null,region:null}),record=(id:string)=>({version:'game-component-record-v1',pieces:[piece(id)]});
++ const view:any={pack,session:{id:'typed-ui',players:[],evidence:[],snapshots:[],preservations:[],assertions:[{id:'old',field:'market.scene',status:'accepted',value:record('old-card'),evidenceIds:[]},{id:'new',field:'market.scene',status:'candidate',value:record('new-card'),evidenceIds:[]}]},questions:[]};let writes=0;
++ const ui=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(ui.tree,n=>n.type==='button'&&n.props.children==='후보 확인·수정').props.onClick();ui.render();const link=find(ui.tree,n=>n.type===ComponentLinkDialog);assert.deepEqual(link.props.initialIds,['new-card']);assert.equal(link.props.initialTarget.field,'market.scene');assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{ui.dispose();}
++});
++
++test('malformed local source is visibly blocked without crashing review or exposing a replacement blank-state save',async()=>{
++ const f=candidateFixture();f.source.value.version=99;let writes=0;const ui=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:false,mutate:async()=>{writes++;},onClose(){},onEvidence(){}});
++ try{const editor=find(ui.tree,n=>n.type===SceneEditor);assert.deepEqual(editor.props.value.components,f.base.components);assert(nodes(ui.tree).some(n=>n.props?.role==='alert'));await assert.rejects(editor.props.onSave(f.base),/위치 후보를 반영할 수 없/);assert.equal(writes,0);}finally{ui.dispose();}
++});
+--- a/tests/rummikub-ui-save.test.ts
++++ b/tests/rummikub-ui-save.test.ts
+@@ -25,3 +25,12 @@
+  const input=draft();input.pending.value='재배열 중';assert.deepEqual(rummikubDraftAnswers(input,PHOTO_INPUT_SAVE_OPTIONS),[{field:'pending',value:'재배열 중'}]);
+  const privateInput=draft('p1');privateInput.opened.value='false';assert.deepEqual(rummikubDraftAnswers(privateInput,PHOTO_INPUT_SAVE_OPTIONS),[{field:'opened',ownerId:'p1',value:false}]);
+ });
++
++test('baseline-inclusive explicit review preserves ordered/manual old tiles and keeps fresh observations loose without identity inference',async()=>{
++ const {prepareRummikubReview}=await import('../src/rummikubSavePolicy.ts');const base=emptyRummikub(),fresh=emptyRummikub();
++ base.groups=[{id:'ordered',label:'수동 묶음',tiles:[createRummikubTile('old-2',{color:'red',number:2}),createRummikubTile('old-1',{color:'red',number:1,note:'직접 정정'})]}];base.loose=[createRummikubTile('old-loose',{color:'green',number:5})];fresh.groups=[{id:'model-group',label:'관측',tiles:[createRummikubTile('new-same-face',{color:'red',number:2})]}];fresh.loose=[createRummikubTile('new-unknown',{kind:'unknown',color:null,number:null})];
++ const before=JSON.stringify([base,fresh]),review=prepareRummikubReview(base,fresh);assert.deepEqual(review.groups,base.groups);assert.deepEqual(review.loose.map(t=>t.id),['old-loose','new-same-face','new-unknown']);assert.equal(JSON.stringify([base,fresh]),before);
++ const input={...draft(),scene:review,requiresReview:true,observationReview:{version:'native-observation-review-v1' as const,sourceAssertionId:'fresh',expectedBaselineAssertionId:'accepted'}};
++ const answers=rummikubDraftAnswers(input);assert.deepEqual(answers[0].observationReview,input.observationReview);assert.deepEqual(answers[0].value,review);
++ assert.throws(()=>rummikubDraftAnswers({...input,observationReview:undefined,dirty:true}),/기존 판과 함께/);assert.deepEqual(rummikubDraftAnswers({...input,observationReview:undefined},PHOTO_INPUT_SAVE_OPTIONS),[]);
++});
+--- a/tests/splendor-record-ui.test.ts
++++ b/tests/splendor-record-ui.test.ts
+@@ -68,3 +68,9 @@
+   assert.doesNotMatch(html,/구성물 종류를 먼저/);assert.equal(JSON.stringify(piece),before);
+  }
+ });
++
++test('unknown development kind retains visible/editable level without choosing a front or deck kind',async()=>{
++ const {SplendorReadout}=await import('../src/SplendorReadout.tsx');const piece={id:'level-only',componentId:'development',variant:null,quantity:null,label:'원문',anchor:'',evidenceId:null,region:null,readout:{schema:'splendor-v1',kind:null,points:null,bonus:null,cost:null,requirements:null,color:null,level:2}} as const,before=JSON.stringify(piece);
++ const read=splendorView(piece as never);assert.equal(read.kind,'unknown');assert.equal(read.level,2);assert.match(renderToStaticMarkup(createElement(SplendorReadout,read)),/2레벨 · 종류 확인 필요/);
++ const fields=SplendorFields({piece:piece as never,disabled:false,onPatch(){}});const html=renderToStaticMarkup(fields);assert.match(html,/aria-label="레벨"/);assert.match(html,/aria-pressed="true"[^>]*>2레벨/);assert.doesNotMatch(html,/점수<input|보너스 보석/);assert.equal(JSON.stringify(piece),before);
++});
+--- /dev/null
++++ b/tests/lightweight-catan-review.test.ts
+@@ -0,0 +1,24 @@
++import test from 'node:test';import assert from 'node:assert/strict';
++import {catanReviewScene} from '../src/catanObservationReviewModel.ts';
++import {CATAN_TOPOLOGY,createComponent,type ComponentScene} from '../shared/scene.ts';
++const empty=():ComponentScene=>({version:2,coverage:'partial',components:[]});
++function fixture(entries:{ref:string;slot:string;kind?:string;quantity?:number|null}[]){
++ const points=['r1c1','r1c3','r5c1','r5c3'].map(id=>CATAN_TOPOLOGY.byId.hex.get(id)!);
++ const frame:any={frameId:'frame',sourceEvidenceId:'photo',sourceSHA:'a'.repeat(64),definitionSHA:'b'.repeat(64),coordinateSpace:'normalized-photo/catan-topology',orientation:0,confirmedByUser:true,correspondences:points.map(p=>({canonicalTopologyId:p.id,canonicalPoint:{x:p.x,y:p.y},photoPointNormalized:{x:(p.x+3)/6,y:(p.y+3)/6}}))};
++ const source:any={id:'candidate',field:'components.observed',status:'candidate',evidenceIds:['photo'],value:{...empty(),components:entries.map(e=>createComponent(empty(),(e.kind??'terrain')as any,{id:e.ref,quantity:e.quantity===undefined?1:e.quantity,evidenceId:'photo',location:{type:'unplaced',id:null}}))},observationReceipts:[{frame,request:{version:'lightweight-observation-v1',gameId:'catan',definitionSHA:frame.definitionSHA,geometryFrameId:frame.frameId,images:[{evidenceId:'photo',sha256:frame.sourceSHA,transformId:null}]},componentRefs:Object.fromEntries(entries.map(e=>[e.ref,e.ref])),geometryCandidates:entries.map(e=>({observationRef:e.ref,frameId:frame.frameId,locationCandidate:{type:'hex',id:e.slot},method:'confirmed-frame',status:'candidate'})),transforms:[]}]};return source;
++}
++test('three independent locations apply while null/zero/bundle quantities stay visible unplaced; source remains immutable',()=>{
++ const source=fixture([{ref:'a',slot:'r1c1'},{ref:'b',slot:'r1c2'},{ref:'c',slot:'r1c3'},{ref:'null',slot:'r2c1',quantity:null},{ref:'zero',slot:'r2c2',quantity:0},{ref:'bundle',slot:'r2c3',quantity:2}]),before=JSON.stringify(source);
++ const result=catanReviewScene(source,empty(),true);assert.deepEqual(result.placedRefs,['a','b','c']);assert.equal(result.unresolved.length,3);for(const id of ['null','zero','bundle'])assert.equal(result.scene.components.find(c=>c.id===id)!.location.type,'unplaced');assert.equal(result.scene.components.length,6);assert.equal(JSON.stringify(source),before);
++ assert.deepEqual(catanReviewScene(source,empty(),false).scene.components,source.value.components);
++});
++test('all same-layer slot contenders defer in either order, independent pieces and separate hex layers still apply',()=>{
++ const entries=[{ref:'a',slot:'r1c1'},{ref:'b',slot:'r1c1'},{ref:'c',slot:'r1c2'},{ref:'n',slot:'r1c2',kind:'number-token'},{ref:'robber',slot:'r1c2',kind:'robber'}];
++ for(const es of [entries,[...entries].reverse()]){const result=catanReviewScene(fixture(es),empty(),true);assert.deepEqual([...result.placedRefs].sort(),['c','n','robber']);assert.deepEqual(result.unresolved.map(x=>x.observationRef).sort(),['a','b']);for(const id of ['a','b'])assert.equal(result.scene.components.find(c=>c.id===id)!.location.type,'unplaced');}
++});
++test('accepted manual number and old IDs never replaced, conflicting destinations defer, missing/wrong frame is hard failure',()=>{
++ const base=empty();base.components=[createComponent(base,'number-token',{id:'manual',number:8,quantity:1,location:{type:'hex',id:'r1c1'}})];const before=JSON.stringify(base),source=fixture([{ref:'observed',slot:'r1c1',kind:'number-token'},{ref:'free',slot:'r1c3'}]);
++ const r=catanReviewScene(source,base,true);assert.deepEqual(r.scene.components.find(c=>c.id==='manual'),base.components[0]);assert.equal(r.scene.components.find(c=>c.id==='observed')!.location.type,'unplaced');assert.deepEqual(r.placedRefs,['free']);assert.equal(JSON.stringify(base),before);
++ const conflict=fixture([{ref:'a',slot:'r1c1'}]);conflict.observationReceipts[0].geometryCandidates.push({...conflict.observationReceipts[0].geometryCandidates[0],locationCandidate:{type:'hex',id:'r1c3'}});assert.deepEqual(catanReviewScene(conflict,empty(),true).placedRefs,[]);
++ source.observationReceipts[0].frame.sourceSHA='c'.repeat(64);assert.throws(()=>catanReviewScene(source,base,true),/frame|좌표/);
++});

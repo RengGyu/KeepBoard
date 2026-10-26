@@ -1,0 +1,55 @@
+{
+  "version": "game-vision-plan-v1",
+  "manifestPath": "/private/tmp/keepboard-game-vision-20261026-v1/d3-schema-recovery/manifest.json",
+  "manifestSHA256": "baf684e21fa92d1c36da4dadf4af05d5aa94ae76e9a4a097f413bd2c80d10551",
+  "gameRunnerSHA256": "46f9230db1d53d94b32f01c87b3eb78d983830b6ebe63392c4b803298271c400",
+  "baseRunnerSHA256": "ca6ad1fda0a8073d42a5dea7cfd3aeeb4fb9c521d84dc865997c1b762fe148f0",
+  "imageApprovedForHosted": true,
+  "task": "catan-game-literals-v1",
+  "runs": [
+    {
+      "context": true,
+      "id": "D3",
+      "provider": "deepseek",
+      "model": "deepseek-flash",
+      "documentedModelRevision": "DeepSeek-V4.1-Flash-1017",
+      "endpoint": "https://api.deepseek.com/responses",
+      "sourceSHA256": "82a495688f1130cbab488b4f30a736c915e32bb8059d4a393042c5456f929e22",
+      "width": 850,
+      "height": 637,
+      "semanticTextSHA256": "fea4c4746bda306307da7c5491f9c188ee4ef313fdc0160ea89ff570cb51fec2",
+      "schemaSHA256": "dba556ac84616f781cadb74ecdc8d1de92a0e66f5d348a3a16d823f3b3622697",
+      "contextSHA256": "221bab3eef21df015050dfef7322432978bc7ad5208e8304b31919e2a6175926",
+      "bodySHA256": "5cf74ef331ee27f41d425c0bb6d9620d217b87341fdb0a24fc33b303688e4118",
+      "inputPlanningByteProxy": 9864,
+      "outputLimit": 32768,
+      "timeoutSeconds": 180,
+      "requestSHA256": "93200ba80a4b5d94665d25e05603a68a3993db2910f88e88238eef8dd4f670d9"
+    }
+  ],
+  "plannedCalls": 1,
+  "maximumExperimentAttempts": 6,
+  "retry": 0,
+  "concurrency": 1,
+  "evaluationPolicy": {
+    "version": "physical-iou-v1",
+    "minimumIoU": 0.25,
+    "matching": "geometry-only reciprocal unique maximum IoU without kind filtering; ties ambiguous; kind and attributes scored after matching",
+    "centerError": "Euclidean pixels between physical bbox centers",
+    "notServicePassThreshold": true
+  },
+  "evaluationFreeze": {
+    "contractPath": "/Users/jeonggyuju/Project_folder/KeepBoard/docs/game-vision-comparison-20261026/data/contract.json",
+    "contractSHA256": "9cad28fe007851911e4e838a30e8df180b1f6428d5b3f07c3d71846b9638e1ab",
+    "privateGTPath": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/kb-game-literal-gt-v2-mpfgil0v/ground-truth.json",
+    "privateGTSHA256": "9ea4c49f2c752cc688259611a7b57e304bdb2bb9edaa07ea64de5b6b7176ff84",
+    "policyRuling": "Supervisor finalized geometry-only reciprocal unique maximum IoU >=0.25, no kind filtering; matched kind/attributes scored separately"
+  },
+  "planningWorstUSD": 0.049152,
+  "planningAllSixGeminiUSD": 0.884736,
+  "budgetUSD": 1.7,
+  "billingCaveat": "32768 input assumption backed by offline byte proxy/media max/margin, not API token count or actual bill; output cap includes reasoning",
+  "D4": "NOT_RUN: no independently confirmed frame bound to selected source supplied",
+  "holdout": "NOT_RUN: no independent newly authorized photos supplied",
+  "planSHA256": "03d21e73912b48e452a4b7c10c77ca8517ea634f6ebf42dfd00ace74087c50d0"
+}

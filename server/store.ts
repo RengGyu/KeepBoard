@@ -12,8 +12,7 @@ export interface SessionExport {
 export class Store {
   private listChange: Promise<unknown> = Promise.resolve();
   private async hiddenSessions(): Promise<Record<string, { deletedAt: string }>> {
-    try { return JSON.parse(await readFile(path.join(this.root, 'session-list.json'), 'utf8')); }
-    catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return {}; throw error; }
+    return await this.readJSON<Record<string,{deletedAt:string}>>(path.join(this.root,'session-list.json'))??{};
   }
   async setSessionsHidden(ids: string[] | undefined, hidden: boolean): Promise<string[]> {
     const job = this.listChange.catch(() => undefined).then(async () => {
@@ -33,29 +32,30 @@ export class Store {
   }
   constructor(readonly root = path.resolve(process.env.KEEPBOARD_DATA_DIR || '.keepboard'), readonly publicRoot = path.resolve('public')) {}
 
-  private filename(kind: 'sessions' | 'packs', id: string) {
+  protected filename(kind: 'sessions' | 'packs', id: string) {
     if (!/^[a-zA-Z0-9._-]+$/.test(id)) throw new Error('잘못된 식별자입니다.');
     return path.join(this.root, kind, `${id}.json`);
   }
 
-  private async atomicWrite(filename: string, value: unknown) {
+  protected async atomicWrite(filename: string, value: unknown) {
     await mkdir(path.dirname(filename), { recursive: true });
     const temporary = `${filename}.${randomUUID()}.tmp`;
-    await writeFile(temporary, JSON.stringify(value, null, 2));
+    await writeFile(temporary, JSON.stringify(value, null, 2), {mode:0o600});
     await rename(temporary, filename);
   }
 
-  async getSession(id: string): Promise<Session | undefined> {
-    try { return JSON.parse(await readFile(this.filename('sessions', id), 'utf8')); }
-    catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return undefined; throw error; }
+  protected async readJSON<T>(filename:string):Promise<T|undefined>{
+    try{return JSON.parse(await readFile(filename,'utf8'));}
+    catch(error){if((error as NodeJS.ErrnoException).code==='ENOENT')return undefined;throw error;}
   }
+  async getSession(id:string):Promise<Session|undefined>{return this.readJSON<Session>(this.filename('sessions',id));}
 
   async saveSession(session: Session) {
     session.updatedAt = new Date().toISOString();
     await this.atomicWrite(this.filename('sessions', session.id), session);
   }
 
-  private async list<T>(kind: 'sessions' | 'packs'): Promise<T[]> {
+  protected async list<T>(kind: 'sessions' | 'packs'): Promise<T[]> {
     let files: string[];
     try { files = await readdir(path.join(this.root, kind)); }
     catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return []; throw error; }
@@ -81,15 +81,12 @@ export class Store {
     return `/uploads/${filename}`;
   }
 
-  private async evidenceData(evidence: Evidence): Promise<string> {
-    if (evidence.url.startsWith('data:image/')) return evidence.url;
-    const filename = evidence.url.startsWith('/uploads/')
-      ? path.join(this.root, 'uploads', path.basename(evidence.url))
-      : path.join(this.publicRoot, path.basename(evidence.url));
-    const extension = path.extname(filename).slice(1).toLowerCase();
-    const mime = extension === 'svg' ? 'image/svg+xml' : extension === 'jpg' ? 'image/jpeg' : `image/${extension}`;
-    return `data:${mime};base64,${(await readFile(filename)).toString('base64')}`;
+  async readEvidence(evidence:Evidence):Promise<{data:Buffer;mimeType:string}>{
+    if(evidence.url.startsWith('data:image/')){const m=/^data:([^;]+);base64,(.+)$/s.exec(evidence.url);if(!m)throw Error('사진 형식을 확인하세요.');return {data:Buffer.from(m[2],'base64'),mimeType:m[1]};}
+    const filename=evidence.url.startsWith('/uploads/')?path.join(this.root,'uploads',path.basename(evidence.url)):path.join(this.publicRoot,path.basename(evidence.url));
+    const ext=path.extname(filename).slice(1).toLowerCase();return {data:await readFile(filename),mimeType:ext==='svg'?'image/svg+xml':ext==='jpg'?'image/jpeg':'image/'+ext};
   }
+  private async evidenceData(evidence:Evidence){const r=await this.readEvidence(evidence);return 'data:'+r.mimeType+';base64,'+r.data.toString('base64');}
 
   async exportSession(session: Session): Promise<SessionExport> {
     const evidence = [...session.evidence, ...session.snapshots.flatMap(snapshot => snapshot.evidence)];

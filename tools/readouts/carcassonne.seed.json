@@ -1,0 +1,179 @@
+{
+  "gameId": "carcassonne",
+  "runtimePackId": "carcassonne",
+  "schema": "carcassonne-v1",
+  "editionId": "base",
+  "sourceSHA": "a2b8788cd3c51aa938884f119fd98fe00818e72a60f8d093c573b89597de5ffa",
+  "packVersion": "1.0.0-essentials-2.a2b8788cd3c5",
+  "title": "카르카손",
+  "batch": "01-map-tiles",
+  "sourceVerification": "official-partial",
+  "components": [
+    {
+      "id": "tiles",
+      "name": "지형 타일",
+      "kind": "tile",
+      "description": "도시·도로·수도원·들판 경계와 회전.",
+      "fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞뒷면 관측",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "인쇄된 표기만; 상업 타일ID 추측 금지",
+          "faceOnly": true
+        },
+        {
+          "id": "city",
+          "label": "도시 표시",
+          "type": "boolean",
+          "acquisition": "visible",
+          "sourceText": "보이는 도시",
+          "faceOnly": true
+        },
+        {
+          "id": "road",
+          "label": "도로 표시",
+          "type": "boolean",
+          "acquisition": "visible",
+          "sourceText": "보이는 도로",
+          "faceOnly": true
+        },
+        {
+          "id": "monastery",
+          "label": "수도원 표시",
+          "type": "boolean",
+          "acquisition": "visible",
+          "sourceText": "보이는 수도원",
+          "faceOnly": true
+        },
+        {
+          "id": "shields",
+          "label": "문장 표시 수",
+          "type": "integer",
+          "acquisition": "visible",
+          "sourceText": "보이는 문장 수; 점수 아님",
+          "min": 0,
+          "faceOnly": true
+        },
+        {
+          "id": "gridX",
+          "label": "지도 가로 칸",
+          "type": "integer",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목"
+        },
+        {
+          "id": "gridY",
+          "label": "지도 세로 칸",
+          "type": "integer",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목"
+        },
+        {
+          "id": "features",
+          "label": "타일 내부 지형",
+          "type": "features",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목"
+        }
+      ]
+    },
+    {
+      "id": "followers",
+      "name": "미플",
+      "kind": "piece",
+      "description": "소유자와 서로 다른 타일 내부 지형의 부착",
+      "fields": [
+        {
+          "id": "posture",
+          "label": "세운/누운 상태",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "선 미플과 누운 농부",
+          "options": [
+            {
+              "value": "standing",
+              "label": "세움"
+            },
+            {
+              "value": "lying",
+              "label": "누움"
+            }
+          ]
+        },
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "색 관측은 플레이어 신원과 다름"
+        },
+        {
+          "id": "owner",
+          "label": "소유 플레이어",
+          "type": "player",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목"
+        },
+        {
+          "id": "attachedTo",
+          "label": "놓인 타일·지형",
+          "type": "reference",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목",
+          "targetComponents": [
+            "tiles"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "score",
+      "name": "점수 말",
+      "kind": "marker",
+      "description": "인쇄 점수칸과 실제 총점 분리",
+      "fields": [
+        {
+          "id": "trackValue",
+          "label": "보이는 점수칸",
+          "type": "integer",
+          "acquisition": "visible",
+          "sourceText": "말이 있는 인쇄 점수값",
+          "min": 0
+        },
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "색으로 사용자 추측 금지"
+        },
+        {
+          "id": "owner",
+          "label": "소유 플레이어",
+          "type": "player",
+          "acquisition": "manual",
+          "sourceText": "원 명세의 수동 배치/연결·사용자 확인 항목"
+        }
+      ]
+    }
+  ]
+}

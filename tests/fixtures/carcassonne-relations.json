@@ -1,0 +1,134 @@
+{
+  "synthetic": true,
+  "gameId": "carcassonne",
+  "field": "map.scene",
+  "players": [
+    {
+      "id": "player-a",
+      "name": "합성 플레이어",
+      "color": "#315a89"
+    }
+  ],
+  "evidenceIds": [
+    "synthetic-photo"
+  ],
+  "value": {
+    "version": "game-component-record-v1",
+    "pieces": [
+      {
+        "id": "tile-a",
+        "componentId": "tiles",
+        "variant": null,
+        "quantity": 1,
+        "label": "합성 시험 tile-a",
+        "anchor": "합성 원본의 해당 영역",
+        "evidenceId": "synthetic-photo",
+        "region": {
+          "x": 0.1,
+          "y": 0.1,
+          "width": 0.1,
+          "height": 0.1
+        },
+        "readout": {
+          "schema": "carcassonne-v1",
+          "kind": "tiles",
+          "values": {
+            "face": "front",
+            "printedName": null,
+            "city": true,
+            "road": true,
+            "monastery": null,
+            "shields": 0,
+            "gridX": -1,
+            "gridY": 2,
+            "features": [
+              {
+                "id": "field-left",
+                "kind": "field",
+                "label": "길 왼쪽 들판",
+                "x": 0.2,
+                "y": 0.5
+              },
+              {
+                "id": "field-right",
+                "kind": "field",
+                "label": "길 오른쪽 들판",
+                "x": 0.8,
+                "y": 0.5
+              }
+            ]
+          },
+          "sources": {
+            "face": "user",
+            "printedName": null,
+            "city": "user",
+            "road": "user",
+            "monastery": null,
+            "shields": "user",
+            "gridX": "user",
+            "gridY": "user",
+            "features": "user"
+          }
+        }
+      },
+      {
+        "id": "meeple-a",
+        "componentId": "followers",
+        "variant": null,
+        "quantity": 1,
+        "label": "합성 시험 meeple-a",
+        "anchor": "합성 원본의 해당 영역",
+        "evidenceId": "synthetic-photo",
+        "region": {
+          "x": 0.1,
+          "y": 0.1,
+          "width": 0.1,
+          "height": 0.1
+        },
+        "readout": {
+          "schema": "carcassonne-v1",
+          "kind": "followers",
+          "values": {
+            "posture": "lying",
+            "observedColor": null,
+            "owner": "player-a",
+            "attachedTo": {
+              "pieceId": "tile-a",
+              "featureId": "field-right"
+            }
+          },
+          "sources": {
+            "posture": "user",
+            "observedColor": null,
+            "owner": "user",
+            "attachedTo": "user"
+          }
+        }
+      },
+      {
+        "id": "legacy-tile",
+        "componentId": "tiles",
+        "variant": null,
+        "quantity": null,
+        "label": "기존 라벨은 구조화 수치로 재해석하지 않음",
+        "anchor": "합성 원본의 해당 영역",
+        "evidenceId": "synthetic-photo",
+        "region": {
+          "x": 0.1,
+          "y": 0.1,
+          "width": 0.1,
+          "height": 0.1
+        }
+      }
+    ]
+  },
+  "expectations": {
+    "tileCount": 2,
+    "missingGrid": [
+      "legacy-tile"
+    ],
+    "followerTarget": "tile-a/field-right",
+    "shields": 0,
+    "legacyQuantity": null
+  }
+}

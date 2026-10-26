@@ -1,0 +1,333 @@
+--- /dev/null
++++ b/server/componentLinking.ts
+@@ -0,0 +1,35 @@
++import {randomUUID} from 'node:crypto';import type {Assertion,GamePack,Session,Value} from '../shared/types.ts';
++import type {GenericPiece,GenericRecord} from '../shared/genericRecord.ts';
++import {componentLinkTargets,componentRecord,latestComponentAssertion,linkedComponents,type ComponentLinkRequest} from '../shared/componentLinking.ts';
++import {validateComponentRecord} from './engine.ts';import {runtimeBinding} from '../shared/gameEssentials.ts';import {ConflictError} from './objects.ts';
++const same=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);
++function accepted(session:Session,pack:GamePack,field:string,ownerId:string|undefined,value:GenericRecord){
++ const checked=validateComponentRecord(session,pack,field,value as unknown as Value,ownerId,undefined,{trustedLink:true});
++ session.assertions=session.assertions.filter(a=>a.status!=='accepted'||a.field!==field||a.ownerId!==ownerId);
++ const a:Assertion={id:randomUUID(),field,ownerId,value:checked as unknown as Value,status:'accepted',basis:'user',evidenceIds:[...new Set(checked.pieces.flatMap(p=>p.evidenceId?[p.evidenceId]:[]))],turnInstanceId:session.turnInstanceId,updatedAt:new Date().toISOString()};session.assertions.push(a);return a;
++}
++/** Caller authorizes room/PIN scopes; this transaction is staged in a clone until every record validates. */
++export function linkComponents(session:Session,pack:GamePack,request:ComponentLinkRequest){
++ const r=request;if(!r||typeof r.sourceAssertionId!=='string'||!Array.isArray(r.pieceIds)||!r.pieceIds.length||r.pieceIds.length>500||r.pieceIds.some(x=>typeof x!=='string'||!x)||new Set(r.pieceIds).size!==r.pieceIds.length||!r.target||typeof r.target.field!=='string'||r.target.ownerId!==undefined&&typeof r.target.ownerId!=='string'||r.expectedTargetAssertionId!==null&&typeof r.expectedTargetAssertionId!=='string')throw Error('연결할 실물과 목적지를 확인하세요.');
++ const source=session.assertions.find(a=>a.id===r.sourceAssertionId&&['candidate','accepted'].includes(a.status)),record=componentRecord(source);if(!source||!record)throw new ConflictError();
++ if(source.status==='accepted'&&latestComponentAssertion(session,source.field,source.ownerId)?.id!==source.id)throw new ConflictError();
++ const selected=record.pieces.filter(p=>r.pieceIds.includes(p.id));if(selected.length!==r.pieceIds.length)throw new ConflictError();
++ const links=linkedComponents(session),already=source.status==='candidate'?selected.map(p=>links.find(x=>x.origin.assertionId===source.id&&x.origin.pieceId===p.id)):[];
++ if(already.some(x=>x&&(x.assertion.field!==r.target.field||x.assertion.ownerId!==r.target.ownerId)))throw new ConflictError();
++ if(already.length&&already.every(Boolean))return {moved:0,idempotent:true};
++ if(!componentLinkTargets(pack,session.players,selected).some(t=>t.field===r.target.field&&t.ownerId===r.target.ownerId))throw Error('이 실물은 선택한 기록 영역에 연결할 수 없어요.');
++ if(source.status==='accepted'&&source.field===r.target.field&&source.ownerId===r.target.ownerId)return {moved:0,idempotent:true};
++ const current=latestComponentAssertion(session,r.target.field,r.target.ownerId);if((current?.id??null)!==r.expectedTargetAssertionId)throw new ConflictError();
++ const targetRecord=componentRecord(current);if(current&&!targetRecord)throw Error('기존 기록 형식은 그대로 보존됩니다. 다른 연결 영역을 선택해 주세요.');
++ const corrections=r.corrections??selected;if(!Array.isArray(corrections)||corrections.length!==selected.length||new Set(corrections.map(p=>p.id)).size!==selected.length||corrections.some(p=>!selected.some(o=>o.id===p.id)))throw Error('선택한 실물만 정정할 수 있어요.');
++ const added:GenericPiece[]=[];for(const original of selected){if(already.some(x=>x?.origin.pieceId===original.id))continue;const p=structuredClone(corrections.find(p=>p.id===original.id)!);
++  if(p.evidenceId!==original.evidenceId||!same(p.region,original.region)||!same(p.linkOrigin,original.linkOrigin)||!same(p.placement,original.placement))throw Error('연결하면서 원본·사진 영역·실물 연결을 바꿀 수 없어요.');
++  if((targetRecord?.pieces??[]).some(q=>q.id===p.id))throw new ConflictError();
++  const origin=p.linkOrigin??{assertionId:source.id,pieceId:p.id,field:source.field,...(source.ownerId?{ownerId:source.ownerId}:{})};
++  if(p.placement&&!runtimeBinding(pack,r.target.field)?.areaIds.includes(p.placement.areaId)){if(r.clearPlacement!==true)throw Error('다른 영역의 배치는 추측하지 않아요. 배치하지 않고 옮기기를 확인해 주세요.');origin.previousPlacement=structuredClone(p.placement);delete p.placement;}
++  p.linkOrigin=origin;added.push(p);
++ }
++ const staged=structuredClone(session);accepted(staged,pack,r.target.field,r.target.ownerId,{version:'game-component-record-v1',pieces:[...(targetRecord?.pieces??[]),...added]});
++ if(source.status==='accepted')accepted(staged,pack,source.field,source.ownerId,{version:'game-component-record-v1',pieces:record.pieces.filter(p=>!r.pieceIds.includes(p.id))});
++ session.assertions=staged.assertions;return {moved:added.length,idempotent:false};
++}
+--- a/server/engine.ts
++++ b/server/engine.ts
+@@ -1,3 +1,4 @@
++import {linkedComponents} from '../shared/componentLinking.ts';
+ import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
+ import { randomUUID } from 'node:crypto';
+ import type { Assertion, Condition, FieldDefinition, GamePack, Preservation, Session, SessionView, Value } from '../shared/types.ts';
+@@ -85,13 +86,22 @@
+ }
+ 
+ /** Shared trust boundary for manual answers, candidate acceptance and imported component records. */
+-export function validateComponentRecord(session:Pick<Session,'players'|'evidence'>&Partial<Pick<Session,'assertions'>>,pack:GamePack,fieldKey:string,value:Value,ownerId?:string,assertionEvidenceIds?:string[]){
++export function validateComponentRecord(session:Pick<Session,'players'|'evidence'>&Partial<Pick<Session,'assertions'>>,pack:GamePack,fieldKey:string,value:Value,ownerId?:string,assertionEvidenceIds?:string[],options:{trustedLink?:boolean;importing?:boolean}={}){
+  const field=pack.fields.find(f=>f.key===fieldKey);if(!field||runtimeBinding(pack,fieldKey)?.editor!=='component-catalog')throw new Error('구성물 필드를 확인하세요.');
+  if(field.scope==='player'?!session.players.some(p=>p.id===ownerId):!!ownerId)throw new Error('구성물 소유 범위를 확인하세요.');
+  const ids=session.evidence.filter(e=>field.visibility==='public'||!ownerId?e.scope==='public'&&!e.ownerId:e.ownerId===ownerId||e.scope==='public'&&!e.ownerId).map(e=>e.id);
+  if(assertionEvidenceIds&&(!Array.isArray(assertionEvidenceIds)||assertionEvidenceIds.some(id=>!ids.includes(id))))throw new Error('이 영역에서 볼 수 있는 원본만 근거로 연결하세요.');
+  const record=validateGenericRecord(value,pack,fieldKey,ids,{playerIds:session.players.map(p=>p.id)});
+  const prior=(session.assertions??[]).filter(a=>a.field===fieldKey&&a.ownerId===ownerId&&['accepted','candidate'].includes(a.status)).flatMap(a=>{const r=a.value as unknown as GenericRecord;return r?.version==='game-component-record-v1'&&Array.isArray(r.pieces)?r.pieces:[];});
++ for(const p of record.pieces){
++  const old=[...prior].reverse().find(o=>o.id===p.id&&o.evidenceId===p.evidenceId);
++  if(!options.trustedLink&&!options.importing){
++   if(p.linkOrigin&&JSON.stringify(p.linkOrigin)!==JSON.stringify(old?.linkOrigin))throw new Error('실물의 기존 연결 정보는 임의로 바꿀 수 없어요.');
++   if(!p.linkOrigin&&old?.linkOrigin)p.linkOrigin=structuredClone(old.linkOrigin);
++   const moved=linkedComponents({assertions:session.assertions??[]}).some(x=>x.origin.field===fieldKey&&x.origin.ownerId===ownerId&&x.origin.pieceId===p.id&&x.piece.evidenceId===p.evidenceId&&(x.assertion.field!==fieldKey||x.assertion.ownerId!==ownerId));
++   if(moved)throw new Error('이미 다른 영역에 연결한 실물이에요. 현재 보유 기록에서 옮겨 주세요.');
++  }
++ }
+  validateReadoutEvidenceChanges(pack,prior,record.pieces);
+  return record;
+ }
+--- a/server/index.ts
++++ b/server/index.ts
+@@ -1,3 +1,5 @@
++import {componentLinkTargets,componentRecord,componentTargetKey,latestComponentAssertion,type ComponentLinkOptions} from '../shared/componentLinking.ts';
++import {linkComponents} from './componentLinking.ts';
+ import {CloudUploads} from './cloudUploads.ts';
+ import {BlobStore} from './blobStore.ts';
+ import {Readable} from 'node:stream';
+@@ -146,6 +148,7 @@
+     const token=credential(req),body=req.body??{},requireOwner=async(owner?:string)=>{await pins.require(session.id,owner,token);};
+     const requireField=async(field:string,owner?:string)=>{if(physicalOnlyField(pack,field))throw new HttpError('이 비밀 내용은 수집하지 않습니다. 실물로 보관하세요.');if(privateField(pack,field))await requireOwner(owner);};
+     if(req.path.includes('/privacy/'))return scopes;
++    if(req.path.endsWith('/component-links')){const source=session.assertions.find(a=>a.id===body.sourceAssertionId);if(!source)throw new HttpError('원본 후보를 찾을 수 없어요.',404);await requireField(source.field,source.ownerId);await requireField(body.target?.field,body.target?.ownerId);}
+     if(req.method==='PATCH'&&req.path===`/api/sessions/${session.id}`){
+       for(const owner of Object.keys(body.notes??{}))await requireOwner(owner);
+       for(const answer of body.answers??[])await requireField(answer.field,answer.ownerId);
+@@ -222,7 +225,7 @@
+     if(importPack.runtime){
+       for(const state of [incoming,...(incoming.snapshots??[])]){
+         if(state.assertions.some(a=>physicalOnlyField(importPack,a.field)||!importPack.fields.some(f=>f.key===a.field)))throw new HttpError('지원하지 않는 비밀 내용은 가져올 수 없습니다. 원본 파일은 그대로 두세요.');
+-        for(const a of state.assertions)if(importPack.runtime.fieldBindings.some(b=>b.key===a.field&&b.editor==='component-catalog')&&a.value!==null)validateComponentRecord({players:incoming.players,evidence:state.evidence},importPack,a.field,a.value,a.ownerId,a.evidenceIds);
++        for(const a of state.assertions)if(importPack.runtime.fieldBindings.some(b=>b.key===a.field&&b.editor==='component-catalog')&&a.value!==null)validateComponentRecord({players:incoming.players,evidence:state.evidence},importPack,a.field,a.value,a.ownerId,a.evidenceIds,{importing:true});
+         if(!hasPrivateDigitalFields(importPack)&&state.evidence.some(e=>e.ownerId||e.scope==='player'))throw new HttpError('지원하지 않는 비밀 사진은 가져올 수 없습니다. 실물 보관을 이용하세요.');
+       }
+       incoming.analysisSummary=undefined;incoming.analysisSummaryOwnerId=undefined;
+@@ -443,6 +446,27 @@
+     res.setHeader('Server-Timing', timingHeader(timings));
+     res.json({...view,analysis});
+   });
++  app.get('/api/sessions/:id/component-links/:assertionId',async(req,res)=>{
++    const {session,pack}=await sessionFor(req.params.id),source=session.assertions.find(a=>a.id===req.params.assertionId&&['candidate','accepted'].includes(a.status));
++    if(!source||!componentRecord(source))throw new HttpError('원본 구성물을 찾을 수 없어요.',404);
++    const actor=session.room?rooms.actor(req,session):undefined;
++    if(actor&&privateField(pack,source.field)&&source.ownerId!==actor.playerId)throw new rooms.RoomError('내 개인 기록만 연결할 수 있어요.');
++    if(privateField(pack,source.field))await pins.require(session.id,source.ownerId,credential(req));
++    const ids=typeof req.query.pieceIds==='string'?req.query.pieceIds.split(','):[];
++    const pieces=componentRecord(source)!.pieces.filter(p=>ids.includes(p.id));
++    if(!ids.length||new Set(ids).size!==ids.length||pieces.length!==ids.length)throw new HttpError('연결할 실물을 선택하세요.');
++    const targets=[] as ComponentLinkOptions['targets'],targetVersions:Record<string,string|null>={};
++    for(const t of componentLinkTargets(pack,session.players,pieces))try{
++      if(actor){rooms.writeScope(actor,session,fieldScope(pack,t.field,t.ownerId));if(source.status==='accepted')rooms.writeScope(actor,session,fieldScope(pack,source.field,source.ownerId));}
++      if(t.visibility==='owner')await pins.require(session.id,t.ownerId,credential(req));
++      const current=latestComponentAssertion(session,t.field,t.ownerId),draft=structuredClone(session);
++      // Use the transaction's actual eligibility checks; do not expose a destination that cannot be saved.
++      linkComponents(draft,pack,{sourceAssertionId:source.id,pieceIds:ids,target:{field:t.field,ownerId:t.ownerId},expectedTargetAssertionId:current?.id??null,clearPlacement:true});
++      targets.push({...t,targetAssertionId:current?.id??null});targetVersions[componentTargetKey(t.field,t.ownerId)]=current?.id??null;
++    }catch{}
++    res.json({sourceAssertionId:source.id,pieces,targets,targetVersions} satisfies ComponentLinkOptions);
++  });
++  app.post('/api/sessions/:id/component-links',async(req,res)=>res.json(await change(req,req.params.id,(session,pack)=>{const result=linkComponents(session,pack,req.body);if(result.moved)activity(session,'component-link','선택한 실물을 지정한 기록 영역에 연결했습니다.');})));
+   app.post('/api/sessions/:id/assertions/:assertionId/accept', async (req, res) => {
+     res.json(await change(req, req.params.id, (session, pack) => {
+       const assertion = session.assertions.find(item => item.id === req.params.assertionId);
+--- a/server/rooms.ts
++++ b/server/rooms.ts
+@@ -30,6 +30,7 @@
+  else if(req.path.endsWith('/evidence')&&req.method==='POST'){const source=s.evidence.find(e=>e.id===body.sourceEvidenceId);if(body.sourceEvidenceId&&!source)throw new RoomError('사진을 찾을 수 없어요.',404);add(source?.ownerId??(source?'public':body.scope==='player'?body.ownerId:'public'));}
+  else if(req.params.evidenceId){const e=s.evidence.find(e=>e.id===req.params.evidenceId);if(!e)throw new RoomError('사진을 찾을 수 없어요.',404);add(e.ownerId??'public');}
+  else if(req.path.endsWith('/analyze')){const key=target(body);add(key);if(!Array.isArray(body.evidenceIds)||!body.evidenceIds.length)throw new RoomError('읽을 사진을 선택해 주세요.',400);const es=s.evidence.filter(e=>body.evidenceIds.includes(e.id));if(es.length!==new Set(body.evidenceIds).size||es.some(e=>(e.ownerId??'public')!==key))throw new RoomError('다른 영역의 사진은 함께 읽을 수 없어요.');}
++ else if(req.path.endsWith('/component-links')){const source=s.assertions.find(x=>x.id===body.sourceAssertionId);if(!source)throw new RoomError('원본 후보를 찾을 수 없어요.',404);if(privateField(pack,source.field)&&source.ownerId!==a.playerId)throw new RoomError('내 개인 기록만 연결할 수 있어요.');field(body.target?.field,body.target?.ownerId,body.corrections);if(source.status==='accepted')field(source.field,source.ownerId);}
+  else if(req.params.assertionId){const x=s.assertions.find(x=>x.id===req.params.assertionId);if(!x)throw new RoomError('후보를 찾을 수 없어요.',404);field(x.field,x.ownerId,x.value);}
+  else if(req.params.preservationId){const x=s.preservations.find(x=>x.id===req.params.preservationId);if(!x)throw new RoomError('보관 항목을 찾을 수 없어요.',404);add(x.ownerId??'public');}
+  else if(req.path.endsWith('/commit')||req.path.endsWith('/resume'))add(target(body));
+--- a/server/runtimeResume.ts
++++ b/server/runtimeResume.ts
+@@ -1,3 +1,4 @@
++import {componentRecord} from '../shared/componentLinking.ts';
+ import {randomUUID} from 'node:crypto';
+ import type {GamePack,Session} from '../shared/types.ts';
+ import {privateField} from '../shared/privacy.ts';
+@@ -15,7 +16,15 @@
+  const restoredAssertions=structuredClone(saved.assertions.filter(assertion));
+  // Only state effective when saved joins the current logical turn; purchase/history and candidates keep their original tags.
+  for(const item of restoredAssertions)if(item.status==='accepted'&&item.basis!=='rule'&&item.turnInstanceId===saved.turnInstanceId&&isTurnField(pack.fields.find(field=>field.key===item.field)))item.turnInstanceId=session.turnInstanceId;
+- session.assertions=[...session.assertions.filter(a=>!assertion(a)),...restoredAssertions];
++ const nextAssertions=[...session.assertions.filter(a=>!assertion(a)),...restoredAssertions];
++ const identities=new Map<string,boolean>();
++ for(const a of nextAssertions.filter(a=>a.status==='accepted'))for(const p of componentRecord(a)?.pieces??[]){
++  // A saved pre-link source has no origin yet: its assertion/piece pair is the same identity later issued by linkComponents.
++  const key=JSON.stringify([p.linkOrigin?.assertionId??a.id,p.linkOrigin?.pieceId??p.id,p.evidenceId]),linked=!!p.linkOrigin;
++  if(identities.has(key)&&(linked||identities.get(key)))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');
++  identities.set(key,linked);
++ }
++ session.assertions=nextAssertions;
+  // Retained private assertions may cite a public original that is absent from the old public snapshot.
+  const retainedRefs=new Set(session.assertions.filter(a=>!assertion(a)).flatMap(a=>a.evidenceIds));
+  const retainedOriginals=session.evidence.filter(e=>retainedRefs.has(e.id));
+--- /dev/null
++++ b/shared/componentLinking.ts
+@@ -0,0 +1,18 @@
++import type {Assertion,GamePack,Player,Session} from './types.ts';
++import type {GenericPiece,GenericPlacement,GenericRecord} from './genericRecord.ts';
++import {runtimeBinding,physicalOnlyField} from './gameEssentials.ts';
++export interface ComponentLinkOrigin {assertionId:string;pieceId:string;field:string;ownerId?:string;previousPlacement?:GenericPlacement}
++export interface ComponentLinkTarget {field:string;label:string;ownerId?:string;ownerName?:string;visibility:'public'|'owner';targetAssertionId?:string|null}
++export interface ComponentLinkRequest {sourceAssertionId:string;pieceIds:string[];target:{field:string;ownerId?:string};expectedTargetAssertionId:string|null;corrections?:GenericPiece[];clearPlacement?:boolean;expectedRevisions?:Record<string,number>}
++export interface ComponentLinkOptions {sourceAssertionId:string;pieces:GenericPiece[];targets:ComponentLinkTarget[];targetVersions:Record<string,string|null>}
++export const componentTargetKey=(field:string,ownerId?:string)=>JSON.stringify([field,ownerId??null]);
++export const componentRecord=(a:Assertion|undefined):GenericRecord|undefined=>{const v=a?.value as unknown as GenericRecord;return v?.version==='game-component-record-v1'&&Array.isArray(v.pieces)?v:undefined;};
++export const latestComponentAssertion=(s:Pick<Session,'assertions'>,field:string,ownerId?:string)=>s.assertions.filter(a=>a.field===field&&a.ownerId===ownerId&&a.status==='accepted').at(-1);
++export function linkedComponents(session:Pick<Session,'assertions'>){return session.assertions.filter(a=>a.status==='accepted').flatMap(a=>(componentRecord(a)?.pieces??[]).filter(p=>!!p.linkOrigin).map(piece=>({assertion:a,piece,origin:piece.linkOrigin!})));}
++export function unlinkedComponentPieces(session:Pick<Session,'assertions'>,source:Assertion){const linked=linkedComponents(session);return (componentRecord(source)?.pieces??[]).filter(p=>source.status==='accepted'||!linked.some(x=>x.origin.assertionId===source.id&&x.origin.pieceId===p.id));}
++/** Only existing pack destinations; ownership is explicit at assertion scope, never inferred from a crop. */
++export function componentLinkTargets(pack:GamePack,players:Player[],pieces:GenericPiece[]):ComponentLinkTarget[]{
++ if(!pieces.length||pack.runtime?.support.recording==='native')return [];
++ return pack.fields.flatMap(f=>{const b=runtimeBinding(pack,f.key);if(b?.editor!=='component-catalog'||physicalOnlyField(pack,f.key)||!['public','player'].includes(f.scope)||!['public','owner'].includes(f.visibility??'public')||pieces.some(p=>p.componentId!==null&&!b.componentIds.includes(p.componentId)))return [];
++ const target={field:f.key,label:f.label,visibility:(f.visibility??'public') as 'public'|'owner'};return f.scope==='player'?players.map(p=>({...target,ownerId:p.id,ownerName:p.name})):[target];});
++}
+--- /dev/null
++++ b/shared/componentStatePack.ts
+@@ -0,0 +1,10 @@
++import type {GamePack} from './types.ts';
++/** Additive app capability for the verified base edition; raw/pinned pack identity and answers stay unchanged. */
++export function effectiveComponentStatePack(raw:GamePack):GamePack{
++ if(raw.runtime?.source.gameId!=='splendor'||raw.runtime.source.editionId!=='base'||!raw.runtime.components.some(c=>c.id==='chips')||raw.fields.some(f=>f.key==='supply.scene'))return raw;
++ const p=structuredClone(raw),key='supply.scene';
++ p.fields.push({key,label:'공용 보석·금 공급',description:'아직 누구도 가져가지 않은 공용 토큰입니다. 플레이어 보유 토큰과 구분해 연결하세요.',type:'json',scope:'public',visibility:'public',lifetime:'session',acquisition:'ask',group:'essentials'});
++ p.runtime!.fieldBindings.push({key,sourceId:'app.splendor.supply-v1',label:'공용 보석·금 공급',editor:'component-catalog',scope:'public',visibility:'public',lifetime:'session',areaIds:['supply'],componentIds:['chips']});
++ if(!p.sources.some(s=>s.id==='app.splendor.supply-v1'))p.sources.push({id:'app.splendor.supply-v1',title:'Splendor base rules — setup and gem tokens',url:'https://cdn.svc.asmodee.net/production-unboxnowcom/uploads/2022/02/Splendor-EN.pdf',section:'Game setup: gem tokens in piles within reach; Buying a development card: spent tokens returned to the middle; The bonuses: purchased-card bonuses. Additive manual-link destination, not new photo permission.'});
++ return p;
++}
+--- a/shared/genericRecord.ts
++++ b/shared/genericRecord.ts
+@@ -1,10 +1,11 @@
++import type {ComponentLinkOrigin} from './componentLinking.ts';
+ import type {Assertion,GamePack,Value} from './types.ts';
+ import {validateSplendorObservation,type SplendorObservation} from './splendor.ts';
+ import {validateGameReadout,type GameReadout,type ReadoutContext} from './readouts/registry.ts';
+ import {validateReadoutRelations} from './readouts/relations.ts';
+ import {runtimeBinding} from './gameEssentials.ts';
+ export interface GenericPlacement {areaId:string;x:number;y:number;rotation:0|90|180|270}
+-export interface GenericPiece {readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
++export interface GenericPiece {linkOrigin?:ComponentLinkOrigin;readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
+ export interface GenericRecord {version:'game-component-record-v1';pieces:GenericPiece[]}
+ export function emptyGenericRecord():GenericRecord{return {version:'game-component-record-v1',pieces:[]};}
+ export function validateGenericRecord(value:Value,pack:GamePack,field:string,allowedEvidenceIds:string[],context:ReadoutContext={}):GenericRecord {
+@@ -13,6 +14,7 @@
+  const seen=new Set<string>();
+  for(const p of raw.pieces){
+   if(!p||typeof p.id!=='string'||!p.id||seen.has(p.id))throw new Error('실물별로 서로 다른 ID가 필요합니다.');seen.add(p.id);
++  if(Object.hasOwn(p,'linkOrigin')){const o=p.linkOrigin;if(context.mode==='ai'||!o||typeof o!=='object'||Object.keys(o).some(k=>!['assertionId','pieceId','field','ownerId','previousPlacement'].includes(k))||[o.assertionId,o.pieceId,o.field].some(v=>typeof v!=='string'||!v)||o.pieceId!==p.id||o.ownerId!==undefined&&(typeof o.ownerId!=='string'||!o.ownerId))throw new Error('실물 연결 원본을 확인하세요.');const q=o.previousPlacement;if(q&&(!q.areaId||typeof q.areaId!=='string'||![q.x,q.y].every(Number.isFinite)||q.x<0||q.x>1||q.y<0||q.y>1||![0,90,180,270].includes(q.rotation)))throw new Error('이전 배치 정보를 확인하세요.');}
+   if(Object.hasOwn(p,'readout')){if((pack.runtime?.source.gameId??pack.id)==='splendor')validateSplendorObservation(p.readout,p.componentId,p.label);else validateGameReadout(p.readout,pack,p.componentId,p.evidenceId,context);}
+   if(p.componentId!==null&&!binding?.componentIds.includes(p.componentId))throw new Error('이 기록의 구성물 종류를 선택하세요.');
+   if(Object.hasOwn(p,'placement')){const q=p.placement;if(!q||!binding?.areaIds.includes(q.areaId)||!Number.isFinite(q.x)||!Number.isFinite(q.y)||q.x<0||q.x>1||q.y<0||q.y>1||![0,90,180,270].includes(q.rotation))throw new Error('기록 배치의 영역과 위치를 확인하세요. 원본 배치는 그대로 유지됩니다.');}
+--- a/shared/recognition.ts
++++ b/shared/recognition.ts
+@@ -1,3 +1,4 @@
++import {effectiveComponentStatePack} from './componentStatePack.ts';
+ import index from './recognition-index.json';
+ import type {FieldDefinition,GamePack} from './types';
+ import type {RuntimeFieldBinding} from './gameEssentials';
+@@ -29,6 +30,7 @@
+  return {mode:bindings.length?'assisted' as const:'manual' as const,bindings,excluded,compatible:!!version};
+ }
+ export function effectiveRecognitionPack(raw:GamePack):GamePack{
++ raw=effectiveComponentStatePack(raw);
+  const c=recognitionCapability(raw);if(c.mode!=='assisted')return raw;
+  const pack=structuredClone(raw),r=pack.runtime!;r.support.recognition='assisted';
+  pack.fields=pack.fields.filter(f=>!observationTray(f.key));r.fieldBindings=r.fieldBindings.filter(b=>!observationTray(b.key));
+--- a/shared/splendor.ts
++++ b/shared/splendor.ts
+@@ -1,3 +1,4 @@
++import type {GamePack,Session} from './types.ts';
+ export const SPLENDOR_GEMS=['white','blue','green','red','black'] as const;
+ export type SplendorGem=typeof SPLENDOR_GEMS[number];
+ export type SplendorColor=SplendorGem|'gold';
+@@ -47,3 +48,17 @@
+  const populated=[v.points,v.bonus,v.cost,v.requirements,v.color,v.level].some(x=>x!==null);
+  return {...rest,kind:kind??'unknown',quantity:piece.quantity,source:piece.readout?'structured':populated?'legacy-label':'unread'};
+ }
++
++/** Counts only explicitly recorded purchased cards, never tokens/costs/reservations or an inferred table total. */
++export function splendorBonusSummary(session:Pick<Session,'assertions'>,pack:GamePack,ownerId:string){
++ if((pack.runtime?.source.gameId??pack.id)!=='splendor')return null;
++ const a=session.assertions.filter(a=>a.field==='player.scene'&&a.ownerId===ownerId&&a.status==='accepted').at(-1),pieces=(a?.value as any)?.pieces;
++ if(!Array.isArray(pieces))return null;
++ const cards=pieces.filter(p=>p.componentId==='development');if(!cards.length)return null;
++ const bonus=Object.fromEntries(SPLENDOR_GEMS.map(g=>[g,0])) as SplendorGemCounts;let unknownCards=0;
++ for(const p of cards){let r:SplendorObservation;try{r=validateSplendorObservation(p.readout,p.componentId);}catch{unknownCards++;for(const g of SPLENDOR_GEMS)bonus[g]=null;continue;}
++  if(r.kind!=='development'||r.bonus===null){unknownCards++;for(const g of SPLENDOR_GEMS)bonus[g]=null;continue;}
++  if(p.quantity===null){unknownCards++;bonus[r.bonus]=null;}else if(bonus[r.bonus]!==null)bonus[r.bonus]!+=p.quantity;
++ }
++ return {bonus,unknownCards,recordedCards:cards.length,complete:unknownCards===0,label:'기록한 구매 카드 보너스'};
++}
+--- /dev/null
++++ b/tests/component-linking-api.test.ts
+@@ -0,0 +1,31 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createApp} from '../server/index.ts';import {BlobStore} from '../server/blobStore.ts';import {MemoryObjects} from '../server/objects.ts';import {emptySplendorObservation,unknownGemCounts} from '../shared/splendor.ts';
++const original={version:'game-component-record-v1',pieces:[{id:'read-once',componentId:'development',variant:null,quantity:1,label:'synthetic',anchor:'',evidenceId:'photo',region:null,readout:{...emptySplendorObservation('development'),bonus:'blue',cost:unknownGemCounts()}},{id:'second',componentId:'development',variant:null,quantity:1,label:'synthetic2',anchor:'',evidenceId:'photo',region:null,readout:{...emptySplendorObservation('development'),bonus:'red',cost:unknownGemCounts()}}]};
++async function fixture(){const objects=new MemoryObjects(),store=new BlobStore(objects),app=await createApp({store,cloud:{objects,dispatch:async()=>{}}}),server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const base='http://127.0.0.1:'+(server.address() as any).port;
++ const call=async(route:string,body?:any,method=body===undefined?'GET':'POST',headers:Record<string,string>={})=>{const r=await fetch(base+route,{method,headers:{Origin:base,'Content-Type':'application/json',...headers},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()};};
++ function client(){let cookie='';return {async call(route:string,body?:any,method=body===undefined?'GET':'POST',token?:string){const r=await fetch(base+route,{method,headers:{Origin:base,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{}),...(token?{'X-KeepBoard-Private-Token':token}:{})},body:body===undefined?undefined:JSON.stringify(body)});const c=r.headers.get('set-cookie');if(c)cookie=c.split(';')[0];return {status:r.status,body:await r.json()};}};}
++ return {store,call,client,close:async()=>{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));}};}
++test('existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin',async()=>{const f=await fixture();try{const first=(await f.call('/api/sessions',{gamePackId:'splendor',players:[{id:'p1',name:'synthetic',color:'red'}]})).body,id=first.session.id,p='/api/sessions/'+id,s=(await f.store.getSession(id))!;s.evidence.push({id:'photo',kind:'photo',scope:'public',url:await f.store.saveEvidence('data:image/png;base64,aGVsbG8='),captureEpoch:s.captureEpoch,capturedAt:'now',label:'synthetic'});s.assertions.push({id:'model',field:'__photo.public',value:original as any,status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:s.turnInstanceId,updatedAt:'now'});await f.store.saveSession(s);
++ const options=await f.call(p+'/component-links/model?pieceIds=read-once');assert.equal(options.status,200);assert(options.body.targets.some((t:any)=>t.field==='player.scene'&&t.ownerId==='p1'));
++ const link={sourceAssertionId:'model',pieceIds:['read-once'],target:{field:'player.scene',ownerId:'p1'},expectedTargetAssertionId:null};const linked=await f.call(p+'/component-links',link);assert.equal(linked.status,200);assert.equal((await f.call(p+'/component-links',link)).status,200);assert.equal((await f.call(p+'/component-links',{...link,pieceIds:['second'],target:{field:'reserve.scene',ownerId:'p1'}})).status,200);
++ assert.equal((await f.call(p,{answers:[{field:'__photo.public',value:original}]},'PATCH')).status,400);assert.equal((await f.call(p+'/assertions/model/accept',{})).status,400);
++ const current=(await f.call(p)).body.session;assert.equal(current.assertions.filter((a:any)=>a.status==='accepted'&&a.field==='player.scene')[0].value.pieces.length,1);assert.equal(current.assertions.find((a:any)=>a.id==='model').value.pieces.length,2);
++ assert.equal((await f.call(p+'/commit',{allowIncomplete:true})).status,200);const exported=(await f.call(p+'/export')).body,imported=await f.call('/api/sessions/import',exported);assert.equal(imported.status,201);const q='/api/sessions/'+imported.body.session.id;assert.equal((await f.call(q+'/resume',{scope:'public'})).status,200);const reopened=(await f.call(q)).body.session;const held=reopened.assertions.find((a:any)=>a.field==='player.scene');assert.equal(held.value.pieces[0].linkOrigin.assertionId,'model');assert.equal(held.value.pieces[0].readout.bonus,'blue');
++ }finally{await f.close();}});
++
++test('room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation',async()=>{const f=await fixture();try{const h=f.client(),m=f.client();for(const c of [h,m])await c.call('/api/rooms/device',{});const made=(await h.call('/api/rooms',{gamePackId:'splendor',capacity:2,me:{color:'#ff0000'},clientRequestId:'link-room'})).body,id=made.session.id,p='/api/sessions/'+id,H=made.roomAccess.playerId,invite=(await h.call('/api/rooms/'+id+'/invite')).body.code,M=(await m.call('/api/rooms/join',{invite,color:'#0000ff'})).body.roomAccess.playerId;
++ const seeded=(await f.store.getSession(id))!;seeded.evidence.push({id:'photo',kind:'photo',scope:'public',url:'/synthetic.png',captureEpoch:seeded.captureEpoch,capturedAt:'now',label:'synthetic'});seeded.assertions.push({id:'model',field:'__photo.public',value:original as any,status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:seeded.turnInstanceId,updatedAt:'now'});await f.store.saveSession(seeded);
++ const req={sourceAssertionId:'model',pieceIds:['read-once'],target:{field:'player.scene',ownerId:M},expectedTargetAssertionId:null,expectedRevisions:{[M]:0}};
++ assert.equal((await h.call(p+'/component-links',req)).status,403);assert.equal((await m.call(p+'/component-links',{...req,target:{field:'player.scene',ownerId:H},expectedRevisions:{[H]:0}})).status,403);
++ const own=await m.call(p+'/component-links',req);assert.equal(own.status,200);assert.equal((await m.call(p+'/component-links',{...req,pieceIds:['second']})).status,409,'stale owner revision rejected');
++ assert.equal((await m.call(p+'/commit',{scope:'owner',ownerId:M,allowIncomplete:true,expectedRevisions:{[M]:1}})).status,200);
++ assert.equal((await m.call(p,{answers:[{field:'player.scene',ownerId:M,value:{version:'game-component-record-v1',pieces:[]}}],expectedRevisions:{[M]:2}},'PATCH')).status,200);
++ assert.equal((await m.call(p+'/resume',{scope:'owner',ownerId:M,expectedRevisions:{[M]:3}})).status,200);const restored=(await m.call(p)).body;assert.equal(restored.session.assertions.find((a:any)=>a.field==='player.scene'&&a.ownerId===M).value.pieces[0].id,'read-once');assert((await h.call(p)).body.session.assertions.some((a:any)=>a.field==='player.scene'&&a.ownerId===M),'public player state remains visible to room peers');
++ const pin=await m.call(p+'/privacy/'+M,{enabled:true,pin:'1234',expectedRevisions:{[M]:4}},'PUT');assert.equal(pin.status,200);
++ const reserve={sourceAssertionId:'model',pieceIds:['second'],target:{field:'reserve.scene',ownerId:M},expectedTargetAssertionId:null,expectedRevisions:{[M]:5}};assert.equal((await m.call(p+'/component-links',reserve)).status,403);const token=(await m.call(p+'/privacy/'+M+'/unlock',{pin:'1234'})).body.token;assert.equal((await m.call(p+'/component-links',reserve,'POST',token)).status,200);assert(!(await h.call(p)).body.session.assertions.some((a:any)=>a.field==='reserve.scene'&&a.ownerId===M));
++ }finally{await f.close();}});
++for(const room of [false,true])test(`HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=${room}`,async()=>{const f=await fixture();try{const h=f.client();if(room)await h.call('/api/rooms/device',{});const made=(await h.call(room?'/api/rooms':'/api/sessions',room?{gamePackId:'splendor',capacity:2,me:{color:'#ff0000'},clientRequestId:'restore-'+room}:{gamePackId:'splendor',players:[{id:'p1',name:'synthetic',color:'#ff0000'}]})).body,id=made.session.id,p='/api/sessions/'+id,owner=room?made.roomAccess.playerId:'p1';let view=made;const rev=(keys:string[])=>room?{expectedRevisions:Object.fromEntries(keys.map(k=>[k,view.roomAccess.revisions[k]]))}:{};
++ const seed=(await f.store.getSession(id))!;seed.evidence.push({id:'photo',kind:'photo',scope:'public',url:'/synthetic.png',captureEpoch:seed.captureEpoch,capturedAt:'now',label:'synthetic'});await f.store.saveSession(seed);
++ const input={version:'game-component-record-v1',pieces:[original.pieces[0]]};const a=await h.call(p,{answers:[{field:'market.scene',value:input}],...rev(['public'])},'PATCH');assert.equal(a.status,200);view=a.body;const source=view.session.assertions.find((a:any)=>a.field==='market.scene'&&a.status==='accepted');assert(!source.value.pieces[0].linkOrigin);
++ const c=await h.call(p+'/commit',{scope:'public',allowIncomplete:true,...rev(['public'])});assert.equal(c.status,200);view=c.body;const normal=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(normal.status,200,'normal same-scope restore stays usable');view=normal.body;
++ const linked=await h.call(p+'/component-links',{sourceAssertionId:source.id,pieceIds:['read-once'],target:{field:'reserve.scene',ownerId:owner},expectedTargetAssertionId:null,...rev(['public',owner])});assert.equal(linked.status,200);view=linked.body;const before=JSON.stringify(await f.store.getSession(id));const restored=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(restored.status,400);assert.match(restored.body.error,/다른 영역/);assert.equal(JSON.stringify(await f.store.getSession(id)),before,'failed restore leaves current state and cloud revision unchanged');
++ }finally{await f.close();}});
+--- /dev/null
++++ b/tests/component-linking-catalog.test.ts
+@@ -0,0 +1,16 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {writeFile} from 'node:fs/promises';
++import {builtinPacks} from '../gamepacks/catalog.ts';import {effectiveRecognitionPack} from '../shared/recognition.ts';import {componentRecord,componentLinkTargets} from '../shared/componentLinking.ts';import {linkComponents} from '../server/componentLinking.ts';import {BlobStore} from '../server/blobStore.ts';import {MemoryObjects} from '../server/objects.ts';import {resumeSnapshot} from '../server/runtimeResume.ts';import {emptyGameReadout,readoutDefinition} from '../shared/readouts/registry.ts';import {emptySplendorObservation} from '../shared/splendor.ts';import type {Session} from '../shared/types.ts';
++test('120 catalog rows: every photo-eligible component destination validates, persists, reopens and restores; native records keep native paths',async()=>{const rows:any[]=[];for(const raw of builtinPacks()){const pack=effectiveRecognitionPack(raw),row:any={gameId:pack.id,edition:pack.edition,sourceSHA:pack.runtime?.source.sha256,mode:pack.runtime?.support.recording,fields:[],status:'SYNTHETIC_LINK_PERSIST_RESUME'};rows.push(row);
++ if(row.mode==='native'){row.status='NATIVE_PATH_RETAINED';row.verification='dedicated native regressions, not converted by componentLinkTargets';assert.deepEqual(componentLinkTargets(pack,[],[{componentId:null} as any]),[]);continue;}
++ for(const b of pack.runtime!.fieldBindings.filter(b=>b.editor==='component-catalog'&&!b.key.startsWith('__photo.'))){const field=pack.fields.find(f=>f.key===b.key)!;const entry:any={field:b.key,owner:b.scope==='player'?'p1':null,visibility:b.visibility,areaIds:b.areaIds,components:[]};row.fields.push(entry);
++ for(const componentId of b.componentIds){const publicTray=pack.runtime!.fieldBindings.find(x=>x.key==='__photo.public'&&x.componentIds.includes(componentId)),privateTray=pack.runtime!.fieldBindings.find(x=>x.key==='__photo.owner'&&x.componentIds.includes(componentId)),source=publicTray??privateTray;
++ if(!source||source.visibility==='owner'&&b.visibility==='public'){entry.components.push({componentId,status:'NO_PERMITTED_PHOTO_SOURCE',method:'existing manual/physical support retained'});continue;}
++ const ownerId=b.scope==='player'?'p1':undefined,photoOwner=source.visibility==='owner'?'p1':undefined;
++ const store=new BlobStore(new MemoryObjects()),pieces=[null,0].map((quantity,i)=>({id:'synthetic-'+i,componentId,variant:null,quantity,label:'합성 연결 시험',anchor:'순서 '+i,evidenceId:'photo',region:{x:.1,y:.1,width:.2,height:.2},...(pack.id==='splendor'?{readout:emptySplendorObservation(componentId==='chips'?'token':componentId==='nobles'?'noble':'development')}:readoutDefinition(pack)?{readout:emptyGameReadout(pack,componentId)}:{})}));
++ const candidate:any={id:'candidate',field:source.key,ownerId:photoOwner,value:{version:'game-component-record-v1',pieces},status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:'turn',updatedAt:'now'};
++ const s={id:pack.id+'-'+b.key+'-'+componentId,name:'synthetic',gamePackId:pack.id,gamePackVersion:pack.version,gamePack:structuredClone(raw),createdAt:'now',updatedAt:'now',captureEpoch:'epoch',turnInstanceId:'turn',stage:'capture',example:false,players:[{id:'p1',name:'synthetic',color:'#ff0000'}],evidence:[{id:'photo',scope:photoOwner?'player':'public',ownerId:photoOwner,kind:'photo',url:'/synthetic.png',captureEpoch:'epoch',capturedAt:'now',label:'synthetic'}],assertions:[candidate],preservations:[],snapshots:[],notes:{},activity:[]} as Session;
++ linkComponents(s,pack,{sourceAssertionId:'candidate',pieceIds:pieces.map(p=>p.id),target:{field:b.key,ownerId},expectedTargetAssertionId:null});const accepted=s.assertions.find(a=>a.field===b.key&&a.ownerId===ownerId&&a.status==='accepted')!;assert.deepEqual(componentRecord(accepted)!.pieces.map(p=>p.quantity),[null,0]);assert.deepEqual(s.assertions.find(a=>a.id==='candidate'),candidate);
++ s.snapshots.push({id:'saved',createdAt:'now',gamePackVersion:s.gamePackVersion,captureEpoch:s.captureEpoch,turnInstanceId:s.turnInstanceId,assertions:structuredClone(s.assertions),evidence:structuredClone(s.evidence),preservations:[],notes:{}});await store.saveSession(s);const reopened=(await new BlobStore(store.objects).getSession(s.id))!;reopened.assertions=reopened.assertions.filter(a=>a.id!==accepted.id);resumeSnapshot(reopened,pack,field.visibility==='owner'?'owner':'public',ownerId);const restored=reopened.assertions.find(a=>a.field===b.key&&a.ownerId===ownerId&&a.status==='accepted')!;assert.deepEqual(restored.value,accepted.value);entry.components.push({componentId,status:'PASS',method:'real validators/linker + independent BlobStore clients/MemoryObjects CAS + resumeSnapshot',readout:readoutDefinition(pack)?'typed-all-null':pack.id==='splendor'?'splendor-all-null':'legacy'});
++ }}
++ }
++ assert.equal(rows.length,120);assert.equal(new Set(rows.map(r=>r.gameId)).size,120);const result={synthetic:true,aiCalls:0,gameCount:120,caseCount:rows.flatMap(r=>r.fields.flatMap((f:any)=>f.components)).filter(c=>c.status==='PASS').length,limitations:['component identity/typed-null data transport, not real-photo accuracy or complete rules','native2 are retained; dedicated native tests provide separate verification','PIN/rooms/HTTP verified in separate focused API tests'],games:rows};if(process.env.KEEPBOARD_LINK_MATRIX_OUT)await writeFile(process.env.KEEPBOARD_LINK_MATRIX_OUT,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({games:result.gameCount,cases:result.caseCount,native:rows.filter(r=>r.mode==='native').length}));});
+--- /dev/null
++++ b/tests/component-linking-supply.test.ts
+@@ -0,0 +1,2 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {builtinPacks} from '../gamepacks/catalog.ts';import {effectiveRecognitionPack} from '../shared/recognition.ts';import {componentLinkTargets} from '../shared/componentLinking.ts';
++test('Splendor supply is an effective compatible public destination without rewriting its pinned pack or widening card targets',()=>{const raw=builtinPacks().find(p=>p.id==='splendor')!,before=JSON.stringify(raw),p=effectiveRecognitionPack(raw);const chip={id:'chip',componentId:'chips',quantity:null,variant:null,label:'',anchor:'',evidenceId:null,region:null};assert(componentLinkTargets(p,[],[chip]).some(t=>t.field==='supply.scene'&&!t.ownerId));assert(!componentLinkTargets(p,[],[{...chip,componentId:'development'}]).some(t=>t.field==='supply.scene'));assert.equal(JSON.stringify(raw),before);assert.equal(p.version,raw.version);assert.equal(p.runtime?.source.sha256,raw.runtime?.source.sha256);assert.deepEqual(effectiveRecognitionPack(p),p);});
+--- /dev/null
++++ b/tests/component-linking.test.ts
+@@ -0,0 +1,19 @@
++import test from 'node:test';import assert from 'node:assert/strict';import packs from '../gamepacks/generated/game-essentials.json';
++import {effectiveRecognitionPack} from '../shared/recognition.ts';import {emptySplendorObservation,unknownGemCounts,splendorBonusSummary} from '../shared/splendor.ts';
++import {linkComponents} from '../server/componentLinking.ts';import {componentLinkTargets} from '../shared/componentLinking.ts';import type {GamePack,Session,Assertion} from '../shared/types.ts';
++const p=()=>effectiveRecognitionPack(structuredClone((packs as unknown as GamePack[]).find(p=>p.id==='splendor')!));
++const card=(id:string,bonus='blue',quantity:number|null=1)=>({id,componentId:'development',variant:null,quantity,label:'synthetic',anchor:'',evidenceId:'photo',region:{x:.1,y:.1,width:.2,height:.3},readout:{...emptySplendorObservation('development'),bonus,cost:unknownGemCounts()}});
++function fixture(){const pack=p(),s={id:'s',name:'synthetic',gamePackId:pack.id,gamePackVersion:pack.version,gamePack:pack,captureEpoch:'epoch',turnInstanceId:'turn',createdAt:'now',updatedAt:'now',stage:'capture',example:false,players:[{id:'p1',name:'one',color:'red'},{id:'p2',name:'two',color:'blue'}],evidence:[{id:'photo',scope:'public',kind:'photo',captureEpoch:'epoch',url:'/synthetic.png'}],assertions:[{id:'candidate',field:'__photo.public',basis:'observation',status:'candidate',value:{version:'game-component-record-v1',pieces:[card('one'),card('two','red')]},evidenceIds:['photo'],turnInstanceId:'turn',updatedAt:'now'}],notes:{},snapshots:[],preservations:[],activity:[]} as unknown as Session;return {pack,s};}
++const request=(changes:any={})=>({sourceAssertionId:'candidate',pieceIds:['one'],target:{field:'player.scene',ownerId:'p1'},expectedTargetAssertionId:null,...changes});
++test('read candidate can explicitly connect to owned cards without model rerun; source stays immutable, existing target and null/zero survive',()=>{const {pack,s}=fixture(),original=structuredClone(s.assertions[0]);const first=card('existing','white');first.readout.points=0;s.assertions.push({id:'existing',field:'player.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:['photo'],value:{version:'game-component-record-v1',pieces:[first]},updatedAt:'now'} as any);
++ assert(componentLinkTargets(pack,s.players,[card('one')] as any).some(t=>t.field==='player.scene'&&t.ownerId==='p1'));
++ linkComponents(s,pack,request({expectedTargetAssertionId:'existing'}));assert.deepEqual(s.assertions.find(a=>a.id==='candidate'),original);const held=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any;assert.deepEqual(held.pieces.map((p:any)=>p.id),['existing','one']);assert.equal(held.pieces[0].readout.points,0);assert.equal(held.pieces[1].readout.cost.blue,null);assert.equal(held.pieces[1].linkOrigin.assertionId,'candidate');assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,1);
++ const count=s.assertions.length;linkComponents(s,pack,request());assert.equal(s.assertions.length,count,'same-target retry never duplicates or overwrites later edits');assert.throws(()=>linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}})));});
++test('reserved/market cards never count as purchased bonuses, unknown remains unknown, costs never count',()=>{const {pack,s}=fixture();linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}}));assert.equal(splendorBonusSummary(s,pack,'p1'),null);linkComponents(s,pack,request({pieceIds:['two']}));assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.red,1);assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,0);
++ const held=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any;held.pieces.push(card('unknown','blue',null));assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,null);assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.red,1);});
++test('stale target, wrong component/owner and private-to-public transfer are rejected without partial state changes',()=>{for(const change of [{expectedTargetAssertionId:'stale'},{target:{field:'turn'}},{target:{field:'player.scene',ownerId:'foreign'}},{target:{field:'noble-area.scene'}}]){const {pack,s}=fixture(),before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request(change)));assert.equal(JSON.stringify(s),before);}
++ const {pack,s}=fixture();s.evidence[0].scope='player';s.evidence[0].ownerId='p1';s.assertions[0].field='__photo.owner';s.assertions[0].ownerId='p1';const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request()));assert.equal(JSON.stringify(s),before);});
++test('the remaining unassigned selection is explicitly usable, and accepted moves preserve one physical state',()=>{const {pack,s}=fixture();linkComponents(s,pack,request());linkComponents(s,pack,request({pieceIds:['two'],target:{field:'__photo.public'}}));const tray=s.assertions.find(a=>a.field==='__photo.public'&&a.status==='accepted')!;assert.deepEqual((tray.value as any).pieces.map((p:any)=>p.id),['two']);const owned=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!;linkComponents(s,pack,request({sourceAssertionId:owned.id,target:{field:'market.scene'}}));assert.equal((s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any).pieces.length,0);assert.equal(s.assertions.filter(a=>a.status==='accepted').flatMap(a=>(a.value as any)?.pieces??[]).filter(p=>p.id==='one').length,1);assert.throws(()=>linkComponents(s,pack,request()));});
++test('partial legacy restore cannot recreate a previously moved reservation beside its purchased state',async()=>{const {resumeSnapshot}=await import('../server/runtimeResume.ts'),{pack,s}=fixture();linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}}));s.snapshots.push({id:'snapshot',createdAt:'now',gamePackVersion:pack.version,captureEpoch:s.captureEpoch,turnInstanceId:s.turnInstanceId,assertions:structuredClone(s.assertions),evidence:structuredClone(s.evidence),preservations:[],notes:{}});const reserved=s.assertions.find(a=>a.field==='reserve.scene'&&a.status==='accepted')!;linkComponents(s,pack,request({sourceAssertionId:reserved.id,target:{field:'player.scene',ownerId:'p1'}}));const before=JSON.stringify(s);assert.throws(()=>resumeSnapshot(s,pack,'owner','p1'),/다른 영역/);assert.equal(JSON.stringify(s),before);});
++test('moving preserves crops and provenance, requires explicit placement clearing; a forged origin is rejected by normal answers',async()=>{const {answerField}=await import('../server/engine.ts'),{pack,s}=fixture();const raw=(s.assertions[0].value as any).pieces[0];raw.placement={areaId:'__photo-public',x:.1,y:.2,rotation:90};const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request()),/배치/);assert.equal(JSON.stringify(s),before);linkComponents(s,pack,request({clearPlacement:true}));const a=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!,p=(a.value as any).pieces[0];assert.equal(p.placement,undefined);assert.deepEqual(p.linkOrigin.previousPlacement,raw.placement);assert.deepEqual(p.region,raw.region);const forged=structuredClone(a.value) as any;forged.pieces[0].linkOrigin.assertionId='forged';assert.throws(()=>answerField(s,pack,'player.scene',forged,'p1'),/연결/);});
++test('partial accepted move cannot leave an attachment dangling; moving the attached group is atomic',async()=>{const {emptyGameReadout,setReadoutValue}=await import('../shared/readouts/registry.ts'),pack=effectiveRecognitionPack(structuredClone((packs as unknown as GamePack[]).find(p=>p.id==='carcassonne')!)),{s}=fixture();s.gamePack=pack;s.gamePackId=pack.id;s.gamePackVersion=pack.version;const tile={...card('tile'),componentId:'tiles',readout:emptyGameReadout(pack,'tiles')},follower={...card('follower'),componentId:'followers',readout:setReadoutValue(pack,emptyGameReadout(pack,'followers'),'attachedTo',{pieceId:'tile',featureId:null})};s.assertions=[{...s.assertions[0],field:'map.scene',status:'accepted',basis:'user',value:{version:'game-component-record-v1',pieces:[tile,follower]}} as any];const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request({pieceIds:['tile'],target:{field:'__photo.public'}})),/대상/);assert.equal(JSON.stringify(s),before);linkComponents(s,pack,request({pieceIds:['tile','follower'],target:{field:'__photo.public'}}));assert.equal((s.assertions.find(a=>a.field==='map.scene'&&a.status==='accepted')!.value as any).pieces.length,0);assert.deepEqual((s.assertions.find(a=>a.field==='__photo.public'&&a.status==='accepted')!.value as any).pieces[1].readout.values.attachedTo,{pieceId:'tile',featureId:null});});

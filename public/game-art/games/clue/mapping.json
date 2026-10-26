@@ -1,0 +1,407 @@
+{
+  "game_id": "clue",
+  "name_ko": "클루",
+  "name_en": "Clue / Cluedo",
+  "edition": {
+    "id": "base",
+    "name": "현행 Classic 기본판",
+    "compatibility_notes": [
+      "구판 방/인물/아트 차이;봉투 내용은 스캔으로 알아내지 않음",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "clue.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/clue.json",
+  "source_sha256": "04f78d8b00cecb3cd74963a8b03630ba067427f86d05c197a679ed9006c36d21",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "board",
+      "name": "저택판",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "방·복도·문·비밀통로.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "저택 구역 · 예시",
+          "layers": [
+            {
+              "asset_id": "clue.board.mansion"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "figures",
+      "name": "용의자·무기",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "플레이어 선택 여부와 무관한 실제 말 위치.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "말",
+          "layers": [
+            {
+              "asset_id": "common.pawn"
+            }
+          ]
+        },
+        {
+          "name": "단검 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-dagger"
+            }
+          ]
+        },
+        {
+          "name": "촛대 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-candlestick"
+            }
+          ]
+        },
+        {
+          "name": "밧줄 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-rope"
+            }
+          ]
+        },
+        {
+          "name": "도구 조각",
+          "layers": [
+            {
+              "asset_id": "common.symbol-wrench"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "사건 카드·봉투",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "개인 손패와 누구도 보지 않은 정답 봉투.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "인물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "건물 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-building",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "봉투",
+          "layers": [
+            {
+              "asset_id": "common.envelope"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "notes",
+      "name": "개인 추리표·주사위",
+      "kind": "marker",
+      "source_confidence": "reported",
+      "source_description": "주사위 값과 소유자별 추리 메모.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "기록지",
+          "layers": [
+            {
+              "asset_id": "common.sheet"
+            }
+          ]
+        },
+        {
+          "name": "눈 1 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-1"
+            }
+          ],
+          "example_face": 1
+        },
+        {
+          "name": "눈 2 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-2"
+            }
+          ],
+          "example_face": 2
+        },
+        {
+          "name": "눈 3 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-3"
+            }
+          ],
+          "example_face": 3
+        },
+        {
+          "name": "눈 4 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-4"
+            }
+          ],
+          "example_face": 4
+        },
+        {
+          "name": "눈 5 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-5"
+            }
+          ],
+          "example_face": 5
+        },
+        {
+          "name": "눈 6 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-6"
+            }
+          ],
+          "example_face": 6
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "mansion",
+      "name": "저택",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "board",
+        "figures"
+      ],
+      "anchor_contract": "방 노드·문·복도 셀을 별개 유형으로 연결. 인물과 무기의 방 위치.",
+      "description": "저택의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 증거 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "소유 카드와 타인에게 보여준 사실은 별도 메모.",
+      "description": "개인 증거 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "solution",
+      "name": "정답 봉투",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "봉투 존재만 기록. 소유자가 없으며 앱도 내용 추정/공개하지 않는다.",
+      "description": "정답 봉투의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "private-notes",
+      "name": "추리 메모",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "notes"
+      ],
+      "anchor_contract": "사용자가 적은 확실/추측 표시의 의미를 그대로 보존.",
+      "description": "추리 메모의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "저택 · 구조 예시",
+    "area_id": "mansion",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "clue.board.mansion",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.pawn",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

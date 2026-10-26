@@ -1,0 +1,112 @@
+{
+  "version": "keepboard-visible-reading-context-v1",
+  "gameId": "splendor",
+  "pack": {
+    "id": "splendor",
+    "version": "1.0.0-essentials-2.c3ee02f2da3a",
+    "editionId": "base",
+    "sourceSHA": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46"
+  },
+  "knowledgeStatus": "Game-definition category lookup, NOT an observation of this photo or verified complete rules.",
+  "areas": [
+    {
+      "id": "market",
+      "partition": "common_public",
+      "componentIds": [
+        "development"
+      ]
+    },
+    {
+      "id": "noble-area",
+      "partition": "common_public",
+      "componentIds": [
+        "nobles"
+      ]
+    },
+    {
+      "id": "player",
+      "partition": "player_public",
+      "componentIds": [
+        "chips",
+        "development",
+        "nobles"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "development",
+      "name": "개발 카드",
+      "visibleProperties": [
+        {
+          "id": "kind",
+          "label": "구성물 종류",
+          "type": "enum"
+        },
+        {
+          "id": "points",
+          "label": "점수",
+          "type": "integer"
+        },
+        {
+          "id": "bonus",
+          "label": "보너스 보석",
+          "type": "enum"
+        },
+        {
+          "id": "cost",
+          "label": "필요 보석",
+          "type": "marks"
+        },
+        {
+          "id": "level",
+          "label": "카드 단계",
+          "type": "enum"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "nobles",
+      "name": "귀족 타일",
+      "visibleProperties": [
+        {
+          "id": "points",
+          "label": "점수",
+          "type": "integer"
+        },
+        {
+          "id": "requirements",
+          "label": "귀족 조건",
+          "type": "marks"
+        },
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "id": "chips",
+      "name": "보석·금 토큰",
+      "visibleProperties": [
+        {
+          "id": "color",
+          "label": "관측 색",
+          "type": "enum"
+        }
+      ]
+    }
+  ],
+  "instructions": [
+    "Read visible printed information literally; unknown remains null.",
+    "Do not complete a standard inventory or infer an unobserved component from game rules.",
+    "Game categories are retrieved context, not pixel evidence. Do not infer owner, turn, hidden cards or legal state.",
+    "Return source locations from the supplied original image; game-board placement is a separate candidate."
+  ]
+}

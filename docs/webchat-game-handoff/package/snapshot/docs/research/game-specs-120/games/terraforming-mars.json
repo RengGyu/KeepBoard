@@ -1,0 +1,922 @@
+{
+  "schema_version": "1.0",
+  "game_id": "terraforming-mars",
+  "name_ko": "테라포밍 마스",
+  "name_en": "Terraforming Mars",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Prelude·모든 지도/프로모 제외;Ares는 별도 작품",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "terraforming-mars.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "terrain",
+      "name": "도시·녹지·바다 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "타일 종류와 지도 칸, 소유 표식.",
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "기업·프로젝트",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "기업과 설치/사건/손패 프로젝트 구분.",
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cubes",
+      "name": "플레이어·자원 큐브",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "소유색 표식과 금속값 자원 큐브 구별.",
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "boards",
+      "name": "개인 자원판",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "보유량과 생산량 별도 트랙.",
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "mars",
+        "name": "화성 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "terrain",
+          "cubes"
+        ],
+        "anchor_contract": "지도판 ID와 육각 번호. 타일 종류·소유 표식, 인접을 별도 보존.",
+        "description": "화성 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "tableau",
+        "name": "개인 카드",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "cubes"
+        ],
+        "anchor_contract": "카드의 활성/사용 표시, 카드 위 미생물·동물 등 부착 자원.",
+        "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "resources",
+        "name": "개인 자원판",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "boards",
+          "cubes"
+        ],
+        "anchor_contract": "자원 종류별 보유 구역과 생산 트랙을 분리.",
+        "description": "개인 자원판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "global",
+        "name": "전 지구 목표·업적",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "cubes"
+        ],
+        "anchor_contract": "온도/산소/해양 수 및 업적·기업상 선택/소유 ID.",
+        "description": "전 지구 목표·업적의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "프로젝트 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "미사용 프로젝트와 선택 중인 연구 카드를 분리.",
+        "description": "프로젝트 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "mars.scene",
+      "label": "화성 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "지도판 ID와 육각 번호. 타일 종류·소유 표식, 인접을 별도 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "terrain",
+        "cubes"
+      ],
+      "area_ids": [
+        "mars"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tableau.scene",
+      "label": "개인 카드",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "카드의 활성/사용 표시, 카드 위 미생물·동물 등 부착 자원. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "cubes"
+      ],
+      "area_ids": [
+        "tableau"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "resources.scene",
+      "label": "개인 자원판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "자원 종류별 보유 구역과 생산 트랙을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "boards",
+        "cubes"
+      ],
+      "area_ids": [
+        "resources"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "global.scene",
+      "label": "전 지구 목표·업적",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "온도/산소/해양 수 및 업적·기업상 선택/소유 ID. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cubes"
+      ],
+      "area_ids": [
+        "global"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "프로젝트 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미사용 프로젝트와 선택 중인 연구 카드를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "stocks",
+      "label": "자원 보유량",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "메가크레딧·강철·티타늄·식물·에너지·열을 각각 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "production",
+      "label": "생산량",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "보유량과 별도 값; 음수 허용 여부를 수량 공통 제약으로 막지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tr",
+      "label": "테라포밍 등급",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "TR과 최종 승점을 구별.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "generation",
+      "label": "세대·패스",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 세대, 각 플레이어 패스 여부와 마지막 행동 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "1차/2차 행동, 카드 효과, 전원 패스 후 생산 중 어디까지 처리했는지 메모. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "essentials.storage-guidance"
+      ],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "starting-player",
+      "label": "세대 선 플레이어",
+      "description": "현재 선 플레이어와 좌석 순서. generation의 패스 상태와 별개. 세대 전환 처리 여부를 기록하고 재열기만으로 이동하지 않는다.",
+      "type": "json",
+      "scope": "public",
+      "visibility": "public",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "terraforming-mars.essentials.rules"
+      ]
+    },
+    {
+      "id": "project-decks.scene",
+      "label": "프로젝트 뽑기·뒷면 버림",
+      "description": "프로젝트 뽑기와 뒷면 버림을 별도 묶음으로 보존. 손패와 합치지 않고, 위/아래·묶음ID·보관 위치만으로 내용 미상도 저장.",
+      "type": "component-scene",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual",
+        "physical"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "terraforming-mars.essentials.rules"
+      ]
+    },
+    {
+      "id": "generation-action-use",
+      "label": "세대당 행동 사용 표식",
+      "description": "파란 카드/기업의 행동 능력별 이번 세대 사용 여부. 카드/기업 ID와 실제 표식에 연결하고 단순 재개 시 제거하지 않는다.",
+      "type": "json",
+      "scope": "public",
+      "visibility": "public",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "terraforming-mars.essentials.rules"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "production",
+      "name": "보유와 생산",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "생산은 장기 엔진 상태이고 현재 자원 보유와 같지 않다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "global",
+      "name": "공유 목표",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "온도·대기·해양의 진행과 지도 타일은 함께 기록해야 하는 전 지구 상태다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "terraforming-mars.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "프로젝트 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "미사용 프로젝트와 선택 중인 연구 카드를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "project-decks.scene.essentials-preserve",
+        "label": "프로젝트 뽑기·뒷면 버림 실물 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "project-decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "해당 필드의 실물만 별도 묶음으로 보관하고 다른 덱·버림·제거·소유자 묶음과 합치지 않는다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 기록한다. 위치도 민감하면 위치 기록을 생략하고 식별표/봉인 확인만 남긴다.",
+          "내용을 알기 위해 펼치거나 숨은 면을 촬영하지 않는다. 이미 의미가 확인된 순서는 위/아래와 내부 경계·줄/슬롯을 그대로 유지한다. 수량/정체 미상도 저장 가능."
+        ],
+        "after": [],
+        "source_refs": [
+          "terraforming-mars.essentials.rules",
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "mars.scene",
+          "global.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "tableau.scene",
+          "resources.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "mars.scene",
+      "tableau.scene",
+      "resources.scene",
+      "global.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "가려진 프로젝트와 카드 위 자원 종류, 과거 업적 선언",
+      "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다."
+    ],
+    "correction_targets": [
+      {
+        "id": "mars.edit",
+        "scope": "public",
+        "component_ids": [
+          "terrain",
+          "cubes"
+        ],
+        "field_ids": [
+          "mars.scene"
+        ],
+        "area_ids": [
+          "mars"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "지도판 ID와 육각 번호. 타일 종류·소유 표식, 인접을 별도 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "tableau.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards",
+          "cubes"
+        ],
+        "field_ids": [
+          "tableau.scene"
+        ],
+        "area_ids": [
+          "tableau"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "카드의 활성/사용 표시, 카드 위 미생물·동물 등 부착 자원.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "resources.edit",
+        "scope": "player",
+        "component_ids": [
+          "boards",
+          "cubes"
+        ],
+        "field_ids": [
+          "resources.scene"
+        ],
+        "area_ids": [
+          "resources"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "자원 종류별 보유 구역과 생산 트랙을 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "global.edit",
+        "scope": "public",
+        "component_ids": [
+          "cubes"
+        ],
+        "field_ids": [
+          "global.scene"
+        ],
+        "area_ids": [
+          "global"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "온도/산소/해양 수 및 업적·기업상 선택/소유 ID.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "미사용 프로젝트와 선택 중인 연구 카드를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "starting-player.essentials-edit",
+        "scope": "public",
+        "field_ids": [
+          "starting-player"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      },
+      {
+        "id": "project-decks.scene.essentials-edit",
+        "scope": "shared-secret",
+        "field_ids": [
+          "project-decks.scene"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      },
+      {
+        "id": "generation-action-use.essentials-edit",
+        "scope": "public",
+        "field_ids": [
+          "generation-action-use"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "mars",
+      "tableau",
+      "resources",
+      "global",
+      "hand"
+    ],
+    "editable_component_ids": [
+      "terrain",
+      "cards",
+      "cubes",
+      "boards"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "terraforming-mars.primary",
+      "title": "Terraforming Mars — 공식 자료",
+      "url": "https://fryxgames.se/product/terraforming-mars/",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 소개에서 기업, 프로젝트, 생산, 도시·녹지, 온도/산소/바다, 업적/기업상 확인. 카드색별 공개성·생산 순서 등은 전체 원문 미대조."
+    },
+    {
+      "id": "terraforming-mars.essentials.rules",
+      "title": "Terraforming Mars English Base Rulebook TMRULESFINAL",
+      "url": "https://fryxgames.se/wp-content/uploads/2023/04/TMRULESFINAL.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "PDF p.7 Setup; p.8 Player Order/Research; p.11 Blue card actions; 적용판본: 기본판 English; 확장 제외; 확인범위: 세대마다 선 플레이어가 시계방향으로 이동한다. 프로젝트 뽑기/버림은 별개이고 연구 때 버린 것은 뒷면이다. 파란 카드 행동은 세대당 사용 표식이 남는다. 원문/열람 한계는 docs/game-essentials/evidence.json#terraforming-mars"
+    },
+    {
+      "id": "essentials.storage-guidance",
+      "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
+      "url": null,
+      "kind": "implementation",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Prelude/Venus/Colonies/Turmoil은 새 필드와 구역 패치; 다른 화성 지도는 map_id별 기하로 교체.",
+    "카드별 예외·이벤트 카드 공개 범위·생산 처리 순서의 완전 규칙 대조는 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

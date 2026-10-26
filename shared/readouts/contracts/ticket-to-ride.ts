@@ -1,0 +1,9 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type TicketToRideReadout =
+  {schema:"ticket-to-ride-v1";kind:"map";values:{"printedName": string | null; "sideLabel": string | null; "cityLabel": string | null; "routeColor": string | null; "routeLength": number | null; "routeEnds": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "cityLabel": FieldBasis | null; "routeColor": FieldBasis | null; "routeLength": FieldBasis | null; "routeEnds": 'user' | null}}
+ | {schema:"ticket-to-ride-v1";kind:"trains";values:{"observedColor": string | null; "trainColor": string | null; "owner": string | null; "route": string | null; "segment": number | null};sources:{"observedColor": FieldBasis | null; "trainColor": FieldBasis | null; "owner": 'user' | null; "route": 'user' | null; "segment": 'user' | null}}
+ | {schema:"ticket-to-ride-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "trainType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "trainType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"ticket-to-ride-v1";kind:"tickets";values:{"face": "front" | "back" | null; "printedName": string | null; "startCity": string | null; "endCity": string | null; "printedPoints": number | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "startCity": FieldBasis | null; "endCity": FieldBasis | null; "printedPoints": FieldBasis | null}}
+ | {schema:"ticket-to-ride-v1";kind:"score";values:{"observedColor": string | null; "trackValue": number | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "trackValue": FieldBasis | null; "owner": 'user' | null}}
+ | {schema:"ticket-to-ride-v1";kind:null;values:{};sources:{}};

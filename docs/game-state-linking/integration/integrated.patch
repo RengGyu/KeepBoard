@@ -1,0 +1,714 @@
+--- /dev/null
++++ b/server/componentLinking.ts
+@@ -0,0 +1,35 @@
++import {randomUUID} from 'node:crypto';import type {Assertion,GamePack,Session,Value} from '../shared/types.ts';
++import type {GenericPiece,GenericRecord} from '../shared/genericRecord.ts';
++import {componentLinkTargets,componentRecord,latestComponentAssertion,linkedComponents,type ComponentLinkRequest} from '../shared/componentLinking.ts';
++import {validateComponentRecord} from './engine.ts';import {runtimeBinding} from '../shared/gameEssentials.ts';import {ConflictError} from './objects.ts';
++const same=(a:unknown,b:unknown)=>JSON.stringify(a)===JSON.stringify(b);
++function accepted(session:Session,pack:GamePack,field:string,ownerId:string|undefined,value:GenericRecord){
++ const checked=validateComponentRecord(session,pack,field,value as unknown as Value,ownerId,undefined,{trustedLink:true});
++ session.assertions=session.assertions.filter(a=>a.status!=='accepted'||a.field!==field||a.ownerId!==ownerId);
++ const a:Assertion={id:randomUUID(),field,ownerId,value:checked as unknown as Value,status:'accepted',basis:'user',evidenceIds:[...new Set(checked.pieces.flatMap(p=>p.evidenceId?[p.evidenceId]:[]))],turnInstanceId:session.turnInstanceId,updatedAt:new Date().toISOString()};session.assertions.push(a);return a;
++}
++/** Caller authorizes room/PIN scopes; this transaction is staged in a clone until every record validates. */
++export function linkComponents(session:Session,pack:GamePack,request:ComponentLinkRequest){
++ const r=request;if(!r||typeof r.sourceAssertionId!=='string'||!Array.isArray(r.pieceIds)||!r.pieceIds.length||r.pieceIds.length>500||r.pieceIds.some(x=>typeof x!=='string'||!x)||new Set(r.pieceIds).size!==r.pieceIds.length||!r.target||typeof r.target.field!=='string'||r.target.ownerId!==undefined&&typeof r.target.ownerId!=='string'||r.expectedTargetAssertionId!==null&&typeof r.expectedTargetAssertionId!=='string')throw Error('연결할 실물과 목적지를 확인하세요.');
++ const source=session.assertions.find(a=>a.id===r.sourceAssertionId&&['candidate','accepted'].includes(a.status)),record=componentRecord(source);if(!source||!record)throw new ConflictError();
++ if(source.status==='accepted'&&latestComponentAssertion(session,source.field,source.ownerId)?.id!==source.id)throw new ConflictError();
++ const selected=record.pieces.filter(p=>r.pieceIds.includes(p.id));if(selected.length!==r.pieceIds.length)throw new ConflictError();
++ const links=linkedComponents(session),already=source.status==='candidate'?selected.map(p=>links.find(x=>x.origin.assertionId===source.id&&x.origin.pieceId===p.id)):[];
++ if(already.some(x=>x&&(x.assertion.field!==r.target.field||x.assertion.ownerId!==r.target.ownerId)))throw new ConflictError();
++ if(already.length&&already.every(Boolean))return {moved:0,idempotent:true};
++ if(!componentLinkTargets(pack,session.players,selected).some(t=>t.field===r.target.field&&t.ownerId===r.target.ownerId))throw Error('이 실물은 선택한 기록 영역에 연결할 수 없어요.');
++ if(source.status==='accepted'&&source.field===r.target.field&&source.ownerId===r.target.ownerId)return {moved:0,idempotent:true};
++ const current=latestComponentAssertion(session,r.target.field,r.target.ownerId);if((current?.id??null)!==r.expectedTargetAssertionId)throw new ConflictError();
++ const targetRecord=componentRecord(current);if(current&&!targetRecord)throw Error('기존 기록 형식은 그대로 보존됩니다. 다른 연결 영역을 선택해 주세요.');
++ const corrections=r.corrections??selected;if(!Array.isArray(corrections)||corrections.length!==selected.length||new Set(corrections.map(p=>p.id)).size!==selected.length||corrections.some(p=>!selected.some(o=>o.id===p.id)))throw Error('선택한 실물만 정정할 수 있어요.');
++ const added:GenericPiece[]=[];for(const original of selected){if(already.some(x=>x?.origin.pieceId===original.id))continue;const p=structuredClone(corrections.find(p=>p.id===original.id)!);
++  if(p.evidenceId!==original.evidenceId||!same(p.region,original.region)||!same(p.linkOrigin,original.linkOrigin)||!same(p.placement,original.placement))throw Error('연결하면서 원본·사진 영역·실물 연결을 바꿀 수 없어요.');
++  if((targetRecord?.pieces??[]).some(q=>q.id===p.id))throw new ConflictError();
++  const origin=p.linkOrigin??{assertionId:source.id,pieceId:p.id,field:source.field,...(source.ownerId?{ownerId:source.ownerId}:{})};
++  if(p.placement&&!runtimeBinding(pack,r.target.field)?.areaIds.includes(p.placement.areaId)){if(r.clearPlacement!==true)throw Error('다른 영역의 배치는 추측하지 않아요. 배치하지 않고 옮기기를 확인해 주세요.');origin.previousPlacement=structuredClone(p.placement);delete p.placement;}
++  p.linkOrigin=origin;added.push(p);
++ }
++ const staged=structuredClone(session);accepted(staged,pack,r.target.field,r.target.ownerId,{version:'game-component-record-v1',pieces:[...(targetRecord?.pieces??[]),...added]});
++ if(source.status==='accepted')accepted(staged,pack,source.field,source.ownerId,{version:'game-component-record-v1',pieces:record.pieces.filter(p=>!r.pieceIds.includes(p.id))});
++ session.assertions=staged.assertions;return {moved:added.length,idempotent:false};
++}
+--- a/server/engine.ts
++++ b/server/engine.ts
+@@ -1,3 +1,4 @@
++import {linkedComponents} from '../shared/componentLinking.ts';
+ import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
+ import { randomUUID } from 'node:crypto';
+ import type { Assertion, Condition, FieldDefinition, GamePack, Preservation, Session, SessionView, Value } from '../shared/types.ts';
+@@ -85,13 +86,22 @@
+ }
+ 
+ /** Shared trust boundary for manual answers, candidate acceptance and imported component records. */
+-export function validateComponentRecord(session:Pick<Session,'players'|'evidence'>&Partial<Pick<Session,'assertions'>>,pack:GamePack,fieldKey:string,value:Value,ownerId?:string,assertionEvidenceIds?:string[]){
++export function validateComponentRecord(session:Pick<Session,'players'|'evidence'>&Partial<Pick<Session,'assertions'>>,pack:GamePack,fieldKey:string,value:Value,ownerId?:string,assertionEvidenceIds?:string[],options:{trustedLink?:boolean;importing?:boolean}={}){
+  const field=pack.fields.find(f=>f.key===fieldKey);if(!field||runtimeBinding(pack,fieldKey)?.editor!=='component-catalog')throw new Error('구성물 필드를 확인하세요.');
+  if(field.scope==='player'?!session.players.some(p=>p.id===ownerId):!!ownerId)throw new Error('구성물 소유 범위를 확인하세요.');
+  const ids=session.evidence.filter(e=>field.visibility==='public'||!ownerId?e.scope==='public'&&!e.ownerId:e.ownerId===ownerId||e.scope==='public'&&!e.ownerId).map(e=>e.id);
+  if(assertionEvidenceIds&&(!Array.isArray(assertionEvidenceIds)||assertionEvidenceIds.some(id=>!ids.includes(id))))throw new Error('이 영역에서 볼 수 있는 원본만 근거로 연결하세요.');
+  const record=validateGenericRecord(value,pack,fieldKey,ids,{playerIds:session.players.map(p=>p.id)});
+  const prior=(session.assertions??[]).filter(a=>a.field===fieldKey&&a.ownerId===ownerId&&['accepted','candidate'].includes(a.status)).flatMap(a=>{const r=a.value as unknown as GenericRecord;return r?.version==='game-component-record-v1'&&Array.isArray(r.pieces)?r.pieces:[];});
++ for(const p of record.pieces){
++  const old=[...prior].reverse().find(o=>o.id===p.id&&o.evidenceId===p.evidenceId);
++  if(!options.trustedLink&&!options.importing){
++   if(p.linkOrigin&&JSON.stringify(p.linkOrigin)!==JSON.stringify(old?.linkOrigin))throw new Error('실물의 기존 연결 정보는 임의로 바꿀 수 없어요.');
++   if(!p.linkOrigin&&old?.linkOrigin)p.linkOrigin=structuredClone(old.linkOrigin);
++   const moved=linkedComponents({assertions:session.assertions??[]}).some(x=>x.origin.field===fieldKey&&x.origin.ownerId===ownerId&&x.origin.pieceId===p.id&&x.piece.evidenceId===p.evidenceId&&(x.assertion.field!==fieldKey||x.assertion.ownerId!==ownerId));
++   if(moved)throw new Error('이미 다른 영역에 연결한 실물이에요. 현재 보유 기록에서 옮겨 주세요.');
++  }
++ }
+  validateReadoutEvidenceChanges(pack,prior,record.pieces);
+  return record;
+ }
+--- a/server/index.ts
++++ b/server/index.ts
+@@ -1,3 +1,5 @@
++import {componentLinkTargets,componentRecord,componentTargetKey,latestComponentAssertion,type ComponentLinkOptions} from '../shared/componentLinking.ts';
++import {linkComponents} from './componentLinking.ts';
+ import {CloudUploads} from './cloudUploads.ts';
+ import {BlobStore} from './blobStore.ts';
+ import {Readable} from 'node:stream';
+@@ -146,6 +148,7 @@
+     const token=credential(req),body=req.body??{},requireOwner=async(owner?:string)=>{await pins.require(session.id,owner,token);};
+     const requireField=async(field:string,owner?:string)=>{if(physicalOnlyField(pack,field))throw new HttpError('이 비밀 내용은 수집하지 않습니다. 실물로 보관하세요.');if(privateField(pack,field))await requireOwner(owner);};
+     if(req.path.includes('/privacy/'))return scopes;
++    if(req.path.endsWith('/component-links')){const source=session.assertions.find(a=>a.id===body.sourceAssertionId);if(!source)throw new HttpError('원본 후보를 찾을 수 없어요.',404);await requireField(source.field,source.ownerId);await requireField(body.target?.field,body.target?.ownerId);}
+     if(req.method==='PATCH'&&req.path===`/api/sessions/${session.id}`){
+       for(const owner of Object.keys(body.notes??{}))await requireOwner(owner);
+       for(const answer of body.answers??[])await requireField(answer.field,answer.ownerId);
+@@ -222,7 +225,7 @@
+     if(importPack.runtime){
+       for(const state of [incoming,...(incoming.snapshots??[])]){
+         if(state.assertions.some(a=>physicalOnlyField(importPack,a.field)||!importPack.fields.some(f=>f.key===a.field)))throw new HttpError('지원하지 않는 비밀 내용은 가져올 수 없습니다. 원본 파일은 그대로 두세요.');
+-        for(const a of state.assertions)if(importPack.runtime.fieldBindings.some(b=>b.key===a.field&&b.editor==='component-catalog')&&a.value!==null)validateComponentRecord({players:incoming.players,evidence:state.evidence},importPack,a.field,a.value,a.ownerId,a.evidenceIds);
++        for(const a of state.assertions)if(importPack.runtime.fieldBindings.some(b=>b.key===a.field&&b.editor==='component-catalog')&&a.value!==null)validateComponentRecord({players:incoming.players,evidence:state.evidence},importPack,a.field,a.value,a.ownerId,a.evidenceIds,{importing:true});
+         if(!hasPrivateDigitalFields(importPack)&&state.evidence.some(e=>e.ownerId||e.scope==='player'))throw new HttpError('지원하지 않는 비밀 사진은 가져올 수 없습니다. 실물 보관을 이용하세요.');
+       }
+       incoming.analysisSummary=undefined;incoming.analysisSummaryOwnerId=undefined;
+@@ -443,6 +446,27 @@
+     res.setHeader('Server-Timing', timingHeader(timings));
+     res.json({...view,analysis});
+   });
++  app.get('/api/sessions/:id/component-links/:assertionId',async(req,res)=>{
++    const {session,pack}=await sessionFor(req.params.id),source=session.assertions.find(a=>a.id===req.params.assertionId&&['candidate','accepted'].includes(a.status));
++    if(!source||!componentRecord(source))throw new HttpError('원본 구성물을 찾을 수 없어요.',404);
++    const actor=session.room?rooms.actor(req,session):undefined;
++    if(actor&&privateField(pack,source.field)&&source.ownerId!==actor.playerId)throw new rooms.RoomError('내 개인 기록만 연결할 수 있어요.');
++    if(privateField(pack,source.field))await pins.require(session.id,source.ownerId,credential(req));
++    const ids=typeof req.query.pieceIds==='string'?req.query.pieceIds.split(','):[];
++    const pieces=componentRecord(source)!.pieces.filter(p=>ids.includes(p.id));
++    if(!ids.length||new Set(ids).size!==ids.length||pieces.length!==ids.length)throw new HttpError('연결할 실물을 선택하세요.');
++    const targets=[] as ComponentLinkOptions['targets'],targetVersions:Record<string,string|null>={};
++    for(const t of componentLinkTargets(pack,session.players,pieces))try{
++      if(actor){rooms.writeScope(actor,session,fieldScope(pack,t.field,t.ownerId));if(source.status==='accepted')rooms.writeScope(actor,session,fieldScope(pack,source.field,source.ownerId));}
++      if(t.visibility==='owner')await pins.require(session.id,t.ownerId,credential(req));
++      const current=latestComponentAssertion(session,t.field,t.ownerId),draft=structuredClone(session);
++      // Use the transaction's actual eligibility checks; do not expose a destination that cannot be saved.
++      linkComponents(draft,pack,{sourceAssertionId:source.id,pieceIds:ids,target:{field:t.field,ownerId:t.ownerId},expectedTargetAssertionId:current?.id??null,clearPlacement:true});
++      targets.push({...t,targetAssertionId:current?.id??null});targetVersions[componentTargetKey(t.field,t.ownerId)]=current?.id??null;
++    }catch{}
++    res.json({sourceAssertionId:source.id,pieces,targets,targetVersions} satisfies ComponentLinkOptions);
++  });
++  app.post('/api/sessions/:id/component-links',async(req,res)=>res.json(await change(req,req.params.id,(session,pack)=>{const result=linkComponents(session,pack,req.body);if(result.moved)activity(session,'component-link','선택한 실물을 지정한 기록 영역에 연결했습니다.');})));
+   app.post('/api/sessions/:id/assertions/:assertionId/accept', async (req, res) => {
+     res.json(await change(req, req.params.id, (session, pack) => {
+       const assertion = session.assertions.find(item => item.id === req.params.assertionId);
+--- a/server/rooms.ts
++++ b/server/rooms.ts
+@@ -30,6 +30,7 @@
+  else if(req.path.endsWith('/evidence')&&req.method==='POST'){const source=s.evidence.find(e=>e.id===body.sourceEvidenceId);if(body.sourceEvidenceId&&!source)throw new RoomError('사진을 찾을 수 없어요.',404);add(source?.ownerId??(source?'public':body.scope==='player'?body.ownerId:'public'));}
+  else if(req.params.evidenceId){const e=s.evidence.find(e=>e.id===req.params.evidenceId);if(!e)throw new RoomError('사진을 찾을 수 없어요.',404);add(e.ownerId??'public');}
+  else if(req.path.endsWith('/analyze')){const key=target(body);add(key);if(!Array.isArray(body.evidenceIds)||!body.evidenceIds.length)throw new RoomError('읽을 사진을 선택해 주세요.',400);const es=s.evidence.filter(e=>body.evidenceIds.includes(e.id));if(es.length!==new Set(body.evidenceIds).size||es.some(e=>(e.ownerId??'public')!==key))throw new RoomError('다른 영역의 사진은 함께 읽을 수 없어요.');}
++ else if(req.path.endsWith('/component-links')){const source=s.assertions.find(x=>x.id===body.sourceAssertionId);if(!source)throw new RoomError('원본 후보를 찾을 수 없어요.',404);if(privateField(pack,source.field)&&source.ownerId!==a.playerId)throw new RoomError('내 개인 기록만 연결할 수 있어요.');field(body.target?.field,body.target?.ownerId,body.corrections);if(source.status==='accepted')field(source.field,source.ownerId);}
+  else if(req.params.assertionId){const x=s.assertions.find(x=>x.id===req.params.assertionId);if(!x)throw new RoomError('후보를 찾을 수 없어요.',404);field(x.field,x.ownerId,x.value);}
+  else if(req.params.preservationId){const x=s.preservations.find(x=>x.id===req.params.preservationId);if(!x)throw new RoomError('보관 항목을 찾을 수 없어요.',404);add(x.ownerId??'public');}
+  else if(req.path.endsWith('/commit')||req.path.endsWith('/resume'))add(target(body));
+--- a/server/runtimeResume.ts
++++ b/server/runtimeResume.ts
+@@ -1,3 +1,4 @@
++import {componentRecord} from '../shared/componentLinking.ts';
+ import {randomUUID} from 'node:crypto';
+ import type {GamePack,Session} from '../shared/types.ts';
+ import {privateField} from '../shared/privacy.ts';
+@@ -15,7 +16,15 @@
+  const restoredAssertions=structuredClone(saved.assertions.filter(assertion));
+  // Only state effective when saved joins the current logical turn; purchase/history and candidates keep their original tags.
+  for(const item of restoredAssertions)if(item.status==='accepted'&&item.basis!=='rule'&&item.turnInstanceId===saved.turnInstanceId&&isTurnField(pack.fields.find(field=>field.key===item.field)))item.turnInstanceId=session.turnInstanceId;
+- session.assertions=[...session.assertions.filter(a=>!assertion(a)),...restoredAssertions];
++ const nextAssertions=[...session.assertions.filter(a=>!assertion(a)),...restoredAssertions];
++ const identities=new Map<string,boolean>();
++ for(const a of nextAssertions.filter(a=>a.status==='accepted'))for(const p of componentRecord(a)?.pieces??[]){
++  // A saved pre-link source has no origin yet: its assertion/piece pair is the same identity later issued by linkComponents.
++  const key=JSON.stringify([p.linkOrigin?.assertionId??a.id,p.linkOrigin?.pieceId??p.id,p.evidenceId]),linked=!!p.linkOrigin;
++  if(identities.has(key)&&(linked||identities.get(key)))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');
++  identities.set(key,linked);
++ }
++ session.assertions=nextAssertions;
+  // Retained private assertions may cite a public original that is absent from the old public snapshot.
+  const retainedRefs=new Set(session.assertions.filter(a=>!assertion(a)).flatMap(a=>a.evidenceIds));
+  const retainedOriginals=session.evidence.filter(e=>retainedRefs.has(e.id));
+--- /dev/null
++++ b/shared/componentLinking.ts
+@@ -0,0 +1,18 @@
++import type {Assertion,GamePack,Player,Session} from './types.ts';
++import type {GenericPiece,GenericPlacement,GenericRecord} from './genericRecord.ts';
++import {runtimeBinding,physicalOnlyField} from './gameEssentials.ts';
++export interface ComponentLinkOrigin {assertionId:string;pieceId:string;field:string;ownerId?:string;previousPlacement?:GenericPlacement}
++export interface ComponentLinkTarget {field:string;label:string;ownerId?:string;ownerName?:string;visibility:'public'|'owner';targetAssertionId?:string|null}
++export interface ComponentLinkRequest {sourceAssertionId:string;pieceIds:string[];target:{field:string;ownerId?:string};expectedTargetAssertionId:string|null;corrections?:GenericPiece[];clearPlacement?:boolean;expectedRevisions?:Record<string,number>}
++export interface ComponentLinkOptions {sourceAssertionId:string;pieces:GenericPiece[];targets:ComponentLinkTarget[];targetVersions:Record<string,string|null>}
++export const componentTargetKey=(field:string,ownerId?:string)=>JSON.stringify([field,ownerId??null]);
++export const componentRecord=(a:Assertion|undefined):GenericRecord|undefined=>{const v=a?.value as unknown as GenericRecord;return v?.version==='game-component-record-v1'&&Array.isArray(v.pieces)?v:undefined;};
++export const latestComponentAssertion=(s:Pick<Session,'assertions'>,field:string,ownerId?:string)=>s.assertions.filter(a=>a.field===field&&a.ownerId===ownerId&&a.status==='accepted').at(-1);
++export function linkedComponents(session:Pick<Session,'assertions'>){return session.assertions.filter(a=>a.status==='accepted').flatMap(a=>(componentRecord(a)?.pieces??[]).filter(p=>!!p.linkOrigin).map(piece=>({assertion:a,piece,origin:piece.linkOrigin!})));}
++export function unlinkedComponentPieces(session:Pick<Session,'assertions'>,source:Assertion){const linked=linkedComponents(session);return (componentRecord(source)?.pieces??[]).filter(p=>source.status==='accepted'||!linked.some(x=>x.origin.assertionId===source.id&&x.origin.pieceId===p.id));}
++/** Only existing pack destinations; ownership is explicit at assertion scope, never inferred from a crop. */
++export function componentLinkTargets(pack:GamePack,players:Player[],pieces:GenericPiece[]):ComponentLinkTarget[]{
++ if(!pieces.length||pack.runtime?.support.recording==='native')return [];
++ return pack.fields.flatMap(f=>{const b=runtimeBinding(pack,f.key);if(b?.editor!=='component-catalog'||physicalOnlyField(pack,f.key)||!['public','player'].includes(f.scope)||!['public','owner'].includes(f.visibility??'public')||pieces.some(p=>p.componentId!==null&&!b.componentIds.includes(p.componentId)))return [];
++ const target={field:f.key,label:f.label,visibility:(f.visibility??'public') as 'public'|'owner'};return f.scope==='player'?players.map(p=>({...target,ownerId:p.id,ownerName:p.name})):[target];});
++}
+--- /dev/null
++++ b/shared/componentStatePack.ts
+@@ -0,0 +1,10 @@
++import type {GamePack} from './types.ts';
++/** Additive app capability for the verified base edition; raw/pinned pack identity and answers stay unchanged. */
++export function effectiveComponentStatePack(raw:GamePack):GamePack{
++ if(raw.runtime?.source.gameId!=='splendor'||raw.runtime.source.editionId!=='base'||!raw.runtime.components.some(c=>c.id==='chips')||raw.fields.some(f=>f.key==='supply.scene'))return raw;
++ const p=structuredClone(raw),key='supply.scene';
++ p.fields.push({key,label:'공용 보석·금 공급',description:'아직 누구도 가져가지 않은 공용 토큰입니다. 플레이어 보유 토큰과 구분해 연결하세요.',type:'json',scope:'public',visibility:'public',lifetime:'session',acquisition:'ask',group:'essentials'});
++ p.runtime!.fieldBindings.push({key,sourceId:'app.splendor.supply-v1',label:'공용 보석·금 공급',editor:'component-catalog',scope:'public',visibility:'public',lifetime:'session',areaIds:['supply'],componentIds:['chips']});
++ if(!p.sources.some(s=>s.id==='app.splendor.supply-v1'))p.sources.push({id:'app.splendor.supply-v1',title:'Splendor base rules — setup and gem tokens',url:'https://cdn.svc.asmodee.net/production-unboxnowcom/uploads/2022/02/Splendor-EN.pdf',section:'Game setup: gem tokens in piles within reach; Buying a development card: spent tokens returned to the middle; The bonuses: purchased-card bonuses. Additive manual-link destination, not new photo permission.'});
++ return p;
++}
+--- a/shared/genericRecord.ts
++++ b/shared/genericRecord.ts
+@@ -1,10 +1,11 @@
++import type {ComponentLinkOrigin} from './componentLinking.ts';
+ import type {Assertion,GamePack,Value} from './types.ts';
+ import {validateSplendorObservation,type SplendorObservation} from './splendor.ts';
+ import {validateGameReadout,type GameReadout,type ReadoutContext} from './readouts/registry.ts';
+ import {validateReadoutRelations} from './readouts/relations.ts';
+ import {runtimeBinding} from './gameEssentials.ts';
+ export interface GenericPlacement {areaId:string;x:number;y:number;rotation:0|90|180|270}
+-export interface GenericPiece {readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
++export interface GenericPiece {linkOrigin?:ComponentLinkOrigin;readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
+ export interface GenericRecord {version:'game-component-record-v1';pieces:GenericPiece[]}
+ export function emptyGenericRecord():GenericRecord{return {version:'game-component-record-v1',pieces:[]};}
+ export function validateGenericRecord(value:Value,pack:GamePack,field:string,allowedEvidenceIds:string[],context:ReadoutContext={}):GenericRecord {
+@@ -13,6 +14,7 @@
+  const seen=new Set<string>();
+  for(const p of raw.pieces){
+   if(!p||typeof p.id!=='string'||!p.id||seen.has(p.id))throw new Error('실물별로 서로 다른 ID가 필요합니다.');seen.add(p.id);
++  if(Object.hasOwn(p,'linkOrigin')){const o=p.linkOrigin;if(context.mode==='ai'||!o||typeof o!=='object'||Object.keys(o).some(k=>!['assertionId','pieceId','field','ownerId','previousPlacement'].includes(k))||[o.assertionId,o.pieceId,o.field].some(v=>typeof v!=='string'||!v)||o.pieceId!==p.id||o.ownerId!==undefined&&(typeof o.ownerId!=='string'||!o.ownerId))throw new Error('실물 연결 원본을 확인하세요.');const q=o.previousPlacement;if(q&&(!q.areaId||typeof q.areaId!=='string'||![q.x,q.y].every(Number.isFinite)||q.x<0||q.x>1||q.y<0||q.y>1||![0,90,180,270].includes(q.rotation)))throw new Error('이전 배치 정보를 확인하세요.');}
+   if(Object.hasOwn(p,'readout')){if((pack.runtime?.source.gameId??pack.id)==='splendor')validateSplendorObservation(p.readout,p.componentId,p.label);else validateGameReadout(p.readout,pack,p.componentId,p.evidenceId,context);}
+   if(p.componentId!==null&&!binding?.componentIds.includes(p.componentId))throw new Error('이 기록의 구성물 종류를 선택하세요.');
+   if(Object.hasOwn(p,'placement')){const q=p.placement;if(!q||!binding?.areaIds.includes(q.areaId)||!Number.isFinite(q.x)||!Number.isFinite(q.y)||q.x<0||q.x>1||q.y<0||q.y>1||![0,90,180,270].includes(q.rotation))throw new Error('기록 배치의 영역과 위치를 확인하세요. 원본 배치는 그대로 유지됩니다.');}
+--- a/shared/recognition.ts
++++ b/shared/recognition.ts
+@@ -1,3 +1,4 @@
++import {effectiveComponentStatePack} from './componentStatePack.ts';
+ import index from './recognition-index.json';
+ import type {FieldDefinition,GamePack} from './types';
+ import type {RuntimeFieldBinding} from './gameEssentials';
+@@ -29,6 +30,7 @@
+  return {mode:bindings.length?'assisted' as const:'manual' as const,bindings,excluded,compatible:!!version};
+ }
+ export function effectiveRecognitionPack(raw:GamePack):GamePack{
++ raw=effectiveComponentStatePack(raw);
+  const c=recognitionCapability(raw);if(c.mode!=='assisted')return raw;
+  const pack=structuredClone(raw),r=pack.runtime!;r.support.recognition='assisted';
+  pack.fields=pack.fields.filter(f=>!observationTray(f.key));r.fieldBindings=r.fieldBindings.filter(b=>!observationTray(b.key));
+--- a/shared/splendor.ts
++++ b/shared/splendor.ts
+@@ -1,3 +1,4 @@
++import type {GamePack,Session} from './types.ts';
+ export const SPLENDOR_GEMS=['white','blue','green','red','black'] as const;
+ export type SplendorGem=typeof SPLENDOR_GEMS[number];
+ export type SplendorColor=SplendorGem|'gold';
+@@ -47,3 +48,17 @@
+  const populated=[v.points,v.bonus,v.cost,v.requirements,v.color,v.level].some(x=>x!==null);
+  return {...rest,kind:kind??'unknown',quantity:piece.quantity,source:piece.readout?'structured':populated?'legacy-label':'unread'};
+ }
++
++/** Counts only explicitly recorded purchased cards, never tokens/costs/reservations or an inferred table total. */
++export function splendorBonusSummary(session:Pick<Session,'assertions'>,pack:GamePack,ownerId:string){
++ if((pack.runtime?.source.gameId??pack.id)!=='splendor')return null;
++ const a=session.assertions.filter(a=>a.field==='player.scene'&&a.ownerId===ownerId&&a.status==='accepted').at(-1),pieces=(a?.value as any)?.pieces;
++ if(!Array.isArray(pieces))return null;
++ const cards=pieces.filter(p=>p.componentId==='development');if(!cards.length)return null;
++ const bonus=Object.fromEntries(SPLENDOR_GEMS.map(g=>[g,0])) as SplendorGemCounts;let unknownCards=0;
++ for(const p of cards){let r:SplendorObservation;try{r=validateSplendorObservation(p.readout,p.componentId);}catch{unknownCards++;for(const g of SPLENDOR_GEMS)bonus[g]=null;continue;}
++  if(r.kind!=='development'||r.bonus===null){unknownCards++;for(const g of SPLENDOR_GEMS)bonus[g]=null;continue;}
++  if(p.quantity===null){unknownCards++;bonus[r.bonus]=null;}else if(bonus[r.bonus]!==null)bonus[r.bonus]!+=p.quantity;
++ }
++ return {bonus,unknownCards,recordedCards:cards.length,complete:unknownCards===0,label:'기록한 구매 카드 보너스'};
++}
+--- /dev/null
++++ b/tests/component-linking-api.test.ts
+@@ -0,0 +1,31 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createApp} from '../server/index.ts';import {BlobStore} from '../server/blobStore.ts';import {MemoryObjects} from '../server/objects.ts';import {emptySplendorObservation,unknownGemCounts} from '../shared/splendor.ts';
++const original={version:'game-component-record-v1',pieces:[{id:'read-once',componentId:'development',variant:null,quantity:1,label:'synthetic',anchor:'',evidenceId:'photo',region:null,readout:{...emptySplendorObservation('development'),bonus:'blue',cost:unknownGemCounts()}},{id:'second',componentId:'development',variant:null,quantity:1,label:'synthetic2',anchor:'',evidenceId:'photo',region:null,readout:{...emptySplendorObservation('development'),bonus:'red',cost:unknownGemCounts()}}]};
++async function fixture(){const objects=new MemoryObjects(),store=new BlobStore(objects),app=await createApp({store,cloud:{objects,dispatch:async()=>{}}}),server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const base='http://127.0.0.1:'+(server.address() as any).port;
++ const call=async(route:string,body?:any,method=body===undefined?'GET':'POST',headers:Record<string,string>={})=>{const r=await fetch(base+route,{method,headers:{Origin:base,'Content-Type':'application/json',...headers},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()};};
++ function client(){let cookie='';return {async call(route:string,body?:any,method=body===undefined?'GET':'POST',token?:string){const r=await fetch(base+route,{method,headers:{Origin:base,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{}),...(token?{'X-KeepBoard-Private-Token':token}:{})},body:body===undefined?undefined:JSON.stringify(body)});const c=r.headers.get('set-cookie');if(c)cookie=c.split(';')[0];return {status:r.status,body:await r.json()};}};}
++ return {store,call,client,close:async()=>{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));}};}
++test('existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin',async()=>{const f=await fixture();try{const first=(await f.call('/api/sessions',{gamePackId:'splendor',players:[{id:'p1',name:'synthetic',color:'red'}]})).body,id=first.session.id,p='/api/sessions/'+id,s=(await f.store.getSession(id))!;s.evidence.push({id:'photo',kind:'photo',scope:'public',url:await f.store.saveEvidence('data:image/png;base64,aGVsbG8='),captureEpoch:s.captureEpoch,capturedAt:'now',label:'synthetic'});s.assertions.push({id:'model',field:'__photo.public',value:original as any,status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:s.turnInstanceId,updatedAt:'now'});await f.store.saveSession(s);
++ const options=await f.call(p+'/component-links/model?pieceIds=read-once');assert.equal(options.status,200);assert(options.body.targets.some((t:any)=>t.field==='player.scene'&&t.ownerId==='p1'));
++ const link={sourceAssertionId:'model',pieceIds:['read-once'],target:{field:'player.scene',ownerId:'p1'},expectedTargetAssertionId:null};const linked=await f.call(p+'/component-links',link);assert.equal(linked.status,200);assert.equal((await f.call(p+'/component-links',link)).status,200);assert.equal((await f.call(p+'/component-links',{...link,pieceIds:['second'],target:{field:'reserve.scene',ownerId:'p1'}})).status,200);
++ assert.equal((await f.call(p,{answers:[{field:'__photo.public',value:original}]},'PATCH')).status,400);assert.equal((await f.call(p+'/assertions/model/accept',{})).status,400);
++ const current=(await f.call(p)).body.session;assert.equal(current.assertions.filter((a:any)=>a.status==='accepted'&&a.field==='player.scene')[0].value.pieces.length,1);assert.equal(current.assertions.find((a:any)=>a.id==='model').value.pieces.length,2);
++ assert.equal((await f.call(p+'/commit',{allowIncomplete:true})).status,200);const exported=(await f.call(p+'/export')).body,imported=await f.call('/api/sessions/import',exported);assert.equal(imported.status,201);const q='/api/sessions/'+imported.body.session.id;assert.equal((await f.call(q+'/resume',{scope:'public'})).status,200);const reopened=(await f.call(q)).body.session;const held=reopened.assertions.find((a:any)=>a.field==='player.scene');assert.equal(held.value.pieces[0].linkOrigin.assertionId,'model');assert.equal(held.value.pieces[0].readout.bonus,'blue');
++ }finally{await f.close();}});
++
++test('room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation',async()=>{const f=await fixture();try{const h=f.client(),m=f.client();for(const c of [h,m])await c.call('/api/rooms/device',{});const made=(await h.call('/api/rooms',{gamePackId:'splendor',capacity:2,me:{color:'#ff0000'},clientRequestId:'link-room'})).body,id=made.session.id,p='/api/sessions/'+id,H=made.roomAccess.playerId,invite=(await h.call('/api/rooms/'+id+'/invite')).body.code,M=(await m.call('/api/rooms/join',{invite,color:'#0000ff'})).body.roomAccess.playerId;
++ const seeded=(await f.store.getSession(id))!;seeded.evidence.push({id:'photo',kind:'photo',scope:'public',url:'/synthetic.png',captureEpoch:seeded.captureEpoch,capturedAt:'now',label:'synthetic'});seeded.assertions.push({id:'model',field:'__photo.public',value:original as any,status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:seeded.turnInstanceId,updatedAt:'now'});await f.store.saveSession(seeded);
++ const req={sourceAssertionId:'model',pieceIds:['read-once'],target:{field:'player.scene',ownerId:M},expectedTargetAssertionId:null,expectedRevisions:{[M]:0}};
++ assert.equal((await h.call(p+'/component-links',req)).status,403);assert.equal((await m.call(p+'/component-links',{...req,target:{field:'player.scene',ownerId:H},expectedRevisions:{[H]:0}})).status,403);
++ const own=await m.call(p+'/component-links',req);assert.equal(own.status,200);assert.equal((await m.call(p+'/component-links',{...req,pieceIds:['second']})).status,409,'stale owner revision rejected');
++ assert.equal((await m.call(p+'/commit',{scope:'owner',ownerId:M,allowIncomplete:true,expectedRevisions:{[M]:1}})).status,200);
++ assert.equal((await m.call(p,{answers:[{field:'player.scene',ownerId:M,value:{version:'game-component-record-v1',pieces:[]}}],expectedRevisions:{[M]:2}},'PATCH')).status,200);
++ assert.equal((await m.call(p+'/resume',{scope:'owner',ownerId:M,expectedRevisions:{[M]:3}})).status,200);const restored=(await m.call(p)).body;assert.equal(restored.session.assertions.find((a:any)=>a.field==='player.scene'&&a.ownerId===M).value.pieces[0].id,'read-once');assert((await h.call(p)).body.session.assertions.some((a:any)=>a.field==='player.scene'&&a.ownerId===M),'public player state remains visible to room peers');
++ const pin=await m.call(p+'/privacy/'+M,{enabled:true,pin:'1234',expectedRevisions:{[M]:4}},'PUT');assert.equal(pin.status,200);
++ const reserve={sourceAssertionId:'model',pieceIds:['second'],target:{field:'reserve.scene',ownerId:M},expectedTargetAssertionId:null,expectedRevisions:{[M]:5}};assert.equal((await m.call(p+'/component-links',reserve)).status,403);const token=(await m.call(p+'/privacy/'+M+'/unlock',{pin:'1234'})).body.token;assert.equal((await m.call(p+'/component-links',reserve,'POST',token)).status,200);assert(!(await h.call(p)).body.session.assertions.some((a:any)=>a.field==='reserve.scene'&&a.ownerId===M));
++ }finally{await f.close();}});
++for(const room of [false,true])test(`HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=${room}`,async()=>{const f=await fixture();try{const h=f.client();if(room)await h.call('/api/rooms/device',{});const made=(await h.call(room?'/api/rooms':'/api/sessions',room?{gamePackId:'splendor',capacity:2,me:{color:'#ff0000'},clientRequestId:'restore-'+room}:{gamePackId:'splendor',players:[{id:'p1',name:'synthetic',color:'#ff0000'}]})).body,id=made.session.id,p='/api/sessions/'+id,owner=room?made.roomAccess.playerId:'p1';let view=made;const rev=(keys:string[])=>room?{expectedRevisions:Object.fromEntries(keys.map(k=>[k,view.roomAccess.revisions[k]]))}:{};
++ const seed=(await f.store.getSession(id))!;seed.evidence.push({id:'photo',kind:'photo',scope:'public',url:'/synthetic.png',captureEpoch:seed.captureEpoch,capturedAt:'now',label:'synthetic'});await f.store.saveSession(seed);
++ const input={version:'game-component-record-v1',pieces:[original.pieces[0]]};const a=await h.call(p,{answers:[{field:'market.scene',value:input}],...rev(['public'])},'PATCH');assert.equal(a.status,200);view=a.body;const source=view.session.assertions.find((a:any)=>a.field==='market.scene'&&a.status==='accepted');assert(!source.value.pieces[0].linkOrigin);
++ const c=await h.call(p+'/commit',{scope:'public',allowIncomplete:true,...rev(['public'])});assert.equal(c.status,200);view=c.body;const normal=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(normal.status,200,'normal same-scope restore stays usable');view=normal.body;
++ const linked=await h.call(p+'/component-links',{sourceAssertionId:source.id,pieceIds:['read-once'],target:{field:'reserve.scene',ownerId:owner},expectedTargetAssertionId:null,...rev(['public',owner])});assert.equal(linked.status,200);view=linked.body;const before=JSON.stringify(await f.store.getSession(id));const restored=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(restored.status,400);assert.match(restored.body.error,/다른 영역/);assert.equal(JSON.stringify(await f.store.getSession(id)),before,'failed restore leaves current state and cloud revision unchanged');
++ }finally{await f.close();}});
+--- /dev/null
++++ b/tests/component-linking-catalog.test.ts
+@@ -0,0 +1,16 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {writeFile} from 'node:fs/promises';
++import {builtinPacks} from '../gamepacks/catalog.ts';import {effectiveRecognitionPack} from '../shared/recognition.ts';import {componentRecord,componentLinkTargets} from '../shared/componentLinking.ts';import {linkComponents} from '../server/componentLinking.ts';import {BlobStore} from '../server/blobStore.ts';import {MemoryObjects} from '../server/objects.ts';import {resumeSnapshot} from '../server/runtimeResume.ts';import {emptyGameReadout,readoutDefinition} from '../shared/readouts/registry.ts';import {emptySplendorObservation} from '../shared/splendor.ts';import type {Session} from '../shared/types.ts';
++test('120 catalog rows: every photo-eligible component destination validates, persists, reopens and restores; native records keep native paths',async()=>{const rows:any[]=[];for(const raw of builtinPacks()){const pack=effectiveRecognitionPack(raw),row:any={gameId:pack.id,edition:pack.edition,sourceSHA:pack.runtime?.source.sha256,mode:pack.runtime?.support.recording,fields:[],status:'SYNTHETIC_LINK_PERSIST_RESUME'};rows.push(row);
++ if(row.mode==='native'){row.status='NATIVE_PATH_RETAINED';row.verification='dedicated native regressions, not converted by componentLinkTargets';assert.deepEqual(componentLinkTargets(pack,[],[{componentId:null} as any]),[]);continue;}
++ for(const b of pack.runtime!.fieldBindings.filter(b=>b.editor==='component-catalog'&&!b.key.startsWith('__photo.'))){const field=pack.fields.find(f=>f.key===b.key)!;const entry:any={field:b.key,owner:b.scope==='player'?'p1':null,visibility:b.visibility,areaIds:b.areaIds,components:[]};row.fields.push(entry);
++ for(const componentId of b.componentIds){const publicTray=pack.runtime!.fieldBindings.find(x=>x.key==='__photo.public'&&x.componentIds.includes(componentId)),privateTray=pack.runtime!.fieldBindings.find(x=>x.key==='__photo.owner'&&x.componentIds.includes(componentId)),source=publicTray??privateTray;
++ if(!source||source.visibility==='owner'&&b.visibility==='public'){entry.components.push({componentId,status:'NO_PERMITTED_PHOTO_SOURCE',method:'existing manual/physical support retained'});continue;}
++ const ownerId=b.scope==='player'?'p1':undefined,photoOwner=source.visibility==='owner'?'p1':undefined;
++ const store=new BlobStore(new MemoryObjects()),pieces=[null,0].map((quantity,i)=>({id:'synthetic-'+i,componentId,variant:null,quantity,label:'합성 연결 시험',anchor:'순서 '+i,evidenceId:'photo',region:{x:.1,y:.1,width:.2,height:.2},...(pack.id==='splendor'?{readout:emptySplendorObservation(componentId==='chips'?'token':componentId==='nobles'?'noble':'development')}:readoutDefinition(pack)?{readout:emptyGameReadout(pack,componentId)}:{})}));
++ const candidate:any={id:'candidate',field:source.key,ownerId:photoOwner,value:{version:'game-component-record-v1',pieces},status:'candidate',basis:'observation',evidenceIds:['photo'],turnInstanceId:'turn',updatedAt:'now'};
++ const s={id:pack.id+'-'+b.key+'-'+componentId,name:'synthetic',gamePackId:pack.id,gamePackVersion:pack.version,gamePack:structuredClone(raw),createdAt:'now',updatedAt:'now',captureEpoch:'epoch',turnInstanceId:'turn',stage:'capture',example:false,players:[{id:'p1',name:'synthetic',color:'#ff0000'}],evidence:[{id:'photo',scope:photoOwner?'player':'public',ownerId:photoOwner,kind:'photo',url:'/synthetic.png',captureEpoch:'epoch',capturedAt:'now',label:'synthetic'}],assertions:[candidate],preservations:[],snapshots:[],notes:{},activity:[]} as Session;
++ linkComponents(s,pack,{sourceAssertionId:'candidate',pieceIds:pieces.map(p=>p.id),target:{field:b.key,ownerId},expectedTargetAssertionId:null});const accepted=s.assertions.find(a=>a.field===b.key&&a.ownerId===ownerId&&a.status==='accepted')!;assert.deepEqual(componentRecord(accepted)!.pieces.map(p=>p.quantity),[null,0]);assert.deepEqual(s.assertions.find(a=>a.id==='candidate'),candidate);
++ s.snapshots.push({id:'saved',createdAt:'now',gamePackVersion:s.gamePackVersion,captureEpoch:s.captureEpoch,turnInstanceId:s.turnInstanceId,assertions:structuredClone(s.assertions),evidence:structuredClone(s.evidence),preservations:[],notes:{}});await store.saveSession(s);const reopened=(await new BlobStore(store.objects).getSession(s.id))!;reopened.assertions=reopened.assertions.filter(a=>a.id!==accepted.id);resumeSnapshot(reopened,pack,field.visibility==='owner'?'owner':'public',ownerId);const restored=reopened.assertions.find(a=>a.field===b.key&&a.ownerId===ownerId&&a.status==='accepted')!;assert.deepEqual(restored.value,accepted.value);entry.components.push({componentId,status:'PASS',method:'real validators/linker + independent BlobStore clients/MemoryObjects CAS + resumeSnapshot',readout:readoutDefinition(pack)?'typed-all-null':pack.id==='splendor'?'splendor-all-null':'legacy'});
++ }}
++ }
++ assert.equal(rows.length,120);assert.equal(new Set(rows.map(r=>r.gameId)).size,120);const result={synthetic:true,aiCalls:0,gameCount:120,caseCount:rows.flatMap(r=>r.fields.flatMap((f:any)=>f.components)).filter(c=>c.status==='PASS').length,limitations:['component identity/typed-null data transport, not real-photo accuracy or complete rules','native2 are retained; dedicated native tests provide separate verification','PIN/rooms/HTTP verified in separate focused API tests'],games:rows};if(process.env.KEEPBOARD_LINK_MATRIX_OUT)await writeFile(process.env.KEEPBOARD_LINK_MATRIX_OUT,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({games:result.gameCount,cases:result.caseCount,native:rows.filter(r=>r.mode==='native').length}));});
+--- /dev/null
++++ b/tests/component-linking-supply.test.ts
+@@ -0,0 +1,2 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {builtinPacks} from '../gamepacks/catalog.ts';import {effectiveRecognitionPack} from '../shared/recognition.ts';import {componentLinkTargets} from '../shared/componentLinking.ts';
++test('Splendor supply is an effective compatible public destination without rewriting its pinned pack or widening card targets',()=>{const raw=builtinPacks().find(p=>p.id==='splendor')!,before=JSON.stringify(raw),p=effectiveRecognitionPack(raw);const chip={id:'chip',componentId:'chips',quantity:null,variant:null,label:'',anchor:'',evidenceId:null,region:null};assert(componentLinkTargets(p,[],[chip]).some(t=>t.field==='supply.scene'&&!t.ownerId));assert(!componentLinkTargets(p,[],[{...chip,componentId:'development'}]).some(t=>t.field==='supply.scene'));assert.equal(JSON.stringify(raw),before);assert.equal(p.version,raw.version);assert.equal(p.runtime?.source.sha256,raw.runtime?.source.sha256);assert.deepEqual(effectiveRecognitionPack(p),p);});
+--- /dev/null
++++ b/tests/component-linking.test.ts
+@@ -0,0 +1,19 @@
++import test from 'node:test';import assert from 'node:assert/strict';import packs from '../gamepacks/generated/game-essentials.json';
++import {effectiveRecognitionPack} from '../shared/recognition.ts';import {emptySplendorObservation,unknownGemCounts,splendorBonusSummary} from '../shared/splendor.ts';
++import {linkComponents} from '../server/componentLinking.ts';import {componentLinkTargets} from '../shared/componentLinking.ts';import type {GamePack,Session,Assertion} from '../shared/types.ts';
++const p=()=>effectiveRecognitionPack(structuredClone((packs as unknown as GamePack[]).find(p=>p.id==='splendor')!));
++const card=(id:string,bonus='blue',quantity:number|null=1)=>({id,componentId:'development',variant:null,quantity,label:'synthetic',anchor:'',evidenceId:'photo',region:{x:.1,y:.1,width:.2,height:.3},readout:{...emptySplendorObservation('development'),bonus,cost:unknownGemCounts()}});
++function fixture(){const pack=p(),s={id:'s',name:'synthetic',gamePackId:pack.id,gamePackVersion:pack.version,gamePack:pack,captureEpoch:'epoch',turnInstanceId:'turn',createdAt:'now',updatedAt:'now',stage:'capture',example:false,players:[{id:'p1',name:'one',color:'red'},{id:'p2',name:'two',color:'blue'}],evidence:[{id:'photo',scope:'public',kind:'photo',captureEpoch:'epoch',url:'/synthetic.png'}],assertions:[{id:'candidate',field:'__photo.public',basis:'observation',status:'candidate',value:{version:'game-component-record-v1',pieces:[card('one'),card('two','red')]},evidenceIds:['photo'],turnInstanceId:'turn',updatedAt:'now'}],notes:{},snapshots:[],preservations:[],activity:[]} as unknown as Session;return {pack,s};}
++const request=(changes:any={})=>({sourceAssertionId:'candidate',pieceIds:['one'],target:{field:'player.scene',ownerId:'p1'},expectedTargetAssertionId:null,...changes});
++test('read candidate can explicitly connect to owned cards without model rerun; source stays immutable, existing target and null/zero survive',()=>{const {pack,s}=fixture(),original=structuredClone(s.assertions[0]);const first=card('existing','white');first.readout.points=0;s.assertions.push({id:'existing',field:'player.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:['photo'],value:{version:'game-component-record-v1',pieces:[first]},updatedAt:'now'} as any);
++ assert(componentLinkTargets(pack,s.players,[card('one')] as any).some(t=>t.field==='player.scene'&&t.ownerId==='p1'));
++ linkComponents(s,pack,request({expectedTargetAssertionId:'existing'}));assert.deepEqual(s.assertions.find(a=>a.id==='candidate'),original);const held=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any;assert.deepEqual(held.pieces.map((p:any)=>p.id),['existing','one']);assert.equal(held.pieces[0].readout.points,0);assert.equal(held.pieces[1].readout.cost.blue,null);assert.equal(held.pieces[1].linkOrigin.assertionId,'candidate');assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,1);
++ const count=s.assertions.length;linkComponents(s,pack,request());assert.equal(s.assertions.length,count,'same-target retry never duplicates or overwrites later edits');assert.throws(()=>linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}})));});
++test('reserved/market cards never count as purchased bonuses, unknown remains unknown, costs never count',()=>{const {pack,s}=fixture();linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}}));assert.equal(splendorBonusSummary(s,pack,'p1'),null);linkComponents(s,pack,request({pieceIds:['two']}));assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.red,1);assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,0);
++ const held=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any;held.pieces.push(card('unknown','blue',null));assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.blue,null);assert.equal(splendorBonusSummary(s,pack,'p1')!.bonus.red,1);});
++test('stale target, wrong component/owner and private-to-public transfer are rejected without partial state changes',()=>{for(const change of [{expectedTargetAssertionId:'stale'},{target:{field:'turn'}},{target:{field:'player.scene',ownerId:'foreign'}},{target:{field:'noble-area.scene'}}]){const {pack,s}=fixture(),before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request(change)));assert.equal(JSON.stringify(s),before);}
++ const {pack,s}=fixture();s.evidence[0].scope='player';s.evidence[0].ownerId='p1';s.assertions[0].field='__photo.owner';s.assertions[0].ownerId='p1';const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request()));assert.equal(JSON.stringify(s),before);});
++test('the remaining unassigned selection is explicitly usable, and accepted moves preserve one physical state',()=>{const {pack,s}=fixture();linkComponents(s,pack,request());linkComponents(s,pack,request({pieceIds:['two'],target:{field:'__photo.public'}}));const tray=s.assertions.find(a=>a.field==='__photo.public'&&a.status==='accepted')!;assert.deepEqual((tray.value as any).pieces.map((p:any)=>p.id),['two']);const owned=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!;linkComponents(s,pack,request({sourceAssertionId:owned.id,target:{field:'market.scene'}}));assert.equal((s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!.value as any).pieces.length,0);assert.equal(s.assertions.filter(a=>a.status==='accepted').flatMap(a=>(a.value as any)?.pieces??[]).filter(p=>p.id==='one').length,1);assert.throws(()=>linkComponents(s,pack,request()));});
++test('partial legacy restore cannot recreate a previously moved reservation beside its purchased state',async()=>{const {resumeSnapshot}=await import('../server/runtimeResume.ts'),{pack,s}=fixture();linkComponents(s,pack,request({target:{field:'reserve.scene',ownerId:'p1'}}));s.snapshots.push({id:'snapshot',createdAt:'now',gamePackVersion:pack.version,captureEpoch:s.captureEpoch,turnInstanceId:s.turnInstanceId,assertions:structuredClone(s.assertions),evidence:structuredClone(s.evidence),preservations:[],notes:{}});const reserved=s.assertions.find(a=>a.field==='reserve.scene'&&a.status==='accepted')!;linkComponents(s,pack,request({sourceAssertionId:reserved.id,target:{field:'player.scene',ownerId:'p1'}}));const before=JSON.stringify(s);assert.throws(()=>resumeSnapshot(s,pack,'owner','p1'),/다른 영역/);assert.equal(JSON.stringify(s),before);});
++test('moving preserves crops and provenance, requires explicit placement clearing; a forged origin is rejected by normal answers',async()=>{const {answerField}=await import('../server/engine.ts'),{pack,s}=fixture();const raw=(s.assertions[0].value as any).pieces[0];raw.placement={areaId:'__photo-public',x:.1,y:.2,rotation:90};const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request()),/배치/);assert.equal(JSON.stringify(s),before);linkComponents(s,pack,request({clearPlacement:true}));const a=s.assertions.find(a=>a.field==='player.scene'&&a.status==='accepted')!,p=(a.value as any).pieces[0];assert.equal(p.placement,undefined);assert.deepEqual(p.linkOrigin.previousPlacement,raw.placement);assert.deepEqual(p.region,raw.region);const forged=structuredClone(a.value) as any;forged.pieces[0].linkOrigin.assertionId='forged';assert.throws(()=>answerField(s,pack,'player.scene',forged,'p1'),/연결/);});
++test('partial accepted move cannot leave an attachment dangling; moving the attached group is atomic',async()=>{const {emptyGameReadout,setReadoutValue}=await import('../shared/readouts/registry.ts'),pack=effectiveRecognitionPack(structuredClone((packs as unknown as GamePack[]).find(p=>p.id==='carcassonne')!)),{s}=fixture();s.gamePack=pack;s.gamePackId=pack.id;s.gamePackVersion=pack.version;const tile={...card('tile'),componentId:'tiles',readout:emptyGameReadout(pack,'tiles')},follower={...card('follower'),componentId:'followers',readout:setReadoutValue(pack,emptyGameReadout(pack,'followers'),'attachedTo',{pieceId:'tile',featureId:null})};s.assertions=[{...s.assertions[0],field:'map.scene',status:'accepted',basis:'user',value:{version:'game-component-record-v1',pieces:[tile,follower]}} as any];const before=JSON.stringify(s);assert.throws(()=>linkComponents(s,pack,request({pieceIds:['tile'],target:{field:'__photo.public'}})),/대상/);assert.equal(JSON.stringify(s),before);linkComponents(s,pack,request({pieceIds:['tile','follower'],target:{field:'__photo.public'}}));assert.equal((s.assertions.find(a=>a.field==='map.scene'&&a.status==='accepted')!.value as any).pieces.length,0);assert.deepEqual((s.assertions.find(a=>a.field==='__photo.public'&&a.status==='accepted')!.value as any).pieces[1].readout.values.attachedTo,{pieceId:'tile',featureId:null});});
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -146,7 +146,7 @@
+     <main className={`main-content ${view ? 'in-session' : ''}`}>
+       {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
+       {loading ? <div className="loading-screen" role="status"><LoaderMark size={32}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <div className="home">
+-        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className="home-head has-photo"><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
++        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className={`home-head has-photo${liveSessions.length?' has-boards':''}`}><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
+         <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><div className="board-tools"><label className="search-box"><Search size={17}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={15}/></button>}</label><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={18}/></button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details></div></div>
+         {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
+           const pack = packs.find(item => item.id === session.gamePackId);
+--- /dev/null
++++ b/src/ComponentLinkDialog.tsx
+@@ -0,0 +1,56 @@
++import {useEffect,useMemo,useState} from 'react';
++import {Check,LockKeyhole} from 'lucide-react';
++import type {Assertion,SessionView} from '../shared/types';
++import type {GenericPiece} from '../shared/genericRecord';
++import {runtimeBinding} from '../shared/gameEssentials';
++import {componentRecord,componentTargetKey,unlinkedComponentPieces,type ComponentLinkOptions,type ComponentLinkTarget} from '../shared/componentLinking';
++import {api} from './api';
++import {fire,type Mutate} from './Fields';
++import {GenericPieceArt} from './GenericPieceArt';
++import {SplendorReadout} from './SplendorReadout';
++import {SplendorFields,isSplendor,splendorView} from './SplendorEditor';
++import {Modal} from './ui';
++
++/** Pick pieces from a candidate (add) or an applied record (move), choose where they belong, optionally correct read values, then apply explicitly. */
++export function ComponentLinkDialog({view,source,initialIds=[],initialTarget,busy,dirtyTarget,mutate,onClose}:{view:SessionView;source:Assertion;initialIds?:string[];initialTarget?:{field:string;ownerId?:string};busy:boolean;dirtyTarget:(field:string,ownerId?:string)=>boolean;mutate:Mutate;onClose:()=>void}){
++ const {session,pack}=view,move=source.status==='accepted',splendor=isSplendor(pack);
++ const pieces=useMemo(()=>move?componentRecord(source)?.pieces??[]:unlinkedComponentPieces(session,source),[source,session.assertions]);
++ const [ids,setIds]=useState<string[]>(initialIds.filter(id=>pieces.some(p=>p.id===id)));
++ const [options,setOptions]=useState<ComponentLinkOptions|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState('');
++ const [targetKey,setTargetKey]=useState(initialTarget?componentTargetKey(initialTarget.field,initialTarget.ownerId):''),[clear,setClear]=useState(false),[corrections,setCorrections]=useState<Record<string,GenericPiece>>({}),[editing,setEditing]=useState<string|null>(null);
++ const selected=pieces.filter(p=>ids.includes(p.id));
++ // Leaving the selection drops its open correction form; a target or selection change asks for placement consent again.
++ useEffect(()=>{if(editing&&!ids.includes(editing))setEditing(null);setClear(false);},[ids.join(',')]);
++ useEffect(()=>setClear(false),[targetKey]);
++ useEffect(()=>{if(!ids.length){setOptions(null);return;}let alive=true;setLoading(true);setError('');
++  api.componentLinkOptions(session.id,source.id,ids).then(o=>{if(!alive)return;setOptions(o);if(!o.targets.some(t=>componentTargetKey(t.field,t.ownerId)===targetKey))setTargetKey('');},e=>{if(alive){setOptions(null);setError(e instanceof Error?e.message:'연결할 곳을 불러오지 못했어요.');}}).finally(()=>{if(alive)setLoading(false);});
++  return()=>{alive=false;};},[ids.join(','),source.id]);
++ const target=options?.targets.find(t=>componentTargetKey(t.field,t.ownerId)===targetKey);
++ const targets=(options?.targets??[]).filter(t=>!(move&&t.field===source.field&&t.ownerId===source.ownerId));
++ const misplaced=!!target&&selected.some(p=>p.placement&&!runtimeBinding(pack,target.field)?.areaIds.includes(p.placement.areaId));
++ const name=(p:GenericPiece)=>p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인';
++ const toggle=(id:string)=>setIds(list=>list.includes(id)?list.filter(x=>x!==id):[...list,id]);
++ async function apply(){
++  if(!target||!options)return;
++  if(dirtyTarget(target.field,target.ownerId)||move&&dirtyTarget(source.field,source.ownerId)){setError('연결할 곳에 저장하지 않은 수정이 있어요. 먼저 기록하거나 되돌린 뒤 연결해 주세요.');return;}
++  const corrected=Object.keys(corrections).length?selected.map(p=>corrections[p.id]??p):undefined;
++  try{await mutate(()=>api.linkComponents(session.id,{sourceAssertionId:source.id,pieceIds:ids,target:{field:target.field,...(target.ownerId?{ownerId:target.ownerId}:{})},expectedTargetAssertionId:options.targetVersions[componentTargetKey(target.field,target.ownerId)]??null,...(corrected?{corrections:corrected}:{}),...(misplaced&&clear?{clearPlacement:true}:{})}),move?'선택한 실물을 옮겼어요':'선택한 실물을 연결했어요');onClose();}
++  catch(e){setError(e instanceof Error?e.message:'연결하지 못했어요. 기존 기록은 그대로예요.');}
++ }
++ const groups=[...new Set(targets.map(t=>t.ownerName??'공용'))];
++ return <Modal title={move?'다른 곳으로 옮기기':'실물 연결'} onClose={onClose}><div className="modal-body cl-dialog">
++  <section><div className="cl-head"><h3>{move?'옮길 실물':'연결할 실물'} <span className="muted">{ids.length}/{pieces.length}</span></h3><button type="button" className="button text small-button" disabled={busy||!pieces.length} onClick={()=>setIds(ids.length===pieces.length?[]:pieces.map(p=>p.id))}>{ids.length===pieces.length?'선택 해제':'모두 선택'}</button></div>
++   {pieces.length?<div className="cl-pieces">{pieces.map(p=><button type="button" key={p.id} className={ids.includes(p.id)?'selected':''} aria-pressed={ids.includes(p.id)} disabled={busy} onClick={()=>toggle(p.id)}>{splendor?<SplendorReadout {...splendorView(corrections[p.id]??p)}/>:<span className="cl-piece"><GenericPieceArt pack={pack} piece={p} size={44}/><span>{name(p)}</span><small>{p.quantity===null?'수량 ?':`${p.quantity}개`}</small></span>}{ids.includes(p.id)&&<Check size={16} className="cl-check" aria-hidden="true"/>}</button>)}</div>:<p className="small muted">남은 실물이 없어요.</p>}
++  </section>
++  {ids.length>0&&<section><h3>어디에 {move?'옮길까요':'둘까요'}</h3>
++   {loading?<p className="small muted" role="status">연결할 곳을 찾는 중…</p>:targets.length?groups.map(g=><div key={g} className="cl-group"><span className="cl-group-name">{g}</span><div className="cl-targets">{targets.filter(t=>(t.ownerName??'공용')===g).map(t=>{const key=componentTargetKey(t.field,t.ownerId);return <button type="button" key={key} aria-pressed={targetKey===key} disabled={busy} onClick={()=>{setTargetKey(key);setError('');}}>{t.visibility==='owner'&&<LockKeyhole size={14} aria-label="개인"/>}{t.label}</button>;})}</div></div>):!error&&<p className="small muted">선택한 실물을 둘 수 있는 곳이 없어요. 선택을 바꿔 보세요.</p>}
++  </section>}
++  {selected.length>0&&<details className="cl-correct" open={!!editing}><summary>읽은 값 고치기 · 선택</summary>
++   <div className="cl-correct-list">{selected.map(p=><button type="button" key={p.id} aria-pressed={editing===p.id} onClick={()=>setEditing(editing===p.id?null:p.id)}>{name(corrections[p.id]??p)}{corrections[p.id]?' · 고침':''}</button>)}</div>
++   {editing&&selected.some(x=>x.id===editing)&&(()=>{const p=corrections[editing]??selected.find(x=>x.id===editing)!;const patch=(c:Partial<GenericPiece>)=>setCorrections(m=>({...m,[editing]:{...p,...c}}));return <div className="cl-correct-form">{splendor&&<SplendorFields piece={p} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={p.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label></div>;})()}
++  </details>}
++  {misplaced&&<label className="cl-consent"><input type="checkbox" checked={clear} disabled={busy} onChange={e=>setClear(e.target.checked)}/>판 위치가 이 영역과 맞지 않아요. 미배치로 옮기기(원래 위치는 연결 기록에 남아요)</label>}
++  {error&&<p className="inline-error" role="alert">{error}</p>}
++  <div className="cl-actions"><button type="button" className="button secondary" onClick={onClose}>닫기</button><button type="button" className="button primary" disabled={busy||!target||loading||misplaced&&!clear} onClick={()=>fire(apply())}>{move?'옮기기':'연결'}{target?` · ${target.ownerName?target.ownerName+' ':''}${target.label}`:''}</button></div>
++ </div></Modal>;
++}
+--- a/src/GameBoardRecord.tsx
++++ b/src/GameBoardRecord.tsx
+@@ -35,7 +35,7 @@
+  return <div className="gb-record">
+   <div className="gb-toolbar">{areas.length>1?<label className="gb-area-label">영역<select aria-label="판 영역" value={area.areaId} onChange={e=>setAreaId(e.target.value)}>{areas.map(a=><option key={a.areaId} value={a.areaId}>{a.label}</option>)}</select></label>:<span className="small muted">기록 배치</span>}<div className="button-row">{!readonly&&<button className="icon-button" aria-label="배치 되돌리기" disabled={busy||!history.current.length} onClick={()=>onChange?.(history.current.pop()!)}><Undo2 size={17}/></button>}<button className="button secondary small-button" onClick={()=>setFull(true)}><Maximize2 size={16}/>크게 보기</button></div></div>
+   {!compatible&&visual&&<p className="small muted">이전 기록 · 위치는 그대로 보존돼요.</p>}
+-  {board(area)}
++  {placed.length||piece?board(area):<p className="gb-surface-empty" role="note" aria-label={area.label+' · 수동 기록 배치'}>{unplaced.length&&!readonly?'아래에서 구성물을 고르면 판에 놓을 수 있어요':'아직 판에 놓인 구성물이 없어요'}</p>}
+   <CarcassonneLayoutPreview pack={pack} record={record} renderArt={art} disabled={busy} onSelect={id=>{onSelect?.(id);if(!readonly)setEdit(true);}}/>
+   {splendor&&record.pieces.length>0&&<div className="gb-cards" aria-label={`카드로 보기 · ${record.pieces.length}개`}>{record.pieces.map(p=><button type="button" key={p.id} className={selected===p.id?'selected':''} aria-pressed={selected===p.id} disabled={busy} onClick={()=>{onSelect?.(p.id);if(!readonly)setEdit(true);}}><SplendorReadout {...splendorView(p)}/></button>)}</div>}
+   {!splendor&&unplaced.length>0&&<div className="gb-tray" aria-label="미배치 구성물"><span className="small muted">미배치</span><div>{unplaced.map(p=>item(p,false))}</div></div>}
+--- a/src/GameEssentials.tsx
++++ b/src/GameEssentials.tsx
+@@ -18,14 +18,17 @@
+ import {recognitionCapability} from '../shared/recognition';
+ import {GenericPieceArt} from './GenericPieceArt';
+ import {genericDraftConflict,preferredPublicBoard} from './genericDraft';
+-import {SplendorReadout} from './SplendorReadout';
++import {SplendorReadout,GEM_ORDER,GEM_NAMES,Gem} from './SplendorReadout';
++import {ComponentLinkDialog} from './ComponentLinkDialog';
++import {componentRecord,latestComponentAssertion,unlinkedComponentPieces} from '../shared/componentLinking';
++import {splendorBonusSummary} from '../shared/splendor';
+ import {SplendorFields,isSplendor,readoutForComponent,splendorView} from './SplendorEditor';
+ 
+ interface Props {view:SessionView;ownerId?:string;busy:boolean;mutate:Mutate;onEvidence:(e:Evidence,region?:Assertion['region'])=>void;onReadyToSave?:(save:(()=>Promise<void>)|null)=>void}
+ export function GameEssentials({view,ownerId,busy,mutate,onEvidence,onReadyToSave}:Props){
+  const {pack,session}=view,runtime=pack.runtime,saves=useRef(new Map<string,()=>Promise<void>>());
+  const [boardKey,setBoardKey]=useState(()=>preferredPublicBoard(pack.fields.filter(f=>f.scope===(ownerId?'player':'public')&&runtimeBinding(pack,f.key)?.editor==='component-catalog'),session,'',ownerId)?.key??''),[boardError,setBoardError]=useState('');
+- const [review,setReview]=useState<Assertion|null>(null),[expanded,setExpanded]=useState<string[]>([]);
++ const [review,setReview]=useState<Assertion|null>(null),[expanded,setExpanded]=useState<string[]>([]),[link,setLink]=useState<{source:Assertion;ids?:string[];target?:{field:string;ownerId?:string}}|null>(null);
+  useEffect(()=>{onReadyToSave?.(async()=>{for(const save of [...saves.current.values()])await save();});return()=>onReadyToSave?.(null);});
+  if(!runtime)return null;
+  const generic=runtime.support.recording==='generic';
+@@ -34,7 +37,8 @@
+  const boardFields=fields.filter(f=>runtimeBinding(pack,f.key)?.editor==='component-catalog');
+  const activeBoard=boardFields.find(f=>f.key===boardKey)??boardFields[0];
+  const allCandidates=session.assertions.filter(a=>a.ownerId===ownerId&&a.status==='candidate'&&fields.some(f=>f.key===a.field));
+- const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates);
++ const linkedCount=allCandidates.reduce((n,a)=>n+(componentRecord(a)?.pieces.length??0)-unlinkedComponentPieces(session,a).length,0);
++ const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates.filter(a=>!componentRecord(a)||unlinkedComponentPieces(session,a).length>0));
+  async function applyCandidate(a:Assertion,value:Value){if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
+  const questions=view.questions.filter(q=>q.ownerId===ownerId&&fields.some(f=>f.key===q.field));
+  const first=new Set([...questions.map(q=>q.field),...runtime.resume.pendingActionFields,...fields.filter(f=>f.key==='turn'||runtimeBinding(pack,f.key)?.editor==='component-catalog').map(f=>f.key)]);
+@@ -42,17 +46,20 @@
+   const accepted=session.assertions.filter(a=>a.field===field.key&&a.ownerId===subject&&a.status==='accepted').at(-1);
+   const save=(value:Value)=>mutate(()=>api.update(session.id,{answers:[{field:field.key,ownerId:subject,value}]}));
+   const ready=(fn:(()=>Promise<void>)|null)=>{if(fn)saves.current.set(`${subject??'public'}:${field.key}`,fn);else saves.current.delete(`${subject??'public'}:${field.key}`);};
+-  return runtimeBinding(pack,field.key)?.editor==='component-catalog'?<GenericComponents key={field.key} view={view} field={field} ownerId={subject} value={accepted?.value} onSave={save} busy={busy} onReadyToSave={ready} onEvidence={onEvidence}/>:<FieldEditor key={field.key} field={{...field,id:`essential-${subject??'public'}-${field.key}`,description:'',reason:generic?'':questions.find(q=>q.field===field.key)?.reason??''}} value={accepted?.value} busy={busy} onSave={save} onReadyToSave={ready}/>;
++  return runtimeBinding(pack,field.key)?.editor==='component-catalog'?<GenericComponents key={field.key} view={view} field={field} ownerId={subject} value={accepted?.value} onSave={save} busy={busy} onReadyToSave={ready} onEvidence={onEvidence} onMove={accepted&&componentRecord(accepted)?id=>setLink({source:accepted,ids:[id]}):undefined}/>:<FieldEditor key={field.key} field={{...field,id:`essential-${subject??'public'}-${field.key}`,description:'',reason:generic?'':questions.find(q=>q.field===field.key)?.reason??''}} value={accepted?.value} busy={busy} onSave={save} onReadyToSave={ready}/>;
+  };
+ function candidateView(a:Assertion){const f=fields.find(f=>f.key===a.field)!;const record=a.value&&typeof a.value==='object'&&!Array.isArray(a.value)&&a.value.version==='game-component-record-v1'?a.value as unknown as GenericRecord:null;
+   if(!record)return <CandidateRow key={a.id} assertion={a} field={f} owner={ownerId?'내 기록':'공용'} busy={busy} onAccept={()=>fire(applyCandidate(a,a.value))} onEdit={value=>applyCandidate(a,value)} onEvidence={()=>{const e=session.evidence.find(e=>e.id===a.evidenceIds[0]);if(e)onEvidence(e,a.region);}}/>;
+-  const open=expanded.includes(a.id),limit=open?record.pieces.length:6,splendor=isSplendor(pack);
+-  return <article key={a.id}><strong>{f.label} · {record.pieces.length}항목</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
+-   <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{record.pieces.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
+-   {record.pieces.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${record.pieces.length})`}</button>}
+-   <button className="button primary small-button" disabled={busy} onClick={()=>setReview(a)}>후보 확인·수정</button></article>;}
++  const rest=unlinkedComponentPieces(session,a);if(!rest.length)return null;
++  const open=expanded.includes(a.id),limit=open?rest.length:6,splendor=isSplendor(pack);
++  return <article key={a.id}><strong>{f.label} · {rest.length<record.pieces.length?`남은 ${rest.length}/${record.pieces.length}항목`:`${record.pieces.length}항목`}</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
++   <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{rest.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
++   {rest.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${rest.length})`}</button>}
++   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
+  const items=session.preservations.filter(p=>p.ownerId===ownerId&&p.templateId.startsWith('spec.'));
+  return <section className="game-essentials" aria-label="게임별 기록과 보관"><header><h3>{generic?'게임 기록':'이어갈 기록·보관'}</h3>{generic&&<p className="small muted">{recognitionCapability(pack).mode==='assisted'?'사진 보조 인식 · 확인 후 적용':'수동 기록 · 사진 관측 미지원'}</p>}</header>
++  {linkedCount>0&&<p className="small muted">사진 실물 {linkedCount}개 연결됨</p>}
++  {ownerId&&<PurchasedBonus view={view} ownerId={ownerId}/>}
+   {candidates.length>0&&<section className="generic-candidates" aria-label="사진에서 찾은 후보"><h4>사진에서 찾은 후보 · {candidates.length}개 영역</h4>{candidates.map(a=>candidateView(a))}{olderCandidates.length>0&&<details className="generic-older"><summary>이전 후보 {olderCandidates.length}개</summary>{olderCandidates.map(a=>candidateView(a))}</details>}</section>}
+   {questions.length>0&&<p className="essentials-ask">확인할 기록 {questions.length}개 · 모르면 비워 둬도 돼요.</p>}
+   {ownerId&&generic&&<PublicBoardOverview view={view} busy={busy}/>}
+@@ -64,6 +71,8 @@
+   {runtime.fieldBindings.some(b=>(b.editor==='physical-only'||b.editor==='opaque-preserve')&&b.scope===(ownerId?'player':'public'))&&<p className="small muted">입력할 수 없는 상태는 실물 그대로 보관하세요. 비밀 내용은 입력하지 않아요.</p>}
+   {items.length>0&&<details open={generic}><summary>실물 보관·복원 {items.length}개</summary>{restoreOrder(items).map(item=><PreservationItem key={item.id} item={item} onReadyToSave={save=>{const key=`preservation:${item.id}`;if(save)saves.current.set(key,save);else saves.current.delete(key);}} owner={ownerId?session.players.find(p=>p.id===ownerId)?.name??'개인':'공용'} busy={busy} restoring={session.stage==='restore'} onChange={body=>mutate(()=>api.preservation(session.id,item.id,body))}/>)}</details>}
+   {latestSnapshot(session,ownerId??'public')&&<details><summary>저장 기록 복원 +</summary><p className="small muted">{ownerId?'내 기록만 복원해요. 공개 기록과 다른 사람 기록은 그대로예요.':'공개 기록만 복원해요. 개인 기록은 그대로예요.'}</p><button className="button secondary small-button" disabled={busy} onClick={()=>fire((async()=>{for(const save of [...saves.current.values()])await save();await mutate(()=>api.resume(session.id,ownerId?'owner':'public',ownerId),'선택한 범위의 저장 기록을 열었어요');})())}>{ownerId?'내 저장 기록 복원':'공개 저장 기록 복원'}</button></details>}
++  {session.room&&<RoomPublicHoldings view={view} ownerId={ownerId} busy={busy}/>}
++  {link&&<ComponentLinkDialog view={view} source={link.source} initialIds={link.ids} initialTarget={link.target} busy={busy} mutate={mutate} dirtyTarget={(field,owner)=>saves.current.has(`${owner??'public'}:${field}`)} onClose={()=>setLink(null)}/>}
+   {review&&<Modal title="사진 후보 확인" wide onClose={()=>setReview(null)}><div className="modal-body"><p className="small muted">확인한 이 영역만 교체해요. 다른 기록은 그대로예요.</p><GenericComponents key={review.id} review view={view} field={fields.find(f=>f.key===review.field)!} ownerId={ownerId} value={review.value} onSave={value=>applyCandidate(review,value)} busy={busy} onEvidence={onEvidence}/></div></Modal>}
+  </section>;
+ }
+@@ -75,7 +84,7 @@
+  const latest=list.filter(a=>!list.some(b=>b!==a&&key(b)===key(a)&&newer(b,a)));
+  return {latest,older:list.filter(a=>!latest.includes(a))};
+ }
+-function GenericComponents({view,field,ownerId,value,onSave,busy,onReadyToSave,onEvidence,review=false}:Omit<Props,'mutate'>&{field:FieldDefinition;value?:Value;onSave:(v:Value)=>Promise<void>;review?:boolean}){
++function GenericComponents({view,field,ownerId,value,onSave,busy,onReadyToSave,onEvidence,review=false,onMove}:Omit<Props,'mutate'>&{onMove?:(pieceId:string)=>void;field:FieldDefinition;value?:Value;onSave:(v:Value)=>Promise<void>;review?:boolean}){
+  const incoming=value&&typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1'?value as unknown as GenericRecord:emptyGenericRecord();
+  const opaque=value!=null&&!(typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1');
+  const [scene,setScene]=useState(incoming),[base,setBase]=useState(JSON.stringify(incoming)),[mapping,setMapping]=useState<ArtMapping>();
+@@ -92,7 +101,7 @@
+  const patch=(change:Partial<GenericPiece>)=>setScene(s=>({...s,pieces:s.pieces.map(p=>p.id===selected?{...p,...change}:p)}));
+  if(opaque)return <div><strong>{field.label}</strong><p className="small muted">기존 기록은 그대로 보존돼요. 여기서는 고칠 수 없어요.</p></div>;
+  return <section className="generic-components" aria-label={field.label}><h4>{field.label}</h4>
+- <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label><label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}</div></div>}/>
++ <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>{!isSplendor(view.pack)&&<label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>}{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}{onMove&&!review&&<button className="button text small-button" disabled={busy||dirty||!JSON.parse(base).pieces?.some((x:GenericPiece)=>x.id===piece.id)} title={dirty?'먼저 기록한 뒤 옮길 수 있어요':undefined} onClick={()=>onMove(piece.id)}>다른 곳으로 옮기기</button>}</div></div>}/>
+  <button className="button secondary small-button" disabled={busy||!dirty&&!review} onClick={()=>fire(save())}>{review?'이 후보 적용':'구성물 기록'}</button>{conflict&&<button className="button text small-button" disabled={busy} onClick={()=>{setScene(incoming);setBase(JSON.stringify(incoming));setMessage('최신 기록을 열었어요');}}>초안 버리고 최신 기록</button>}{message&&<p role="status">{message}</p>}</section>;
+ }
+ function PublicBoardOverview({view,busy}:{view:SessionView;busy:boolean}){
+@@ -103,3 +112,17 @@
+  const record=value&&typeof value==='object'&&!Array.isArray(value)&&value.version==='game-component-record-v1'?value as unknown as GenericRecord:null;
+  return <details className="gb-public-overview"><summary>공용 기록</summary>{fields.length>1&&<select aria-label="공용 기록 영역" value={field.key} onChange={e=>setKey(e.target.value)}>{fields.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select>}{record?<GameBoardRecord pack={view.pack} fieldKey={field.key} record={record} busy={busy} readonly/>:<p>아직 기록한 구성물이 없어요.</p>}</details>;
+ }
++
++/** Room: other players' public records, read-only. Owner-private fields, photos and PIN state are never shown here. */
++export function RoomPublicHoldings({view,ownerId,busy}:{view:SessionView;ownerId?:string;busy:boolean}){
++ const {pack,session}=view,fields=pack.fields.filter(f=>f.scope==='player'&&(f.visibility??'public')==='public'&&runtimeBinding(pack,f.key)?.editor==='component-catalog');
++ const rows=session.players.filter(p=>p.id!==ownerId).map(p=>({player:p,records:fields.map(f=>({field:f,record:componentRecord(latestComponentAssertion(session,f.key,p.id))})).filter(r=>r.record?.pieces.length),bonus:splendorBonusSummary(session,pack,p.id)})).filter(r=>r.records.length);
++ if(!rows.length)return null;
++ return <section className="room-public-holdings" aria-label="다른 플레이어 공개 기록"><h4>{ownerId?'다른 플레이어 공개 기록':'플레이어 공개 기록'}</h4>{rows.map(({player,records,bonus})=><details key={player.id}><summary><span>{player.name}</span>{bonus&&<span className="rph-bonus" aria-label={`${bonus.label}: ${GEM_ORDER.map(g=>`${GEM_NAMES[g]} ${bonus.bonus[g]??'?'}`).join(', ')}`}>{GEM_ORDER.map(g=><span key={g}><Gem color={g} size={14}/>{bonus.bonus[g]??'?'}</span>)}</span>}<span className="small muted">{records.reduce((n,r)=>n+r.record!.pieces.length,0)}개</span></summary>
++  {records.map(({field,record})=><div key={field.key} className="rph-field"><span className="small muted">{field.label}</span><GameBoardRecord pack={pack} fieldKey={field.key} record={record!} busy={busy} readonly/></div>)}</details>)}</section>;
++}
++
++function PurchasedBonus({view,ownerId}:{view:SessionView;ownerId:string}){
++ const summary=splendorBonusSummary(view.session,view.pack,ownerId);if(!summary)return null;
++ return <section className="purchased-bonus" aria-label={summary.label}><strong>{summary.label}</strong><div className="rph-bonus" aria-label={GEM_ORDER.map(g=>`${GEM_NAMES[g]} ${summary.bonus[g]??'?'}`).join(', ')}>{GEM_ORDER.map(g=><span key={g}><Gem color={g} size={18}/>{summary.bonus[g]??'?'}</span>)}</div>{!summary.complete&&<p className="small muted">확인하지 않은 카드가 있어요.</p>}</section>;
++}
+--- a/src/PhotoCaptureGuide.tsx
++++ b/src/PhotoCaptureGuide.tsx
+@@ -11,5 +11,6 @@
+ export function PhotoCaptureGuide({pack,ownerId,areaId,onChange,disabled}:{pack:GamePack;ownerId?:string;areaId:string;onChange:(id:string)=>void;disabled?:boolean}){
+  const profile=captureProfile(pack);if(!profile)return null;
+  const areas=captureAreas(pack,ownerId),selected=areas.find(a=>a.id===areaId);
+- return <section className="panel" aria-label="게임별 촬영 안내"><h3>{pack.title} · {ownerId?'본인 사진':'공용 사진'}</h3><p>{captureGuideText(pack)}</p><label className="field">촬영할 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label>{selected&&<p>{captureGuideText(pack,selected)}</p>}<p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></section>;
++ // The current target stays visible in the summary; the picker and guidance open on demand so the board starts higher on phones.
++ return <section className="panel capture-guide" aria-label="게임별 촬영 안내"><details className="capture-guide-help"><summary>{ownerId?'본인 사진':'공용 사진'} · 찍을 부분: <b>{selected?.name??'전체'}</b></summary><label className="field capture-guide-target">찍을 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label><p>{captureGuideText(pack,selected)}</p><p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></details></section>;
+ }
+--- a/src/RoomEntry.tsx
++++ b/src/RoomEntry.tsx
+@@ -14,10 +14,11 @@
+ import {PlayerRows} from './Dialogs';
+ import {creationPlayers} from './creationPlayers';
+ import {preferredPublicBoard} from './genericDraft';
++import {RoomPublicHoldings} from './GameEssentials';
+ const COLORS=['#c65d4b','#6285aa','#d5a44d','#78967a','#997ba6','#b68a64'];
+ export function RoomPublicBoard({view}:{view:SessionView}){const [key,setKey]=useState('');const fields=view.pack.fields.filter(f=>f.scope==='public'),boards=fields.filter(f=>view.pack.runtime?.fieldBindings.some(b=>b.key===f.key&&b.editor==='component-catalog')),field=preferredPublicBoard(boards,view.session,key);const pick=pickRummikubSource(view.session.assertions.filter(a=>a.field==='table.scene'&&!a.ownerId)),source=pick.candidate??pick.accepted,scene=source?normalizeRummikubDetailed(source.value).scene:null;
+  return <section className="room-public" aria-label="공용 보드 읽기 전용"><h3>공용 보드 <span className="small muted">보기 전용</span></h3>{view.pack.id==='rummikub'?scene?<div className="rt-board" style={boardStyle(28)}><RummikubBoardView scene={scene} rack={false}/></div>:<p>방장이 공용판을 기록하면 여기에 보여요.</p>:view.pack.runtime?.support.recording==='generic'?<>{boards.length>1&&<label>공용 영역<select value={field?.key} onChange={e=>setKey(e.target.value)}>{boards.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select></label>}{field&&(()=>{const a=view.session.assertions.filter(a=>a.field===field.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<GameBoardRecord pack={view.pack} fieldKey={field.key} record={a.value as unknown as GenericRecord} readonly busy={false}/>:<p>아직 기록한 구성물이 없어요.</p>;})()}</>:<div inert className="room-readonly"><SceneWorkspace view={view} busy mutate={async()=>{throw new Error('공용판은 보기 전용이에요.');}} onEvidence={()=>{}}/></div>}
+- {fields.filter(f=>f.type!=='json').map(f=>{const a=view.session.assertions.filter(a=>a.field===f.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<p key={f.key}><strong>{f.label}</strong> · {previewValue(a.value,f,view.session.players)}</p>:null;})}{view.session.notes.public&&<p>{view.session.notes.public}</p>}</section>;
++ {fields.filter(f=>f.type!=='json').map(f=>{const a=view.session.assertions.filter(a=>a.field===f.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<p key={f.key}><strong>{f.label}</strong> · {previewValue(a.value,f,view.session.players)}</p>:null;})}{view.session.notes.public&&<p>{view.session.notes.public}</p>}<RoomPublicHoldings view={view} ownerId={view.roomAccess?.playerId} busy={false}/></section>;
+ }
+ export function RoomEntry({packs,joining,initialInvite='',onClose,onCreated}:{packs:GameCatalogEntry[];joining:boolean;initialInvite?:string;onClose:()=>void;onCreated:(v:SessionView)=>Promise<void>}){
+  const [mode,setMode]=useState<'single'|'invite'>('single');
+--- a/src/RummikubWorkspace.tsx
++++ b/src/RummikubWorkspace.tsx
+@@ -82,7 +82,7 @@
+  const zoomIndex=ZOOMS.indexOf(zoom as typeof ZOOMS[number]);
+  const baseTile=rack?42:28;
+  return <section className="rt-workspace" aria-label={rack?'내 루미큐브 받침대':'루미큐브 공용판'}>
+-  {rack&&publicScene?.recognized&&<div className="rt-overview"><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</div>}
++  {rack&&publicScene?.recognized&&<details className="rt-overview"><summary>공용판 보기</summary><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</details>}
+   <header className="rt-heading"><h3>{rack?'내 받침대':'공용판'}</h3><div className="button-row">
+    {source&&source.status!=='accepted'&&!showAccepted&&accepted&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(true)}>이전 기록 보기</button>}
+    {showAccepted&&candidate&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>setShowAccepted(false)}>새 사진 결과 보기</button>}
+--- a/src/api.ts
++++ b/src/api.ts
+@@ -1,4 +1,5 @@
+ import {upload} from '@vercel/blob/client';
++import type {ComponentLinkOptions,ComponentLinkRequest} from '../shared/componentLinking';
+ import type {AnalysisJob} from '../shared/analysisJobs';
+ import type {GameCatalogEntry} from '../shared/gameEssentials';
+ import type { AISettings, AIStatus, GamePack, Player, Session, SessionView, Stage, Value } from '../shared/types';
+@@ -61,6 +62,8 @@
+   },
+   removeEvidence: (id: string, evidenceId: string) => request<SessionView>(`/sessions/${id}/evidence/${evidenceId}`, 'DELETE'),
+   startAnalysisJob:(id:string,body:{requestId:string;evidenceIds:string[];expectedCaptureEpoch:string;scope:'public'|'owner';ownerId?:string;purpose?:'capture'|'restore';instruction?:string;captureTarget?:import('../shared/photoCapture').CaptureTarget;sameStaticState?:boolean})=>request<{job:AnalysisJob}>(`/sessions/${id}/analysis-jobs`,'POST',body),
++  componentLinkOptions:(id:string,assertionId:string,pieceIds:string[])=>request<ComponentLinkOptions>(`/sessions/${id}/component-links/${encodeURIComponent(assertionId)}?pieceIds=${pieceIds.map(encodeURIComponent).join(',')}`),
++  linkComponents:(id:string,body:ComponentLinkRequest)=>request<SessionView>(`/sessions/${id}/component-links`,'POST',body),
+   analysisJobs:(id:string,ownerId?:string)=>request<{jobs:AnalysisJob[]}>(`/sessions/${id}/analysis-jobs${ownerId?'?ownerId='+encodeURIComponent(ownerId):''}`),
+   analyze: (id: string, body: { purpose?: 'capture' | 'restore'; instruction?: string; sameStaticState?:boolean; evidenceIds?: string[]; expectedCaptureEpoch?: string }) => request<SessionView>(`/sessions/${id}/analyze`, 'POST', body),
+   accept: (id: string, assertionId: string) => request<SessionView>(`/sessions/${id}/assertions/${assertionId}/accept`, 'POST', {}),
+--- a/src/correction-workspace.css
++++ b/src/correction-workspace.css
+@@ -166,3 +166,10 @@
+   .rummikub-session .rt-overview{margin-bottom:8px;padding-bottom:8px}
+   .rummikub-session .rt-heading{margin-bottom:6px}
+ }
++
++/* Phones: the sticky bottom bar is the one save button (this beat `.button{display:inline-flex}` on load order before). */
++@media(max-width:900px){.cw-actions .cw-save-top{display:none}}
++.capture-guide{display:flex;flex-direction:column;gap:6px}
++.capture-guide-target{margin:0}
++.capture-guide-help>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++.capture-guide-help p{margin:4px 0}
+--- a/src/game-board-record.css
++++ b/src/game-board-record.css
+@@ -25,3 +25,12 @@
+ .gb-cards>button .splendor-readout{max-width:none}
+ .gb-cards>button.selected .splendor-readout{border-color:var(--accent);box-shadow:inset 0 46px 0 var(--sr-tint),0 0 0 2px var(--accent)}
+ .gb-cards>button:focus-visible{outline-offset:2px}
++
++/* Empty placement board collapses to one line; it opens as soon as a piece is placed or selected. */
++.gb-surface-empty{margin:4px 0;padding:10px 12px;border:1.5px dashed var(--line-2);border-radius:12px;font-size:13px;color:var(--muted);text-align:center}
++@media(max-width:600px){
++ /* Visible labels on the header actions (save moved to the sticky bottom bar on phones). */
++ .board-record-session .cw-actions .button>span{display:inline}
++ .board-record-session .cw-actions .button{gap:4px;font-size:13px}
++}
++@media(max-width:380px){.board-record-session .cw-actions .button{flex-direction:column;gap:2px;min-height:52px;font-size:12px}}
+--- a/src/game-essentials.css
++++ b/src/game-essentials.css
+@@ -4,3 +4,27 @@
+ .generic-candidate-cards>.splendor-readout{max-width:none}
+ .generic-older>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
+ .sr-original>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++/* Candidate actions sit on one row; link dialog and room read-only holdings. */
++.generic-candidate-actions{gap:8px}.generic-candidate-actions>.button{flex:1 1 140px}
++.cl-dialog{display:flex;flex-direction:column;gap:14px}.cl-dialog h3{font-size:16px;margin:0 0 8px}
++.cl-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.cl-head h3{margin:0}
++.cl-pieces{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
++.cl-pieces>button{position:relative;display:flex;justify-content:center;padding:0;border:0;background:transparent;border-radius:14px;min-height:44px}
++.cl-pieces>button .splendor-readout{max-width:none}
++.cl-pieces>button.selected .splendor-readout,.cl-pieces>button.selected .cl-piece{outline:3px solid var(--accent);outline-offset:1px}
++.cl-piece{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:6px;border:2px solid var(--line-2);border-radius:12px;background:var(--surface);font-size:13px}
++.cl-check{position:absolute;top:4px;right:4px;color:#fff;background:var(--accent);border-radius:50%;padding:2px}
++.cl-group{margin-bottom:8px}.cl-group-name{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
++.cl-targets{display:flex;flex-wrap:wrap;gap:6px}
++.cl-targets>button,.cl-correct-list>button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 12px;border:2px solid var(--line-2);border-radius:12px;background:var(--surface);font-size:14px;font-weight:600;color:var(--ink)}
++.cl-targets>button[aria-pressed=true],.cl-correct-list>button[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}
++.cl-correct>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++.cl-correct-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.cl-correct-form{display:flex;flex-direction:column;gap:10px}
++.cl-consent{display:flex;align-items:flex-start;gap:8px;font-size:14px;font-weight:500;color:var(--ink-2)}.cl-consent input{margin-top:2px}
++.cl-actions{display:flex;gap:8px;position:sticky;bottom:0;padding:10px 0 max(4px,env(safe-area-inset-bottom));background:var(--surface)}.cl-actions>.button{flex:1}.cl-actions>.button.primary{flex:2;white-space:normal}
++.room-public-holdings{margin:12px 0}.room-public-holdings>h4{margin-bottom:6px}
++.room-public-holdings details>summary{min-height:44px;display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;flex-wrap:wrap}
++.rph-bonus{display:inline-flex;gap:6px;font-size:13px;font-weight:700}.rph-bonus>span{display:inline-flex;align-items:center;gap:2px}
++.rph-field{margin:6px 0}
++
++.purchased-bonus{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}.purchased-bonus .rph-bonus{display:flex;gap:12px}.purchased-bonus .rph-bonus>span{display:inline-flex;align-items:center;gap:4px}
+--- a/src/lobby-theme.css
++++ b/src/lobby-theme.css
+@@ -129,3 +129,27 @@
+   .capture-start::before{top:0;left:46px}
+ }
+ @media(prefers-reduced-motion:reduce){.session-card::before,.board-event.has-photo::before,.home-games .js-ball,.home-games .js-stick,.home-head.has-photo::after,.brand-icon,.home-head-photo img,.home-head.has-photo .home-head-copy,.home-example,.home-games{animation:none}}
++
++/* Phones with saved boards: shorter stage photo, no repeated counts (the filter tabs show them), smaller example button. */
++@media(max-width:760px){
++  .home-head.has-boards .home-head-photo{height:120px}
++  .home-head.has-boards .home-head-copy{margin-top:-24px;padding:14px 16px 16px}
++  .home-head.has-boards .home-head-copy>p,.home-head.has-boards .home-stats{display:none}
++  .home-head.has-boards .home-example{width:auto;min-height:44px;margin-top:10px;padding:8px 16px;font-size:14px}
++}
++
++/* Returning mobile users can open a named board without scrolling past a full cover. */
++@media(max-width:760px){
++ .home-head.has-boards .home-head-photo{height:76px}
++ .home-head.has-boards .home-head-copy{margin-top:-18px;padding:10px 16px}
++ .home-head.has-boards .home-example{margin-top:4px}
++ .session-open{flex-direction:row;align-items:stretch;min-height:128px}
++ .session-card-image{width:92px;flex:0 0 92px;aspect-ratio:auto;border-radius:20px 0 0 20px}
++ .session-card-image img[src$=".svg"]{padding:8px}
++ .session-card-body{min-width:0;padding:12px 44px 12px 12px}
++ .session-card h3{overflow-wrap:anywhere}
++ .session-card-footer{flex-wrap:wrap;gap:8px}
++ .session-status{top:auto;bottom:6px;left:4px;display:flex;font-size:13px;margin:0;padding:4px 6px;gap:3px}
++ .session-card:has(.session-status.is-saved)::before{display:none}
++ .session-card:has(.session-open:not(:disabled)):hover{transform:none}
++}
+--- a/src/rummikub-workspace.css
++++ b/src/rummikub-workspace.css
+@@ -23,7 +23,7 @@
+ .rt-rack-row{position:relative;display:flex;justify-content:center;padding:0 6px calc(var(--rt-tile)*.5)}
+ .rt-rack-row>.rt-meld{position:relative;flex-wrap:wrap;justify-content:center;gap:2px}
+ .rt-ledge{position:absolute;left:0;right:0;bottom:0;width:100%;height:calc(var(--rt-tile)*1.3);display:block}
+-.rt-rack .rt-add-group{align-self:center;min-height:40px}
++.rt-rack .rt-add-group{align-self:center;min-height:44px}
+ .rt-aside{display:flex;align-items:center;gap:10px}.rt-aside>span{font-size:13px;color:var(--muted,#5d6b82)}
+ .rt-overview{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line,#dce2df)}
+ .rt-overview .rt-heading h3{font-size:15px}
+@@ -63,3 +63,5 @@
+ .rt-notes{margin-top:12px}.rt-notes summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:13px;color:var(--muted,#66736d)}.rt-notes label{display:block;font-size:13px}.rt-notes textarea{width:100%;min-height:72px}.rt-notes p{font-size:13px;margin:6px 0}
+ @media(max-width:600px){.rt-workspace{padding:12px}}
+ @media(prefers-reduced-motion:reduce){.rt-meld{transition:none}}
++
++.rt-overview>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600}
+--- a/src/ui.tsx
++++ b/src/ui.tsx
+@@ -1,4 +1,5 @@
+ import { useEffect, useId, useRef, type ReactNode } from 'react';
++import { createPortal } from 'react-dom';
+ import { ArrowRight, X } from 'lucide-react';
+ import type { Value } from '../shared/types';
+ import { ComponentArt } from './ComponentArt';
+@@ -29,12 +30,14 @@
+     document.addEventListener('keydown', handler);
+     return () => { document.body.style.overflow = overflow; document.removeEventListener('keydown', handler); prior?.focus(); };
+   }, []);
+-  return <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
++  const dialog = <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+     <div className={`modal ${wide ? 'modal-wide' : ''}`} ref={panel} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId}>
+       <header className="modal-header"><h2 id={titleId}>{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><X size={21}/></button></header>
+       {children}
+     </div>
+   </div>;
++  // On body: a dialog rendered inside .main-content (its own stacking context) sat under the sticky app bar.
++  return typeof document === 'undefined' ? dialog : createPortal(dialog, document.body);
+ }
+ 
+ // A player's colour as that game's own piece; games without piece art keep a plain colour chip.
+--- /dev/null
++++ b/tests/component-linking-ui.test.ts
+@@ -0,0 +1,11 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {register} from 'node:module';import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';
++import {effectiveRecognitionPack} from '../shared/recognition';import type {GamePack,SessionView} from '../shared/types';
++register('../docs/board-story/feedback/skip-css.mjs',import.meta.url);(globalThis as any).window={addEventListener(){}};
++const {GameEssentials}=await import('../src/GameEssentials');const {RoomPublicBoard}=await import('../src/RoomEntry');
++const pack=effectiveRecognitionPack(JSON.parse(readFileSync('gamepacks/generated/game-essentials.json','utf8')).find((p:GamePack)=>p.id==='splendor'));
++const piece={id:'card',componentId:'development',variant:null,quantity:1,label:'합성',anchor:'',evidenceId:null,region:null,readout:{schema:'splendor-v1',kind:'development',points:0,bonus:'blue',cost:null,requirements:null,color:null,level:1}};
++const record=(p:any=piece)=>({version:'game-component-record-v1',pieces:[p]});
++function fixture(){return {pack,session:{id:'synthetic-ui',gamePackId:pack.id,gamePackVersion:pack.version,players:[{id:'p1',name:'합성 하나',color:'#3978bd'},{id:'p2',name:'합성 둘',color:'#e56b5d'}],assertions:[{id:'holdings',field:'player.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:[],value:record(),updatedAt:'now'},{id:'private',field:'reserve.scene',ownerId:'p1',status:'accepted',basis:'user',evidenceIds:[],value:record({...piece,id:'secret',readout:{...piece.readout,points:9,bonus:'black'}}),updatedAt:'now'}],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[],derived:[],differences:[],ready:true,progress:{resolved:0,total:0}} as unknown as SessionView;}
++test('self purchased bonus is visible and excludes reserved card bonuses',()=>{const view=fixture();const html=renderToStaticMarkup(React.createElement(GameEssentials,{view,ownerId:'p1',busy:false,mutate:async()=>{},onEvidence(){}}));assert(html.includes('기록한 구매 카드 보너스'));assert(html.includes('파랑 1'));assert(!html.includes('검정 1'));});
++test('room member public board displays other public holdings read-only without private cards',()=>{const view=fixture();view.session.room={version:'room-v1',capacity:2,hostPlayerId:'p1',revisions:{public:0,p1:0,p2:0,roster:0}};view.roomAccess={role:'member',playerId:'p2',revisions:{public:0,p2:0,roster:0}};const html=renderToStaticMarkup(React.createElement(RoomPublicBoard,{view}));assert(html.includes('다른 플레이어 공개 기록'));assert(html.includes('합성 하나'));assert(html.includes('파랑 1'));assert(!html.includes('9점'));assert(!html.includes('다른 곳으로 옮기기'));});
++test('fully linked photo pieces are marked processed rather than presented as empty pending candidate areas',()=>{const view=fixture();view.session.assertions=view.session.assertions.filter(a=>a.field!=='reserve.scene');view.session.assertions.push({id:'photo-candidate',field:'__photo.public',status:'candidate',basis:'observation',value:record(),evidenceIds:[],updatedAt:'now'} as any);(view.session.assertions[0].value as any).pieces[0]={...piece,linkOrigin:{assertionId:'photo-candidate',pieceId:'card',field:'__photo.public'}};const html=renderToStaticMarkup(React.createElement(GameEssentials,{view,busy:false,mutate:async()=>{},onEvidence(){}}));assert(!html.includes('사진에서 찾은 후보 ·'));assert(html.includes('사진 실물 1개 연결됨'));});

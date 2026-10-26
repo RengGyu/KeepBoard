@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-21",
+  "scope": "synthetic local contract regression; no real model/camera/private data/deployment",
+  "before": { "command": "node --import tsx --test tests/catan-review-fixes.test.ts", "tests": 8, "pass": 1, "fail": 7, "exit": 1 },
+  "after": {
+    "test": { "command": "npm test", "tests": 150, "pass": 150, "fail": 0, "exit": 0, "newTests": 12 },
+    "typecheck": { "command": "npm run typecheck", "exit": 0 },
+    "build": { "command": "npm run build", "exit": 0 }
+  },
+  "intermediate": [
+    { "command": "npm test", "exit": 1, "reason": "sandbox EPERM on tsx local IPC socket, before tests" },
+    { "command": "npm test (approved local execution)", "tests": 150, "pass": 149, "fail": 1, "exit": 1, "reason": "minimal adapter fixture omits derivedRules; observableFields now supports that legacy shape" }
+  ],
+  "realAPICalls": 0,
+  "cameraUsed": false,
+  "browser390Verified": false,
+  "deployed": false,
+  "remaining": ["real recognition and model latency unmeasured", "past full-arm parsing event remains unknown because raw reply was not retained", "unknown legacy purchase turn and board layers remain unknown", "simple readiness is not proof of complete legal game state"]
+}

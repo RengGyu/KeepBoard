@@ -1,0 +1,110 @@
+{
+  "version": "hosted-vision-benchmark-v1",
+  "images": [
+    {
+      "id": "catan-corpus-development",
+      "gameId": "catan",
+      "path": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-local-reader-vyzn4xm9-55c8peu1/number-comparison-product-v1/store/uploads/80f08d20-4b27-4bf3-ba2c-54466fdc85d2.jpeg",
+      "sha256": "08942c1046b3e366e67e07e2b3ed3ef98a0fd116321af09504bfea1979c27bc8",
+      "width": 1024,
+      "height": 1024,
+      "mimeType": "image/jpeg",
+      "approvedForHosted": false
+    },
+    {
+      "id": "catan-user-development",
+      "gameId": "catan",
+      "path": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-catan-user-diagnosis-t68bb0vj/public-photo.jpeg",
+      "sha256": "82a495688f1130cbab488b4f30a736c915e32bb8059d4a393042c5456f929e22",
+      "width": 850,
+      "height": 637,
+      "mimeType": "image/jpeg",
+      "approvedForHosted": true
+    }
+  ],
+  "contexts": [
+    {
+      "id": "catan-visible-categories-v1",
+      "gameId": "catan",
+      "definitions": {
+        "path": "contexts/catan-definition.json",
+        "sha256": "16afd0f35730fbce4cd3ff1a0f9e0290ce56092931baaa1355d322e8fab98151"
+      },
+      "rules": {
+        "path": "contexts/catan-reading-categories.txt",
+        "sha256": "c97e44dd612f56945e80fcc00ca7d74de0fedd88a804e355c9eaa669be2078ca"
+      }
+    },
+    {
+      "id": "splendor-visible-categories-v1",
+      "gameId": "splendor",
+      "definitions": {
+        "path": "contexts/splendor-definition.json",
+        "sha256": "0ee28c08df9bb1e4b63d4bd60953ab7f0ad5a3f0cba2e4c78cecabfe44a70360"
+      },
+      "rules": {
+        "path": "contexts/splendor-reading-categories.txt",
+        "sha256": "5b9ff2585168e0584d9f106f27fc93fc6aaefc06eafe1b49fe0f48498ef37315"
+      }
+    },
+    {
+      "id": "sagrada-visible-categories-v1",
+      "gameId": "sagrada",
+      "definitions": {
+        "path": "contexts/sagrada-definition.json",
+        "sha256": "4849fd6fa8075d34092ab86aabd0d5262dbf025d92eae2023cef99be37a76aad"
+      },
+      "rules": {
+        "path": "contexts/sagrada-reading-categories.txt",
+        "sha256": "d91d052d73db33b5e972827ee8a6a421e2609d9a098e17bba0a90bcf47dea4df"
+      }
+    }
+  ],
+  "runs": [
+    {
+      "id": "catan-gemini-ocr-with-region-photos",
+      "imageId": "catan-user-development",
+      "provider": "gemini",
+      "condition": "photos-only",
+      "task": "ocr-with-region"
+    },
+    {
+      "id": "catan-gemini-component-location-photos",
+      "imageId": "catan-user-development",
+      "provider": "gemini",
+      "condition": "photos-only",
+      "task": "component-location"
+    },
+    {
+      "id": "catan-florence-ocr-with-region-photos",
+      "imageId": "catan-user-development",
+      "provider": "florence",
+      "condition": "photos-only",
+      "task": "ocr-with-region"
+    },
+    {
+      "id": "catan-florence-component-location-photos",
+      "imageId": "catan-user-development",
+      "provider": "florence",
+      "condition": "photos-only",
+      "task": "component-location"
+    },
+    {
+      "id": "catan-gemini-ocr-with-region-context",
+      "imageId": "catan-user-development",
+      "provider": "gemini",
+      "condition": "game-context",
+      "contextId": "catan-visible-categories-v1",
+      "task": "ocr-with-region"
+    },
+    {
+      "id": "catan-gemini-component-location-context",
+      "imageId": "catan-user-development",
+      "provider": "gemini",
+      "condition": "game-context",
+      "contextId": "catan-visible-categories-v1",
+      "task": "component-location"
+    }
+  ],
+  "maxCalls": 6
+}

@@ -1,3 +1,4 @@
+import {catanPack} from '../gamepacks/catan.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -22,7 +23,7 @@ test('save as-is and reopen retain unknowns, private cards, original evidence an
     return response.json();
   }
   try {
-    let view = await call('/api/sessions', 'POST', { name: '합성 · 간단 저장', example: true });
+    let view = await call('/api/sessions', 'POST', { name: '합성 · 간단 저장', gamePackVersion: catanPack.version, example: true });
     const route = `/api/sessions/${view.session.id}`, turn = view.session.turnInstanceId;
     view = await call(route, 'PATCH', { answers: [{ field: 'currentPlayer', value: null }], notes: { public: '파랑이 자원 받을 차례' } });
     assert.equal(view.ready, false);

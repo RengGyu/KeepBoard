@@ -1,0 +1,137 @@
+{
+  "as_of": "2026-10-23",
+  "status": "FROZEN",
+  "verdict": "PASS_SCOPED_INTEGRATION_REVIEW",
+  "unresolved_must_fix_count": 0,
+  "source": {
+    "originalDigest": "ecb937282bf255371b499cddc752fe997da5f6d5bbc0f09094e89d44b4021a70",
+    "finalDigest": "c061328e56121b6b5a2ef5a13185fd722ae33688604181a8de685bb9d472b692",
+    "sourceFiles": 1323,
+    "changedFiles": 27,
+    "manifestMatches": true,
+    "testSourceMatches": true,
+    "drift": [],
+    "deltaFromOriginal": [
+      "server/ai/generic.ts",
+      "src/PhotoCaptureGuide.tsx",
+      "src/SessionWorkspace.tsx",
+      "tests/photo-capture-api.test.ts",
+      "tests/photo-capture-ui.test.ts"
+    ],
+    "machineProfileUnchanged": true,
+    "patchSHA256": "fb98a47d11a3c9c3e2edc3b96a293557f9a74159dca4ec3e2afaeb379893eace",
+    "patchMatches": true,
+    "exit": 0
+  },
+  "reviewed_scope": {
+    "games": 120,
+    "capture_areas": 441,
+    "source_files": 1323,
+    "changed_files": 27,
+    "current_game_only_prompt": true,
+    "owner_public_intersection": true,
+    "manual_and_unknown_preserved": true,
+    "job_reconnect_and_candidate_boundary": true,
+    "fresh_source_alias_and_existing_provenance": true,
+    "browser_used_by_reviewer": false
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "status": "RESOLVED_VERIFIED",
+      "severity": "API_COMPATIBILITY",
+      "files": [
+        "server/ai/generic.ts:16",
+        "server/index.ts:450"
+      ],
+      "trigger": "Existing upload target market; new request target player; stored __photo.public candidate; explicit accept API.",
+      "before": {
+        "accept_http": 400,
+        "actual_ui_patch_http": 200
+      },
+      "after": {
+        "accept_http": 200,
+        "actual_ui_patch_http": 200
+      },
+      "fix": "Only fresh model normalization applies capture-target validation inside genericCandidateValue. Independent server commit target guards and existing field/owner/evidence/typed/provenance validation remain.",
+      "evidence": [
+        "integration-review.behavior.red.json",
+        "integration-review.behavior.json",
+        "integration-review.tests.red.log",
+        "integration-review.tests.log"
+      ]
+    }
+  ],
+  "independent_checks": [
+    {
+      "name": "manifest-and-actual-source",
+      "status": "VERIFIED",
+      "exit": 0
+    },
+    {
+      "name": "120-contract-exact-projection",
+      "status": "VERIFIED",
+      "exit": 0
+    },
+    {
+      "name": "441-area-authorized-intersection",
+      "status": "VERIFIED",
+      "exit": 0
+    },
+    {
+      "name": "focused-ui-api-contract-display-and-provenance",
+      "status": "VERIFIED",
+      "tests": 34,
+      "passed": 34,
+      "failed": 0,
+      "exit": 0
+    },
+    {
+      "name": "approved-deltas-ui3-accept2",
+      "status": "VERIFIED",
+      "files": 5,
+      "exit": 0
+    }
+  ],
+  "worker_checks": {
+    "evidence_level": "REPORTED_WITH_LOG_READ",
+    "full_tests": 591,
+    "full_test_exit": 0,
+    "typecheck_exit": 0,
+    "separate_vite_build_exit": 0,
+    "ui_evidence": "docs/game-photo-integration/ui-check-sol/verification.json",
+    "native_browser_upload_verified": false,
+    "preview_64188_accept_fix_loaded": false
+  },
+  "limitations": [
+    "No real model calls or recognition accuracy certification, including all120 games.",
+    "No reviewer CUA; worker UI evidence distinguishes old functional assets and later Korean-copy assets.",
+    "Catan browser upload remains unverified; authorized synthetic API start is not upload proof.",
+    "Final accept API behavior was checked with a newly loaded synthetic fixture; preview64188 backend retained the old module.",
+    "Operating backend rollout/startup verification is outside this review.",
+    "Single-process job scheduler scope and prior zero-candidate interrupted-recovery limitation remain as documented in sol1-review.md."
+  ],
+  "environment_attempt": {
+    "initial": "Sandbox loopback EPERM and review JSX configuration; not product findings.",
+    "resolved": "Authorized local synthetic server and explicit pinned TSX_TSCONFIG_PATH."
+  },
+  "reviewer_actions": {
+    "real_ai_calls": 0,
+    "browser_calls": 0,
+    "product_writes": 0,
+    "operating_writes": 0,
+    "private_user_data_reads": 0
+  },
+  "input_hashes": {
+    "docs/game-photo-integration/source-manifest.json": "229c74c398584fe50d8bf0a764b5c776deae0d1e06c75d2cf7c9c0f0d5384185",
+    "docs/game-photo-integration/integrated.patch": "fb98a47d11a3c9c3e2edc3b96a293557f9a74159dca4ec3e2afaeb379893eace",
+    "docs/game-photo-integration/verification.json": "8202fb06016151c1693cbb3a123e46dfed1510fbfa69b5750d9e71ec012188fb",
+    "docs/game-photo-integration/release/ui-copy-manifest.json": "8e2edfae45219c2426d3d6466e56c19fe5af188d75d197a7a4aefb8366fe59ec",
+    "docs/game-photo-integration/release/accept-fix-manifest.json": "2f22b1b57aa29cb5bdb84989550977095ac518a684b119b4f8f478fba909a6bb",
+    "docs/game-photo-integration/release/ui-copy.diff": "6403815fceb839908df335e58cf8b610dbef235a3ccfe0b5cebb4de5332a374c",
+    "docs/game-photo-integration/release/verification-run.json": "d0fee15c210c086237cef190429d59489bb71068031aefe5721b36d745e36452",
+    "docs/game-photo-integration/release/full-test.log": "817235e5b2428611102fd0ed8db5bcc153ab19641244515184fd98d2cf17aebc",
+    "docs/game-photo-integration/ui-check-sol/verification.json": "269e89f19d1236d9b7d2b6b437153fa197f771c5ed0782176151a00ba23fb7d4"
+  },
+  "verification_exit": 0
+}

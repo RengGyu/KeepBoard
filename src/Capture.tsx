@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
-import { Camera, Check, Crop, Pause, Play, RotateCcw, ScanLine } from 'lucide-react';
+import { Camera, Check, Crop, Pause, Play, RotateCcw } from 'lucide-react';
 import type { Evidence } from '../shared/types';
 import { Modal } from './ui';
+import { CaptureHelp } from './BoardFeedback';
+import { BRAND_IMAGES } from './brandImages';
 import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, type ScanFrame } from './scanQuality';
 
 import { createScanUploadQueue, type UploadSnapshot } from './scanUploads';
@@ -9,7 +11,7 @@ import { recordScanTiming } from './scanTiming';
 
 export type PhotoInput = { dataUrl: string; label?: string; width?: number; height?: number };
 
-export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCapture: (photo: PhotoInput) => Promise<Evidence> }) {
+export function CameraDialog({ onClose, onCapture, guidance }: { guidance?:string; onClose: () => void; onCapture: (photo: PhotoInput) => Promise<Evidence> }) {
   const video = useRef<HTMLVideoElement>(null);
   const stream = useRef<MediaStream | null>(null);
   const sampleCanvas = useRef<HTMLCanvasElement | null>(null);
@@ -218,16 +220,17 @@ export function CameraDialog({ onClose, onCapture }: { onClose: () => void; onCa
   const savedCount = transfers.entries.filter(e => e.state === 'saved').length;
   const failedCount = transfers.entries.filter(e => e.state === 'failed').length;
   return <Modal title="판을 천천히 훑어주세요" onClose={() => void closeCamera()} wide>
-    <div className="camera-view"><video ref={video} playsInline muted autoPlay/><div className="camera-guide"><ScanLine size={42}/></div><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
+    {guidance&&<p className="small">{guidance}</p>}
+    <div className="camera-view"><video ref={video} playsInline muted autoPlay poster={BRAND_IMAGES.captureGuide}/><div className="camera-guide" aria-hidden="true"/><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
     <div className="modal-body">
+      <CaptureHelp/>
       <ol className="scan-guidance"><li>판 전체</li><li>영역별로 잠시 멈추기</li><li>마치기</li></ol>
       <p className="camera-status" role="status" aria-live="polite">{status}</p>
-      <p className="muted small scan-explanation">흐림·밝기·움직임·비슷한 장면은 기기에서 검사합니다. 원본은 촬영 중 전송하고, AI는 마친 뒤 이번 사진만 한 번 읽어요.</p>
       {count > 0 && <><p className="camera-status" role="status">사진 전송 {savedCount}/{count}{transfers.active ? ' · 보내는 중…' : failedCount ? ` · ${failedCount}장 실패` : ' · 완료'}</p><div className="scan-thumbnails" aria-label="이번 스캔에서 확보한 사진">{transfers.entries.map((entry, index) => { const preview = capturePreviews.current.get(entry.id); return <div key={entry.id}>{preview?.url && <img src={preview.url} alt={`확보한 사진 ${index + 1}`}/>}<span>{index + 1} · {entry.state === 'saved' ? '전송됨' : entry.state === 'failed' ? '전송 실패' : '전송 중'}</span></div>; })}</div></>}
       {failedCount > 0 && <div className="button-row"><button className="button secondary" disabled={transfers.active || finishing} onClick={() => void retryUploads()}>전송 다시 시도</button><button className="button text" disabled={transfers.active || finishing} onClick={omitFailedAndFinish}>실패한 {failedCount}장 빼고 마치기</button></div>}
       {error && <p className="inline-error" role="alert">{error}</p>}
       <div className="button-row"><button className="button secondary" disabled={finishing || count >= SCAN_LIMIT} onClick={() => paused ? void startCamera() : pauseCamera()}>{paused ? <Play size={17}/> : <Pause size={17}/>} {paused ? '다시 시작' : '일시정지'}</button><button className="button secondary" disabled={!ready || savingPhoto || finishing || count >= SCAN_LIMIT} onClick={() => void takePhoto(false)}><Camera size={17}/>{savingPhoto ? '확보 중…' : '직접 촬영'}</button></div>
-      <p className="muted small scan-manual-note">자동 선별이 어려우면 직접 촬영할 수 있어요. 확보한 장수로 판 전체나 복원 완료를 판단하지 않습니다.</p>
+      <p className="muted small scan-manual-note">자동으로 안 찍히면 ‘직접 촬영’을 눌러 주세요.</p>
       <button className="button primary full" disabled={finishing} onClick={() => void closeCamera()}><Check size={17}/>{finishing ? '사진 전송 마무리 중…' : '스캔 마치고 사진 확인'}</button>
     </div>
   </Modal>;

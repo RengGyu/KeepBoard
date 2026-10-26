@@ -1,25 +1,35 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowDownToLine, ArrowRight, ArrowUpFromLine, BookOpen, Check, ChevronRight, Clock3, FolderOpen, Hexagon, LayoutGrid, LoaderCircle, Plus, RefreshCw, Search, MoreHorizontal, Trash2, Undo2, Sparkles, Users, X } from 'lucide-react';
-import type { AIStatus, GamePack, Session, SessionView } from '../shared/types';
+import { ArrowRight, BookOpen, Check, Clock3, Hexagon, LayoutGrid, MoreHorizontal, Plus, RefreshCw, Search, Trash2, Undo2, X } from 'lucide-react';
+import type {GameCatalogEntry} from '../shared/gameEssentials';
+import type { AIStatus, Session, SessionView } from '../shared/types';
 import { api } from './api';
-import { CreateDialog, LibraryDialog } from './Dialogs';
+import { LibraryDialog } from './Dialogs';
 import { fire, type Mutate } from './Fields';
 import SessionWorkspace from './SessionWorkspace';
-import { Busy, Empty, formatDate } from './ui';
+import { Busy, Empty, PlayerPiece, formatDate } from './ui';
+import {redactSession,redactView} from '../shared/privacy';
+import { BRAND_IMAGES } from './brandImages';
+import {GameCover} from './GameCover';
+import {BoardEvent, LoaderMark} from './BoardFeedback';
 
-type Dialog = 'create' | 'library' | null;
+import {RoomEntry} from './RoomEntry';
+import {rememberRoom,selectRoomScope,roomIsStale} from './roomAccess';
+type Dialog = 'create' | 'join' | 'library' | null;
 
 export default function App() {
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [packs, setPacks] = useState<GamePack[]>([]);
+  const [packs, setPacks] = useState<GameCatalogEntry[]>([]);
   const [status, setStatus] = useState<AIStatus | null>(null);
   const [view, setView] = useState<SessionView | null>(null);
   const [ownerId, setOwnerIdState] = useState<string | undefined>(new URLSearchParams(location.search).get('player') || undefined);
-  const [dialog, setDialog] = useState<Dialog>(null);
+  const [initialInvite,setInitialInvite]=useState(()=>new URLSearchParams(location.hash.slice(1)).get('join')??'');
+  const [dialog, setDialog] = useState<Dialog>(initialInvite?'join':null);
+  const [conflict,setConflict]=useState(false);const [roomReload,setRoomReload]=useState(0);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
+  const [reopenFeedback, setReopenFeedback] = useState(0);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'saved' | 'trash'>('all');
   const [deleteUndo, setDeleteUndo] = useState<string[]>([]);
@@ -28,33 +38,44 @@ export default function App() {
   const pending = useRef(0);
   const liveView = useRef(view); liveView.current = view;
   const showToast = useCallback((message: string) => { setToast(message); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToast(''), 4200); }, []);
-  const refreshPacks = async () => setPacks(await api.packs());
+  const refreshPacks = async () => setPacks(await api.catalog());
+  useEffect(()=>{const changed=()=>{const invite=new URLSearchParams(location.hash.slice(1)).get('join');if(invite){setInitialInvite(invite);setDialog('join');}};window.addEventListener('hashchange',changed);return()=>window.removeEventListener('hashchange',changed);},[]);
   const updateUrl = (sessionId?: string, playerId?: string) => {
     const url = new URL(location.href);
-    url.searchParams.delete('step');
+    url.searchParams.delete('step');url.hash='';
     if (sessionId) url.searchParams.set('session', sessionId); else url.searchParams.delete('session');
     if (sessionId && playerId) url.searchParams.set('player', playerId); else url.searchParams.delete('player');
     history.replaceState({}, '', url);
   };
-  const setOwnerId = (id?: string) => { setOwnerIdState(id); updateUrl(view?.session.id, id); };
+  const setOwnerId = async (id?: string) => {
+    if(!view)return;
+    if(view.roomAccess&&id&&id!==view.roomAccess.playerId)id=view.roomAccess.playerId;
+    const sessionId=view.session.id;
+    const locking=api.lockPrivate(sessionId);
+    receive(redactView(view,new Set(view.privacy?.protectedOwnerIds??[]),new Set()));
+    setOwnerIdState(id);updateUrl(sessionId,id);setBusy(true);
+    try{await locking;const next=await api.session(sessionId);selectRoomScope(next,id);setConflict(false);receive(next);}finally{setBusy(false);}
+  };
   const receive = (next: SessionView) => {
+    rememberRoom(next);
     liveView.current = next;
     setView(next);
-    setSessions(current => [{ ...next.session, deletedAt: current.find(item => item.id === next.session.id)?.deletedAt }, ...current.filter(item => item.id !== next.session.id)]);
+    const listSession=redactSession(next.session,next.pack,new Set(next.privacy?.protectedOwnerIds??[]),new Set());
+    setSessions(current => [{ ...listSession, deletedAt: current.find(item => item.id === next.session.id)?.deletedAt }, ...current.filter(item => item.id !== next.session.id)]);
   };
   const open = async (id: string) => {
     setBusy(true); setError('');
-    try { const next = await api.session(id); receive(next); updateUrl(id, ownerId); requestAnimationFrame(() => window.scrollTo({ top: 0 })); }
+    try { await api.lockPrivate(view?.session.id);const next = await api.session(id);const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;setOwnerIdState(selected);selectRoomScope(next,selected);setConflict(false);receive(next); if (next.session.snapshots.length) setReopenFeedback(current => current + 1); updateUrl(id, selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); }
     catch (reason) { setError(reason instanceof Error ? reason.message : '기록을 열지 못했습니다.'); } finally { setBusy(false); }
   };
-  const created = async (next: SessionView) => { await leaveWorkspace.current?.(); receive(next); setDialog(null); setOwnerIdState(undefined); updateUrl(next.session.id); requestAnimationFrame(() => window.scrollTo({ top: 0 })); };
-  const mutate: Mutate = async (task, message) => {
+  const created = async (next: SessionView) => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;selectRoomScope(next,selected);receive(next);setConflict(false);setInitialInvite('');setDialog(null);setOwnerIdState(selected);updateUrl(next.session.id,selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); };
+  const mutate: Mutate = async (task, message, options) => {
     pending.current += 1; setBusy(true); setError('');
     try { receive(await task()); if (message) showToast(message); }
-    catch (reason) { setError(reason instanceof Error ? reason.message : '변경 내용을 저장하지 못했습니다.'); throw reason; }
+    catch (reason) { if(!options?.localError)setError(reason instanceof Error ? reason.message : '변경 내용을 저장하지 못했습니다.'); throw reason; }
     finally { pending.current -= 1; setBusy(pending.current > 0); }
   };
-  const back = () => fire((async () => { await leaveWorkspace.current?.(); setView(null); setOwnerIdState(undefined); updateUrl(); setSessions(await api.sessions(true)); })());
+  const back = () => fire((async () => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); setView(null); setOwnerIdState(undefined); updateUrl(); setSessions(await api.sessions(true)); })());
 
   async function hideBoards(id?: string) {
     setBusy(true); setError(''); setToast('');
@@ -74,11 +95,12 @@ export default function App() {
     const initialize = async () => {
       setLoading(true); setError('');
       try {
-        const results = await Promise.all([api.sessions(true), api.packs(), api.status()]);
+        await api.roomDevice();
+        const results = await Promise.all([api.sessions(true), api.catalog(), api.status()]);
         if (cancelled) return;
         setSessions(results[0]); setPacks(results[1]); setStatus(results[2]);
         const id = new URLSearchParams(location.search).get('session');
-        if (id) { const next = await api.session(id); if (!cancelled) setView(next); }
+        if (id) { const next = await api.session(id); if (!cancelled) { const requested=new URLSearchParams(location.search).get('player')||undefined;const selected=next.roomAccess&&requested&&requested!==next.roomAccess.playerId?next.roomAccess.playerId:requested;setOwnerIdState(selected);selectRoomScope(next,selected);receive(next);if (next.session.snapshots.length) setReopenFeedback(current => current + 1); } }
       } catch (reason) { if (!cancelled) setError(reason instanceof Error ? reason.message : '서버에 연결하지 못했습니다.'); }
       finally { if (!cancelled) setLoading(false); }
     };
@@ -104,41 +126,41 @@ export default function App() {
       inFlight = true;
       try {
         const next = await api.session(view.session.id);
-        if (!cancelled && !pending.current && liveView.current?.session.id === next.session.id && liveView.current.session.updatedAt !== next.session.updatedAt) receive(next);
+        if (!cancelled && !pending.current && liveView.current?.session.id === next.session.id && (liveView.current.session.updatedAt !== next.session.updatedAt||JSON.stringify(liveView.current.privacy)!==JSON.stringify(next.privacy))) {if(roomIsStale(liveView.current,next,ownerId))setConflict(true);else receive(next);}
       } catch { /* Keep local work visible; a subsequent mutation reports server errors. */ }
       finally { inFlight = false; }
     }, 4500);
     return () => { cancelled = true; clearInterval(timer); };
-  }, [view?.session.id, dialog]);
+  }, [view?.session.id, dialog,ownerId]);
 
   const liveSessions = sessions.filter(session => !session.deletedAt);
   const visibleSessions = sessions.filter(session => (filter === 'trash' ? !!session.deletedAt : !session.deletedAt) && (!search || `${session.name} ${packs.find(pack => pack.id === session.gamePackId)?.title || ''}`.toLowerCase().includes(search.toLowerCase())) && (filter !== 'saved' || session.snapshots.length > 0));
+  const savedCount = liveSessions.filter(session => session.snapshots.length).length;
+  const openExample = () => fire(mutate(() => api.create({ example: true }), '카탄 예시를 열었어요').then(() => { const next = liveView.current; if (next) updateUrl(next.session.id); }));
   return <div className="app-shell">
-    <aside className="sidebar"><button className="brand" onClick={back} aria-label="KeepBoard 내 보드"><span className="brand-icon"><Hexagon size={27} strokeWidth={2.5}/><span/></span>KeepBoard<span className="brand-period">.</span></button><span className="sidebar-caption">멈춘 판도, 이어지는 즐거움.</span><nav aria-label="메인 메뉴"><span className="nav-label">메뉴</span><button className={!view ? 'active' : ''} onClick={back}><LayoutGrid size={19}/>내 보드<span className="nav-count">{liveSessions.length}</span></button><button onClick={() => setDialog('library')}><BookOpen size={19}/>게임 목록</button></nav></aside>
+    <header className="app-bar">
+      <button className="brand" onClick={back} aria-label="KeepBoard 내 보드로"><span className="brand-icon" aria-hidden="true"><Hexagon size={26} strokeWidth={2.4}/><span/></span>KeepBoard</button>
+      <nav className="app-nav" aria-label="메인 메뉴"><button className={!view ? 'active' : ''} aria-current={!view ? 'page' : undefined} onClick={back}><LayoutGrid size={18}/><span>내 보드</span></button><button onClick={() => setDialog('library')}><BookOpen size={18}/><span>게임</span></button></nav>
+      <button className="button primary small-button app-new" aria-label="새 보드" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/><span>새 보드</span></button>
+    </header>
     <main className={`main-content ${view ? 'in-session' : ''}`}>
-      {loading ? <div className="loading-screen"><LoaderCircle className="spin" size={30}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={view.session.id} view={view} busy={busy} status={status} mutate={mutate} onBack={back} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <>
-        <header className="home-topbar"><span>나의 플레이 공간</span><div><span className="today">{new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' })}</span></div></header>
-        <section className="home-hero"><div className="hero-copy"><span className="eyebrow">보드게임 기록</span><h1>오늘의 판을,<br/>다음으로<span>.</span></h1><p>잠깐 멈춰도 괜찮아요.<br/>사진으로 남기고, 그대로 열어 고쳐요.</p><div className="button-row"><button className="button primary" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/>새 판 기록하기</button><button className="button hero-example" disabled={busy || !packs.length} onClick={() => fire(mutate(() => api.create({ example: true }), '카탄 예시를 열었어요').then(() => { const next = liveView.current; if (next) updateUrl(next.session.id); }))}><PlayIcon/>카탄 예시 둘러보기<ArrowRight size={15}/></button></div></div><div className="hero-art"><div className="art-circle"/><img src="/demo-board.svg" alt="육각형 타일과 길, 마을이 놓인 카탄 예시 보드"/></div></section>
-        <section className="boards-section"><div className="boards-heading"><div><h2>내 보드 <span>{liveSessions.length}</span></h2></div><div className="board-tools"><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={17}/></button></div></div>
-          <div className="board-filters"><div className="filter-tabs"><button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체 보드</button><button className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{liveSessions.filter(session => session.snapshots.length).length}</span></button><button className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><label className="search-box"><Search size={16}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={14}/></button>}</label></div>
-          {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
-            const pack = packs.find(item => item.id === session.gamePackId);
-            const evidence = session.evidence.find(item => item.scope === 'public' && !item.ownerId);
-            return <article className="session-card" key={session.id}><button className="session-open" disabled={busy || !!session.deletedAt} onClick={() => void open(session.id)}><div className="session-card-image"><img src={evidence?.url || '/demo-board.svg'} alt={`${session.name} 보드 미리보기`} loading="lazy"/><span className={`session-status ${session.snapshots.length ? 'is-saved' : ''}`}>{session.snapshots.length ? <Check size={11}/> : <Clock3 size={11}/>} {session.snapshots.length ? '저장됨' : '기록 중'}</span></div><div className="session-card-body"><div className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}</div><h3>{session.name}</h3><p><Clock3 size={13}/>{formatDate(session.updatedAt)}</p><div className="session-card-footer"><div className="player-colors">{session.players.map(player => <span key={player.id} title={player.name} style={{ background: player.color }}/>)}</div><span>{session.players.length}명<span className="dot-divider">·</span>{session.snapshots.length ? '저장한 판' : '기록 중'}</span><ChevronRight size={17}/></div></div></button>{session.deletedAt ? <button className="button secondary small-button restore-board" disabled={busy} onClick={() => void restoreBoards([session.id])}><Undo2 size={15}/>복원</button> : <button className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={() => void hideBoards(session.id)}><Trash2 size={16}/></button>}</article>;
-          })}<button className="new-board-tile" disabled={busy || !packs.length} onClick={() => setDialog('create')}><span><Plus size={25}/></span><strong>새로운 판 기록</strong><small>다음 플레이를 준비하세요</small></button></div> : <Empty title={search ? '검색 결과가 없어요' : filter === 'trash' ? '삭제한 보드가 없어요' : filter === 'saved' ? '아직 저장한 판이 없어요' : '첫 번째 판을 기록해 보세요'} action={<button className="button secondary" disabled={!packs.length || busy} onClick={() => setDialog('create')}><Plus size={16}/>새 판 기록</button>}>{search ? '다른 이름이나 게임으로 찾아보세요.' : '새 판을 만들거나 카탄 예시로 전체 흐름을 경험해 보세요.'}</Empty>}
-        </section><footer className="home-footer"><span><Hexagon size={15}/>모든 판에는, 다음이 있으니까.</span><button onClick={() => setDialog('library')}>게임 살펴보기 <ArrowRight size={14}/></button></footer>
-      </>}
+      {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
+      {loading ? <div className="loading-screen" role="status"><LoaderMark size={32}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <div className="home">
+        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className={`home-head has-photo${liveSessions.length?' has-boards':''}`}><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
+        <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><div className="board-tools"><label className="search-box"><Search size={17}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={15}/></button>}</label><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={18}/></button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details></div></div>
+        {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
+          const pack = packs.find(item => item.id === session.gamePackId);
+          const evidence = session.evidence.find(item => item.scope === 'public' && !item.ownerId);
+          return <article className="session-card" key={session.id}><button className="session-open" disabled={busy || !!session.deletedAt} onClick={() => void open(session.id)}><div className="session-card-image">{evidence?.url ? <img src={evidence.url} alt={`${session.name} 보드 미리보기`} loading="lazy"/> : <GameCover gameId={session.gamePackId} label={`${pack?.title ?? '게임'} · 대표 표지 그림`}/>}<span className={`session-status ${session.snapshots.length ? 'is-saved' : 'is-recording'}`}>{session.snapshots.length ? <Check size={13}/> : <Clock3 size={13}/>}{session.snapshots.length ? '저장됨' : '기록 중'}</span></div><div className="session-card-body"><h3>{session.name}</h3><p className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}<span className="dot-divider" aria-hidden="true">·</span>{formatDate(session.updatedAt)}</p><div className="session-card-footer"><div className="player-colors" aria-label={`${session.players.length}명: ${session.players.map(player => player.name).join(', ')}`}>{session.players.map(player => <PlayerPiece key={player.id} color={player.color} game={session.gamePackId} size={26}/>)}</div>{!session.deletedAt && <span className="session-go">이어하기<ArrowRight size={16}/></span>}</div></div></button>{session.deletedAt ? <button className="button secondary small-button restore-board" disabled={busy} onClick={() => void restoreBoards([session.id])}><Undo2 size={15}/>복원</button> : session.room ? null : <button className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={() => void hideBoards(session.id)}><Trash2 size={16}/></button>}</article>;
+        })}</div> : <Empty title={search ? '검색 결과가 없어요' : filter === 'trash' ? '삭제한 보드가 없어요' : filter === 'saved' ? '아직 저장한 판이 없어요' : '첫 번째 판을 기록해 보세요'} action={filter === 'trash' ? undefined : <div className="button-row empty-actions"><button className="button primary" disabled={!packs.length || busy} onClick={() => setDialog('create')}><Plus size={17}/>새 보드</button><button className="button secondary" disabled={!packs.length || busy} onClick={openExample}>카탄 예시 열기</button></div>}>{search ? '다른 이름이나 게임으로 찾아보세요.' : filter === 'trash' ? '삭제한 보드는 여기에서 복원할 수 있어요.' : '게임 사진과 상태를 함께 남기면 저장한 판을 이어볼 수 있어요.'}</Empty>}
+      </div>}
       {error && <div className="error-banner" role="alert"><div><strong>요청을 완료하지 못했어요</strong><p>{error}</p></div><button className="icon-button" aria-label="오류 닫기" onClick={() => setError('')}><X size={18}/></button></div>}
     </main>
-    <nav className="mobile-nav" aria-label="모바일 메뉴"><button className={!view ? 'active' : ''} onClick={back}><LayoutGrid size={20}/><span>내 보드</span></button><button onClick={() => setDialog('create')} disabled={!packs.length}><Plus size={22}/><span>새 기록</span></button><button onClick={() => setDialog('library')}><BookOpen size={20}/><span>게임팩</span></button></nav>
-    {dialog === 'create' && <CreateDialog packs={packs} onClose={() => setDialog(null)} onCreated={created}/>}
-
+    {(dialog === 'create'||dialog==='join') && <RoomEntry packs={packs} joining={dialog==='join'} initialInvite={initialInvite} onClose={() => {setDialog(null);setInitialInvite('');const u=new URL(location.href);u.hash='';history.replaceState({},'',u);}} onCreated={created}/>}
     {dialog === 'library' && <LibraryDialog packs={packs} onClose={() => setDialog(null)} onChanged={refreshPacks}/>}
-
     {deleteUndo.length > 0 && <div className="delete-undo" role="status"><span>보드 {deleteUndo.length}개를 삭제했어요.</span><button disabled={busy} onClick={() => void restoreBoards(deleteUndo)}><Undo2 size={15}/>되돌리기</button></div>}
     {toast && !deleteUndo.length && <div className="toast" role="status"><Check size={17}/>{toast}</div>}
+    {reopenFeedback > 0 && <BoardEvent key={reopenFeedback} kind="reopen"/>}
     {busy && !view && <div className="mutation-indicator" role="status"><Busy/></div>}
   </div>;
 }
-
-function PlayIcon() { return <Sparkles size={17}/>; }

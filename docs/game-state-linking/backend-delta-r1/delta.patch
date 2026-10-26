@@ -1,0 +1,35 @@
+--- a/server/runtimeResume.ts
++++ b/server/runtimeResume.ts
+@@ -1,4 +1,4 @@
+-import {linkedComponents} from '../shared/componentLinking.ts';
++import {componentRecord} from '../shared/componentLinking.ts';
+ import {randomUUID} from 'node:crypto';
+ import type {GamePack,Session} from '../shared/types.ts';
+ import {privateField} from '../shared/privacy.ts';
+@@ -17,7 +17,13 @@
+  // Only state effective when saved joins the current logical turn; purchase/history and candidates keep their original tags.
+  for(const item of restoredAssertions)if(item.status==='accepted'&&item.basis!=='rule'&&item.turnInstanceId===saved.turnInstanceId&&isTurnField(pack.fields.find(field=>field.key===item.field)))item.turnInstanceId=session.turnInstanceId;
+  const nextAssertions=[...session.assertions.filter(a=>!assertion(a)),...restoredAssertions];
+- const identities=new Set<string>();for(const x of linkedComponents({assertions:nextAssertions})){const key=JSON.stringify([x.origin.assertionId,x.origin.pieceId]);if(identities.has(key))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');identities.add(key);}
++ const identities=new Map<string,boolean>();
++ for(const a of nextAssertions.filter(a=>a.status==='accepted'))for(const p of componentRecord(a)?.pieces??[]){
++  // A saved pre-link source has no origin yet: its assertion/piece pair is the same identity later issued by linkComponents.
++  const key=JSON.stringify([p.linkOrigin?.assertionId??a.id,p.linkOrigin?.pieceId??p.id,p.evidenceId]),linked=!!p.linkOrigin;
++  if(identities.has(key)&&(linked||identities.get(key)))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');
++  identities.set(key,linked);
++ }
+  session.assertions=nextAssertions;
+  // Retained private assertions may cite a public original that is absent from the old public snapshot.
+  const retainedRefs=new Set(session.assertions.filter(a=>!assertion(a)).flatMap(a=>a.evidenceIds));
+--- a/tests/component-linking-api.test.ts
++++ b/tests/component-linking-api.test.ts
+@@ -23,3 +23,9 @@
+  const pin=await m.call(p+'/privacy/'+M,{enabled:true,pin:'1234',expectedRevisions:{[M]:4}},'PUT');assert.equal(pin.status,200);
+  const reserve={sourceAssertionId:'model',pieceIds:['second'],target:{field:'reserve.scene',ownerId:M},expectedTargetAssertionId:null,expectedRevisions:{[M]:5}};assert.equal((await m.call(p+'/component-links',reserve)).status,403);const token=(await m.call(p+'/privacy/'+M+'/unlock',{pin:'1234'})).body.token;assert.equal((await m.call(p+'/component-links',reserve,'POST',token)).status,200);assert(!(await h.call(p)).body.session.assertions.some((a:any)=>a.field==='reserve.scene'&&a.ownerId===M));
+  }finally{await f.close();}});
++for(const room of [false,true])test(`HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=${room}`,async()=>{const f=await fixture();try{const h=f.client();if(room)await h.call('/api/rooms/device',{});const made=(await h.call(room?'/api/rooms':'/api/sessions',room?{gamePackId:'splendor',capacity:2,me:{color:'#ff0000'},clientRequestId:'restore-'+room}:{gamePackId:'splendor',players:[{id:'p1',name:'synthetic',color:'#ff0000'}]})).body,id=made.session.id,p='/api/sessions/'+id,owner=room?made.roomAccess.playerId:'p1';let view=made;const rev=(keys:string[])=>room?{expectedRevisions:Object.fromEntries(keys.map(k=>[k,view.roomAccess.revisions[k]]))}:{};
++ const seed=(await f.store.getSession(id))!;seed.evidence.push({id:'photo',kind:'photo',scope:'public',url:'/synthetic.png',captureEpoch:seed.captureEpoch,capturedAt:'now',label:'synthetic'});await f.store.saveSession(seed);
++ const input={version:'game-component-record-v1',pieces:[original.pieces[0]]};const a=await h.call(p,{answers:[{field:'market.scene',value:input}],...rev(['public'])},'PATCH');assert.equal(a.status,200);view=a.body;const source=view.session.assertions.find((a:any)=>a.field==='market.scene'&&a.status==='accepted');assert(!source.value.pieces[0].linkOrigin);
++ const c=await h.call(p+'/commit',{scope:'public',allowIncomplete:true,...rev(['public'])});assert.equal(c.status,200);view=c.body;const normal=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(normal.status,200,'normal same-scope restore stays usable');view=normal.body;
++ const linked=await h.call(p+'/component-links',{sourceAssertionId:source.id,pieceIds:['read-once'],target:{field:'reserve.scene',ownerId:owner},expectedTargetAssertionId:null,...rev(['public',owner])});assert.equal(linked.status,200);view=linked.body;const before=JSON.stringify(await f.store.getSession(id));const restored=await h.call(p+'/resume',{scope:'public',...rev(['public'])});assert.equal(restored.status,400);assert.match(restored.body.error,/다른 영역/);assert.equal(JSON.stringify(await f.store.getSession(id)),before,'failed restore leaves current state and cloud revision unchanged');
++ }finally{await f.close();}});

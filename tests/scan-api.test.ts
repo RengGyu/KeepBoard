@@ -1,3 +1,4 @@
+import {catanPack} from '../gamepacks/catan.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -46,7 +47,7 @@ test('exact sweep retries send six originals once per request, retain accepted s
   };
   try {
     await saveAISettings({ provider: 'gemini', model: 'local-only', apiKey: 'test-only', baseUrl: `http://127.0.0.1:${modelAddress.port}` });
-    let view: SessionView = await call('/api/sessions', { name: '실사진 묶음', example: true });
+    let view: SessionView = await call('/api/sessions', { name: '실사진 묶음', gamePackVersion: catanPack.version, example: true });
     const route = `/api/sessions/${view.session.id}`;
     const epoch = view.session.captureEpoch;
     view = await call(route, { answers: [{ field: 'robber.hexAnchor', value: 'r3c3' }] }, 'PATCH');
@@ -62,7 +63,9 @@ test('exact sweep retries send six originals once per request, retain accepted s
       assert.equal(evidence.kind, 'photo');
       sweepIds.push(result.createdEvidenceId);
     }
-    const analyzeBody = { evidenceIds: [...sweepIds], expectedCaptureEpoch: epoch, purpose: 'capture' };
+    const analyzeBody = { evidenceIds: [...sweepIds], expectedCaptureEpoch: epoch, purpose: 'capture', sameStaticState:true };
+    const unconfirmed=await request(`${route}/analyze`,{...analyzeBody,sameStaticState:false});
+    assert.equal(unconfirmed.status,400);assert.equal(received.length,0,'no upstream call before same-state confirmation');
     const failed = await request(`${route}/analyze`, analyzeBody);
     assert.equal(failed.status >= 400, true);
     view = await call(route, undefined, 'GET');

@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-26",
+  "gemini": {
+    "model": "gemini-3.8-flash",
+    "modelSource": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash",
+    "restSource": "https://ai.google.dev/api/generate-content",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+    "authentication": "x-goog-api-key request header; never URL",
+    "structuredOutput": "generationConfig.responseFormat.text: mimeType APPLICATION_JSON, schema JSON Schema",
+    "settings": {"thinkingLevel": "HIGH", "mediaResolution": "MEDIA_RESOLUTION_HIGH", "maxOutputTokens": 8192, "candidateCount": 1},
+    "unsupported": "minimal thinking; temperature is ignored by3.6Flash and newer, so omitted",
+    "imageSource": "https://ai.google.dev/gemini-api/docs/image-understanding",
+    "credentialSource": "https://ai.google.dev/gemini-api/docs/api-key",
+    "pricingSource": "https://ai.google.dev/gemini-api/docs/pricing",
+    "standardPaidUSDPerMillionUntil2026_12_31": {"input": 0.75, "outputIncludingThinking": 3.75},
+    "accountTierAndBilling": "UNKNOWN; no login/inference performed. Free tier content may improve products; paid tier is listed No. This project launches no training job. Provider policy is separate information, not a new consent or mandatory paid-plan gate; no automatic upgrade."
+  },
+  "florence": {
+    "model": "florence-2-base",
+    "modelAndRESTSource": "https://docs.roboflow.com/models/supported-models/florence-2",
+    "endpoint": "https://serverless.roboflow.com/infer/lmm",
+    "authentication": "Authorization: Bearer header; never URL or api_key body",
+    "request": "image {type:base64,value}, model_id, prompt",
+    "tasks": {"ocr-with-region": "<OCR_WITH_REGION>", "component-location": "<OD>"},
+    "nativeShapeSource": "https://huggingface.co/microsoft/Florence-2-base",
+    "envelopeSource": "https://github.com/roboflow/inference/blob/main/inference/core/entities/responses/inference.py",
+    "ocrShape": "response.<OCR_WITH_REGION> has quad_boxes of8 pixel coordinates and labels",
+    "objectShape": "response.<OD> has bboxes of4 xyxy pixel coordinates and labels",
+    "nativeCompletion": "No documented finish-token metadata in LMMInferenceResponse. Explicit truncation rejected; otherwise completeness UNKNOWN, not silently complete.",
+    "pricingSource": "https://docs.roboflow.com/deployment/roboflow-cloud/serverless-api/pricing",
+    "modelPricingSource": "https://docs.roboflow.com/deployment/roboflow-cloud/serverless-api/model-pricing",
+    "executionSecondsPerCredit": 500,
+    "pricingNote": "Florence is execution-time VLM billing, not RF-DETR per-image billing. Provider processing time can estimate credits but is not a billed-duration measurement. Even401/403/404 may use credits. Account credits and dollar conversion UNKNOWN.",
+    "credentialSetup": "https://app.roboflow.com/settings/api"
+  },
+  "limitations": [
+    "Hosted model alias is pinned in request hashes; provider weight revision is not known before a response.",
+    "Official REST/schema contracts verified; actual account authorization, response conformance, latency and accuracy have not been tested.",
+    "No rule reasoning/state reconstruction parity is claimed for Florence task tokens."
+  ]
+}

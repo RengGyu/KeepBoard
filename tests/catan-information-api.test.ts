@@ -1,3 +1,4 @@
+import {catanPack} from '../gamepacks/catan.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -14,7 +15,7 @@ test('harbor, purchase subset and mid-trade save/export/import/resume retain exa
  const server=(await createApp({store:new Store(directory)})).listen(0,'127.0.0.1');await new Promise<void>(resolve=>server.once('listening',resolve));const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  const call=async(route:string,method='GET',body?:unknown)=>{const response=await fetch(base+route,{method,...(body===undefined?{}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})});const result=await response.json();assert(response.ok,JSON.stringify(result));return result;};
  try {
-  let view:SessionView=await call('/api/sessions','POST',{name:'Synthetic v2'});const route=`/api/sessions/${view.session.id}`;assert.equal(factValue(view.session,'rulesProfile'),'base-6e-2025');assert.equal(view.pack.version,'2.0.0');
+  let view:SessionView=await call('/api/sessions','POST',{name:'Synthetic v2',gamePackVersion:catanPack.version});const route=`/api/sessions/${view.session.id}`;assert.equal(factValue(view.session,'rulesProfile'),'base-6e-2025');assert.equal(view.pack.version,'2.0.0');
   const edge=COASTAL_EDGES[0];
   const common={quantity:1,ownerId:null,region:null,evidenceId:null,variant:null};
   const board={version:2,coverage:'full',coverageByLayer:{terrain:'complete',buildings:'complete',roads:'complete',harbors:'partial'},components:[...CATAN_TOPOLOGY.hexes.map((h,i)=>({...common,id:'tile'+i,kind:'terrain',variant:i===9?'desert':'forest',location:{type:'hex',id:h.id}})),{...common,id:'wood-port',kind:'harbor',variant:'lumber',ratio:2,location:{type:'edge',id:edge.id}},{...common,id:'red-village',kind:'settlement',ownerId:'red',location:{type:'vertex',id:edge.vertexIds[0]}},{...common,id:'robber',kind:'robber',location:{type:'hex',id:'r3c3'}}]};

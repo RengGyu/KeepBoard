@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 730" role="img" aria-labelledby="title desc">
+  <title id="title">CATAN 예시 배치 보드</title>
+  <desc id="desc">기본판 19개 타일, 숫자 토큰, 도둑, 세 플레이어의 도로와 정착지를 그린 도식입니다.</desc>
+  <defs>
+    <polygon id="hex" points="0,-56 48.5,-28 48.5,28 0,56 -48.5,28 -48.5,-28" />
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#6c573b" flood-opacity=".10" />
+    </filter>
+    <style>
+      .forest { fill: #668667; }
+      .pasture { fill: #a7bf7d; }
+      .hills { fill: #c77d58; }
+      .fields { fill: #d9b45e; }
+      .mountains { fill: #879ba0; }
+      .desert { fill: #dfc99a; }
+      .resource-label { fill: #fffaf0; font: 600 11px system-ui, sans-serif; letter-spacing: .03em; text-anchor: middle; }
+      .token { fill: #fff8e9; stroke: #806e51; stroke-width: 1.2; }
+      .token-text { fill: #433b30; font: 700 14px system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; }
+      .road { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+      .red { stroke: #bd4e42; fill: #bd4e42; }
+      .blue { stroke: #427d9c; fill: #427d9c; }
+      .white { stroke: #586878; fill: #f6f0e4; }
+      .settlement { stroke-width: 2.5; stroke-linejoin: round; }
+      .legend { fill: #5e594f; font: 500 13px system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="730" rx="26" fill="#f8f3e8" />
+  <circle cx="918" cy="84" r="56" fill="#efe4ce" opacity=".55" />
+  <circle cx="74" cy="654" r="32" fill="#e6ead8" opacity=".72" />
+  <text x="46" y="50" fill="#353b32" font-family="Georgia,serif" font-size="27" font-weight="700">CATAN</text>
+  <text x="48" y="74" fill="#777163" font-family="system-ui,sans-serif" font-size="12" letter-spacing=".09em">BASE GAME · 19 HEXES</text>
+  <g transform="translate(829 38)">
+    <rect width="127" height="30" rx="15" fill="#eee3cf" />
+    <text x="63.5" y="19.5" text-anchor="middle" fill="#76684f" font-family="system-ui,sans-serif" font-size="11" font-weight="600">예시 배치 · 도식</text>
+  </g>
+  <text x="48" y="108" fill="#7d7568" font-family="system-ui,sans-serif" font-size="13">숲 · 목초지 · 구릉 · 들판 · 산맥 · 사막</text>
+
+  <g filter="url(#card-shadow)">
+    <rect x="185" y="127" width="630" height="500" rx="24" fill="#fffdf8" stroke="#e9dfcc" />
+  </g>
+
+  <!-- 19 resource hexes; anchors follow the example fixture's axial q/r layout. -->
+  <g transform="translate(404 195)"><use href="#hex" class="forest" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">숲</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">5</text></g>
+  <g transform="translate(500 195)"><use href="#hex" class="pasture" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">목초지</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">2</text></g>
+  <g transform="translate(596 195)"><use href="#hex" class="hills" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">구릉</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">6</text></g>
+
+  <g transform="translate(356 279)"><use href="#hex" class="fields" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">들판</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">9</text></g>
+  <g transform="translate(452 279)"><use href="#hex" class="mountains" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">산맥</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">10</text></g>
+  <g transform="translate(548 279)"><use href="#hex" class="pasture" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">목초지</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">4</text></g>
+  <g transform="translate(644 279)"><use href="#hex" class="forest" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">숲</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">3</text></g>
+
+  <g transform="translate(308 363)"><use href="#hex" class="hills" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">구릉</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">11</text></g>
+  <g transform="translate(404 363)"><use href="#hex" class="forest" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">숲</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">8</text></g>
+  <g transform="translate(500 363)"><use href="#hex" class="desert" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="11" fill="#766345">사막</text><g transform="translate(0 31)"><path d="M-10 -10 Q0 -17 10 -10 L7 6 Q0 13 -7 6Z" fill="#50453c"/><circle cy="-8" r="8" fill="#625447"/><circle cx="-3" cy="-9" r="1.4" fill="#e7d6b5"/></g></g>
+  <g transform="translate(596 363)"><use href="#hex" class="fields" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">들판</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">12</text></g>
+  <g transform="translate(692 363)"><use href="#hex" class="mountains" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">산맥</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">5</text></g>
+
+  <g transform="translate(356 447)"><use href="#hex" class="pasture" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">목초지</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">9</text></g>
+  <g transform="translate(452 447)"><use href="#hex" class="fields" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">들판</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">4</text></g>
+  <g transform="translate(548 447)"><use href="#hex" class="forest" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">숲</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">6</text></g>
+  <g transform="translate(644 447)"><use href="#hex" class="mountains" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">산맥</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">11</text></g>
+
+  <g transform="translate(404 531)"><use href="#hex" class="fields" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">들판</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">8</text></g>
+  <g transform="translate(500 531)"><use href="#hex" class="pasture" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">목초지</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">10</text></g>
+  <g transform="translate(596 531)"><use href="#hex" class="hills" stroke="#fff8ed" stroke-width="2.4"/><text class="resource-label" y="5">구릉</text><circle class="token" cy="29" r="12"/><text class="token-text" y="29">3</text></g>
+
+  <!-- Road pieces mirror the red, blue, and white example anchors. -->
+  <g class="road red">
+    <path d="M404 307 L452 335 L452 391 L404 419 L356 391 L356 335 L259 335" />
+  </g>
+  <g class="road blue">
+    <path d="M596 251 L692 251 L692 307" />
+  </g>
+  <g class="road white">
+    <path d="M404 475 L452 503 L452 559 L500 587 L548 559 L596 587" />
+  </g>
+  <g class="settlement red">
+    <path class="settlement" d="M404 296 L415 305 V318 H393 V305 Z" />
+    <path class="settlement" d="M259 324 L270 333 V346 H248 V333 Z" />
+  </g>
+  <g class="settlement blue">
+    <path class="settlement" d="M596 240 L607 249 V262 H585 V249 Z" />
+    <path class="settlement" d="M692 296 L703 305 V318 H681 V305 Z" />
+  </g>
+  <g class="settlement white">
+    <path class="settlement" d="M404 464 L415 473 V486 H393 V473 Z" />
+    <path class="settlement" d="M596 576 L607 585 V598 H585 V585 Z" />
+  </g>
+
+  <g transform="translate(290 661)">
+    <path d="M0 0 H34" class="road red" />
+    <text x="43" y="4" class="legend">빨강</text>
+    <path d="M113 0 H147" class="road blue" />
+    <text x="156" y="4" class="legend">파랑</text>
+    <path d="M226 0 H260" class="road white" />
+    <text x="269" y="4" class="legend">흰색</text>
+    <text x="390" y="4" fill="#8a8173" font-family="system-ui,sans-serif" font-size="11">타일과 말은 예시용으로 배치됨</text>
+  </g>
+  <text x="48" y="708" fill="#9a9183" font-family="system-ui,sans-serif" font-size="10">도식 이미지 · 실제 게임 사진이 아닙니다</text>
+</svg>

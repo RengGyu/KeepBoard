@@ -1,0 +1,1463 @@
+{
+  "method": "Manual direct visual inspection of the downloaded author-images JPEGs, no AI/OCR. Partial labels unless explicitly stated otherwise.",
+  "coordinates": "Approximate pixel bounding boxes [left,top,right,bottom] in the downloaded JPEG dimensions. Coordinates are aids to inspection, not segmentation-quality masks.",
+  "color_policy": "Record orange as visibly orange; do not silently normalize it to yellow. Joker printed ink color never supplies its assigned color/number.",
+  "photos": [
+    {
+      "id": "ryan-tiles",
+      "dimensions": [
+        1024,
+        683
+      ],
+      "scene": "Physical game on a wooden table, low oblique angle and shallow depth of field. Foreground loose/overlapping tiles; background table melds are out of focus. Partial racks at image edges.",
+      "coverage": "partial-example-tiles-only",
+      "example_groups": [],
+      "instances": [
+        {
+          "id": "ryan-orange-2",
+          "bbox_px": [
+            681,
+            340,
+            861,
+            443
+          ],
+          "kind": "number",
+          "color": "orange",
+          "number": 2,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ryan-orange-3",
+          "bbox_px": [
+            534,
+            432,
+            794,
+            552
+          ],
+          "kind": "number",
+          "color": "orange",
+          "number": 3,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ryan-red-4",
+          "bbox_px": [
+            325,
+            408,
+            590,
+            575
+          ],
+          "kind": "number",
+          "color": "red",
+          "number": 4,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ryan-red-1",
+          "bbox_px": [
+            638,
+            525,
+            928,
+            683
+          ],
+          "kind": "number",
+          "color": "red",
+          "number": 1,
+          "confidence": "legible",
+          "group_id": null,
+          "tile_boundary": "partly cut by bottom edge"
+        },
+        {
+          "id": "ryan-blue-12",
+          "bbox_px": [
+            280,
+            524,
+            612,
+            683
+          ],
+          "kind": "number",
+          "color": "blue",
+          "number": 12,
+          "confidence": "legible",
+          "group_id": null,
+          "tile_boundary": "partly cut by bottom edge"
+        },
+        {
+          "id": "ryan-joker",
+          "bbox_px": [
+            242,
+            301,
+            418,
+            367
+          ],
+          "kind": "joker",
+          "printed_color": "red",
+          "assigned_color": null,
+          "assigned_number": null,
+          "confidence": "legible face symbol",
+          "group_id": null
+        }
+      ],
+      "uncertain": [
+        {
+          "area": "background table above y=300",
+          "reason": "Blurred groups and glyphs; no sequence or full tile counts labeled."
+        },
+        {
+          "area": "center orange glyph and foreground blue single digit",
+          "reason": "Rotated 6/9-like glyphs; number remains null rather than choosing by expected run."
+        },
+        {
+          "area": "partly visible racks at left/right/back",
+          "reason": "Player/private areas; not imported into public table labels. Owner and concealed tile counts unknown."
+        }
+      ],
+      "global_counts": null,
+      "limits": "No confidently readable full gameplay run/set in this 1024px download. Example instances do not imply all visible tiles are annotated."
+    },
+    {
+      "id": "brewbooks-table",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "scene": "Overhead physical tile inventory arranged in eight number rows, two jokers above and blue racks around the grid. This is a display layout, not evidence of a played game position.",
+      "coverage": "entire displayed number grid and both isolated jokers; rack counts not labeled",
+      "example_groups": [
+        {
+          "id": "display-black-a",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            265,
+            214,
+            757,
+            271
+          ],
+          "sequence": "left-to-right",
+          "color": "black",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-black-b",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            261,
+            266,
+            760,
+            325
+          ],
+          "sequence": "left-to-right",
+          "color": "black",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-red-a",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            257,
+            317,
+            765,
+            378
+          ],
+          "sequence": "left-to-right",
+          "color": "red",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-red-b",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            254,
+            372,
+            768,
+            433
+          ],
+          "sequence": "left-to-right",
+          "color": "red",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-blue-a",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            250,
+            426,
+            772,
+            490
+          ],
+          "sequence": "left-to-right",
+          "color": "blue",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-blue-b",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            246,
+            483,
+            775,
+            548
+          ],
+          "sequence": "left-to-right",
+          "color": "blue",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-orange-a",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            242,
+            542,
+            778,
+            608
+          ],
+          "sequence": "left-to-right",
+          "color": "orange",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        },
+        {
+          "id": "display-orange-b",
+          "kind": "display-row-not-gameplay-meld",
+          "bbox_px": [
+            238,
+            601,
+            782,
+            672
+          ],
+          "sequence": "left-to-right",
+          "color": "orange",
+          "numbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "confidence": "legible"
+        }
+      ],
+      "instances": [
+        {
+          "id": "display-red-joker",
+          "bbox_px": [
+            446,
+            95,
+            486,
+            150
+          ],
+          "kind": "joker",
+          "printed_color": "red",
+          "assigned_color": null,
+          "assigned_number": null,
+          "confidence": "legible"
+        },
+        {
+          "id": "display-black-joker",
+          "bbox_px": [
+            531,
+            95,
+            573,
+            150
+          ],
+          "kind": "joker",
+          "printed_color": "black",
+          "assigned_color": null,
+          "assigned_number": null,
+          "confidence": "legible"
+        }
+      ],
+      "duplicate_examples": [
+        {
+          "color": "black",
+          "number": 1,
+          "occurrences": [
+            {
+              "group_id": "display-black-a",
+              "index": 0
+            },
+            {
+              "group_id": "display-black-b",
+              "index": 0
+            }
+          ],
+          "meaning": "Two distinct visible physical tiles, not one identity to merge."
+        },
+        {
+          "color": "orange",
+          "number": 13,
+          "occurrences": [
+            {
+              "group_id": "display-orange-a",
+              "index": 12
+            },
+            {
+              "group_id": "display-orange-b",
+              "index": 12
+            }
+          ],
+          "meaning": "Two distinct visible physical tiles, not an inferred scene total."
+        }
+      ],
+      "observed_display_counts": {
+        "number_tiles": 104,
+        "jokers": 2,
+        "basis": "eight directly legible rows of thirteen and two isolated face-symbol tiles"
+      },
+      "uncertain": [
+        {
+          "area": "blue rack pile",
+          "reason": "Overlapping empty racks; exact rack count not annotated."
+        }
+      ],
+      "limits": "Rows are manually selected visual display groups, not claimed legal runs or evidence of actual turn/initial meld. Exact boxed SKU/printing unknown."
+    },
+    {
+      "id": "ella-table",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "scene": "Classic-style physical number tiles piled on a round yellow dish on a table. Overlap, rotation and one face-down tile; no played run/set.",
+      "coverage": "partial-example-tiles-only",
+      "example_groups": [],
+      "instances": [
+        {
+          "id": "ella-red-13",
+          "bbox_px": [
+            540,
+            18,
+            698,
+            153
+          ],
+          "kind": "number",
+          "color": "red",
+          "number": 13,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-black-11",
+          "bbox_px": [
+            401,
+            88,
+            550,
+            194
+          ],
+          "kind": "number",
+          "color": "black",
+          "number": 11,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-black-4-a",
+          "bbox_px": [
+            366,
+            184,
+            513,
+            308
+          ],
+          "kind": "number",
+          "color": "black",
+          "number": 4,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-blue-4",
+          "bbox_px": [
+            319,
+            301,
+            452,
+            465
+          ],
+          "kind": "number",
+          "color": "blue",
+          "number": 4,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-red-12",
+          "bbox_px": [
+            445,
+            300,
+            561,
+            449
+          ],
+          "kind": "number",
+          "color": "red",
+          "number": 12,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-orange-8-a",
+          "bbox_px": [
+            639,
+            345,
+            758,
+            492
+          ],
+          "kind": "number",
+          "color": "orange",
+          "number": 8,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-orange-8-b",
+          "bbox_px": [
+            709,
+            410,
+            839,
+            557
+          ],
+          "kind": "number",
+          "color": "orange",
+          "number": 8,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-black-4-b",
+          "bbox_px": [
+            403,
+            524,
+            547,
+            640
+          ],
+          "kind": "number",
+          "color": "black",
+          "number": 4,
+          "confidence": "legible",
+          "group_id": null
+        },
+        {
+          "id": "ella-face-down",
+          "bbox_px": [
+            619,
+            540,
+            771,
+            689
+          ],
+          "kind": "unknown",
+          "color": null,
+          "number": null,
+          "confidence": "unmarked tile back; no identity inferred",
+          "group_id": null
+        }
+      ],
+      "duplicate_examples": [
+        {
+          "color": "orange",
+          "number": 8,
+          "instances": [
+            "ella-orange-8-a",
+            "ella-orange-8-b"
+          ],
+          "meaning": "Visible duplicate physical instances in a loose pile, not different melds."
+        },
+        {
+          "color": "black",
+          "number": 4,
+          "instances": [
+            "ella-black-4-a",
+            "ella-black-4-b"
+          ],
+          "meaning": "Visible duplicate physical instances; preserve both."
+        }
+      ],
+      "global_counts": null,
+      "uncertain": [
+        {
+          "area": "under overlapping tiles and face-down tile",
+          "reason": "Hidden identities and full count unknown; no completion by game inventory."
+        },
+        {
+          "area": "rotated 6/9-like glyphs",
+          "reason": "Not selected as confident labels; do not infer orientation from nearby numbers."
+        }
+      ],
+      "limits": "No joker confidently labeled here and no run/set sequence asserted. Only selected visible tiles are annotated."
+    },
+    {
+      "id": "evening-table",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "edition": "Rummikub Large Numbers Edition (visible box label)",
+      "role": "supervisor-approved supplementary group-reading photo only; not a confirmed Classic photo or Classic runtime accuracy success case",
+      "scene": "Real played table with clear separated number groups and two visible joker symbols; green tiles differ from the Classic runtime orange palette.",
+      "coverage": "15 selected public tabletop groups only; rack and printed box excluded",
+      "example_groups": [
+        {
+          "id": "ones-set",
+          "bbox_px": [
+            472,
+            188,
+            582,
+            235
+          ],
+          "sequence": "left-to-right",
+          "kind": "set-shaped",
+          "tiles": [
+            {
+              "id": "evening-ones-set-0",
+              "kind": "number",
+              "color": "green",
+              "number": 1,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-ones-set-1",
+              "kind": "number",
+              "color": "black",
+              "number": 1,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-ones-set-2",
+              "kind": "number",
+              "color": "red",
+              "number": 1,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-ones-set-3",
+              "kind": "number",
+              "color": "blue",
+              "number": 1,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "twos-joker",
+          "bbox_px": [
+            622,
+            205,
+            709,
+            250
+          ],
+          "sequence": "left-to-right",
+          "kind": "set-shaped",
+          "tiles": [
+            {
+              "id": "evening-twos-joker-0",
+              "kind": "joker",
+              "color": null,
+              "number": null,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "printed_color": "black",
+              "assigned_color": null,
+              "assigned_number": null
+            },
+            {
+              "id": "evening-twos-joker-1",
+              "kind": "number",
+              "color": "blue",
+              "number": 2,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-twos-joker-2",
+              "kind": "number",
+              "color": "green",
+              "number": 2,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "red-3-9",
+          "bbox_px": [
+            386,
+            244,
+            587,
+            289
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-red-3-9-0",
+              "kind": "number",
+              "color": "red",
+              "number": 3,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-1",
+              "kind": "number",
+              "color": "red",
+              "number": 4,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-2",
+              "kind": "number",
+              "color": "red",
+              "number": 5,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-3",
+              "kind": "number",
+              "color": "red",
+              "number": 6,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-4",
+              "kind": "number",
+              "color": "red",
+              "number": 7,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-5",
+              "kind": "number",
+              "color": "red",
+              "number": 8,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-3-9-6",
+              "kind": "number",
+              "color": "red",
+              "number": 9,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "red-11-13",
+          "bbox_px": [
+            600,
+            248,
+            685,
+            296
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-red-11-13-0",
+              "kind": "number",
+              "color": "red",
+              "number": 11,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-11-13-1",
+              "kind": "number",
+              "color": "red",
+              "number": 12,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-11-13-2",
+              "kind": "number",
+              "color": "red",
+              "number": 13,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "green-1-5",
+          "bbox_px": [
+            265,
+            310,
+            430,
+            361
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-green-1-5-0",
+              "kind": "number",
+              "color": "green",
+              "number": 1,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-1-5-1",
+              "kind": "number",
+              "color": "green",
+              "number": 2,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-1-5-2",
+              "kind": "number",
+              "color": "green",
+              "number": 3,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-1-5-3",
+              "kind": "number",
+              "color": "green",
+              "number": 4,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-1-5-4",
+              "kind": "number",
+              "color": "green",
+              "number": 5,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "green-5-7",
+          "bbox_px": [
+            452,
+            316,
+            542,
+            364
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-green-5-7-0",
+              "kind": "number",
+              "color": "green",
+              "number": 5,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-5-7-1",
+              "kind": "number",
+              "color": "green",
+              "number": 6,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-5-7-2",
+              "kind": "number",
+              "color": "green",
+              "number": 7,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "green-7-9",
+          "bbox_px": [
+            561,
+            305,
+            653,
+            352
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-green-7-9-0",
+              "kind": "number",
+              "color": "green",
+              "number": 7,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-7-9-1",
+              "kind": "number",
+              "color": "green",
+              "number": 8,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-7-9-2",
+              "kind": "number",
+              "color": "green",
+              "number": 9,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "green-9-13",
+          "bbox_px": [
+            665,
+            301,
+            800,
+            349
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-green-9-13-0",
+              "kind": "number",
+              "color": "green",
+              "number": 9,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-9-13-1",
+              "kind": "number",
+              "color": "green",
+              "number": 10,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-9-13-2",
+              "kind": "number",
+              "color": "green",
+              "number": 11,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-9-13-3",
+              "kind": "number",
+              "color": "green",
+              "number": 12,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            },
+            {
+              "id": "evening-green-9-13-4",
+              "kind": "number",
+              "color": "green",
+              "number": 13,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "runtime_support": "unsupported-color; never substitute orange"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "blue-1-3",
+          "bbox_px": [
+            337,
+            368,
+            441,
+            418
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-blue-1-3-0",
+              "kind": "number",
+              "color": "blue",
+              "number": 1,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-1-3-1",
+              "kind": "number",
+              "color": "blue",
+              "number": 2,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-1-3-2",
+              "kind": "number",
+              "color": "blue",
+              "number": 3,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "blue-3-6",
+          "bbox_px": [
+            464,
+            365,
+            588,
+            414
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-blue-3-6-0",
+              "kind": "number",
+              "color": "blue",
+              "number": 3,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-3-6-1",
+              "kind": "number",
+              "color": "blue",
+              "number": 4,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-3-6-2",
+              "kind": "number",
+              "color": "blue",
+              "number": 5,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-3-6-3",
+              "kind": "number",
+              "color": "blue",
+              "number": 6,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "blue-9-13",
+          "bbox_px": [
+            612,
+            358,
+            756,
+            410
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-blue-9-13-0",
+              "kind": "number",
+              "color": "blue",
+              "number": 9,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-9-13-1",
+              "kind": "number",
+              "color": "blue",
+              "number": 10,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-9-13-2",
+              "kind": "number",
+              "color": "blue",
+              "number": 11,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-9-13-3",
+              "kind": "number",
+              "color": "blue",
+              "number": 12,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-9-13-4",
+              "kind": "number",
+              "color": "blue",
+              "number": 13,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "red-8-10",
+          "bbox_px": [
+            560,
+            415,
+            659,
+            470
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-red-8-10-0",
+              "kind": "number",
+              "color": "red",
+              "number": 8,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-8-10-1",
+              "kind": "number",
+              "color": "red",
+              "number": 9,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-red-8-10-2",
+              "kind": "number",
+              "color": "red",
+              "number": 10,
+              "runtimeColor": "red",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "black-1-10",
+          "bbox_px": [
+            327,
+            459,
+            657,
+            536
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-black-1-10-0",
+              "kind": "number",
+              "color": "black",
+              "number": 1,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-1",
+              "kind": "number",
+              "color": "black",
+              "number": 2,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-2",
+              "kind": "number",
+              "color": "black",
+              "number": 3,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-3",
+              "kind": "number",
+              "color": "black",
+              "number": 4,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-4",
+              "kind": "number",
+              "color": "black",
+              "number": 5,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-5",
+              "kind": "number",
+              "color": "black",
+              "number": 6,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-6",
+              "kind": "number",
+              "color": "black",
+              "number": 7,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-7",
+              "kind": "number",
+              "color": "black",
+              "number": 8,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-8",
+              "kind": "number",
+              "color": "black",
+              "number": 9,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-1-10-9",
+              "kind": "number",
+              "color": "black",
+              "number": 10,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "blue-7-joker-9-10",
+          "bbox_px": [
+            550,
+            531,
+            693,
+            587
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-blue-7-joker-9-10-0",
+              "kind": "number",
+              "color": "blue",
+              "number": 7,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-7-joker-9-10-1",
+              "kind": "joker",
+              "color": null,
+              "number": null,
+              "runtimeColor": null,
+              "confidence": "legible",
+              "printed_color": "red",
+              "assigned_color": null,
+              "assigned_number": null
+            },
+            {
+              "id": "evening-blue-7-joker-9-10-2",
+              "kind": "number",
+              "color": "blue",
+              "number": 9,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-blue-7-joker-9-10-3",
+              "kind": "number",
+              "color": "blue",
+              "number": 10,
+              "runtimeColor": "blue",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        },
+        {
+          "id": "black-10-12",
+          "bbox_px": [
+            652,
+            585,
+            764,
+            646
+          ],
+          "sequence": "left-to-right",
+          "kind": "run-shaped",
+          "tiles": [
+            {
+              "id": "evening-black-10-12-0",
+              "kind": "number",
+              "color": "black",
+              "number": 10,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-10-12-1",
+              "kind": "number",
+              "color": "black",
+              "number": 11,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            },
+            {
+              "id": "evening-black-10-12-2",
+              "kind": "number",
+              "color": "black",
+              "number": 12,
+              "runtimeColor": "black",
+              "confidence": "legible"
+            }
+          ],
+          "legality_verified": false
+        }
+      ],
+      "instances": [],
+      "duplicate_examples": [
+        {
+          "color": "red",
+          "number": 8,
+          "occurrences": [
+            {
+              "group_id": "red-3-9",
+              "index": 5
+            },
+            {
+              "group_id": "red-8-10",
+              "index": 0
+            }
+          ],
+          "meaning": "Separate visible physical red-8 instances in separate table groups; preserve both."
+        },
+        {
+          "color": "blue",
+          "number": 9,
+          "occurrences": [
+            {
+              "group_id": "blue-9-13",
+              "index": 0
+            },
+            {
+              "group_id": "blue-7-joker-9-10",
+              "index": 2
+            }
+          ],
+          "meaning": "Separate visible physical blue-9 instances in separate table groups; preserve both."
+        },
+        {
+          "color": "black",
+          "number": 10,
+          "occurrences": [
+            {
+              "group_id": "black-1-10",
+              "index": 9
+            },
+            {
+              "group_id": "black-10-12",
+              "index": 0
+            }
+          ],
+          "meaning": "Separate visible physical black-10 instances in separate table groups; preserve both."
+        }
+      ],
+      "global_counts": null,
+      "excluded_areas": [
+        {
+          "bbox_px": [
+            387,
+            0,
+            673,
+            155
+          ],
+          "scope": "printed-product-art",
+          "reason": "Tile depictions printed on the box are not physical table tiles."
+        },
+        {
+          "bbox_px": [
+            175,
+            370,
+            324,
+            714
+          ],
+          "scope": "player-private",
+          "reason": "Left rack; not public tabletop labels. Owner and concealed/full count unknown."
+        },
+        {
+          "bbox_px": [
+            755,
+            356,
+            951,
+            633
+          ],
+          "scope": "player-private",
+          "reason": "Right rack; no hidden identities or total inferred."
+        }
+      ],
+      "uncertain": [
+        {
+          "area": "joker assignments",
+          "reason": "Face symbols observed; assigned color/number remain null. Sequence expectations are not visual ground truth."
+        },
+        {
+          "area": "edition/runtime mapping",
+          "reason": "Printed green stays green with runtimeColor:null; no replacement by orange."
+        },
+        {
+          "area": "photograph boundaries/hidden areas",
+          "reason": "No full game counts, initial-meld history, current turn or score inferred."
+        }
+      ]
+    }
+  ]
+}

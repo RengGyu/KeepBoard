@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type TerraformingMarsReadout =
+  {schema:"terraforming-mars-v1";kind:"terrain";values:{"face": "front" | "back" | null; "printedName": string | null; "tileType": string | null; "mapCell": string | null; "owner": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileType": FieldBasis | null; "mapCell": 'user' | null; "owner": 'user' | null}}
+ | {schema:"terraforming-mars-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"terraforming-mars-v1";kind:"cubes";values:{"observedColor": string | null; "cubeRole": string | null; "observedMaterial": string | null; "nominalValue": number | null};sources:{"observedColor": FieldBasis | null; "cubeRole": 'user' | null; "observedMaterial": FieldBasis | null; "nominalValue": 'user' | null}}
+ | {schema:"terraforming-mars-v1";kind:"boards";values:{"printedName": string | null; "sideLabel": string | null; "resourceType": string | null; "stockValue": number | null; "productionValue": number | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "resourceType": FieldBasis | null; "stockValue": FieldBasis | null; "productionValue": FieldBasis | null}}
+ | {schema:"terraforming-mars-v1";kind:null;values:{};sources:{}};

@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type MonopolyReadout =
+  {schema:"monopoly-v1";kind:"board";values:{"printedName": string | null; "sideLabel": string | null; "editionLabel": string | null; "spaceLabel": string | null; "spaceOrder": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "editionLabel": FieldBasis | null; "spaceLabel": FieldBasis | null; "spaceOrder": 'user' | null}}
+ | {schema:"monopoly-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "dieValue": number | null; "location": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "dieValue": FieldBasis | null; "location": 'user' | null; "owner": 'user' | null}}
+ | {schema:"monopoly-v1";kind:"property";values:{"face": "front" | "back" | null; "printedName": string | null; "itemType": string | null; "mortgageFace": string | null; "targetProperty": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "itemType": FieldBasis | null; "mortgageFace": FieldBasis | null; "targetProperty": 'user' | null}}
+ | {schema:"monopoly-v1";kind:"money";values:{"observedColor": string | null; "itemType": string | null; "nominalValue": number | null; "pile": string | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "nominalValue": FieldBasis | null; "pile": 'user' | null}}
+ | {schema:"monopoly-v1";kind:null;values:{};sources:{}};

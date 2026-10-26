@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type GrandAustriaHotelReadout =
+  {schema:"grand-austria-hotel-v1";kind:"rooms";values:{"face": "front" | "back" | null; "printedName": string | null; "roomColor": string | null; "roomState": string | null; "roomCell": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "roomColor": FieldBasis | null; "roomState": 'user' | null; "roomCell": 'user' | null}}
+ | {schema:"grand-austria-hotel-v1";kind:"guests";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "fulfilment": SymbolValue[] | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "fulfilment": 'user' | null; "cardArea": 'user' | null}}
+ | {schema:"grand-austria-hotel-v1";kind:"dice";values:{"observedColor": string | null; "dieValue": number | null; "group": string | null; "used": string | null};sources:{"observedColor": FieldBasis | null; "dieValue": FieldBasis | null; "group": 'user' | null; "used": 'user' | null}}
+ | {schema:"grand-austria-hotel-v1";kind:"food";values:{"observedColor": string | null; "foodType": string | null; "storage": string | null; "targetGuest": string | null};sources:{"observedColor": FieldBasis | null; "foodType": FieldBasis | null; "storage": 'user' | null; "targetGuest": 'user' | null}}
+ | {schema:"grand-austria-hotel-v1";kind:null;values:{};sources:{}};

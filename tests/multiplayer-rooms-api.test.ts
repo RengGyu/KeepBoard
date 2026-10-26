@@ -1,0 +1,74 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
+const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-room-bootstrap-'));process.chdir(bootstrap);
+for(const key of ['GEMINI_API_KEY','GOOGLE_API_KEY','OPENAI_API_KEY','KEEPBOARD_AI_GATEWAY_URL'])delete process.env[key];
+const {createApp}=await import('../server/index.ts');const {Store}=await import('../server/store.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+async function fixture(options:Partial<Parameters<typeof createApp>[0]>={}){const root=await mkdtemp(path.join(os.tmpdir(),'kb-rooms-')),store=new Store(root,path.join(project,'public')),app=await createApp({store,...options});let server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const port=(server.address() as {port:number}).port,base=`http://127.0.0.1:${port}`;
+ function client(){let cookie='';return {async call(route:string,method='GET',body?:unknown,token?:string){const res=await fetch(base+route,{method,headers:{Origin:base,Connection:'close',...(body?{'Content-Type':'application/json'}:{}),...(cookie?{Cookie:cookie}:{}),...(token?{'X-KeepBoard-Private-Token':token}:{})},body:body?JSON.stringify(body):undefined});const set=res.headers.get('set-cookie');if(set)cookie=set.split(';')[0];return {status:res.status,body:res.headers.get('content-type')?.includes('application/json')?await res.json():{image:true}};},async init(){return this.call('/api/rooms/device','POST',{});}};}
+ return {store,client,restart:async()=>{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));const app=await createApp({store:new Store(root,path.join(project,'public')),...options});server=app.listen(port,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));},close:async()=>{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));await rm(root,{recursive:true,force:true});}};}
+test('rooms issue independent identity, atomically reserve seats/colors and reject impersonation through old APIs',async()=>{const f=await fixture();try{
+ const h=f.client(),a=f.client(),b=f.client(),x=f.client();for(const c of [h,a,b,x])assert.equal((await c.init()).status,200);
+ const made=await h.call('/api/rooms','POST',{gamePackId:'rummikub',capacity:3,name:'합성 방',me:{name:'방장',color:'#ff0000'},clientRequestId:'create-one'});assert.equal(made.status,201);const id=made.body.session.id,p='/api/sessions/'+id,host=made.body.roomAccess.playerId;
+ assert.equal((await h.call('/api/rooms','POST',{gamePackId:'rummikub',capacity:3,me:{name:'방장',color:'#ff0000'},clientRequestId:'create-one'})).body.session.id,id);
+ const invite=(await h.call('/api/rooms/'+id+'/invite')).body.code;assert.match(invite,/^[A-Z2-9]{8}$/);assert(!JSON.stringify(made.body).includes(invite));
+ assert.equal((await x.call(p)).status,403);const preview=await a.call('/api/rooms/preview','POST',{invite});assert.equal(preview.status,200);assert(!preview.body.players);
+ const joins=await Promise.all([a,b].map(c=>c.call('/api/rooms/join','POST',{invite,name:'참가',color:'#0000ff'})));assert.deepEqual(joins.map(r=>r.status).sort(),[200,409]);
+ const member=joins[0].status===200?a:b,other=member===a?b:a;const view=(await member.call(p)).body,own=view.roomAccess.playerId;
+ assert.equal((await other.call('/api/rooms/join','POST',{invite,name:'셋',color:'#00ff00'})).status,200);
+ assert.equal((await x.call('/api/rooms/join','POST',{invite,name:'넷',color:'#999999'})).status,409);assert.equal((await member.call('/api/rooms/join','POST',{invite,name:'다시',color:'#0000ff'})).body.roomAccess.playerId,own);
+ assert.equal((await member.call(p,'PATCH',{notes:{public:'공격'},expectedRevisions:{public:0}})).status,403);
+ assert.equal((await member.call(p,'PATCH',{players:[{id:host,name:'위장',color:'#123456'}]})).status,403);
+ assert.equal((await h.call(p,'PATCH',{notes:{[own]:'방장 우회'},expectedRevisions:{[own]:0}})).status,403);
+ assert.equal((await member.call(p,'PATCH',{notes:{[own]:'SECRET-A'},expectedRevisions:{[own]:0}})).status,200);
+ assert(!JSON.stringify((await h.call(p)).body).includes('SECRET-A'));assert(JSON.stringify((await member.call(p)).body).includes('SECRET-A'));
+ assert.equal((await h.call(p+'/privacy/'+own,'PUT',{enabled:true,pin:'0007'})).status,403);
+ assert.equal((await x.call(p+'/export')).status,403);assert.equal((await h.call(p+'/export')).status,403);
+ const lists=await x.call('/api/sessions');assert(!JSON.stringify(lists.body).includes(id));
+ assert.equal((await member.call(p,'PATCH',{notes:{[own]:'STALE'},expectedRevisions:{[own]:0}})).status,409);
+ const raw=await f.store.getSession(id);assert(raw);assert.equal(raw.notes[own],'SECRET-A');
+ }finally{await f.close();}});
+
+test('mock analysis sees only actor scope; long call permits another owner write and stale result cannot change facts',async()=>{let calls=0,release=()=>{},entered=()=>{};let started=new Promise<void>(r=>entered=r),gate=Promise.resolve();const inputs:string[]=[];let fail=false;
+ const f=await fixture({analyzer:async input=>{calls++;inputs.push(JSON.stringify(input.session));entered();await gate;if(fail)throw new Error('합성 판독 실패');return {mode:'live',warnings:[],summary:'합성 후보',assertions:[{id:'mock',field:'pending',value:'MOCK-CANDIDATE',basis:'observation',status:'candidate',evidenceIds:input.evidence.map(e=>e.id),updatedAt:new Date().toISOString()}]};}});try{
+ const h=f.client(),a=f.client();await h.init();await a.init();const made=(await h.call('/api/rooms','POST',{gamePackId:'rummikub',capacity:2,me:{name:'H',color:'#ff0000'},clientRequestId:'analysis'})).body,id=made.session.id,p='/api/sessions/'+id,H=made.roomAccess.playerId,invite=(await h.call('/api/rooms/'+id+'/invite')).body.code,A=(await a.call('/api/rooms/join','POST',{invite,name:'A',color:'#0000ff'})).body.roomAccess.playerId;
+ await h.call(p,'PATCH',{notes:{[H]:'HOST-PRIVATE'},expectedRevisions:{[H]:0}});await a.call(p,'PATCH',{notes:{[A]:'OTHER-PRIVATE'},expectedRevisions:{[A]:0}});
+ const photo=(await h.call(p+'/evidence','POST',{scope:'public',dataUrl:'data:image/svg+xml;base64,PHN2Zy8+',expectedRevisions:{public:0}})).body;const evidenceIds=[photo.createdEvidenceId],epoch=photo.session.captureEpoch;
+ const req=(revision:number)=>h.call(p+'/analyze','POST',{scope:'public',evidenceIds,expectedCaptureEpoch:epoch,expectedRevisions:{public:revision}});
+ assert.equal((await req(1)).status,200);assert.equal(calls,1);assert(!inputs[0].includes('HOST-PRIVATE'));assert(!inputs[0].includes('OTHER-PRIVATE'));const first=(await f.store.getSession(id))!.assertions.find(x=>x.value==='MOCK-CANDIDATE')!;assert.equal(first.status,'candidate');
+ started=new Promise<void>(r=>entered=r);gate=new Promise<void>(r=>release=r);const pending=req(2);await started;
+ assert.equal((await a.call(p,'PATCH',{notes:{[A]:'OTHER-EDIT'},expectedRevisions:{[A]:1}})).status,200);
+ assert.equal((await h.call(p,'PATCH',{answers:[{field:'pending',value:'USER-EDIT'}],expectedRevisions:{public:2}})).status,200);release();assert.equal((await pending).status,409);assert.equal((await f.store.getSession(id))!.assertions.find(x=>x.field==='pending')!.value,'USER-EDIT');
+ gate=Promise.resolve();fail=true;const before=(await f.store.getSession(id))!;assert.equal((await req(3)).status,400);const after=(await f.store.getSession(id))!;assert.deepEqual(after.assertions,before.assertions);assert.deepEqual(after.evidence,before.evidence);assert.equal(after.notes[A],'OTHER-EDIT');
+ }finally{release();await f.close();}});
+
+test('room scope snapshots restore their own baseline, PIN and original photos never grant another actor access',async()=>{const f=await fixture();try{
+ const h=f.client(),a=f.client();await h.init();await a.init();const made=(await h.call('/api/rooms','POST',{gamePackId:'catan-base',capacity:2,me:{name:'H',color:'#ff0000'},clientRequestId:'scope-test'})).body,id=made.session.id,p='/api/sessions/'+id,H=made.roomAccess.playerId;
+ const invite=(await h.call('/api/rooms/'+id+'/invite')).body.code,A=(await a.call('/api/rooms/join','POST',{invite,name:'A',color:'#0000ff'})).body.roomAccess.playerId;
+ let hr=0,ar=0;async function write(c:typeof h,key:string,revision:number,body:any){return c.call(p,'PATCH',{...body,expectedRevisions:{[key]:revision}});}
+ assert.equal((await write(h,'public',hr++,{notes:{public:'P-SAVED'},answers:[{field:'turn.phase',value:'build'},{field:'turn.diceTotal',value:8}]})).status,200);
+ assert.equal((await write(a,A,ar++,{notes:{[A]:'A-SAVED'}})).status,200);
+ assert.equal((await a.call(p+'/commit','POST',{scope:'owner',ownerId:A,allowIncomplete:true,expectedRevisions:{[A]:ar++}})).status,200);
+ assert.equal((await h.call(p+'/commit','POST',{scope:'public',allowIncomplete:true,expectedRevisions:{public:hr++}})).status,200);
+ const snapshots=(await f.store.getSession(id))!.snapshots;assert.equal(snapshots.length,2);assert.equal(snapshots[0].savedScope?.ownerId,A);assert.deepEqual(Object.keys(snapshots[0].notes),[A]);assert.equal(snapshots[1].notes[A],undefined);
+ await write(a,A,ar++,{notes:{[A]:'A-NEW'}});await write(h,'public',hr++,{notes:{public:'P-NEW'}});
+ const before=(await f.store.getSession(id))!;assert.equal((await a.call(p+'/resume','POST',{scope:'owner',ownerId:A,expectedRevisions:{[A]:ar++}})).status,200);let raw=(await f.store.getSession(id))!;assert.equal(raw.notes[A],'A-SAVED');assert.equal(raw.notes.public,'P-NEW');assert.equal(raw.turnInstanceId,before.turnInstanceId);assert.equal(raw.captureEpoch,before.captureEpoch);
+ assert.equal((await h.call(p+'/next-turn','POST',{playerId:H,expectedRevisions:{public:hr++}})).status,200);const turn=(await f.store.getSession(id))!.turnInstanceId;
+ const restored=await h.call(p+'/resume','POST',{scope:'public',expectedRevisions:{public:hr++}});assert.equal(restored.status,200);assert.equal(restored.body.session.turnInstanceId,turn);assert(restored.body.briefing.some((b:any)=>b.field==='turn.diceTotal'&&b.text.includes('8')));assert.equal((await f.store.getSession(id))!.notes[A],'A-SAVED');
+ const photo=await a.call(p+'/evidence','POST',{scope:'player',ownerId:A,dataUrl:'data:image/svg+xml;base64,PHN2Zy8+',expectedRevisions:{[A]:ar++}});assert.equal(photo.status,200);const url=photo.body.session.evidence.at(-1).url;assert.equal((await h.call(url)).status,403);assert.equal((await a.call(url)).status,200);
+ assert.equal((await a.call(p+'/privacy/'+A,'PUT',{enabled:true,pin:'0007',expectedRevisions:{[A]:ar++}})).status,200);assert(!JSON.stringify((await a.call(p)).body).includes('A-SAVED'));assert.equal((await a.call(url)).status,403);
+ assert.equal((await a.call(p+'/privacy/'+A,'PUT',{enabled:false,expectedRevisions:{[A]:ar}})).status,403);assert.equal((await a.call(p,'PATCH',{notes:{[A]:'BLOCKED'},expectedRevisions:{[A]:ar}})).status,403);
+ assert.equal((await h.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).status,403);const token=(await a.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).body.token;assert(token);assert.equal((await a.call(url,'GET',undefined,token)).status,200);assert.equal((await h.call(url,'GET',undefined,token)).status,403);
+ assert.equal((await h.call(p+'/privacy/lock','POST',{},token)).status,403);assert.equal((await a.call(url,'GET',undefined,token)).status,200);
+ assert(!JSON.stringify((await h.call(p)).body).includes('A-SAVED'));assert(!JSON.stringify((await h.call(p)).body).includes('members'));
+ await f.restart();assert.equal((await h.call(p)).body.roomAccess.playerId,H);assert.equal((await a.call(p)).body.roomAccess.playerId,A);assert(!JSON.stringify((await a.call(p)).body).includes('A-SAVED'));const again=(await a.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).body.token;assert(again);assert(JSON.stringify((await a.call(p,'GET',undefined,again)).body).includes('A-SAVED'));
+ }finally{await f.close();}});
+
+test('generic owner component records retain unknowns/physical IDs and cannot cite another rack; unsupported secrets stay physical-only',async()=>{const f=await fixture();try{const h=f.client(),a=f.client();await h.init();await a.init();const v=(await h.call('/api/rooms','POST',{gamePackId:'wingspan',capacity:2,me:{name:'H',color:'#ff0000'},clientRequestId:'generic'})).body,id=v.session.id,p='/api/sessions/'+id,invite=(await h.call('/api/rooms/'+id+'/invite')).body.code,A=(await a.call('/api/rooms/join','POST',{invite,name:'A',color:'#0000ff'})).body.roomAccess.playerId;
+ const hand=v.pack.runtime.fieldBindings.find((b:any)=>b.scope==='player'&&b.visibility==='owner'&&b.editor==='component-catalog');assert(hand);const value={version:'game-component-record-v1',pieces:[{id:'physical-one',componentId:hand.componentIds[0],variant:null,quantity:null,label:'PRIVATE-BIRD',anchor:'둘째',evidenceId:null,region:null}]};assert.equal((await a.call(p,'PATCH',{answers:[{field:hand.key,ownerId:A,value}],expectedRevisions:{[A]:0}})).status,200);assert(!JSON.stringify((await h.call(p)).body).includes('PRIVATE-BIRD'));
+ assert.equal((await a.call(p+'/commit','POST',{scope:'owner',ownerId:A,allowIncomplete:true,expectedRevisions:{[A]:1}})).status,200);const reopened=(await a.call(p)).body;assert.deepEqual(reopened.session.assertions.find((x:any)=>x.field===hand.key&&x.ownerId===A).value,value);
+ const bad=structuredClone(value);bad.pieces[0].evidenceId='another-owner-photo' as any;assert.equal((await a.call(p,'PATCH',{answers:[{field:hand.key,ownerId:A,value:bad}],expectedRevisions:{[A]:2}})).status,403);
+ const physical=v.pack.runtime.fieldBindings.find((b:any)=>b.editor==='physical-only');if(physical)assert.equal((await h.call(p,'PATCH',{answers:[{field:physical.key,ownerId:physical.scope==='player'?v.roomAccess.playerId:undefined,value:'SHOULD-NOT-COLLECT'}],expectedRevisions:{public:0,[v.roomAccess.playerId]:0}})).status,400);
+ }finally{await f.close();}});
+
+test('own-hidden game data stays physical-only even for its room host and cannot be uploaded as a private photo',async()=>{const f=await fixture();try{const h=f.client();await h.init();const v=(await h.call('/api/rooms','POST',{gamePackId:'hanabi',capacity:2,me:{name:'H',color:'#ff0000'},clientRequestId:'physical-only'})).body,p='/api/sessions/'+v.session.id,H=v.roomAccess.playerId;
+ const field=v.pack.runtime.fieldBindings.find((b:any)=>b.editor==='physical-only'&&b.scope==='player');assert(field,'fixture must exercise an unsupported secret, not skip it');assert.equal((await h.call(p,'PATCH',{answers:[{field:field.key,ownerId:H,value:'DO-NOT-COLLECT'}],expectedRevisions:{[H]:0}})).status,400);assert.equal((await h.call(p+'/evidence','POST',{scope:'player',ownerId:H,dataUrl:'data:image/svg+xml;base64,PHN2Zy8+',expectedRevisions:{[H]:0}})).status,403);assert(!JSON.stringify(await f.store.getSession(v.session.id)).includes('DO-NOT-COLLECT'));
+ }finally{await f.close();}});

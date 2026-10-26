@@ -1,0 +1,170 @@
+{
+  "status": "COMPLETED_LOW_OCR_ONLY",
+  "aggregateAttempts": 6,
+  "aggregateMaximum": 6,
+  "remaining": 0,
+  "newAttempts": 1,
+  "retries": 0,
+  "requestDifference": {
+    "aggregateCap": 6,
+    "allOtherBodyFieldsEqual": true,
+    "bodyDiffOnly": "/generationConfig/thinkingConfig/thinkingLevel HIGH -> LOW",
+    "credentialReads": 0,
+    "highBodySHA256": "9118b2bdeb569bd91d1e16c528e5119a05152bc3b2f2af29825cd532428b8f5d",
+    "lowBodySHA256": "2664d6220880b7a42021b2e4fd3e2cab5c85005b62a610395544e6f9b3173487",
+    "networkCalls": 0,
+    "newMaximum": 1,
+    "planSHA256": "7c531261b6e648b868940c5b46530c982af105d4563cd1cd0fc415c8330fcb4a",
+    "priorAttempts": 5,
+    "regressions": {
+      "GREEN": "3/3 passed; request config/truncation rejection/cost includes thoughts",
+      "RED": "HIGH != LOW, actual assertion failure"
+    },
+    "runnerSHA256": "ca6ad1fda0a8073d42a5dea7cfd3aeeb4fb9c521d84dc865997c1b762fe148f0"
+  },
+  "resolvedModel": "gemini-3.8-flash",
+  "result": {
+    "completion": "STOP",
+    "condition": "photos-only",
+    "credentialEchoRedacted": false,
+    "httpStatus": 200,
+    "id": "catan-gemini-ocr-with-region-photos",
+    "observationCount": 46,
+    "provider": "gemini",
+    "rawResponseSHA256": "086411c5cf49d64adbc0f0e8157fd06fe4a0aef18037e32bdaa2c7fbdee21aeb",
+    "resolvedModel": "gemini-3.8-flash",
+    "status": "PARSED",
+    "storedResponseSHA256": "086411c5cf49d64adbc0f0e8157fd06fe4a0aef18037e32bdaa2c7fbdee21aeb",
+    "task": "ocr-with-region",
+    "usageAndCost": {
+      "billedCredits": null,
+      "billedUSD": null,
+      "estimateBasis": "2026-10-26 standard paid list rates USD0.75/M input,3.75/M output incl thinking; account tier/cache/actual invoice not known",
+      "estimatedCredits": null,
+      "estimatedUSD": 0.0097305,
+      "providerUsage": {
+        "candidatesTokenCount": 2353,
+        "promptTokenCount": 1209,
+        "totalTokenCount": 3562
+      },
+      "wallMs": 18897.09287509322
+    },
+    "wallMs": 18897.09287509322
+  },
+  "OCRSubset": {
+    "denominator": 18,
+    "counts": {
+      "correct": 2,
+      "wrong": 0,
+      "unknown": 1,
+      "missing_annotated_target": 15,
+      "ambiguous": 0
+    },
+    "rawObservationCount": 46,
+    "rawUnmatchedText": 43,
+    "rawUnmatchedNumerals": 14,
+    "unmatchedIsAutomaticallyFalsePositive": false,
+    "matching": "reciprocal unique source polygon containment of frozen tile centerPx; values not used for matching",
+    "GT_SHA256": "61ee4343effc494d988a5098ba19f49431fa0e0f678fa2fb82439987cb0c48f6",
+    "GT_scope": "board numeral subset only; not exhaustive all text",
+    "limitation": "Frozen target centerPx is tile center; misses do not distinguish localization from missing text; not token-boundary IoU"
+  },
+  "comparison": {
+    "samePhoto": true,
+    "sameLiteralOCRTask": true,
+    "FlorencePrior": {
+      "rawObservations": 1,
+      "correct": 1,
+      "unknown": 0,
+      "missingAtFrozenCenters": 17,
+      "wallMs": 8241.812624968588
+    },
+    "GeminiLow": {
+      "rawObservations": 46,
+      "correct": 2,
+      "unknown": 1,
+      "missingAtFrozenCenters": 15,
+      "wallMs": 18897.09287509322
+    },
+    "validity": "Frozen tile centers are not verified token centers; these are strict frozen-center spatial scores, not standalone numeral-reading accuracy",
+    "unmatchedNumerals": "14 unmatched Gemini numeral strings require spatial scope adjudication; never automatic false positives",
+    "winner": "UNDETERMINED",
+    "componentLocation": "Gemini NOT_RUN; Florence qualitative/unscored",
+    "contextEffect": "NOT_RUN"
+  },
+  "highIncompleteCondition": {
+    "maxOutputTokens": 8192,
+    "thinkingLevel": "HIGH",
+    "finishReason": "MAX_TOKENS",
+    "wallMs": 65278.15333311446,
+    "estimatedUSD": 0.03157425,
+    "notCombinedWithLowAsSuccess": true
+  },
+  "billing": {
+    "lowEstimatedUSD": 0.0097305,
+    "basis": "reported input1209/candidate2353 at standard paid list rate; thoughts field absent, reported total3562 equals their sum",
+    "actualBilledUSD": null,
+    "actualAccountTier": "UNKNOWN",
+    "allAttemptActualCharges": "UNKNOWN",
+    "billingChanged": false
+  },
+  "focusedChecks": {
+    "RED": "Existing HIGH request failed the new LOW assertion before runner edit",
+    "GREEN": "3/3 request config/truncation rejection/cost usage tests passed",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 tests/hosted-vision-benchmark.test.py Harness.test_requests_have_fixed_models_tasks_no_secrets_or_gt_and_context_is_separate Contracts.test_gemini_rejects_truncated_blocked_and_unstructured_responses Contracts.test_cost_estimate_is_not_billing_and_counts_thinking",
+    "sourceDiff": "Only HIGH -> LOW thinkingLevel; test expectation likewise",
+    "runnerPreSHA256": "7255c93b10aabe3494752a5f9097bf832402debfc9257eca4fe2f34aca883741",
+    "runnerPostSHA256": "ca6ad1fda0a8073d42a5dea7cfd3aeeb4fb9c521d84dc865997c1b762fe148f0",
+    "testPostSHA256": "8b2bff4e1d11c86d1307b082613c0a065c3db9b5ea57cf9f4103e2f6ef084967"
+  },
+  "previousEvidenceUnchanged": true,
+  "GTUnchanged": true,
+  "noKeyValuesOrHashes": true,
+  "artifacts": [
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/manifest.json",
+      "sha256": "946f04a52bf77d20daa18023ca42fb5c794e8dae1d5c11c28fcaba13aca5d8be",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/preflight.json",
+      "sha256": "0e337250670ffe06e22b8d311c8437be88c34994f7a01fb0ecf492daf35f130d",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/catan-gemini-ocr-with-region-photos.attempt.json",
+      "sha256": "beb67cf77b29936f074703911ec93d262fa8b46f02d02db3188b4467b25aaeea",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/catan-gemini-ocr-with-region-photos.observations.json",
+      "sha256": "de90b23c7198cdb398a7d6d33f8cf66d79cb0e1cba5c14887a6bad296b1b7af1",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/catan-gemini-ocr-with-region-photos.response.json",
+      "sha256": "086411c5cf49d64adbc0f0e8157fd06fe4a0aef18037e32bdaa2c7fbdee21aeb",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/execute.claim.json",
+      "sha256": "06daa63bfb0951f66158180426f0d464f565bb0bfc2f08c4a337ba8ba8f9daeb",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/ocr-evaluation.json",
+      "sha256": "6b032e499d9d6470b0daa3b081d12d35b6766966a9ca095b7db15d9948e6c51d",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/plan.json",
+      "sha256": "adadb4e764a203e7be4351e10a29fd7b8e89779fe2f8d226bc4cc0ea655e63c5",
+      "mode": "0600"
+    },
+    {
+      "privatePath": "/private/tmp/keepboard-hosted-vision-gemini-low-v1/run/result.json",
+      "sha256": "032dca4df14ef572febdf4c8c6d0993cc2594a5bb2a1d31f6c0f877111bcb655",
+      "mode": "0600"
+    }
+  ]
+}

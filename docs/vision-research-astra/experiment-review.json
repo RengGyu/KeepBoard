@@ -1,0 +1,1039 @@
+{
+  "as_of": "2026-10-23",
+  "decision": "KEEP_HIGH_DEFAULT; NONE_QUALITY_GATE_FAILED; APPLY_TWO_NARROW_FORMAT_CORRECTIONS",
+  "evidence_level": "VERIFIED_SCOPED_PILOT_ONLY",
+  "card_sha256": "e4bcde3566aa5e746b6a2dedce60161f76e598ab8a8a99fb8ea8f273d85ee3f6",
+  "gt_changes": 0,
+  "additional_paid_requests": 0,
+  "product_writes": 0,
+  "request_count": 6,
+  "automatic_retries": 0,
+  "http_and_json_success": 6,
+  "nonempty_normalized_results": 4,
+  "normalized_results_with_populated_typed_values": 2,
+  "input_checks": [
+    {
+      "game_id": "splendor",
+      "original_sha256": "25c3ba99150e52870a9c40f360d0581a191ed1f64cc8344031f951f449584e3f",
+      "prompt_sha256": "0819edfb3896fbc26d7ecddc86373f53afad3c853309025b786413d367a31289",
+      "body_sha256": "b9dd51a94288c923852538f1752b317da61dbabb4b56d69c2c1a7b7605bd3640",
+      "reconstructed_request_bytes": 155557,
+      "both_conditions_match": true
+    },
+    {
+      "game_id": "sagrada",
+      "original_sha256": "8ed0ebe465eb7679298947eaab1d26c9adba4a3cba6fc6a5c1dc93aea09fbda4",
+      "prompt_sha256": "d8b5d5a5bbd1522c07e8607323020c8341af9d5c2c7aef2b6cee02000e24a09b",
+      "body_sha256": "e679c31fc337ae0973bceca7020e79dacd50b6517b21820e1338b8881dfabf47",
+      "reconstructed_request_bytes": 149199,
+      "both_conditions_match": true
+    },
+    {
+      "game_id": "scout",
+      "original_sha256": "bc7259b0968cc2efd9fab73f9e14994f57c1b81677bae169fad7cc9fa864d6f3",
+      "prompt_sha256": "7b014e536b6cb39b2cb457d4e85a9acde531c0c862f367a803823b6ff256aa47",
+      "body_sha256": "a74d0dcc44d84a223280c0340271c876cf2ec96529fd9d02e2da4df86144afcb",
+      "reconstructed_request_bytes": 291808,
+      "both_conditions_match": true
+    }
+  ],
+  "source_hash_checks": [
+    {
+      "path": "docs/photo-read-experiment/prepare.mts",
+      "sha256": "44161cccf593e0a5af88b8d87851fd384efa69f3aec39404c8a367eb2e3a77b5",
+      "matches": true
+    },
+    {
+      "path": "docs/photo-read-experiment/run.mts",
+      "sha256": "3b0fb5df6893eb0de39b78ca8fdbb2ed0db3516b7d214e3ac4be23a778c7d451",
+      "matches": true
+    },
+    {
+      "path": "docs/vision-research-astra/experiment-card.json",
+      "sha256": "e4bcde3566aa5e746b6a2dedce60161f76e598ab8a8a99fb8ea8f273d85ee3f6",
+      "matches": true
+    },
+    {
+      "path": "gateway/server.mjs",
+      "sha256": "02525fd92544849c6d79b57ade42997c9bb2d0f710e731b6cf263aec3e30e9fe",
+      "matches": true
+    },
+    {
+      "path": "server/ai/index.ts",
+      "sha256": "d3aa8b6d8a463ad7b60e3495965e4bf9f51411cd65d29bf0221d9a2926aec84f",
+      "matches": true
+    },
+    {
+      "path": "server/ai/generic.ts",
+      "sha256": "bbbfad95edabcfc0105c86dfd657ec8bb4aa7df45b8b582859bf3c844e501973",
+      "matches": true
+    },
+    {
+      "path": "server/ai/gameReadouts.ts",
+      "sha256": "4f349538fcf60961eeb5fef766912524301bffd2e6e9cf8c522d2e95fc9e04e3",
+      "matches": true
+    },
+    {
+      "path": "server/ai/splendor.ts",
+      "sha256": "bdcadb832b39872e6be1e8983a59ee9eb0f034ccc1f6b7006155c75cea926c4e",
+      "matches": true
+    },
+    {
+      "path": "shared/genericRecord.ts",
+      "sha256": "cc9447e2ef337036b96228dee136122eb3c8c55bf75785c557e97286028e09d0",
+      "matches": true
+    },
+    {
+      "path": "shared/recognition.ts",
+      "sha256": "473292f25c4635e45c39464ae72bb88cd35673620d8b6805ad34858e227ad760",
+      "matches": true
+    }
+  ],
+  "results": [
+    {
+      "sequence": 1,
+      "game_id": "splendor",
+      "condition": "A",
+      "gateway_roundtrip_ms": 78727.733375,
+      "upstream_network_provider_output_ms": 78717,
+      "normalization_ms": 2.775416000004043,
+      "reasoning_tokens_reported": 12904,
+      "input_tokens_reported": 1933,
+      "output_tokens_reported": 14044,
+      "raw_pieces": 6,
+      "normalized_pieces": 6,
+      "raw_readout_pieces": 6,
+      "raw_score_counts": {
+        "correct": 11,
+        "missing": 1
+      },
+      "normalized_score_counts": {
+        "correct": 11,
+        "missing": 1
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "위 가운데 카드",
+          "field": "points",
+          "expected": 4,
+          "raw_actual": 4,
+          "normalized_actual": 4,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 1,
+          "target": "위 가운데 카드",
+          "field": "bonus",
+          "expected": "blue",
+          "raw_actual": "blue",
+          "normalized_actual": "blue",
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 2,
+          "target": "위 가운데 카드",
+          "field": "cost.white",
+          "expected": 6,
+          "raw_actual": 6,
+          "normalized_actual": 6,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 3,
+          "target": "위 가운데 카드",
+          "field": "cost.blue",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 4,
+          "target": "위 가운데 카드",
+          "field": "cost.black",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 5,
+          "target": "아래 가운데 카드",
+          "field": "points",
+          "expected": 2,
+          "raw_actual": 2,
+          "normalized_actual": 2,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 6,
+          "target": "아래 가운데 카드",
+          "field": "bonus",
+          "expected": "black",
+          "raw_actual": "black",
+          "normalized_actual": "black",
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 7,
+          "target": "아래 가운데 카드",
+          "field": "cost.blue",
+          "expected": 1,
+          "raw_actual": 1,
+          "normalized_actual": 1,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 8,
+          "target": "아래 가운데 카드",
+          "field": "cost.green",
+          "expected": 4,
+          "raw_actual": 4,
+          "normalized_actual": 4,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 9,
+          "target": "아래 가운데 카드",
+          "field": "cost.red",
+          "expected": 2,
+          "raw_actual": 2,
+          "normalized_actual": 2,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 10,
+          "target": "아래 오른쪽 카드",
+          "field": "points",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 11,
+          "target": "아래 오른쪽 카드",
+          "field": "cost.red",
+          "expected": 6,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        }
+      ],
+      "scope_violation_count": 0
+    },
+    {
+      "sequence": 2,
+      "game_id": "splendor",
+      "condition": "B",
+      "gateway_roundtrip_ms": 4736.771708,
+      "upstream_network_provider_output_ms": 4733,
+      "normalization_ms": 0.9292920000007143,
+      "reasoning_tokens_reported": 0,
+      "input_tokens_reported": 1909,
+      "output_tokens_reported": 1031,
+      "raw_pieces": 6,
+      "normalized_pieces": 6,
+      "raw_readout_pieces": 6,
+      "raw_score_counts": {
+        "correct": 9,
+        "incorrect": 1,
+        "missing": 2
+      },
+      "normalized_score_counts": {
+        "correct": 9,
+        "incorrect": 1,
+        "missing": 2
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "위 가운데 카드",
+          "field": "points",
+          "expected": 4,
+          "raw_actual": 4,
+          "normalized_actual": 4,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 1,
+          "target": "위 가운데 카드",
+          "field": "bonus",
+          "expected": "blue",
+          "raw_actual": "blue",
+          "normalized_actual": "blue",
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 2,
+          "target": "위 가운데 카드",
+          "field": "cost.white",
+          "expected": 6,
+          "raw_actual": 6,
+          "normalized_actual": 6,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 3,
+          "target": "위 가운데 카드",
+          "field": "cost.blue",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 4,
+          "target": "위 가운데 카드",
+          "field": "cost.black",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 5,
+          "target": "아래 가운데 카드",
+          "field": "points",
+          "expected": 2,
+          "raw_actual": 2,
+          "normalized_actual": 2,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 6,
+          "target": "아래 가운데 카드",
+          "field": "bonus",
+          "expected": "black",
+          "raw_actual": "red",
+          "normalized_actual": "red",
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "incorrect",
+          "normalized_status": "incorrect"
+        },
+        {
+          "gt_index": 7,
+          "target": "아래 가운데 카드",
+          "field": "cost.blue",
+          "expected": 1,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 8,
+          "target": "아래 가운데 카드",
+          "field": "cost.green",
+          "expected": 4,
+          "raw_actual": 4,
+          "normalized_actual": 4,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 9,
+          "target": "아래 가운데 카드",
+          "field": "cost.red",
+          "expected": 2,
+          "raw_actual": 2,
+          "normalized_actual": 2,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 10,
+          "target": "아래 오른쪽 카드",
+          "field": "points",
+          "expected": 3,
+          "raw_actual": 3,
+          "normalized_actual": 3,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 11,
+          "target": "아래 오른쪽 카드",
+          "field": "cost.red",
+          "expected": 6,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "correspondence": "direct source object + anchor/crop; not inferred market ownership",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        }
+      ],
+      "scope_violation_count": 0
+    },
+    {
+      "sequence": 3,
+      "game_id": "sagrada",
+      "condition": "B",
+      "gateway_roundtrip_ms": 8123.387333000006,
+      "upstream_network_provider_output_ms": 8119,
+      "normalization_ms": 1.815374999991036,
+      "reasoning_tokens_reported": 0,
+      "input_tokens_reported": 2786,
+      "output_tokens_reported": 2071,
+      "raw_pieces": 21,
+      "normalized_pieces": 21,
+      "raw_readout_pieces": 0,
+      "raw_score_counts": {
+        "unsupported": 5,
+        "correct": 1,
+        "missing": 6
+      },
+      "normalized_score_counts": {
+        "unsupported": 5,
+        "correct": 1,
+        "missing": 6
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "창문",
+          "field": "rows",
+          "expected": 4,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no current typed board dimensions"
+        },
+        {
+          "gt_index": 1,
+          "target": "창문",
+          "field": "columns",
+          "expected": 5,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no current typed board dimensions"
+        },
+        {
+          "gt_index": 2,
+          "target": "창문 전체",
+          "field": "visible-dice-count",
+          "expected": 19,
+          "raw_actual": 19,
+          "normalized_actual": 19,
+          "representation": "candidate-instance count, NOT populated typed value or quantity-null->1",
+          "raw_status": "correct",
+          "normalized_status": "correct"
+        },
+        {
+          "gt_index": 3,
+          "target": "창문 위에서2행 왼쪽에서5열",
+          "field": "occupancy",
+          "expected": "empty",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "cell/placement manual, not AI geometry"
+        },
+        {
+          "gt_index": 4,
+          "target": "2행2열",
+          "field": "dieValue",
+          "expected": 4,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": 5,
+          "label_only_status": "incorrect",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 5,
+          "target": "2행2열",
+          "field": "observedColor",
+          "expected": "yellow",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": "yellow",
+          "label_only_status": "correct",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 6,
+          "target": "2행3열",
+          "field": "dieValue",
+          "expected": 6,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": 6,
+          "label_only_status": "correct",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 7,
+          "target": "2행3열",
+          "field": "observedColor",
+          "expected": "green",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": "green",
+          "label_only_status": "correct",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 8,
+          "target": "2행4열",
+          "field": "dieValue",
+          "expected": 5,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": 6,
+          "label_only_status": "incorrect",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 9,
+          "target": "왼쪽 목표",
+          "field": "printedName",
+          "expected": "GREEN FOCUS",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": "GREEN FOCUS",
+          "label_only_status": "correct",
+          "reason": "No raw readout. Text is not promoted to structured data.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 10,
+          "target": "왼쪽 목표",
+          "field": "printed-effect-paraphrase",
+          "expected": "창문의 초록 주사위마다 3점",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no typed effect field"
+        },
+        {
+          "gt_index": 11,
+          "target": "창문 왼쪽 투명 돌",
+          "field": "visible-count",
+          "expected": 2,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "favor stones absent from this owner photo binding"
+        }
+      ],
+      "scope_violation_count": 0
+    },
+    {
+      "sequence": 4,
+      "game_id": "sagrada",
+      "condition": "A",
+      "gateway_roundtrip_ms": 71154.818166,
+      "upstream_network_provider_output_ms": 71150,
+      "normalization_ms": 3.0659169999998994,
+      "reasoning_tokens_reported": 10689,
+      "input_tokens_reported": 2810,
+      "output_tokens_reported": 14645,
+      "raw_pieces": 21,
+      "normalized_pieces": 0,
+      "raw_readout_pieces": 21,
+      "raw_score_counts": {
+        "unsupported": 5,
+        "correct": 5,
+        "incorrect": 2
+      },
+      "normalized_score_counts": {
+        "unsupported": 5,
+        "missing": 7
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "창문",
+          "field": "rows",
+          "expected": 4,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no current typed board dimensions"
+        },
+        {
+          "gt_index": 1,
+          "target": "창문",
+          "field": "columns",
+          "expected": 5,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no current typed board dimensions"
+        },
+        {
+          "gt_index": 2,
+          "target": "창문 전체",
+          "field": "visible-dice-count",
+          "expected": 19,
+          "raw_actual": 19,
+          "normalized_actual": null,
+          "representation": "candidate-instance count, NOT populated typed value or quantity-null->1",
+          "raw_status": "correct",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 3,
+          "target": "창문 위에서2행 왼쪽에서5열",
+          "field": "occupancy",
+          "expected": "empty",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "cell/placement manual, not AI geometry"
+        },
+        {
+          "gt_index": 4,
+          "target": "2행2열",
+          "field": "dieValue",
+          "expected": 4,
+          "raw_actual": 2,
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "incorrect",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 5,
+          "target": "2행2열",
+          "field": "observedColor",
+          "expected": "yellow",
+          "raw_actual": "yellow",
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "correct",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 6,
+          "target": "2행3열",
+          "field": "dieValue",
+          "expected": 6,
+          "raw_actual": 4,
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "incorrect",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 7,
+          "target": "2행3열",
+          "field": "observedColor",
+          "expected": "green",
+          "raw_actual": "green",
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "correct",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 8,
+          "target": "2행4열",
+          "field": "dieValue",
+          "expected": 5,
+          "raw_actual": 5,
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "correct",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 9,
+          "target": "왼쪽 목표",
+          "field": "printedName",
+          "expected": "GREEN FOCUS",
+          "raw_actual": "GREEN FOCUS",
+          "normalized_actual": null,
+          "correspondence": "direct image review + declared relative row/column anchor, not accepted board coordinates",
+          "raw_status": "correct",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 10,
+          "target": "왼쪽 목표",
+          "field": "printed-effect-paraphrase",
+          "expected": "창문의 초록 주사위마다 3점",
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "no typed effect field"
+        },
+        {
+          "gt_index": 11,
+          "target": "창문 왼쪽 투명 돌",
+          "field": "visible-count",
+          "expected": 2,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "unsupported",
+          "normalized_status": "unsupported",
+          "reason": "favor stones absent from this owner photo binding"
+        }
+      ],
+      "scope_violation_count": 0
+    },
+    {
+      "sequence": 5,
+      "game_id": "scout",
+      "condition": "A",
+      "gateway_roundtrip_ms": 89648.2495,
+      "upstream_network_provider_output_ms": 89641,
+      "normalization_ms": 1.3787089999823365,
+      "reasoning_tokens_reported": 14128,
+      "input_tokens_reported": 2493,
+      "output_tokens_reported": 17168,
+      "raw_pieces": 15,
+      "normalized_pieces": 0,
+      "raw_readout_pieces": 15,
+      "raw_score_counts": {
+        "incorrect": 1,
+        "ambiguous": 1,
+        "missing": 1
+      },
+      "normalized_score_counts": {
+        "missing": 3
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "맨 앞 카드 주황 끝",
+          "field": "printedNumber",
+          "expected": 9,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "incorrect",
+          "raw_end_pair": [
+            3,
+            6
+          ],
+          "correspondence": "foreground card anchor/crop; colour-end association unspecified; no inferred activeEnd",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 1,
+          "target": "같은 카드 파랑 끝",
+          "field": "printedNumber",
+          "expected": 3,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "raw_status": "ambiguous",
+          "raw_end_pair": [
+            3,
+            6
+          ],
+          "correspondence": "foreground card anchor/crop; colour-end association unspecified; no inferred activeEnd",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 2,
+          "target": "오른쪽 따로 놓인 별 토큰",
+          "field": "visible-nominal-values",
+          "expected": [
+            5,
+            10,
+            10,
+            2
+          ],
+          "raw_actual": [
+            5,
+            10,
+            2
+          ],
+          "normalized_actual": null,
+          "raw_status": "missing",
+          "reason": "One of two distinct 10 tokens omitted; frozen list is one GT item.",
+          "normalized_status": "missing"
+        }
+      ],
+      "scope_violation_count": 0
+    },
+    {
+      "sequence": 6,
+      "game_id": "scout",
+      "condition": "B",
+      "gateway_roundtrip_ms": 8637.176082999998,
+      "upstream_network_provider_output_ms": 8628,
+      "normalization_ms": 2.8854170000122394,
+      "reasoning_tokens_reported": 0,
+      "input_tokens_reported": 2469,
+      "output_tokens_reported": 1850,
+      "raw_pieces": 17,
+      "normalized_pieces": 17,
+      "raw_readout_pieces": 0,
+      "raw_score_counts": {
+        "missing": 3
+      },
+      "normalized_score_counts": {
+        "missing": 3
+      },
+      "gt_entries": [
+        {
+          "gt_index": 0,
+          "target": "맨 앞 카드 주황 끝",
+          "field": "printedNumber",
+          "expected": 9,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_end_pair": [
+            2,
+            6
+          ],
+          "label_only_status": "incorrect",
+          "correspondence": "foreground card anchor/crop; colour-end association unspecified; no inferred activeEnd",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 1,
+          "target": "같은 카드 파랑 끝",
+          "field": "printedNumber",
+          "expected": 3,
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_end_pair": [
+            2,
+            6
+          ],
+          "label_only_status": "incorrect",
+          "correspondence": "foreground card anchor/crop; colour-end association unspecified; no inferred activeEnd",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        },
+        {
+          "gt_index": 2,
+          "target": "오른쪽 따로 놓인 별 토큰",
+          "field": "visible-nominal-values",
+          "expected": [
+            5,
+            10,
+            10,
+            2
+          ],
+          "raw_actual": null,
+          "normalized_actual": null,
+          "label_only_actual": [
+            3,
+            10,
+            10,
+            2
+          ],
+          "label_only_status": "incorrect",
+          "reason": "Typed values missing; label5->3 mismatch is secondary only.",
+          "raw_status": "missing",
+          "normalized_status": "missing"
+        }
+      ],
+      "scope_violation_count": 0
+    }
+  ],
+  "worker_aggregate_match": true,
+  "count_note": "Sagrada correct1 is19 candidate dice, not a populated typed detail. Unsupported5 never enter correctness denominator; primary27 frozen GT per condition are unchanged.",
+  "measurement_boundary": "Local isolated gateway HTTP start through final nonstreaming JSON bytes. Includes provider network/queue/thinking/output; excludes phone camera/upload, app job queue/commit, render. headersMs is not model first-token latency.",
+  "none_acceptance": "3 HTTP200 replies report deepseek-flash and effort none with reasoningTokens0; actual alias accepted in these calls, not merely configured.",
+  "quality_gate": "FAILED: Splendor none introduces black->red bonus error and blue1 cost omission; both other none responses omit typed readouts. High also has visual mistakes and source-format rejection.",
+  "minimum_fixes": [
+    {
+      "id": "E1",
+      "files": [
+        "server/ai/gameReadouts.ts",
+        "server/ai/generic.ts"
+      ],
+      "description": "Fresh response source basis exactly matching its authorized same-scope piece evidence ID may be canonicalized to observation. Keep user/manual/foreign-id and non-null manual-field rejection. Never change saved/imported records.",
+      "diagnostic": "In-memory narrow alias-only replay recovers high Sagrada21/SCOUT15; no raw value or GT score changed."
+    },
+    {
+      "id": "E2",
+      "files": [
+        "server/ai/gameReadouts.ts",
+        "server/ai/generic.ts"
+      ],
+      "description": "Remove optional/required contradiction for active typed schemas; include actual component readout values/sources shape in final response example, distinguish source basis from evidenceId. Do not parse arbitrary labels into accepted values or add paid retry."
+    }
+  ],
+  "other_observations": [
+    "Both Splendor outputs select market.scene although frozen market-versus-owned context is UNKNOWN. Treat dedicated destination as unverified; current-game/area UI should let user select, otherwise prompt should use unassigned tray when context is not visible. No proof of public/private leak here.",
+    "Raw high Sagrada contains19 canonical dieColor claims despite uncertain lighting; not all are proven false. Correct format does not certify them.",
+    "Wrong extra Splendor black6/white1 costs and SCOUT label numerals are described separately; no new GT entries/denominator added."
+  ],
+  "limitations": [
+    "One call per game per condition, no p95/statistical estimate or120-game generalization.",
+    "Upstream full wire payload/billing is not independently captured; six attempts established by local ledger and single-fetch/no-retry code.",
+    "Operating high unchanged and temporary server shutdown use worker before/after metadata plus runner code; no settings/keys/process inspection by reviewer.",
+    "Candidate-only/accepted-save/reconnect behavior not exercised by this direct gateway runner.",
+    "Five Sagrada GT fields unsupported in this pinned scope; do not manufacture values or expand full board engine.",
+    "Future prompt/normalizer fix needs offline acceptance first; recognition benefit remains unmeasured without separately authorized calls."
+  ],
+  "artifact_hashes": {
+    "docs/photo-read-experiment/README.md": {
+      "sha256": "6d658ca318ce6bb73d1aecf52994d4eb8af5ffab8d9d3af600ef8b988ae751b0",
+      "bytes": 5393
+    },
+    "docs/photo-read-experiment/requests.json": {
+      "sha256": "3eeb1c16788b610761460f2976bb20941940528d74768e0653887134aa2f0216",
+      "bytes": 12523
+    },
+    "docs/photo-read-experiment/evaluation.json": {
+      "sha256": "34c693493e850350fb941a9e4a6eb374a830aaf41e8e01c9195b8fa9ee2ec0c9",
+      "bytes": 7242
+    },
+    "docs/photo-read-experiment/verification.json": {
+      "sha256": "a8edbe017ca7005222f03c797f63e859b3dbb78e8c14dbf1a095f59e92b39e09",
+      "bytes": 1671
+    },
+    "docs/photo-read-experiment/source-manifest.json": {
+      "sha256": "8ce5455de1950346f8f858c6f39e9d8d94bb25d62aff8c9e8247170726ea4208",
+      "bytes": 1528
+    },
+    "docs/photo-read-experiment/prepare.mts": {
+      "sha256": "44161cccf593e0a5af88b8d87851fd384efa69f3aec39404c8a367eb2e3a77b5",
+      "bytes": 3473
+    },
+    "docs/photo-read-experiment/run.mts": {
+      "sha256": "3b0fb5df6893eb0de39b78ca8fdbb2ed0db3516b7d214e3ac4be23a778c7d451",
+      "bytes": 8260
+    },
+    "docs/photo-read-experiment/evaluate.py": {
+      "sha256": "1842859684d6c8444340bfc9ae049e456f58094f733f7bf6d219c2739c247117",
+      "bytes": 9816
+    },
+    "docs/photo-read-experiment/preflight.json": {
+      "sha256": "b66c626cdfc5200b58a2e7291bde21ec5498173f3ca90c2769c6456f6ac96c3b",
+      "bytes": 3429
+    },
+    "docs/vision-research-astra/experiment-card.json": {
+      "sha256": "e4bcde3566aa5e746b6a2dedce60161f76e598ab8a8a99fb8ea8f273d85ee3f6",
+      "bytes": 16053
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/splendor.input.json": {
+      "sha256": "7b95983ef949a72854a4e1da69cd33288eeae2413c2318ca4ed6efc7df4d7212",
+      "bytes": 38855
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/sagrada.input.json": {
+      "sha256": "7ed043c047c209d324006f0b5b809fb26688c24f2acd8c26657fa98fc8ce2373",
+      "bytes": 43142
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/scout.input.json": {
+      "sha256": "4ad9115cc5c3d482d73ffc52321f2b8e2febcefceeee17b9f0374b4702c5f03e",
+      "bytes": 38864
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/1-splendor-A.response.json": {
+      "sha256": "eeba37241864a934735ecf1a7ee3d0bdd17a7388e370bc4fbc8d94c58efa2c7e",
+      "bytes": 3949
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/1-splendor-A.normalized.json": {
+      "sha256": "66ced6d52cd24f27def7a92687633a623ff5de2c7586a44319bdcd6d4d754e5d",
+      "bytes": 6859
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/2-splendor-B.response.json": {
+      "sha256": "30559e39e74005259cf4b88db37b95e8a7a43ddab82750b8a81c2deeee5dbd5a",
+      "bytes": 3576
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/2-splendor-B.normalized.json": {
+      "sha256": "cdc8dd3d91332561099087748b1e1119f934b8c2afc0ad3b6e8e3420555f1692",
+      "bytes": 6484
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/3-sagrada-B.response.json": {
+      "sha256": "0ee6d4a8b2a874a8176f98de6a2194941cf4ca907bac5a11a40df82e471a443c",
+      "bytes": 6443
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/3-sagrada-B.normalized.json": {
+      "sha256": "bc96a695fc5a34f3e1e0ff69dcf0ba5b9aea8a4fff17cca151394891757c5372",
+      "bytes": 23984
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/4-sagrada-A.response.json": {
+      "sha256": "d26a7221869bde3321ccddb079fb0ce40201435ddf2f47207fed6d3f7159337a",
+      "bytes": 12563
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/4-sagrada-A.normalized.json": {
+      "sha256": "a9212ad093731bd24ca4e4b152c898c872024dabf51c32505fa8b9ca1384ca2e",
+      "bytes": 882
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/5-scout-A.response.json": {
+      "sha256": "be6f301aabfcaaa162bfca3cbcad91b1b8c157c8d38def764b6fa88d44714340",
+      "bytes": 9962
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/5-scout-A.normalized.json": {
+      "sha256": "5e6cc908c95abf37ee19e1afb1d1a1e5f3836170df5f41c2d04aa6fee7c4486c",
+      "bytes": 1067
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/6-scout-B.response.json": {
+      "sha256": "d8c6bb1ad5d2c12f0e7a07082d6c830f242fefeec5b61637ed69b368ffb7122d",
+      "bytes": 5969
+    },
+    "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-photo-read-experiment-PB0Ir0/6-scout-B.normalized.json": {
+      "sha256": "5c63cb4688bf2bd3d08dfd1ebc795b1e307b10b53e142536e047ec0d34aa7cbd",
+      "bytes": 21337
+    }
+  },
+  "replay_file": "experiment-review.replay.json",
+  "verification_exit": 0,
+  "implementation_followup": {
+    "evidence_level": "WORKER_REPORTED_RESULTS; RESPONSE_HASHES_INDEPENDENTLY_MATCHED",
+    "path": "docs/game-photo-integration/offline-replay.json",
+    "sha256": "af46254e6ecd537884413a33196f02fd2d230866aa32fa4ac51d576d67faa801",
+    "summary": "Sol2 reports corrected high Sagrada21/SCOUT15 pieces with60/42 non-null typed values; none outputs retain0 non-null typed values. Matches this review diagnostic. Frozen integration source review is a separate task; these counts do not certify recognition accuracy."
+  }
+}

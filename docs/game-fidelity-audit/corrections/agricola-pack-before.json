@@ -1,0 +1,656 @@
+{
+  "derivedRules": [],
+  "description": "명세에 따라 상태를 수동 기록하고 실물을 보관해 이어갑니다.",
+  "edition": "2016 Revised 기본판",
+  "fields": [
+    {
+      "acquisition": "ask",
+      "description": "방/밭/목장 셀, 울타리 변, 외양간·동물·작물의 부착 셀. 주택 재질은 별도 속성. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "group": "essentials",
+      "key": "farm-area.scene",
+      "label": "개인 농장",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "json",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 0
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "라운드 행동 카드와 누적 자원, 배치된 가족을 각 공간에 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "group": "essentials",
+      "key": "actions.scene",
+      "label": "공용 행동 공간",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "json",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 1
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "미사용 자원/음식과 사용 설비를 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "group": "essentials",
+      "key": "stock.scene",
+      "label": "개인 보유·설비",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "json",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 2
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "설비와 직업을 분리하고 미공개 정체 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "group": "essentials",
+      "key": "hand.scene",
+      "label": "직업·보조설비 손패",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "json",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 3
+      },
+      "visibility": "owner"
+    },
+    {
+      "acquisition": "ask",
+      "description": "현재 라운드와 밭/먹이/번식 중 중단 지점.",
+      "group": "essentials",
+      "key": "round",
+      "label": "라운드·수확",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "text",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 4
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+      "group": "essentials",
+      "key": "record-note.food",
+      "label": "음식·구걸 · 확인 메모",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "text",
+      "ui": {
+        "level": "detail",
+        "order": 5
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "나무/흙/돌 등 확인된 실제 재질.",
+      "group": "essentials",
+      "key": "house",
+      "label": "집 재질",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "text",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 6
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+      "group": "essentials",
+      "key": "record-note.family",
+      "label": "가족 상태 · 확인 메모",
+      "lifetime": "session",
+      "scope": "player",
+      "type": "text",
+      "ui": {
+        "level": "detail",
+        "order": 7
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "group": "essentials",
+      "key": "turn",
+      "label": "누구 차례",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "text",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 8
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "가족 배치 효과 또는 수확의 작물/먹이/번식 중 처리한 지점을 기록. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다.",
+      "group": "essentials",
+      "key": "pending",
+      "label": "중단한 지점",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "text",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 9
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "group": "essentials",
+      "key": "note",
+      "label": "짧은 메모",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "text",
+      "ui": {
+        "editor": "default",
+        "level": "detail",
+        "order": 10
+      },
+      "visibility": "public"
+    },
+    {
+      "acquisition": "ask",
+      "description": "구조를 바꾸지 않고 확인한 내용을 글로 남겨요. 원래 상태를 확인했다는 자동 판정은 하지 않아요.",
+      "group": "essentials",
+      "key": "record-note.starting-player",
+      "label": "선 플레이어 표식 보유자 · 확인 메모",
+      "lifetime": "session",
+      "scope": "public",
+      "type": "text",
+      "ui": {
+        "level": "detail",
+        "order": 11
+      },
+      "visibility": "public"
+    }
+  ],
+  "id": "agricola",
+  "preservationTemplates": [
+    {
+      "conditions": [
+        "설비와 직업을 분리하고 미공개 정체 유지.",
+        "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+        "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+      ],
+      "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+      "externalOnly": false,
+      "id": "spec.hand.preserve",
+      "label": "직업·보조설비 손패 보존(선택)",
+      "method": "sealed-bundle",
+      "orderSensitive": false,
+      "restoreAfter": [],
+      "scope": "player",
+      "sourceVisibility": "owner"
+    },
+    {
+      "conditions": [
+        "해당 필드의 실물만 별도 묶음으로 보관하고 다른 덱·버림·제거·소유자 묶음과 합치지 않는다.",
+        "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 기록한다. 위치도 민감하면 위치 기록을 생략하고 식별표/봉인 확인만 남긴다.",
+        "내용을 알기 위해 펼치거나 숨은 면을 촬영하지 않는다. 이미 의미가 확인된 순서는 위/아래와 내부 경계·줄/슬롯을 그대로 유지한다. 수량/정체 미상도 저장 가능.",
+        "순서를 섞지 않고 앞뒤 방향을 유지하세요."
+      ],
+      "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
+      "externalOnly": true,
+      "id": "spec.round-deck.scene.essentials-preserve",
+      "label": "미공개 라운드 행동 카드 실물 보존(선택)",
+      "method": "ordered-bundle",
+      "orderSensitive": true,
+      "restoreAfter": [],
+      "scope": "public",
+      "sourceVisibility": "hidden"
+    },
+    {
+      "conditions": [
+        "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+        "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+        "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+        "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+      ],
+      "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+      "externalOnly": false,
+      "id": "spec.essentials.public-layout.player",
+      "label": "공개 배치·묶음 복원 참조(선택)",
+      "method": "manual-note",
+      "orderSensitive": false,
+      "restoreAfter": [],
+      "scope": "player",
+      "sourceVisibility": "public"
+    },
+    {
+      "conditions": [
+        "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+        "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+        "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+        "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+      ],
+      "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+      "externalOnly": false,
+      "id": "spec.essentials.public-layout.public",
+      "label": "공개 배치·묶음 복원 참조(선택)",
+      "method": "manual-note",
+      "orderSensitive": false,
+      "restoreAfter": [],
+      "scope": "public",
+      "sourceVisibility": "public"
+    },
+    {
+      "conditions": [
+        "내용을 펼치거나 JSON으로 입력하지 마세요.",
+        "기존 순서·방향과 봉인 상태를 유지하세요."
+      ],
+      "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+      "externalOnly": true,
+      "id": "spec.keep.food",
+      "label": "음식·구걸 · 실물 보관",
+      "restoreAfter": [],
+      "scope": "player",
+      "sourceVisibility": "public"
+    },
+    {
+      "conditions": [
+        "내용을 펼치거나 JSON으로 입력하지 마세요.",
+        "기존 순서·방향과 봉인 상태를 유지하세요."
+      ],
+      "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+      "externalOnly": true,
+      "id": "spec.keep.family",
+      "label": "가족 상태 · 실물 보관",
+      "restoreAfter": [],
+      "scope": "player",
+      "sourceVisibility": "public"
+    },
+    {
+      "conditions": [
+        "내용을 펼치거나 JSON으로 입력하지 마세요.",
+        "기존 순서·방향과 봉인 상태를 유지하세요."
+      ],
+      "description": "이 항목은 내용을 입력하지 않고 원본과 실물을 유지하세요.",
+      "externalOnly": true,
+      "id": "spec.keep.starting-player",
+      "label": "선 플레이어 표식 보유자 · 실물 보관",
+      "restoreAfter": [],
+      "scope": "public",
+      "sourceVisibility": "public"
+    }
+  ],
+  "requirements": [],
+  "runtime": {
+    "adapterVersion": "essentials-2",
+    "components": [
+      {
+        "id": "farm",
+        "kind": "tile",
+        "name": "방·밭 타일",
+        "variants": []
+      },
+      {
+        "id": "people",
+        "kind": "piece",
+        "name": "가족·울타리·외양간",
+        "variants": [
+          {
+            "id": "가족 원반",
+            "name": "가족 원반"
+          },
+          {
+            "id": "울타리",
+            "name": "울타리"
+          },
+          {
+            "id": "외양간",
+            "name": "외양간"
+          }
+        ]
+      },
+      {
+        "id": "goods",
+        "kind": "token",
+        "name": "자원·곡물·채소·가축",
+        "variants": []
+      },
+      {
+        "id": "cards",
+        "kind": "card",
+        "name": "직업·설비 카드",
+        "variants": [
+          {
+            "id": "직업",
+            "name": "직업"
+          },
+          {
+            "id": "보조설비",
+            "name": "보조설비"
+          },
+          {
+            "id": "대설비",
+            "name": "대설비"
+          }
+        ]
+      }
+    ],
+    "fieldBindings": [
+      {
+        "areaIds": [
+          "farm-area"
+        ],
+        "componentIds": [
+          "farm",
+          "people",
+          "goods"
+        ],
+        "editor": "component-catalog",
+        "key": "farm-area.scene",
+        "label": "개인 농장",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "farm-area.scene",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "actions"
+        ],
+        "componentIds": [
+          "people",
+          "goods",
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "actions.scene",
+        "label": "공용 행동 공간",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "actions.scene",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "stock"
+        ],
+        "componentIds": [
+          "goods",
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "stock.scene",
+        "label": "개인 보유·설비",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "stock.scene",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "hand"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "hand.scene",
+        "label": "직업·보조설비 손패",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "hand.scene",
+        "visibility": "owner"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "round",
+        "label": "라운드·수확",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "round",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "opaque-preserve",
+        "key": "food",
+        "label": "음식·구걸",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "food",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "record-note.food",
+        "label": "음식·구걸",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "food:note",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "house",
+        "label": "집 재질",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "house",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "opaque-preserve",
+        "key": "family",
+        "label": "가족 상태",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "family",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "record-note.family",
+        "label": "가족 상태",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "family:note",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "turn",
+        "label": "누구 차례",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "turn",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "pending",
+        "label": "중단한 지점",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "pending",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "note",
+        "label": "짧은 메모",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "note",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "opaque-preserve",
+        "key": "starting-player",
+        "label": "선 플레이어 표식 보유자",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "starting-player",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "scalar",
+        "key": "record-note.starting-player",
+        "label": "선 플레이어 표식 보유자",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "starting-player:note",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [],
+        "componentIds": [],
+        "editor": "physical-only",
+        "key": "round-deck.scene",
+        "label": "미공개 라운드 행동 카드",
+        "lifetime": "session",
+        "scope": "shared-secret",
+        "sourceId": "round-deck.scene",
+        "visibility": "hidden"
+      }
+    ],
+    "gaps": [
+      "구판 5인 구성과 Revised 확장 덱은 별도 패치. Family Edition과 같은 규칙으로 취급하지 않는다.",
+      "2016 Revised의 정확한 카드 덱 구성·직업/설비 효과와 농장 수용 규칙은 전체 미대조.",
+      "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+      "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+    ],
+    "privatePolicy": "optional-pin",
+    "resume": {
+      "mustAskFieldIds": [],
+      "notes": [
+        "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+        "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+        "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+        "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+        "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+      ],
+      "pendingActionFields": [
+        "pending"
+      ],
+      "requiredFieldIds": []
+    },
+    "roles": [],
+    "rules": [
+      {
+        "id": "farm",
+        "kind": "procedure",
+        "label": "농장 성장",
+        "summary": "방을 늘리고 개량하며 밭을 일구고 작물을 재배·수확하는 상태가 지속된다."
+      },
+      {
+        "id": "feeding",
+        "kind": "procedure",
+        "label": "수확 중단",
+        "summary": "수확의 세부 처리 순서와 가족 먹이 요구는 규칙서 확인이 필요하다. 자동 해결하지 않고 중단 지점을 보존한다."
+      },
+      {
+        "id": "record-only",
+        "kind": "constraint",
+        "label": "원상태 보존",
+        "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다."
+      },
+      {
+        "id": "essentials.starting-player",
+        "kind": "procedure",
+        "label": "선 플레이어 유지",
+        "summary": "Meeting Place로 바뀐 실제 선 플레이어를 유지하며 재열기만으로 다음 사람에게 넘기지 않는다."
+      }
+    ],
+    "source": {
+      "editionId": "base",
+      "editionName": "2016 Revised 기본판",
+      "gameId": "agricola",
+      "schemaVersion": "1.0",
+      "sha256": "02ad9e2fba26292d18304b3808b32fa47e824baf894e8eca399a381e4b426703"
+    },
+    "support": {
+      "illustration": "catalog",
+      "recognition": "manual",
+      "recording": "generic",
+      "rules": "none"
+    }
+  },
+  "sources": [
+    {
+      "id": "spec.agricola.primary",
+      "section": "Lookout Revised 소개에서 집 증축·개량, 밭·파종·수확, 곡물·채소·가축, 보드/카드/자원 확인. 직업·보조설비 개별 효과와 먹이 지불 순서는 추가 확인 대상.",
+      "title": "Agricola — 공식 자료",
+      "url": "https://www.lookout-spiele.de/en/games/agricolare.html"
+    },
+    {
+      "id": "spec.agricola.art-confirmation.agricola-rules",
+      "section": "pp.2–3 Components/Setup; p.10 Hand Cards — 직업은 노랑, 보조설비는 주황, 대설비는 빨강 카드다. 개인 손패와 사용 카드, 공용 대설비를 구분한다. 유형색은 소유색이 아니다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음.",
+      "title": "Agricola Revised Edition ©2016 — English Rules",
+      "url": "https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf"
+    },
+    {
+      "id": "spec.agricola.essentials.rules",
+      "section": "PDF pp.3 Action Space Cards; p.6 Work Phase; p.12 Starting Player; 적용판본: 2016 Revised 기본판; 확인범위: 회의장으로 선 플레이어가 바뀌며 자동 순환하지 않는다. 행동 카드는 단계별로 쌓인 숨은 무작위 순서다. 원문/열람 한계는 docs/game-essentials/evidence.json#agricola",
+      "title": "Agricola Revised Edition English Rules ©2016",
+      "url": "https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf"
+    },
+    {
+      "id": "spec.essentials.storage-guidance",
+      "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
+      "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
+      "url": null
+    }
+  ],
+  "supportGaps": [
+    "구판 5인 구성과 Revised 확장 덱은 별도 패치. Family Edition과 같은 규칙으로 취급하지 않는다.",
+    "2016 Revised의 정확한 카드 덱 구성·직업/설비 효과와 농장 수용 규칙은 전체 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+    "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
+  ],
+  "title": "아그리콜라",
+  "version": "1.0.0-essentials-2.02ad9e2fba26"
+}

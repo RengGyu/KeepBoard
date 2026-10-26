@@ -1,3 +1,5 @@
+import {linkedComponents} from '../shared/componentLinking.ts';
+import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
 import { randomUUID } from 'node:crypto';
 import type { Assertion, Condition, FieldDefinition, GamePack, Preservation, Session, SessionView, Value } from '../shared/types.ts';
 import { RESOURCES, DEVELOPMENTS, catanNextProcedure, countSummary, countValue, objectValue } from '../shared/catanSummary.ts';
@@ -6,18 +8,26 @@ import { compareStateValues } from './compare.ts';
 import { normalizeScene } from '../shared/scene.ts';
 import { hasCompleteBoard } from '../shared/sceneBridge.ts';
 import { isSceneField } from '../shared/sceneFields.ts';
+import { allRummikubTiles, isRummikubField, normalizeRummikubDetailed, rummikubSourceEvidence, validateRummikubColorEdits } from '../shared/rummikub.ts';
 
-const isTurnField = (field: FieldDefinition | undefined) => !['player.development.boughtThisTurnType','player.development.boughtThisTurnIdentity'].includes(field?.key??'') && (field?.lifetime === 'turn' || (!field?.lifetime && field?.group === 'turn'));
+import {physicalOnlyField,runtimeBinding} from '../shared/gameEssentials.ts';
+import {validateGenericRecord,type GenericRecord} from '../shared/genericRecord.ts';
+import {validateReadoutEvidenceChanges} from '../shared/readouts/registry.ts';
+import {receiptsForValue} from './observationReceipts';
+import {observationAnswerContext} from './observationReview';
+import type {NativeObservationReview} from '../shared/observationReview';
+
+export const isTurnField = (field: FieldDefinition | undefined) => !['player.development.boughtThisTurnType','player.development.boughtThisTurnIdentity'].includes(field?.key??'') && (field?.lifetime === 'turn' || (!field?.lifetime && field?.group === 'turn'));
 export const fieldId = (field: string, ownerId?: string) => `${ownerId ?? 'public'}:${field}`;
 const sameValue = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
-function currentFacts(session: Session, pack: GamePack, assertions: Assertion[]) {
+function currentFacts(session: Session, pack: GamePack, assertions: Assertion[], turnInstanceId = session.turnInstanceId) {
   const facts = new Map<string, Assertion>();
   for (const assertion of assertions) {
     if (assertion.status !== 'accepted') continue;
     if (assertion.field === 'board.layout' && assertion.value && typeof assertion.value === 'object' && !Array.isArray(assertion.value) && [1,2].includes(Number(assertion.value.version)) && !hasCompleteBoard(normalizeScene(assertion.value))) continue;
     const field = pack.fields.find(field => field.key === assertion.field);
-    if (isTurnField(field) && assertion.turnInstanceId && assertion.turnInstanceId !== session.turnInstanceId) continue;
+    if (isTurnField(field) && assertion.turnInstanceId && assertion.turnInstanceId !== turnInstanceId) continue;
     facts.set(fieldId(assertion.field, assertion.ownerId), assertion);
   }
   return facts;
@@ -78,18 +88,53 @@ export function validateValue(field: FieldDefinition, value: Value): void {
   if (!valid) throw new Error(`${field.label}: ${field.type} 형식의 값을 입력하세요.`);
 }
 
-export function answerField(session: Session, pack: GamePack, fieldKey: string, value: Value, ownerId?: string) {
+/** Shared trust boundary for manual answers, candidate acceptance and imported component records. */
+export function validateComponentRecord(session:Pick<Session,'players'|'evidence'>&Partial<Pick<Session,'assertions'>>,pack:GamePack,fieldKey:string,value:Value,ownerId?:string,assertionEvidenceIds?:string[],options:{trustedLink?:boolean;importing?:boolean}={}){
+ const field=pack.fields.find(f=>f.key===fieldKey);if(!field||runtimeBinding(pack,fieldKey)?.editor!=='component-catalog')throw new Error('구성물 필드를 확인하세요.');
+ if(field.scope==='player'?!session.players.some(p=>p.id===ownerId):!!ownerId)throw new Error('구성물 소유 범위를 확인하세요.');
+ const ids=session.evidence.filter(e=>field.visibility==='public'||!ownerId?e.scope==='public'&&!e.ownerId:e.ownerId===ownerId||e.scope==='public'&&!e.ownerId).map(e=>e.id);
+ if(assertionEvidenceIds&&(!Array.isArray(assertionEvidenceIds)||assertionEvidenceIds.some(id=>!ids.includes(id))))throw new Error('이 영역에서 볼 수 있는 원본만 근거로 연결하세요.');
+ const record=validateGenericRecord(value,pack,fieldKey,ids,{playerIds:session.players.map(p=>p.id)});
+ const prior=(session.assertions??[]).filter(a=>a.field===fieldKey&&a.ownerId===ownerId&&['accepted','candidate'].includes(a.status)).flatMap(a=>{const r=a.value as unknown as GenericRecord;return r?.version==='game-component-record-v1'&&Array.isArray(r.pieces)?r.pieces:[];});
+ for(const p of record.pieces){
+  const old=[...prior].reverse().find(o=>o.id===p.id&&o.evidenceId===p.evidenceId);
+  if(!options.trustedLink&&!options.importing){
+   if(p.linkOrigin&&JSON.stringify(p.linkOrigin)!==JSON.stringify(old?.linkOrigin))throw new Error('실물의 기존 연결 정보는 임의로 바꿀 수 없어요.');
+   if(!p.linkOrigin&&old?.linkOrigin)p.linkOrigin=structuredClone(old.linkOrigin);
+   const moved=linkedComponents({assertions:session.assertions??[]}).some(x=>x.origin.field===fieldKey&&x.origin.ownerId===ownerId&&x.origin.pieceId===p.id&&x.piece.evidenceId===p.evidenceId&&(x.assertion.field!==fieldKey||x.assertion.ownerId!==ownerId));
+   if(moved)throw new Error('이미 다른 영역에 연결한 실물이에요. 현재 보유 기록에서 옮겨 주세요.');
+  }
+ }
+ validateReadoutEvidenceChanges(pack,prior,record.pieces);
+ return record;
+}
+export function answerField(session: Session, pack: GamePack, fieldKey: string, value: Value, ownerId?: string,observationReview?:NativeObservationReview) {
+  if(physicalOnlyField(pack,fieldKey))throw new Error('이 비밀 내용은 수집하지 않습니다. 실물 보관 안내를 이용하세요.');
   const field = pack.fields.find(item => item.key === fieldKey);
   if (!field) throw new Error(`알 수 없는 필드: ${fieldKey}`);
   if (field.scope === 'player' && !session.players.some(player => player.id === ownerId)) throw new Error('플레이어를 지정하세요.');
   if (field.scope === 'public' && ownerId) throw new Error('공용 필드는 플레이어를 지정할 수 없습니다.');
   validateValue(field, value);
+  let tileEvidence: string[] = [];
+  if(runtimeBinding(pack,fieldKey)?.editor==='component-catalog'&&value!==null){const record=validateComponentRecord(session,pack,fieldKey,value,ownerId);value=record as unknown as Value;tileEvidence=record.pieces.flatMap(p=>p.evidenceId?[p.evidenceId]:[]);}
+  if (pack.id === 'rummikub' && isRummikubField(fieldKey) && value !== null) {
+    const authorized = rummikubSourceEvidence(session.evidence, ownerId).map(e => e.id);
+    const result = normalizeRummikubDetailed(value, { ownerId, evidenceIds: authorized });
+    if (!result.recognized) throw new Error(result.warnings[0] || '루미큐브 타일 기록을 확인하세요.');
+    const previousScenes=session.assertions.filter(a=>a.field===fieldKey&&a.ownerId===ownerId&&['accepted','candidate','conflict'].includes(a.status)).map(a=>normalizeRummikubDetailed(a.value,{ownerId}).scene);
+    validateRummikubColorEdits(result.scene,previousScenes);
+    value = result.scene as unknown as Value;
+    tileEvidence = allRummikubTiles(result.scene).flatMap(tile => tile.evidenceIds);
+  }
   if (field.key==='turn.trade' && value) { const trade=objectValue(value); if(!session.players.some(p=>p.id===trade.playerId) || (trade.counterpartyId && !session.players.some(p=>p.id===trade.counterpartyId))) throw new Error('실제 참가자를 교역 당사자로 선택하세요.'); }
   if (isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && [1,2].includes(Number(value.version))) value = normalizeScene(value) as unknown as Value;
+  const review=observationAnswerContext(session,pack,fieldKey,value,ownerId,observationReview);
   const previous = session.assertions.find(item => item.field === fieldKey && item.ownerId === ownerId && item.basis !== 'rule');
-  session.assertions = session.assertions.filter(item => fieldId(item.field, item.ownerId) !== fieldId(fieldKey, ownerId));
+  const observationReceipts=[...(value===null?[]:receiptsForValue(session,value,ownerId)),...(review.reviewed?.observationReceipts??[])].filter((r,i,all)=>all.findIndex(x=>x.request.taskId===r.request.taskId)===i);
+  session.assertions = session.assertions.filter(item => !review.consumed.has(item.id)&&(fieldId(item.field,item.ownerId)!==fieldId(fieldKey,ownerId)||item.status==='candidate'&&!!item.observationReceipts?.length));
   // A correction changes the value, while its photographed target stays linked.
-  if (value !== null) session.assertions.push({ id: randomUUID(), field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: previous?.evidenceIds || [], ...(previous?.region ? { region: previous.region } : {}), updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
+  const sceneEvidence = isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && Array.isArray(value.components) ? value.components.flatMap(raw => { const c = objectValue(raw); return typeof c.evidenceId === 'string' && session.evidence.some(e => e.id === c.evidenceId && (ownerId ? e.ownerId === ownerId || e.scope === 'public' : e.scope === 'public')) ? [c.evidenceId] : []; }) : [];
+  if (value !== null) session.assertions.push({ id: randomUUID(), field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: [...new Set([...(previous?.evidenceIds || []), ...sceneEvidence, ...tileEvidence])], ...(previous?.region ? { region: previous.region } : {}), ...(observationReceipts.length?{observationReceipts}:{}),updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
 }
 
 export function recompute(session: Session, pack: GamePack): SessionView {
@@ -101,6 +146,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
     for (const rule of pack.derivedRules) {
       const owners = rule.scope === 'player' ? session.players.map(player => player.id) : [undefined];
       for (const ownerId of owners) {
+        if (pack.id === 'catan-base' && ['player.development.newActionCardUnavailableThisTurn','player.development.newVictoryPointCanBeRevealedToWin'].includes(rule.field) && facts.get(fieldId('player.development.boughtThisTurnType', ownerId))?.turnInstanceId !== session.turnInstanceId) continue;
         if (!evaluateCondition(rule.when, facts, ownerId)) continue;
         next.push({ id: `rule:${rule.id}:${ownerId ?? 'public'}`, field: rule.field, value: rule.value, ownerId, basis: 'rule', status: 'accepted', evidenceIds: conditionEvidence(rule.when, facts, ownerId), reason: rule.reason, turnInstanceId: session.turnInstanceId, updatedAt: session.updatedAt });
       }
@@ -111,8 +157,9 @@ export function recompute(session: Session, pack: GamePack): SessionView {
   }
   session.assertions = [...base, ...derived];
   const facts = currentFacts(session, pack, session.assertions);
-  const preservations: Preservation[] = [];
-  for (const template of pack.preservationTemplates) {
+  const simple = pack.id === 'catan-base' && session.recordingMode === 'simple';
+  const preservations: Preservation[] = simple ? session.preservations : [];
+  for (const template of simple ? pack.preservationTemplates.filter(p=>p.id.startsWith('spec.')) : pack.preservationTemplates) {
     for (const ownerId of template.scope === 'player' ? session.players.map(player => player.id) : [undefined]) {
       if (!evaluateCondition(template.when, facts, ownerId)) continue;
       const id = `${ownerId ?? 'public'}:${template.id}`;
@@ -134,7 +181,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
     }
   }
   const required = new Map<string, SessionView['questions'][number]>();
-  for (const requirement of pack.requirements) {
+  for (const requirement of simple ? pack.requirements.filter(r=>r.id.startsWith('spec.')) : pack.requirements) {
     for (const ownerId of requirement.scope === 'player' ? session.players.map(player => player.id) : [undefined]) {
       if (!evaluateCondition(requirement.when, facts, ownerId)) continue;
       for (const key of requirement.fields) {
@@ -155,18 +202,20 @@ export function recompute(session: Session, pack: GamePack): SessionView {
   }).sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id));
   const latest = session.snapshots.at(-1);
   const differences: SessionView['differences'] = [];
-  if (session.stage === 'restore' && latest) {
-    const expected = currentFacts(session, pack, latest.assertions);
+  if ((session.room||session.stage === 'restore') && latest) {
+    const expected = currentFacts(session, pack, latest.assertions, latest.turnInstanceId);
     const equal = (field: string, a: Value, b: Value) => {
       const definition = pack.fields.find(item => item.key === field);
       return definition ? compareStateValues(definition, a, b) : sameValue(a, b);
     };
     for (const [id, observed] of facts) {
-      const saved = expected.get(id);
+      const baseline=session.room?latestSnapshot(session,fieldScope(pack,observed.field,observed.ownerId)):latest;
+      const saved = session.room?(baseline?currentFacts(session,pack,baseline.assertions,baseline.turnInstanceId).get(id):undefined):expected.get(id);
       if (saved && !equal(observed.field, saved.value, observed.value)) differences.push({ field: observed.field, label: pack.fields.find(field => field.key === observed.field)?.label ?? observed.field, expected: saved.value, observed: observed.value, ownerId: observed.ownerId });
     }
     for (const candidate of session.assertions.filter(item => item.status === 'candidate' || item.status === 'conflict')) {
-      const saved = expected.get(fieldId(candidate.field, candidate.ownerId));
+      const baseline=session.room?latestSnapshot(session,fieldScope(pack,candidate.field,candidate.ownerId)):latest;
+      const saved = session.room?(baseline?currentFacts(session,pack,baseline.assertions,baseline.turnInstanceId).get(fieldId(candidate.field,candidate.ownerId)):undefined):expected.get(fieldId(candidate.field, candidate.ownerId));
       if (saved && !equal(candidate.field, saved.value, candidate.value) && !differences.some(item => item.field === candidate.field && item.ownerId === candidate.ownerId && equal(candidate.field, item.observed, candidate.value))) differences.push({ field: candidate.field, label: pack.fields.find(field => field.key === candidate.field)?.label ?? candidate.field, expected: saved.value, observed: candidate.value, ownerId: candidate.ownerId });
     }
   }

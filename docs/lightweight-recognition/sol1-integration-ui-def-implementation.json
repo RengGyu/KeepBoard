@@ -1,0 +1,113 @@
+{
+  "status": "FROZEN_OWNED_INTEGRATION_REGRESSIONS_FIXED",
+  "frozenAt": "2026-10-24T15:49:01.494657+00:00",
+  "stageRoot": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/keepboard-lightweight-recognition-vyzn4xm9/app",
+  "immutableChangedSnapshot": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/kb-sol1-integration-ui-def-final-3czr3y_8",
+  "files": [
+    {
+      "file": "src/GameEssentials.tsx",
+      "preSHA256": "8991cdec86f1268c9c6bee8bbf2c9129a77ce295b4229491ed9bdff18b8e79a6",
+      "postSHA256": "4ce71fbbd446bf495280cb445a7898a042da0dd20a59d3b326e1380c689ca498"
+    },
+    {
+      "file": "tools/lightweight-recognition/generate-photo-definitions.mts",
+      "preSHA256": "a18eb29c3733354fb3b053aab5e2f2e3b4d19a5826b9fbb9c315be19bc307a6d",
+      "postSHA256": "dfac34e6fcae4a00e2687196e701f386c1ca254b0d2c09c3e1da60e22278c6aa"
+    },
+    {
+      "file": "game-photo-definitions/manifest.json",
+      "preSHA256": "6e655a9ac6ccfd697fd7bfe90bca12a14816c5930211e980339cbe2fcf4666f0",
+      "postSHA256": "df279f5b04ce66be04b17fa6caed87c8e824e2f080a86d96b96baa59bcc13b69"
+    },
+    {
+      "file": "tests/photo-definitions.test.ts",
+      "preSHA256": "494b86f892011547f38797eb241c99c2e6b3f7b7c0e0f9799d563135b17da820",
+      "postSHA256": "fc4ced0a91cab489c0bd27d20ffb472f9c7730804d255e073f105e10981ebfc2"
+    },
+    {
+      "file": "tests/lightweight-reader-ui.test.ts",
+      "preSHA256": "f7df12f6e4f03a632d8aa359904a7ff4ec3cd78c1e698c4d17cc11841582c686",
+      "postSHA256": "d11b991ce5d915de533e57bd492afb6b2efd1ef3fa48df2ff1a644b90c7b2ddd"
+    }
+  ],
+  "changedFileCount": 5,
+  "changedFilesDigest": "d8f126b2c65079b7f38584ed6a3eeec6d308412e9a2821ddfafa24dd456cf68b",
+  "patch": {
+    "path": "docs/lightweight-recognition/sol1-integration-ui-def.patch",
+    "sha256": "bf4b711d8fb1a9c1d66bfa2cc83f1c0ad36943dd444674a4575188a3424580d7"
+  },
+  "causes": [
+    {
+      "failure": "photo-definitions 3",
+      "verified": "Pinned shared/splendor.ts original d12575… differs only through approved R3 revision 13e060…; no generated domain change.",
+      "fix": "Keep original contract SHA; allow only exact original or exact approved R3 file SHA. Manifest inputs now record actual SHA plus original approved SHA/reason."
+    },
+    {
+      "failure": "game-recognition-ui same-field dirty path",
+      "verified": "Receipt-free legacy AI with accepted state was incorrectly rerouted to ComponentLinkDialog instead of existing explicit replacement review.",
+      "fix": "Only local observation-receipt partial candidates with accepted record require linked review / direct-apply guard. Existing AI review and dirty/failure behavior preserved."
+    }
+  ],
+  "checks": {
+    "red": {
+      "exit": 1,
+      "failed": 4,
+      "passed": 3,
+      "log": "docs/lightweight-recognition/sol1-integration-ui-def-red.log"
+    },
+    "focused": {
+      "command": "node --import tsx --test tests/photo-definitions.test.ts tests/game-recognition-ui.test.ts tests/lightweight-reader-ui.test.ts",
+      "exit": 0,
+      "passed": 28,
+      "failed": 0,
+      "log": "docs/lightweight-recognition/sol1-integration-ui-def-focused.log"
+    },
+    "typecheck": {
+      "command": "npx tsc --noEmit",
+      "exit": 0,
+      "log": "docs/lightweight-recognition/sol1-integration-ui-def-typecheck.log"
+    },
+    "definitionRegeneration": {
+      "games": 120,
+      "indexSHA": "c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60",
+      "contractSHA": "2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b",
+      "indexBytesUnchanged": true,
+      "contractBytesUnchanged": true,
+      "manifestSHA": "df279f5b04ce66be04b17fa6caed87c8e824e2f080a86d96b96baa59bcc13b69",
+      "revision": {
+        "file": "shared/splendor.ts",
+        "sha256": "13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1",
+        "approvedContractSHA256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8",
+        "revisionReason": "Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged."
+      }
+    },
+    "manifestOnlyChangedInput": "shared/splendor.ts",
+    "manifestOtherMetadataUnchanged": true,
+    "existingGameRecognitionTestsUnchanged": true,
+    "unknownSplendorInputRevisionRejected": true,
+    "localPartialExistingAndLateAcceptedProtected": true,
+    "numericProductionSourceFilesUnchanged": [
+      "src/SessionWorkspace.tsx",
+      "src/LightweightReaderControls.tsx",
+      "src/LocalCatanReview.tsx",
+      "src/SceneWorkspace.tsx",
+      "src/numericReaderStatus.ts"
+    ]
+  },
+  "scope": {
+    "realModelCalls": 0,
+    "OCRCalls": 0,
+    "APICalls": 0,
+    "CUAAttempts": 0,
+    "sharedServerEdits": 0,
+    "sharedMainApply": false,
+    "fullSuiteRerun": false,
+    "buildRerun": false,
+    "GTFrameChanges": false
+  },
+  "limits": [
+    "Focused hook/SSR/pure generation evidence; no new browser/model execution on this card.",
+    "Final full suite/build delegated to integration owner; unrelated fifth integration failure not changed.",
+    "Only local branch in existing owned UI test updated; numeric production files are byte-identical to numeric freeze."
+  ]
+}

@@ -1,0 +1,403 @@
+{
+  "game_id": "istanbul",
+  "name_ko": "이스탄불",
+  "name_en": "Istanbul",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Big Box 확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "istanbul.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/istanbul.json",
+  "source_sha256": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "places",
+      "name": "장소 타일",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "기본판 장소는1–16의 정사각 타일을4×4로 배치한다. Big Box 규칙의17–20·21–25는 확장이므로 제외한다. 타일 번호·배치와 장소별 루비 칸을 보존한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "기본 장소 타일",
+          "layers": [
+            {
+              "asset_id": "istanbul.places.market-place"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "istanbul.art-confirmation.istanbul-rules"
+      ],
+      "source_location": "pp.3–6 Base Components/Setup; pp.18–19 base Places"
+    },
+    {
+      "component_id": "people",
+      "name": "상인·조수·기타 인물",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "상인과 남겨둔 조수는 같은 색이어도 역할/쌓임이 다름.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "말",
+          "layers": [
+            {
+              "asset_id": "common.pawn"
+            }
+          ]
+        },
+        {
+          "name": "원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        },
+        {
+          "name": "인물 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-portrait"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "goods",
+      "name": "수레·상품·루비·돈",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "수레 용량/상품 종류별 양·루비와 돈.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "상품 수레",
+          "layers": [
+            {
+              "asset_id": "istanbul.goods.cart"
+            }
+          ]
+        },
+        {
+          "name": "직물 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-cloth",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "보석 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-gem",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "cards",
+      "name": "보너스·요구·보상 타일",
+      "kind": "card",
+      "source_confidence": "verified",
+      "source_description": "보너스 카드와 모스크 타일·요구 타일은 서로 다르다. 원 초안의 막연한 보상 타일 표현은 기본판 모스크 타일로 좁힌다. 커피콩/인장 표시 확장 카드는 제외한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "보너스 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "모스크 타일",
+          "layers": [
+            {
+              "asset_id": "istanbul.cards.mosque-tile"
+            }
+          ]
+        },
+        {
+          "name": "요구 타일",
+          "layers": [
+            {
+              "asset_id": "istanbul.cards.demand-tile"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "hidden_layers": [],
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "istanbul.art-confirmation.istanbul-rules"
+      ],
+      "source_location": "pp.3–4 Base Components; p.7 Setup; p.24 Bonus Cards"
+    }
+  ],
+  "areas": [
+    {
+      "id": "city",
+      "name": "시장 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "places",
+        "people",
+        "goods",
+        "cards"
+      ],
+      "anchor_contract": "실제 선택한 기본 장소 행열·장소ID·상인/조수의 높이와 층별 말. 확장5×5를 기본 칸수로 고정하지 않는다.",
+      "description": "시장 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "wheelbarrow",
+      "name": "개인 수레",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "goods"
+      ],
+      "anchor_contract": "상품 종류별 현재량과 별도의 용량 확장·획득 루비.",
+      "description": "개인 수레의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "supply",
+      "name": "조수·개인 공개 보상",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "anchor_contract": "상인과 함께 이동하는 조수/장소에 남긴 조수/기준 장소의 조수를 위치별 구분.",
+      "description": "조수·개인 공개 보상의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 보너스 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "비공개 카드와 사용 대기 선택.",
+      "description": "개인 보너스 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "요구·보너스 묶음",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "현재 공개 요구와 미공개 덱/버림을 분리 보관.",
+      "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "시장 지도 · 구조 예시",
+    "area_id": "city",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "istanbul.places.market-place",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.pawn",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

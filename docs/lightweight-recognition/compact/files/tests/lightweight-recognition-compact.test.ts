@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import * as adapter from '../server/ai/qwenNumberGrounding';
+import defs from '../game-photo-definitions/index.json';
+import {catalogPacks} from '../gamepacks/catalog';
+import {effectiveRecognitionPack} from '../shared/recognition';
+import {compileObservationTask,type PhotoDefinition} from '../shared/lightweightRecognition';
+import {mapObservationRegion,type PhotoTransform} from '../shared/photoGeometry';
+const definition=defs.games.find(d=>d.gameId==='catan') as PhotoDefinition,pack=effectiveRecognitionPack(catalogPacks.find(p=>p.id===definition.packId)!);
+const request=compileObservationTask({pack,definition,areaId:'board',taskId:'compact-test',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'source',inputId:'source',sha256:'a'.repeat(64),width:1000,height:1000,transformId:null}]});
+const sha=(v:string)=>createHash('sha256').update(v).digest('hex');
+test('compact product wire shares exact D2 prompt/schema and only maps a uniquely containing panel',()=>{
+ assert.equal(sha((adapter as any).QWEN_NUMBER_PROMPT),'18af5a6912a0af1b592686a0fd4087097da412070dcb4187c356e19204384861');
+ assert.equal(sha(JSON.stringify((adapter as any).QWEN_NUMBER_SCHEMA)),'ef97902a7aa0e38d1c7af7bdf14d6698597246072565f9a75e2bbcf5a0672627');
+ const transform:PhotoTransform={transformId:'B0',sourceSHA:'b'.repeat(64),inputSHA:'a'.repeat(64),sourceDimensions:{width:1000,height:1000},inputDimensions:{width:1000,height:1000},forwardMatrix:[1,0,0,0,1,0,0,0,1],inverseMatrix:[1,0,0,0,1,0,0,0,1],panels:[{panelRef:'p1',inputRectangle:{x:.1,y:.1,width:.3,height:.3},sourcePolygon:[{x:.1,y:.1},{x:.5,y:.15},{x:.4,y:.6},{x:.15,y:.5}],candidateSlotId:'r1c1'},{panelRef:'p2',inputRectangle:{x:.5,y:.1,width:.3,height:.3},sourcePolygon:[{x:.6,y:.1},{x:.9,y:.1},{x:.9,y:.5},{x:.6,y:.5}],candidateSlotId:'r1c2'}]};
+ const plan={...request,geometryFrameId:'frame',images:[{...request.images[0],inputId:'B0',transformId:'B0'}]};
+ const raw={items:[{bbox_2d:[200,200,300,300],text:'6'},{bbox_2d:[350,200,550,300],text:'8'},{bbox_2d:[900,900,950,950],text:null}]};
+ const result=(adapter.qwenNumberGrounding as any)(raw,plan,definition,[transform]);
+ assert.equal(result.result.observations.length,1);assert.equal(result.result.observations[0].panelRef,'p1');assert.equal(result.deferred.length,2);assert.deepEqual(result.nativeWire.result,raw);
+ const box=mapObservationRegion(result.result.observations[0],plan,[transform])!;assert(box.width>0&&box.height>0);assert.notDeepEqual(box,result.result.observations[0].bbox,'original region uses actual inverse projective warp');
+ const overlap=structuredClone(transform);overlap.panels.push({...overlap.panels[0],panelRef:'ambiguous'});
+ const held=(adapter.qwenNumberGrounding as any)({items:[raw.items[0]]},plan,definition,[overlap]);assert.equal(held.result.observations.length,0);assert.equal(held.deferred.length,1);
+ assert.throws(()=>(adapter.qwenNumberGrounding as any)(raw,plan,definition,[{...transform,inputSHA:'c'.repeat(64)}]));
+});
+test('compact original accepts optional frame, keeps null/domain unknown and identical copies independent',()=>{
+ const result=(adapter.qwenNumberGrounding as any)({items:[{bbox_2d:[100,100,150,150],text:null},{bbox_2d:[200,100,250,150],text:'7'},{bbox_2d:[300,100,350,150],text:'12'},{bbox_2d:[300,100,350,150],text:'12'}]},{...request,geometryFrameId:'optional-frame'},definition);
+ assert.deepEqual(result.result.observations.map((o:any)=>o.properties.number.value),[null,null,12,12]);assert(result.result.observations.every((o:any)=>o.quantity===1));assert.equal(new Set(result.result.observations.map((o:any)=>o.ref)).size,4);
+ assert.equal((adapter.qwenNumberGrounding as any)({items:[]},request,definition).result.observations.length,0);
+ for(const bad of [{...request,scope:{...request.scope,ownerId:'p1'}},{...request,areaId:'player'},{...request,gameId:'sagrada'}])assert.throws(()=>(adapter.qwenNumberGrounding as any)({items:[]},bad,definition));
+ assert.throws(()=>(adapter.qwenNumberGrounding as any)({items:[{bbox_2d:[.1,.1,.2,.2],text:'6'}]},request,definition));
+});

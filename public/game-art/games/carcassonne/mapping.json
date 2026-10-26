@@ -1,0 +1,537 @@
+{
+  "game_id": "carcassonne",
+  "name_ko": "카르카손",
+  "name_en": "Carcassonne",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판",
+    "compatibility_notes": [
+      "Big Box/강·수도원장 등 동봉 모듈은 기본 규칙 범위와 별도 표시",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "carcassonne.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/carcassonne.json",
+  "source_sha256": "a2b8788cd3c51aa938884f119fd98fe00818e72a60f8d093c573b89597de5ffa",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "tiles",
+      "name": "지형 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "도시·도로·수도원·들판 경계와 회전.",
+      "status": "existing-reference",
+      "variants": [
+        {
+          "name": "tile-field",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-field"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "field"
+            }
+          }
+        },
+        {
+          "name": "tile-road-straight",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-road-straight"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "road-straight"
+            }
+          }
+        },
+        {
+          "name": "tile-road-bend",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-road-bend"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "road-bend"
+            }
+          }
+        },
+        {
+          "name": "tile-road-junction",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-road-junction"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "road-junction"
+            }
+          }
+        },
+        {
+          "name": "tile-city-cap",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-city-cap"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "city-cap"
+            }
+          }
+        },
+        {
+          "name": "tile-city-corner",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-city-corner"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "city-corner"
+            }
+          }
+        },
+        {
+          "name": "tile-city-road",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-city-road"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "city-road"
+            }
+          }
+        },
+        {
+          "name": "tile-monastery",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-monastery"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "monastery"
+            }
+          }
+        },
+        {
+          "name": "tile-monastery-road",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-monastery-road"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "monastery-road"
+            }
+          }
+        },
+        {
+          "name": "tile-unknown",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-unknown"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile",
+              "variant": "unknown"
+            }
+          }
+        },
+        {
+          "name": "tile-stack",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.tile-stack"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "tile-stack"
+            }
+          }
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "followers",
+      "name": "미플",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "소유자 및 타일 내부 기능별 위치. 눕힌 농부는 선 미플과 구별.",
+      "status": "existing-reference",
+      "variants": [
+        {
+          "name": "follower-standing-red",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-standing-red"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "standing",
+              "color": "#bc6048"
+            }
+          }
+        },
+        {
+          "name": "follower-farmer-red",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-farmer-red"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "farmer",
+              "color": "#bc6048"
+            }
+          }
+        },
+        {
+          "name": "follower-standing-blue",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-standing-blue"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "standing",
+              "color": "#61879d"
+            }
+          }
+        },
+        {
+          "name": "follower-farmer-blue",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-farmer-blue"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "farmer",
+              "color": "#61879d"
+            }
+          }
+        },
+        {
+          "name": "follower-standing-green",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-standing-green"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "standing",
+              "color": "#63825c"
+            }
+          }
+        },
+        {
+          "name": "follower-farmer-green",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-farmer-green"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "farmer",
+              "color": "#63825c"
+            }
+          }
+        },
+        {
+          "name": "follower-standing-gold",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-standing-gold"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "standing",
+              "color": "#c6a24f"
+            }
+          }
+        },
+        {
+          "name": "follower-farmer-gold",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.follower-farmer-gold"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "follower",
+              "variant": "farmer",
+              "color": "#c6a24f"
+            }
+          }
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "score",
+      "name": "점수 말",
+      "kind": "marker",
+      "source_confidence": "reported",
+      "source_description": "점수판 위치와 필요시 한 바퀴 지난 점수 메모.",
+      "status": "existing-reference",
+      "variants": [
+        {
+          "name": "score-marker",
+          "layers": [
+            {
+              "asset_id": "existing.carcassonne.score-marker"
+            }
+          ],
+          "adapter": {
+            "module": "src/CarcassonneArt.tsx",
+            "export": "CarcassonneArt",
+            "props": {
+              "kind": "score-marker",
+              "color": "#63825c"
+            }
+          }
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "map",
+      "name": "성장하는 지도",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "tiles",
+        "followers"
+      ],
+      "anchor_contract": "정사각 격자 x/y와 90도 회전, 타일 내부 도로·도시·들판 feature ID에 미플 부착.",
+      "description": "성장하는 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": null,
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "track",
+      "name": "점수판",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "score"
+      ],
+      "anchor_contract": "인쇄 점수값과 소유색. 보이는 위치만으로 총점의 순환 횟수 추정 금지.",
+      "description": "점수판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": null,
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "supply",
+      "name": "미플 공급",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "followers"
+      ],
+      "anchor_contract": "플레이어별 미배치 미플 수.",
+      "description": "미플 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": null,
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "draw",
+      "name": "뽑을 타일",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "다음 타일을 노출하지 않고 실물 더미 순서 보존.",
+      "description": "뽑을 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": null,
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": null
+}

@@ -1,0 +1,165 @@
+{
+  "checked_at": "2026-10-23",
+  "source_digest": "0255142408c9035805725fdb74c2a93b9679c81458acd18f2358c9240d8cfe7d",
+  "findings": [
+    {
+      "id": "R01",
+      "evidence_level": "VERIFIED",
+      "claim": "4사진의 주요 숫자·종류·누락 오류는 provider 최종 JSON에 존재하고 raw→normalized→usable에서 값이 보존됨",
+      "local_evidence": [
+        "evidence.json",
+        "semantic-audit.json"
+      ],
+      "application_files": [
+        "server/ai/index.ts",
+        "server/ai/generic.ts",
+        "server/ai/splendor.ts",
+        "server/ai/rummikubPrompt.ts"
+      ],
+      "limits": "모든 후처리 경로의 무손실 또는 이전 live Catan 원요청의 원인 증명이 아님",
+      "recommended_action": "UI/normalizer 추정 수정부터 시작하지 않고 입력·관측 모델을 비교"
+    },
+    {
+      "id": "R02",
+      "evidence_level": "VERIFIED",
+      "claim": "일부 배치 정보의 null은 현재 manual 계약 요구",
+      "local_evidence": [
+        "game-impact.json",
+        "semantic-audit.json"
+      ],
+      "application_files": [
+        "server/ai/gameReadouts.ts",
+        "shared/readouts/contracts/sagrada.ts",
+        "src/GameBoardRecord.tsx"
+      ],
+      "limits": "505개 manual 중 턴·소유·비밀 정보는 자동화하면 안 됨",
+      "recommended_action": "사진 frame+방향 확인 후 형상별 배치 후보를 별도 계약으로 제안"
+    },
+    {
+      "id": "R03",
+      "evidence_level": "VERIFIED",
+      "claim": "짧은 순수 관측 B는 주요 속성의 일관 개선이나 전체 속도 개선을 보이지 않음",
+      "local_evidence": [
+        "ab-review.json",
+        "experiment-card.json",
+        "../photo-observation-ab/requests.json"
+      ],
+      "application_files": [
+        "server/ai/generic.ts",
+        "server/ai/scenePrompt.ts"
+      ],
+      "limits": "각 게임 조건1회. 과제/출력 형식도 변경됨. 길이만의 인과 실험이 아님",
+      "recommended_action": "B 제품 교체 보류; 작은 DTO는 유지보수용 선택이며 품질 개선으로 판매하지 않음"
+    },
+    {
+      "id": "R04",
+      "evidence_level": "VERIFIED",
+      "claim": "원래4회 upstream 왕복이 gateway 경과의99.981–99.994%, 정규화1.45–5.77ms",
+      "local_evidence": [
+        "evidence.json"
+      ],
+      "application_files": [
+        "gateway/server.mjs",
+        "server/ai/index.ts"
+      ],
+      "limits": "폰 업로드/운영 터널/provider 큐·TTFT/순수GPU시간 미측정",
+      "recommended_action": "추론/출력 usage와 정확도를 함께 보고, 단계 timing만 수집"
+    },
+    {
+      "id": "R05",
+      "evidence_level": "VERIFIED",
+      "claim": "192px 품질 썸네일 송신 가설은 코드/요청 바이트와 맞지 않음",
+      "local_evidence": [
+        "evidence.json"
+      ],
+      "application_files": [
+        "src/Capture.tsx",
+        "gateway/server.mjs"
+      ],
+      "limits": "모바일 기기의 실제 full frame 해상도와 provider 내부 재조정은 별도",
+      "recommended_action": "현행 원본보존을 유지하며 가까운 촬영/선택 영역을 비교"
+    },
+    {
+      "id": "R06",
+      "evidence_level": "VERIFIED",
+      "claim": "현재 모델 요청은 현재 게임 텍스트+시험 사진이며 전체120팩/참조 아트 전송이 아님",
+      "local_evidence": [
+        "evidence.json",
+        "ab-review.json",
+        "game-impact.json"
+      ],
+      "application_files": [
+        "server/ai/prompt.ts",
+        "server/ai/generic.ts",
+        "server/ai/scenePrompt.ts"
+      ],
+      "limits": "시각 학습 데이터와 내부 모델 지식은 확인 불가",
+      "recommended_action": "팩/아트 추가만으로 인식 개선을 주장하지 않음"
+    },
+    {
+      "id": "R07",
+      "evidence_level": "VERIFIED",
+      "claim": "동일 A 요청 바이트의 반복에서도 Catan 값·Sagrada 박스/눈 결과가 달라짐",
+      "local_evidence": [
+        "ab-review.json",
+        "semantic-audit.json"
+      ],
+      "application_files": [
+        "gateway/server.mjs"
+      ],
+      "limits": "반복 수가 적고 backend weights/큐는 고정 확인 못함",
+      "recommended_action": "상수 좌표 보정·한 응답 신뢰도 보증 금지; 미사용 사진으로 최소 확인"
+    },
+    {
+      "id": "R08",
+      "evidence_level": "UNCLEAR",
+      "claim": "미세 인쇄 크기·회전·반사와 모델 시각 한계가 각각 기여할 가능성",
+      "local_evidence": [
+        "semantic-audit.json",
+        "ab-review.json",
+        "../game-state-linking/evaluation/README.md"
+      ],
+      "application_files": [
+        "src/Capture.tsx",
+        "shared/photoCapture.ts"
+      ],
+      "limits": "encoder/decoder/전처리 내부 원인은 구분 불가. 기존 ROI는 다른3사진",
+      "recommended_action": "동일 이미지/과제로 비전 모델1개 비교; 새 키가 없으면 한 구획 ROI2회만 별도 승인 제안"
+    },
+    {
+      "id": "R09",
+      "evidence_level": "VERIFIED",
+      "claim": "typed117종의1800필드 중505manual, source verification115attachment-only/2official-partial",
+      "local_evidence": [
+        "game-impact.json"
+      ],
+      "application_files": [
+        "shared/readouts/catalog.ts",
+        "shared/readouts/registry.ts",
+        "shared/photoCapture.ts"
+      ],
+      "limits": "계약 점검이지120게임 실물 정확도 시험이 아님",
+      "recommended_action": "행별 표현 공백을 사용하고 전체 규칙·카드 사전 증축을 우선하지 않음"
+    },
+    {
+      "id": "R10",
+      "evidence_level": "RECOMMENDATION",
+      "claim": "다른 비전 모델1개와 고정2사진·최대4요청 비교가 다음 인식기 진단에 유효",
+      "local_evidence": [
+        "sources.json",
+        "README.md"
+      ],
+      "application_files": [
+        "gateway/server.mjs"
+      ],
+      "limits": "새 키/alias/별도 예산 승인 필요, 호출0·우수성 미확인",
+      "recommended_action": "품질·공식 이미지 처리·독립 계열·Responses 계약 적합성을 근거로 GPT-6 Astra를 우선 진단 후보로 제안. Gemini4Argon은 실제 접근 가능한 강한 대안. 비용은 선정 후 승인, 최저가 이유로 후보를 정하지 않음. 둘 다 실사진 우수성 미검증."
+    }
+  ],
+  "changes_by_reviewer": {
+    "product": 0,
+    "operating_configuration": 0,
+    "real_model_calls": 0,
+    "private_raw_GT_publications": 0
+  }
+}

@@ -1,0 +1,503 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "rummikub",
+  "name_ko": "루미큐브",
+  "name_en": "Rummikub",
+  "edition": {
+    "id": "base",
+    "name": "Classic 기본 세트",
+    "compatibility_notes": [
+      "세트 크기·타일 디자인 확인;3D 받침 뒤 타일 자동 추정 금지",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "rummikub.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/rummikub.json",
+    "sha256": "fb4be402632a82c3b96eac327ddca8922f79219b9d5f4a83794c08fa59de64d9",
+    "runtime_pack_id": "rummikub",
+    "runtime_pack_version": "1.1.0-essentials-2.fb4be402632a",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "native-or-specialized",
+    "official_scoped_checks_this_task": [
+      "official.rummikub.20261023"
+    ],
+    "inherited_evidence_ids": [
+      "rummikub::rummikub.primary",
+      "rummikub::rummikub.essentials.rules",
+      "rummikub::essentials.storage-guidance",
+      "inherited::rummikub.essentials.rules"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "공용 타일 묶음별 숫자·색과 조커, 본인 받침대 별도",
+  "critical_resume_distinction": "같은 숫자/색 복제 실물과 묶음 순서 보존; 조커 대체값/초기등록 이력 비추론",
+  "partitions": {
+    "common_public": [
+      "table"
+    ],
+    "player_public": [],
+    "owner_private": [
+      "rack"
+    ],
+    "do_not_infer": [
+      "pool"
+    ]
+  },
+  "areas": [
+    {
+      "id": "table",
+      "name": "공용 묶음",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "free",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "free"
+      ],
+      "component_ids": [
+        "numbers",
+        "jokers"
+      ],
+      "anchor_contract": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지.",
+      "description": "공용 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "table.scene"
+      ],
+      "current_manual_target_fields": [
+        "table.scene"
+      ],
+      "source_field_ids": [
+        "table.scene"
+      ],
+      "allowed_component_ids": [
+        "numbers",
+        "jokers"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "공용 묶음 전체 경계를 먼저 기록. 묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "native"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "rack",
+      "name": "개인 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "numbers",
+        "jokers",
+        "racks"
+      ],
+      "anchor_contract": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+      "description": "개인 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "owner_private",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "rack.scene"
+      ],
+      "current_manual_target_fields": [
+        "rack.scene"
+      ],
+      "source_field_ids": [
+        "rack.scene"
+      ],
+      "allowed_component_ids": [
+        "numbers",
+        "jokers",
+        "racks"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 타일 전체 경계를 먼저 기록. 소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "native"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "pool",
+      "name": "미공개 공급",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "numbers",
+        "jokers"
+      ],
+      "anchor_contract": "뒤집힌 타일 더미를 정체 미상으로 저장.",
+      "description": "미공개 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "do_not_infer",
+      "capture_allowed_current": false,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [],
+      "source_field_ids": [
+        "pool.scene"
+      ],
+      "allowed_component_ids": [],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "내용 촬영 제외. 뒤집거나 펼치지 말고 원래 순서/방향의 실물 묶음을 보존.",
+      "capture_access": "physical-preserve-only",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "뒤집힌 타일 더미를 정체 미상으로 저장.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "native"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "numbers",
+      "name": "숫자 타일",
+      "kind": "tile",
+      "identity_description": "색·숫자·동일 사본 인스턴스.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "rummikub::rummikub.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "jokers",
+      "name": "조커",
+      "kind": "tile",
+      "identity_description": "실제 조커와 현재 나타내는 색/숫자(미상 가능).",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "rummikub::rummikub.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "racks",
+      "name": "개인 받침대",
+      "kind": "board",
+      "identity_description": "가려진 개인 타일 영역.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "rummikub::rummikub.primary"
+      ],
+      "current_typed_fields": [],
+      "must_preserve_readout_keys": [],
+      "visible_attribute_keys": [],
+      "manual_attribute_keys": [],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": {
+    "schema": "rummikub-scene-v1",
+    "source_file": "shared/rummikub.ts",
+    "visible_attributes": [
+      "kind",
+      "color",
+      "number",
+      "face",
+      "evidenceIds",
+      "region"
+    ],
+    "manual_or_bounded_geometry": "공용 groups/loose와 owner rack; 같은 색/숫자 복제 타일 ID·순서 유지. 조커가 대체하는 색/숫자는 정체 관측과 별개 확인."
+  },
+  "runtime_capture_contract": {
+    "mode": "native",
+    "public_photo_fields": [
+      {
+        "key": "table.scene",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "rack.scene",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": []
+  },
+  "manual_context_fields": [
+    {
+      "id": "opened",
+      "label": "최초 등록 상태",
+      "scope": "player",
+      "visibility": "public",
+      "description": "사용자가 확인한 등록 여부; 현재 공용 타일만으로 역산하지 않는다."
+    },
+    {
+      "id": "timer",
+      "label": "재배열 중단",
+      "scope": "public",
+      "visibility": "public",
+      "description": "진행 중 조합과 합의한 시간제한 메모. 재열기로 패널티 자동 적용 금지."
+    },
+    {
+      "id": "score",
+      "label": "라운드 점수",
+      "scope": "player",
+      "visibility": "public",
+      "description": "라운드 종료 후 확인된 값만."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "재배열을 시작했는지·임시로 빼놓은 타일·되돌릴 기준 사진을 메모. 재배열 중이라면 현재 장면과 재배열 전 참조(manipulation-baseline)를 구별한다. 시간 경과·벌칙을 재열기로 자동 적용하지 않는다. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    },
+    {
+      "id": "manipulation-baseline",
+      "label": "재배열 전 테이블 참조(선택)",
+      "scope": "public",
+      "visibility": "public",
+      "description": "재배열 도중 중단한 경우에만 재배열 전 사진/묶음별 타일순서 참조, 받침대에서 낸 타일과 임시 분리 타일, 남은 조커 재사용 여부를 남긴다. 과거 상태가 없으면 모름으로 저장하며 복원값을 생성하지 않는다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "받침대 타일, 조커의 유일한 값, 최초 등록 이력",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "rack.preserve",
+        "label": "개인 타일 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "rack.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "pool.preserve",
+        "label": "미공개 공급 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "pool.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "뒤집힌 타일 더미를 정체 미상으로 저장.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "table.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "Twist/Xpress는 특수 조커/주사위 등 별도 프로필. Classic에 자동 추가하지 않는다.",
+    "Classic 인쇄별 시간제한/조커 세부 문구와 한국어판은 추가 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [],
+  "photo_need": {
+    "game_id": "rummikub",
+    "edition": "Classic 기본 세트",
+    "status": "DIRECT_REVIEWED_PARTIAL",
+    "corpus_availability": {
+      "provided_image_rows": 2,
+      "producer_usable_yes_rows": 1,
+      "candidate_image_rows": 4,
+      "retained_image_rows": 2,
+      "producer_status": "found",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "26bad7b14b6e865768aeff5c77e54867db56fec9e33c8f7ba932a3e3ee430efc",
+        "ae31323722707f78281055bcde8bc4490e3ce6dc6c96a75731b9030822fee2c1"
+      ],
+      "directly_reviewed_sha256": [
+        "26bad7b14b6e865768aeff5c77e54867db56fec9e33c8f7ba932a3e3ee430efc"
+      ]
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "공용 타일 묶음별 숫자·색과 조커, 본인 받침대 별도",
+    "closeups": [
+      {
+        "area_id": "table",
+        "name": "공용 묶음",
+        "needs": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "rack",
+        "name": "개인 타일",
+        "needs": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      }
+    ],
+    "do_not_collect": [
+      {
+        "area_id": "pool",
+        "name": "미공개 공급",
+        "reason": "hidden"
+      }
+    ],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": null,
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 3,
+    "board_instance_count": 1,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

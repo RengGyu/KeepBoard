@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type LotrLcgReadout =
+  {schema:"lotr-lcg-v1";kind:"characters";values:{"face": "front" | "back" | null; "printedName": string | null; "characterType": string | null; "damage": number | null; "exhaustion": string | null; "participation": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "characterType": FieldBasis | null; "damage": FieldBasis | null; "exhaustion": 'user' | null; "participation": 'user' | null}}
+ | {schema:"lotr-lcg-v1";kind:"encounter";values:{"face": "front" | "back" | null; "printedName": string | null; "cardArea": string | null; "cardType": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardArea": 'user' | null; "cardType": FieldBasis | null}}
+ | {schema:"lotr-lcg-v1";kind:"attachments";values:{"face": "front" | "back" | null; "printedName": string | null; "target": string | null; "attachmentRole": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "target": 'user' | null; "attachmentRole": 'user' | null}}
+ | {schema:"lotr-lcg-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "displayValue": number | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "displayValue": FieldBasis | null; "target": 'user' | null}}
+ | {schema:"lotr-lcg-v1";kind:null;values:{};sources:{}};

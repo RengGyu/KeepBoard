@@ -20,7 +20,7 @@ test('individual/all soft deletion and undo survive reload without modifying ori
  const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  async function call(route:string,method='GET',body?:unknown){const response=await fetch(base+route,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});assert(response.ok,await response.clone().text());return response.json();}
  try{
-   const views:SessionView[]=[];for(let i=0;i<3;i++)views.push(await call('/api/sessions','POST',{name:`synthetic-${i}`,example:true}));
+   const views:SessionView[]=[];for(let i=0;i<3;i++)views.push(await call('/api/sessions','POST',{name:`synthetic-${i}`,gamePackVersion:catanPack.version,example:true}));
    const ids=views.map(v=>v.session.id),route=`/api/sessions/${ids[0]}`;
    await call(route+'/evidence','POST',{dataUrl:'data:image/png;base64,aGVsbG8=',scope:'player',ownerId:'red',expectedCaptureEpoch:views[0].session.captureEpoch});
    await call(route+'/commit','POST',{allowIncomplete:true});
@@ -45,7 +45,7 @@ test('saving and reopening never rotate epoch/turn; player name/color updates re
  const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  async function call(route:string,method='GET',body?:unknown):Promise<SessionView>{const response=await fetch(base+route,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});assert(response.ok,await response.clone().text());return response.json();}
  try{
-   let view=await call('/api/sessions','POST',{name:'synthetic color update',example:true});const route=`/api/sessions/${view.session.id}`;
+   let view=await call('/api/sessions','POST',{name:'synthetic color update',gamePackVersion:catanPack.version,example:true});const route=`/api/sessions/${view.session.id}`;
    const epoch=view.session.captureEpoch,turn=view.session.turnInstanceId;
    view=await call(route,'PATCH',{notes:{red:'private fixture'},answers:[{field:'player.resources.counts',ownerId:'red',value:{lumber:4,brick:0,wool:null,grain:2,ore:1}}]});
    const facts=structuredClone(view.session.assertions.filter(a=>a.basis!=='rule'));

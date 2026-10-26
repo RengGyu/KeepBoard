@@ -1,0 +1,7449 @@
+{
+  "version": "game-photo-definitions-manifest-v1",
+  "contractSHA": "2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b",
+  "inputs": [
+    {
+      "file": "gamepacks/generated/game-essentials.json",
+      "sha256": "6bcf84b5d70cf85eee3c9f97cbcf9d0a84c4e17aafa12209eb32d4113b6bca7b"
+    },
+    {
+      "file": "shared/capture-profiles.json",
+      "sha256": "14c5a21b4ad8d925cdf8d317b9e613ce1b66af3d06d825eae1cb64d02cf00b96"
+    },
+    {
+      "file": "shared/readouts/types.ts",
+      "sha256": "a8bbbd71f9b8c1b750ef6b651979ad352da4f3dc7db5cf89bb3270f70d0e8584"
+    },
+    {
+      "file": "shared/readouts/registry.ts",
+      "sha256": "39af8efea308c2e6f0fe74be3e5886489d8e554927a719a1f35e1b6c951a25e2"
+    },
+    {
+      "file": "shared/scene.ts",
+      "sha256": "d89b4925fa2c05c42043905983c957ad7e9585bdc80712718818cacf9c3b063a"
+    },
+    {
+      "file": "shared/rummikub.ts",
+      "sha256": "066993cf575d74a037a29715e3d5615d232266c5121a016af76964413c9f1399"
+    },
+    {
+      "file": "shared/splendor.ts",
+      "sha256": "13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1",
+      "approvedContractSHA256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8",
+      "revisionReason": "Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged."
+    },
+    {
+      "file": "shared/readouts/catalogs/01-spatial-tiles.json",
+      "sha256": "6ea5f0f8c77b7fc25672e010d26317654caa17c3aa4fa92e5b8ad102447a9440"
+    },
+    {
+      "file": "shared/readouts/catalogs/02-cards-tableau.json",
+      "sha256": "645dc7ed62de8e28724f0f4b1094c69752bf53392e0ec9b36cf7fcd95bda947b"
+    },
+    {
+      "file": "shared/readouts/catalogs/03-workers-economy.json",
+      "sha256": "057f5813dbeba079d35374b70536c55c3e87eebcd7665dcef4b5fd9fdabe1349"
+    },
+    {
+      "file": "shared/readouts/catalogs/04-hidden-social.json",
+      "sha256": "ecadae525fb253e78dca5d23e80ebbdb88d1d7d75b451e36509c40fb01665e81"
+    },
+    {
+      "file": "shared/readouts/catalogs/05-campaign-combat.json",
+      "sha256": "47703ece8c1750fece9f0ee13e3dfac50842371ed3606a0d02b385a4f4bfe15a"
+    },
+    {
+      "file": "shared/readouts/catalogs/06-maps-tracks.json",
+      "sha256": "f94b681e856cb6c9a9a6cbc2f6e4ccb1560f8191b4ccf6e257e4919181de3a70"
+    }
+  ],
+  "indexSHA": "c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60",
+  "coverage": {
+    "games": 120,
+    "nativeBridges": 3,
+    "typedGames": 117,
+    "inferenceAccuracy": "UNMEASURED"
+  },
+  "games": [
+    {
+      "gameId": "catan",
+      "manualStateFields": [
+        "board-public-state",
+        "player-resource-hands",
+        "currentPlayer",
+        "turn.phase",
+        "turn.diceTotal",
+        "turn.productionResolved",
+        "turn.actionDevelopmentCardPlayed",
+        "turn.developmentCardBoughtThisTurn",
+        "turn.sevenDiscardsResolved",
+        "robber.hexAnchor",
+        "robber.resolutionStep",
+        "robber.targetHexAnchor",
+        "robber.stolenFromPlayerId",
+        "player.resources.counts",
+        "player.resources.total",
+        "player.resources.mustDiscardHalf",
+        "player.development.handCounts",
+        "newly-bought-development-card",
+        "player.development.boughtThisTurnType",
+        "player.development.boughtThisTurnIdentity",
+        "player.development.knightsPlayed",
+        "player.development.newActionCardUnavailableThisTurn",
+        "player.development.newVictoryPointCanBeRevealedToWin",
+        "player.development.qualifiesForLargestArmy",
+        "player.road.longestContinuousSegments",
+        "player.road.qualifiesForLongestRoad",
+        "turn.actionDevelopmentCardLimitReached",
+        "awards.longestRoadHolder",
+        "awards.largestArmyHolder",
+        "physical.bankResources",
+        "physical.availablePieces",
+        "ordered-development-deck",
+        "player.private.planNote",
+        "turn.pendingEffect",
+        "turn.pendingEffectDetails",
+        "resume.nextProcedure",
+        "player.discard.remainingCount",
+        "rulesProfile",
+        "tradeBuildMode",
+        "turn.trade",
+        "robber.cause",
+        "turn.returnPhase",
+        "turn.productionRemaining",
+        "setup.round",
+        "setup.step",
+        "setup.seatOrderConfirmed",
+        "setup.startingResourcesResolvedByPlayer",
+        "game.status",
+        "game.winnerPlayerId",
+        "player.pieces.remaining",
+        "physical.standardSupplyConfirmed",
+        "player.score.hiddenVictoryPoints",
+        "player.development.purchaseBatches",
+        "player.development.unusedTotal"
+      ],
+      "physicalPreserve": [],
+      "preservationTemplateIds": [
+        "board-public-state",
+        "player-resource-hands",
+        "player.development.handCounts",
+        "newly-bought-development-card",
+        "ordered-development-deck",
+        "physical.bankResources",
+        "physical.availablePieces",
+        "played-development-cards",
+        "spec.board-public-state",
+        "spec.player-resource-hands",
+        "spec.player.development.handCounts",
+        "spec.newly-bought-development-card",
+        "spec.ordered-development-deck",
+        "spec.physical.bankResources",
+        "spec.physical.availablePieces",
+        "spec.played-development-cards"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "board",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "carcassonne",
+      "manualStateFields": [
+        "active-tile",
+        "scoring",
+        "score-total",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.draw.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "track",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "ticket-to-ride",
+      "manualStateFields": [
+        "score",
+        "remaining-trains",
+        "final-round",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map-area",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "azul",
+      "manualStateFields": [
+        "score",
+        "phase",
+        "board-side",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bag.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.bag.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "offer",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "pattern",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "wall",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "floor",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "splendor",
+      "manualStateFields": [
+        "prestige",
+        "record-note.bonus",
+        "ending",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "bonus",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.reserve.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.bonus"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "noble-area",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "reserve",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "seven-wonders",
+      "manualStateFields": [
+        "age",
+        "selected",
+        "coins",
+        "record-note.neighbors",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "discard.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "neighbors",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.discard.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.neighbors"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "city",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "wonder-area",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "wingspan",
+      "manualStateFields": [
+        "round",
+        "record-note.food-stock",
+        "activation",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "food-stock",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.food-stock"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "habitats",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "shared",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "goal-area",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "everdell",
+      "manualStateFields": [
+        "season",
+        "record-note.resources",
+        "workers-left",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "common",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "city",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "ark-nova",
+      "manualStateFields": [
+        "appeal",
+        "conservation",
+        "reputation",
+        "money",
+        "break",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "zoo",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "action-row",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tableau",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "shared",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "terraforming-mars",
+      "manualStateFields": [
+        "record-note.stocks",
+        "record-note.production",
+        "tr",
+        "record-note.generation",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player",
+        "record-note.generation-action-use"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "stocks",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "production",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "generation",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "project-decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "generation-action-use",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.project-decks.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.stocks",
+        "spec.keep.production",
+        "spec.keep.generation",
+        "spec.keep.starting-player",
+        "spec.keep.generation-action-use"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "mars",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tableau",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "resources",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "global",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "dune-imperium-uprising",
+      "manualStateFields": [
+        "phase",
+        "record-note.influence",
+        "record-note.resources",
+        "score",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "influence",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "common-decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.deck.preserve",
+        "spec.hand.preserve",
+        "spec.common-decks.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.influence",
+        "spec.keep.resources",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "board",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "conflict",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "display",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "brass-birmingham",
+      "manualStateFields": [
+        "era",
+        "record-note.income",
+        "money",
+        "record-note.order",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "income",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "order",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.income",
+        "spec.keep.order"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "network",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "markets",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "agricola",
+      "manualStateFields": [
+        "round",
+        "record-note.food",
+        "house",
+        "record-note.family",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "food",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "family",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "round-deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.round-deck.scene.essentials-preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.food",
+        "spec.keep.family",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "farm-area",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "stock",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "viticulture",
+      "manualStateFields": [
+        "season",
+        "record-note.income",
+        "record-note.wake",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "income",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "wake",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.income",
+        "spec.keep.wake"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "estate",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cellar",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "scythe",
+      "manualStateFields": [
+        "coins",
+        "record-note.power",
+        "action",
+        "record-note.combat",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "power",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "combat",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.power",
+        "spec.keep.combat"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "mats",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "root",
+      "manualStateFields": [
+        "phase",
+        "record-note.decree",
+        "record-note.vagabond",
+        "record-note.score",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "decree",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "vagabond",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "score",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.decree",
+        "spec.keep.vagabond",
+        "spec.keep.score"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "faction",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "spirit-island",
+      "manualStateFields": [
+        "phase",
+        "record-note.energy",
+        "record-note.setup",
+        "record-note.damage",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "energy",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "setup",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "damage",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "earned-fear.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.earned-fear.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.energy",
+        "spec.keep.setup",
+        "spec.keep.damage"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "island",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "invaders",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "spirit",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "pandemic",
+      "manualStateFields": [
+        "role",
+        "actions",
+        "record-note.outbreak",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "outbreak",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.outbreak"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "world",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "status",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "gloomhaven-jaws",
+      "manualStateFields": [
+        "scenario",
+        "record-note.initiative",
+        "record-note.health",
+        "record-note.campaign",
+        "record-note.progress",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "initiative",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "health",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "progress",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.initiative",
+        "spec.keep.health",
+        "spec.keep.campaign",
+        "spec.keep.progress"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "battle",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "character",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "frosthaven",
+      "manualStateFields": [
+        "record-note.clock",
+        "record-note.scenario",
+        "record-note.entities",
+        "record-note.campaign",
+        "record-note.class-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "clock",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "scenario",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "entities",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "class-state",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.clock",
+        "spec.keep.scenario",
+        "spec.keep.entities",
+        "spec.keep.campaign",
+        "spec.keep.class-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "battle",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "town",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "arkham-lcg",
+      "manualStateFields": [
+        "chapter",
+        "record-note.phase",
+        "record-note.values",
+        "record-note.campaign-log",
+        "record-note.test",
+        "turn",
+        "pending",
+        "note",
+        "lead-investigator",
+        "record-note.chaos-bag",
+        "record-note.scenario-progress"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hidden.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign-log",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "test",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "chaos-bag",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "scenario-progress",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.hidden.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.chaos-bag.essentials-preserve",
+        "spec.keep.phase",
+        "spec.keep.values",
+        "spec.keep.campaign-log",
+        "spec.keep.test",
+        "spec.keep.scenario-progress"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "play",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "twilight-imperium-4",
+      "manualStateFields": [
+        "phase",
+        "active-system",
+        "record-note.pools",
+        "record-note.economy",
+        "record-note.speaker",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "pools",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "economy",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "speaker",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "future-objectives.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "common-decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.future-objectives.scene.essentials-preserve",
+        "spec.common-decks.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.pools",
+        "spec.keep.economy",
+        "spec.keep.speaker"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "faction",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "agenda",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "lost-ruins-arnak",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.stock",
+        "record-note.research-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "stock",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "research-state",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.round",
+        "spec.keep.stock",
+        "spec.keep.research-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "island",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "research-area",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "castles-burgundy",
+      "manualStateFields": [
+        "stage",
+        "record-note.score",
+        "record-note.resources",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "score",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.score",
+        "spec.keep.resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "duchy",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "depots",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "cascadia",
+      "manualStateFields": [
+        "nature-count",
+        "remaining",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "pool.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.pool.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "ecosystem",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "offer",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "goals",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "patchwork",
+      "manualStateFields": [
+        "buttons",
+        "income",
+        "bonus",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "quilt",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "ring",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "time",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "rummikub",
+      "manualStateFields": [
+        "opened",
+        "timer",
+        "score",
+        "currentPlayer",
+        "pending",
+        "note",
+        "record-note.manipulation-baseline"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "pool.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "manipulation-baseline",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.rack.preserve",
+        "spec.pool.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.manipulation-baseline"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "table",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "rack",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "clue",
+      "manualStateFields": [
+        "edition",
+        "suggestion",
+        "shown",
+        "eliminated",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "solution.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.solution.preserve",
+        "spec.private-notes.preserve",
+        "spec.essentials.public-layout.public"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "mansion",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private-notes",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "seven-wonders-duel",
+      "manualStateFields": [
+        "age",
+        "coins",
+        "record-note.science",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "future.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "science",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "removed-progress.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.future.preserve",
+        "spec.removed-progress.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.science"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "structure",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "city",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "track",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "clank-catacombs",
+      "manualStateFields": [
+        "record-note.health",
+        "record-note.loot",
+        "record-note.turn-resources",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hidden.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "health",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "loot",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "turn-resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.hidden.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.health",
+        "spec.keep.loot",
+        "spec.keep.turn-resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "dungeon",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "clank",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "heat",
+      "manualStateFields": [
+        "record-note.lap",
+        "gear",
+        "record-note.speed",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "lap",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "speed",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.lap",
+        "spec.keep.speed"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "circuit",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "caverna",
+      "manualStateFields": [
+        "round",
+        "record-note.weapons",
+        "record-note.stocks",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "weapons",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "stocks",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "harvest-markers.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.harvest-markers.scene.essentials-preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.weapons",
+        "spec.keep.stocks",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "home",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "stock",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "gaia-project",
+      "manualStateFields": [
+        "record-note.resource-values",
+        "record-note.power-bowls",
+        "record-note.phase",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "resource-values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "power-bowls",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.resource-values",
+        "spec.keep.power-bowls",
+        "spec.keep.phase"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "faction",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "research",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "terra-mystica",
+      "manualStateFields": [
+        "record-note.resources",
+        "record-note.skills",
+        "record-note.round",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "skills",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.resources",
+        "spec.keep.skills",
+        "spec.keep.round",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "faction",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cults",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "great-western-trail",
+      "manualStateFields": [
+        "delivery",
+        "record-note.workers",
+        "record-note.stock",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "workers",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "stock",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.workers",
+        "spec.keep.stock"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "trail",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "rail",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "barrage",
+      "manualStateFields": [
+        "energy",
+        "wheel-position",
+        "record-note.round",
+        "turn",
+        "pending",
+        "note",
+        "record-note.turn-order"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "turn-order",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.round",
+        "spec.keep.turn-order"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "basin",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "wheel",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "company",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "concordia",
+      "manualStateFields": [
+        "money",
+        "last-card",
+        "ending",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "store",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "display",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "orleans",
+      "manualStateFields": [
+        "round",
+        "record-note.goods",
+        "record-note.committed",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bag.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "goods",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "committed",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.bag.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.goods",
+        "spec.keep.committed"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "plan",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "power-grid",
+      "manualStateFields": [
+        "step",
+        "record-note.auction",
+        "powered",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "auction",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.wallet.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.auction"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "network",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "wallet",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "grand-austria-hotel",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.money",
+        "record-note.staff-used",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "money",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "staff-used",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.staff.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.round",
+        "spec.keep.money",
+        "spec.keep.staff-used"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hotel",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cafe",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "staff",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "le-havre",
+      "manualStateFields": [
+        "round",
+        "record-note.food",
+        "record-note.loans",
+        "turn",
+        "pending",
+        "note",
+        "game-length-mode"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "food",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "loans",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "special-buildings.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.special-buildings.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.food",
+        "spec.keep.loans"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "harbor",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "town",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "assets",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "a-feast-for-odin",
+      "manualStateFields": [
+        "round",
+        "record-note.income",
+        "record-note.occupation",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "income",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "occupation",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.income",
+        "spec.keep.occupation"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "puzzle",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "assets",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "war-of-the-ring-2",
+      "manualStateFields": [
+        "phase",
+        "previous-hunt",
+        "record-note.ring-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "ring-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.ring-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "middle-earth",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "pool",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "star-wars-rebellion",
+      "manualStateFields": [
+        "phase",
+        "record-note.tracks",
+        "record-note.production",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "rebel-secret.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "imperial-secret.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "tracks",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "production",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.rebel-secret.preserve",
+        "spec.imperial-secret.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.tracks",
+        "spec.keep.production"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "leaders-area",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "mage-knight",
+      "manualStateFields": [
+        "day-night",
+        "record-note.values",
+        "record-note.combat",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "combat",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.values",
+        "spec.keep.combat"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map-area",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "offers",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "nemesis",
+      "manualStateFields": [
+        "record-note.ship-status",
+        "record-note.wounds-ammo",
+        "record-note.known-checks",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "ship-status",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "wounds-ammo",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "known-checks",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.ship-status",
+        "spec.keep.wounds-ammo",
+        "spec.keep.known-checks"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "ship",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "character",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "robinson-crusoe",
+      "manualStateFields": [
+        "record-note.scenario",
+        "record-note.camp-levels",
+        "record-note.resource-zones",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "scenario",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "camp-levels",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "resource-zones",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.scenario",
+        "spec.keep.camp-levels",
+        "spec.keep.resource-zones"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "island-map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "camp",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "character",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "pandemic-legacy-1",
+      "manualStateFields": [
+        "record-note.calendar",
+        "record-note.tracks",
+        "record-note.persistent",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "calendar",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "tracks",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "persistent",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.players.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.calendar",
+        "spec.keep.tracks",
+        "spec.keep.persistent"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "campaign",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "players",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "marvel-champions",
+      "manualStateFields": [
+        "record-note.form",
+        "record-note.health",
+        "record-note.enemy-stage",
+        "turn",
+        "pending",
+        "note",
+        "record-note.first-player",
+        "record-note.round-phase"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "form",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "health",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "enemy-stage",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "first-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "round-phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.form",
+        "spec.keep.health",
+        "spec.keep.enemy-stage",
+        "spec.keep.first-player",
+        "spec.keep.round-phase"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "enemy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hero",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "lotr-lcg",
+      "manualStateFields": [
+        "record-note.hero-resources",
+        "threat",
+        "record-note.scenario",
+        "record-note.campaign",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "hero-resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "scenario",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.hero-resources",
+        "spec.keep.scenario",
+        "spec.keep.campaign"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "quest",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "eclipse-second-dawn",
+      "manualStateFields": [
+        "record-note.economy",
+        "record-note.round",
+        "record-note.damage",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "economy",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "damage",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.economy",
+        "spec.keep.round",
+        "spec.keep.damage"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "blueprints",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "arcs",
+      "manualStateFields": [
+        "record-note.chapter",
+        "record-note.ambitions",
+        "record-note.action-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "chapter",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "ambitions",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "action-state",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.chapter",
+        "spec.keep.ambitions",
+        "spec.keep.action-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "court",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "trick",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "anachrony",
+      "manualStateFields": [
+        "record-note.era",
+        "record-note.loans",
+        "record-note.workers",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "era",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "loans",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "workers",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "pool-decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.pool-decks.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.era",
+        "spec.keep.loans",
+        "spec.keep.workers",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "timeline",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "kanban-ev",
+      "manualStateFields": [
+        "record-note.cycles",
+        "record-note.training-levels",
+        "record-note.assets",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "cycles",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "training-levels",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "assets",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.cycles",
+        "spec.keep.training-levels",
+        "spec.keep.assets"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "factory",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "line",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "training",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "wyrmspan",
+      "manualStateFields": [
+        "record-note.exploration",
+        "record-note.round",
+        "record-note.attached",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "exploration",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "attached",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.exploration",
+        "spec.keep.round",
+        "spec.keep.attached"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "caves",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "guild",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "stock",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "quacks",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.pot-status",
+        "budget",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bag.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "pot-status",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.bag.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.round",
+        "spec.keep.pot-status"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "pot",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "books",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "isle-of-cats",
+      "manualStateFields": [
+        "record-note.day",
+        "record-note.lessons",
+        "record-note.oshax",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "day",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "lessons",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        },
+        {
+          "field": "oshax",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.day",
+        "spec.keep.lessons",
+        "spec.keep.oshax"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "boat",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "island",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "dominion",
+      "manualStateFields": [
+        "record-note.turn-counters",
+        "record-note.kingdom",
+        "pending-response",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "turn-counters",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "kingdom",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.discard.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.turn-counters",
+        "spec.keep.kingdom"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "supply",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "play",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discard",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "forest-shuffle",
+      "manualStateFields": [
+        "record-note.winter",
+        "record-note.half-choice",
+        "cave-count",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "winter",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "half-choice",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.cave.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.winter",
+        "spec.keep.half-choice"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "forest",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "clearing",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cave",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "eldritch-horror",
+      "manualStateFields": [
+        "record-note.tracks",
+        "record-note.investigator",
+        "record-note.phase",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "unknown-faces.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "tracks",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "investigator",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.unknown-faces.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.tracks",
+        "spec.keep.investigator",
+        "spec.keep.phase"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "threat",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "kingdomino",
+      "manualStateFields": [
+        "mode",
+        "record-note.choice",
+        "record-note.score",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "choice",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "score",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.draw.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.choice",
+        "spec.keep.score"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "kingdom",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "draft",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "sagrada",
+      "manualStateFields": [
+        "record-note.round",
+        "favors",
+        "record-note.tool-action",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "tool-action",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.round",
+        "spec.keep.tool-action"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "window",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "draft",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "round-track",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tools",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "calico",
+      "manualStateFields": [
+        "record-note.mode",
+        "record-note.awards",
+        "pending-tile",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bag.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "mode",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "awards",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.bag.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.mode",
+        "spec.keep.awards"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "quilt",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "scoring",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "akropolis",
+      "manualStateFields": [
+        "record-note.height",
+        "stone-count",
+        "variant",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "height",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.draw.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.height"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "city",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "stone-age",
+      "manualStateFields": [
+        "record-note.agriculture",
+        "record-note.tools",
+        "record-note.resolution",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player",
+        "round-phase"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "agriculture",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "tools",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resolution",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.agriculture",
+        "spec.keep.tools",
+        "spec.keep.resolution",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "codenames",
+      "manualStateFields": [
+        "record-note.teams",
+        "record-note.clue",
+        "record-note.revealed",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "key.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "key-map",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "teams",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "clue",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "revealed",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.key.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.key-map",
+        "spec.keep.teams",
+        "spec.keep.clue",
+        "spec.keep.revealed"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "words",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "davinci-code",
+      "manualStateFields": [
+        "record-note.pending-tile",
+        "record-note.guess",
+        "round-status",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "pool.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "pending-tile",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        },
+        {
+          "field": "guess",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.identity.preserve",
+        "spec.pool.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.pending-tile",
+        "spec.keep.guess"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "rows",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "identity",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "avalon",
+      "manualStateFields": [
+        "record-note.composition",
+        "known-information",
+        "record-note.quest-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "mission.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "composition",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "quest-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.role.preserve",
+        "spec.mission.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.composition",
+        "spec.keep.quest-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "table",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "role",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "vote",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "dixit",
+      "manualStateFields": [
+        "theme",
+        "record-note.reveal",
+        "record-note.results",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "reveal",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "results",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.vote.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.reveal",
+        "spec.keep.results"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "display",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "vote",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "scores",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "just-one",
+      "manualStateFields": [
+        "record-note.roles",
+        "record-note.progress",
+        "cancelled",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "answer.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "roles",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "progress",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.answer.preserve",
+        "spec.writing.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.roles",
+        "spec.keep.progress"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "writing",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "clues",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "scout",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.insert",
+        "once",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "insert",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.round",
+        "spec.keep.insert"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "show",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "score",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "six-nimmt",
+      "manualStateFields": [
+        "score",
+        "record-note.processing",
+        "round",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "processing",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.penalty.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.processing"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "rows",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "reveal",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "penalty",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "crew-deep-sea",
+      "manualStateFields": [
+        "record-note.mission",
+        "record-note.task-results",
+        "record-note.trick-lead",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "mission",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "task-results",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "trick-lead",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.won.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.mission",
+        "spec.keep.task-results",
+        "spec.keep.trick-lead"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "trick",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tasks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "communication",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "won",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "hanabi",
+      "manualStateFields": [
+        "record-note.clues",
+        "record-note.final-turns",
+        "variant",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hand.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "own-hidden"
+        },
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "clues",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "final-turns",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.clues",
+        "spec.keep.final-turns"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "fireworks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discard",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tokens",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "love-letter",
+      "manualStateFields": [
+        "record-note.active",
+        "private-knowledge",
+        "record-note.round",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "active",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.active",
+        "spec.keep.round"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "play",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "score",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "coup",
+      "manualStateFields": [
+        "record-note.claim",
+        "record-note.response",
+        "influence-count",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "court.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "claim",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "response",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.court.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.claim",
+        "spec.keep.response"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "public",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "cockroach-poker",
+      "manualStateFields": [
+        "claim",
+        "record-note.chain",
+        "knowledge",
+        "verdict",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "offered.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "chain",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.offered.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.chain"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "collected",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "skull",
+      "manualStateFields": [
+        "record-note.bid",
+        "record-note.reveals",
+        "removed",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bid",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "reveals",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.stacks.preserve",
+        "spec.private.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.keep.bid",
+        "spec.keep.reveals"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "stacks",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "mats",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "dobble",
+      "manualStateFields": [
+        "mode",
+        "record-note.counts",
+        "pause",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hidden.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "counts",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hidden.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.counts"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "center",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "monopoly",
+      "manualStateFields": [
+        "record-note.turn-state",
+        "record-note.debt",
+        "house-rules",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "turn-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "debt",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.assets.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.turn-state",
+        "spec.keep.debt"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "track",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "ownership",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "assets",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "bohnanza",
+      "manualStateFields": [
+        "deck-cycle",
+        "record-note.trade-state",
+        "phase",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "trade-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.coins.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.trade-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "fields",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "trade",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "coins",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "lost-cities",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.investments",
+        "turn-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "investments",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.discard.preserve",
+        "spec.hand.preserve",
+        "spec.draw.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.round",
+        "spec.keep.investments"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "expeditions",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discard",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "jaipur",
+      "manualStateFields": [
+        "seals",
+        "record-note.transaction",
+        "round",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "transaction",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.token-supply.preserve",
+        "spec.earned.preserve",
+        "spec.draw.scene.essentials-preserve",
+        "spec.herd-private.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.transaction"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "camels",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "token-supply",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "earned",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "race-for-the-galaxy",
+      "manualStateFields": [
+        "record-note.phases",
+        "record-note.goods",
+        "mode",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "phases",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "goods",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.actions.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.phases",
+        "spec.keep.goods"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "tableau",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "vp",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "res-arcana",
+      "manualStateFields": [
+        "record-note.essence-counts",
+        "record-note.round",
+        "record-note.power",
+        "turn",
+        "pending",
+        "note",
+        "starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "essence-counts",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "power",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.essence-counts",
+        "spec.keep.round",
+        "spec.keep.power"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "engine",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "star-realms",
+      "manualStateFields": [
+        "authority",
+        "record-note.turn-resources",
+        "record-note.abilities",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "trade-deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "turn-resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "abilities",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.deck.preserve",
+        "spec.trade-deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.turn-resources",
+        "spec.keep.abilities"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "play",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "machi-koro",
+      "manualStateFields": [
+        "record-note.income-state",
+        "record-note.landmarks",
+        "extra-turn",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "income-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "landmarks",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.income-state",
+        "spec.keep.landmarks"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "city",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "bank",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "roll",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "king-of-tokyo",
+      "manualStateFields": [
+        "record-note.values",
+        "record-note.resolution",
+        "roll-count",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resolution",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.deck.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.values",
+        "spec.keep.resolution"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "tokyo",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "roll",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "space-base",
+      "manualStateFields": [
+        "record-note.rewards",
+        "record-note.charge",
+        "buy-state",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "rewards",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "charge",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.rewards",
+        "spec.keep.charge"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "sectors",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "roll",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "tiny-towns",
+      "manualStateFields": [
+        "record-note.announced",
+        "record-note.build",
+        "finished",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "announced",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "build",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.monument.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.announced",
+        "spec.keep.build"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "town",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "definitions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "monument",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "turn-marker",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "splendor-duel",
+      "manualStateFields": [
+        "record-note.crowns-scores",
+        "optional",
+        "effect",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "bag.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "crowns-scores",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.reserved.preserve",
+        "spec.bag.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.crowns-scores"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "board",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "reserved",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "apiary",
+      "manualStateFields": [
+        "record-note.worker-values",
+        "record-note.hibernation-state",
+        "record-note.dance",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "worker-values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "hibernation-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "dance",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.worker-values",
+        "spec.keep.hibernation-state",
+        "spec.keep.dance"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "hive",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hibernation",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "tapestry",
+      "manualStateFields": [
+        "record-note.era",
+        "record-note.resources",
+        "civilization",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "era",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.era",
+        "spec.keep.resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "capital",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "income",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "expeditions",
+      "manualStateFields": [
+        "record-note.card-zones",
+        "record-note.values",
+        "record-note.actions",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "card-zones",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "values",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "actions",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.card-zones",
+        "spec.keep.values",
+        "spec.keep.actions"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cards",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "charterstone",
+      "manualStateFields": [
+        "record-note.campaign-progress",
+        "record-note.session-progress",
+        "building-status",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "campaign-progress",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "session-progress",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.campaign-progress",
+        "spec.keep.session-progress"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "village",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "campaign",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "gloomhaven",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.character",
+        "record-note.campaign-state",
+        "private-goals",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "character",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.round",
+        "spec.keep.character",
+        "spec.keep.campaign-state"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "monster",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "campaign",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "sleeping-gods",
+      "manualStateFields": [
+        "record-note.story",
+        "record-note.turn-state",
+        "record-note.ship-damage",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "story",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "turn-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "ship-damage",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.story",
+        "spec.keep.turn-state",
+        "spec.keep.ship-damage"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "world",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "ship",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "crew",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "combat",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "mansions-madness-2",
+      "manualStateFields": [
+        "external-save",
+        "record-note.phase",
+        "record-note.known-monsters",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "known-monsters",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.phase",
+        "spec.keep.known-monsters"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "descent-legends-dark",
+      "manualStateFields": [
+        "external-save",
+        "record-note.hero-state",
+        "record-note.turn-state",
+        "record-note.campaign",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hero-state",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "turn-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.hero-state",
+        "spec.keep.turn-state",
+        "spec.keep.campaign"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hero",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "roll",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "arkham-horror-3",
+      "manualStateFields": [
+        "record-note.phase",
+        "record-note.mythos-state",
+        "record-note.progress",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "cup.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "mythos-state",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "progress",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "event-deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.cup.preserve",
+        "spec.event-deck.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.phase",
+        "spec.keep.mythos-state",
+        "spec.keep.progress"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "scenario",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "star-wars-outer-rim",
+      "manualStateFields": [
+        "record-note.reputation",
+        "record-note.assets",
+        "record-note.job",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "reputation",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "assets",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "job",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.reputation",
+        "spec.keep.assets",
+        "spec.keep.job"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "ship",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "imperial-assault",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.campaign",
+        "pending-attack",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "imperial.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "imperial-plans",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "role-limited"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "campaign",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.imperial.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.imperial-plans",
+        "spec.keep.round",
+        "spec.keep.campaign"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "heroes",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "groups",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "journeys-middle-earth",
+      "manualStateFields": [
+        "external-save",
+        "record-note.party",
+        "record-note.phase",
+        "record-note.test",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "skill-deck.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "party",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "test",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.skill-deck.preserve",
+        "spec.private.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.party",
+        "spec.keep.phase",
+        "spec.keep.test"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hero",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "twilight-struggle",
+      "manualStateFields": [
+        "record-note.play",
+        "record-note.military-space",
+        "record-note.score",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "play",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "military-space",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "score",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.play",
+        "spec.keep.military-space",
+        "spec.keep.score"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "world",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "ongoing",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "through-the-ages",
+      "manualStateFields": [
+        "record-note.age",
+        "record-note.politics",
+        "record-note.resources",
+        "record-note.actions",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "events.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "age",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "politics",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "actions",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.events.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.age",
+        "spec.keep.politics",
+        "spec.keep.resources",
+        "spec.keep.actions"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "civilization",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "banks",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "row",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "dominant-species",
+      "manualStateFields": [
+        "record-note.round",
+        "record-note.adaptation",
+        "record-note.endangered",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "adaptation",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "endangered",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "dominance-deck.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "terrain-stacks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.dominance-deck.scene.essentials-preserve",
+        "spec.terrain-stacks.scene.essentials-preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.round",
+        "spec.keep.adaptation",
+        "spec.keep.endangered"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "earth",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "animal",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cards",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "hansa-teutonica",
+      "manualStateFields": [
+        "actions",
+        "record-note.displacement",
+        "record-note.route-resolution",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "displacement",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "route-resolution",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.displacement",
+        "spec.keep.route-resolution"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "network",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "skills",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "bonus",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "castles-mad-ludwig",
+      "manualStateFields": [
+        "record-note.builder",
+        "record-note.room-resolution",
+        "cash",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "builder",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "room-resolution",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.builder",
+        "spec.keep.room-resolution"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "castle",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "public-goals",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "istanbul",
+      "manualStateFields": [
+        "record-note.goods",
+        "record-note.move-action",
+        "record-note.assets",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "goods",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "move-action",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "assets",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.goods",
+        "spec.keep.move-action",
+        "spec.keep.assets"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "city",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "wheelbarrow",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "supply",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "five-tribes",
+      "manualStateFields": [
+        "record-note.movement",
+        "record-note.resolution",
+        "record-note.assets",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "movement",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "resolution",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "assets",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "owner"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.movement",
+        "spec.keep.resolution",
+        "spec.keep.assets"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "board",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "order",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "assets",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "small-world",
+      "manualStateFields": [
+        "record-note.conquest",
+        "record-note.decline",
+        "score",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "conquest",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "decline",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.private-score.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.conquest",
+        "spec.keep.decline"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "map",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "race-market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "private-score",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "round",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "paleo",
+      "manualStateFields": [
+        "record-note.groups",
+        "record-note.day",
+        "record-note.aid",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "groups",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "day",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "aid",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.keep.groups",
+        "spec.keep.day",
+        "spec.keep.aid"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "groups",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "active",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discards",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "camp",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "age-of-innovation",
+      "manualStateFields": [
+        "record-note.identity",
+        "record-note.resources",
+        "record-note.round",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "identity",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "round",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.identity",
+        "spec.keep.resources",
+        "spec.keep.round"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "world",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "player",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "power",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "sciences",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "round",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "underwater-cities",
+      "manualStateFields": [
+        "record-note.card-action",
+        "record-note.production",
+        "record-note.resources",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "card-action",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "production",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.card-action",
+        "spec.keep.production",
+        "spec.keep.resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "network",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "actions",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tableau",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "tracks",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "voidfall",
+      "manualStateFields": [
+        "mode",
+        "record-note.focus",
+        "record-note.trade-age",
+        "record-note.resources",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "focus",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "trade-age",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.plans.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.focus",
+        "spec.keep.trade-age",
+        "spec.keep.resources"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "galaxy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "house",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "technology",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "plans",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "cycle",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "seti",
+      "manualStateFields": [
+        "record-note.rotations",
+        "record-note.phase",
+        "record-note.discovery",
+        "record-note.resources",
+        "turn",
+        "pending",
+        "note",
+        "record-note.starting-player"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "hidden.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "rotations",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "phase",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "discovery",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "starting-player",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.hidden.preserve",
+        "spec.essentials.public-layout.public",
+        "spec.essentials.public-layout.player",
+        "spec.keep.rotations",
+        "spec.keep.phase",
+        "spec.keep.discovery",
+        "spec.keep.resources",
+        "spec.keep.starting-player"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "solar-system",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "signals",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "computer",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "public",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "galaxy-trucker",
+      "manualStateFields": [
+        "ship-class",
+        "record-note.adventure",
+        "credits",
+        "building-stop",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "adventure.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "adventure",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.adventure.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.adventure"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "ship",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "build",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "flight",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "losses",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "halligalli",
+      "manualStateFields": [
+        "record-note.visible-fruit",
+        "ring",
+        "record-note.remaining",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "visible-fruit",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "remaining",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.open.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.visible-fruit",
+        "spec.keep.remaining"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "open",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "bell",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "blokus",
+      "manualStateFields": [
+        "record-note.color-control",
+        "turn-color",
+        "record-note.score-mode",
+        "record-note.passed",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "color-control",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "score-mode",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "passed",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.essentials.public-layout.public",
+        "spec.keep.color-control",
+        "spec.keep.score-mode",
+        "spec.keep.passed"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "board",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "reserve",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    },
+    {
+      "gameId": "aeons-end",
+      "manualStateFields": [
+        "record-note.turn-resources",
+        "record-note.pending-enemy",
+        "record-note.health",
+        "turn",
+        "pending",
+        "note"
+      ],
+      "physicalPreserve": [
+        {
+          "field": "draw.scene",
+          "editor": "physical-only",
+          "scope": "player",
+          "visibility": "hidden"
+        },
+        {
+          "field": "decks.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
+        },
+        {
+          "field": "turn-resources",
+          "editor": "opaque-preserve",
+          "scope": "player",
+          "visibility": "public"
+        },
+        {
+          "field": "pending-enemy",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        },
+        {
+          "field": "health",
+          "editor": "opaque-preserve",
+          "scope": "public",
+          "visibility": "public"
+        }
+      ],
+      "preservationTemplateIds": [
+        "spec.hand.preserve",
+        "spec.draw.preserve",
+        "spec.discard.preserve",
+        "spec.decks.preserve",
+        "spec.essentials.public-layout.player",
+        "spec.essentials.public-layout.public",
+        "spec.keep.turn-resources",
+        "spec.keep.pending-enemy",
+        "spec.keep.health"
+      ],
+      "referenceSets": [],
+      "areas": [
+        {
+          "areaId": "mages",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hand",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discard",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "market",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "enemy",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+ "p1RackWrite": 200,
+ "S1 default (no PIN): anonymous GET session exposes p1 rack tile": true,
+ "S1 default (no PIN): /api/sessions list exposes p1 rack tile": true,
+ "S2 default (no PIN): anonymous PATCH can overwrite p1 rack (status)": 200,
+ "S3 public rack tile-count field declared in runtime pack": [],
+ "S3 runtime pack field keys": [
+  "table.scene:public/public",
+  "rack.scene:player/owner",
+  "currentPlayer:public/public",
+  "opened:player/public",
+  "pending:public/public"
+ ],
+ "pin p1": 200,
+ "pin p2": 200,
+ "S4 locked p2 rack write without token (status)": 403,
+ "p2RackWriteWithToken": 200,
+ "S5 PIN locked: anonymous GET hides p1/p2 rack": true,
+ "S5 PIN locked: p1 opened (declared public) still visible": true,
+ "S6 p1 token sees own rack and not p2 rack": true,
+ "S7 activity messages visible while locked": [
+  "새 게임 기록을 시작했습니다.",
+  "입력한 상태에서 요구사항과 도출 사실을 다시 계산했습니다.",
+  "입력한 상태에서 요구사항과 도출 사실을 다시 계산했습니다.",
+  "입력한 상태에서 요구사항과 도출 사실을 다시 계산했습니다."
+ ],
+ "commit": 200,
+ "S8 resume with p1 token only (2 protected owners)": 403,
+ "S8 resume with p2 token only (2 protected owners)": 403,
+ "S8 resume with no token": 403,
+ "S9 next-turn status (public, locked)": 200,
+ "S9 p1 rack kept after next-turn": true,
+ "S10 p3 (no PIN) rack readable by anonymous while p1/p2 locked": true
+}

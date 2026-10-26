@@ -1,0 +1,8 @@
+// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
+import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
+export type IsleOfCatsReadout =
+  {schema:"isle-of-cats-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "catColor": string | null; "shape": string | null; "selectedColor": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "catColor": FieldBasis | null; "shape": FieldBasis | null; "selectedColor": 'user' | null; "location": 'user' | null}}
+ | {schema:"isle-of-cats-v1";kind:"boats";values:{"printedName": string | null; "sideLabel": string | null; "gridCell": string | null; "roomLabel": string | null; "printedSymbols": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "gridCell": 'user' | null; "roomLabel": FieldBasis | null; "printedSymbols": FieldBasis | null}}
+ | {schema:"isle-of-cats-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
+ | {schema:"isle-of-cats-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "displayValue": FieldBasis | null}}
+ | {schema:"isle-of-cats-v1";kind:null;values:{};sources:{}};

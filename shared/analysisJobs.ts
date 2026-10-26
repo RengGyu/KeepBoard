@@ -1,0 +1,3 @@
+export type AnalysisJobState='queued'|'running'|'completed'|'failed'|'stale'|'interrupted';
+export interface AnalysisJob {id:string;sessionId:string;ownerId?:string;evidenceIds:string[];captureEpoch:string;state:AnalysisJobState;createdAt:string;updatedAt:string;candidateCount?:number;mode?:'live'|'manual'|'example';timings?:Record<string,number>;error?:'analysis-failed'|'stale'|'interrupted';reader?:import('./lightweightRecognition').ObservationReaderIdentity;definitionSHA?:string;inputSHA?:string;taskProfile?:import('./lightweightRecognition').LocalTaskProfile;observationReceipts?:import('./lightweightRecognition').ObservationReceipt[]}
+export const activeAnalysisJob=(j:AnalysisJob)=>j.state==='queued'||j.state==='running';

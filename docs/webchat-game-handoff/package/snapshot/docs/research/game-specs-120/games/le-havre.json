@@ -1,0 +1,713 @@
+{
+  "schema_version": "1.0",
+  "game_id": "le-havre",
+  "name_ko": "르 아브르",
+  "name_en": "Le Havre",
+  "edition": {
+    "id": "base",
+    "name": "기본 게임 모드",
+    "compatibility_notes": [
+      "현행 번들 내 추가 카드 포함 여부 확인",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "le-havre.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "goods",
+      "name": "원재료·가공품",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "앞뒷면 가공 단계와 종류.",
+      "source_refs": [
+        "le-havre.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "buildings",
+      "name": "건물·선박 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "마을/개인 소유, 사용 중 건물과 선박 종류.",
+      "source_refs": [
+        "le-havre.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "workers",
+      "name": "일꾼·라운드 배",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "건물 점유와 공급 순서 위치.",
+      "source_refs": [
+        "le-havre.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "debt",
+      "name": "돈·대출",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "프랑",
+        "대출 카드"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "돈은 프랑 동전이고 대출은 Loan 카드다. 대출을 화폐 토큰으로 합치지 않는다. 개인별 현금과 미상환 카드 수를 기록하며 확장 특수건물은 이 분류의 근거에서 제외한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "le-havre.art-confirmation.le-havre-2016-rules"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "harbor",
+        "name": "공급 칸·라운드",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "goods",
+          "workers"
+        ],
+        "anchor_contract": "공급 표식과 공개 상품 수, 라운드 배 위치.",
+        "description": "공급 칸·라운드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "town",
+        "name": "마을 건물",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "buildings",
+          "workers"
+        ],
+        "anchor_contract": "건물 ID·소유자와 사용 중인 일꾼 부착.",
+        "description": "마을 건물의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "assets",
+        "name": "개인 상품·선박",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "goods",
+          "buildings",
+          "debt"
+        ],
+        "anchor_contract": "가공 전후 면, 선박, 돈·대출을 각각 기록.",
+        "description": "개인 상품·선박의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "harbor.scene",
+      "label": "공급 칸·라운드",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공급 표식과 공개 상품 수, 라운드 배 위치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "goods",
+        "workers"
+      ],
+      "area_ids": [
+        "harbor"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "town.scene",
+      "label": "마을 건물",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "건물 ID·소유자와 사용 중인 일꾼 부착. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "buildings",
+        "workers"
+      ],
+      "area_ids": [
+        "town"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "assets.scene",
+      "label": "개인 상품·선박",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "가공 전후 면, 선박, 돈·대출을 각각 기록. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "goods",
+        "buildings",
+        "debt"
+      ],
+      "area_ids": [
+        "assets"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "라운드·먹이 지불",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 라운드와 수확/먹이/건물 추가 처리 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "food",
+      "label": "음식 가치",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실제 상품 종류/개수와 확인한 음식 값; 자동 소비 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "loans",
+      "label": "대출·돈",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "보유 대출 장수와 프랑; 자산 총점과 구별.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "공급/건물 행동/가공/라운드 먹이·이자 처리 중 지점. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "essentials.storage-guidance"
+      ],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "game-length-mode",
+      "label": "Full/Shortened 모드",
+      "description": "사용 중인 full/shortened 및 인원별 라운드 배열. 선택을 모르면 비워 두고 특수건물 존재를 강제로 추론하지 않는다.",
+      "type": "text",
+      "scope": "public",
+      "visibility": "public",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "le-havre.essentials.rules"
+      ]
+    },
+    {
+      "id": "special-buildings.scene",
+      "label": "미공개 특수건물 묶음",
+      "description": "Full game에서 사용하는 미공개 특수건물 덱. 공개 건물 제안 더미/이미 지어진 건물과 분리. Shortened 미사용이면 없음으로 기록.",
+      "type": "component-scene",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "lifetime": "session",
+      "confidence": "verified",
+      "acquisition": [
+        "manual",
+        "physical"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [
+        "le-havre.essentials.rules"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "processing",
+      "name": "가공",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "건물을 통해 원재료를 가공/교환하며 선박·건물을 건설한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "le-havre.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "ownership",
+      "name": "건물 기록",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "건물 소유와 지금 그 건물을 사용하는 일꾼은 서로 다른 속성으로 설계한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "special-buildings.scene.essentials-preserve",
+        "label": "미공개 특수건물 묶음 실물 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "special-buildings.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "해당 필드의 실물만 별도 묶음으로 보관하고 다른 덱·버림·제거·소유자 묶음과 합치지 않는다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 기록한다. 위치도 민감하면 위치 기록을 생략하고 식별표/봉인 확인만 남긴다.",
+          "내용을 알기 위해 펼치거나 숨은 면을 촬영하지 않는다. 이미 의미가 확인된 순서는 위/아래와 내부 경계·줄/슬롯을 그대로 유지한다. 수량/정체 미상도 저장 가능."
+        ],
+        "after": [],
+        "source_refs": [
+          "le-havre.essentials.rules",
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "harbor.scene",
+          "town.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "assets.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "harbor.scene",
+      "town.scene",
+      "assets.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "뒤집힌 자원 면과 과거 먹이 지급, 건물 소유만으로 점유자",
+      "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다."
+    ],
+    "correction_targets": [
+      {
+        "id": "harbor.edit",
+        "scope": "public",
+        "component_ids": [
+          "goods",
+          "workers"
+        ],
+        "field_ids": [
+          "harbor.scene"
+        ],
+        "area_ids": [
+          "harbor"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "공급 표식과 공개 상품 수, 라운드 배 위치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "town.edit",
+        "scope": "public",
+        "component_ids": [
+          "buildings",
+          "workers"
+        ],
+        "field_ids": [
+          "town.scene"
+        ],
+        "area_ids": [
+          "town"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "건물 ID·소유자와 사용 중인 일꾼 부착.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "assets.edit",
+        "scope": "player",
+        "component_ids": [
+          "goods",
+          "buildings",
+          "debt"
+        ],
+        "field_ids": [
+          "assets.scene"
+        ],
+        "area_ids": [
+          "assets"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "가공 전후 면, 선박, 돈·대출을 각각 기록.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "game-length-mode.essentials-edit",
+        "scope": "public",
+        "field_ids": [
+          "game-length-mode"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      },
+      {
+        "id": "special-buildings.scene.essentials-edit",
+        "scope": "shared-secret",
+        "field_ids": [
+          "special-buildings.scene"
+        ],
+        "component_ids": [],
+        "area_ids": [],
+        "operations": [
+          "note"
+        ],
+        "anchor_strategy": "필드 ID와 실제 소유자/역할 및 별도 묶음 참조. 모름은 모름으로 유지.",
+        "notes": [
+          "선택 수동 기록. 사진만으로 비공개 정체·과거 처리·자동 차례를 생성하지 않는다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "harbor",
+      "town",
+      "assets"
+    ],
+    "editable_component_ids": [
+      "goods",
+      "buildings",
+      "workers",
+      "debt"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "le-havre.primary",
+      "title": "Le Havre — 공식 자료",
+      "url": "https://www.lookout-spiele.de/en/games/lehavre.html",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 소개/구성에서 공급·건물 사용으로 상품 가공/판매·선박/건물 건설, 상품 표식·건물 카드·말·선박 확인. 먹이/대출/이자 세부는 원문 추가 검증 대상."
+    },
+    {
+      "id": "le-havre.art-confirmation.le-havre-2016-rules",
+      "title": "Le Havre 2016 English rules — full base mode",
+      "url": "https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.1–3 Components; p.10 Loans — 돈은 프랑 동전이고 대출은 Loan 카드다. 대출을 화폐 토큰으로 합치지 않는다. 개인별 현금과 미상환 카드 수를 기록하며 확장 특수건물은 이 분류의 근거에서 제외한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    },
+    {
+      "id": "le-havre.essentials.rules",
+      "title": "Le Havre 2016 English Rules",
+      "url": "https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "PDF p.2 Special Buildings/Shortened Version; p.3 Building Proposals; p.5 Personal Supply; 적용판본: 2016 기본판 full/shortened 구분; 확인범위: 정규 full game은 특수건물6장을 뒷면으로 준비하나 shortened는 사용하지 않는다. 일반건물 제안은 공개 순서이며 개인 상품/프랑은 가리지 않는다. 원문/열람 한계는 docs/game-essentials/evidence.json#le-havre"
+    },
+    {
+      "id": "essentials.storage-guidance",
+      "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
+      "url": null,
+      "kind": "implementation",
+      "access": "opened",
+      "checked_at": "2026-10-22",
+      "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "기본판 full game에도 특수건물 묶음이 포함되며 shortened는 사용하지 않음(공식2016 규칙p.2). Le Grand Hameau 확장 건물은 별도 카드 패치이고 Inland Port는 독립작.",
+    "전체 건물 효과·대출 규칙·인원별 라운드 구성은 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

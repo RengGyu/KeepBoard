@@ -1,0 +1,830 @@
+{
+  "contract_version": "0.1-research",
+  "game_id": "caverna",
+  "name_ko": "카베르나",
+  "name_en": "Caverna: The Cave Farmers",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Forgotten Folk 제외;시간은 인당 약 30분",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "caverna.primary"
+    ],
+    "confidence": "reported"
+  },
+  "pinned_source": {
+    "path": "docs/research/game-specs-120/games/caverna.json",
+    "sha256": "88d9b8b72e7972b6f6b28cc4966c92e9312f6b456baf2b82d8cdce9a8a64337a",
+    "runtime_pack_id": "caverna",
+    "runtime_pack_version": "1.0.0-essentials-2.88d9b8b72e79",
+    "runtime_match": true
+  },
+  "basis": {
+    "contract": "RECOMMENDATION",
+    "current_code_mapping": "VERIFIED_CODE_ONLY",
+    "readout_source_verification": "attachment-only",
+    "official_scoped_checks_this_task": [],
+    "inherited_evidence_ids": [
+      "caverna::caverna.primary",
+      "caverna::caverna.essentials.rules",
+      "caverna::essentials.storage-guidance",
+      "inherited::caverna.essentials.rules"
+    ],
+    "whole_game_rules_verified": false,
+    "real_photo_accuracy_verified": false
+  },
+  "capture_focus": "농장/동굴 셀과 가구·목장·동물, 무기 근접",
+  "critical_resume_distinction": "드워프 인스턴스별 무기값·행동 위치, 가구 공급과 설치 상태 구분",
+  "partitions": {
+    "common_public": [
+      "actions",
+      "market"
+    ],
+    "player_public": [
+      "home",
+      "stock"
+    ],
+    "owner_private": [],
+    "do_not_infer": []
+  },
+  "areas": [
+    {
+      "id": "home",
+      "name": "개인 동굴·농장",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "tiles",
+        "goods"
+      ],
+      "anchor_contract": "개인판의 동굴/숲 셀, 방 가구·밭·목장과 동물/작물 부착.",
+      "description": "개인 동굴·농장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "home.scene"
+      ],
+      "source_field_ids": [
+        "home.scene"
+      ],
+      "allowed_component_ids": [
+        "tiles",
+        "goods"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 동굴·농장 전체 경계를 먼저 기록. 개인판의 동굴/숲 셀, 방 가구·밭·목장과 동물/작물 부착. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "개인판의 동굴/숲 셀, 방 가구·밭·목장과 동물/작물 부착.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "actions",
+      "name": "행동 공간",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dwarfs",
+        "goods"
+      ],
+      "anchor_contract": "행동 칸 ID와 배치된 드워프, 누적 자원.",
+      "description": "행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "actions.scene"
+      ],
+      "current_manual_target_fields": [
+        "actions.scene"
+      ],
+      "source_field_ids": [
+        "actions.scene"
+      ],
+      "allowed_component_ids": [
+        "dwarfs",
+        "goods"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "행동 공간 전체 경계를 먼저 기록. 행동 칸 ID와 배치된 드워프, 누적 자원. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "행동 칸 ID와 배치된 드워프, 누적 자원.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "stock",
+      "name": "개인 공급·무기",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "dwarfs",
+        "goods"
+      ],
+      "anchor_contract": "행동 대기 드워프와 각 무기값, 보유 음식/자원.",
+      "description": "개인 공급·무기의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "player_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "stock.scene"
+      ],
+      "source_field_ids": [
+        "stock.scene"
+      ],
+      "allowed_component_ids": [
+        "dwarfs",
+        "goods"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "개인 공급·무기 전체 경계를 먼저 기록. 행동 대기 드워프와 각 무기값, 보유 음식/자원. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "행동 대기 드워프와 각 무기값, 보유 음식/자원.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "market",
+      "name": "가구 공급",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "구매 가능한 가구와 이미 설치된 가구를 구별.",
+      "description": "가구 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "market.scene"
+      ],
+      "current_manual_target_fields": [
+        "market.scene"
+      ],
+      "source_field_ids": [
+        "market.scene"
+      ],
+      "allowed_component_ids": [
+        "tiles"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "가구 공급 전체 경계를 먼저 기록. 구매 가능한 가구와 이미 설치된 가구를 구별. 작은 인쇄/겹침은 같은 멈춘 상태에서 가까이 촬영; 읽히지 않으면 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "구매 가능한 가구와 이미 설치된 가구를 구별.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    }
+  ],
+  "components": [
+    {
+      "component_id": "tiles",
+      "name": "동굴·밭·방 가구",
+      "kind": "tile",
+      "identity_description": "동굴/외부 농장과 설치 타일 종류.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "caverna::caverna.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "face",
+          "label": "보이는 면",
+          "type": "enum",
+          "acquisition": "visible",
+          "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+          "options": [
+            {
+              "value": "front",
+              "label": "앞면"
+            },
+            {
+              "value": "back",
+              "label": "뒷면"
+            }
+          ]
+        },
+        {
+          "id": "printedName",
+          "label": "읽히는 인쇄 표기",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "동굴/외부 농장과 설치 타일 종류.",
+          "faceOnly": true
+        },
+        {
+          "id": "tileType",
+          "type": "text",
+          "label": "동굴·농장·방",
+          "acquisition": "visible",
+          "sourceText": "동굴/외부 농장과 설치 타일 종류.",
+          "faceOnly": true
+        },
+        {
+          "id": "gridCell",
+          "type": "text",
+          "label": "개인판 칸",
+          "acquisition": "manual",
+          "sourceText": "동굴/외부 농장과 설치 타일 종류. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "face",
+        "printedName",
+        "tileType",
+        "gridCell"
+      ],
+      "visible_attribute_keys": [
+        "face",
+        "printedName",
+        "tileType"
+      ],
+      "manual_attribute_keys": [
+        "gridCell"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "dwarfs",
+      "name": "드워프·무기",
+      "kind": "piece",
+      "identity_description": "드워프별 무기 수치와 배치 장소.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "caverna::caverna.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 드워프별 무기 수치와 배치 장소."
+        },
+        {
+          "id": "weaponValue",
+          "type": "integer",
+          "label": "무기 표시값",
+          "acquisition": "visible",
+          "min": 0,
+          "sourceText": "드워프별 무기 수치와 배치 장소."
+        },
+        {
+          "id": "actionSlot",
+          "type": "text",
+          "label": "배치 행동칸",
+          "acquisition": "manual",
+          "sourceText": "드워프별 무기 수치와 배치 장소. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        },
+        {
+          "id": "owner",
+          "type": "player",
+          "label": "소유 플레이어",
+          "acquisition": "manual",
+          "sourceText": "드워프별 무기 수치와 배치 장소. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "weaponValue",
+        "actionSlot",
+        "owner"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "weaponValue"
+      ],
+      "manual_attribute_keys": [
+        "actionSlot",
+        "owner"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    },
+    {
+      "component_id": "goods",
+      "name": "자원·가축·작물",
+      "kind": "token",
+      "identity_description": "보유와 생산 칸에 있는 자원을 분리.",
+      "inventory_quantity": null,
+      "inventory_quantity_is_not_observed_quantity": true,
+      "spec_confidence": "reported",
+      "spec_source_refs": [
+        "caverna::caverna.primary"
+      ],
+      "current_typed_fields": [
+        {
+          "id": "observedColor",
+          "label": "사진에서 본 색·재질",
+          "type": "text",
+          "acquisition": "visible",
+          "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 보유와 생산 칸에 있는 자원을 분리."
+        },
+        {
+          "id": "goodsType",
+          "type": "text",
+          "label": "재화·동물·작물",
+          "acquisition": "visible",
+          "sourceText": "보유와 생산 칸에 있는 자원을 분리."
+        },
+        {
+          "id": "goodsZone",
+          "type": "text",
+          "label": "재고·밭·동물 공간",
+          "acquisition": "manual",
+          "sourceText": "보유와 생산 칸에 있는 자원을 분리. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+        }
+      ],
+      "must_preserve_readout_keys": [
+        "observedColor",
+        "goodsType",
+        "goodsZone"
+      ],
+      "visible_attribute_keys": [
+        "observedColor",
+        "goodsType"
+      ],
+      "manual_attribute_keys": [
+        "goodsZone"
+      ],
+      "mandatory_value_policy": "키를 유지하되 값 입력은 강제하지 않는다. 안 읽히는 값/basis는 null. 전체 패널을 확인하지 않은 0/false/빈 배열은 금지.",
+      "art_identity_policy": "illustration variant is not printed commercial subtype; fresh AI variant=null; crop+legible text is the identity evidence"
+    }
+  ],
+  "native_or_special_readout": null,
+  "runtime_capture_contract": {
+    "mode": "assisted",
+    "public_photo_fields": [
+      {
+        "key": "actions.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "market.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
+        "key": "__photo.public",
+        "scope": "public",
+        "visibility": "public"
+      }
+    ],
+    "owner_photo_fields": [
+      {
+        "key": "__photo.owner",
+        "scope": "player",
+        "visibility": "owner"
+      }
+    ],
+    "excluded_bindings": [
+      {
+        "key": "round",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "weapons",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.weapons",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "stocks",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.stocks",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "turn",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "pending",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "note",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "starting-player",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "record-note.starting-player",
+        "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "harvest-markers.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      }
+    ]
+  },
+  "manual_context_fields": [
+    {
+      "id": "round",
+      "label": "라운드·수확",
+      "scope": "public",
+      "visibility": "public",
+      "description": "라운드와 먹이/번식/탐험 보상 처리 지점. 이미 공개된 수확 물음표 횟수와 이번 수확의 진행/선택한 하위 단계도 구분한다. 미공개 미래 표식은 harvest-markers.scene으로 분리한다."
+    },
+    {
+      "id": "weapons",
+      "label": "드워프별 무기값",
+      "scope": "player",
+      "visibility": "public",
+      "description": "말 인스턴스 ID별 값. 무장 말 수만 저장하지 않는다."
+    },
+    {
+      "id": "stocks",
+      "label": "자원·음식",
+      "scope": "player",
+      "visibility": "public",
+      "description": "종류별 현재 보유량과 가축 분포."
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다."
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "description": "드워프 행동·탐험 보상 선택·수확 중 남은 처리. 앱 보존 권고: 이미 완료한 처리와 아직 남은 처리, 해당하는 경우 효과의 대상·출처·종료 시점을 선택 메모로 구분한다. 공개 pending에는 공개된 처리만 적고 비공개 효과의 정체/선택은 소유자·허용 역할 기록에 둔다. 모르는 효과나 종료 조건은 생성하지 않는다."
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
+    },
+    {
+      "id": "starting-player",
+      "label": "시작 플레이어 표식",
+      "scope": "public",
+      "visibility": "public",
+      "description": "현재 표식 보유자와 시계방향 좌석 순서. 라운드 종료만으로 넘기지 않는다."
+    },
+    {
+      "id": "harvest-markers.scene",
+      "label": "미공개 수확 표식",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "description": "라운드 칸별 뒷면 수확 표식을 정체 미상으로 위치/앞뒤만 기록. 공개된 표식과 물음표 누적은 round의 공개 메모에 구분. 내부 면을 보려고 뒤집지 않는다."
+    }
+  ],
+  "never_infer": [
+    "가려진 구성물의 정체·수량과 덱 순서",
+    "소유자 비공개 정보와 사진 밖 상태",
+    "이전 행동·자동 점수·승리 확정",
+    "동물 뒤의 개수와 무기값, 다음 라운드 공개물",
+    "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
+    "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+  ],
+  "preservation": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "harvest-markers.scene.essentials-preserve",
+        "label": "미공개 수확 표식 실물 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "harvest-markers.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "해당 필드의 실물만 별도 묶음으로 보관하고 다른 덱·버림·제거·소유자 묶음과 합치지 않는다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 기록한다. 위치도 민감하면 위치 기록을 생략하고 식별표/봉인 확인만 남긴다.",
+          "내용을 알기 위해 펼치거나 숨은 면을 촬영하지 않는다. 이미 의미가 확인된 순서는 위/아래와 내부 경계·줄/슬롯을 그대로 유지한다. 수량/정체 미상도 저장 가능."
+        ],
+        "after": [],
+        "source_refs": [
+          "caverna.essentials.rules",
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.player",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "home.scene",
+          "stock.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "essentials.public-layout.public",
+        "label": "공개 배치·묶음 복원 참조(선택)",
+        "scope": "public",
+        "visibility": "public",
+        "field_ids": [
+          "actions.scene",
+          "market.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
+          "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
+          "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
+          "재개 시 참조 기록과 실물을 비교한 뒤 남은 처리만 이어 간다. 사진과 다른 값을 자동 수용하거나 미지의 정체·수량을 채우지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다.",
+      "보존 묶음의 ID/보관 위치/봉인/순서 유지 확인은 내용 정체를 안다는 뜻이 아니다. 공개 총수와 비공개 내용은 기존 공개범위별로 분리하며 모르는 수량을0으로 만들지 않는다.",
+      "실제 사용하는 차례·시작자/순서·라운드/단계·남은 처리만 기록한다. 없는 기작을 추가하거나 재열기만으로 처리 완료/다음 턴/라운드 리셋을 실행하지 않는다."
+    ]
+  },
+  "source_rule_gaps": [
+    "Forgotten Folk는 세력별 공간·가구 예외 패치. 기본 드워프 규칙과 자동 혼합 금지.",
+    "무기 순서·가축 수용·탐험 보상표 및 가구 효과는 원문 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "schema_gaps": [
+    {
+      "id": "PARTITION-EVIDENCE",
+      "status": "VERIFIED_CODE_GAP",
+      "detail": "Evidence에 public/player+owner+captureEpoch는 있으나 area/region별 공개범위·staticStateId·여러 원본의 동일 실물 연결은 없다. 현재 촬영 전에 공개/owner를 분리하고 수동 연결을 유지한다."
+    }
+  ],
+  "photo_need": {
+    "game_id": "caverna",
+    "edition": "기본판",
+    "status": "PROVIDED_NOT_REVIEWED",
+    "corpus_availability": {
+      "provided_image_rows": 1,
+      "producer_usable_yes_rows": 0,
+      "candidate_image_rows": 4,
+      "retained_image_rows": 1,
+      "producer_status": "partial",
+      "producer_edition_match": "unverified",
+      "producer_ground_truth_validated": false,
+      "selected_sha256": [
+        "b20bc4050ca07681edc85dba089f6ba3706b37b56bffcc52be0f8f3bd5ca0317"
+      ],
+      "directly_reviewed_sha256": []
+    },
+    "same_state_multiview": "UNKNOWN",
+    "first_capture": "농장/동굴 셀과 가구·목장·동물, 무기 근접",
+    "closeups": [
+      {
+        "area_id": "home",
+        "name": "개인 동굴·농장",
+        "needs": "개인판의 동굴/숲 셀, 방 가구·밭·목장과 동물/작물 부착.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "actions",
+        "name": "행동 공간",
+        "needs": "행동 칸 ID와 배치된 드워프, 누적 자원.",
+        "access": "public evidence"
+      },
+      {
+        "area_id": "stock",
+        "name": "개인 공급·무기",
+        "needs": "행동 대기 드워프와 각 무기값, 보유 음식/자원.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "market",
+        "name": "가구 공급",
+        "needs": "구매 가능한 가구와 이미 설치된 가구를 구별.",
+        "access": "public evidence"
+      }
+    ],
+    "do_not_collect": [],
+    "edition_evidence_needed": "박스/규칙 인쇄판 또는 원 게시물의 판본 설명; 사진 게시일≠판본/촬영일",
+    "no_photo_fallback": "contract/manual inspection only; no real-photo accuracy claim"
+  },
+  "current_board_mapping": {
+    "gameId": "caverna",
+    "editionId": "base",
+    "sourceSHA": "88d9b8b72e7972b6f6b28cc4966c92e9312f6b456baf2b82d8cdce9a8a64337a",
+    "status": "new",
+    "areas": [
+      {
+        "areaId": "home",
+        "label": "개인 동굴·농장",
+        "fieldKeys": [
+          "home.scene"
+        ],
+        "componentIds": [
+          "tiles",
+          "goods"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "template": "square-mat",
+        "status": "source-pending",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "actions",
+        "label": "행동 공간",
+        "fieldKeys": [
+          "actions.scene"
+        ],
+        "componentIds": [
+          "dwarfs",
+          "goods"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "stock",
+        "label": "개인 공급·무기",
+        "fieldKeys": [
+          "stock.scene"
+        ],
+        "componentIds": [
+          "dwarfs",
+          "goods"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "personal-tray",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "market",
+        "label": "가구 공급",
+        "fieldKeys": [
+          "market.scene"
+        ],
+        "componentIds": [
+          "tiles"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [],
+        "sourceConfidence": "recommendation",
+        "artComponentId": null
+      }
+    ],
+    "fidelityPending": []
+  },
+  "visual_review": {
+    "status": "INSUFFICIENT_EVIDENCE",
+    "baseline_status": "INSUFFICIENT_EVIDENCE",
+    "decision_scope": "Current known issue and scoped render evidence only; absence of an issue is not whole-game/real-board PASS.",
+    "source_sha_matches": true,
+    "rendered_variant_count": 9,
+    "board_instance_count": 4,
+    "structural_render_errors": [],
+    "direct_visual_files": [],
+    "real_photo_accuracy_verified": false,
+    "findings": [],
+    "display_requirement": "Original source/crop + legible typed values remain primary. Neutral board/art are schematic; no automatic game-slot/owner/history equivalence.",
+    "remaining": "판본 맞는 실물과 영역/방향/부착 관계 대조. 게임별 필요한 영역은 photo_need 참조; 계약 연결 구현의 별도 선행 마일스톤으로 확대하지 않음."
+  }
+}

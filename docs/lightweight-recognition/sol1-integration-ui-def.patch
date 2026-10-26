@@ -1,0 +1,101 @@
+--- a/src/GameEssentials.tsx
++++ b/src/GameEssentials.tsx
+@@ -39,7 +39,9 @@
+  const allCandidates=session.assertions.filter(a=>a.ownerId===ownerId&&a.status==='candidate'&&fields.some(f=>f.key===a.field));
+  const linkedCount=allCandidates.reduce((n,a)=>n+(componentRecord(a)?.pieces.length??0)-unlinkedComponentPieces(session,a).length,0);
+  const {latest:candidates,older:olderCandidates}=splitCandidates(allCandidates.filter(a=>!componentRecord(a)||unlinkedComponentPieces(session,a).length>0));
+- async function applyCandidate(a:Assertion,value:Value){if(componentRecord(a)&&latestComponentAssertion(session,a.field,a.ownerId))throw new Error('기존 기록이 있어요. 실물 연결에서 선택한 후보를 더하거나 기존 기록을 직접 정정해 주세요. 현재 초안은 유지됩니다.');if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
++ // Local observation receipts describe partial scans; receipt-free default AI keeps its explicit replacement review.
++ const localPartialWithAccepted=(a:Assertion)=>!!a.observationReceipts?.length&&!!componentRecord(a)&&!!latestComponentAssertion(session,a.field,a.ownerId);
++ async function applyCandidate(a:Assertion,value:Value){if(localPartialWithAccepted(a))throw new Error('기존 기록이 있어요. 실물 연결에서 선택한 후보를 더하거나 기존 기록을 직접 정정해 주세요. 현재 초안은 유지됩니다.');if(saves.current.has(`${ownerId??'public'}:${a.field}`))throw new Error('같은 영역을 편집 중이에요. 먼저 기록하거나 초안을 되돌려 주세요.');if(!session.assertions.some(x=>x.id===a.id&&x.status==='candidate'))throw new Error('후보가 바뀌었어요. 새 후보를 확인해 주세요.');await mutate(()=>api.update(session.id,{answers:[{field:a.field,ownerId,value}]}),'확인한 후보를 적용했어요');setReview(null);if(!saves.current.size)setBoardKey(a.field);}
+  const questions=view.questions.filter(q=>q.ownerId===ownerId&&fields.some(f=>f.key===q.field));
+  const first=new Set([...questions.map(q=>q.field),...runtime.resume.pendingActionFields,...fields.filter(f=>f.key==='turn'||runtimeBinding(pack,f.key)?.editor==='component-catalog').map(f=>f.key)]);
+  const render=(field:FieldDefinition,subject=ownerId)=>{
+@@ -55,7 +57,7 @@
+   return <article key={a.id}><strong>{f.label} · {rest.length<record.pieces.length?`남은 ${rest.length}/${record.pieces.length}항목`:`${record.pieces.length}항목`}</strong><span className="small muted">아직 기록에 적용하지 않았어요.</span>
+    <div className={splendor?'generic-candidate-cards':'generic-candidate-pieces'}>{rest.slice(0,limit).map(p=>splendor?<SplendorReadout key={p.id} {...splendorView(p)}/>:<div key={p.id}><GenericPieceArt pack={pack} piece={p}/><GameDetailReadout pack={pack} piece={p} players={session.players} compact/><span>{p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인'}</span><small>{p.quantity===null?'수량 모름':p.quantity+'개'}</small></div>)}</div>
+    {rest.length>6&&<button className="button text small-button" aria-expanded={open} onClick={()=>setExpanded(list=>open?list.filter(id=>id!==a.id):[...list,a.id])}>{open?'접기':`모두 보기 (${rest.length})`}</button>}
+-   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>latestComponentAssertion(session,a.field,a.ownerId)?setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}}):setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
++   <div className="button-row generic-candidate-actions">{rest.length<record.pieces.length?<button className="button primary small-button" disabled={busy} onClick={()=>setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}})}>남은 {rest.length}개 확인·적용</button>:<button className="button primary small-button" disabled={busy} onClick={()=>localPartialWithAccepted(a)?setLink({source:a,ids:rest.map(p=>p.id),target:{field:a.field,...(a.ownerId?{ownerId:a.ownerId}:{})}}):setReview(a)}>후보 확인·수정</button>}<button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:a})}>다른 곳에 연결</button></div></article>;}
+  const items=session.preservations.filter(p=>p.ownerId===ownerId&&p.templateId.startsWith('spec.'));
+  return <section className="game-essentials" aria-label="게임별 기록과 보관"><header><h3>{generic?'게임 기록':'이어갈 기록·보관'}</h3>{generic&&<p className="small muted">{recognitionCapability(pack).mode==='assisted'?'사진 보조 인식 · 확인 후 적용':'수동 기록 · 사진 관측 미지원'}</p>}</header>
+   {linkedCount>0&&<p className="small muted">사진 실물 {linkedCount}개 연결됨</p>}
+--- a/tools/lightweight-recognition/generate-photo-definitions.mts
++++ b/tools/lightweight-recognition/generate-photo-definitions.mts
+@@ -31,7 +31,13 @@
+  if(sha(contractBytes)!=='2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b')throw Error('Approved contract hash changed; do not silently rebind saved games.');
+  const contract=JSON.parse(contractBytes.toString());
+  const inputs=contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json').filter((i:any)=>!i.file.startsWith('server/'));
+- for(const input of inputs)if(sha(readFileSync(resolve(root,input.file)))!==input.sha256)throw Error(`Pinned input changed: ${input.file}`);
++ // R3 changed only Splendor validation; its generated gem domain is unchanged. Keep both exact approved revisions.
++ const approvedSplendorR3={contractSHA:'d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8',sha256:'13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1'};
++ const actualInputs=inputs.map((input:any)=>{
++  const actualSHA=sha(readFileSync(resolve(root,input.file))),r3=input.file==='shared/splendor.ts'&&input.sha256===approvedSplendorR3.contractSHA&&actualSHA===approvedSplendorR3.sha256;
++  if(actualSHA!==input.sha256&&!r3)throw Error(`Pinned input changed: ${input.file}`);
++  return {file:input.file,sha256:actualSHA,...(r3?{approvedContractSHA256:input.sha256,revisionReason:'Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged.'}:{})};
++ });
+  const profiles=read(root,'shared/capture-profiles.json'),packs=read(root,'gamepacks/generated/game-essentials.json');
+  const definitions:PhotoDefinition[]=contract.games.map((g:any)=>{
+   const profile=profiles[g.game_id],pack=packs.find((p:any)=>p.id===g.pack_id);
+@@ -56,7 +62,7 @@
+  });
+  if(definitions.length!==120||new Set(definitions.map(d=>d.gameId)).size!==120||Object.keys(profiles).some(id=>!definitions.some(d=>d.gameId===id)))throw Error('Exact 120 capture game IDs required.');
+  const index={version:'game-photo-definitions-v1',games:definitions};
+- const manifest={version:'game-photo-definitions-manifest-v1',contractSHA:sha(contractBytes),inputs:inputs.map((i:any)=>({file:i.file,sha256:i.sha256})),indexSHA:sha(JSON.stringify(index,null,2)+'\n'),coverage:{games:120,nativeBridges:3,typedGames:117,inferenceAccuracy:'UNMEASURED'},games:contract.games.map((g:any)=>({gameId:g.game_id,manualStateFields:g.manual_state_fields,physicalPreserve:g.physical_preserve,preservationTemplateIds:g.preservation_template_ids,referenceSets:[],areas:g.areas.map((a:any)=>({areaId:a.id,support:a.allowed_fields.length&&a.components.some((id:string)=>g.component_field_policy[id]?.visible.length)?'literal-observation-candidate':'manual-or-preserve',accuracy:'UNMEASURED'}))}))};
++ const manifest={version:'game-photo-definitions-manifest-v1',contractSHA:sha(contractBytes),inputs:actualInputs,indexSHA:sha(JSON.stringify(index,null,2)+'\n'),coverage:{games:120,nativeBridges:3,typedGames:117,inferenceAccuracy:'UNMEASURED'},games:contract.games.map((g:any)=>({gameId:g.game_id,manualStateFields:g.manual_state_fields,physicalPreserve:g.physical_preserve,preservationTemplateIds:g.preservation_template_ids,referenceSets:[],areas:g.areas.map((a:any)=>({areaId:a.id,support:a.allowed_fields.length&&a.components.some((id:string)=>g.component_field_policy[id]?.visible.length)?'literal-observation-candidate':'manual-or-preserve',accuracy:'UNMEASURED'}))}))};
+  return {definitions,index,manifest};
+ }
+ if(process.argv[1]&&fileURLToPath(import.meta.url)===resolve(process.argv[1])){const root=process.cwd(),generated=generateDefinitions(root);mkdirSync(resolve(root,'game-photo-definitions'),{recursive:true});for(const [name,value]of [['index',generated.index],['manifest',generated.manifest]] as const)writeFileSync(resolve(root,`game-photo-definitions/${name}.json`),JSON.stringify(value,null,2)+'\n');console.log(JSON.stringify({games:generated.definitions.length,indexSHA:generated.manifest.indexSHA}));}
+--- a/game-photo-definitions/manifest.json
++++ b/game-photo-definitions/manifest.json
+@@ -28,7 +28,9 @@
+     },
+     {
+       "file": "shared/splendor.ts",
+-      "sha256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8"
++      "sha256": "13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1",
++      "approvedContractSHA256": "d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8",
++      "revisionReason": "Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged."
+     },
+     {
+       "file": "shared/readouts/catalogs/01-spatial-tiles.json",
+--- a/tests/photo-definitions.test.ts
++++ b/tests/photo-definitions.test.ts
+@@ -1,6 +1,8 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import {readFileSync} from 'node:fs';
++import {readFileSync,mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync} from 'node:fs';
++import {tmpdir} from 'node:os';
++import {join,dirname,resolve} from 'node:path';
+ import {createHash} from 'node:crypto';
+ import {generateDefinitions,canonicalJSON} from '../tools/lightweight-recognition/generate-photo-definitions.mts';
+ const hash=(v:unknown)=>createHash('sha256').update(canonicalJSON(v)).digest('hex');
+@@ -32,3 +34,10 @@
+  const result={version:'lightweight-observation-v1',coverage:'partial',completion:'complete',observations:[{ref:'digit',componentId:'number-token',imageIndex:0,panelRef:null,bbox:{x:.1,y:.1,width:.1,height:.1},face:'back',quantity:1,rotationDegrees:null,properties:{number:{state:'observed',value:6}},referenceCandidates:[]}]};
+  assert.throws(()=>validateObservationResult(result,request,definition),/앞면/);result.observations[0].face='front';assert.equal(validateObservationResult(result,request,definition).observations.length,1);
+ });
++
++test('approved R3 uses actual input provenance while keeping exact original pin and rejecting any unapproved revision',()=>{
++ const generated=generateDefinitions(process.cwd()),input=generated.manifest.inputs.find((i:any)=>i.file==='shared/splendor.ts')!;
++ assert.equal(input.sha256,'13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1');assert.equal(input.approvedContractSHA256,'d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8');assert.match(input.revisionReason,/R3/);
++ assert.equal(generated.manifest.indexSHA,'c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60');
++ const root=mkdtempSync(join(tmpdir(),'kb-definition-unapproved-'));try{const copy='game-photo-definitions/contract.json';mkdirSync(dirname(join(root,copy)),{recursive:true});writeFileSync(join(root,copy),readFileSync(copy));for(const item of contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json')){const target=join(root,item.file);mkdirSync(dirname(target),{recursive:true});if(item.file==='shared/splendor.ts')writeFileSync(target,readFileSync(item.file,'utf8')+'\n// unapproved revision\n');else symlinkSync(resolve(item.file),target);}assert.throws(()=>generateDefinitions(root),/Pinned input changed: shared\/splendor.ts/);}finally{rmSync(root,{recursive:true,force:true});}
++});
+--- a/tests/lightweight-reader-ui.test.ts
++++ b/tests/lightweight-reader-ui.test.ts
+@@ -121,11 +121,12 @@
+  }finally{ui.dispose();api.update=old;}
+ });
+ 
+-test('typed candidate review routes through explicit component linking when its field already has accepted objects',async()=>{
++test('local partial typed candidate uses explicit component linking with accepted objects; late accepted state blocks whole replacement',async()=>{
+  const {GameEssentials}=await import('../src/GameEssentials.tsx'),{ComponentLinkDialog}=await import('../src/ComponentLinkDialog.tsx');const pack=catalogPacks.find(p=>p.id==='splendor')!;
+  const piece=(id:string)=>({id,componentId:'development',variant:null,quantity:1,label:'合成',anchor:'',evidenceId:null,region:null}),record=(id:string)=>({version:'game-component-record-v1',pieces:[piece(id)]});
+- const view:any={pack,session:{id:'typed-ui',players:[],evidence:[],snapshots:[],preservations:[],assertions:[{id:'old',field:'market.scene',status:'accepted',value:record('old-card'),evidenceIds:[]},{id:'new',field:'market.scene',status:'candidate',value:record('new-card'),evidenceIds:[]}]},questions:[]};let writes=0;
++ const view:any={pack,session:{id:'typed-ui',players:[],evidence:[],snapshots:[],preservations:[],assertions:[{id:'old',field:'market.scene',status:'accepted',value:record('old-card'),evidenceIds:[]},{id:'new',field:'market.scene',status:'candidate',value:record('new-card'),evidenceIds:[],observationReceipts:[{version:'lightweight-observation-v1',reader:{kind:'local-observation-v1'}}]}]},questions:[]};let writes=0;
+  const ui=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(ui.tree,n=>n.type==='button'&&n.props.children==='후보 확인·수정').props.onClick();ui.render();const link=find(ui.tree,n=>n.type===ComponentLinkDialog);assert.deepEqual(link.props.initialIds,['new-card']);assert.equal(link.props.initialTarget.field,'market.scene');assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{ui.dispose();}
++ const baseline=view.session.assertions.shift(),first=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(first.tree,n=>n.type==='button'&&n.props.children==='후보 확인·수정').props.onClick();first.render();view.session.assertions.unshift(baseline);first.render();const review=find(first.tree,n=>typeof n.type==='function'&&n.type.name==='GenericComponents'&&n.props.review);await assert.rejects(review.props.onSave(review.props.value),/기존 기록/);assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{first.dispose();}
+ });
+ 
+ test('malformed local source is visibly blocked without crashing review or exposing a replacement blank-state save',async()=>{

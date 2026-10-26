@@ -1,0 +1,73 @@
+{
+  "status": "READY_FOR_REVIEW_NO_INFERENCE",
+  "startedAt": "2026-10-26T01:30:32.090315+00:00",
+  "finishedAt": "2026-10-26T01:30:32.448730+00:00",
+  "focused": {
+    "command": [
+      "python3",
+      "tests/hosted-vision-benchmark.test.py"
+    ],
+    "exitCode": 0,
+    "tests": 18,
+    "logSHA256": "3a66af0080e75b337de5e23ea0ef2bd20487e15b70e4bb8bee04314b84afbb9a"
+  },
+  "check": {
+    "command": [
+      "python3",
+      "tools/hosted-vision-benchmark/runner.py",
+      "--check",
+      "--manifest",
+      "docs/hosted-vision-comparison/data/benchmark-manifest.json"
+    ],
+    "exitCode": 0,
+    "logSHA256": "e589235dadccf0b5c9a3daa9d829b7c85e03916746cf1ec062e78ef5ce637b26"
+  },
+  "prepare": {
+    "command": [
+      "python3",
+      "tools/hosted-vision-benchmark/runner.py",
+      "--prepare",
+      "--manifest",
+      "docs/hosted-vision-comparison/data/benchmark-manifest.json",
+      "--out",
+      "/private/tmp/keepboard-hosted-vision-pilot-v1"
+    ],
+    "exitCode": 0,
+    "logSHA256": "e589235dadccf0b5c9a3daa9d829b7c85e03916746cf1ec062e78ef5ce637b26",
+    "privatePlan": "/private/tmp/keepboard-hosted-vision-pilot-v1/plan.json",
+    "planSHA256": "cdc2a0dc879d0473450794c1ac1113dc33017f001956603131956dd6548f39f3",
+    "plannedCalls": 6,
+    "inputEligibilityBlockers": []
+  },
+  "dataManifestSHA256": "70196537a28496797bd8c3f0f1b241a4c69c8dfa65a757bd8d2f9bacea5b7bbb",
+  "credentials": {
+    "gemini": {
+      "suppliedFileLocated": true,
+      "usableFormatFound": true,
+      "format": "single-labeled-token",
+      "remoteAuthentication": "NOT_TESTED"
+    },
+    "roboflow": {
+      "namedEnvironmentPresent": false,
+      "namedEnvironmentFormatSupported": false,
+      "dedicatedStoreExists": false,
+      "dedicatedStoreFormatSupported": null,
+      "dedicatedStoreContainsRoboflow": false,
+      "remoteAuthentication": "NOT_TESTED"
+    }
+  },
+  "liveModelRequests": 0,
+  "photoUploads": 0,
+  "signups": 0,
+  "newDependencies": 0,
+  "productEdits": 0,
+  "prior59ProductPostDrift": [],
+  "wholeSuiteRuns": 0,
+  "buildRuns": 0,
+  "remaining": [
+    "Roboflow account/API key absent from exact named environment and dedicated store",
+    "Internal source/plan review before execution within existing user request",
+    "Existing Gemini remote authentication/tier and actual provider billing remain UNKNOWN; no automatic upgrade or new consent gate",
+    "Actual response conformance/accuracy/latency untested; mocks are protocol checks only"
+  ]
+}

@@ -1,0 +1,749 @@
+{
+  "game_id": "blokus",
+  "name_ko": "블로커스",
+  "name_en": "Blokus",
+  "edition": {
+    "id": "base",
+    "name": "Classic 기본판",
+    "compatibility_notes": [
+      "Duo/Trigon 별도;언어판 중복 계수 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "blokus.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/blokus.json",
+  "source_sha256": "7ffd4e6e58fbd7824a8372e358c4405fb1f5fa71e649772859c6b37b0a60ba24",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "board",
+      "name": "공용 격자판",
+      "kind": "board",
+      "source_confidence": "verified",
+      "source_description": "네 색이 공유하는 단일 격자. 개인 격자 네 개로 분리하지 않는다.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "공용 격자 · 예시",
+          "layers": [
+            {
+              "asset_id": "blokus.board.shared-grid"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "pieces",
+      "name": "색별 폴리오미노",
+      "kind": "piece",
+      "source_confidence": "verified",
+      "source_description": "색별21개의 모양. 한 조각의 여러 정사각형은 하나의 실물 인스턴스다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "1칸 형태 1",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-01"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "2칸 형태 2",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-02"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "3칸 형태 3",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-03"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "3칸 형태 4",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-04"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "4칸 형태 5",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-05"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "4칸 형태 6",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-06"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "4칸 형태 7",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-07"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "4칸 형태 8",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-08"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "4칸 형태 9",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-09"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 10",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-10"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 11",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-11"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 12",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-12"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 13",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-13"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 14",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-14"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 15",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-15"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 16",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-16"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 17",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-17"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 18",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-18"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 19",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-19"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 20",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-20"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "can_reflect": true
+        },
+        {
+          "name": "5칸 형태 21",
+          "layers": [
+            {
+              "asset_id": "common.polyomino-21"
+            }
+          ],
+          "occupied_cells": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "can_reflect": true
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": 84,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "physical-type-color; owner is separate",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "board",
+      "name": "공용 배치판",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "board",
+        "pieces"
+      ],
+      "anchor_contract": "칸 좌표·조각ID·기준칸/회전/반사·점유 칸 집합·색. 사진 원근과 조각 회전을 분리.",
+      "description": "공용 배치판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "reserve",
+      "name": "색별 남은 조각",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "pieces"
+      ],
+      "anchor_contract": "색 단위 미사용 모양·조각수와 남은 정사각형 수. 색의 담당자와 실물색을 별개로 연결.",
+      "description": "색별 남은 조각의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "공용 배치판 · 구조 예시",
+    "area_id": "board",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "blokus.board.shared-grid",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.polyomino-01",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

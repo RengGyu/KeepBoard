@@ -1,0 +1,233 @@
+{
+  "version": "compact-reader-connection-v1",
+  "date": "2026-10-24",
+  "status": "RECOMMENDATION; source/artifact read only; new inference 0",
+  "decision": "카탄 공용판의 선택 기능 ‘숫자만 읽기’를 기존 LocalReader/job/후보 정정/명시 반영/저장에 연결한다. 먼저 D2와 같은 원본 compact wire를 연결하고, 같은 wire의 bbox를 기존 B0로 역매핑하는 작은 확장까지만 비교한다. 기본 AI와 다른 게임은 바꾸지 않는다.",
+  "evidence": {
+    "diagnostic": {
+      "path": "docs/lightweight-recognition/number-diagnostic.json",
+      "sha256": "1c87dd049ccf27d35feb4dc97333f418c920e560d0a9bb06f621f799b0ea2a16",
+      "level": "VERIFIED_ARTIFACT; this task did not rerun inference",
+      "D1": {
+        "finish": "length",
+        "output_tokens": 1024,
+        "reader_seconds": 68.453520875,
+        "scoring": "18 UNSCORABLE, not 0 correct"
+      },
+      "D2": {
+        "finish": "stop",
+        "output_tokens": 699,
+        "reader_seconds": 49.218831709,
+        "end_to_end_seconds": 49.25345075,
+        "strict_denominator": 18,
+        "correct": 17,
+        "wrong": 0,
+        "unknown": 0,
+        "missing": 1,
+        "ambiguous": 0,
+        "extra_localization_false_positive": 1,
+        "runtime_prompt_ms": 10069.207,
+        "runtime_decode_ms": 39100.662,
+        "peak_sampled_process_rss_kib": 5000448,
+        "usable_assertions_offline": 1
+      },
+      "limits": [
+        "한 사진/숫자만의 offline 결과; 제품 정정·저장 시간과 다른 판/120게임 정확도 UNKNOWN.",
+        "D1/D2 순서·재시작·열·캐시 통제 없음. image-min 단독 효과·안정 속도 향상 미확정. 실제 image tokens/해상도 UNKNOWN; RSS는 Metal 포함 총량 아님."
+      ]
+    },
+    "source_basis": {
+      "manifest_locator": "docs/lightweight-recognition/stage-manifest.json",
+      "scope": "현재 격리 stage를 읽음. 공유/배포 소스와 구별; R1/R2/R3 최종 완료 인증 아님.",
+      "files": [
+        {
+          "path": "server/ai/qwenNumberGrounding.ts",
+          "sha256": "ba156f0ba7e6e052c97d37aa6bb62d0e8a0f5418934262499175a6966cfb90b3",
+          "symbol": "qwenNumberGrounding; QWEN_NUMBER_WIRE; scoreNumberGrounding"
+        },
+        {
+          "path": "server/ai/localReader.ts",
+          "sha256": "1a0d97e25ddac6f319630ea81da6fb8edd84e942fe1d2ffa0320afd88bfeefe7",
+          "symbol": "LocalReader.read/status; observationReaderPrompt/observationResponseSchema"
+        },
+        {
+          "path": "server/ai/catanAtlas.ts",
+          "sha256": "78afda1f9e294ab20c758e5f78748afae77e992ef3b080e4637d8c809c55608a",
+          "symbol": "buildCatanAtlas"
+        }
+      ]
+    }
+  },
+  "task_contract": {
+    "selection": {
+      "kind": "local-observation-v1",
+      "task": "catan-numerals-v1",
+      "definitionSHA": "current exact definition",
+      "areaId": "board",
+      "inputMode": [
+        "original",
+        "catan-atlas"
+      ],
+      "frame": "optional for original; required and user-confirmed for atlas"
+    },
+    "supported": {
+      "gameId": "catan",
+      "packId": "catan-base",
+      "partition": "common_public",
+      "ownerId": null,
+      "images": 1,
+      "epoch": "current",
+      "allowedComponents": [
+        "number-token"
+      ],
+      "allowedPropertyIds": {
+        "number-token": [
+          "number"
+        ]
+      }
+    },
+    "compatibility": [
+      "task 생략/기본 AI/다른 게임의 기존 경로는 그대로. 숫자 선택은 일치하는 카탄 기본판 public board·현재 epoch 사진1장만 UI와 서버 양쪽에서 허용한다. 확장/가변 판을 19칸에 강제하지 않는다.",
+      "로컬 runtime/pin 미확인 또는 cloud 환경은 숫자 task unavailable. 유료 AI 자동 전환 없음; macOS 실행을 Vercel 지원으로 표시하지 않는다."
+    ],
+    "wire": {
+      "id": "qwen-number-grounding-v1",
+      "shape": "{items:[{bbox_2d:[left,top,right,bottom],text:string|null}]}",
+      "coordinate_space": "integer 0..1000 xyxy of the ACTUAL transmitted image",
+      "prompt_source": "docs/lightweight-recognition/reader-checkpoint.json#/nextExperiment/shared/prompt",
+      "promptSHA256": "18af5a6912a0af1b592686a0fd4087097da412070dcb4187c356e19204384861",
+      "schema_source": "docs/lightweight-recognition/reader-checkpoint.json#/nextExperiment/shared/responseSchema",
+      "schemaSHA256": "ef97902a7aa0e38d1c7af7bdf14d6698597246072565f9a75e2bbcf5a0672627",
+      "implementation": "해당 문자열/schema를 server/ai/qwenNumberGrounding.ts의 공통 상수로 옮겨 product와 진단이 공유한다. 런타임에 연구 JSON을 import하지 않는다. 기존 SHA 직렬화 방식으로 내용 동일성을 확인한다."
+    },
+    "runtime_pin": {
+      "model": "Qwen/Qwen3-VL-4B-Instruct-GGUF",
+      "contextTokens": 8192,
+      "imageMinTokens": 1024,
+      "maxOutputTokens": 1024,
+      "temperature": 0,
+      "cache_prompt": false,
+      "stream": false,
+      "automaticRetries": 0,
+      "parallelRequests": 1,
+      "verification": "D2 실행 인자와 명시적 image-min=1024를 소유 runtime 시작 기록에 고정한다. health/models alias 성공만으로 image 설정을 검증했다고 표시하지 않는다. 미확인/불일치는 numeric task unavailable. 기존 config의 maxOutput2048을 그대로 실험 pin으로 기록하지 말고 effective1024를 기록한다.",
+      "identity_source": "docs/lightweight-recognition/number-diagnostic.json#/preflight/reader (위 artifact SHA로 고정된 revision/weight/projector/runtime SHA 그대로)"
+    },
+    "identity_and_receipt": "LocalReaderSelection.task 추가. PinnedLocalObservation/ObservationReceipt에 optional taskProfile(id/wire/promptSHA/schemaSHA/effective generation/image settings), 숫자 task에서는 필수. ReaderIdentity budget도 실제1024. 기존 job signature의 pinned plan 및 commit 비교에 profile을 포함한다. task/mode/frame/image/source/edition/owner/epoch가 다르면 재사용하지 않는다. 원본 evidenceId/SHA와 transformed inputSHA를 분리 보존한다.",
+    "literal_adapter": [
+      "raw bytes 불변. native 정수 좌표를 단 한 번 1000으로 나눠 내부 xywh로 변환한다. 좌표 단위를 추측하거나 clamp하지 않는다.",
+      "각 물체 ref는 요청 내부에서 고유; componentRefs가 새 candidate ID와 연결한다. quantity=1은 반환된 token instance의 수량이고 인쇄값이 아니다.",
+      "text null은 number unknown. 도메인 밖 숫자는 raw/diagnostics에 남기고 속성만 unsupported unknown; 기대 숫자·18개·인벤토리로 보정하지 않는다.",
+      "응답에 없는 token/미촬영 칸은 없음·0·완료로 만들지 않는다. coverage partial; 빈 items도 기존판 보존. 길이 종료/형식 불일치는 실패로 남기며 자동 재호출하지 않는다."
+    ],
+    "review_save": "prepare → compact LocalReader → qwenNumberGrounding → validate/assemble → 기존 job candidate → LocalCatanReview/SceneEditor → 명시 반영/저장/재열기. frame 없으면 미배치, 있어도 후보. R1 accepted/raw 분리·R2 독립 배치/충돌 보류 사용; 숫자 외 상태와 기존 수동값 보존. 같은 실물인지 자동 추측하지 않고 중복 삭제/이동/교환은 사용자가 결정. stale/CAS 유지."
+  },
+  "B0_boundary": {
+    "choice": "새 panel-only/text-only wire는 이번에 만들지 않는다. 같은 compact bbox+text wire에 기존 B0 raster/역매핑만 붙인다. verbose 일반 출력 부담은 줄이지만 bbox 자체의 생성 비용까지 줄였다고 주장하지 않는다.",
+    "minimal_adapter": "qwenNumberGrounding의 original-only/frame-null guard만 numeric scope+optional confirmed frame/검증된 B0 transform으로 확장. atlas 전체 좌표 bbox를 완전히 포함하는 패널이 정확히 하나일 때 코드로 panelRef를 붙여 기존 mapObservationRegion 사용. 모델에 panelRef/slot/GT/기대 개수를 넣지 않는다.",
+    "provenance": "모델 bbox와 제공 frame/sourcePolygon/inputRectangle은 별개. panel ROI/candidateSlotId를 물체 bbox로 대체하지 않는다. 역투영 bbox의 원본 외접영역으로 오버레이한다.",
+    "unresolved": "경계/여러 panel/여백 box는 raw·진단에 보존하고 보류 건수를 표시; 유효 다른 항목 유지. 누락/out-of-frame 패널은 없음·0으로 만들지 않으며 accepted 보존. 요청/transform 해시 불일치는 거절.",
+    "future_not_this_slice": "bbox 없는 {panelRef,text}는 제공 ROI의 읽기이며 물체 localization과 다른 계약이다. 이를 도입하면 ROI 근거/존재 불명/모델 bbox null을 별도로 표현해야 하므로 이번 두 요청 비교에 섞지 않는다."
+  },
+  "ownership_and_sequence": [
+    {
+      "order": 1,
+      "owner": "Sol2 (existing backend/shared runtime owner; stage only)",
+      "files": [
+        "shared/lightweightRecognition.ts",
+        "server/ai/qwenNumberGrounding.ts",
+        "server/ai/localReader.ts",
+        "server/localObservation.ts",
+        "server/ai/observationAssembly.ts",
+        "server/analysisTask.ts",
+        "server/index.ts"
+      ],
+      "work": "taskProfile·선택·pin/capability 연결, LocalReader 공통 transport/receipt에서 숫자 task만 D2 prompt/schema/budget 사용. analyze에서 native→내부 adapter. B0는 unique panel mapping만 확장. 소유 stage/runtime 절차만 사용."
+    },
+    {
+      "order": 2,
+      "owner": "Sol1 (existing src owner)",
+      "files": [
+        "src/SessionWorkspace.tsx",
+        "src/LightweightReaderControls.tsx",
+        "src/LocalCatanReview.tsx"
+      ],
+      "work": "카탄 공용판에만 ‘숫자만 읽기’ 선택. 원본 기본; ‘맞춘 판으로 읽기’는 기존 frame UI 기반 보조 선택. 제목/완료는 숫자 후보로 한정. R1/R2 정정/명시 반영/저장 재열기 연결; 기본 AI 불변."
+    },
+    {
+      "order": 3,
+      "owner": "Sol2 focused contracts/API; Sol1 UI + independent photo GT/measurement",
+      "files": [
+        "tests/lightweight-number-diagnostic.test.ts",
+        "existing local-observation API tests",
+        "existing Catan observation-review tests"
+      ],
+      "work": "기존 D2 raw offline replay로 task pin→candidate→명시 반영/재열기 먼저 확인(모델0). wrong scope/task/pin, null/미검출, accepted 보존, 하나의 충돌과 독립 정상 후보, frame/atlas, job 재접속·task/mode 분리만 집중 회귀. R1/R2/R3 완료본 위에서 각 소유자가 이어 수정."
+    }
+  ],
+  "next_comparison": {
+    "status": "PROPOSED ONLY; execution 0; existing final6 batch not released",
+    "max_new_requests_including_failures": 2,
+    "retry": 0,
+    "concurrency": 1,
+    "paid_model_calls": 0,
+    "input": {
+      "corpus_index": "docs/game-photo-corpus/manifest.json",
+      "source_page": "https://boardgamegeek.com/image/9862197",
+      "sha256": "08942c1046b3e366e67e07e2b3ed3ef98a0fd116321af09504bfea1979c27bc8",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 239045,
+      "inspection": "직접 이미지 확인: 기존 850×637 원본과 다른 실물 배치, 공용판 중심, 돌아간 숫자와 건물 혼잡. 눈으로 센 숫자 token 18개. 사적 손패 내용은 보이지 않음. 정확 출판 인쇄판본은 UNKNOWN; numeral-only 기본판 의미 적합성만 시험.",
+      "rights": "기존 허용된 비공개 검증 corpus. 새 다운로드/게시/제품 참조 에셋 편입 없음."
+    },
+    "GT_and_geometry": {
+      "owner": "Sol1, model output blind before either request",
+      "before_send": [
+        "Sol1이 model output 없이 원본 token center/box·문자·가독성/가림을 수동 표기하고 private GT SHA 동결. 현재 직접 센18은 기대 inventory가 아니다. localization18 재확인, legible value 분모 별도 고정; unknown 유지. GT는 모델/제품 데이터에 넣지 않는다.",
+        "숫자 정답과 무관하게 기존 UI로 frame/방향을 한 번 확인·SHA 동결. 양 조건에 동일 frame; 원본 모델 요청에는 frame/slot 없음. 고정 frame으로 B0 한 번 생성, inputSHA/크기/panel수/polygon 고정. GT를 보고 crop을 조절하지 않으며 잘린 token/범위 밖 panel도 기록."
+      ],
+      "pending": "private GT SHA, legible-value denominator, frame SHA, B0 input SHA는 아직 UNKNOWN. 이 네 값이 고정되지 않으면 송신하지 않는다. GT가 현재 사진으로 안 정해지면 다른 사진으로 몰래 바꾸지 않고 중단한다."
+    },
+    "requests": [
+      {
+        "id": "N1",
+        "mode": "original",
+        "task": "catan-numerals-v1",
+        "input": "동결한 독립 사진 원본 bytes; no resize/crop",
+        "purpose": "새 상태의 직접 compact product 경로와 정정·저장 확인"
+      },
+      {
+        "id": "N2",
+        "mode": "catan-atlas",
+        "task": "catan-numerals-v1",
+        "input": "동일 사진+동결한 사용자 frame으로 생성한 기존 B0 실제 raster",
+        "purpose": "같은 prompt/schema/runtime에서 입력 raster만 바꿨을 때 값/위치와 총 사용자 시간의 차이"
+      }
+    ],
+    "conditions": "D2 prompt/schema/runtime/image-min1024/output1024/temp0/cache_prompt:false 동일, N1→N2 각1회 실패 포함. 합성 로컬 세션 actual job→review→save, 동일 출발 accepted 상태; N1 결과가 N2 입력/초안에 섞이지 않게 한다. 단일쌍·검토자 학습 효과 때문에 일반 속도/교정시간 우열은 확정하지 않는다.",
+    "score_separately": [
+      "동일 원본 GT로 strict reciprocal-center 일대일 대응. 값 정답/오독/null/누락/모호 및 FP 별도; 숫자 일치 재매칭 금지.",
+      "N2 model bbox 역매핑 후 같은 전체18 분모로 채점. 실제 B0 포함/가독 token 분모도 병기하되 crop 밖 누락을 숨기지 않는다. 제공 panel/slot은 localization 정답이 아니다.",
+      "배치 정확도는 사람이 준 frame 조건부로 별도 기록. 동일 검토자의 값/추가/삭제/위치/중복 정정 동작과 미해결, 반영/저장/재열기 결과를 기록. frame 설정 비용은 양 조건 총시간에 포함."
+    ],
+    "measure_and_limits": {
+      "wall_time": "준비/모델 로드/캘리브레이션/B0생성/큐/전송·reader/parse·assembly/검토·정정/반영·저장/재열기를 구분. scan→검토 완료 저장 총경과와 사용자가 실제 조작한 시간을 둘 다 기록. D2 49.22s는 추론 관측값이며 이 전체시간이 아니다.",
+      "generation": "usage prompt/completion, finish_reason, runtime prompt/decode timing 기록. 실제 image-token은 없으면 UNKNOWN.",
+      "memory": "샘플링 process RSS와 OOM/실패; Metal 전체 메모리는 따로 얻지 못하면 UNKNOWN.",
+      "cost": "추가 cloud 모델 요금0; 실제 기기·전력 비용 UNKNOWN.",
+      "resource_bound": "기존 진단과 같은 요청별 timeout600s, 최대2/재시도0/동시1/output1024. 수치들은 실행 예산이지 제품 성능 합격선이 아니다. 새 model/서비스/가중치 없음.",
+      "user_effort": "고정된 한 frame 설정과 각 결과 한 번의 정정·저장만 측정; 같은 사진을 반복 튜닝하지 않는다. 조작시간/클릭 수 목표를 새로 만들지 않는다. 완료 못 하면 미완료와 투입 시간을 그대로 남긴다."
+    },
+    "stop_and_decide": [
+      "offline 연결/GT·source·frame 고정 실패는 송신0. N1 transport/OOM/잘림/공통 wire 실패면 N2 미사용 종료; 숫자 오독 자체는 N2 비교를 막지 않는다.",
+      "N2의 mapping이 좁은 확장으로 성립하지 않으면 N1 한 번만 수행하고 원본 연결을 인계한다.",
+      "최대2회 후 종료: prompt/상한/사진 변경·재시도 없음. 전체분모 오류/누락/FP와 frame 포함 정정→저장 시간을 함께 보고 선택; 혼합/불확실이면 원본 유지, B0 선택 기능. 숫자/연결 성공을 전체판·120게임 성능으로 확대하지 않는다."
+    ]
+  },
+  "handoff_limits": [
+    "이번 작성: 모델콜/제품/설정 변경0, 시험실행0; source/hash 읽기와 사진 눈검토만.",
+    "새 서빙/credentials 불필요. 로컬 runtime 없는 배포 환경은 범위 밖.",
+    "새 사진은 이번 진단에서 처음 쓰는 상태이며 모델 학습에 미노출된 사진이라는 뜻은 아니다."
+  ]
+}

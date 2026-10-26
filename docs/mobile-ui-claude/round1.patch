@@ -1,0 +1,109 @@
+--- a/src/ui.tsx
++++ b/src/ui.tsx
+@@ -1,4 +1,5 @@
+ import { useEffect, useId, useRef, type ReactNode } from 'react';
++import { createPortal } from 'react-dom';
+ import { ArrowRight, X } from 'lucide-react';
+ import type { Value } from '../shared/types';
+ import { ComponentArt } from './ComponentArt';
+@@ -29,12 +30,14 @@
+     document.addEventListener('keydown', handler);
+     return () => { document.body.style.overflow = overflow; document.removeEventListener('keydown', handler); prior?.focus(); };
+   }, []);
+-  return <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
++  const dialog = <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+     <div className={`modal ${wide ? 'modal-wide' : ''}`} ref={panel} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId}>
+       <header className="modal-header"><h2 id={titleId}>{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><X size={21}/></button></header>
+       {children}
+     </div>
+   </div>;
++  // On body: a dialog rendered inside .main-content (its own stacking context) sat under the sticky app bar.
++  return typeof document === 'undefined' ? dialog : createPortal(dialog, document.body);
+ }
+ 
+ // A player's colour as that game's own piece; games without piece art keep a plain colour chip.
+--- a/src/PhotoCaptureGuide.tsx
++++ b/src/PhotoCaptureGuide.tsx
+@@ -11,5 +11,6 @@
+ export function PhotoCaptureGuide({pack,ownerId,areaId,onChange,disabled}:{pack:GamePack;ownerId?:string;areaId:string;onChange:(id:string)=>void;disabled?:boolean}){
+  const profile=captureProfile(pack);if(!profile)return null;
+  const areas=captureAreas(pack,ownerId),selected=areas.find(a=>a.id===areaId);
+- return <section className="panel" aria-label="게임별 촬영 안내"><h3>{pack.title} · {ownerId?'본인 사진':'공용 사진'}</h3><p>{captureGuideText(pack)}</p><label className="field">촬영할 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label>{selected&&<p>{captureGuideText(pack,selected)}</p>}<p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></section>;
++ return <section className="panel capture-guide" aria-label="게임별 촬영 안내"><label className="field capture-guide-target">{ownerId?'본인 사진 · 찍을 부분':'공용 사진 · 찍을 부분'}<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label>
++  <details className="capture-guide-help"><summary>촬영 안내</summary><p>{captureGuideText(pack,selected)}</p><p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></details></section>;
+ }
+--- a/src/GameBoardRecord.tsx
++++ b/src/GameBoardRecord.tsx
+@@ -35,7 +35,7 @@
+  return <div className="gb-record">
+   <div className="gb-toolbar">{areas.length>1?<label className="gb-area-label">영역<select aria-label="판 영역" value={area.areaId} onChange={e=>setAreaId(e.target.value)}>{areas.map(a=><option key={a.areaId} value={a.areaId}>{a.label}</option>)}</select></label>:<span className="small muted">기록 배치</span>}<div className="button-row">{!readonly&&<button className="icon-button" aria-label="배치 되돌리기" disabled={busy||!history.current.length} onClick={()=>onChange?.(history.current.pop()!)}><Undo2 size={17}/></button>}<button className="button secondary small-button" onClick={()=>setFull(true)}><Maximize2 size={16}/>크게 보기</button></div></div>
+   {!compatible&&visual&&<p className="small muted">이전 기록 · 위치는 그대로 보존돼요.</p>}
+-  {board(area)}
++  {placed.length||piece?board(area):<p className="gb-surface-empty" role="note" aria-label={area.label+' · 수동 기록 배치'}>{unplaced.length&&!readonly?'아래에서 구성물을 고르면 판에 놓을 수 있어요':'아직 판에 놓인 구성물이 없어요'}</p>}
+   <CarcassonneLayoutPreview pack={pack} record={record} renderArt={art} disabled={busy} onSelect={id=>{onSelect?.(id);if(!readonly)setEdit(true);}}/>
+   {splendor&&record.pieces.length>0&&<div className="gb-cards" aria-label={`카드로 보기 · ${record.pieces.length}개`}>{record.pieces.map(p=><button type="button" key={p.id} className={selected===p.id?'selected':''} aria-pressed={selected===p.id} disabled={busy} onClick={()=>{onSelect?.(p.id);if(!readonly)setEdit(true);}}><SplendorReadout {...splendorView(p)}/></button>)}</div>}
+   {!splendor&&unplaced.length>0&&<div className="gb-tray" aria-label="미배치 구성물"><span className="small muted">미배치</span><div>{unplaced.map(p=>item(p,false))}</div></div>}
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -146,7 +146,7 @@
+     <main className={`main-content ${view ? 'in-session' : ''}`}>
+       {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
+       {loading ? <div className="loading-screen" role="status"><LoaderMark size={32}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <div className="home">
+-        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className="home-head has-photo"><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
++        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className={`home-head has-photo${liveSessions.length?' has-boards':''}`}><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
+         <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><div className="board-tools"><label className="search-box"><Search size={17}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={15}/></button>}</label><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={18}/></button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details></div></div>
+         {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
+           const pack = packs.find(item => item.id === session.gamePackId);
+--- a/src/GameEssentials.tsx
++++ b/src/GameEssentials.tsx
+@@ -92,7 +92,7 @@
+  const patch=(change:Partial<GenericPiece>)=>setScene(s=>({...s,pieces:s.pieces.map(p=>p.id===selected?{...p,...change}:p)}));
+  if(opaque)return <div><strong>{field.label}</strong><p className="small muted">기존 기록은 그대로 보존돼요. 여기서는 고칠 수 없어요.</p></div>;
+  return <section className="generic-components" aria-label={field.label}><h4>{field.label}</h4>
+- <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label><label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}</div></div>}/>
++ <GameBoardRecord pack={view.pack} fieldKey={field.key} record={scene} mapping={mapping} selected={selected} onSelect={setSelected} onChange={setScene} ownerColor={ownerId?view.session.players.find(p=>p.id===ownerId)?.color:undefined} busy={busy} onAdd={()=>{const id=crypto.randomUUID();setScene(s=>({...s,pieces:[...s.pieces,{id,componentId:null,variant:null,quantity:null,label:'',anchor:'',evidenceId:null,region:null}]}));setSelected(id);}} editor={piece&&<div className="generic-piece-edit"><label>구성물<select value={piece.componentId??''} disabled={busy} onChange={e=>{const id=e.target.value||null;patch(isSplendor(view.pack)?{...readoutForComponent(piece,id),variant:null}:{...readoutForGameComponent(view.pack,piece,id),variant:null});}}><option value="">모름</option>{components.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>{!isSplendor(view.pack)&&<label>대표 그림<select disabled={busy} value={piece.variant??''} onChange={e=>patch({variant:e.target.value||null})}><option value="">세부 모름</option>{mapping?.components.find(c=>c.component_id===piece.componentId)?.variants.map((v,i)=><option key={v.name} value={v.name}>{artVariantLabel(v,i)}</option>)}</select></label>}{isSplendor(view.pack)?<><SplendorFields piece={piece} disabled={busy} onPatch={patch}/><details className="sr-original"><summary>원문 메모</summary><label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label></details></>:<label>표시·확인한 내용<input value={piece.label} disabled={busy} onChange={e=>patch({label:e.target.value})}/></label>}{readoutDefinition(view.pack)&&<GameDetailFields pack={view.pack} piece={piece} record={scene} players={view.session.players} disabled={busy} onPatch={patch}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={piece.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label><label>사진 기준 위치·순서<input value={piece.anchor} disabled={busy} placeholder="예: 왼쪽 두 번째, 방향 그대로" onChange={e=>patch({anchor:e.target.value})}/></label><label>연결할 원본<select disabled={busy||!canRelinkReadoutEvidence(view.pack,piece)} value={piece.evidenceId??''} onChange={e=>patch({evidenceId:e.target.value||null,region:null})}><option value="">연결 없음</option>{view.session.evidence.filter(e=>field.visibility==='public'?e.scope==='public'&&!e.ownerId:e.scope==='public'&&!e.ownerId||e.ownerId===ownerId).map((e,i)=><option key={e.id} value={e.id}>{e.label||`원본 ${i+1}`}</option>)}</select>{!canRelinkReadoutEvidence(view.pack,piece)&&<small>판독값의 근거 원본을 유지해요. 다른 사진은 새 후보로 읽어 주세요.</small>}</label><div className="button-row"><button className="button secondary small-button" disabled={busy||scene.pieces[0].id===piece.id} onClick={()=>{setScene(s=>{const pieces=[...s.pieces],i=pieces.findIndex(p=>p.id===piece.id);[pieces[i-1],pieces[i]]=[pieces[i],pieces[i-1]];return {...s,pieces};});}}>앞으로</button><button className="button text small-button" disabled={busy} onClick={()=>{if(readoutReferrers(scene.pieces,piece.id).length){setMessage('연결된 부품이 있어요. 부착 대상을 먼저 고쳐 주세요.');return;}setScene(s=>({...s,pieces:s.pieces.filter(p=>p.id!==piece.id)}));setSelected(undefined);}}>삭제</button>{piece.evidenceId&&<button className="button text small-button" disabled={busy} onClick={()=>{const e=view.session.evidence.find(e=>e.id===piece.evidenceId);if(e)onEvidence(e,piece.region??undefined);}}>원본 보기</button>}</div></div>}/>
+  <button className="button secondary small-button" disabled={busy||!dirty&&!review} onClick={()=>fire(save())}>{review?'이 후보 적용':'구성물 기록'}</button>{conflict&&<button className="button text small-button" disabled={busy} onClick={()=>{setScene(incoming);setBase(JSON.stringify(incoming));setMessage('최신 기록을 열었어요');}}>초안 버리고 최신 기록</button>}{message&&<p role="status">{message}</p>}</section>;
+ }
+ function PublicBoardOverview({view,busy}:{view:SessionView;busy:boolean}){
+--- a/src/lobby-theme.css
++++ b/src/lobby-theme.css
+@@ -129,3 +129,11 @@
+   .capture-start::before{top:0;left:46px}
+ }
+ @media(prefers-reduced-motion:reduce){.session-card::before,.board-event.has-photo::before,.home-games .js-ball,.home-games .js-stick,.home-head.has-photo::after,.brand-icon,.home-head-photo img,.home-head.has-photo .home-head-copy,.home-example,.home-games{animation:none}}
++
++/* Phones with saved boards: shorter stage photo, no repeated counts (the filter tabs show them), smaller example button. */
++@media(max-width:760px){
++  .home-head.has-boards .home-head-photo{height:120px}
++  .home-head.has-boards .home-head-copy{margin-top:-24px;padding:14px 16px 16px}
++  .home-head.has-boards .home-head-copy>p,.home-head.has-boards .home-stats{display:none}
++  .home-head.has-boards .home-example{width:auto;min-height:44px;margin-top:10px;padding:8px 16px;font-size:14px}
++}
+--- a/src/game-board-record.css
++++ b/src/game-board-record.css
+@@ -25,3 +25,12 @@
+ .gb-cards>button .splendor-readout{max-width:none}
+ .gb-cards>button.selected .splendor-readout{border-color:var(--accent);box-shadow:inset 0 46px 0 var(--sr-tint),0 0 0 2px var(--accent)}
+ .gb-cards>button:focus-visible{outline-offset:2px}
++
++/* Empty placement board collapses to one line; it opens as soon as a piece is placed or selected. */
++.gb-surface-empty{margin:4px 0;padding:10px 12px;border:1.5px dashed var(--line-2);border-radius:12px;font-size:13px;color:var(--muted);text-align:center}
++@media(max-width:600px){
++ /* Visible labels on the header actions (save moved to the sticky bottom bar on phones). */
++ .board-record-session .cw-actions .button>span{display:inline}
++ .board-record-session .cw-actions .button{gap:4px;font-size:13px}
++}
++@media(max-width:380px){.board-record-session .cw-actions .button{flex-direction:column;gap:2px;min-height:52px;font-size:12px}}
+--- a/src/correction-workspace.css
++++ b/src/correction-workspace.css
+@@ -166,3 +166,10 @@
+   .rummikub-session .rt-overview{margin-bottom:8px;padding-bottom:8px}
+   .rummikub-session .rt-heading{margin-bottom:6px}
+ }
++
++/* Phones: the sticky bottom bar is the one save button (this beat `.button{display:inline-flex}` on load order before). */
++@media(max-width:900px){.cw-actions .cw-save-top{display:none}}
++.capture-guide{display:flex;flex-direction:column;gap:6px}
++.capture-guide-target{margin:0}
++.capture-guide-help>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:14px;color:var(--muted)}
++.capture-guide-help p{margin:4px 0}
