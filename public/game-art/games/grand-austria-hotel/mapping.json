@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/grand-austria-hotel.json",
-  "source_sha256": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
+  "source_sha256": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -57,10 +57,10 @@
     },
     {
       "component_id": "guests",
-      "name": "손님·직원 카드",
+      "name": "손님 카드",
       "kind": "card",
       "source_confidence": "reported",
-      "source_description": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+      "source_description": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
       "status": "common-reuse",
       "variants": [
         {
@@ -268,6 +268,43 @@
       "owner_color_supported": true,
       "gap": null,
       "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "staff-cards",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "전용 그림 없음 · 실물 기준",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "unknown",
+      "owner_color_supported": false,
+      "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+      "name": "직원 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+      "source_quantity": null
     }
   ],
   "areas": [
@@ -347,7 +384,7 @@
     },
     {
       "id": "staff",
-      "name": "직원 손패",
+      "name": "미고용 직원 손패",
       "scope": "player",
       "visibility": "owner",
       "topology": "zone",
@@ -357,15 +394,41 @@
         "zone"
       ],
       "component_ids": [
-        "guests"
+        "staff-cards"
       ],
-      "anchor_contract": "아직 고용하지 않은 직원과 고용한 직원을 분리.",
+      "anchor_contract": "미고용 직원 손패만 소유자 범위로 보존.",
       "description": "직원 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hired-staff",
+      "name": "고용한 직원 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "staff-cards"
+      ],
+      "anchor_contract": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다.",
+      "description": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "grand-austria-hotel.rules-2015"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

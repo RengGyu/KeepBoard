@@ -1571,9 +1571,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "splendor",
       "packId": "splendor",
-      "packVersion": "1.0.0-essentials-2.c3ee02f2da3a",
+      "packVersion": "1.0.0-essentials-2.334af0a2f55b",
       "editionId": "base",
-      "sourceSHA": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+      "sourceSHA": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450",
       "nativeBridge": "splendor",
       "readoutSchema": "splendor-v1",
       "areas": [
@@ -1617,6 +1617,16 @@
           ],
           "componentIds": [
             "development"
+          ]
+        },
+        {
+          "id": "chip-supply",
+          "partition": "common_public",
+          "fields": [
+            "chip-supply.scene"
+          ],
+          "componentIds": [
+            "chips"
           ]
         }
       ],
@@ -1868,7 +1878,7 @@
           ]
         }
       ],
-      "definitionSHA": "5b01077953bfcc83bd29c217d1daeedf6e474ffb6d4c671fa2d8800c65a4678d"
+      "definitionSHA": "2aa81d63bd39c530f7608aa5f37c20c5a31979c117fe47fc39ed65ea1961e433"
     },
     {
       "version": "game-photo-definition-v1",
@@ -4875,9 +4885,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "arkham-lcg",
       "packId": "arkham-lcg",
-      "packVersion": "1.0.0-essentials-2.df44ab4683ab",
+      "packVersion": "1.0.0-essentials-2.742919169974",
       "editionId": "base",
-      "sourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+      "sourceSHA": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
       "nativeBridge": null,
       "readoutSchema": "arkham-lcg-v1",
       "areas": [
@@ -4899,7 +4909,8 @@
           "fields": [],
           "componentIds": [
             "investigators",
-            "tokens"
+            "tokens",
+            "decks"
           ]
         },
         {
@@ -4908,6 +4919,14 @@
           "fields": [
             "hand.scene"
           ],
+          "componentIds": [
+            "decks"
+          ]
+        },
+        {
+          "id": "discard",
+          "partition": "player_public",
+          "fields": [],
           "componentIds": [
             "decks"
           ]
@@ -5096,7 +5115,7 @@
           ]
         }
       ],
-      "definitionSHA": "7e625a2135642042394b1f4733d278b1fee527631b9cb69c14fa23ad883a2d56"
+      "definitionSHA": "e4bbaed25dd6afd35515988e8367f48e6b39a3116a079ddd061ca7412aeb56fa"
     },
     {
       "version": "game-photo-definition-v1",
@@ -7915,9 +7934,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "concordia",
       "packId": "concordia",
-      "packVersion": "1.0.0-essentials-2.6c1b7ca22813",
+      "packVersion": "1.0.0-essentials-2.f7717930ce6b",
       "editionId": "base",
-      "sourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+      "sourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
       "nativeBridge": null,
       "readoutSchema": "concordia-v1",
       "areas": [
@@ -7958,6 +7977,14 @@
           "fields": [
             "hand.scene"
           ],
+          "componentIds": [
+            "cards"
+          ]
+        },
+        {
+          "id": "played-personality",
+          "partition": "player_public",
+          "fields": [],
           "componentIds": [
             "cards"
           ]
@@ -8082,7 +8109,7 @@
           ]
         }
       ],
-      "definitionSHA": "acf3e30e27d1701ff262588d5348ccec21fbed1ea3668a344cba123d3e2f1c8e"
+      "definitionSHA": "d7f1457c0808eef304c2bcf9e3f58f220d181adb0d2d086bfde457806f066314"
     },
     {
       "version": "game-photo-definition-v1",
@@ -8453,9 +8480,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "grand-austria-hotel",
       "packId": "grand-austria-hotel",
-      "packVersion": "1.0.0-essentials-2.1ed916bfc7da",
+      "packVersion": "1.0.0-essentials-2.1dff0e209e2b",
       "editionId": "base",
-      "sourceSHA": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
+      "sourceSHA": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
       "nativeBridge": null,
       "readoutSchema": "grand-austria-hotel-v1",
       "areas": [
@@ -8494,7 +8521,15 @@
             "staff.scene"
           ],
           "componentIds": [
-            "guests"
+            "staff-cards"
+          ]
+        },
+        {
+          "id": "hired-staff",
+          "partition": "player_public",
+          "fields": [],
+          "componentIds": [
+            "staff-cards"
           ]
         }
       ],
@@ -8566,7 +8601,7 @@
               "label": "읽히는 인쇄 표기",
               "type": "text",
               "acquisition": "visible",
-              "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+              "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
               "faceOnly": true
             },
             {
@@ -8574,7 +8609,7 @@
               "type": "text",
               "label": "손님·직원",
               "acquisition": "visible",
-              "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+              "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
               "faceOnly": true
             }
           ],
@@ -8629,9 +8664,40 @@
             "storage",
             "targetGuest"
           ]
+        },
+        {
+          "id": "staff-cards",
+          "properties": [
+            {
+              "id": "face",
+              "label": "보이는 면",
+              "type": "enum",
+              "acquisition": "visible",
+              "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+              "options": [
+                {
+                  "value": "front",
+                  "label": "앞면"
+                },
+                {
+                  "value": "back",
+                  "label": "뒷면"
+                }
+              ]
+            },
+            {
+              "id": "printedName",
+              "label": "읽히는 인쇄 표기",
+              "type": "text",
+              "acquisition": "visible",
+              "sourceText": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+              "faceOnly": true
+            }
+          ],
+          "manualPropertyIds": []
         }
       ],
-      "definitionSHA": "ce31cb45f44e44ded2f04fe6d1407c846e9ba58efb07ef60865042c1a4f5ef24"
+      "definitionSHA": "4a881630d92eab49ddde87593e25f9c5dcdc3c2ca5e939b74e18b8aff0353489"
     },
     {
       "version": "game-photo-definition-v1",
@@ -8812,9 +8878,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "a-feast-for-odin",
       "packId": "a-feast-for-odin",
-      "packVersion": "1.0.0-essentials-2.539007f66356",
+      "packVersion": "1.0.0-essentials-2.20d00a567a99",
       "editionId": "base",
-      "sourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+      "sourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
       "nativeBridge": null,
       "readoutSchema": "a-feast-for-odin-v1",
       "areas": [
@@ -8852,6 +8918,14 @@
           "fields": [
             "hand.scene"
           ],
+          "componentIds": [
+            "cards"
+          ]
+        },
+        {
+          "id": "played-occupations",
+          "partition": "player_public",
+          "fields": [],
           "componentIds": [
             "cards"
           ]
@@ -9022,7 +9096,7 @@
           ]
         }
       ],
-      "definitionSHA": "707aa3419b4e24f21ecec5303cdda1b87f5ce9cfe24fef7d09b6c500cb314d2c"
+      "definitionSHA": "719b34f65eec6e42672eed2368d83062d5da8d1ee2dd4e09af105439b69f5943"
     },
     {
       "version": "game-photo-definition-v1",
@@ -10007,9 +10081,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "pandemic-legacy-1",
       "packId": "pandemic-legacy-1",
-      "packVersion": "1.0.0-essentials-2.8e0f96155c30",
+      "packVersion": "1.0.0-essentials-2.af498bfba9fd",
       "editionId": "base",
-      "sourceSHA": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+      "sourceSHA": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
       "nativeBridge": null,
       "readoutSchema": "pandemic-legacy-1-v1",
       "areas": [
@@ -10042,7 +10116,14 @@
             "players.scene"
           ],
           "componentIds": [
-            "cards",
+            "cards"
+          ]
+        },
+        {
+          "id": "character-card",
+          "partition": "player_public",
+          "fields": [],
+          "componentIds": [
             "record"
           ]
         }
@@ -10184,7 +10265,7 @@
           ]
         }
       ],
-      "definitionSHA": "11ce51ed077d468262e472fad0368eb769c313cb4d303974362239f01631c3ac"
+      "definitionSHA": "87deda2519c044d1b3a41305a1f26f5b3c2b575370c0c56a4c2511605c6613a6"
     },
     {
       "version": "game-photo-definition-v1",
@@ -12877,9 +12958,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "akropolis",
       "packId": "akropolis",
-      "packVersion": "1.0.0-essentials-2.d025cfc8cbbc",
+      "packVersion": "1.0.0-essentials-2.98f8fa766f65",
       "editionId": "base",
-      "sourceSHA": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+      "sourceSHA": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
       "nativeBridge": null,
       "readoutSchema": "akropolis-v1",
       "areas": [
@@ -12888,7 +12969,8 @@
           "partition": "player_public",
           "fields": [],
           "componentIds": [
-            "tiles"
+            "tiles",
+            "starting-tiles"
           ]
         },
         {
@@ -12906,7 +12988,8 @@
           "partition": "player_public",
           "fields": [],
           "componentIds": [
-            "stones"
+            "stones",
+            "chief-architect"
           ]
         }
       ],
@@ -12936,7 +13019,7 @@
               "label": "읽히는 인쇄 표기",
               "type": "text",
               "acquisition": "visible",
-              "sourceText": "다중 육각의 지구/광장·채석장과 회전·높이.",
+              "sourceText": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
               "faceOnly": true
             },
             {
@@ -12944,7 +13027,7 @@
               "type": "text",
               "label": "지구·광장·채석장 표기",
               "acquisition": "visible",
-              "sourceText": "다중 육각의 지구/광장·채석장과 회전·높이.",
+              "sourceText": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
               "faceOnly": true
             },
             {
@@ -12952,13 +13035,44 @@
               "type": "text",
               "label": "관측한 조각 모양",
               "acquisition": "visible",
-              "sourceText": "다중 육각의 지구/광장·채석장과 회전·높이.",
+              "sourceText": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
               "faceOnly": true
             }
           ],
           "manualPropertyIds": [
             "height"
           ]
+        },
+        {
+          "id": "starting-tiles",
+          "properties": [
+            {
+              "id": "face",
+              "label": "보이는 면",
+              "type": "enum",
+              "acquisition": "visible",
+              "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+              "options": [
+                {
+                  "value": "front",
+                  "label": "앞면"
+                },
+                {
+                  "value": "back",
+                  "label": "뒷면"
+                }
+              ]
+            },
+            {
+              "id": "printedName",
+              "label": "읽히는 인쇄 표기",
+              "type": "text",
+              "acquisition": "visible",
+              "sourceText": "각 건축가의 개인 도시 출발 타일. 일반 도시 타일과 별도 실물이다.",
+              "faceOnly": true
+            }
+          ],
+          "manualPropertyIds": []
         },
         {
           "id": "stones",
@@ -12968,22 +13082,35 @@
               "label": "사진에서 본 색·재질",
               "type": "text",
               "acquisition": "visible",
-              "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인 석재와 시작 플레이어 표식."
+              "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 개인에게 공개된 석재 큐브. 건설 현장 비용과 덮인 채석장의 보상에 사용한다."
             },
             {
               "id": "itemType",
               "type": "text",
               "label": "돌·시작 표식 구분",
               "acquisition": "visible",
-              "sourceText": "개인 석재와 시작 플레이어 표식."
+              "sourceText": "개인에게 공개된 석재 큐브. 건설 현장 비용과 덮인 채석장의 보상에 사용한다."
             }
           ],
           "manualPropertyIds": [
             "owner"
           ]
+        },
+        {
+          "id": "chief-architect",
+          "properties": [
+            {
+              "id": "observedColor",
+              "label": "사진에서 본 색·재질",
+              "type": "text",
+              "acquisition": "visible",
+              "sourceText": "관측 색은 소유자 ID나 자원 가치로 자동 변환하지 않는다. 현재 라운드의 건설 현장 순서를 시작하는 건축가를 가리키는 단일 공개 표식."
+            }
+          ],
+          "manualPropertyIds": []
         }
       ],
-      "definitionSHA": "54e3e76aa63351532ef8bcb2dae9d1a41e9e3c11605d7ec6c6cafee8c1abd5d5"
+      "definitionSHA": "adb9290ea6463063e34262844ec77cf8076a9adc29966e5aaf04cb0db280b587"
     },
     {
       "version": "game-photo-definition-v1",
@@ -13550,9 +13677,9 @@
       "version": "game-photo-definition-v1",
       "gameId": "dixit",
       "packId": "dixit",
-      "packVersion": "1.0.0-essentials-2.3536bf279979",
+      "packVersion": "1.0.0-essentials-2.cf1374228a08",
       "editionId": "base",
-      "sourceSHA": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+      "sourceSHA": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
       "nativeBridge": null,
       "readoutSchema": "dixit-v1",
       "areas": [
@@ -13671,7 +13798,7 @@
           ]
         }
       ],
-      "definitionSHA": "015935f345625f87f556d0828175955763eff7b58d13858cb079d651be7f8b14"
+      "definitionSHA": "b07f4797c8453bf61414fb0a9f56152d27437a946e6b9995fa93eae91a642e5c"
     },
     {
       "version": "game-photo-definition-v1",

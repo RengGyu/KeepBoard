@@ -22,7 +22,10 @@ for p in sorted((ROOT/'docs/research/game-specs-120/games').glob('*.json')):
   ref=next((c for c in arts if c['component_id'] in a['component_ids']),None)
   areas.append({'areaId':a['id'],'label':a['name'],'fieldKeys':[f['id'] for f in s['state_fields'] if a['id'] in f.get('area_ids',[])],'componentIds':a['component_ids'],'scope':a['scope'],'visibility':a['visibility'],'topology':a['topology'],'template':template,'status':'not-needed' if not ok else 'reuse' if g=='catan' or ref or g=='carcassonne' else 'source-pending' if a['topology'] in ['graph','hex','grid','track'] and a.get('confidence') not in ['verified'] else 'new','geometryStatus':'native' if g=='catan' else 'manual-surface','sourceRefs':a['source_refs'],'sourceConfidence':a['confidence'],'artComponentId':ref['component_id'] if ref else None})
  rows.append({'gameId':g,'editionId':s['edition']['id'],'sourceSHA':sha(p),'status':status,'areas':areas,'fidelityPending':pending.get(g,[])})
-assert len(rows)==119 and sum(len(r['areas']) for r in rows)==522
+# The frozen board had 119 games and 522 areas; an approved source revision may add or remove exactly the areas its ledger row lists.
+ledger=json.loads((ROOT/'docs/gamepack-revision-20261026/revision.json').read_text())
+assert ledger['base']['totals']['boardAreas']==522 and ledger['base']['totals']['boardGames']==119
+assert len(rows)==ledger['totals']['boardGames'] and sum(len(r['areas']) for r in rows)==ledger['totals']['boardAreas']
 emit(OUT/'mapping.json',json.dumps({'version':'board-visuals-v1','games':rows},ensure_ascii=False,indent=2)+'\n')
 # Open-ended guide patterns are intentionally not finite game slots or printed tracks.
 patterns={

@@ -6,13 +6,16 @@ import {validateGenericRecord} from '../shared/genericRecord.ts';import {generic
 import {readoutRows} from '../shared/readouts/presentation.ts';
 const expected=JSON.parse(readFileSync('tests/fixtures/readout-source-contracts.json','utf8'));
 const packs=JSON.parse(readFileSync('gamepacks/generated/game-essentials.json','utf8'));
+// The source contracts fixture is the historical pin; a game revised by the approved ledger is pinned by its final digest and may only add the listed components.
+const ledger=JSON.parse(readFileSync('docs/gamepack-revision-20261026/revision.json','utf8'));
 test('exactly remaining117 contracts; no modification/override of native or Splendor',()=>{
  assert.equal(Object.keys(GAME_READOUTS).length,117);assert.deepEqual(Object.keys(GAME_READOUTS).sort(),expected.map((x:any)=>x.gameId).sort());
  for(const id of ['catan','rummikub','splendor'])assert.equal(GAME_READOUTS[id],undefined);
 });
 for(const source of expected)test(`${source.gameId}: pinned descriptors, all original components, strict values and actual photo boundary`,()=>{
- const d=GAME_READOUTS[source.gameId];assert.ok(d,'game has new descriptor');assert.equal(d.sourceSHA,source.sourceSHA);assert.equal(d.editionId,source.editionId);assert.equal(d.packVersion,source.packVersion);
- assert.deepEqual(d.components.map(c=>c.id).sort(),source.components.map((c:any)=>c.id).sort());
+ const d=GAME_READOUTS[source.gameId],revision=ledger.games[source.gameId],current=packs.find((p:any)=>p.id===source.runtimePackId);assert.ok(d,'game has new descriptor');
+ assert.equal(d.sourceSHA,revision?revision.finalSHA256:source.sourceSHA);if(revision)assert.equal(revision.preimageSHA256,source.sourceSHA);assert.equal(d.editionId,source.editionId);assert.equal(d.packVersion,revision?current.version:source.packVersion);
+ assert.deepEqual(d.components.map(c=>c.id).sort(),[...source.components.map((c:any)=>c.id),...(revision?.components.added??[])].sort());
  const pack=effectiveRecognitionPack(packs.find((p:any)=>p.id===source.runtimePackId)),before=JSON.stringify(pack);
  for(const c of d.components){assert.ok(c.fields.length>0);assert.equal(new Set(c.fields.map(f=>f.id)).size,c.fields.length);
   const blank=emptyGameReadout(pack,c.id);assert.deepEqual(validateGameReadout(blank,pack,c.id,null),blank);

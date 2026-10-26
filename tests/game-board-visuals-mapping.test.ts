@@ -1,8 +1,10 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
 import {boardAreas,compatibleBoard,visiblePlacement,pendingArt,recordSurfacePoint,recordSurfaceCenter,type BoardVisual} from '../src/boardVisuals.ts';import type {GamePack} from '../shared/types.ts';import type {GenericPiece} from '../shared/genericRecord.ts';
 const data=JSON.parse(await readFile(new URL('../public/game-art/boards/mapping.json',import.meta.url),'utf8')) as {games:BoardVisual[]};
-test('119/522 exact IDs/edition/source/component/field/template references, no rummikub, hidden areas not-needed',async()=>{
- assert.equal(data.games.length,119);assert.equal(new Set(data.games.map(g=>g.gameId)).size,119);assert(!data.games.some(g=>g.gameId==='rummikub'));assert.equal(data.games.flatMap(g=>g.areas).length,522);
+const ledger=JSON.parse(await readFile(new URL('../docs/gamepack-revision-20261026/revision.json',import.meta.url),'utf8'));
+test('119 games and the frozen 522 areas plus exactly the ledger-listed revisions: exact IDs/edition/source/component/field/template references, no rummikub, hidden areas not-needed',async()=>{
+ assert.equal(ledger.base.totals.boardAreas,522);assert.equal(ledger.totals.boardAreas,522+Object.values<any>(ledger.games).reduce((n,g)=>n+(g.boardAreas?g.boardAreas.added.length-g.boardAreas.removed.length:0),0));
+ assert.equal(data.games.length,119);assert.equal(new Set(data.games.map(g=>g.gameId)).size,119);assert(!data.games.some(g=>g.gameId==='rummikub'));assert.equal(data.games.flatMap(g=>g.areas).length,ledger.totals.boardAreas);
  for(const g of data.games){const raw=await readFile(new URL('../docs/research/game-specs-120/games/'+g.gameId+'.json',import.meta.url));const spec=JSON.parse(raw.toString());assert.equal(g.sourceSHA,createHash('sha256').update(raw).digest('hex'));assert.equal(g.editionId,spec.edition.id);
  for(const a of g.areas){assert(spec.layout.areas.some((s:any)=>s.id===a.areaId));for(const key of a.fieldKeys)assert(spec.state_fields.some((f:any)=>f.id===key&&f.area_ids.includes(a.areaId)));for(const id of a.componentIds)assert(spec.components.some((c:any)=>c.id===id));await readFile(new URL('../public/game-art/boards/'+a.template+'.svg',import.meta.url));if(!(['public','owner'].includes(a.visibility)&&['public','player'].includes(a.scope)))assert.equal(a.status,'not-needed');}}
 });

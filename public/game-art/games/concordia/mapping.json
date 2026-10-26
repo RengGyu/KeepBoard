@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/concordia.json",
-  "source_sha256": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+  "source_sha256": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -389,13 +389,39 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "사용 전 카드와 사용 더미를 별개 보존.",
+      "anchor_contract": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
       "description": "성격 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "played-personality",
+      "name": "사용한 성격 카드 더미",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다.",
+      "description": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "concordia.art-confirmation.concordia-web"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

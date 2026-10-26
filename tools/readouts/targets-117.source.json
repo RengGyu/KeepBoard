@@ -5,12 +5,12 @@
     "title": "오딘을 위하여",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.539007f66356",
-    "sourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
-    "sourceSHAActual": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+    "packVersion": "1.0.0-essentials-2.20d00a567a99",
+    "sourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
+    "sourceSHAActual": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf | ",
+    "sourceURLs": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -161,6 +161,21 @@
         "scope": "public",
         "sourceId": "note",
         "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "played-occupations"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "played-occupations.scene",
+        "label": "사용한 직업 카드",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "played-occupations.scene",
+        "visibility": "public"
       }
     ],
     "components": [
@@ -273,9 +288,9 @@
         "title": "A Feast for Odin — 공식 자료",
         "url": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf",
         "kind": "official-rules",
-        "access": "search-index",
+        "access": "opened",
         "checked_at": "2026-10-21",
-        "note": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인."
+        "note": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인. 2026-10-26 로컬 공식 PDF pp.3,20 확인: 손패의 비공개 직업과 사용한 직업 구별. 전체 규칙 검증 아님."
       },
       {
         "id": "essentials.storage-guidance",
@@ -371,7 +386,7 @@
           "manual",
           "physical"
         ],
-        "description": "아직 내지 않은 직업과 공개한 직업 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
         "component_ids": [
           "cards"
         ],
@@ -485,6 +500,31 @@
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "played-occupations.scene",
+        "label": "사용한 직업 카드",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "cards"
+        ],
+        "area_ids": [
+          "played-occupations"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "a-feast-for-odin.primary"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -562,9 +602,30 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "아직 내지 않은 직업과 공개한 직업 구별.",
+          "anchor_contract": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
           "description": "직업 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "played-occupations",
+          "name": "사용한 직업 카드",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다.",
+          "description": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "a-feast-for-odin.primary"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -653,7 +714,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/a-feast-for-odin/mapping.json",
-    "artSourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7"
+    "artSourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb"
   },
   {
     "gameId": "aeons-end",
@@ -666,7 +727,7 @@
     "sourceSHAActual": "1e9a628d7e1bc0eebbe2511fb7d20be7ddd59b46a3e515ccb281f2cf24c079f2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://indieboardsandcards.com/our-games/aeons-end/ | https://play.google.com/store/apps/details?hl=en_IN&id=com.handelabra.AeonsEnd | ",
+    "sourceURLs": "https://indieboardsandcards.com/our-games/aeons-end/ | https://play.google.com/store/apps/details?hl=en_IN&id=com.handelabra.AeonsEnd",
     "bindings": [
       {
         "areaIds": [
@@ -1577,7 +1638,7 @@
     "sourceSHAActual": "8e6e7852b320eb2e66871b2734956c5b385463a6e6a161b011c2d2977260be6d",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://capstone-games.com/products/age-of-innovation/ | ",
+    "sourceURLs": "https://capstone-games.com/products/age-of-innovation/",
     "bindings": [
       {
         "areaIds": [
@@ -2285,7 +2346,7 @@
     "sourceSHAActual": "a0327f3809605f8d0d3ef4d9a08a74fbb586b804efca178a581112b1d1d62d84",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/en/games/agricolare.html | https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf | https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf | ",
+    "sourceURLs": "https://www.lookout-spiele.de/en/games/agricolare.html | https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf | https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -3082,19 +3143,20 @@
     "title": "아크로폴리스",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.d025cfc8cbbc",
-    "sourceSHA": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
-    "sourceSHAActual": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+    "packVersion": "1.0.0-essentials-2.98f8fa766f65",
+    "sourceSHA": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
+    "sourceSHAActual": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://en.gigamic.com/games-for-family/1115-product.html | ",
+    "sourceURLs": "https://en.gigamic.com/games-for-family/1115-product.html | https://en.gigamic.com/index.php?controller=attachment&id_attachment=471",
     "bindings": [
       {
         "areaIds": [
           "city"
         ],
         "componentIds": [
-          "tiles"
+          "tiles",
+          "starting-tiles"
         ],
         "editor": "component-catalog",
         "key": "city.scene",
@@ -3124,11 +3186,12 @@
           "supply"
         ],
         "componentIds": [
-          "stones"
+          "stones",
+          "chief-architect"
         ],
         "editor": "component-catalog",
         "key": "supply.scene",
-        "label": "개인 석재",
+        "label": "개인 석재·수석 표식",
         "lifetime": "session",
         "scope": "player",
         "sourceId": "supply.scene",
@@ -3150,8 +3213,13 @@
         "visibility": "hidden"
       },
       {
-        "areaIds": [],
-        "componentIds": [],
+        "areaIds": [
+          "city"
+        ],
+        "componentIds": [
+          "tiles",
+          "starting-tiles"
+        ],
         "editor": "opaque-preserve",
         "key": "height",
         "label": "층·덮임",
@@ -3172,8 +3240,12 @@
         "visibility": "public"
       },
       {
-        "areaIds": [],
-        "componentIds": [],
+        "areaIds": [
+          "supply"
+        ],
+        "componentIds": [
+          "stones"
+        ],
         "editor": "scalar",
         "key": "stone-count",
         "label": "석재",
@@ -3230,10 +3302,10 @@
     "components": [
       {
         "id": "tiles",
-        "name": "도시·시작 타일",
+        "name": "도시 타일",
         "kind": "tile",
-        "quantity": null,
-        "quantity_scope": "unknown",
+        "quantity": 61,
+        "quantity_scope": "game",
         "variants": [],
         "properties": [
           "identity",
@@ -3241,18 +3313,37 @@
           "owner",
           "quantity"
         ],
-        "description": "다중 육각의 지구/광장·채석장과 회전·높이.",
+        "description": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
         "source_refs": [
-          "akropolis.primary"
+          "akropolis.rules.20261026"
         ],
-        "confidence": "reported"
+        "confidence": "verified"
+      },
+      {
+        "id": "starting-tiles",
+        "name": "시작 타일",
+        "kind": "tile",
+        "quantity": 4,
+        "quantity_scope": "game",
+        "variants": [],
+        "properties": [
+          "identity",
+          "face",
+          "owner",
+          "quantity"
+        ],
+        "description": "각 건축가의 개인 도시 출발 타일. 일반 도시 타일과 별도 실물이다.",
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
+        "confidence": "verified"
       },
       {
         "id": "stones",
-        "name": "석재·수석 건축가",
+        "name": "석재 큐브",
         "kind": "token",
-        "quantity": null,
-        "quantity_scope": "unknown",
+        "quantity": 40,
+        "quantity_scope": "game",
         "variants": [],
         "properties": [
           "identity",
@@ -3260,11 +3351,30 @@
           "owner",
           "quantity"
         ],
-        "description": "개인 석재와 시작 플레이어 표식.",
+        "description": "개인에게 공개된 석재 큐브. 건설 현장 비용과 덮인 채석장의 보상에 사용한다.",
         "source_refs": [
-          "akropolis.primary"
+          "akropolis.rules.20261026"
         ],
-        "confidence": "reported"
+        "confidence": "verified"
+      },
+      {
+        "id": "chief-architect",
+        "name": "수석 건축가 표식",
+        "kind": "marker",
+        "quantity": 1,
+        "quantity_scope": "game",
+        "variants": [],
+        "properties": [
+          "identity",
+          "face",
+          "owner",
+          "quantity"
+        ],
+        "description": "현재 라운드의 건설 현장 순서를 시작하는 건축가를 가리키는 단일 공개 표식.",
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
+        "confidence": "verified"
       }
     ],
     "source": {
@@ -3292,6 +3402,15 @@
         "access": "opened",
         "checked_at": "2026-10-22",
         "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+      },
+      {
+        "id": "akropolis.rules.20261026",
+        "title": "Akropolis — Gigamic English base rulebook (2022 printing)",
+        "url": "https://en.gigamic.com/index.php?controller=attachment&id_attachment=471",
+        "kind": "official-rules",
+        "access": "opened",
+        "checked_at": "2026-10-26",
+        "note": "p.2 Contents/Setup: 61 City tiles, 4 starting tiles, 40 Stone cubes and Chief Architect marker; p.3 ordered Construction Site and personal starting tile; pp.4–5 paid selection, three-hex tile placement and covered quarry; p.7 market replenishment and marker transfer. Checked these sections, not every variant."
       }
     ],
     "stateFields": [
@@ -3307,15 +3426,18 @@
           "manual",
           "physical"
         ],
-        "description": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "시작 타일과 도시 타일 인스턴스별 세 육각, 방향, 층, 덮는 관계를 유지한다. 위층 타일은 빈 공간 위에 놓이지 않고 서로 다른 아래 타일 두 장 이상에 걸친다; 가려진 아래 인쇄는 추정하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "component_ids": [
-          "tiles"
+          "tiles",
+          "starting-tiles"
         ],
         "area_ids": [
           "city"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -3330,7 +3452,7 @@
           "manual",
           "physical"
         ],
-        "description": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "건설 현장의 공개 도시 타일을 왼쪽부터 순서대로 보존한다. 선택 타일 앞의 수만큼 석재 비용이 달라지며 마지막 한 장은 해당 라운드에 선택하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "component_ids": [
           "tiles"
         ],
@@ -3338,12 +3460,14 @@
           "market"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
         "confidence": "recommendation"
       },
       {
         "id": "supply.scene",
-        "label": "개인 석재",
+        "label": "개인 석재·수석 표식",
         "scope": "player",
         "visibility": "public",
         "type": "component-scene",
@@ -3353,15 +3477,18 @@
           "manual",
           "physical"
         ],
-        "description": "현재 석재 잔액과 수석 건축가. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "각 플레이어의 석재 큐브 수와 수석 건축가 표식의 현재 보유자를 별개로 기록한다. 표식의 소유자와 실제 다음 차례는 동일하다고 추측하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "component_ids": [
-          "stones"
+          "stones",
+          "chief-architect"
         ],
         "area_ids": [
           "supply"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -3376,7 +3503,7 @@
           "manual",
           "physical"
         ],
-        "description": "공개하지 않은 타일 더미 순서 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "공개 전 도시 타일의 뒷면 11개 대기 더미를 더미 ID별로 따로 보존한다. 각 더미 내부 위아래 방향과 남은 수를 알 때만 적고, 타일 앞면은 확인하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "component_ids": [
           "tiles"
         ],
@@ -3384,7 +3511,9 @@
           "draw"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "akropolis.rules.20261026"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -3398,8 +3527,13 @@
           "manual"
         ],
         "description": "타일별 높이와 아래 받치는 인스턴스. 높이를 면적에서 추정하지 않는다.",
-        "component_ids": [],
-        "area_ids": [],
+        "component_ids": [
+          "tiles",
+          "starting-tiles"
+        ],
+        "area_ids": [
+          "city"
+        ],
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
@@ -3415,8 +3549,12 @@
           "manual"
         ],
         "description": "실제 잔액만 기록하며 지운 채석장에서 자동 보상 지급 금지.",
-        "component_ids": [],
-        "area_ids": [],
+        "component_ids": [
+          "stones"
+        ],
+        "area_ids": [
+          "supply"
+        ],
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
@@ -3506,11 +3644,14 @@
             "hex"
           ],
           "component_ids": [
-            "tiles"
+            "tiles",
+            "starting-tiles"
           ],
-          "anchor_contract": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+          "anchor_contract": "시작 타일과 도시 타일 인스턴스별 세 육각, 방향, 층, 덮는 관계를 유지한다. 위층 타일은 빈 공간 위에 놓이지 않고 서로 다른 아래 타일 두 장 이상에 걸친다; 가려진 아래 인쇄는 추정하지 않는다.",
           "description": "개인 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation"
         },
         {
@@ -3527,14 +3668,16 @@
           "component_ids": [
             "tiles"
           ],
-          "anchor_contract": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+          "anchor_contract": "건설 현장의 공개 도시 타일을 왼쪽부터 순서대로 보존한다. 선택 타일 앞의 수만큼 석재 비용이 달라지며 마지막 한 장은 해당 라운드에 선택하지 않는다.",
           "description": "건설 현장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation"
         },
         {
           "id": "supply",
-          "name": "개인 석재",
+          "name": "개인 석재·수석 표식",
           "scope": "player",
           "visibility": "public",
           "topology": "zone",
@@ -3544,11 +3687,14 @@
             "zone"
           ],
           "component_ids": [
-            "stones"
+            "stones",
+            "chief-architect"
           ],
-          "anchor_contract": "현재 석재 잔액과 수석 건축가.",
+          "anchor_contract": "각 플레이어의 석재 큐브 수와 수석 건축가 표식의 현재 보유자를 별개로 기록한다. 표식의 소유자와 실제 다음 차례는 동일하다고 추측하지 않는다.",
           "description": "개인 석재의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation"
         },
         {
@@ -3565,9 +3711,11 @@
           "component_ids": [
             "tiles"
           ],
-          "anchor_contract": "공개하지 않은 타일 더미 순서 보존.",
+          "anchor_contract": "공개 전 도시 타일의 뒷면 11개 대기 더미를 더미 ID별로 따로 보존한다. 각 더미 내부 위아래 방향과 남은 수를 알 때만 적고, 타일 앞면은 확인하지 않는다.",
           "description": "대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -3580,7 +3728,7 @@
     "preservation": [
       {
         "conditions": [
-          "공개하지 않은 타일 더미 순서 보존.",
+          "공개 전 도시 타일 더미 11개를 더미 ID별로 따로 보관하고 남은 각 더미의 위아래 방향을 유지한다. 앞면을 펼쳐 기록하지 않는다.",
           "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
           "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다.",
           "순서를 섞지 않고 앞뒤 방향을 유지하세요."
@@ -3597,6 +3745,7 @@
       },
       {
         "conditions": [
+          "개인 도시의 시작 타일·층·덮는 관계와 개인 석재 및 수석 표식 위치를 분리해 기록한다.",
           "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
           "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
           "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
@@ -3614,6 +3763,7 @@
       },
       {
         "conditions": [
+          "건설 현장의 타일 왼쪽부터 순서와 마지막 남은 타일을 기록한다.",
           "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
           "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
           "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
@@ -3644,7 +3794,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/akropolis/mapping.json",
-    "artSourceSHA": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e"
+    "artSourceSHA": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27"
   },
   {
     "gameId": "anachrony",
@@ -3657,7 +3807,7 @@
     "sourceSHAActual": "adb8889e47b70049325298ae62297f9f0493c9f7e10d94432351411327dada5b",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf | ",
+    "sourceURLs": "https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2021/02/Anachrony-Essential-Edition-Rulebook-Single-Pages-websafe.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -4437,7 +4587,7 @@
     "sourceSHAActual": "1fc973077275d198ada056c2ce0b09902f4dd39b0accb0ac6f9e7c860bff2b2c",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://canada.stonemaiergames.com/products/apiary | ",
+    "sourceURLs": "https://canada.stonemaiergames.com/products/apiary",
     "bindings": [
       {
         "areaIds": [
@@ -5158,7 +5308,7 @@
     "sourceSHAActual": "9c69a814486011410f5f3ae98d3b7f495b3628b0436a5a39383b2d6c117813e2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://ledergames.com/pages/how-to-play-arcs | ",
+    "sourceURLs": "https://ledergames.com/pages/how-to-play-arcs",
     "bindings": [
       {
         "areaIds": [
@@ -5877,7 +6027,7 @@
     "sourceSHAActual": "918de2fc75df261242ec06af1eb711f7387b57c059f9a978df46eab0b88fa462",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://capstone-games.com/products/ark-nova | ",
+    "sourceURLs": "https://capstone-games.com/products/ark-nova",
     "bindings": [
       {
         "areaIds": [
@@ -6604,7 +6754,7 @@
     "sourceSHAActual": "dd7aedf379ffbf86cfb339c60c97957b6d82359638f1e241eb8e8351980e66a9",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/ca/77/ca776ab5-8169-4e4e-9036-dd61843b08e1/ahb01_learn-to-play-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/ca/77/ca776ab5-8169-4e4e-9036-dd61843b08e1/ahb01_learn-to-play-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/70/15/70156879-aefe-441e-94a0-1a816872058d/ahb01_rules-reference-compressed.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -7466,12 +7616,12 @@
     "title": "아컴호러 카드게임",
     "editionId": "base",
     "edition": "2026 Chapter Two 기본판 AHC100",
-    "packVersion": "1.0.0-essentials-2.df44ab4683ab",
-    "sourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
-    "sourceSHAActual": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+    "packVersion": "1.0.0-essentials-2.742919169974",
+    "sourceSHA": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
+    "sourceSHAActual": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.fantasyflightgames.com/product/arkham-horror-the-card-game/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/ahc100_rulebook-web.pdf | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/ahc100_rulebook-web.pdf | ",
+    "sourceURLs": "https://www.fantasyflightgames.com/product/arkham-horror-the-card-game/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/ahc100_rulebook-web.pdf | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/ahc100_rulebook-web.pdf | https://images-cdn.fantasyflightgames.com/filer_public/0e/d0/0ed09507-1705-47ed-a630-cd15885cabb0/ahc100_rulebook-web.pdf | https://images-cdn.fantasyflightgames.com/filer_public/76/b3/76b332d5-7047-458f-91b6-82c8500cc445/arkham_grimoire.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -7496,7 +7646,8 @@
         ],
         "componentIds": [
           "investigators",
-          "tokens"
+          "tokens",
+          "decks"
         ],
         "editor": "component-catalog",
         "key": "play.scene",
@@ -7723,6 +7874,21 @@
         "scope": "public",
         "sourceId": "scenario-progress:note",
         "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "discard"
+        ],
+        "componentIds": [
+          "decks"
+        ],
+        "editor": "component-catalog",
+        "key": "discard.scene",
+        "label": "각 조사자의 공개 버림더미",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "discard.scene",
+        "visibility": "public"
       }
     ],
     "components": [
@@ -7868,6 +8034,24 @@
         "access": "opened",
         "checked_at": "2026-10-22",
         "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+      },
+      {
+        "id": "arkham-lcg.current-rulebook",
+        "title": "Arkham Horror: The Card Game current core rulebook",
+        "url": "https://images-cdn.fantasyflightgames.com/filer_public/0e/d0/0ed09507-1705-47ed-a630-cd15885cabb0/ahc100_rulebook-web.pdf",
+        "kind": "official-rules",
+        "access": "search-index",
+        "checked_at": "2026-10-26",
+        "note": "Types of Actions > Play: an asset from hand is placed in the investigator's play area; an event goes to discard. Indexed text checked; entire 11 MB PDF not opened."
+      },
+      {
+        "id": "arkham-lcg.current-reference",
+        "title": "Arkham Grimoire current rules reference",
+        "url": "https://images-cdn.fantasyflightgames.com/filer_public/76/b3/76b332d5-7047-458f-91b6-82c8500cc445/arkham_grimoire.pdf",
+        "kind": "official-rules",
+        "access": "search-index",
+        "checked_at": "2026-10-26",
+        "note": "Discard Piles: each investigator has an open-information face-up discard pile; its card order must not be altered except by an effect. Indexed section checked; whole reference not verified."
       }
     ],
     "stateFields": [
@@ -7911,13 +8095,16 @@
         "description": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
         "component_ids": [
           "investigators",
-          "tokens"
+          "tokens",
+          "decks"
         ],
         "area_ids": [
           "play"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "arkham-lcg.current-rulebook"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -8161,6 +8348,31 @@
         "source_refs": [
           "arkham-lcg.essentials.rules"
         ]
+      },
+      {
+        "id": "discard.scene",
+        "label": "각 조사자의 공개 버림더미",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "decks"
+        ],
+        "area_ids": [
+          "discard"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "arkham-lcg.current-reference"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -8199,11 +8411,14 @@
           ],
           "component_ids": [
             "investigators",
-            "tokens"
+            "tokens",
+            "decks"
           ],
           "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
           "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "arkham-lcg.current-rulebook"
+          ],
           "confidence": "recommendation"
         },
         {
@@ -8243,6 +8458,27 @@
           "anchor_contract": "덱별 순서·버림·제거/보류 카드를 독립 묶음으로 보존.",
           "description": "조우·플레이어 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "discard",
+          "name": "각 조사자의 공개 버림더미",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "decks"
+          ],
+          "anchor_contract": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+          "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "arkham-lcg.current-reference"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -8403,7 +8639,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/arkham-lcg/mapping.json",
-    "artSourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e"
+    "artSourceSHA": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2"
   },
   {
     "gameId": "avalon",
@@ -8416,7 +8652,7 @@
     "sourceSHAActual": "2227f0ecf3351684f213d810631ada1e86bfef1591fa94107706b73e844666b6",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://indieboardsandcards.com/our-games/avalon-big-box/ | ",
+    "sourceURLs": "https://indieboardsandcards.com/our-games/avalon-big-box/",
     "bindings": [
       {
         "areaIds": [
@@ -9024,7 +9260,7 @@
     "sourceSHAActual": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf | ",
+    "sourceURLs": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -9689,7 +9925,7 @@
     "sourceSHAActual": "eeb9e974a3a9427a4588764075817f97503a644ad78b60bcef01058a5aa0ac2e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://craniocreations.com/products/barrage-eng | https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012 | https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012 | ",
+    "sourceURLs": "https://craniocreations.com/products/barrage-eng | https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012 | https://cdn.shopify.com/s/files/1/1010/2246/6379/files/Barrage_Rules_Core_ENG_compressed_compressed_2.pdf?v=1784708012",
     "bindings": [
       {
         "areaIds": [
@@ -10366,7 +10602,7 @@
     "sourceSHAActual": "7ffd4e6e58fbd7824a8372e358c4405fb1f5fa71e649772859c6b37b0a60ba24",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://service.mattel.com/instruction_sheets/BJV44-Eng.pdf | ",
+    "sourceURLs": "https://service.mattel.com/instruction_sheets/BJV44-Eng.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -10867,7 +11103,7 @@
     "sourceSHAActual": "c0ec9975cc58e86205cf4d5adee47ebcd0e512efca5e73594feae2a0bdd48abd",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.amigo-spiele.de/bohnanza_1661_1075 | ",
+    "sourceURLs": "https://www.amigo-spiele.de/bohnanza_1661_1075",
     "bindings": [
       {
         "areaIds": [
@@ -11531,7 +11767,7 @@
     "sourceSHAActual": "238e434998d45f8b18c65904c9c3d7ed085168c1b811626723a01d5b68225ec2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://roxley.com/products/brass-birmingham?currency=GBP | ",
+    "sourceURLs": "https://roxley.com/products/brass-birmingham?currency=GBP",
     "bindings": [
       {
         "areaIds": [
@@ -12292,7 +12528,7 @@
     "sourceSHAActual": "cb0d951a742e63cad718ee75e5cf003310ef1b1ee18e00c8d96a7d440898058c",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.alderac.com/calico | ",
+    "sourceURLs": "https://www.alderac.com/calico",
     "bindings": [
       {
         "areaIds": [
@@ -12986,7 +13222,7 @@
     "sourceSHAActual": "a2b8788cd3c51aa938884f119fd98fe00818e72a60f8d093c573b89597de5ffa",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images.zmangames.com/filer_public/24/b9/24b924f3-b7d0-464f-9d1d-618bd01e38a0/carcassonne_v3_rulesheet_en_revised_ab.pdf | ",
+    "sourceURLs": "https://images.zmangames.com/filer_public/24/b9/24b924f3-b7d0-464f-9d1d-618bd01e38a0/carcassonne_v3_rulesheet_en_revised_ab.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -13554,7 +13790,7 @@
     "sourceSHAActual": "324b9eee26c5fc154927a48d1ee217d5095d4d6106c87cb33258484cf096a357",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.alderac.com/cascadia/ | https://www.alderac.com/wp-content/uploads/2025/04/Cascadia_BaseGame_Rulebook_Optimized.pdf | ",
+    "sourceURLs": "https://www.alderac.com/cascadia/ | https://www.alderac.com/wp-content/uploads/2025/04/Cascadia_BaseGame_Rulebook_Optimized.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -14129,7 +14365,7 @@
     "sourceSHAActual": "8ec94acf2ca01b3e8d36f860e0ff69c35881633dcf8cb25c3e167595ca2ffe22",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.ravensburger.org/spielanleitungen/ecm/Spielanleitungen/CoB_Rulebook_285x210mm%20%5B28%20pages%5D.pdf?ossl=pds_text_Spielanleitung | ",
+    "sourceURLs": "https://www.ravensburger.org/spielanleitungen/ecm/Spielanleitungen/CoB_Rulebook_285x210mm%20%5B28%20pages%5D.pdf?ossl=pds_text_Spielanleitung",
     "bindings": [
       {
         "areaIds": [
@@ -14699,7 +14935,7 @@
     "sourceSHAActual": "8babfb12296ee506efecf1fd79dc7d92e6ec07d2d609a626d4071cdf7182d26a",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://beziergames.com/products/castles | ",
+    "sourceURLs": "https://beziergames.com/products/castles",
     "bindings": [
       {
         "areaIds": [
@@ -15416,7 +15652,7 @@
     "sourceSHAActual": "88d9b8b72e7972b6f6b28cc4966c92e9312f6b456baf2b82d8cdce9a8a64337a",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/en/games/caverna.html | https://www.lookout-spiele.de/upload/en_caverna.html_Rules_Caverna_EN.pdf | ",
+    "sourceURLs": "https://www.lookout-spiele.de/en/games/caverna.html | https://www.lookout-spiele.de/upload/en_caverna.html_Rules_Caverna_EN.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -16133,7 +16369,7 @@
     "sourceSHAActual": "e5db7ba506e3bb617c146274b8b6395efef86df08990f30d45786dcf93e4e18b",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://store.stonemaiergames.com/products/charterstone | ",
+    "sourceURLs": "https://store.stonemaiergames.com/products/charterstone",
     "bindings": [
       {
         "areaIds": [
@@ -16768,7 +17004,7 @@
     "sourceSHAActual": "ee7bf4f8c755c7b9b50eed66763c9158a36a277d3a467d0aa4acaa6d3bdb9d81",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://direwolfdigital.com/clank-catacombs/ | ",
+    "sourceURLs": "https://direwolfdigital.com/clank-catacombs/",
     "bindings": [
       {
         "areaIds": [
@@ -17506,7 +17742,7 @@
     "sourceSHAActual": "04f78d8b00cecb3cd74963a8b03630ba067427f86d05c197a679ed9006c36d21",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://instructions.hasbro.com/en-gb/instruction/clue-the-classic-mystery-game | ",
+    "sourceURLs": "https://instructions.hasbro.com/en-gb/instruction/clue-the-classic-mystery-game",
     "bindings": [
       {
         "areaIds": [
@@ -18135,7 +18371,7 @@
     "sourceSHAActual": "aed599abd90cebf8976eb9decacd4ebe5f459b5046654a6ba494e5e84780668b",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.schmidtspiele.de/detail/product/cockroach-poker.html | ",
+    "sourceURLs": "https://www.schmidtspiele.de/detail/product/cockroach-poker.html",
     "bindings": [
       {
         "areaIds": [
@@ -18655,7 +18891,7 @@
     "sourceSHAActual": "ef0d8c206e6bd3573a4f6fe60776ab2758a15f00fb6c68a46dc377f9fb6b79a4",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://czechgames.com/files/rules/codenames-rules-en.pdf | ",
+    "sourceURLs": "https://czechgames.com/files/rules/codenames-rules-en.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -19208,12 +19444,12 @@
     "title": "콩코르디아",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.6c1b7ca22813",
-    "sourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
-    "sourceSHAActual": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+    "packVersion": "1.0.0-essentials-2.f7717930ce6b",
+    "sourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
+    "sourceSHAActual": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.riograndegames.com/games/concordia/ | https://www.riograndegames.com/wp-content/uploads/2013/10/Concordia_rules_eng_1_1.pdf | ",
+    "sourceURLs": "https://www.riograndegames.com/games/concordia/ | https://www.riograndegames.com/wp-content/uploads/2013/10/Concordia_rules_eng_1_1.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -19342,6 +19578,21 @@
         "lifetime": "session",
         "scope": "public",
         "sourceId": "note",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "played-personality"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "played-personality.scene",
+        "label": "사용한 성격 카드 더미",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "played-personality.scene",
         "visibility": "public"
       }
     ],
@@ -19558,7 +19809,7 @@
           "manual",
           "physical"
         ],
-        "description": "사용 전 카드와 사용 더미를 별개 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
         "component_ids": [
           "cards"
         ],
@@ -19672,6 +19923,31 @@
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "played-personality.scene",
+        "label": "사용한 성격 카드 더미",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "cards"
+        ],
+        "area_ids": [
+          "played-personality"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "concordia.art-confirmation.concordia-web"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -19750,9 +20026,30 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "사용 전 카드와 사용 더미를 별개 보존.",
+          "anchor_contract": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
           "description": "성격 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "played-personality",
+          "name": "사용한 성격 카드 더미",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다.",
+          "description": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "concordia.art-confirmation.concordia-web"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -19815,7 +20112,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/concordia/mapping.json",
-    "artSourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a"
+    "artSourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178"
   },
   {
     "gameId": "coup",
@@ -19828,7 +20125,7 @@
     "sourceSHAActual": "82b468b25dda98bd5ff5d756e09479fd4f44847b4171d184714f6e6add74630e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://indieboardsandcards.com/our-games/coup/ | ",
+    "sourceURLs": "https://indieboardsandcards.com/our-games/coup/",
     "bindings": [
       {
         "areaIds": [
@@ -20365,7 +20662,7 @@
     "sourceSHAActual": "bd1a3b71ef099ef0bb5069d95eb7ce877fa70eee3c5b1afb7da905149b4393a5",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.thamesandkosmos.com/manuals/full/691869_Crew_Deep%20Sea_Manual.pdf | https://www.thamesandkosmos.co.uk/wp-content/uploads/2021/02/691869_Crew_Deep-Sea_Manual.pdf | ",
+    "sourceURLs": "https://www.thamesandkosmos.com/manuals/full/691869_Crew_Deep%20Sea_Manual.pdf | https://www.thamesandkosmos.co.uk/wp-content/uploads/2021/02/691869_Crew_Deep-Sea_Manual.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -21095,7 +21392,7 @@
     "sourceSHAActual": "f6f7cc94d289032072499c5dc0ecd9aaa9bb9ad63be2af506d3f5692973f3d47",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.koreaboardgames.com/product/detail?prdCd=PD2024002346M4NG | ",
+    "sourceURLs": "https://www.koreaboardgames.com/product/detail?prdCd=PD2024002346M4NG",
     "bindings": [
       {
         "areaIds": [
@@ -21609,7 +21906,7 @@
     "sourceSHAActual": "cbb469b97890862ef377bab7a4b1f796b2945417c18f1f71700ca58b6e26537f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.fantasyflightgames.com/en/products/descent-legends-of-the-dark/ | ",
+    "sourceURLs": "https://www.fantasyflightgames.com/en/products/descent-legends-of-the-dark/",
     "bindings": [
       {
         "areaIds": [
@@ -22220,12 +22517,12 @@
     "title": "딕싯",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.3536bf279979",
-    "sourceSHA": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
-    "sourceSHAActual": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+    "packVersion": "1.0.0-essentials-2.cf1374228a08",
+    "sourceSHA": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
+    "sourceSHAActual": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.libellud.com/game/dixit/ | ",
+    "sourceURLs": "https://www.libellud.com/game/dixit/",
     "bindings": [
       {
         "areaIds": [
@@ -22389,6 +22686,21 @@
         "scope": "public",
         "sourceId": "note",
         "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "submissions"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "editor": "physical-only",
+        "key": "submissions.scene",
+        "label": "공개 전 제출 카드 묶음",
+        "lifetime": "session",
+        "scope": "shared-secret",
+        "sourceId": "submissions.scene",
+        "visibility": "hidden"
       }
     ],
     "components": [
@@ -22444,9 +22756,9 @@
         "title": "Dixit — 공식 자료",
         "url": "https://www.libellud.com/game/dixit/",
         "kind": "official-product",
-        "access": "search-index",
+        "access": "opened",
         "checked_at": "2026-10-21",
-        "note": "공식 상품/설명에서 이야기꾼의 비밀 카드·주제, 다른 참가자의 카드 제출, 섞어 공개·투표 및 일부만 맞히는 득점 취지 확인. 현행8인 구성 표시."
+        "note": "공식 상품/설명에서 이야기꾼의 비밀 카드·주제, 다른 참가자의 카드 제출, 섞어 공개·투표 및 일부만 맞히는 득점 취지 확인. 현행8인 구성 표시. 2026-10-26 공식 How to play: 각자 손패에서 카드 선택→함께 섞음→공개와 투표. 제출 중 정체는 공개하지 않음."
       },
       {
         "id": "essentials.storage-guidance",
@@ -22494,7 +22806,7 @@
           "manual",
           "physical"
         ],
-        "description": "현재 손패와 자신이 낸 카드, 이야기꾼의 정답 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 제출하지 않은 개인 손패만; 제출 묶음과 공개된 그림판은 각각 별도 영역.",
         "component_ids": [
           "cards"
         ],
@@ -22677,6 +22989,30 @@
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "submissions.scene",
+        "label": "공개 전 제출 카드 묶음",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "manual",
+          "physical"
+        ],
+        "description": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "cards"
+        ],
+        "area_ids": [
+          "submissions"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "dixit.primary"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -22714,7 +23050,7 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "현재 손패와 자신이 낸 카드, 이야기꾼의 정답 카드.",
+          "anchor_contract": "아직 제출하지 않은 개인 손패만; 제출 묶음과 공개된 그림판은 각각 별도 영역.",
           "description": "개인 손패·제출 정체의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation"
@@ -22774,6 +23110,27 @@
           "anchor_contract": "뽑기/버림 묶음과 순서 보존.",
           "description": "뽑기 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "submissions",
+          "name": "공개 전 제출 카드 묶음",
+          "scope": "shared-secret",
+          "visibility": "hidden",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다.",
+          "description": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "dixit.primary"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -22852,6 +23209,21 @@
       },
       {
         "conditions": [
+          "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다.",
+          "보이지 않는 면을 열지 않고 구역·소유자·묶음 방향을 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": true,
+        "id": "spec.submissions.preserve",
+        "label": "공개 전 제출 카드 묶음 실물 묶음 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      },
+      {
+        "conditions": [
           "내용을 펼치거나 JSON으로 입력하지 마세요.",
           "기존 순서·방향과 봉인 상태를 유지하세요."
         ],
@@ -22878,7 +23250,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/dixit/mapping.json",
-    "artSourceSHA": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e"
+    "artSourceSHA": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203"
   },
   {
     "gameId": "dobble",
@@ -22891,7 +23263,7 @@
     "sourceSHAActual": "14d4be598ecb9188abde869b6c3da343b059d207999af83a726533c1852bf777",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.zygomatic-games.com/game/dobble/ | ",
+    "sourceURLs": "https://www.zygomatic-games.com/game/dobble/",
     "bindings": [
       {
         "areaIds": [
@@ -23385,7 +23757,7 @@
     "sourceSHAActual": "ccdeff34e476b3a26588bdb5a24a5ee98a03e91104edfcc22eae6a78c98f9012",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf | https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf | https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf | ",
+    "sourceURLs": "https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf | https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf | https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -24210,7 +24582,7 @@
     "sourceSHAActual": "030db7ee88c766c30402ddb66764ef40565805623f70d6ae8d0bfa89b81ee422",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2020/03/Dominion-gameRules.pdf | https://www.riograndegames.com/games/dominion/ | ",
+    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2020/03/Dominion-gameRules.pdf | https://www.riograndegames.com/games/dominion/",
     "bindings": [
       {
         "areaIds": [
@@ -24906,7 +25278,7 @@
     "sourceSHAActual": "3a4971e4836f92ddb0db8e1708fc0022c6715eed970f117442915a33f94ab7cd",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.asmodee.co.uk/products/dwd01015-dune-imperium-uprising | https://d19y2ttatozxjp.cloudfront.net/pdfs/DUNE_IMPERIUM_UPRISING_Main_Rulebook_23-10-12.pdf | ",
+    "sourceURLs": "https://www.asmodee.co.uk/products/dwd01015-dune-imperium-uprising | https://d19y2ttatozxjp.cloudfront.net/pdfs/DUNE_IMPERIUM_UPRISING_Main_Rulebook_23-10-12.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -25809,7 +26181,7 @@
     "sourceSHAActual": "a93a7db2c286112d4500d37e4eaad0466505dccd6719366c6d13e1b4d316e1ad",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://en.lautapelit.fi/product/45295/ | https://ucf9ee4ca301ab1c6c5e2f8aed8e.dl.dropboxusercontent.com/cd/0/get/DKZywIFVNxybb6Yf79kyTy86yllpYySthc3d20jpHsd6zIX6g811oXXeQmlJXW-nLFMgh3Wm60fFsl_kQMuyfLcyJ5mnNp96Cw67Gj9stoSOQ2GKZtRc0_hxxFTI6ILFMQpd2O0pAvxGApWd5vVI9-Fs/file?dl=1 | ",
+    "sourceURLs": "https://en.lautapelit.fi/product/45295/ | https://ucf9ee4ca301ab1c6c5e2f8aed8e.dl.dropboxusercontent.com/cd/0/get/DKZywIFVNxybb6Yf79kyTy86yllpYySthc3d20jpHsd6zIX6g811oXXeQmlJXW-nLFMgh3Wm60fFsl_kQMuyfLcyJ5mnNp96Cw67Gj9stoSOQ2GKZtRc0_hxxFTI6ILFMQpd2O0pAvxGApWd5vVI9-Fs/file?dl=1",
     "bindings": [
       {
         "areaIds": [
@@ -26544,7 +26916,7 @@
     "sourceSHAActual": "06d713c81435903ba1bb9490d35206448d21278bb04a8b845a0ef60f49a25351",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/ffg_content/eldritch-horror/EH01%20Rulebook.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/ffg_content/eldritch-horror/EH01%20Rulebook.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -27288,7 +27660,7 @@
     "sourceSHAActual": "a83a429d4c07471cd1199373786dcf743a3aebe1b9031dd7f55e5c5517d95aff",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.asmodee.co.uk/products/tabstg2680-everdell-essentials-edition | ",
+    "sourceURLs": "https://www.asmodee.co.uk/products/tabstg2680-everdell-essentials-edition",
     "bindings": [
       {
         "areaIds": [
@@ -27922,7 +28294,7 @@
     "sourceSHAActual": "7055630727025fde86d1e2a83949bff05f5e4746f3a4db1bc698dfb721ac516b",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://store.stonemaiergames.com/products/expeditions | ",
+    "sourceURLs": "https://store.stonemaiergames.com/products/expeditions",
     "bindings": [
       {
         "areaIds": [
@@ -28584,7 +28956,7 @@
     "sourceSHAActual": "4ecd95ce5cbff1e8308279a20ad63f068032126075145925f58f2384a619b61e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.daysofwonder.com/game/fives-tribes-the-djinns-of-naqala/ | ",
+    "sourceURLs": "https://www.daysofwonder.com/game/fives-tribes-the-djinns-of-naqala/",
     "bindings": [
       {
         "areaIds": [
@@ -29404,7 +29776,7 @@
     "sourceSHAActual": "450ffb8059a82f69294c3b9129253e531dbd1dc89d61c2f01f277bf401975039",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/upload/en_forrestshuffle.html_Forest_Shuffle_175_Rules_EN_WEB_260209.pdf | ",
+    "sourceURLs": "https://www.lookout-spiele.de/upload/en_forrestshuffle.html_Forest_Shuffle_175_Rules_EN_WEB_260209.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -30091,7 +30463,7 @@
     "sourceSHAActual": "7dd33bde2611b9a45b2d1737ea9245833b95ced97e3d2e1d297c04cab65df01f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://cephalofair.com/collections/board-games/products/frosthaven-bundles | ",
+    "sourceURLs": "https://cephalofair.com/collections/board-games/products/frosthaven-bundles",
     "bindings": [
       {
         "areaIds": [
@@ -30952,7 +31324,7 @@
     "sourceSHAActual": "ef1f77b1041ce91252800aa4ad9514b075bb596784ec3652f8d0d1e2155908cd",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://capstone-games.com/wp-content/uploads/2020/09/Gaia-Project-Rules-CG.0609sm2.pdf | ",
+    "sourceURLs": "https://capstone-games.com/wp-content/uploads/2020/09/Gaia-Project-Rules-CG.0609sm2.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -31543,7 +31915,7 @@
     "sourceSHAActual": "7ad936429d8214863dd62422a2185e164a8768f0da80d6c666090c0352ddb294",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://czechgames.com/files/rules/galaxy-trucker-rules-en.pdf | ",
+    "sourceURLs": "https://czechgames.com/files/rules/galaxy-trucker-rules-en.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -32241,7 +32613,7 @@
     "sourceSHAActual": "a675ecec24d7ac23c96021a225d1cae11bc57d3b7a288257cea5fa4a37bd8437",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://cephalofair.com/products/gloomhaven-jaws-of-the-lion | ",
+    "sourceURLs": "https://cephalofair.com/products/gloomhaven-jaws-of-the-lion",
     "bindings": [
       {
         "areaIds": [
@@ -33002,7 +33374,7 @@
     "sourceSHAActual": "9292588d881b5be9282565c7a02d6d7344ec6abac71ffbb54b450120570744ec",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://cephalofair.com/pages/gloomhaven | https://drive.usercontent.google.com/download?id=16TmmCKa6zVVObj2qM-vIj9RcEAC3nfMT&export=download | ",
+    "sourceURLs": "https://cephalofair.com/pages/gloomhaven | https://drive.usercontent.google.com/download?id=16TmmCKa6zVVObj2qM-vIj9RcEAC3nfMT&export=download",
     "bindings": [
       {
         "areaIds": [
@@ -33871,12 +34243,12 @@
     "title": "그랜드 오스트리아 호텔",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.1ed916bfc7da",
-    "sourceSHA": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
-    "sourceSHAActual": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
+    "packVersion": "1.0.0-essentials-2.1dff0e209e2b",
+    "sourceSHA": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
+    "sourceSHAActual": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/en/games/grandaustriahotel.html | ",
+    "sourceURLs": "https://www.lookout-spiele.de/en/games/grandaustriahotel.html | https://www.lookout-spiele.de/wp-content/uploads/GAH_rules_EN_web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -33930,11 +34302,11 @@
           "staff"
         ],
         "componentIds": [
-          "guests"
+          "staff-cards"
         ],
         "editor": "component-catalog",
         "key": "staff.scene",
-        "label": "직원 손패",
+        "label": "미고용 직원 손패",
         "lifetime": "session",
         "scope": "player",
         "sourceId": "staff.scene",
@@ -34038,6 +34410,21 @@
         "scope": "public",
         "sourceId": "note",
         "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "hired-staff"
+        ],
+        "componentIds": [
+          "staff-cards"
+        ],
+        "editor": "component-catalog",
+        "key": "hired-staff.scene",
+        "label": "고용한 직원 카드",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "hired-staff.scene",
+        "visibility": "public"
       }
     ],
     "components": [
@@ -34062,7 +34449,7 @@
       },
       {
         "id": "guests",
-        "name": "손님·직원 카드",
+        "name": "손님 카드",
         "kind": "card",
         "quantity": null,
         "quantity_scope": "unknown",
@@ -34073,7 +34460,7 @@
           "owner",
           "quantity"
         ],
-        "description": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+        "description": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
         "source_refs": [
           "grand-austria-hotel.primary"
         ],
@@ -34116,6 +34503,25 @@
           "grand-austria-hotel.primary"
         ],
         "confidence": "reported"
+      },
+      {
+        "id": "staff-cards",
+        "name": "직원 카드",
+        "kind": "card",
+        "quantity": null,
+        "quantity_scope": "unknown",
+        "variants": [],
+        "properties": [
+          "identity",
+          "face",
+          "owner",
+          "quantity"
+        ],
+        "description": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+        "source_refs": [
+          "grand-austria-hotel.rules-2015"
+        ],
+        "confidence": "reported"
       }
     ],
     "source": {
@@ -34143,6 +34549,15 @@
         "access": "opened",
         "checked_at": "2026-10-22",
         "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+      },
+      {
+        "id": "grand-austria-hotel.rules-2015",
+        "title": "Grand Austria Hotel official English rulebook",
+        "url": "https://www.lookout-spiele.de/wp-content/uploads/GAH_rules_EN_web.pdf",
+        "kind": "official-rules",
+        "access": "opened",
+        "checked_at": "2026-10-26",
+        "note": "pp.2,10-13: guest and staff are distinct cards; staff cards are held then played/hired face-up and may be rotated for once-per-round use. 2015 rules; 2022 retail differences remain unverified."
       }
     ],
     "stateFields": [
@@ -34219,7 +34634,7 @@
       },
       {
         "id": "staff.scene",
-        "label": "직원 손패",
+        "label": "미고용 직원 손패",
         "scope": "player",
         "visibility": "owner",
         "type": "component-scene",
@@ -34229,9 +34644,9 @@
           "manual",
           "physical"
         ],
-        "description": "아직 고용하지 않은 직원과 고용한 직원을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "미고용 직원 손패만 소유자 범위로 보존.",
         "component_ids": [
-          "guests"
+          "staff-cards"
         ],
         "area_ids": [
           "staff"
@@ -34343,6 +34758,31 @@
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "hired-staff.scene",
+        "label": "고용한 직원 카드",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "staff-cards"
+        ],
+        "area_ids": [
+          "hired-staff"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "grand-austria-hotel.rules-2015"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -34408,7 +34848,7 @@
         },
         {
           "id": "staff",
-          "name": "직원 손패",
+          "name": "미고용 직원 손패",
           "scope": "player",
           "visibility": "owner",
           "topology": "zone",
@@ -34418,11 +34858,32 @@
             "zone"
           ],
           "component_ids": [
-            "guests"
+            "staff-cards"
           ],
-          "anchor_contract": "아직 고용하지 않은 직원과 고용한 직원을 분리.",
+          "anchor_contract": "미고용 직원 손패만 소유자 범위로 보존.",
           "description": "직원 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "hired-staff",
+          "name": "고용한 직원 카드",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "staff-cards"
+          ],
+          "anchor_contract": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다.",
+          "description": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "grand-austria-hotel.rules-2015"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -34524,7 +34985,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/grand-austria-hotel/mapping.json",
-    "artSourceSHA": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604"
+    "artSourceSHA": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f"
   },
   {
     "gameId": "great-western-trail",
@@ -34537,7 +34998,7 @@
     "sourceSHAActual": "936782ffac63eb6248b8863c379bb12d1ef467dfa87cbba05ddba1e6f523b1c5",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://store.asmodee.com/products/great-western-trail | ",
+    "sourceURLs": "https://store.asmodee.com/products/great-western-trail",
     "bindings": [
       {
         "areaIds": [
@@ -35245,7 +35706,7 @@
     "sourceSHAActual": "d0bd8029766f3040b04d27dc80a45c47cefabd14bfded1cce0d28b8c12aace27",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.amigo-spiele.de/halli-galli_1700_1077 | ",
+    "sourceURLs": "https://www.amigo-spiele.de/halli-galli_1700_1077",
     "bindings": [
       {
         "areaIds": [
@@ -35802,7 +36263,7 @@
     "sourceSHAActual": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf | ",
+    "sourceURLs": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -36452,7 +36913,7 @@
     "sourceSHAActual": "05afa4666c37cab35e9b68563809ef727a6ef227c0c85e690b19e167a0ebd4dc",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://pegasus.de/en/NetiMedia/download?mediaId=018e5c283e69708e9b50c79cb8a8b317 | ",
+    "sourceURLs": "https://pegasus.de/en/NetiMedia/download?mediaId=018e5c283e69708e9b50c79cb8a8b317",
     "bindings": [
       {
         "areaIds": [
@@ -37117,7 +37578,7 @@
     "sourceSHAActual": "ab623840f14b9ec715e6720a0c9eac16be202c8f6f0efea60bb652f1f9c59bd3",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.daysofwonder.com/game/heat/ | https://www.daysofwonder.com/game/heat/ | ",
+    "sourceURLs": "https://www.daysofwonder.com/game/heat/ | https://www.daysofwonder.com/game/heat/",
     "bindings": [
       {
         "areaIds": [
@@ -37768,7 +38229,7 @@
     "sourceSHAActual": "af8c6d10759cdfd82ae3f37e435f2c1c3c5a73deaeace27b39376b90fc460ce2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/84/fc/84fcff54-eafe-45ec-acf4-538a86e1acfc/imperial_assault_learn_to_play_guide.pdf | https://images-cdn.fantasyflightgames.com/filer_public/84/fc/84fcff54-eafe-45ec-acf4-538a86e1acfc/imperial_assault_learn_to_play_guide.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/84/fc/84fcff54-eafe-45ec-acf4-538a86e1acfc/imperial_assault_learn_to_play_guide.pdf | https://images-cdn.fantasyflightgames.com/filer_public/84/fc/84fcff54-eafe-45ec-acf4-538a86e1acfc/imperial_assault_learn_to_play_guide.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -38484,7 +38945,7 @@
     "sourceSHAActual": "58fed7481d436ee70e5933cc64f8b8b4cf338c0b047da3e05454c7a9e7441835",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://thecityofkings.com/games/the-isle-of-cats/how-to-play/ | ",
+    "sourceURLs": "https://thecityofkings.com/games/the-isle-of-cats/how-to-play/",
     "bindings": [
       {
         "areaIds": [
@@ -39148,7 +39609,7 @@
     "sourceSHAActual": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://pegasus.de/en/Istanbul-Big-Box/55119G | https://cdn.pegasus.de/public/media/c5/22/4d/1717757333/4250231715532_gb.pdf?ts=1752574415 | ",
+    "sourceURLs": "https://pegasus.de/en/Istanbul-Big-Box/55119G | https://cdn.pegasus.de/public/media/c5/22/4d/1717757333/4250231715532_gb.pdf?ts=1752574415",
     "bindings": [
       {
         "areaIds": [
@@ -39907,7 +40368,7 @@
     "sourceSHAActual": "021ae745519b7289af48b6dec8de04b80fb0d8120b2578e414bee0b86688884f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.spacecowboys-games.com/game/jaipur/ | https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/Rules-JAIPUR-12x17-Version-EN_BD.pdf | ",
+    "sourceURLs": "https://www.spacecowboys-games.com/game/jaipur/ | https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/Rules-JAIPUR-12x17-Version-EN_BD.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -40706,7 +41167,7 @@
     "sourceSHAActual": "89cb47c2f278080679383f2973f73d2e236c58d10dff57731cf1bfcfd7216a65",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf | https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf | https://images-cdn.fantasyflightgames.com/filer_public/74/c1/74c1ee20-a2d2-407f-93da-e6c2a4b25529/journeys_in_middle-earth_learn_to_play.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -41444,7 +41905,7 @@
     "sourceSHAActual": "bf9d3ef0bd93395912705d434efd0bee3abe12c1377240d0ff8d611792a50406",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.rprod.com/en/press/just-one | ",
+    "sourceURLs": "https://www.rprod.com/en/press/just-one",
     "bindings": [
       {
         "areaIds": [
@@ -42059,7 +42520,7 @@
     "sourceSHAActual": "afdaefc6c133a334489ff7f2cea0dd8d5b7cf333232bf8b6f060bf2096449145",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.eagle-gryphon.com/products/kanban-ev | ",
+    "sourceURLs": "https://www.eagle-gryphon.com/products/kanban-ev",
     "bindings": [
       {
         "areaIds": [
@@ -42792,7 +43253,7 @@
     "sourceSHAActual": "f85e6965fdedae7f65abde51b718820430b55adc81b9508f99c5f9f0fd998eb8",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://iellogames.com/wp-content/uploads/2021/10/KOT_Rules_EN_11-2023_Light.pdf | ",
+    "sourceURLs": "https://iellogames.com/wp-content/uploads/2021/10/KOT_Rules_EN_11-2023_Light.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -43487,7 +43948,7 @@
     "sourceSHAActual": "57b0a63c70f23fa479b908e80da5109c5a89d8e5619d1d5656c05ea5049510d9",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://kingdomino.blueorangegames.eu/ | ",
+    "sourceURLs": "https://kingdomino.blueorangegames.eu/",
     "bindings": [
       {
         "areaIds": [
@@ -44030,7 +44491,7 @@
     "sourceSHAActual": "706976b3f4cb1a36693d391c29be15b831f963ae3c5b41ad7507af518e1219c2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/en/games/lehavre.html | https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf | https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf | ",
+    "sourceURLs": "https://www.lookout-spiele.de/en/games/lehavre.html | https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf | https://www.lookout-spiele.de/upload/en_lehavre.html_Rules_LeHavre-2016_EN.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -44699,7 +45160,7 @@
     "sourceSHAActual": "b4a96de4209fc64c07c51abf51a94d37d019de6089891634863115a8679817cf",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.thamesandkosmos.co.uk/product/lost-cities-card-game/ | ",
+    "sourceURLs": "https://www.thamesandkosmos.co.uk/product/lost-cities-card-game/",
     "bindings": [
       {
         "areaIds": [
@@ -45329,7 +45790,7 @@
     "sourceSHAActual": "add095935a7a5abe981b5d9c1d500e2410b2417ba3e50462dc4c2e53971eabc0",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://filemanager.czechgames.com/storage/files/lost-ruins-of-arnak/rules/lost-ruins-of-arnak-rules-en.pdf | ",
+    "sourceURLs": "https://filemanager.czechgames.com/storage/files/lost-ruins-of-arnak/rules/lost-ruins-of-arnak-rules-en.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -46146,7 +46607,7 @@
     "sourceSHAActual": "71d4f3d370edfc04ea38eabd9f71ab71e2d8c37f6b87373c6df718273ff402c3",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/2e/31/2e3129b3-dc51-4c27-81ed-6a72f13e82f3/lotr_faq_19.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/2e/31/2e3129b3-dc51-4c27-81ed-6a72f13e82f3/lotr_faq_19.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -46867,7 +47328,7 @@
     "sourceSHAActual": "2ee81cb177c12e0569506ffa1ec7fbe2d2b5c387034e360270b4ea14f537912c",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images.zmangames.com/filer_public/5b/6c/5b6c17d7-7e0e-4b70-a311-9a6c32066010/ll-rulebook.pdf | ",
+    "sourceURLs": "https://images.zmangames.com/filer_public/5b/6c/5b6c17d7-7e0e-4b70-a311-9a6c32066010/ll-rulebook.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -47460,7 +47921,7 @@
     "sourceSHAActual": "260a6b3f5a1f47528505872be32707a8bf39e373c68c1e65cf699e7ae1aa272e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://pandasaurusgames.com/products/machi-koro | https://ucec194ccb3c4cead0db0c2b428a.dl.dropboxusercontent.com/cd/0/get/DKZawDlmIJW-SCvYRblJo9d1iFuviWFarSnZFMp7J-3qoUzTF0fCEaIJMl3sf6tnkeIMYrX1psjz1r4gRJKViS0FJ_flCEaVfaIAccd4HgDyJ1v_SRzr66sy_lJCZkz5vaykb21ef3T8SAGdmXRvj8qq/file?dl=1 | ",
+    "sourceURLs": "https://pandasaurusgames.com/products/machi-koro | https://ucec194ccb3c4cead0db0c2b428a.dl.dropboxusercontent.com/cd/0/get/DKZawDlmIJW-SCvYRblJo9d1iFuviWFarSnZFMp7J-3qoUzTF0fCEaIJMl3sf6tnkeIMYrX1psjz1r4gRJKViS0FJ_flCEaVfaIAccd4HgDyJ1v_SRzr66sy_lJCZkz5vaykb21ef3T8SAGdmXRvj8qq/file?dl=1",
     "bindings": [
       {
         "areaIds": [
@@ -48075,7 +48536,7 @@
     "sourceSHAActual": "611d7fcd88fa4a32543f87a6ee945f82358a563fcbb2e8ae78920a9cced9345e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://wizkids.com/mage-knight/ | ",
+    "sourceURLs": "https://wizkids.com/mage-knight/",
     "bindings": [
       {
         "areaIds": [
@@ -48812,7 +49273,7 @@
     "sourceSHAActual": "5e98fdb7aa03a2151123c8056442051f394334c678aa8abb8b713450fc5507ca",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.fantasyflightgames.com/product/mansions-of-madness-second-edition/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mansions_of_madness_second_edition_learn_to_play.pdf | ",
+    "sourceURLs": "https://www.fantasyflightgames.com/product/mansions-of-madness-second-edition/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mansions_of_madness_second_edition_learn_to_play.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -49502,7 +49963,7 @@
     "sourceSHAActual": "f367a06a89dd3853db56cbb8416834892f0fb7ee58f872eb5d59dd18505172b4",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.fantasyflightgames.com/en/news/2019/8/1/marvel-champions/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mvc01_learn_to_play_eng-compressed.pdf | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mvc01_learn_to_play_eng-compressed.pdf | ",
+    "sourceURLs": "https://www.fantasyflightgames.com/en/news/2019/8/1/marvel-champions/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mvc01_learn_to_play_eng-compressed.pdf | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mvc01_learn_to_play_eng-compressed.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -50306,7 +50767,7 @@
     "sourceSHAActual": "82ef725b60a9d2fb021c5d074ffe305d0f6b375e6f8764c6355d09d4036ded34",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://instructions.hasbro.com/en-us/instruction/monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8 | https://instructions.hasbro.com/api/download/G0009_en-us_monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8.pdf | ",
+    "sourceURLs": "https://instructions.hasbro.com/en-us/instruction/monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8 | https://instructions.hasbro.com/api/download/G0009_en-us_monopoly-board-game-classic-game-with-storage-tray-and-larger-tokens-family-games-8.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -50978,7 +51439,7 @@
     "sourceSHAActual": "bf8ab0e893b7b705771dc76ed19a82636967c8317bfc6291a3fde77703f4998a",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://awakenrealms.com/images/download/Nemesis/ENG/RULEBOOK_280x280mm_bleed3mm_28pages_PRINT.pdf | ",
+    "sourceURLs": "https://awakenrealms.com/images/download/Nemesis/ENG/RULEBOOK_280x280mm_bleed3mm_28pages_PRINT.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -51662,7 +52123,7 @@
     "sourceSHAActual": "942136e0b38a339fe3483b82dee1d71cc8a398ff8c67f41a0d9f209596e11fd6",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.dlp-games.de/en/spiele/orleans | ",
+    "sourceURLs": "https://www.dlp-games.de/en/spiele/orleans",
     "bindings": [
       {
         "areaIds": [
@@ -52302,7 +52763,7 @@
     "sourceSHAActual": "2ec9035fdb4847506ee636d0d7701e2fb614aeee3a589564e8f7671552d9afe1",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images.zmangames.com/filer_public/62/c0/62c0e5b8-1459-41d9-8b56-5b22a9ab18e1/paleo_rulebook_en_web_v4a.pdf | ",
+    "sourceURLs": "https://images.zmangames.com/filer_public/62/c0/62c0e5b8-1459-41d9-8b56-5b22a9ab18e1/paleo_rulebook_en_web_v4a.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -53002,12 +53463,12 @@
     "title": "팬데믹 레거시: 시즌 1",
     "editionId": "base",
     "edition": "시즌 1 기본 상자",
-    "packVersion": "1.0.0-essentials-2.8e0f96155c30",
-    "sourceSHA": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
-    "sourceSHAActual": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+    "packVersion": "1.0.0-essentials-2.af498bfba9fd",
+    "sourceSHA": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
+    "sourceSHAActual": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images.zmangames.com/filer_public/c2/93/c2930641-a3b9-4a69-9eca-976839f9d291/zm7170_zm7171_rules_red_web.pdf | ",
+    "sourceURLs": "https://images.zmangames.com/filer_public/c2/93/c2930641-a3b9-4a69-9eca-976839f9d291/zm7170_zm7171_rules_red_web.pdf | https://www.zmangames.com/game/pandemic-legacy-season-1/",
     "bindings": [
       {
         "areaIds": [
@@ -53046,12 +53507,11 @@
           "players"
         ],
         "componentIds": [
-          "cards",
-          "record"
+          "cards"
         ],
         "editor": "component-catalog",
         "key": "players.scene",
-        "label": "인물과 손패",
+        "label": "이번 게임의 개인 손패",
         "lifetime": "session",
         "scope": "player",
         "sourceId": "players.scene",
@@ -53170,6 +53630,21 @@
         "scope": "public",
         "sourceId": "note",
         "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "character-card"
+        ],
+        "componentIds": [
+          "record"
+        ],
+        "editor": "component-catalog",
+        "key": "character-card.scene",
+        "label": "공개된 인물 카드·기록",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "character-card.scene",
+        "visibility": "public"
       }
     ],
     "components": [
@@ -53275,6 +53750,15 @@
         "access": "opened",
         "checked_at": "2026-10-22",
         "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+      },
+      {
+        "id": "pandemic-legacy-1.product-current",
+        "title": "Pandemic Legacy Season 1, Z-Man Games product/components",
+        "url": "https://www.zmangames.com/game/pandemic-legacy-season-1/",
+        "kind": "official-product",
+        "access": "opened",
+        "checked_at": "2026-10-26",
+        "note": "Component listing distinguishes character cards from player cards and sealed campaign material. This does not verify full campaign rules or unrevealed contents."
       }
     ],
     "stateFields": [
@@ -53328,7 +53812,7 @@
       },
       {
         "id": "players.scene",
-        "label": "인물과 손패",
+        "label": "이번 게임의 개인 손패",
         "scope": "player",
         "visibility": "owner",
         "type": "component-scene",
@@ -53338,10 +53822,9 @@
           "manual",
           "physical"
         ],
-        "description": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
         "component_ids": [
-          "cards",
-          "record"
+          "cards"
         ],
         "area_ids": [
           "players"
@@ -53476,6 +53959,31 @@
         "rule_ids": [],
         "source_refs": [],
         "confidence": "recommendation"
+      },
+      {
+        "id": "character-card.scene",
+        "label": "공개된 인물 카드·기록",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "component_ids": [
+          "record"
+        ],
+        "area_ids": [
+          "character-card"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "pandemic-legacy-1.product-current"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "layout": {
@@ -53522,7 +54030,7 @@
         },
         {
           "id": "players",
-          "name": "인물과 손패",
+          "name": "이번 게임의 개인 손패",
           "scope": "player",
           "visibility": "owner",
           "topology": "zone",
@@ -53532,10 +54040,9 @@
             "zone"
           ],
           "component_ids": [
-            "cards",
-            "record"
+            "cards"
           ],
-          "anchor_contract": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사.",
+          "anchor_contract": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
           "description": "인물과 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation"
@@ -53557,6 +54064,27 @@
           "anchor_contract": "감염/플레이어/레거시 덱을 별도 순서 묶음으로 보존.",
           "description": "세션 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
+          "confidence": "recommendation"
+        },
+        {
+          "id": "character-card",
+          "name": "공개된 인물 카드·기록",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "record"
+          ],
+          "anchor_contract": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+          "description": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "pandemic-legacy-1.product-current"
+          ],
           "confidence": "recommendation"
         }
       ],
@@ -53619,6 +54147,21 @@
       },
       {
         "conditions": [
+          "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+          "보이지 않는 면을 열지 않고 구역·소유자·묶음 방향을 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.character-card.preserve",
+        "label": "공개된 인물 카드·기록 실물 묶음 보존(선택)",
+        "method": "manual-note",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
           "내용을 펼치거나 JSON으로 입력하지 마세요.",
           "기존 순서·방향과 봉인 상태를 유지하세요."
         ],
@@ -53658,7 +54201,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/pandemic-legacy-1/mapping.json",
-    "artSourceSHA": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60"
+    "artSourceSHA": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f"
   },
   {
     "gameId": "pandemic",
@@ -53671,7 +54214,7 @@
     "sourceSHAActual": "e4c3fb0ab675614204791c7dd519d62831870f774d2ee1962d937c14efad38ef",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images.zmangames.com/filer_public/58/b6/58b6de62-0f55-4d52-b55b-fb9b94ef63ec/zm7102_rulebook_web.pdf | ",
+    "sourceURLs": "https://images.zmangames.com/filer_public/58/b6/58b6de62-0f55-4d52-b55b-fb9b94ef63ec/zm7102_rulebook_web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -54262,7 +54805,7 @@
     "sourceSHAActual": "0f0740d35e4eb49f10a33906bd0f2e97e93296d2c04a9cea55830de7d3265258",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.lookout-spiele.de/en/games/patchworkre.html | ",
+    "sourceURLs": "https://www.lookout-spiele.de/en/games/patchworkre.html",
     "bindings": [
       {
         "areaIds": [
@@ -54759,7 +55302,7 @@
     "sourceSHAActual": "d679db1a19a62d12d95a536b64dcb1ba8085659314b8170d8edd564bf29f5fed",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.riograndegames.com/games/power-grid-recharged/ | ",
+    "sourceURLs": "https://www.riograndegames.com/games/power-grid-recharged/",
     "bindings": [
       {
         "areaIds": [
@@ -55372,7 +55915,7 @@
     "sourceSHAActual": "0ed54775a771acc576a0d6e5a330a1bded8d4cfcbde84a9891f34980c2d9c517",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.schmidtspiele.de/files/Retail/72dpi_PNG/88220_Quack_rules_english_2024.pdf | https://www.schmidtspiele.de/files/Retail/72dpi_PNG/88220_Quack_rules_english_2024.pdf | ",
+    "sourceURLs": "https://www.schmidtspiele.de/files/Retail/72dpi_PNG/88220_Quack_rules_english_2024.pdf | https://www.schmidtspiele.de/files/Retail/72dpi_PNG/88220_Quack_rules_english_2024.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -56030,7 +56573,7 @@
     "sourceSHAActual": "9f76a2eb9958356a8a2abd3dfeda42e6035c5246e844ab6b09bdd982c8830a7d",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2013/02/RFTG_2e_rules.pdf | https://www.riograndegames.com/wp-content/uploads/2013/02/RFTG_2e_rules.pdf | ",
+    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2013/02/RFTG_2e_rules.pdf | https://www.riograndegames.com/wp-content/uploads/2013/02/RFTG_2e_rules.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -56726,7 +57269,7 @@
     "sourceSHAActual": "d8312cb14f732518eb5d1663010b0f2f4b7a8ceebbe2bdba140b80dbdedaa1ce",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://sandcastle-games.com/res-arcana | https://sandcastle-games.com/assets/PDFs/ResArcanaRulesEN20201003.pdf | https://sandcastle-games.com/assets/PDFs/ResArcanaRulesEN20201003.pdf | ",
+    "sourceURLs": "https://sandcastle-games.com/res-arcana | https://sandcastle-games.com/assets/PDFs/ResArcanaRulesEN20201003.pdf | https://sandcastle-games.com/assets/PDFs/ResArcanaRulesEN20201003.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -57440,7 +57983,7 @@
     "sourceSHAActual": "d2aadd6ab5ffc8640afbdab5680778cb28721ede2fade02ccfc685c6994cd5fc",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://portalgames.pl/files/rules/robinson_crusoe_rulebook.pdf | ",
+    "sourceURLs": "https://portalgames.pl/files/rules/robinson_crusoe_rulebook.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -58165,7 +58708,7 @@
     "sourceSHAActual": "104a6a3bca60df9111352722abd2a13f16859e8918be862680e34a22093693ac",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://rules.ledergames.com/?locale=en-US&printing=p16&product=root | ",
+    "sourceURLs": "https://rules.ledergames.com/?locale=en-US&printing=p16&product=root",
     "bindings": [
       {
         "areaIds": [
@@ -58899,7 +59442,7 @@
     "sourceSHAActual": "2e9d6c491427f8cd6be9cbe822c49046f8e4fb854903bd429e4ca7bdf2b3981e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://floodgategames.com/Sagrada/Sagrada-Rules-Floodgate-Games-SA01.pdf | ",
+    "sourceURLs": "https://floodgategames.com/Sagrada/Sagrada-Rules-Floodgate-Games-SA01.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -59593,7 +60136,7 @@
     "sourceSHAActual": "772eff084fd28c12984234762c1510ed550806d835a79628f334b7e3a3938ae2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://oinkgames.com/en/games/analog/scout/ | ",
+    "sourceURLs": "https://oinkgames.com/en/games/analog/scout/",
     "bindings": [
       {
         "areaIds": [
@@ -60131,7 +60674,7 @@
     "sourceSHAActual": "1454014dc2374000ea7da5f396c3cfe139ed95d0c717880e63c8ffd4b1efeec6",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://aus.stonemaiergames.com/products/scythe | ",
+    "sourceURLs": "https://aus.stonemaiergames.com/products/scythe",
     "bindings": [
       {
         "areaIds": [
@@ -60821,7 +61364,7 @@
     "sourceSHAActual": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://czechgames.com/files/rules/seti-rules-en.pdf | https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf | https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf | ",
+    "sourceURLs": "https://czechgames.com/files/rules/seti-rules-en.pdf | https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf | https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -61766,7 +62309,7 @@
     "sourceSHAActual": "ad6dbe61fbe18bec1a4e5109d25c8486054e1f7f0575cb205d6d26b1611fe48e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.rprod.com/index.php/en/games/7-wonders-duel | https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-duel/en/7du-rules-us-15990558193s5I6.pdf | ",
+    "sourceURLs": "https://www.rprod.com/index.php/en/games/7-wonders-duel | https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-duel/en/7du-rules-us-15990558193s5I6.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -62471,7 +63014,7 @@
     "sourceSHAActual": "c76d37bcdddaa65ff6aa1bd5c8cdb63931328911657afc2b45f553f526035aa8",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders/en/sev-en02-rules-1716388903zBEZx.pdf | ",
+    "sourceURLs": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders/en/sev-en02-rules-1716388903zBEZx.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -63115,7 +63658,7 @@
     "sourceSHAActual": "ba8f0bbc5d60ceafd3000314bfa2d02907bb400c4d618acced9518eae3d94cd2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.amigo-spiele.de/6-nimmt_4910_1124 | ",
+    "sourceURLs": "https://www.amigo-spiele.de/6-nimmt_4910_1124",
     "bindings": [
       {
         "areaIds": [
@@ -63665,7 +64208,7 @@
     "sourceSHAActual": "07c63ec84e66bce986308e1f78f194839207806ec6ce4bf8200ca007af108f3a",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.spacecowboys-games.com/game/skull/ | ",
+    "sourceURLs": "https://www.spacecowboys-games.com/game/skull/",
     "bindings": [
       {
         "areaIds": [
@@ -64201,7 +64744,7 @@
     "sourceSHAActual": "1242e1ee5684e65af7b02e48f38f20e65e54a43fe92ca493e9ffc433717c8ac1",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://sleeping-gods.rulepop.com/ | ",
+    "sourceURLs": "https://sleeping-gods.rulepop.com/",
     "bindings": [
       {
         "areaIds": [
@@ -65002,7 +65545,7 @@
     "sourceSHAActual": "92552f07f86429a11448fdaf2e6f1d2c5a2b5d73743d44b894c13be3da3caf4b",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.daysofwonder.com/game/small-world/ | ",
+    "sourceURLs": "https://www.daysofwonder.com/game/small-world/",
     "bindings": [
       {
         "areaIds": [
@@ -65705,7 +66248,7 @@
     "sourceSHAActual": "6fd93fb7b528bf56c4f4b54db0a82cf501b0777b10293c0a1be8c636ac963e0c",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.alderac.com/wp-content/uploads/2025/03/SpaceBase_Rulebook.pdf | ",
+    "sourceURLs": "https://www.alderac.com/wp-content/uploads/2025/03/SpaceBase_Rulebook.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -66378,7 +66921,7 @@
     "sourceSHAActual": "f720340d932e00467ec099c74b576c0885f5d1290c5f0459314d215b4b8c5ec3",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://shop.greaterthangames.com/products/spirit-island | https://www.dropbox.com/scl/fi/5wzghwnbsi39msyy6vvox/Spirit-Island-CORE-Rulebook.pdf?dl=1&rlkey=86i7aofqbzhulezjr7z0ssyff | ",
+    "sourceURLs": "https://shop.greaterthangames.com/products/spirit-island | https://www.dropbox.com/scl/fi/5wzghwnbsi39msyy6vvox/Spirit-Island-CORE-Rulebook.pdf?dl=1&rlkey=86i7aofqbzhulezjr7z0ssyff",
     "bindings": [
       {
         "areaIds": [
@@ -67209,7 +67752,7 @@
     "sourceSHAActual": "9b9704522ff4b9fe6dae9187db891da0d45490a35db9a701b628aaa087be2cfc",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.spacecowboys-games.com/game/splendor-duel/ | ",
+    "sourceURLs": "https://www.spacecowboys-games.com/game/splendor-duel/",
     "bindings": [
       {
         "areaIds": [
@@ -67880,7 +68423,7 @@
     "sourceSHAActual": "5f777f1f233679d43d8c1de2806940b643ff1de6616e1284eb02e7c7ea1a99bb",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.starrealms.com/learn-to-play | ",
+    "sourceURLs": "https://www.starrealms.com/learn-to-play",
     "bindings": [
       {
         "areaIds": [
@@ -68564,7 +69107,7 @@
     "sourceSHAActual": "70f1e093e1aed21eb2a8822fa7eebb4219be65c8e477954eb6132d82e9a8ac57",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://drafts.fantasyflightgames.com/en/products/star-wars-outer-rim/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/sw06_learn_to_play_v2-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/01/91/01919a54-ddc4-44e6-a721-068dfb73bca0/sw06_rules_reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/01/91/01919a54-ddc4-44e6-a721-068dfb73bca0/sw06_rules_reference-compressed.pdf | ",
+    "sourceURLs": "https://drafts.fantasyflightgames.com/en/products/star-wars-outer-rim/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/sw06_learn_to_play_v2-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/01/91/01919a54-ddc4-44e6-a721-068dfb73bca0/sw06_rules_reference-compressed.pdf | https://images-cdn.fantasyflightgames.com/filer_public/01/91/01919a54-ddc4-44e6-a721-068dfb73bca0/sw06_rules_reference-compressed.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -69348,7 +69891,7 @@
     "sourceSHAActual": "c0c416217ca12d0319081523ce0655b8a8d44674abe327437a436d2cd888c2b5",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf | https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf | ",
+    "sourceURLs": "https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf | https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -70031,7 +70574,7 @@
     "sourceSHAActual": "0aca148f0847528f0e476999f0460cdbb0eba5980a5bcdee55099845d701be02",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.hans-im-glueck.de/en/game/stone-age-2/ | https://www.hans-im-glueck.de/wp-content/uploads/2023/06/stone_age_rules.pdf | ",
+    "sourceURLs": "https://www.hans-im-glueck.de/en/game/stone-age-2/ | https://www.hans-im-glueck.de/wp-content/uploads/2023/06/stone_age_rules.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -70793,7 +71336,7 @@
     "sourceSHAActual": "be619e2e54e87bc53ba267d69300eac9da2da9790dc16f646fa8eff6773dd62f",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://store.stonemaiergames.com/products/tapestry | ",
+    "sourceURLs": "https://store.stonemaiergames.com/products/tapestry",
     "bindings": [
       {
         "areaIds": [
@@ -71491,7 +72034,7 @@
     "sourceSHAActual": "82ad4dda1a1a773b10b2c2180b4bad503bda87720c813a5e64ac12252ebf962d",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://capstone-games.com/products/terra-mystica | https://capstone-games.com/cdn/shop/files/EN_terra_mystica_rules-3rd_CG_web.pdf?v=15200505769140123159 | https://capstone-games.com/cdn/shop/files/EN_terra_mystica_rules-3rd_CG_web.pdf?v=15200505769140123159 | ",
+    "sourceURLs": "https://capstone-games.com/products/terra-mystica | https://capstone-games.com/cdn/shop/files/EN_terra_mystica_rules-3rd_CG_web.pdf?v=15200505769140123159 | https://capstone-games.com/cdn/shop/files/EN_terra_mystica_rules-3rd_CG_web.pdf?v=15200505769140123159",
     "bindings": [
       {
         "areaIds": [
@@ -72161,7 +72704,7 @@
     "sourceSHAActual": "4c3fbe578e648d7e529f685254e682635c8450d8c69c2b73bfeda71dde4304cd",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://fryxgames.se/product/terraforming-mars/ | https://fryxgames.se/wp-content/uploads/2023/04/TMRULESFINAL.pdf | ",
+    "sourceURLs": "https://fryxgames.se/product/terraforming-mars/ | https://fryxgames.se/wp-content/uploads/2023/04/TMRULESFINAL.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -73075,7 +73618,7 @@
     "sourceSHAActual": "8230eb1cbc8f878e08825f16821f81c848c74eb932dc5efe0770d4ef02f723fd",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://czechgames.com/files/rules/through-the-ages-new-story-rules-en.pdf | ",
+    "sourceURLs": "https://czechgames.com/files/rules/through-the-ages-new-story-rules-en.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -73894,7 +74437,7 @@
     "sourceSHAActual": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.daysofwonder.com/game/ticket-to-ride/ | ",
+    "sourceURLs": "https://www.daysofwonder.com/game/ticket-to-ride/",
     "bindings": [
       {
         "areaIds": [
@@ -74505,7 +75048,7 @@
     "sourceSHAActual": "c9280a43c494455f7cef34501f26891aa25b09263f616e58292de88b7b2339ce",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.alderac.com/wp-content/uploads/2024/05/Tiny_Towns_Rulebook_WEB.pdf | ",
+    "sourceURLs": "https://www.alderac.com/wp-content/uploads/2024/05/Tiny_Towns_Rulebook_WEB.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -75139,7 +75682,7 @@
     "sourceSHAActual": "4f113cb5b291037b6f37e5ba774fcf2fdcd1fa3fdc4eb380ba4023ca7e5a6d01",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.fantasyflightgames.com/product/twilight-imperium-fourth-edition/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/08/ti-k0289_learn_to_play_2020_web.pdf | ",
+    "sourceURLs": "https://www.fantasyflightgames.com/product/twilight-imperium-fourth-edition/ | https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/08/ti-k0289_learn_to_play_2020_web.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -75986,7 +76529,7 @@
     "sourceSHAActual": "2f0e2bc0968b3e46cead0d8393ae44983960da656624a4f2d1dc397454bc914e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.gmtgames.com/living_rules/TS_Rules_Deluxe.pdf | ",
+    "sourceURLs": "https://www.gmtgames.com/living_rules/TS_Rules_Deluxe.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -76685,7 +77228,7 @@
     "sourceSHAActual": "6508a183269a1a4c69c19cf3731953fbb358d5447876e5d13ba521d4c0de5811",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2018/12/Underwater-Cities-Rules.pdf | ",
+    "sourceURLs": "https://www.riograndegames.com/wp-content/uploads/2018/12/Underwater-Cities-Rules.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -77477,7 +78020,7 @@
     "sourceSHAActual": "230c87689db891112d5574c34cd61dbfbbb0108180ba8a2e3525ab9b7d28bf3e",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://store.stonemaiergames.com/products/viticulture-essential-edition | ",
+    "sourceURLs": "https://store.stonemaiergames.com/products/viticulture-essential-edition",
     "bindings": [
       {
         "areaIds": [
@@ -78183,7 +78726,7 @@
     "sourceSHAActual": "e073b9bcfb8d9a847fb5331cd2bf112e385e67a824d27b8475a9ccdc77086bcf",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf | ",
+    "sourceURLs": "https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf | https://mindclashgames.com/wp-content/uploads/2023/03/VOIDFALL-Rulebook-websafe.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -78952,7 +79495,7 @@
     "sourceSHAActual": "9d088ad8e4e66220554f14e4a44207144a3a13928d419d1a850621e296be82f2",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.aresgames.eu/1518 | ",
+    "sourceURLs": "https://www.aresgames.eu/1518",
     "bindings": [
       {
         "areaIds": [
@@ -79571,7 +80114,7 @@
     "sourceSHAActual": "a962689d0aed64bfe02f637676abbbf8e3861f4cadb6fdb2bbe4be863806cdc0",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://europe.stonemaiergames.com/products/wingspan | ",
+    "sourceURLs": "https://europe.stonemaiergames.com/products/wingspan",
     "bindings": [
       {
         "areaIds": [
@@ -80289,7 +80832,7 @@
     "sourceSHAActual": "59a59ae7e5a17cbe346e7348900b61c6416ba451528b933277a4137a942bff03",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://europe.stonemaiergames.com/products/wyrmspan | https://europe.stonemaiergames.com/products/wyrmspan | https://stonemaiergames.com/games/wyrmspan/rules-faq/ | ",
+    "sourceURLs": "https://europe.stonemaiergames.com/products/wyrmspan | https://europe.stonemaiergames.com/products/wyrmspan | https://stonemaiergames.com/games/wyrmspan/rules-faq/",
     "bindings": [
       {
         "areaIds": [

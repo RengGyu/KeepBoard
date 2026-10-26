@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/pandemic-legacy-1.json",
-  "source_sha256": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+  "source_sha256": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -277,7 +277,7 @@
     },
     {
       "id": "players",
-      "name": "인물과 손패",
+      "name": "이번 게임의 개인 손패",
       "scope": "player",
       "visibility": "owner",
       "topology": "zone",
@@ -287,10 +287,9 @@
         "zone"
       ],
       "component_ids": [
-        "cards",
-        "record"
+        "cards"
       ],
-      "anchor_contract": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사.",
+      "anchor_contract": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
       "description": "인물과 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
@@ -321,6 +320,32 @@
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "character-card",
+      "name": "공개된 인물 카드·기록",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "record"
+      ],
+      "anchor_contract": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+      "description": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "pandemic-legacy-1.product-current"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

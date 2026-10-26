@@ -29,3 +29,12 @@ test('capture fields require current source photo permission, matching area, and
  assert.deepEqual(actual.areas.map(a=>[a.id,a.fields]),[['market',[]],['tableau',['__photo.public']],['hand',[]]]);
  assert.throws(()=>buildCaptureProfile(source,{...pack,runtime:{...pack.runtime,source:{...pack.runtime.source,editionId:'other'}}},profile,{}),/source\/edition/);
 });
+
+test('a prior approved owner-private photo field survives a source revision of the same area; a new area is not widened by it',()=>{
+ const spec=structuredClone(source);spec.recognition_correction.photographable_field_ids=['market.scene','tableau.scene'];
+ const prior:any={areas:[{id:'hand',partition:'owner_private',fields:['hand.scene']},{id:'deck',partition:'owner_private',fields:['deck.scene']}]};
+ const actual=buildCaptureProfile(spec,pack,profile,{},prior);
+ assert.deepEqual(actual.areas.map(a=>[a.id,a.fields]),[['market',['market.scene']],['tableau',['__photo.public']],['hand',['hand.scene']]],'hidden deck stays excluded even if a prior row named it');
+ const moved=structuredClone(pack);moved.runtime.fieldBindings.find((b:any)=>b.sourceId==='hand.scene').visibility='public';
+ assert.deepEqual(buildCaptureProfile(spec,moved,profile,{},prior).areas.find(a=>a.id==='hand')!.fields,[],'a changed visibility needs fresh source permission');
+});

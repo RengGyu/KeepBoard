@@ -54,7 +54,7 @@
       },
       {
         "acquisition": "ask",
-        "description": "아직 내지 않은 직업과 공개한 직업 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
         "group": "essentials",
         "key": "hand.scene",
         "label": "직업 손패",
@@ -159,6 +159,22 @@
           "editor": "default",
           "level": "detail",
           "order": 9
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "played-occupations.scene",
+        "label": "사용한 직업 카드",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 10
         },
         "visibility": "public"
       }
@@ -427,6 +443,21 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "played-occupations"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "played-occupations.scene",
+          "label": "사용한 직업 카드",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "played-occupations.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
@@ -476,7 +507,7 @@
         "editionName": "기본판",
         "gameId": "a-feast-for-odin",
         "schemaVersion": "1.0",
-        "sha256": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7"
+        "sha256": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb"
       },
       "support": {
         "illustration": "catalog",
@@ -488,7 +519,7 @@
     "sources": [
       {
         "id": "spec.a-feast-for-odin.primary",
-        "section": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인.",
+        "section": "공식 기본 규칙 검색 본문에서 직업, 행동 공간, 선박 종류 요구/반복 사용·탐험/이민, 상품 퍼즐 배치 확인. 타일 색 인접 규칙의 전체 예외는 추가 확인. 2026-10-26 로컬 공식 PDF pp.3,20 확인: 손패의 비공개 직업과 사용한 직업 구별. 전체 규칙 검증 아님.",
         "title": "A Feast for Odin — 공식 자료",
         "url": "https://www.feuerland-spiele.de/fileadmin/game/Ein_Fest_fuer_Odin/ODIN_EN_rules_2nd_Web.pdf"
       },
@@ -507,7 +538,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "오딘을 위하여",
-    "version": "1.0.0-essentials-2.539007f66356"
+    "version": "1.0.0-essentials-2.20d00a567a99"
   },
   {
     "derivedRules": [],
@@ -2369,7 +2400,7 @@
     "fields": [
       {
         "acquisition": "ask",
-        "description": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "시작 타일과 도시 타일 인스턴스별 세 육각, 방향, 층, 덮는 관계를 유지한다. 위층 타일은 빈 공간 위에 놓이지 않고 서로 다른 아래 타일 두 장 이상에 걸친다; 가려진 아래 인쇄는 추정하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "group": "essentials",
         "key": "city.scene",
         "label": "개인 도시",
@@ -2385,7 +2416,7 @@
       },
       {
         "acquisition": "ask",
-        "description": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "건설 현장의 공개 도시 타일을 왼쪽부터 순서대로 보존한다. 선택 타일 앞의 수만큼 석재 비용이 달라지며 마지막 한 장은 해당 라운드에 선택하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "group": "essentials",
         "key": "market.scene",
         "label": "건설 현장",
@@ -2401,10 +2432,10 @@
       },
       {
         "acquisition": "ask",
-        "description": "현재 석재 잔액과 수석 건축가. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "각 플레이어의 석재 큐브 수와 수석 건축가 표식의 현재 보유자를 별개로 기록한다. 표식의 소유자와 실제 다음 차례는 동일하다고 추측하지 않는다. 각 실물 인스턴스의 정체·소유·방향·수량·사진 영역을 독립 보존한다.",
         "group": "essentials",
         "key": "supply.scene",
-        "label": "개인 석재",
+        "label": "개인 석재·수석 표식",
         "lifetime": "session",
         "scope": "player",
         "type": "json",
@@ -2515,7 +2546,7 @@
     "preservationTemplates": [
       {
         "conditions": [
-          "공개하지 않은 타일 더미 순서 보존.",
+          "공개 전 도시 타일 더미 11개를 더미 ID별로 따로 보관하고 남은 각 더미의 위아래 방향을 유지한다. 앞면을 펼쳐 기록하지 않는다.",
           "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
           "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다.",
           "순서를 섞지 않고 앞뒤 방향을 유지하세요."
@@ -2532,6 +2563,7 @@
       },
       {
         "conditions": [
+          "개인 도시의 시작 타일·층·덮는 관계와 개인 석재 및 수석 표식 위치를 분리해 기록한다.",
           "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
           "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
           "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
@@ -2549,6 +2581,7 @@
       },
       {
         "conditions": [
+          "건설 현장의 타일 왼쪽부터 순서와 마지막 남은 타일을 기록한다.",
           "정리하기 전에 공개 장면의 참조 사진 또는 수동 배치 기록을 남긴다. 사진 없이도 모름/나중에 저장을 허용한다.",
           "기존 장면의 구역·그룹·층·부착 대상·방향과 같은 것끼리의 중복 인스턴스를 구분한다. 뒷면이 섞인 공개 장면은 위치/앞뒤만 기록하고 정체를 확인하려 뒤집지 않는다.",
           "분해가 필요하면 구역/실제 소유자별 묶음 ID와 보관 위치를 적고 구역 경계를 유지한다. 원래 순서가 의미 있는 줄·덱·부착은 그 관계를 유지; 무순서 풀에 새 게임상 순서를 만들지 않는다.",
@@ -2585,13 +2618,25 @@
         {
           "id": "tiles",
           "kind": "tile",
-          "name": "도시·시작 타일",
+          "name": "도시 타일",
+          "variants": []
+        },
+        {
+          "id": "starting-tiles",
+          "kind": "tile",
+          "name": "시작 타일",
           "variants": []
         },
         {
           "id": "stones",
           "kind": "token",
-          "name": "석재·수석 건축가",
+          "name": "석재 큐브",
+          "variants": []
+        },
+        {
+          "id": "chief-architect",
+          "kind": "marker",
+          "name": "수석 건축가 표식",
           "variants": []
         }
       ],
@@ -2601,7 +2646,8 @@
             "city"
           ],
           "componentIds": [
-            "tiles"
+            "tiles",
+            "starting-tiles"
           ],
           "editor": "component-catalog",
           "key": "city.scene",
@@ -2631,11 +2677,12 @@
             "supply"
           ],
           "componentIds": [
-            "stones"
+            "stones",
+            "chief-architect"
           ],
           "editor": "component-catalog",
           "key": "supply.scene",
-          "label": "개인 석재",
+          "label": "개인 석재·수석 표식",
           "lifetime": "session",
           "scope": "player",
           "sourceId": "supply.scene",
@@ -2657,8 +2704,13 @@
           "visibility": "hidden"
         },
         {
-          "areaIds": [],
-          "componentIds": [],
+          "areaIds": [
+            "city"
+          ],
+          "componentIds": [
+            "tiles",
+            "starting-tiles"
+          ],
           "editor": "opaque-preserve",
           "key": "height",
           "label": "층·덮임",
@@ -2679,8 +2731,12 @@
           "visibility": "public"
         },
         {
-          "areaIds": [],
-          "componentIds": [],
+          "areaIds": [
+            "supply"
+          ],
+          "componentIds": [
+            "stones"
+          ],
           "editor": "scalar",
           "key": "stone-count",
           "label": "석재",
@@ -2736,9 +2792,9 @@
       ],
       "gaps": [
         "기본 Akropolis. Athena/Pantheon의 조각·목표/미니 타일은 새 구성물과 조건 패치.",
-        "쌓기 지지 조건·지구별 연결/외곽/높이 계산과 변형 규칙 전체 검증 미완료.",
         "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
-        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+        "공식 기본판 규칙서 p.2–7에서 구성·건설·보충을 대조했다. 변형 득점 전체와 모든 인쇄/언어판 차이는 전수 확인하지 않았다."
       ],
       "privatePolicy": "optional-pin",
       "resume": {
@@ -2761,13 +2817,13 @@
           "id": "vertical",
           "kind": "procedure",
           "label": "높이 건설",
-          "summary": "수평 배치뿐 아니라 위로 쌓는 건설이 있으므로 평면 그림만으로 상태를 대표하지 않는다."
+          "summary": "도시 타일은 세 육각으로 이루어진다. 1층은 기존 도시에 변을 접하고 위층은 빈 공간 없이 서로 다른 아래 타일 두 장 이상을 덮는다. 기록된 층과 가려진 아래 타일은 구분한다."
         },
         {
           "id": "districts",
           "kind": "procedure",
           "label": "지구 종류",
-          "summary": "지구와 광장·채석장을 구분하고 종류별 점수 조건은 미확인으로 남긴다."
+          "summary": "채석장·광장·다섯 지구를 구별한다. 덮인 채석장은 석재를 주고, 지구는 종류별 배치 조건과 같은 종류 광장의 별에 따라 종료 득점한다."
         },
         {
           "id": "record-only",
@@ -2781,7 +2837,7 @@
         "editionName": "기본판",
         "gameId": "akropolis",
         "schemaVersion": "1.0",
-        "sha256": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e"
+        "sha256": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27"
       },
       "support": {
         "illustration": "catalog",
@@ -2802,17 +2858,23 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.akropolis.rules.20261026",
+        "section": "p.2 Contents/Setup: 61 City tiles, 4 starting tiles, 40 Stone cubes and Chief Architect marker; p.3 ordered Construction Site and personal starting tile; pp.4–5 paid selection, three-hex tile placement and covered quarry; p.7 market replenishment and marker transfer. Checked these sections, not every variant.",
+        "title": "Akropolis — Gigamic English base rulebook (2022 printing)",
+        "url": "https://en.gigamic.com/index.php?controller=attachment&id_attachment=471"
       }
     ],
     "supportGaps": [
       "기본 Akropolis. Athena/Pantheon의 조각·목표/미니 타일은 새 구성물과 조건 패치.",
-      "쌓기 지지 조건·지구별 연결/외곽/높이 계산과 변형 규칙 전체 검증 미완료.",
       "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
       "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "공식 기본판 규칙서 p.2–7에서 구성·건설·보충을 대조했다. 변형 득점 전체와 모든 인쇄/언어판 차이는 전수 확인하지 않았다.",
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "아크로폴리스",
-    "version": "1.0.0-essentials-2.d025cfc8cbbc"
+    "version": "1.0.0-essentials-2.98f8fa766f65"
   },
   {
     "derivedRules": [],
@@ -6016,6 +6078,22 @@
           "order": 13
         },
         "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "discard.scene",
+        "label": "각 조사자의 공개 버림더미",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 14
+        },
+        "visibility": "public"
       }
     ],
     "id": "arkham-lcg",
@@ -6298,7 +6376,8 @@
           ],
           "componentIds": [
             "investigators",
-            "tokens"
+            "tokens",
+            "decks"
           ],
           "editor": "component-catalog",
           "key": "play.scene",
@@ -6525,13 +6604,29 @@
           "scope": "public",
           "sourceId": "scenario-progress:note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "discard"
+          ],
+          "componentIds": [
+            "decks"
+          ],
+          "editor": "component-catalog",
+          "key": "discard.scene",
+          "label": "각 조사자의 공개 버림더미",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "discard.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
         "게임 전체 카드 수집은 하지 않는다. 캠페인/조우 세트 의존성과 덱 목록을 참조 ID로 연결하고 새 코어/구 코어 대체표는 별도 검증.",
         "2026 AHC100 공식 규칙 PDF는 확보했고 선임 조사자/혼돈 주머니/막·의제·파멸의 인용 절을 확인했다. 그 밖의 시나리오별 배치·공개성·카드별 타이밍의 완전 대조와 최신 Grimoire 대조는 미완료.",
         "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
-        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+        "새 공개 play/discard 필드는 앞으로 기록할 카드 영역이다. 이전 pinned pack의 hidden.scene에 섞인 버림 카드를 자동 공개·이동하지 않는다."
       ],
       "privatePolicy": "optional-pin",
       "resume": {
@@ -6574,7 +6669,7 @@
         "editionName": "2026 Chapter Two 기본판 AHC100",
         "gameId": "arkham-lcg",
         "schemaVersion": "1.0",
-        "sha256": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e"
+        "sha256": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2"
       },
       "support": {
         "illustration": "catalog",
@@ -6607,6 +6702,18 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.arkham-lcg.current-rulebook",
+        "section": "Types of Actions > Play: an asset from hand is placed in the investigator's play area; an event goes to discard. Indexed text checked; entire 11 MB PDF not opened.",
+        "title": "Arkham Horror: The Card Game current core rulebook",
+        "url": "https://images-cdn.fantasyflightgames.com/filer_public/0e/d0/0ed09507-1705-47ed-a630-cd15885cabb0/ahc100_rulebook-web.pdf"
+      },
+      {
+        "id": "spec.arkham-lcg.current-reference",
+        "section": "Discard Piles: each investigator has an open-information face-up discard pile; its card order must not be altered except by an effect. Indexed section checked; whole reference not verified.",
+        "title": "Arkham Grimoire current rules reference",
+        "url": "https://images-cdn.fantasyflightgames.com/filer_public/76/b3/76b332d5-7047-458f-91b6-82c8500cc445/arkham_grimoire.pdf"
       }
     ],
     "supportGaps": [
@@ -6614,10 +6721,11 @@
       "2026 AHC100 공식 규칙 PDF는 확보했고 선임 조사자/혼돈 주머니/막·의제·파멸의 인용 절을 확인했다. 그 밖의 시나리오별 배치·공개성·카드별 타이밍의 완전 대조와 최신 Grimoire 대조는 미완료.",
       "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
       "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "새 공개 play/discard 필드는 앞으로 기록할 카드 영역이다. 이전 pinned pack의 hidden.scene에 섞인 버림 카드를 자동 공개·이동하지 않는다.",
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "아컴호러 카드게임",
-    "version": "1.0.0-essentials-2.df44ab4683ab"
+    "version": "1.0.0-essentials-2.742919169974"
   },
   {
     "derivedRules": [],
@@ -19399,7 +19507,7 @@
       },
       {
         "acquisition": "ask",
-        "description": "사용 전 카드와 사용 더미를 별개 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
         "group": "essentials",
         "key": "hand.scene",
         "label": "성격 손패",
@@ -19506,6 +19614,22 @@
           "editor": "default",
           "level": "detail",
           "order": 9
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "played-personality.scene",
+        "label": "사용한 성격 카드 더미",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 10
         },
         "visibility": "public"
       }
@@ -19768,6 +19892,21 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "played-personality"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "played-personality.scene",
+          "label": "사용한 성격 카드 더미",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "played-personality.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
@@ -19817,7 +19956,7 @@
         "editionName": "기본판",
         "gameId": "concordia",
         "schemaVersion": "1.0",
-        "sha256": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a"
+        "sha256": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178"
       },
       "support": {
         "illustration": "catalog",
@@ -19854,7 +19993,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "콩코르디아",
-    "version": "1.0.0-essentials-2.6c1b7ca22813"
+    "version": "1.0.0-essentials-2.f7717930ce6b"
   },
   {
     "derivedRules": [],
@@ -21858,7 +21997,7 @@
       },
       {
         "acquisition": "ask",
-        "description": "현재 손패와 자신이 낸 카드, 이야기꾼의 정답 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "아직 제출하지 않은 개인 손패만; 제출 묶음과 공개된 그림판은 각각 별도 영역.",
         "group": "essentials",
         "key": "hand.scene",
         "label": "개인 손패·제출 정체",
@@ -22069,6 +22208,21 @@
       },
       {
         "conditions": [
+          "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다.",
+          "보이지 않는 면을 열지 않고 구역·소유자·묶음 방향을 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": true,
+        "id": "spec.submissions.preserve",
+        "label": "공개 전 제출 카드 묶음 실물 묶음 보존(선택)",
+        "method": "sealed-bundle",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "public",
+        "sourceVisibility": "hidden"
+      },
+      {
+        "conditions": [
           "내용을 펼치거나 JSON으로 입력하지 마세요.",
           "기존 순서·방향과 봉인 상태를 유지하세요."
         ],
@@ -22274,6 +22428,21 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "submissions"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "physical-only",
+          "key": "submissions.scene",
+          "label": "공개 전 제출 카드 묶음",
+          "lifetime": "session",
+          "scope": "shared-secret",
+          "sourceId": "submissions.scene",
+          "visibility": "hidden"
         }
       ],
       "gaps": [
@@ -22323,7 +22492,7 @@
         "editionName": "기본판",
         "gameId": "dixit",
         "schemaVersion": "1.0",
-        "sha256": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e"
+        "sha256": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203"
       },
       "support": {
         "illustration": "catalog",
@@ -22335,7 +22504,7 @@
     "sources": [
       {
         "id": "spec.dixit.primary",
-        "section": "공식 상품/설명에서 이야기꾼의 비밀 카드·주제, 다른 참가자의 카드 제출, 섞어 공개·투표 및 일부만 맞히는 득점 취지 확인. 현행8인 구성 표시.",
+        "section": "공식 상품/설명에서 이야기꾼의 비밀 카드·주제, 다른 참가자의 카드 제출, 섞어 공개·투표 및 일부만 맞히는 득점 취지 확인. 현행8인 구성 표시. 2026-10-26 공식 How to play: 각자 손패에서 카드 선택→함께 섞음→공개와 투표. 제출 중 정체는 공개하지 않음.",
         "title": "Dixit — 공식 자료",
         "url": "https://www.libellud.com/game/dixit/"
       },
@@ -22354,7 +22523,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "딕싯",
-    "version": "1.0.0-essentials-2.3536bf279979"
+    "version": "1.0.0-essentials-2.cf1374228a08"
   },
   {
     "derivedRules": [],
@@ -30929,10 +31098,10 @@
       },
       {
         "acquisition": "ask",
-        "description": "아직 고용하지 않은 직원과 고용한 직원을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "미고용 직원 손패만 소유자 범위로 보존.",
         "group": "essentials",
         "key": "staff.scene",
-        "label": "직원 손패",
+        "label": "미고용 직원 손패",
         "lifetime": "session",
         "scope": "player",
         "type": "json",
@@ -31033,6 +31202,22 @@
           "editor": "default",
           "level": "detail",
           "order": 9
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "hired-staff.scene",
+        "label": "고용한 직원 카드",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 10
         },
         "visibility": "public"
       }
@@ -31142,7 +31327,7 @@
         {
           "id": "guests",
           "kind": "card",
-          "name": "손님·직원 카드",
+          "name": "손님 카드",
           "variants": []
         },
         {
@@ -31155,6 +31340,12 @@
           "id": "food",
           "kind": "token",
           "name": "음식·음료·돈",
+          "variants": []
+        },
+        {
+          "id": "staff-cards",
+          "kind": "card",
+          "name": "직원 카드",
           "variants": []
         }
       ],
@@ -31211,11 +31402,11 @@
             "staff"
           ],
           "componentIds": [
-            "guests"
+            "staff-cards"
           ],
           "editor": "component-catalog",
           "key": "staff.scene",
-          "label": "직원 손패",
+          "label": "미고용 직원 손패",
           "lifetime": "session",
           "scope": "player",
           "sourceId": "staff.scene",
@@ -31319,6 +31510,21 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "hired-staff"
+          ],
+          "componentIds": [
+            "staff-cards"
+          ],
+          "editor": "component-catalog",
+          "key": "hired-staff.scene",
+          "label": "고용한 직원 카드",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "hired-staff.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
@@ -31368,7 +31574,7 @@
         "editionName": "기본판",
         "gameId": "grand-austria-hotel",
         "schemaVersion": "1.0",
-        "sha256": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604"
+        "sha256": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f"
       },
       "support": {
         "illustration": "catalog",
@@ -31389,6 +31595,12 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.grand-austria-hotel.rules-2015",
+        "section": "pp.2,10-13: guest and staff are distinct cards; staff cards are held then played/hired face-up and may be rotated for once-per-round use. 2015 rules; 2022 retail differences remain unverified.",
+        "title": "Grand Austria Hotel official English rulebook",
+        "url": "https://www.lookout-spiele.de/wp-content/uploads/GAH_rules_EN_web.pdf"
       }
     ],
     "supportGaps": [
@@ -31399,7 +31611,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "그랜드 오스트리아 호텔",
-    "version": "1.0.0-essentials-2.1ed916bfc7da"
+    "version": "1.0.0-essentials-2.1dff0e209e2b"
   },
   {
     "derivedRules": [],
@@ -46047,10 +46259,10 @@
       },
       {
         "acquisition": "ask",
-        "description": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
         "group": "essentials",
         "key": "players.scene",
-        "label": "인물과 손패",
+        "label": "이번 게임의 개인 손패",
         "lifetime": "session",
         "scope": "player",
         "type": "json",
@@ -46153,6 +46365,22 @@
           "order": 8
         },
         "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "character-card.scene",
+        "label": "공개된 인물 카드·기록",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 9
+        },
+        "visibility": "public"
       }
     ],
     "id": "pandemic-legacy-1",
@@ -46205,6 +46433,21 @@
         "orderSensitive": false,
         "restoreAfter": [],
         "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+          "보이지 않는 면을 열지 않고 구역·소유자·묶음 방향을 남긴다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.character-card.preserve",
+        "label": "공개된 인물 카드·기록 실물 묶음 보존(선택)",
+        "method": "manual-note",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
         "sourceVisibility": "public"
       },
       {
@@ -46314,12 +46557,11 @@
             "players"
           ],
           "componentIds": [
-            "cards",
-            "record"
+            "cards"
           ],
           "editor": "component-catalog",
           "key": "players.scene",
-          "label": "인물과 손패",
+          "label": "이번 게임의 개인 손패",
           "lifetime": "session",
           "scope": "player",
           "sourceId": "players.scene",
@@ -46438,13 +46680,29 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "character-card"
+          ],
+          "componentIds": [
+            "record"
+          ],
+          "editor": "component-catalog",
+          "key": "character-card.scene",
+          "label": "공개된 인물 카드·기록",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "character-card.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
         "시즌1 Red/Blue는 같은 게임. 시즌0/2는 별개이며 아직 열지 않은 캠페인 내용을 사전 생성하지 않는다.",
         "캠페인 중 추가되는 비공개 규칙은 공개 후 기록해야 하며 이번 명세는 전체 스포일러 사전이 아니다.",
         "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
-        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+        "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+        "신규 character-card.scene은 공개된 앞면만 기록한다. 기존 저장본의 players.scene에 혼재된 인물 기록을 자동 이동/공개하지 않는다. 기존 팩 핀 보존과 수동 확인이 필요하다."
       ],
       "privatePolicy": "optional-pin",
       "resume": {
@@ -46487,7 +46745,7 @@
         "editionName": "시즌 1 기본 상자",
         "gameId": "pandemic-legacy-1",
         "schemaVersion": "1.0",
-        "sha256": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60"
+        "sha256": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f"
       },
       "support": {
         "illustration": "catalog",
@@ -46508,6 +46766,12 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.pandemic-legacy-1.product-current",
+        "section": "Component listing distinguishes character cards from player cards and sealed campaign material. This does not verify full campaign rules or unrevealed contents.",
+        "title": "Pandemic Legacy Season 1, Z-Man Games product/components",
+        "url": "https://www.zmangames.com/game/pandemic-legacy-season-1/"
       }
     ],
     "supportGaps": [
@@ -46515,10 +46779,11 @@
       "캠페인 중 추가되는 비공개 규칙은 공개 후 기록해야 하며 이번 명세는 전체 스포일러 사전이 아니다.",
       "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
       "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+      "신규 character-card.scene은 공개된 앞면만 기록한다. 기존 저장본의 players.scene에 혼재된 인물 기록을 자동 이동/공개하지 않는다. 기존 팩 핀 보존과 수동 확인이 필요하다.",
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "팬데믹 레거시: 시즌 1",
-    "version": "1.0.0-essentials-2.8e0f96155c30"
+    "version": "1.0.0-essentials-2.af498bfba9fd"
   },
   {
     "derivedRules": [],
@@ -58213,6 +58478,22 @@
           "order": 9
         },
         "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다. 실물 인스턴스 ID·앞뒷면·그룹/순서·소유자·사진 근거를 별개로 보존한다. 가린 정체는 추정하지 않는다.",
+        "group": "essentials",
+        "key": "chip-supply.scene",
+        "label": "공용 보석·금 공급",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 10
+        },
+        "visibility": "public"
       }
     ],
     "id": "splendor",
@@ -58475,6 +58756,21 @@
           "scope": "public",
           "sourceId": "note",
           "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "chip-supply"
+          ],
+          "componentIds": [
+            "chips"
+          ],
+          "editor": "component-catalog",
+          "key": "chip-supply.scene",
+          "label": "공용 보석·금 공급",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "chip-supply.scene",
+          "visibility": "public"
         }
       ],
       "gaps": [
@@ -58524,7 +58820,7 @@
         "editionName": "현행 기본판",
         "gameId": "splendor",
         "schemaVersion": "1.0",
-        "sha256": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46"
+        "sha256": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450"
       },
       "support": {
         "illustration": "catalog",
@@ -58545,6 +58841,12 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.splendor.rules-current",
+        "section": "Setup: six distinct central gem/gold stacks; Actions: taken/spent tokens move between central supply and player holdings, purchased development is public. Printed reprint may differ from chosen refresh art; exact token inventory not pinned.",
+        "title": "Splendor English rules, official Asmodee CDN",
+        "url": "https://cdn.svc.asmodee.net/production-asmodeeca/uploads/2022/01/SCSPL01EN_SPLENDOR_RULES_LIGHT.pdf"
       }
     ],
     "supportGaps": [
@@ -58555,7 +58857,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "스플렌더",
-    "version": "1.0.0-essentials-2.c3ee02f2da3a"
+    "version": "1.0.0-essentials-2.334af0a2f55b"
   },
   {
     "derivedRules": [],

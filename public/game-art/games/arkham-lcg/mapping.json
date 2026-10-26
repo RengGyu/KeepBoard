@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/arkham-lcg.json",
-  "source_sha256": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+  "source_sha256": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -408,11 +408,14 @@
       ],
       "component_ids": [
         "investigators",
-        "tokens"
+        "tokens",
+        "decks"
       ],
       "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
       "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "arkham-lcg.current-rulebook"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
@@ -466,6 +469,32 @@
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "discard",
+      "name": "각 조사자의 공개 버림더미",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "decks"
+      ],
+      "anchor_contract": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+      "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "arkham-lcg.current-reference"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

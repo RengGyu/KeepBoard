@@ -26,10 +26,14 @@ function nativeProperty(game:string,component:string,id:string):PropertySpec {
  if(id==='ratio')return enumeration([2,3]);
  return {...base,type:'text'};
 }
+/** The historical contract (frozen before the runtime revision) and the one reviewed revision derived from it by tools/game-runtime/revise-inputs.ts contract. Only the reviewed revision is accepted. */
+export const HISTORICAL_CONTRACT_SHA256='2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b';
+export const APPROVED_CONTRACT={revision:'gamepack-revision-20261026',sha256:'797e8438e2ccab25e93fea80477ea6da2e36da43a5c3429b87391250d1247a8c'};
 export function generateDefinitions(root:string){
  const contractFile='game-photo-definitions/contract.json',contractBytes=readFileSync(resolve(root,contractFile));
- if(sha(contractBytes)!=='2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b')throw Error('Approved contract hash changed; do not silently rebind saved games.');
+ if(sha(contractBytes)!==APPROVED_CONTRACT.sha256)throw Error('Approved contract hash changed; do not silently rebind saved games.');
  const contract=JSON.parse(contractBytes.toString());
+ if(contract.source_revision?.previousContractSHA256!==HISTORICAL_CONTRACT_SHA256||contract.source_revision?.id!==APPROVED_CONTRACT.revision)throw Error('Contract revision does not chain from the historical contract.');
  const inputs=contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json').filter((i:any)=>!i.file.startsWith('server/'));
  // R3 changed only Splendor validation; its generated gem domain is unchanged. Keep both exact approved revisions.
  const approvedSplendorR3={contractSHA:'d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8',sha256:'13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1'};

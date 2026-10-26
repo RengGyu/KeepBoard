@@ -1,0 +1,225 @@
+{
+  "game_id": "akropolis",
+  "name_ko": "아크로폴리스",
+  "name_en": "Akropolis",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "사진 하나의 층 높이 추정 한계;확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "akropolis.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/akropolis.json",
+  "source_sha256": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "tiles",
+      "name": "도시·시작 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "다중 육각의 지구/광장·채석장과 회전·높이.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "겹친 도시 타일 예시",
+          "layers": [
+            {
+              "asset_id": "akropolis.tiles.akropolis-cluster"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "stones",
+      "name": "석재·수석 건축가",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "개인 석재와 시작 플레이어 표식.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "석재 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-stone",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "작업자 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-helmet-worker"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "city",
+      "name": "개인 도시",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+      "description": "개인 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "건설 현장",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+      "description": "건설 현장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "supply",
+      "name": "개인 석재",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "stones"
+      ],
+      "anchor_contract": "현재 석재 잔액과 수석 건축가.",
+      "description": "개인 석재의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "draw",
+      "name": "대기 타일",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "공개하지 않은 타일 더미 순서 보존.",
+      "description": "대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 도시 · 구조 예시",
+    "area_id": "city",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "akropolis.tiles.akropolis-cluster",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

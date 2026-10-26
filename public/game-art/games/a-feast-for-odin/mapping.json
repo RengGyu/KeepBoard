@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/a-feast-for-odin.json",
-  "source_sha256": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+  "source_sha256": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -513,13 +513,39 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "아직 내지 않은 직업과 공개한 직업 구별.",
+      "anchor_contract": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
       "description": "직업 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "played-occupations",
+      "name": "사용한 직업 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다.",
+      "description": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "a-feast-for-odin.primary"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

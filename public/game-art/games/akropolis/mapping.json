@@ -15,15 +15,15 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/akropolis.json",
-  "source_sha256": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+  "source_sha256": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
       "component_id": "tiles",
-      "name": "도시·시작 타일",
+      "name": "도시 타일",
       "kind": "tile",
-      "source_confidence": "reported",
-      "source_description": "다중 육각의 지구/광장·채석장과 회전·높이.",
+      "source_confidence": "verified",
+      "source_description": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
       "status": "dedicated",
       "variants": [
         {
@@ -36,7 +36,7 @@
         }
       ],
       "variant_count_is_quantity": false,
-      "source_quantity": null,
+      "source_quantity": 61,
       "quantity_display": {
         "source": "runtime observed quantity only",
         "null": "?",
@@ -56,11 +56,48 @@
       "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
     },
     {
+      "component_id": "starting-tiles",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "전용 그림 없음 · 실물 기준",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "unknown",
+      "owner_color_supported": false,
+      "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+      "name": "시작 타일",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "각 건축가의 개인 도시 출발 타일. 일반 도시 타일과 별도 실물이다.",
+      "source_quantity": 4
+    },
+    {
       "component_id": "stones",
-      "name": "석재·수석 건축가",
+      "name": "석재 큐브",
       "kind": "token",
-      "source_confidence": "reported",
-      "source_description": "개인 석재와 시작 플레이어 표식.",
+      "source_confidence": "verified",
+      "source_description": "개인에게 공개된 석재 큐브. 건설 현장 비용과 덮인 채석장의 보상에 사용한다.",
       "status": "common-reuse",
       "variants": [
         {
@@ -85,7 +122,7 @@
         }
       ],
       "variant_count_is_quantity": false,
-      "source_quantity": null,
+      "source_quantity": 40,
       "quantity_display": {
         "source": "runtime observed quantity only",
         "null": "?",
@@ -103,6 +140,43 @@
       "owner_color_supported": false,
       "gap": null,
       "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "chief-architect",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "전용 그림 없음 · 실물 기준",
+          "layers": [
+            {
+              "asset_id": "common.unknown"
+            }
+          ],
+          "unresolved": true
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "unknown",
+      "owner_color_supported": false,
+      "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+      "name": "수석 건축가 표식",
+      "kind": "marker",
+      "source_confidence": "verified",
+      "source_description": "현재 라운드의 건설 현장 순서를 시작하는 건축가를 가리키는 단일 공개 표식.",
+      "source_quantity": 1
     }
   ],
   "areas": [
@@ -118,11 +192,14 @@
         "hex"
       ],
       "component_ids": [
-        "tiles"
+        "tiles",
+        "starting-tiles"
       ],
-      "anchor_contract": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+      "anchor_contract": "시작 타일과 도시 타일 인스턴스별 세 육각, 방향, 층, 덮는 관계를 유지한다. 위층 타일은 빈 공간 위에 놓이지 않고 서로 다른 아래 타일 두 장 이상에 걸친다; 가려진 아래 인쇄는 추정하지 않는다.",
       "description": "개인 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "akropolis.rules.20261026"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-hex",
@@ -144,9 +221,11 @@
       "component_ids": [
         "tiles"
       ],
-      "anchor_contract": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+      "anchor_contract": "건설 현장의 공개 도시 타일을 왼쪽부터 순서대로 보존한다. 선택 타일 앞의 수만큼 석재 비용이 달라지며 마지막 한 장은 해당 라운드에 선택하지 않는다.",
       "description": "건설 현장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "akropolis.rules.20261026"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
@@ -156,7 +235,7 @@
     },
     {
       "id": "supply",
-      "name": "개인 석재",
+      "name": "개인 석재·수석 표식",
       "scope": "player",
       "visibility": "public",
       "topology": "zone",
@@ -166,11 +245,14 @@
         "zone"
       ],
       "component_ids": [
-        "stones"
+        "stones",
+        "chief-architect"
       ],
-      "anchor_contract": "현재 석재 잔액과 수석 건축가.",
+      "anchor_contract": "각 플레이어의 석재 큐브 수와 수석 건축가 표식의 현재 보유자를 별개로 기록한다. 표식의 소유자와 실제 다음 차례는 동일하다고 추측하지 않는다.",
       "description": "개인 석재의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "akropolis.rules.20261026"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-zone",
@@ -192,9 +274,11 @@
       "component_ids": [
         "tiles"
       ],
-      "anchor_contract": "공개하지 않은 타일 더미 순서 보존.",
+      "anchor_contract": "공개 전 도시 타일의 뒷면 11개 대기 더미를 더미 ID별로 따로 보존한다. 각 더미 내부 위아래 방향과 남은 수를 알 때만 적고, 타일 앞면은 확인하지 않는다.",
       "description": "대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "akropolis.rules.20261026"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-stack",

@@ -4,8 +4,8 @@
     "runtimePackId": "a-feast-for-odin",
     "schema": "a-feast-for-odin-v1",
     "editionId": "base",
-    "sourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
-    "packVersion": "1.0.0-essentials-2.539007f66356",
+    "sourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
+    "packVersion": "1.0.0-essentials-2.20d00a567a99",
     "title": "오딘을 위하여",
     "batch": "03-workers-economy",
     "sourceVerification": "attachment-only",
@@ -1464,8 +1464,8 @@
     "runtimePackId": "concordia",
     "schema": "concordia-v1",
     "editionId": "base",
-    "sourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
-    "packVersion": "1.0.0-essentials-2.6c1b7ca22813",
+    "sourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
+    "packVersion": "1.0.0-essentials-2.f7717930ce6b",
     "title": "콩코르디아",
     "batch": "03-workers-economy",
     "sourceVerification": "attachment-only",
@@ -1634,8 +1634,8 @@
     "runtimePackId": "grand-austria-hotel",
     "schema": "grand-austria-hotel-v1",
     "editionId": "base",
-    "sourceSHA": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
-    "packVersion": "1.0.0-essentials-2.1ed916bfc7da",
+    "sourceSHA": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
+    "packVersion": "1.0.0-essentials-2.1dff0e209e2b",
     "title": "그랜드 오스트리아 호텔",
     "batch": "03-workers-economy",
     "sourceVerification": "attachment-only",
@@ -1697,9 +1697,9 @@
       },
       {
         "id": "guests",
-        "name": "손님·직원 카드",
+        "name": "손님 카드",
         "kind": "card",
-        "description": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+        "description": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
         "fields": [
           {
             "id": "face",
@@ -1723,7 +1723,7 @@
             "label": "읽히는 인쇄 표기",
             "type": "text",
             "acquisition": "visible",
-            "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+            "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
             "faceOnly": true
           },
           {
@@ -1731,7 +1731,7 @@
             "type": "text",
             "label": "손님·직원",
             "acquisition": "visible",
-            "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+            "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
             "faceOnly": true
           },
           {
@@ -1739,14 +1739,14 @@
             "type": "marks",
             "label": "직접 확인한 주문 지급",
             "acquisition": "manual",
-            "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+            "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
           },
           {
             "id": "cardArea",
             "type": "text",
             "label": "대기·투숙·손패",
             "acquisition": "manual",
-            "sourceText": "카페 손님 주문·충족/투숙, 직원 공개/손패. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+            "sourceText": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
           }
         ]
       },
@@ -1820,6 +1820,39 @@
             "label": "배달 대상",
             "acquisition": "manual",
             "sourceText": "주방 재고와 손님에게 배달한 큐브. · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다."
+          }
+        ]
+      },
+      {
+        "id": "staff-cards",
+        "name": "직원 카드",
+        "kind": "card",
+        "description": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+        "fields": [
+          {
+            "id": "face",
+            "label": "보이는 면",
+            "type": "enum",
+            "acquisition": "visible",
+            "sourceText": "앞면을 보지 못하면 앞면 상세는 미확인. 기존 명세의 face 보존.",
+            "options": [
+              {
+                "value": "front",
+                "label": "앞면"
+              },
+              {
+                "value": "back",
+                "label": "뒷면"
+              }
+            ]
+          },
+          {
+            "id": "printedName",
+            "label": "읽히는 인쇄 표기",
+            "type": "text",
+            "acquisition": "visible",
+            "sourceText": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+            "faceOnly": true
           }
         ]
       }

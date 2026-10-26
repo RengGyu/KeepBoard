@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/dixit.json",
-  "source_sha256": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+  "source_sha256": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -153,7 +153,7 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "현재 손패와 자신이 낸 카드, 이야기꾼의 정답 카드.",
+      "anchor_contract": "아직 제출하지 않은 개인 손패만; 제출 묶음과 공개된 그림판은 각각 별도 영역.",
       "description": "개인 손패·제출 정체의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
@@ -232,6 +232,32 @@
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "submissions",
+      "name": "공개 전 제출 카드 묶음",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다.",
+      "description": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "dixit.primary"
+      ],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

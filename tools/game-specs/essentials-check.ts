@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { validateSpecification } from './validate.ts';
+import { readLedger, acceptedSourceDigest } from '../game-runtime/revision-ledger.ts';
 
 type Row = Record<string, any>;
 const F001_OLD='가족 원반·울타리·외양간은 개인색 구성물이다. 개인 공급과 농장/행동칸의 위치를 구별한다. 개인당 가족5·울타리15·외양간4가 표기되지만 이 묶음의 단일 quantity로 합산하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.';
@@ -23,6 +24,8 @@ export async function checkEssentials(root = process.cwd()) {
   const evidence = await read(prefix + 'evidence.json');
   const errors: string[] = [];
   const specs = new Map<string, Row>();
+  // An approved source revision replaces one frozen digest with one exact final digest; everything else still checks against the frozen baseline.
+  const ledger = readLedger(root);
   const gameFiles = await readdir(`${root}/docs/research/game-specs-120/games`);
   if (gameFiles.filter(f => f.endsWith('.json')).length !== 120) errors.push('expected 120 specification files');
   if (baseline.length !== 120 || manifest.games.length !== 120) errors.push('expected 120 baseline/manifest rows');
@@ -32,10 +35,16 @@ export async function checkEssentials(root = process.cwd()) {
     const raw = await readFile(`${root}/${old.path}`, 'utf8');
     const spec = JSON.parse(raw);
     specs.set(spec.game_id, spec);
-    if (!row || row.final_sha256 !== sha(raw)) errors.push(`${old.game_id}: missing row or stale digest`);
+    const revision = ledger?.games?.[old.game_id];
+    if (!row || !acceptedSourceDigest(ledger, old.game_id, row.final_sha256, sha(raw))) errors.push(`${old.game_id}: missing row or stale digest`);
     if (!validateSpecification(spec).valid) errors.push(`${old.game_id}: original schema/references invalid`);
     if (spec.game_id !== old.spec.game_id || spec.schema_version !== old.spec.schema_version || JSON.stringify(spec.edition) !== JSON.stringify(old.spec.edition)) errors.push(`${old.game_id}: stable ID/schema/edition changed`);
-    if (JSON.stringify(spec.components) !== JSON.stringify(expectedEssentialsComponents(old.game_id,old.spec.components))) errors.push(`${old.game_id}: components changed`);
+    if (!revision && JSON.stringify(spec.components) !== JSON.stringify(expectedEssentialsComponents(old.game_id,old.spec.components))) errors.push(`${old.game_id}: components changed`);
+    if (revision) {
+      const ids = spec.components.map((c: Row) => c.id), before = old.spec.components.map((c: Row) => c.id);
+      if (before.some((id: string) => !ids.includes(id) && !revision.components.removed.includes(id))) errors.push(`${old.game_id}: component removed outside the revision`);
+      if (JSON.stringify(ids.filter((id: string) => !before.includes(id))) !== JSON.stringify(revision.components.added.filter((id: string) => !before.includes(id)))) errors.push(`${old.game_id}: components added outside the revision`);
+    }
     for (const prior of old.spec.state_fields) {
       const field = spec.state_fields.find((f: Row) => f.id === prior.id);
       if (!field) { errors.push(`${old.game_id}: removed field ${prior.id}`); continue; }
@@ -49,7 +58,8 @@ export async function checkEssentials(root = process.cwd()) {
     ]) if (JSON.stringify(actual) !== JSON.stringify(previous)) errors.push(`${old.game_id}: expanded ${name}`);
     if (spec.resume.opening_policy !== 'retain-saved-turn') errors.push(`${old.game_id}: saved turn policy lost`);
     for (const field of spec.state_fields.filter((f: Row) => !old.spec.state_fields.some((p: Row) => p.id === f.id))) {
-      if (!field.source_refs.some((ref: string) => evidence.sources.some((s: Row) => s.spec_source_id === ref && s.game_id === spec.game_id && s.location && s.url))) errors.push(`${spec.game_id}.${field.id}: missing scoped primary evidence`);
+      const receipted = (ref: string) => !!revision?.receipts?.some((r: Row) => r.spec_source_id === ref && r.location && spec.sources.some((s: Row) => s.id === ref && s.url));
+      if (!field.source_refs.some((ref: string) => evidence.sources.some((s: Row) => s.spec_source_id === ref && s.game_id === spec.game_id && s.location && s.url) || receipted(ref))) errors.push(`${spec.game_id}.${field.id}: missing scoped primary evidence`);
       if (field.visibility !== 'public' && (field.acquisition.includes('photo') || spec.recognition_correction.photographable_field_ids.includes(field.id))) errors.push(`${spec.game_id}.${field.id}: hidden content requested as photo`);
     }
     if (spec.game_id !== 'catan') {

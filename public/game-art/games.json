@@ -17,7 +17,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/a-feast-for-odin.json",
-      "source_sha256": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+      "source_sha256": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -515,13 +515,39 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "아직 내지 않은 직업과 공개한 직업 구별.",
+          "anchor_contract": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
           "description": "직업 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "played-occupations",
+          "name": "사용한 직업 카드",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다.",
+          "description": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "a-feast-for-odin.primary"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -2041,15 +2067,15 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/akropolis.json",
-      "source_sha256": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+      "source_sha256": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
           "component_id": "tiles",
-          "name": "도시·시작 타일",
+          "name": "도시 타일",
           "kind": "tile",
-          "source_confidence": "reported",
-          "source_description": "다중 육각의 지구/광장·채석장과 회전·높이.",
+          "source_confidence": "verified",
+          "source_description": "지구·광장·채석장이 인쇄된 세 육각의 도시 타일. 건설 현장과 개인 도시에 놓인다.",
           "status": "dedicated",
           "variants": [
             {
@@ -2062,7 +2088,7 @@
             }
           ],
           "variant_count_is_quantity": false,
-          "source_quantity": null,
+          "source_quantity": 61,
           "quantity_display": {
             "source": "runtime observed quantity only",
             "null": "?",
@@ -2082,11 +2108,48 @@
           "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
         },
         {
+          "component_id": "starting-tiles",
+          "status": "common-reuse",
+          "variants": [
+            {
+              "name": "전용 그림 없음 · 실물 기준",
+              "layers": [
+                {
+                  "asset_id": "common.unknown"
+                }
+              ],
+              "unresolved": true
+            }
+          ],
+          "variant_count_is_quantity": false,
+          "quantity_display": {
+            "source": "runtime observed quantity only",
+            "null": "?",
+            "zero": "0",
+            "art_stack_layers": "material depth only"
+          },
+          "rotation": {
+            "center": [
+              60,
+              60
+            ],
+            "allowed": "runtime direction; reflects only when scene/spec permits"
+          },
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+          "name": "시작 타일",
+          "kind": "tile",
+          "source_confidence": "verified",
+          "source_description": "각 건축가의 개인 도시 출발 타일. 일반 도시 타일과 별도 실물이다.",
+          "source_quantity": 4
+        },
+        {
           "component_id": "stones",
-          "name": "석재·수석 건축가",
+          "name": "석재 큐브",
           "kind": "token",
-          "source_confidence": "reported",
-          "source_description": "개인 석재와 시작 플레이어 표식.",
+          "source_confidence": "verified",
+          "source_description": "개인에게 공개된 석재 큐브. 건설 현장 비용과 덮인 채석장의 보상에 사용한다.",
           "status": "common-reuse",
           "variants": [
             {
@@ -2111,7 +2174,7 @@
             }
           ],
           "variant_count_is_quantity": false,
-          "source_quantity": null,
+          "source_quantity": 40,
           "quantity_display": {
             "source": "runtime observed quantity only",
             "null": "?",
@@ -2129,6 +2192,43 @@
           "owner_color_supported": false,
           "gap": null,
           "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+        },
+        {
+          "component_id": "chief-architect",
+          "status": "common-reuse",
+          "variants": [
+            {
+              "name": "전용 그림 없음 · 실물 기준",
+              "layers": [
+                {
+                  "asset_id": "common.unknown"
+                }
+              ],
+              "unresolved": true
+            }
+          ],
+          "variant_count_is_quantity": false,
+          "quantity_display": {
+            "source": "runtime observed quantity only",
+            "null": "?",
+            "zero": "0",
+            "art_stack_layers": "material depth only"
+          },
+          "rotation": {
+            "center": [
+              60,
+              60
+            ],
+            "allowed": "runtime direction; reflects only when scene/spec permits"
+          },
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+          "name": "수석 건축가 표식",
+          "kind": "marker",
+          "source_confidence": "verified",
+          "source_description": "현재 라운드의 건설 현장 순서를 시작하는 건축가를 가리키는 단일 공개 표식.",
+          "source_quantity": 1
         }
       ],
       "areas": [
@@ -2144,11 +2244,14 @@
             "hex"
           ],
           "component_ids": [
-            "tiles"
+            "tiles",
+            "starting-tiles"
           ],
-          "anchor_contract": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+          "anchor_contract": "시작 타일과 도시 타일 인스턴스별 세 육각, 방향, 층, 덮는 관계를 유지한다. 위층 타일은 빈 공간 위에 놓이지 않고 서로 다른 아래 타일 두 장 이상에 걸친다; 가려진 아래 인쇄는 추정하지 않는다.",
           "description": "개인 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-hex",
@@ -2170,9 +2273,11 @@
           "component_ids": [
             "tiles"
           ],
-          "anchor_contract": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+          "anchor_contract": "건설 현장의 공개 도시 타일을 왼쪽부터 순서대로 보존한다. 선택 타일 앞의 수만큼 석재 비용이 달라지며 마지막 한 장은 해당 라운드에 선택하지 않는다.",
           "description": "건설 현장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
@@ -2182,7 +2287,7 @@
         },
         {
           "id": "supply",
-          "name": "개인 석재",
+          "name": "개인 석재·수석 표식",
           "scope": "player",
           "visibility": "public",
           "topology": "zone",
@@ -2192,11 +2297,14 @@
             "zone"
           ],
           "component_ids": [
-            "stones"
+            "stones",
+            "chief-architect"
           ],
-          "anchor_contract": "현재 석재 잔액과 수석 건축가.",
+          "anchor_contract": "각 플레이어의 석재 큐브 수와 수석 건축가 표식의 현재 보유자를 별개로 기록한다. 표식의 소유자와 실제 다음 차례는 동일하다고 추측하지 않는다.",
           "description": "개인 석재의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
@@ -2218,9 +2326,11 @@
           "component_ids": [
             "tiles"
           ],
-          "anchor_contract": "공개하지 않은 타일 더미 순서 보존.",
+          "anchor_contract": "공개 전 도시 타일의 뒷면 11개 대기 더미를 더미 ID별로 따로 보존한다. 각 더미 내부 위아래 방향과 남은 수를 알 때만 적고, 타일 앞면은 확인하지 않는다.",
           "description": "대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "akropolis.rules.20261026"
+          ],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-stack",
@@ -4407,7 +4517,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/arkham-lcg.json",
-      "source_sha256": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+      "source_sha256": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -4800,11 +4910,14 @@
           ],
           "component_ids": [
             "investigators",
-            "tokens"
+            "tokens",
+            "decks"
           ],
           "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
           "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "arkham-lcg.current-rulebook"
+          ],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
@@ -4858,6 +4971,32 @@
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "discard",
+          "name": "각 조사자의 공개 버림더미",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "decks"
+          ],
+          "anchor_contract": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+          "description": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "arkham-lcg.current-reference"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -12397,7 +12536,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/concordia.json",
-      "source_sha256": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+      "source_sha256": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -12771,13 +12910,39 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "사용 전 카드와 사용 더미를 별개 보존.",
+          "anchor_contract": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
           "description": "성격 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "played-personality",
+          "name": "사용한 성격 카드 더미",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다.",
+          "description": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "concordia.art-confirmation.concordia-web"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -13901,7 +14066,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/dixit.json",
-      "source_sha256": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+      "source_sha256": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -14039,7 +14204,7 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "현재 손패와 자신이 낸 카드, 이야기꾼의 정답 카드.",
+          "anchor_contract": "아직 제출하지 않은 개인 손패만; 제출 묶음과 공개된 그림판은 각각 별도 영역.",
           "description": "개인 손패·제출 정체의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation",
@@ -14118,6 +14283,32 @@
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "submissions",
+          "name": "공개 전 제출 카드 묶음",
+          "scope": "shared-secret",
+          "visibility": "hidden",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다.",
+          "description": "섞은 제출 카드의 뒷면 묶음과 원래 제출자 연결을 강제로 만들지 않는다. 공개 전 정체는 비공개로 보존한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "dixit.primary"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -19908,7 +20099,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/grand-austria-hotel.json",
-      "source_sha256": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
+      "source_sha256": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -19950,10 +20141,10 @@
         },
         {
           "component_id": "guests",
-          "name": "손님·직원 카드",
+          "name": "손님 카드",
           "kind": "card",
           "source_confidence": "reported",
-          "source_description": "카페 손님 주문·충족/투숙, 직원 공개/손패.",
+          "source_description": "카페의 손님 주문·충족/투숙. 직원 카드와 별개 물리 카드 종류.",
           "status": "common-reuse",
           "variants": [
             {
@@ -20161,6 +20352,43 @@
           "owner_color_supported": true,
           "gap": null,
           "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+        },
+        {
+          "component_id": "staff-cards",
+          "status": "common-reuse",
+          "variants": [
+            {
+              "name": "전용 그림 없음 · 실물 기준",
+              "layers": [
+                {
+                  "asset_id": "common.unknown"
+                }
+              ],
+              "unresolved": true
+            }
+          ],
+          "variant_count_is_quantity": false,
+          "quantity_display": {
+            "source": "runtime observed quantity only",
+            "null": "?",
+            "zero": "0",
+            "art_stack_layers": "material depth only"
+          },
+          "rotation": {
+            "center": [
+              60,
+              60
+            ],
+            "allowed": "runtime direction; reflects only when scene/spec permits"
+          },
+          "color_role": "unknown",
+          "owner_color_supported": false,
+          "gap": "새로 분리한 구성물의 전용 그림은 미확인입니다. 실물과 원본을 기준으로 기록하세요.",
+          "name": "직원 카드",
+          "kind": "card",
+          "source_confidence": "reported",
+          "source_description": "손패의 미고용 직원과 고용 후 공개한 직원, 사용 방향을 별개로 보존.",
+          "source_quantity": null
         }
       ],
       "areas": [
@@ -20240,7 +20468,7 @@
         },
         {
           "id": "staff",
-          "name": "직원 손패",
+          "name": "미고용 직원 손패",
           "scope": "player",
           "visibility": "owner",
           "topology": "zone",
@@ -20250,15 +20478,41 @@
             "zone"
           ],
           "component_ids": [
-            "guests"
+            "staff-cards"
           ],
-          "anchor_contract": "아직 고용하지 않은 직원과 고용한 직원을 분리.",
+          "anchor_contract": "미고용 직원 손패만 소유자 범위로 보존.",
           "description": "직원 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation",
           "art_reference": {
             "asset_id": "common.area-zone",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "hired-staff",
+          "name": "고용한 직원 카드",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "staff-cards"
+          ],
+          "anchor_contract": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다.",
+          "description": "고용한 직원 카드는 개인 앞 공개 영역에 보존하고 사용/미사용 방향을 기록한다. 미고용 손패와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "grand-austria-hotel.rules-2015"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -30337,7 +30591,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/pandemic-legacy-1.json",
-      "source_sha256": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+      "source_sha256": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -30599,7 +30853,7 @@
         },
         {
           "id": "players",
-          "name": "인물과 손패",
+          "name": "이번 게임의 개인 손패",
           "scope": "player",
           "visibility": "owner",
           "topology": "zone",
@@ -30609,10 +30863,9 @@
             "zone"
           ],
           "component_ids": [
-            "cards",
-            "record"
+            "cards"
           ],
-          "anchor_contract": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사.",
+          "anchor_contract": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
           "description": "인물과 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
           "source_refs": [],
           "confidence": "recommendation",
@@ -30643,6 +30896,32 @@
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "character-card",
+          "name": "공개된 인물 카드·기록",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "record"
+          ],
+          "anchor_contract": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+          "description": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "pandemic-legacy-1.product-current"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }
@@ -38931,7 +39210,7 @@
         "confidence": "reported"
       },
       "source_spec": "docs/research/game-specs-120/games/splendor.json",
-      "source_sha256": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+      "source_sha256": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450",
       "art_scope": "representative-original-presets; never an exhaustive printed inventory",
       "components": [
         {
@@ -39215,6 +39494,32 @@
           "art_reference": {
             "asset_id": "common.area-stack",
             "use": "schematic zone only; source component geometry is independent",
+            "canonical_layout": false
+          }
+        },
+        {
+          "id": "chip-supply",
+          "name": "공용 보석·금 공급",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "chips"
+          ],
+          "anchor_contract": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다.",
+          "description": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "splendor.rules-current"
+          ],
+          "confidence": "recommendation",
+          "art_reference": {
+            "asset_id": "common.area-zone",
+            "use": "schematic zone only; not a printed game board",
             "canonical_layout": false
           }
         }

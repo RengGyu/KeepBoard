@@ -1,14 +1,14 @@
 {
   "version": "game-photo-definitions-manifest-v1",
-  "contractSHA": "2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b",
+  "contractSHA": "797e8438e2ccab25e93fea80477ea6da2e36da43a5c3429b87391250d1247a8c",
   "inputs": [
     {
       "file": "gamepacks/generated/game-essentials.json",
-      "sha256": "6bcf84b5d70cf85eee3c9f97cbcf9d0a84c4e17aafa12209eb32d4113b6bca7b"
+      "sha256": "a3f37685870e32435ef3702840edae7334d0b49a16a0f19142ebcc8ce8780c9c"
     },
     {
       "file": "shared/capture-profiles.json",
-      "sha256": "14c5a21b4ad8d925cdf8d317b9e613ce1b66af3d06d825eae1cb64d02cf00b96"
+      "sha256": "9230211eba71cc0d909afc75db129a9d248e2fcfa965893217b6f8de9e22a5d3"
     },
     {
       "file": "shared/readouts/types.ts",
@@ -34,7 +34,7 @@
     },
     {
       "file": "shared/readouts/catalogs/01-spatial-tiles.json",
-      "sha256": "6ea5f0f8c77b7fc25672e010d26317654caa17c3aa4fa92e5b8ad102447a9440"
+      "sha256": "7b6f81ad93c3896ef30f9ab5769b80f33cf5dcdf751661cf9a08ddbe16e9d7e5"
     },
     {
       "file": "shared/readouts/catalogs/02-cards-tableau.json",
@@ -42,22 +42,22 @@
     },
     {
       "file": "shared/readouts/catalogs/03-workers-economy.json",
-      "sha256": "057f5813dbeba079d35374b70536c55c3e87eebcd7665dcef4b5fd9fdabe1349"
+      "sha256": "089593c5a159b191b5706d5603703367c6d4c823e8c64a77abf66200aa856e15"
     },
     {
       "file": "shared/readouts/catalogs/04-hidden-social.json",
-      "sha256": "ecadae525fb253e78dca5d23e80ebbdb88d1d7d75b451e36509c40fb01665e81"
+      "sha256": "f45470179b4d1172f95e7cddd385031de3fc156cbf1c7603f27758d2f44a2506"
     },
     {
       "file": "shared/readouts/catalogs/05-campaign-combat.json",
-      "sha256": "47703ece8c1750fece9f0ee13e3dfac50842371ed3606a0d02b385a4f4bfe15a"
+      "sha256": "c8e312af768e9771c91eb25a594f2047024c6d2ee1437386a71bda2264bffff7"
     },
     {
       "file": "shared/readouts/catalogs/06-maps-tracks.json",
       "sha256": "f94b681e856cb6c9a9a6cbc2f6e4ccb1560f8191b4ccf6e257e4919181de3a70"
     }
   ],
-  "indexSHA": "c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60",
+  "indexSHA": "c25e951f03cca14f6ac5dc508390056fc1b58ac05a98dcff25f2b1ac4ec85990",
   "coverage": {
     "games": 120,
     "nativeBridges": 3,
@@ -337,6 +337,11 @@
         },
         {
           "areaId": "reserve",
+          "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "chip-supply",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
         }
@@ -1401,6 +1406,11 @@
           "areaId": "hand",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "discard",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
         }
       ]
     },
@@ -2294,6 +2304,11 @@
           "areaId": "hand",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "played-personality",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
         }
       ]
     },
@@ -2460,6 +2475,11 @@
           "areaId": "staff",
           "support": "literal-observation-candidate",
           "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "hired-staff",
+          "support": "manual-or-preserve",
+          "accuracy": "UNMEASURED"
         }
       ]
     },
@@ -2571,6 +2591,11 @@
         {
           "areaId": "hand",
           "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "played-occupations",
+          "support": "manual-or-preserve",
           "accuracy": "UNMEASURED"
         }
       ]
@@ -2915,6 +2940,7 @@
         "spec.players.preserve",
         "spec.decks.preserve",
         "spec.essentials.public-layout.public",
+        "spec.character-card.preserve",
         "spec.keep.calendar",
         "spec.keep.tracks",
         "spec.keep.persistent"
@@ -2934,6 +2960,11 @@
         {
           "areaId": "players",
           "support": "literal-observation-candidate",
+          "accuracy": "UNMEASURED"
+        },
+        {
+          "areaId": "character-card",
+          "support": "manual-or-preserve",
           "accuracy": "UNMEASURED"
         }
       ]
@@ -4228,6 +4259,12 @@
           "editor": "opaque-preserve",
           "scope": "public",
           "visibility": "public"
+        },
+        {
+          "field": "submissions.scene",
+          "editor": "physical-only",
+          "scope": "shared-secret",
+          "visibility": "hidden"
         }
       ],
       "preservationTemplateIds": [
@@ -4235,6 +4272,7 @@
         "spec.vote.preserve",
         "spec.deck.preserve",
         "spec.essentials.public-layout.public",
+        "spec.submissions.preserve",
         "spec.keep.reveal",
         "spec.keep.results"
       ],

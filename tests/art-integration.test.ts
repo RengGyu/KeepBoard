@@ -4,8 +4,9 @@ import {readFile,readdir,access} from 'node:fs/promises';
 import path from 'node:path';
 import {artGameId,assetURL,resolveArt,svgFragment,namespaceSVG,type ArtMapping,type ArtAsset} from '../src/artResolver.ts';
 const root=path.resolve('public/game-art');
+const ledger=JSON.parse(await readFile('docs/gamepack-revision-20261026/revision.json','utf8'));
 const mapping=async(id:string):Promise<ArtMapping>=>JSON.parse(await readFile(path.join(root,'games',id,'mapping.json'),'utf8'));
-test('all 120 catalog entries and 437 categories resolve every declared preset to real SVG paths/adapters',async()=>{
+test('all 120 catalog entries and every current category (the frozen 437 plus ledger additions) resolve every declared preset to real SVG paths/adapters',async()=>{
  const catalog=JSON.parse(await readFile('src/artCatalog.json','utf8'));
  const coverage=JSON.parse(await readFile(path.join(root,'coverage.json'),'utf8'));
  const folders=await readdir(path.join(root,'games'));assert.equal(catalog.length,120);assert.deepEqual(new Set(catalog.map((c:any)=>c.id)),new Set(folders));
@@ -13,7 +14,7 @@ test('all 120 catalog entries and 437 categories resolve every declared preset t
  let count=0,presets=0;const statuses:Record<string,number>={},assetCounts:Record<string,number>={};const checked=new Set<string>();
  for(const asset of index.values())assetCounts[asset.classification]=(assetCounts[asset.classification]??0)+1;
  for(const row of catalog){const m=await mapping(row.id);assert.equal(m.name_ko,row.name);assert.equal(m.name_en,row.english);
-  for(const c of m.components){count++;const before=JSON.stringify(c);assert.equal(new Set(c.variants.map(v=>v.name)).size,c.variants.length,`${row.id}: duplicate variant names`);
+  for(const c of m.components){if((c as any).legacy)continue;count++;const before=JSON.stringify(c);assert.equal(new Set(c.variants.map(v=>v.name)).size,c.variants.length,`${row.id}: duplicate variant names`);
    statuses[c.status]=(statuses[c.status]??0)+1;assert(c.variants.length>0,`${row.id}/${c.component_id}: missing presets`);
    const source=c as typeof c & {source_confidence:string};
    assert.equal(c.status==='unclear',source.source_confidence==='unclear'||c.kind==='unknown',`${row.id}/${c.component_id}: preserve source uncertainty`);
@@ -22,7 +23,7 @@ test('all 120 catalog entries and 437 categories resolve every declared preset t
     for(const layer of [...v.layers,...c.hidden_layers??[]]){const asset=index.get(layer.asset_id);assert(asset,layer.asset_id);const url=assetURL(asset);if(!checked.has(url)){checked.add(url);const file=path.resolve('public','.'+url);await access(file);if(asset.classification!=='existing')svgFragment(await readFile(file,'utf8'));}}
    }assert.equal(JSON.stringify(c),before,'art resolution never edits facts, quantity or mapping');
   }
- }assert.equal(count,437);assert(presets>=count);assert.equal(coverage.planned_games,120);assert.equal(coverage.built_games,120);assert.equal(coverage.components,count);
+ }assert.equal(ledger.base.totals.artComponents,437);assert.equal(count,ledger.totals.artComponents);assert(presets>=count);assert.equal(coverage.planned_games,120);assert.equal(coverage.built_games,120);assert.equal(coverage.components,count);
  assert.deepEqual(statuses,coverage.statuses);assert.deepEqual(assetCounts,coverage.asset_counts);assert.deepEqual(coverage.unmade_components,[]);assert.deepEqual(coverage.unbuilt_game_ids,[]);
 });
 test('Catan aliases, dynamic adapters and Carcassonne retain exact named variants without inventing a missing tile',async()=>{

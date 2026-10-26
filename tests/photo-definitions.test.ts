@@ -38,6 +38,8 @@ test('generated domains reject fresh back-face digits without changing native/ma
 test('approved R3 uses actual input provenance while keeping exact original pin and rejecting any unapproved revision',()=>{
  const generated=generateDefinitions(process.cwd()),input=generated.manifest.inputs.find((i:any)=>i.file==='shared/splendor.ts')!;
  assert.equal(input.sha256,'13e0602322e51b0eee1bd032bb8eb5145c1ef4d6d3c96d76ecc02cf0f820d5c1');assert.equal(input.approvedContractSHA256,'d12575cb8b481309455bc6c3ee13192bbc8155f1c9c9db371c7ae71977aad0e8');assert.match(input.revisionReason,/R3/);
- assert.equal(generated.manifest.indexSHA,'c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60');
+ // The historical index stays recorded in the revision history; the current index is the reviewed revision's exact output.
+ assert.equal(createHash('sha256').update(readFileSync('docs/gamepack-revision-20261026/history/before-runtime-revision/game-photo-definitions/index.json')).digest('hex'),'c8efa2bb79a06101beba90ae9c0fb384f0b38a3b824233bbdf8ea4836fbb2f60');
+ assert.equal(generated.manifest.indexSHA,createHash('sha256').update(readFileSync('game-photo-definitions/index.json')).digest('hex'));
  const root=mkdtempSync(join(tmpdir(),'kb-definition-unapproved-'));try{const copy='game-photo-definitions/contract.json';mkdirSync(dirname(join(root,copy)),{recursive:true});writeFileSync(join(root,copy),readFileSync(copy));for(const item of contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json')){const target=join(root,item.file);mkdirSync(dirname(target),{recursive:true});if(item.file==='shared/splendor.ts')writeFileSync(target,readFileSync(item.file,'utf8')+'\n// unapproved revision\n');else symlinkSync(resolve(item.file),target);}assert.throws(()=>generateDefinitions(root),/Pinned input changed: shared\/splendor.ts/);}finally{rmSync(root,{recursive:true,force:true});}
 });

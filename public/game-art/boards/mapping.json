@@ -4,7 +4,7 @@
     {
       "gameId": "a-feast-for-odin",
       "editionId": "base",
-      "sourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+      "sourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
       "status": "reuse",
       "areas": [
         {
@@ -82,6 +82,27 @@
           "status": "new",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "played-occupations",
+          "label": "사용한 직업 카드",
+          "fieldKeys": [
+            "played-occupations.scene"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "a-feast-for-odin.primary"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -435,17 +456,19 @@
     {
       "gameId": "akropolis",
       "editionId": "base",
-      "sourceSHA": "d025cfc8cbbc2c6469ab1e2c0e39d50b87d220807bc2389308cb084b16de858e",
+      "sourceSHA": "98f8fa766f65a21481be8e7aad2e4eca746609b81ea61311db603760d05c8e27",
       "status": "new",
       "areas": [
         {
           "areaId": "city",
           "label": "개인 도시",
           "fieldKeys": [
-            "city.scene"
+            "city.scene",
+            "height"
           ],
           "componentIds": [
-            "tiles"
+            "tiles",
+            "starting-tiles"
           ],
           "scope": "player",
           "visibility": "public",
@@ -453,7 +476,9 @@
           "template": "hex-mat",
           "status": "source-pending",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "akropolis.rules.20261026"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         },
@@ -472,18 +497,22 @@
           "template": "free-table",
           "status": "new",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "akropolis.rules.20261026"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         },
         {
           "areaId": "supply",
-          "label": "개인 석재",
+          "label": "개인 석재·수석 표식",
           "fieldKeys": [
-            "supply.scene"
+            "supply.scene",
+            "stone-count"
           ],
           "componentIds": [
-            "stones"
+            "stones",
+            "chief-architect"
           ],
           "scope": "player",
           "visibility": "public",
@@ -491,7 +520,9 @@
           "template": "personal-tray",
           "status": "new",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "akropolis.rules.20261026"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         },
@@ -510,7 +541,9 @@
           "template": "card-lanes",
           "status": "not-needed",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "akropolis.rules.20261026"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -1042,7 +1075,7 @@
     {
       "gameId": "arkham-lcg",
       "editionId": "base",
-      "sourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+      "sourceSHA": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
       "status": "source-pending",
       "areas": [
         {
@@ -1074,7 +1107,8 @@
           ],
           "componentIds": [
             "investigators",
-            "tokens"
+            "tokens",
+            "decks"
           ],
           "scope": "player",
           "visibility": "public",
@@ -1082,7 +1116,9 @@
           "template": "personal-tray",
           "status": "new",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "arkham-lcg.current-rulebook"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         },
@@ -1122,6 +1158,27 @@
           "status": "not-needed",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "discard",
+          "label": "각 조사자의 공개 버림더미",
+          "fieldKeys": [
+            "discard.scene"
+          ],
+          "componentIds": [
+            "decks"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "arkham-lcg.current-reference"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -2731,7 +2788,7 @@
     {
       "gameId": "concordia",
       "editionId": "base",
-      "sourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+      "sourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
       "status": "source-pending",
       "areas": [
         {
@@ -2810,6 +2867,27 @@
           "status": "new",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "played-personality",
+          "label": "사용한 성격 카드 더미",
+          "fieldKeys": [
+            "played-personality.scene"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "concordia.art-confirmation.concordia-web"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -3126,7 +3204,7 @@
     {
       "gameId": "dixit",
       "editionId": "base",
-      "sourceSHA": "3536bf279979ddf5cbfcb2e5ec1583143882ac2036f47d334a5bf2f254f7271e",
+      "sourceSHA": "cf1374228a08fc0b2de805715fcffe086875304a3bc1b3a3ca7e4903938e9203",
       "status": "new",
       "areas": [
         {
@@ -3221,6 +3299,27 @@
           "status": "not-needed",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "submissions",
+          "label": "공개 전 제출 카드 묶음",
+          "fieldKeys": [
+            "submissions.scene"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "scope": "shared-secret",
+          "visibility": "hidden",
+          "topology": "zone",
+          "template": "card-lanes",
+          "status": "not-needed",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "dixit.primary"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -4739,7 +4838,7 @@
     {
       "gameId": "grand-austria-hotel",
       "editionId": "base",
-      "sourceSHA": "1ed916bfc7da5d6d212d1ecacd8f0976eaef7289342e07a2aeaebb8ba3ca0604",
+      "sourceSHA": "1dff0e209e2b2d989ba4e5aaa35cae6f3105c9b56a4e0402601d6134000f390f",
       "status": "new",
       "areas": [
         {
@@ -4803,12 +4902,12 @@
         },
         {
           "areaId": "staff",
-          "label": "직원 손패",
+          "label": "미고용 직원 손패",
           "fieldKeys": [
             "staff.scene"
           ],
           "componentIds": [
-            "guests"
+            "staff-cards"
           ],
           "scope": "player",
           "visibility": "owner",
@@ -4817,6 +4916,27 @@
           "status": "new",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "hired-staff",
+          "label": "고용한 직원 카드",
+          "fieldKeys": [
+            "hired-staff.scene"
+          ],
+          "componentIds": [
+            "staff-cards"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "grand-austria-hotel.rules-2015"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -7350,7 +7470,7 @@
     {
       "gameId": "pandemic-legacy-1",
       "editionId": "base",
-      "sourceSHA": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+      "sourceSHA": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
       "status": "reuse",
       "areas": [
         {
@@ -7395,13 +7515,12 @@
         },
         {
           "areaId": "players",
-          "label": "인물과 손패",
+          "label": "이번 게임의 개인 손패",
           "fieldKeys": [
             "players.scene"
           ],
           "componentIds": [
-            "cards",
-            "record"
+            "cards"
           ],
           "scope": "player",
           "visibility": "owner",
@@ -7429,6 +7548,27 @@
           "status": "not-needed",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "character-card",
+          "label": "공개된 인물 카드·기록",
+          "fieldKeys": [
+            "character-card.scene"
+          ],
+          "componentIds": [
+            "record"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "pandemic-legacy-1.product-current"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
@@ -9431,7 +9571,7 @@
     {
       "gameId": "splendor",
       "editionId": "base",
-      "sourceSHA": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+      "sourceSHA": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450",
       "status": "new",
       "areas": [
         {
@@ -9528,6 +9668,27 @@
           "status": "not-needed",
           "geometryStatus": "manual-surface",
           "sourceRefs": [],
+          "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "chip-supply",
+          "label": "공용 보석·금 공급",
+          "fieldKeys": [
+            "chip-supply.scene"
+          ],
+          "componentIds": [
+            "chips"
+          ],
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "free-table",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "splendor.rules-current"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         }
