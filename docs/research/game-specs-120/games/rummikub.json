@@ -1,0 +1,559 @@
+{
+  "schema_version": "1.0",
+  "game_id": "rummikub",
+  "name_ko": "루미큐브",
+  "name_en": "Rummikub",
+  "edition": {
+    "id": "base",
+    "name": "Classic 기본 세트",
+    "compatibility_notes": [
+      "세트 크기·타일 디자인 확인;3D 받침 뒤 타일 자동 추정 금지",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "rummikub.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "numbers",
+      "name": "숫자 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "색·숫자·동일 사본 인스턴스.",
+      "source_refs": [
+        "rummikub.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "jokers",
+      "name": "조커",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "실제 조커와 현재 나타내는 색/숫자(미상 가능).",
+      "source_refs": [
+        "rummikub.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "racks",
+      "name": "개인 받침대",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "가려진 개인 타일 영역.",
+      "source_refs": [
+        "rummikub.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "table",
+        "name": "공용 묶음",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "free",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "free"
+        ],
+        "component_ids": [
+          "numbers",
+          "jokers"
+        ],
+        "anchor_contract": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지.",
+        "description": "공용 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "rack",
+        "name": "개인 타일",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "numbers",
+          "jokers",
+          "racks"
+        ],
+        "anchor_contract": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+        "description": "개인 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "pool",
+        "name": "미공개 공급",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "numbers",
+          "jokers"
+        ],
+        "anchor_contract": "뒤집힌 타일 더미를 정체 미상으로 저장.",
+        "description": "미공개 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "table.scene",
+      "label": "공용 묶음",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "numbers",
+        "jokers"
+      ],
+      "area_ids": [
+        "table"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "rack.scene",
+      "label": "개인 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "numbers",
+        "jokers",
+        "racks"
+      ],
+      "area_ids": [
+        "rack"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pool.scene",
+      "label": "미공개 공급",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "뒤집힌 타일 더미를 정체 미상으로 저장. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "numbers",
+        "jokers"
+      ],
+      "area_ids": [
+        "pool"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "opened",
+      "label": "최초 등록 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "boolean",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "사용자가 확인한 등록 여부; 현재 공용 타일만으로 역산하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "timer",
+      "label": "재배열 중단",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "진행 중 조합과 합의한 시간제한 메모. 재열기로 패널티 자동 적용 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "score",
+      "label": "라운드 점수",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "라운드 종료 후 확인된 값만.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "재배열을 시작했는지·임시로 빼놓은 타일·되돌릴 기준 사진을 메모.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "joker",
+      "name": "조커 재배열",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "조커를 회수한 뒤 같은 턴 새 묶음에 재사용하는 규칙이 있어 임시 조커 위치도 보존한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "rummikub.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "meld",
+      "name": "최초 등록",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "최초 등록 여부는 이후 조커 활용에 영향을 주는 별도 상태다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "rummikub.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "rack.preserve",
+        "label": "개인 타일 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "rack.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "pool.preserve",
+        "label": "미공개 공급 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "pool.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "뒤집힌 타일 더미를 정체 미상으로 저장.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "table.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "받침대 타일, 조커의 유일한 값, 최초 등록 이력"
+    ],
+    "correction_targets": [
+      {
+        "id": "table.edit",
+        "scope": "public",
+        "component_ids": [
+          "numbers",
+          "jokers"
+        ],
+        "field_ids": [
+          "table.scene"
+        ],
+        "area_ids": [
+          "table"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "묶음 ID와 묶음 안 순서; 재배열 중 임시 분리 타일도 유지.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "rack.edit",
+        "scope": "player",
+        "component_ids": [
+          "numbers",
+          "jokers",
+          "racks"
+        ],
+        "field_ids": [
+          "rack.scene"
+        ],
+        "area_ids": [
+          "rack"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "소유자 타일과 실제 줄 순서. 동일 숫자/색 타일을 합쳐 없애지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "pool.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "numbers",
+          "jokers"
+        ],
+        "field_ids": [
+          "pool.scene"
+        ],
+        "area_ids": [
+          "pool"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "뒤집힌 타일 더미를 정체 미상으로 저장.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "table",
+      "rack",
+      "pool"
+    ],
+    "editable_component_ids": [
+      "numbers",
+      "jokers",
+      "racks"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "rummikub.primary",
+      "title": "Rummikub — 공식 자료",
+      "url": "https://rummikub.com/wp-content/uploads/2019/12/2600-English.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 Classic 영어 규칙 검색 본문에서 그룹/런 재배열과 조커 회수·재사용, 최초 등록 전 조커 회수 제한 확인. Twist 특수 조커 규칙과 혼동하지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Twist/Xpress는 특수 조커/주사위 등 별도 프로필. Classic에 자동 추가하지 않는다.",
+    "Classic 인쇄별 시간제한/조커 세부 문구와 한국어판은 추가 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

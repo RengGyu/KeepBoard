@@ -1,0 +1,297 @@
+{
+  "game_id": "calico",
+  "name_ko": "칼리코",
+  "name_en": "Calico",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "표면 패턴 판독 난도 미검증",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "calico.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/calico.json",
+  "source_sha256": "15dfe0399a9cd61812709dd2a936aa143d74b7063ae3d70b7db7b906046f9e3b",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "patches",
+      "name": "패치 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "색과 무늬를 독립 속성으로 저장.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "색·무늬 패치 예시",
+          "layers": [
+            {
+              "asset_id": "calico.patches.cloth-hex"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "boards",
+      "name": "이불판·디자인 목표",
+      "kind": "board",
+      "source_confidence": "reported",
+      "source_description": "개인판 셀·테두리 인쇄·목표 타일 위치.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "개인 격자 · 예시",
+          "layers": [
+            {
+              "asset_id": "common.preset-quilt"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "scoring",
+      "name": "고양이·단추",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "선택 고양이 조건과 놓인/획득한 고양이·단추.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "고양이 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-cat",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "단추 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-button",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "quilt",
+      "name": "개인 이불",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "patches",
+        "boards",
+        "scoring"
+      ],
+      "anchor_contract": "육각 셀·인쇄 테두리·목표 자리와 패치, 획득 표식 층.",
+      "description": "개인 이불의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "패치 시장",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "patches"
+      ],
+      "anchor_contract": "공개 선택 타일과 보충 전 빈자리.",
+      "description": "패치 시장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 대기 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "patches"
+      ],
+      "anchor_contract": "손에 보관한 타일만. 공개 여부는 플레이 그룹 확인에 따라 조정.",
+      "description": "개인 대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "scoring",
+      "name": "공용 고양이·단추 조건",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "scoring",
+        "boards"
+      ],
+      "anchor_contract": "선택 고양이 면·대응 무늬 타일과 단추 조건.",
+      "description": "공용 고양이·단추 조건의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "bag",
+      "name": "패치 주머니",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "patches"
+      ],
+      "anchor_contract": "미공개 공급은 물리 주머니 단위로 보존.",
+      "description": "패치 주머니의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 이불 · 구조 예시",
+    "area_id": "quilt",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "calico.patches.cloth-hex",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.preset-quilt",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

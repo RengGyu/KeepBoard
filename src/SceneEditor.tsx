@@ -10,7 +10,8 @@ import {
 import { changeSceneComponentKind, moveSceneComponent, sameSceneLocation, type SceneMoveResult } from '../shared/sceneMoves';
 import { canEditOwner, editSceneSelection } from '../shared/sceneEditing';
 import { observedColorCSS, linkObservedColor } from '../shared/playerColors';
-import { ComponentArt } from './ComponentArt';
+import { GameComponentArt } from './GameComponentArt';
+import { PlayerPiece } from './ui';
 import { groupSceneComponents, deleteSceneGroupSelection, type SceneGroup } from './sceneGroups';
 import './scene-editor.css';
 
@@ -26,6 +27,7 @@ export interface SceneEditorProps {
   forceSave?: boolean;
   onDirtyChange?: (dirty: boolean) => void;
   onEvidence?: (evidenceId: string, region?: Assertion['region']) => void;
+  game?: string;
 }
 
 const U = 100; // topology unit → SVG user units
@@ -44,6 +46,13 @@ const ART_SIZE: Record<SceneKind, number> = {
   'resource-card': 54, 'development-card': 54, token: 50, deck: 56, container: 56, unknown: 50,
 };
 const NEUTRAL = '#cfcabb';
+// One-tap add: every kind stays visible; headings only sort the grid.
+const ADD_GROUPS: { label: string; kinds: SceneKind[] }[] = [
+  { label: '말', kinds: ['road', 'settlement', 'city', 'robber'] },
+  { label: '타일·숫자', kinds: ['terrain', 'number-token', 'harbor'] },
+  { label: '카드·기타', kinds: ['resource-card', 'development-card', 'deck', 'token'] },
+];
+const CATALOG_KINDS: SceneKind[] = ['resource-card', 'development-card', 'deck', 'token', 'container'];
 const serialize = (scene: ComponentScene) => JSON.stringify(scene);
 
 function variantLabel(kind: SceneKind, variant: string | null) { return variant ? SCENE_VARIANTS[kind]?.find(o => o.value === variant)?.label ?? variant : null; }
@@ -52,17 +61,17 @@ function componentTitle(c: SceneComponent) {
   return [variantLabel(c.kind, c.variant), pieceName(c.kind), typeof c.number === 'number' ? String(c.number) : null].filter(Boolean).join(' ');
 }
 // ComponentArt fills blanks with a default terrain/card; unknown contents must stay visibly unknown.
-function artProps(c: Pick<SceneComponent, 'kind' | 'variant' | 'ownerId' | 'number' | 'ratio' | 'observedColor'>, players: Player[]) {
+function artProps(c: Pick<SceneComponent, 'kind' | 'variant' | 'ownerId' | 'number' | 'ratio' | 'observedColor' | 'face'>, players: Player[]) {
   const owned = c.kind === 'road' || c.kind === 'settlement' || c.kind === 'city';
   const color = c.ownerId ? players.find(p => p.id === c.ownerId)?.color : observedColorCSS(c.observedColor) ?? (owned ? NEUTRAL : undefined);
   if (c.kind === 'terrain' && !c.variant) return { kind: 'unknown', label: '지형 모름', color };
   const variant = c.variant ?? (c.kind === 'resource-card' || c.kind === 'development-card' ? 'unknown' : undefined);
-  return { kind: c.kind, variant, color, number: c.kind === 'harbor' ? c.ratio ?? undefined : c.number ?? undefined };
+  return { kind: c.kind, variant, color, face: c.face ?? undefined, number: c.kind === 'harbor' ? c.ratio ?? undefined : c.number ?? undefined };
 }
 
 interface DragState { id: string; pointerId: number; startX: number; startY: number; active: boolean; point: Point | null; snap: SceneLocation | null; offBoard: boolean }
 interface History { stack: ComponentScene[]; key: string | null; at: number }
-export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvidence, onReadyToSave, forceSave = false, ownerId, catalogOnly = false, onDirtyChange }: SceneEditorProps) {
+export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvidence, onReadyToSave, forceSave = false, ownerId, catalogOnly = false, onDirtyChange, game }: SceneEditorProps) {
   const incoming = useMemo(() => normalizeSceneDetailed(value), [value]);
   const incomingKey = serialize(incoming.scene);
   const [base, setBase] = useState(incoming);
@@ -241,27 +250,27 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
     {pendingIncoming && <div className="se-banner"><span>새 사진 결과가 있어요. 지금 정정을 반영한 뒤 볼 수 있어요.</span></div>}
     {message && <p className={`se-message ${message.tone}`} role="status">{message.text}</p>}
     {multiple && <div className="se-batch" aria-label="여러 부품 수정"><strong>{picked.length}개 선택</strong><button className="button text small-button" onClick={() => { setSelection([]); setInlineNumberIds([]); }} disabled={!picked.length}>전체 해제</button>
-      {picked.length > 0 && picked.every(c => canEditOwner(c.kind)) && <OwnerColors players={players} value={picked.every(c => c.ownerId === picked[0].ownerId) ? picked[0].ownerId : undefined} onChange={ownerId => commit(editSceneSelection(scene, selectedIds, { ownerId }))}/>}
+      {picked.length > 0 && picked.every(c => canEditOwner(c.kind)) && <OwnerColors game={game} players={players} value={picked.every(c => c.ownerId === picked[0].ownerId) ? picked[0].ownerId : undefined} onChange={ownerId => commit(editSceneSelection(scene, selectedIds, { ownerId }))}/>}
       <button className="button secondary small-button se-danger" disabled={!picked.length} onClick={() => commit(deleteSceneGroupSelection(scene, selectedIds, inlineNumberIds))}><Trash2 size={14}/>선택 삭제</button>
     </div>}
     <div className={`se-layout ${adding ? 'adding' : ''} ${!adding && (!selected || multiple) ? 'overview' : ''}`}>
       <div className="se-stage">
         {moveMode && !adding && <div className="se-move-banner"><span>옮길 자리를 누르세요. 같은 부품이 있으면 서로 바꿔요.</span><button className="button text small-button" onClick={() => setMoveMode(false)}>취소</button></div>}
         {adding && draft && !catalogOnly && boardSlotTypes(draft.kind).length > 0 && <div className="se-move-banner">추가할 자리를 누르세요.</div>}
-        {view === 'board' && catalog && (!targetKind || catalogOnly) ? <div className="se-catalog">{groups.length ? groups.map(group => <GroupButton key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>) : <p>사진을 추가하거나 필요한 부품만 놓아 주세요.</p>}</div> : view === 'board' ? <BoardView svgRef={svgRef} scene={previewScene} players={players} selectedId={adding ? draft?.id ?? null : selectedId} selectedIds={adding && draft ? [draft.id] : selectedIds} selectedHex={null} targetKind={targetKind} drag={drag} dragComponent={dragComponent} onBeginDrag={beginDrag} onSelect={id => selectComponent(id)} onTarget={location => { if (Date.now() - lastDragEnd.current < 250) return; if (adding) finishAdd(location); else if (selected) placeComponent(selected.id, location); }} onHex={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }} onBackground={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }}/>
+        {view === 'board' && catalog && (!targetKind || catalogOnly) ? <div className="se-catalog">{groups.length ? groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>) : <p>사진을 추가하거나 필요한 부품만 놓아 주세요.</p>}</div> : view === 'board' ? <BoardView game={game} svgRef={svgRef} scene={previewScene} players={players} selectedId={adding ? draft?.id ?? null : selectedId} selectedIds={adding && draft ? [draft.id] : selectedIds} selectedHex={null} targetKind={targetKind} drag={drag} dragComponent={dragComponent} onBeginDrag={beginDrag} onSelect={id => selectComponent(id)} onTarget={location => { if (Date.now() - lastDragEnd.current < 250) return; if (adding) finishAdd(location); else if (selected) placeComponent(selected.id, location); }} onHex={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }} onBackground={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }}/>
           : photo && <PhotoView photo={photo} photos={photos} scene={scene} selected={selected} drawing={false} onPhoto={setPhotoId} onSelect={id => selectComponent(id)} onRegion={() => {}}/>}
         <p className="se-hint">{multiple ? '부품을 누르면 선택하거나 해제해요.' : view === 'photo' ? catalogOnly ? '사진의 표시를 눌러 같은 카드를 고쳐요.' : '표시된 부품을 누르면 그림과 같은 부품을 고칠 수 있어요.' : catalogOnly ? '카드를 눌러 종류와 수량을 고쳐요.' : '부품을 눌러 고치거나, 끌어서 자리를 바꿔요.'}</p>
       </div>
       <aside ref={panelRef} className="se-inspector" aria-label={adding ? '부품 추가' : '선택한 부품'}>
         {adding ? <div className="se-form"><header className="se-form-head"><h4>{draft ? `${pieceName(draft.kind)} 추가` : '무엇을 추가할까요?'}</h4><button className="icon-button" aria-label="추가 취소" onClick={closeAdd}><X size={18}/></button></header>
-          {!draft ? <div className="se-add-grid">{SCENE_KINDS.filter(k => catalogOnly ? ['resource-card', 'development-card', 'deck', 'token', 'container'].includes(k) : k !== 'unknown' && k !== 'container').map(kind => <button key={kind} aria-label={pieceName(kind)} onClick={() => setDraft(createComponent(scene, kind, { quantity: 1, variant: SCENE_VARIANTS[kind]?.[0]?.value ?? null, ...(kind === 'number-token' ? { number: 6 } : {}), ...(kind === 'harbor' ? { ratio: 3 } : {}), ownerId: canEditOwner(kind) ? ownerId ?? null : null, ...lastDrafts.current[kind] }))}><ComponentArt {...artProps({ kind, variant: null, ownerId: null }, players)} size={36}/><span>{pieceName(kind)}</span></button>)}</div> : <>
-            <PieceFields adding catalogOnly={catalogOnly} component={draft} players={players} onPatch={patch => setDraft({ ...draft, ...patch })}/>
+          {!draft ? <div className="se-add-groups">{(catalogOnly ? [{ label: '', kinds: CATALOG_KINDS }] : ADD_GROUPS).map(group => <div className="se-add-group" key={group.label || 'catalog'}>{group.label && <h5>{group.label}</h5>}<div className="se-add-grid">{group.kinds.map(kind => <button key={kind} aria-label={pieceName(kind)} onClick={() => setDraft(createComponent(scene, kind, { quantity: 1, variant: SCENE_VARIANTS[kind]?.[0]?.value ?? null, ...(kind === 'number-token' ? { number: 6 } : {}), ...(kind === 'harbor' ? { ratio: 3 } : {}), ownerId: canEditOwner(kind) ? ownerId ?? null : null, ...lastDrafts.current[kind] }))}><GameComponentArt game={game} {...artProps({ kind, variant: null, ownerId: null }, players)} size={40}/><span>{pieceName(kind)}</span></button>)}</div></div>)}</div> : <>
+            <PieceFields game={game} adding catalogOnly={catalogOnly} component={draft} players={players} onPatch={patch => setDraft({ ...draft, ...patch })}/>
             <div className="button-row"><button className="button text small-button" onClick={() => setDraft(null)}>다른 종류</button>{(catalogOnly || !boardSlotTypes(draft.kind).length) && <button className="button primary small-button" onClick={() => finishAdd()}>추가</button>}</div>
             {!catalogOnly && boardSlotTypes(draft.kind).length > 0 && <><button className="button text small-button" onClick={() => finishAdd()}>보드 밖에 추가</button></>}
           </>}
-        </div> : selected && !multiple && <div className="se-form"><header className="se-form-head"><ComponentArt {...artProps(inspected!, players)} size={48}/><div><h4>{componentTitle(inspected!)}</h4><span className="small muted">{friendlyLocation(selected.location)}</span></div><button className="icon-button" aria-label="선택 해제" onClick={() => { setSelectedId(null); setMoveMode(false); }}><X size={18}/></button></header>
+        </div> : selected && !multiple && <div className="se-form"><header className="se-form-head"><GameComponentArt game={game} {...artProps(inspected!, players)} size={48}/><div><h4>{componentTitle(inspected!)}</h4><span className="small muted">{friendlyLocation(selected.location)}</span></div><button className="icon-button" aria-label="선택 해제" onClick={() => { setSelectedId(null); setMoveMode(false); }}><X size={18}/></button></header>
           {activeGroup && activeGroup.ids.length > 1 && <div className="se-group-members" aria-label="묶음의 개별 부품">{activeGroup.ids.map((id, index) => { const member = scene.components.find(c => c.id === id)!; return <button key={id} className={id === selectedId ? 'selected' : ''} aria-pressed={id === selectedId} onClick={() => { setSelectedId(id); setMoveMode(false); }}>{index + 1}<span>{friendlyLocation(member.location)}</span></button>; })}</div>}
-          <PieceFields catalogOnly={catalogOnly} component={inspected!} players={players} onPatch={patch => {
+          <PieceFields game={game} catalogOnly={catalogOnly} component={inspected!} players={players} onPatch={patch => {
             patchComponent(selected.id, patch);
             if (inlineNumberSelected) {
               const next = { ...scene, components: scene.components.map(c => c.id === selected.id ? { ...c, ...patch } : c) };
@@ -274,23 +283,23 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
         </div>}
       </aside>
     </div>
-    {!(catalogOnly && view === 'board') && <details className="se-details" open={multiple || undefined}><summary>부품 목록 더 보기 +</summary><div className="se-list" data-scene-drop="off-board"><div className="se-simple-list">{groups.map(group => <GroupButton key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>)}</div></div></details>}
+    {!(catalogOnly && view === 'board') && <details className="se-details" open={multiple || undefined}><summary>부품 목록 더 보기 +</summary><div className="se-list" data-scene-drop="off-board"><div className="se-simple-list">{groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>)}</div></div></details>}
   </div>;
 }
 
 function pieceName(kind: SceneKind) { return kind === 'settlement' ? '마을' : SCENE_KIND_LABELS[kind]; }
-function GroupButton({ group, players, selected, onClick }: { group: SceneGroup; players: Player[]; selected: boolean; onClick: () => void }) {
+function GroupButton({ group, players, selected, onClick, game }: { game?: string; group: SceneGroup; players: Player[]; selected: boolean; onClick: () => void }) {
   const owner = players.find(p => p.id === group.component.ownerId);
   return <button className={selected ? 'selected' : ''} aria-pressed={selected} onClick={onClick}>
-    <ComponentArt {...artProps(group.component, players)} size={40}/>
+    <GameComponentArt game={game} {...artProps(group.component, players)} size={40}/>
     <span><strong>{componentTitle(group.component)}</strong>{owner && <small><i className="se-color-dot" style={{ backgroundColor: owner.color }}/>{owner.name}</small>}</span>
     <b>×{group.quantity ?? '?'}</b>
   </button>;
 }
-export function OwnerColors({ players, value, onChange, label = '소유색' }: { label?: string; players: Player[]; value: string | null | undefined; onChange: (ownerId: string | null) => void }) {
+export function OwnerColors({ players, value, onChange, label = '소유색', game }: { label?: string; game?: string; players: Player[]; value: string | null | undefined; onChange: (ownerId: string | null) => void }) {
   return <fieldset className="se-owner-colors"><legend>{label}</legend><div>
     <button type="button" aria-pressed={value === null} className={value === null ? 'selected' : ''} onClick={() => onChange(null)}><i className="se-color-dot"/>모름</button>
-    {players.map(player => <button type="button" key={player.id} aria-pressed={value === player.id} className={value === player.id ? 'selected' : ''} onClick={() => onChange(player.id)}><i className="se-color-dot" style={{ backgroundColor: player.color }}/>{player.name}</button>)}
+    {players.map(player => <button type="button" key={player.id} aria-pressed={value === player.id} className={value === player.id ? 'selected' : ''} onClick={() => onChange(player.id)}><PlayerPiece color={player.color} game={game} size={22}/>{player.name}</button>)}
   </div></fieldset>;
 }
 function friendlyLocation(location: SceneLocation) {
@@ -300,13 +309,13 @@ function friendlyLocation(location: SceneLocation) {
   const index = slots.findIndex(s => s.id === location.id);
   return `${location.type === 'hex' ? '타일' : location.type === 'edge' ? '길 자리' : '건물 자리'} ${index + 1}`;
 }
-function PieceFields({ component: c, players, onPatch, adding = false, catalogOnly = false }: { catalogOnly?: boolean; adding?: boolean; component: SceneComponent; players: Player[]; onPatch: (patch: Partial<SceneComponent>) => void }) {
+function PieceFields({ component: c, players, onPatch, adding = false, catalogOnly = false, game }: { catalogOnly?: boolean; adding?: boolean; game?: string; component: SceneComponent; players: Player[]; onPatch: (patch: Partial<SceneComponent>) => void }) {
   const variants = SCENE_VARIANTS[c.kind];
   const cards = ['resource-card','development-card','deck'].includes(c.kind);
   return <div className="se-piece-fields">
     {variants && <label>종류<select value={c.variant ?? ''} onChange={event => { const variant = event.target.value || null; onPatch({ variant, ...(c.kind === 'harbor' ? { ratio: variant === 'generic' ? 3 : variant ? 2 : null } : {}) }); }}><option value="">모름</option>{variants.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}{c.variant && !variants.some(o => o.value === c.variant) && <option value={c.variant}>{c.variant}</option>}</select></label>}
     {canEditOwner(c.kind) && (c.observedColor || !c.ownerId && ['road', 'settlement', 'city'].includes(c.kind)) && <label>사진색 {c.observedColor ? `· ${c.observedColor}` : '· 미확인'}<input type="color" aria-label="사진에서 본 부품 색" value={observedColorCSS(c.observedColor) ?? '#cfcabb'} onInput={event => onPatch({ observedColor: event.currentTarget.value })} onChange={event => onPatch({ observedColor: event.target.value })}/>{c.observedColor && <small className="muted">같은 사진색은 소유색을 함께 연결해요.</small>}</label>}
-    {canEditOwner(c.kind) && <OwnerColors players={players} value={c.ownerId} onChange={ownerId => onPatch({ ownerId })}/>}
+    {canEditOwner(c.kind) && <OwnerColors game={game} players={players} value={c.ownerId} onChange={ownerId => onPatch({ ownerId })}/>}
     {(c.kind === 'number-token' || (c.kind === 'terrain' && c.number !== undefined)) && <label>숫자<select value={c.number ?? ''} onChange={event => onPatch({ number: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option>{CATAN_NUMBERS.map(n => <option key={n} value={n}>{n}</option>)}</select></label>}
     {c.kind === 'harbor' && <label>교환 비율<select value={c.ratio ?? ''} onChange={event => onPatch({ ratio: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option><option value={3}>3:1</option><option value={2}>2:1</option></select></label>}
     {(!adding || !boardSlotTypes(c.kind).length) && (catalogOnly || !slotPoint(c.location) || c.quantity !== 1) && <label>수량<input type="number" min={0} step={1} inputMode="numeric" placeholder="모름" value={c.quantity ?? ''} onChange={event => { const value = event.target.value === '' ? null : Number(event.target.value); if (value === null || Number.isInteger(value) && value >= 0) onPatch({ quantity: value }); }}/></label>}
@@ -314,8 +323,8 @@ function PieceFields({ component: c, players, onPatch, adding = false, catalogOn
   </div>;
 }
 // ---------- Board ----------
-function BoardView({ svgRef, scene, players, selectedId, selectedIds, selectedHex, targetKind, drag, dragComponent, onBeginDrag, onSelect, onTarget, onHex, onBackground }: {
-  svgRef: React.RefObject<SVGSVGElement | null>; scene: ComponentScene; players: Player[]; selectedId: string | null; selectedIds: string[]; selectedHex: string | null; targetKind: SceneKind | null;
+function BoardView({ game, svgRef, scene, players, selectedId, selectedIds, selectedHex, targetKind, drag, dragComponent, onBeginDrag, onSelect, onTarget, onHex, onBackground }: {
+  game?: string; svgRef: React.RefObject<SVGSVGElement | null>; scene: ComponentScene; players: Player[]; selectedId: string | null; selectedIds: string[]; selectedHex: string | null; targetKind: SceneKind | null;
   drag: DragState | null; dragComponent: SceneComponent | null;
   onBeginDrag: (event: ReactPointerEvent, id: string) => void; onSelect: (id: string) => void; onTarget: (location: SceneLocation) => void; onHex: (hexId: string) => void; onBackground: () => void;
 }) {
@@ -364,7 +373,7 @@ function BoardView({ svgRef, scene, players, selectedId, selectedIds, selectedHe
       {selectedIds.includes(c.id) && (c.kind === 'terrain'
         ? <polygon className="se-selection" points={hexPoints(0, 0, U * 0.98)}/>
         : <circle className="se-selection" r={size * 0.42}/>)}
-      <g transform={`translate(${-size / 2} ${-size / 2})`}><ComponentArt {...art} number={tokenOnHex ? undefined : art.number} size={size}/></g>
+      <g transform={`translate(${-size / 2} ${-size / 2})`}><GameComponentArt game={game} {...art} number={tokenOnHex ? undefined : art.number} size={size}/></g>
       {c.kind === 'terrain' ? <polygon className="se-hit" points={hexPoints(0, 0, U * 0.96)}/>
         : c.kind === 'road' ? <rect className="se-hit" x={-size * 0.4} y={-16} width={size * 0.8} height={32} rx={10}/>
         : <circle className="se-hit" r={Math.max(size * 0.4, 22)}/>}
@@ -395,7 +404,7 @@ function BoardView({ svgRef, scene, players, selectedId, selectedIds, selectedHe
       return <circle key={`t-${vertex.id}`} className={`se-target se-target-vertex ${info.state} ${drag?.snap?.id === vertex.id ? 'hot' : ''}`} cx={vertex.x * U} cy={vertex.y * U} r={23} role="button" tabIndex={0} aria-label={info.description} onClick={() => onTarget(location)} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onTarget(location); } }}><title>{info.description}</title></circle>;
     })}
     {drag?.active && dragComponent && drag.point && <g className="se-ghost" transform={`translate(${(drag.snap ? slotPoint(drag.snap)!.x : drag.point.x) * U} ${(drag.snap ? slotPoint(drag.snap)!.y : drag.point.y) * U}) rotate(${drag.snap?.type === 'edge' ? CATAN_TOPOLOGY.byId.edge.get(drag.snap.id!)!.angle : 0})`}>
-      <g transform={`translate(${-ART_SIZE[dragComponent.kind] / 2} ${-ART_SIZE[dragComponent.kind] / 2})`}><ComponentArt {...artProps(dragComponent, players)} size={ART_SIZE[dragComponent.kind]}/></g>
+      <g transform={`translate(${-ART_SIZE[dragComponent.kind] / 2} ${-ART_SIZE[dragComponent.kind] / 2})`}><GameComponentArt game={game} {...artProps(dragComponent, players)} size={ART_SIZE[dragComponent.kind]}/></g>
     </g>}
   </svg>;
 }

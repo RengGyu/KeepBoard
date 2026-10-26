@@ -1,0 +1,495 @@
+{
+  "game_id": "mansions-madness-2",
+  "name_ko": "광기의 저택 2판",
+  "name_en": "Mansions of Madness: Second Edition",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "앱 내부 시나리오 세이브는 별도로 필요;KeepBoard가 대체하지 않음",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "mansions-madness-2.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/mansions-madness-2.json",
+  "source_sha256": "276a2f97b738bc7780fd82be552af931af955d7e5ea489d0c0a6599212067bf2",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "map",
+      "name": "방 타일·문·탐색 표식",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "방 지도 타일과 문·벽·수색/상호작용·탐험/시야 토큰이 별개다. 앱이 공개한 타일과 표식 위치를 기록한다. 기존1판 전환 키트는2판 기본 구성 근거와 분리한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "방 타일",
+          "layers": [
+            {
+              "asset_id": "common.preset-room-doors"
+            }
+          ]
+        },
+        {
+          "name": "문",
+          "layers": [
+            {
+              "asset_id": "common.preset-door"
+            }
+          ]
+        },
+        {
+          "name": "벽",
+          "layers": [
+            {
+              "asset_id": "common.wall-link"
+            }
+          ]
+        },
+        {
+          "name": "탐색/상호작용",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-eye",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "탐험/시야",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-compass",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "source_location": "pp.3–5 Components/Setup; p.14 Explore"
+    },
+    {
+      "component_id": "figures",
+      "name": "조사자·괴물",
+      "kind": "piece",
+      "source_confidence": "verified",
+      "source_description": "조사자 카드와 맞는 피겨, 괴물 토큰과 맞는 피겨가 있다. 괴물 토큰은 받침에 끼운다. 인물/괴물 종류·개체ID·지도 위치·앱 연동 상태를 구별한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "조사자 피겨 대표",
+          "layers": [
+            {
+              "asset_id": "common.piece-portrait"
+            }
+          ]
+        },
+        {
+          "name": "괴물 피겨 대표",
+          "layers": [
+            {
+              "asset_id": "common.symbol-skull"
+            }
+          ]
+        },
+        {
+          "name": "괴물 받침 토큰",
+          "layers": [
+            {
+              "asset_id": "mansions-madness-2.figures.monster-base"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "source_location": "pp.3–4 Components/Setup steps3,6"
+    },
+    {
+      "component_id": "cards",
+      "name": "물품·주문·상태·피해·공포",
+      "kind": "card",
+      "source_confidence": "verified",
+      "source_description": "일반/고유 아이템·주문·상태·피해·공포는 별도 카드군이다. 피해/공포의 공개/비공개 면과 주문의 뒤집힘, 개인 보유/부착을 구분한다. 뒷면 내용은 펼쳐 수집하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "일반 아이템",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-bag",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "고유 아이템",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gem",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "주문",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-staff",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "상태",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-shield",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "피해",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-heart",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "공포",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-moon",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ],
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "source_location": "pp.3–4 Components/Create Card Decks; pp.12–13 Damage/Horror/Conditions"
+    },
+    {
+      "component_id": "tokens",
+      "name": "단서·화재·어둠·상태",
+      "kind": "token",
+      "source_confidence": "verified",
+      "source_description": "단서, 양면 화재/어둠, 바리케이드·비밀통로·ID 토큰이 구별된다. 상태는 주로 카드이므로 상태를 임의 토큰 재고로 만들지 않는다. 토큰 면과 방/개체 연결을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "단서",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-eye",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "화재 면",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-flame",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "어둠 면",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-moon",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "바리케이드",
+          "layers": [
+            {
+              "asset_id": "common.fence"
+            }
+          ]
+        },
+        {
+          "name": "비밀 통로",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-compass",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "ID",
+          "layers": [
+            {
+              "asset_id": "common.id-token"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "mansions-madness-2.art-confirmation.mansions-rules"
+      ],
+      "source_location": "p.3 Components; pp.13–15 Tokens/Terrain"
+    }
+  ],
+  "areas": [
+    {
+      "id": "map",
+      "name": "공개 저택",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "map",
+        "figures",
+        "tokens"
+      ],
+      "anchor_contract": "타일ID/면/회전·공간·벽·문과 인물/괴물/탐색 표식.",
+      "description": "공개 저택의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "조사자 공개 상태",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "인물·물품·공개된 피해/공포·상태와 단서.",
+      "description": "조사자 공개 상태의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "private",
+      "name": "개인 비공개 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "비공개 광기 등 실제로 소유자만 읽는 면은 별도. 카드 뒷면 자동 공개 금지.",
+      "description": "개인 비공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "실물 카드 더미",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "종류별 덱/버림/미해결 뒷면 카드 묶음.",
+      "description": "실물 카드 더미의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "공개 저택 · 구조 예시",
+    "area_id": "map",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "common.preset-room-doors",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-portrait",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

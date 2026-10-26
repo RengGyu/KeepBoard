@@ -1,0 +1,379 @@
+{
+  "game_id": "eclipse-second-dawn",
+  "name_ko": "이클립스: 두 번째 여명",
+  "name_en": "Eclipse: Second Dawn for the Galaxy",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "2011판과 2020판 배치/컴포넌트 호환 미검증",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "eclipse-second-dawn.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/eclipse-second-dawn.json",
+  "source_sha256": "9b20a28c6c372573db6e1c64f4f1fbebbcb1ed3a6827a9ba47e9b4cd5817312e",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "sectors",
+      "name": "섹터 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "섹터 ID·회전·웜홀·행성.",
+      "status": "dedicated",
+      "variants": [
+        {
+          "name": "연결 변 우주 섹터",
+          "layers": [
+            {
+              "asset_id": "eclipse-second-dawn.sectors.wormhole-sector"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "ships",
+      "name": "함선·부품",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "함선 종류/소유자와 개인 청사진의 부품.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "함선 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-ship"
+            }
+          ]
+        },
+        {
+          "name": "함선 부품 판",
+          "layers": [
+            {
+              "asset_id": "eclipse-second-dawn.ships.ship-blueprint"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "discs",
+      "name": "영향력·인구·식민선",
+      "kind": "token",
+      "source_confidence": "verified",
+      "source_description": "영향력은 원반, 인구는 큐브, 식민선은 양면 타일이다. 원반의 구역/행동/트랙 위치, 인구의 자원 트랙/행성 위치, 식민선 사용면을 구별한다. 영향력과 인구의 색은 세력 소유색이다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "영향력 원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        },
+        {
+          "name": "인구 큐브",
+          "layers": [
+            {
+              "asset_id": "common.cube"
+            }
+          ]
+        },
+        {
+          "name": "식민선 준비면",
+          "layers": [
+            {
+              "asset_id": "eclipse-second-dawn.discs.colony-ready"
+            }
+          ]
+        },
+        {
+          "name": "식민선 사용면",
+          "layers": [
+            {
+              "asset_id": "eclipse-second-dawn.discs.colony-spent"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "mixed; owner disc/cube separate from colony face",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "eclipse-second-dawn.art-confirmation.eclipse-rules"
+      ],
+      "source_location": "pp.3–4 Components/Player Area; p.6 Game Concepts; p.8 Colonization"
+    },
+    {
+      "component_id": "tiles",
+      "name": "기술·발견·평판",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "공개 연구/발견과 비공개 평판 묶음.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "우주 구역",
+          "layers": [
+            {
+              "asset_id": "common.terrain-space"
+            }
+          ]
+        },
+        {
+          "name": "기술 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-gear",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "별 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "galaxy",
+      "name": "은하 섹터망",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "sectors",
+        "ships",
+        "discs"
+      ],
+      "anchor_contract": "섹터 좌표·회전별 웜홀 변과 행성별 인구. 함선은 섹터 내부 묶음.",
+      "description": "은하 섹터망의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "blueprints",
+      "name": "개인 함선 청사진",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "ships"
+      ],
+      "anchor_contract": "함선 종류별 부품 슬롯과 빈 칸, 설치 위치를 고정 보존.",
+      "description": "개인 함선 청사진의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "종족판·경제",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "discs",
+        "tiles"
+      ],
+      "anchor_contract": "영향력 공급/행동/지도 분포, 인구 큐브의 트랙과 자원 수치.",
+      "description": "종족판·경제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "기술·공개 발견",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "기술 시장과 획득 후 설치 위치.",
+      "description": "기술·공개 발견의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "private",
+      "name": "비공개 평판·대기 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "확인 가능한 자기 평판만. 비공개 공용 타일은 보이지 않는 물리 묶음.",
+      "description": "비공개 평판·대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "은하 섹터망 · 구조 예시",
+    "area_id": "galaxy",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "eclipse-second-dawn.sectors.wormhole-sector",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.piece-ship",
+        "transform": "translate(63 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

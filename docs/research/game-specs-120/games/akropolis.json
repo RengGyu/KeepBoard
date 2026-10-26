@@ -1,0 +1,581 @@
+{
+  "schema_version": "1.0",
+  "game_id": "akropolis",
+  "name_ko": "아크로폴리스",
+  "name_en": "Akropolis",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "사진 하나의 층 높이 추정 한계;확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "akropolis.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "tiles",
+      "name": "도시·시작 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "다중 육각의 지구/광장·채석장과 회전·높이.",
+      "source_refs": [
+        "akropolis.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "stones",
+      "name": "석재·수석 건축가",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "개인 석재와 시작 플레이어 표식.",
+      "source_refs": [
+        "akropolis.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "city",
+        "name": "개인 도시",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+        "description": "개인 도시의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "market",
+        "name": "건설 현장",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+        "description": "건설 현장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "supply",
+        "name": "개인 석재",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "stones"
+        ],
+        "anchor_contract": "현재 석재 잔액과 수석 건축가.",
+        "description": "개인 석재의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "draw",
+        "name": "대기 타일",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "공개하지 않은 타일 더미 순서 보존.",
+        "description": "대기 타일의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "city.scene",
+      "label": "개인 도시",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "city"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "market.scene",
+      "label": "건설 현장",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "market"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "supply.scene",
+      "label": "개인 석재",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "현재 석재 잔액과 수석 건축가. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "stones"
+      ],
+      "area_ids": [
+        "supply"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "draw.scene",
+      "label": "대기 타일",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공개하지 않은 타일 더미 순서 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "draw"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "height",
+      "label": "층·덮임",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "타일별 높이와 아래 받치는 인스턴스. 높이를 면적에서 추정하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "stone-count",
+      "label": "석재",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실제 잔액만 기록하며 지운 채석장에서 자동 보상 지급 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "variant",
+      "label": "득점 변형",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "사용한 기본/변형·솔로 설정을 선택 메모.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "타일 선택·석재 지불/배치·덮인 채석장 처리/시장 보충 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "vertical",
+      "name": "높이 건설",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "수평 배치뿐 아니라 위로 쌓는 건설이 있으므로 평면 그림만으로 상태를 대표하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "akropolis.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "districts",
+      "name": "지구 종류",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "지구와 광장·채석장을 구분하고 종류별 점수 조건은 미확인으로 남긴다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "akropolis.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "draw.preserve",
+        "label": "대기 타일 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "draw.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "공개하지 않은 타일 더미 순서 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "city.scene",
+      "market.scene",
+      "supply.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "가려진 하층 타일과 실제 높이, 사진 면적으로 모든 득점 확정"
+    ],
+    "correction_targets": [
+      {
+        "id": "city.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "city.scene"
+        ],
+        "area_ids": [
+          "city"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "타일 인스턴스의 각 육각 좌표·회전·z층·덮는 타일 관계. 가려진 하층은 모름 유지.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "market.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "market.scene"
+        ],
+        "area_ids": [
+          "market"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "선택 줄의 순서와 비용 위치, 뒤 대기 더미와 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "supply.edit",
+        "scope": "player",
+        "component_ids": [
+          "stones"
+        ],
+        "field_ids": [
+          "supply.scene"
+        ],
+        "area_ids": [
+          "supply"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "현재 석재 잔액과 수석 건축가.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "draw.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "draw.scene"
+        ],
+        "area_ids": [
+          "draw"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "공개하지 않은 타일 더미 순서 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "city",
+      "market",
+      "supply",
+      "draw"
+    ],
+    "editable_component_ids": [
+      "tiles",
+      "stones"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "akropolis.primary",
+      "title": "Akropolis — 공식 자료",
+      "url": "https://en.gigamic.com/games-for-family/1115-product.html",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 상품에서 주거/사원/시장/정원/병영·광장, 채석장·석재·높이 건설 및 도시 타일 구성 확인. 층별 놓기/득점 수식은 원문 미대조."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "기본 Akropolis. Athena/Pantheon의 조각·목표/미니 타일은 새 구성물과 조건 패치.",
+    "쌓기 지지 조건·지구별 연결/외곽/높이 계산과 변형 규칙 전체 검증 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

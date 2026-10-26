@@ -1,0 +1,692 @@
+{
+  "schema_version": "1.0",
+  "game_id": "star-wars-rebellion",
+  "name_ko": "스타워즈: 리벨리온",
+  "name_en": "Star Wars: Rebellion",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "기본 2인 우선·4인 팀전 별도;확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "star-wars-rebellion.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "units",
+      "name": "우주·지상 유닛",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "진영/유닛 종류, 시스템 내 우주/지상 구역.",
+      "source_refs": [
+        "star-wars-rebellion.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "leaders",
+      "name": "지도자·포로 링",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "미션·시스템·풀 및 포획/부착 상태.",
+      "source_refs": [
+        "star-wars-rebellion.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "미션·탐사·목표",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "진영 손패와 공개/미공개 임무.",
+      "source_refs": [
+        "star-wars-rebellion.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "markers",
+      "name": "충성·사보타주·트랙",
+      "kind": "marker",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "충성",
+        "복종",
+        "사보타주",
+        "시간",
+        "평판"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "galaxy",
+        "name": "시스템 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "units",
+          "leaders",
+          "markers"
+        ],
+        "anchor_contract": "시스템 ID와 연결, 지상/우주/파괴된 행성 구역을 구별.",
+        "description": "시스템 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "leaders-area",
+        "name": "지도자 풀·공개 미션",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "leaders",
+          "cards"
+        ],
+        "anchor_contract": "지도자 인스턴스와 미션 카드의 부착, 포로 링 상태.",
+        "description": "지도자 풀·공개 미션의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "rebel-secret",
+        "name": "반란군 비공개",
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "기지 위치와 미공개 목표/미션. 반란군 진영만 접근.",
+        "description": "반란군 비공개의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation",
+        "visible_to_roles": [
+          "rebel"
+        ]
+      },
+      {
+        "id": "imperial-secret",
+        "name": "제국 비공개",
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "탐사 카드와 미공개 미션. 제국 진영만 접근.",
+        "description": "제국 비공개의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation",
+        "visible_to_roles": [
+          "imperial"
+        ]
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "galaxy.scene",
+      "label": "시스템 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "시스템 ID와 연결, 지상/우주/파괴된 행성 구역을 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "units",
+        "leaders",
+        "markers"
+      ],
+      "area_ids": [
+        "galaxy"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "leaders-area.scene",
+      "label": "지도자 풀·공개 미션",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "지도자 인스턴스와 미션 카드의 부착, 포로 링 상태. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "leaders",
+        "cards"
+      ],
+      "area_ids": [
+        "leaders-area"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "rebel-secret.scene",
+      "label": "반란군 비공개",
+      "scope": "shared-secret",
+      "visibility": "role-limited",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "기지 위치와 미공개 목표/미션. 반란군 진영만 접근. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "rebel-secret"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation",
+      "visible_to_roles": [
+        "rebel"
+      ]
+    },
+    {
+      "id": "imperial-secret.scene",
+      "label": "제국 비공개",
+      "scope": "shared-secret",
+      "visibility": "role-limited",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "탐사 카드와 미공개 미션. 제국 진영만 접근. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "imperial-secret"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation",
+      "visible_to_roles": [
+        "imperial"
+      ]
+    },
+    {
+      "id": "phase",
+      "label": "라운드·단계",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "배정/명령/회복과 현재 미션·전투 처리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tracks",
+      "label": "시간·평판",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "두 트랙을 별도 값으로 유지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "production",
+      "label": "생산 대기열",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "슬롯별 유닛과 이미 배치한 유닛 구별.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "미션 대항/주사위/전투 라운드/기지 이동/생산 회복 중 미해결 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "assignment",
+      "name": "미션 배정",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "배정 단계의 미션은 뒷면으로 유지하며 지도자를 그 카드에 붙인다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "star-wars-rebellion.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "captured",
+      "name": "포로 지도자",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "포획된 지도자를 일반 풀로 자동 회수하거나 반란군이 임의 이동하게 취급하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "star-wars-rebellion.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "rebel-secret.preserve",
+        "label": "반란군 비공개 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "field_ids": [
+          "rebel-secret.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "기지 위치와 미공개 목표/미션. 반란군 진영만 접근.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation",
+        "visible_to_roles": [
+          "rebel"
+        ]
+      },
+      {
+        "id": "imperial-secret.preserve",
+        "label": "제국 비공개 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "role-limited",
+        "field_ids": [
+          "imperial-secret.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "탐사 카드와 미공개 미션. 제국 진영만 접근.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation",
+        "visible_to_roles": [
+          "imperial"
+        ]
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "galaxy.scene",
+      "leaders-area.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "반란군 기지·제국 탐사 카드·미션의 뒷면 정체"
+    ],
+    "correction_targets": [
+      {
+        "id": "galaxy.edit",
+        "scope": "public",
+        "component_ids": [
+          "units",
+          "leaders",
+          "markers"
+        ],
+        "field_ids": [
+          "galaxy.scene"
+        ],
+        "area_ids": [
+          "galaxy"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "시스템 ID와 연결, 지상/우주/파괴된 행성 구역을 구별.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "leaders-area.edit",
+        "scope": "player",
+        "component_ids": [
+          "leaders",
+          "cards"
+        ],
+        "field_ids": [
+          "leaders-area.scene"
+        ],
+        "area_ids": [
+          "leaders-area"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "지도자 인스턴스와 미션 카드의 부착, 포로 링 상태.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "rebel-secret.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "rebel-secret.scene"
+        ],
+        "area_ids": [
+          "rebel-secret"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "기지 위치와 미공개 목표/미션. 반란군 진영만 접근.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "imperial-secret.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "imperial-secret.scene"
+        ],
+        "area_ids": [
+          "imperial-secret"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "탐사 카드와 미공개 미션. 제국 진영만 접근.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "galaxy",
+      "leaders-area",
+      "rebel-secret",
+      "imperial-secret"
+    ],
+    "editable_component_ids": [
+      "units",
+      "leaders",
+      "cards",
+      "markers"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "star-wars-rebellion.primary",
+      "title": "Star Wars: Rebellion — 공식 자료",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 규칙 검색 본문에서 미션 뒷면에 지도자 배정, 미배정 지도자 풀, 포로 지도자 제약, 팀 Admiral/General과 미션 손패 역할 확인. 기지/탐사 카드 정보는 보수적 역할 제한 설계."
+    },
+    {
+      "id": "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary",
+      "title": "Star Wars Rebellion Base — Rules Reference",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/d9/76/d97645d4-3973-41b6-ad78-6c9b927d3bc1/sw03_rules_reference_web.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "Loyalty/Subjugation pp.8,14; Reputation p.12; Sabotage Markers p.13; Refresh Phase pp.10–11 — 충성/복종과 사보타주 표식은 다른 시스템 상태다. 시간과 반란군 평판은 같은 트랙의 다른 표식이며 생산 대기는 유닛의 build queue 위치다. 생산 대기를 임의 토큰으로 만들지 않는다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Rise of the Empire의 전투 카드·새 유닛은 별도 패치.",
+    "3–4인 팀의 General/Admiral 세부 권한은 추가 역할 패치 필요. 현재 진영 단위는 연구용 최소 범위.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ],
+  "roles": [
+    {
+      "id": "rebel",
+      "name": "반란군",
+      "description": "반란군 진영 사용자"
+    },
+    {
+      "id": "imperial",
+      "name": "제국",
+      "description": "제국 진영 사용자"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Check, ChevronDown, Minus, Pencil, Plus, Sparkles } from 'lucide-react';
+import { Check, ChevronDown, Info, Minus, Pencil, Plus } from 'lucide-react';
 import type { Assertion, FieldDefinition, Question, SessionView, Value } from '../shared/types';
-import { ComponentArt } from './ComponentArt';
+import { GameComponentArt } from './GameComponentArt';
 import { RESOURCES, DEVELOPMENTS, RESOURCE_NAMES, objectValue, conditionMatches } from '../shared/catanSummary';
 import { api } from './api';
 import { formatValue } from './ui';
 import { previewValue } from './presentation';
 
-export type Mutate = (task: () => Promise<SessionView>, message?: string) => Promise<void>;
+export type Mutate = (task: () => Promise<SessionView>, message?: string, options?: {localError?:boolean}) => Promise<void>;
 export const fire = (promise: Promise<unknown>) => { void promise.catch(() => {}); };
 
 export function FieldEditor({ field, value, onSave, onPreserve, busy, compact = false }: { field: Pick<Question, 'id' | 'label' | 'description' | 'type' | 'options' | 'reason'> & { acquisition?: Question['acquisition']; preservationId?: string; key?: string; field?: string; ui?: FieldDefinition['ui'] }; value?: Value; onSave: (value: Value) => Promise<void>; onPreserve?: () => void; busy: boolean; compact?: boolean }) {
@@ -61,12 +61,12 @@ export function RecordedFields({ view, ownerId, busy, mutate }: { view: SessionV
   const assertions = [...view.session.assertions.filter(item => item.status === 'accepted'), ...view.derived];
   return <details className="records-details"><summary>전체 상태 보기 · 직접 입력 <span>{fields.length}개 항목</span></summary><div className="records-fields">{fields.map(field => {
     const current = assertions.find(item => item.field === field.key && item.ownerId === ownerId);
-    if (view.pack.derivedRules.some(rule => rule.field === field.key)) return <div key={field.key}><strong>{field.label}</strong><p className="derived-label"><Sparkles size={13}/>{current ? formatValue(current.value) : '관련 상태를 확인하면 안내합니다'}</p>{current?.reason && <p className="field-description">{current.reason}</p>}</div>;
-    return <div key={field.key}>{current?.basis === 'rule' && <p className="derived-label"><Sparkles size={13}/>확인된 기록에서 도출 · {current.reason}</p>}<FieldEditor field={{ ...field, id: `${ownerId || 'public'}-${field.key}`, reason: '' }} value={current?.value} busy={busy} compact onSave={value => mutate(() => api.update(view.session.id, { answers: [{ field: field.key, value, ownerId }] }), '상태를 기록했어요')}/></div>;
+    if (view.pack.derivedRules.some(rule => rule.field === field.key)) return <div key={field.key}><strong>{field.label}</strong><p className="derived-label"><Info size={13}/>{current ? formatValue(current.value) : '관련 상태를 확인하면 안내합니다'}</p>{current?.reason && <p className="field-description">{current.reason}</p>}</div>;
+    return <div key={field.key}>{current?.basis === 'rule' && <p className="derived-label"><Info size={13}/>확인된 기록에서 도출 · {current.reason}</p>}<FieldEditor field={{ ...field, id: `${ownerId || 'public'}-${field.key}`, reason: '' }} value={current?.value} busy={busy} compact onSave={value => mutate(() => api.update(view.session.id, { answers: [{ field: field.key, value, ownerId }] }), '상태를 기록했어요')}/></div>;
   })}</div></details>;
 }
 
-export function CountsEditor({ field, value, onSave, busy, kind = 'resource', onReadyToSave, forceSave = false }: { field: {id:string;label:string;description?:string}; value?:Value; onSave:(value:Value)=>Promise<void>; onPreserve?:()=>void; busy:boolean; kind?:'resource'|'development'|'pieces'; onReadyToSave?: (save: (() => Promise<void>) | null) => void; forceSave?: boolean }) {
+export function CountsEditor({ field, value, onSave, busy, kind = 'resource', onReadyToSave, forceSave = false, game }: { game?:string; field: {id:string;label:string;description?:string}; value?:Value; onSave:(value:Value)=>Promise<void>; onPreserve?:()=>void; busy:boolean; kind?:'resource'|'development'|'pieces'; onReadyToSave?: (save: (() => Promise<void>) | null) => void; forceSave?: boolean }) {
   const keys: readonly string[] = kind === 'development' ? DEVELOPMENTS : kind === 'pieces' ? ['road','settlement','city'] : RESOURCES;
   const names: Record<string,string> = { ...RESOURCE_NAMES, knight:'기사', 'road-building':'도로 건설', 'year-of-plenty':'풍년', monopoly:'독점', 'victory-point':'승점', road:'도로', settlement:'마을', city:'도시' };
   const incoming = JSON.stringify(value);
@@ -81,5 +81,5 @@ export function CountsEditor({ field, value, onSave, busy, kind = 'resource', on
     await onSave({ ...objectValue(value), ...counts } as Value); edited.current = false; setMessage('반영했어요.');
   }
   useEffect(() => { onReadyToSave?.(edited.current || forceSave ? save : null); return () => onReadyToSave?.(null); });
-  return <form className="field-editor counts-editor" onSubmit={event => { event.preventDefault(); fire(save()); }}><strong>{field.label}</strong><div className="counts-grid">{keys.map(key => <label key={key}><ComponentArt kind={kind === 'pieces' ? key : kind === 'development' ? 'development-card' : 'resource-card'} variant={kind === 'pieces' ? undefined : key} size={44}/><span>{names[key]}</span><input aria-label={`${field.label} · ${names[key]}`} type="number" min={0} step={1} inputMode="numeric" placeholder="모름" value={draft[key] ?? ''} disabled={busy} onChange={event => { edited.current = true; setDraft(current => ({ ...current, [key]: event.target.value })); setMessage(''); }}/></label>)}</div><p className="small muted">모르면 비워두세요.</p><button className="button secondary small-button" disabled={busy}>반영</button>{message && <p role="status" className="small">{message}</p>}</form>;
+  return <form className="field-editor counts-editor" onSubmit={event => { event.preventDefault(); fire(save()); }}><strong>{field.label}</strong><div className="counts-grid">{keys.map(key => <label key={key}><GameComponentArt game={game} kind={kind === 'pieces' ? key : kind === 'development' ? 'development-card' : 'resource-card'} variant={kind === 'pieces' ? undefined : key} size={44}/><span>{names[key]}</span><input aria-label={`${field.label} · ${names[key]}`} type="number" min={0} step={1} inputMode="numeric" placeholder="모름" value={draft[key] ?? ''} disabled={busy} onChange={event => { edited.current = true; setDraft(current => ({ ...current, [key]: event.target.value })); setMessage(''); }}/></label>)}</div><p className="small muted">모르면 비워두세요.</p><button className="button secondary small-button" disabled={busy}>반영</button>{message && <p role="status" className="small">{message}</p>}</form>;
 }

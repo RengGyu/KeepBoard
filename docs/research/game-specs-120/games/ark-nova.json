@@ -1,0 +1,760 @@
+{
+  "schema_version": "1.0",
+  "game_id": "ark-nova",
+  "name_ko": "아크 노바",
+  "name_en": "Ark Nova",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Marine Worlds 등 확장 제외;새 지도/프로모 별도",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "ark-nova.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "tiles",
+      "name": "울타리·동물원 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "타일 모양·방향·사용 면과 개인 지도 점유.",
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "동물·후원·프로젝트 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "손패/설치/공개 진열/프로젝트 구분.",
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "actions",
+      "name": "행동 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "종류, 현재 줄 위치와 업그레이드 면.",
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "workers",
+      "name": "협회 일꾼·협력 표식",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "협회 행동 및 개인 사용/대기 상태.",
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "tracks",
+      "name": "점수·명성·자원 표식",
+      "kind": "marker",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "서로 다른 트랙의 값.",
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "zoo",
+        "name": "개인 동물원",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "개인 지도 ID, 육각 셀 목록과 회전, 울타리 인스턴스에 동물/사용 면을 연결.",
+        "description": "개인 동물원의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "action-row",
+        "name": "행동 카드 줄",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "actions"
+        ],
+        "anchor_contract": "다섯 행동 카드의 순서와 앞뒷면. 카드 정체와 강도 위치를 분리.",
+        "description": "행동 카드 줄의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "tableau",
+        "name": "개인 카드",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "workers",
+          "tracks"
+        ],
+        "anchor_contract": "설치된 동물·후원, 보전 투입 표식, 자원.",
+        "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "shared",
+        "name": "진열·협회·보전",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "workers",
+          "tracks"
+        ],
+        "anchor_contract": "진열 순서, 협회 자리, 보전 목표와 점유 표식.",
+        "description": "진열·협회·보전의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "손패와 개인 최종 목표를 분리해 보존.",
+        "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "zoo.scene",
+      "label": "개인 동물원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "개인 지도 ID, 육각 셀 목록과 회전, 울타리 인스턴스에 동물/사용 면을 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "zoo"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "action-row.scene",
+      "label": "행동 카드 줄",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "다섯 행동 카드의 순서와 앞뒷면. 카드 정체와 강도 위치를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "actions"
+      ],
+      "area_ids": [
+        "action-row"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tableau.scene",
+      "label": "개인 카드",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "설치된 동물·후원, 보전 투입 표식, 자원. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "workers",
+        "tracks"
+      ],
+      "area_ids": [
+        "tableau"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "shared.scene",
+      "label": "진열·협회·보전",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "진열 순서, 협회 자리, 보전 목표와 점유 표식. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "workers",
+        "tracks"
+      ],
+      "area_ids": [
+        "shared"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "손패와 개인 최종 목표를 분리해 보존. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "appeal",
+      "label": "매력",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "매력 트랙의 실제 값.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "conservation",
+      "label": "보전",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "보전 트랙의 실제 값; 매력과 임의 합산 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "reputation",
+      "label": "명성",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "카드 접근과 관련된 명성 트랙 값.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "money",
+      "label": "돈",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "동전 보유.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "break",
+      "label": "휴식 진행",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "휴식 표식과 휴식 처리 중단 지점은 원본/메모로 보존.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "선택 행동의 하위 효과/휴식/보전 프로젝트 처리 중 지점 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "action-power",
+      "name": "행동 카드 강도",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "다섯 행동 카드의 현재 위치가 행동 강도에 영향을 주고 업그레이드할 수 있다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "goals",
+      "name": "점수 구분",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "매력과 보전, 과학 명성은 각각 기록한다. 하나의 총재산으로 합치지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "ark-nova.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "손패와 개인 최종 목표를 분리해 보존.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "zoo.scene",
+      "action-row.scene",
+      "tableau.scene",
+      "shared.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "뒷면 개인 목표와 미공개 카드, 매력·보전만으로 마지막 차례 확정"
+    ],
+    "correction_targets": [
+      {
+        "id": "zoo.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "zoo.scene"
+        ],
+        "area_ids": [
+          "zoo"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "개인 지도 ID, 육각 셀 목록과 회전, 울타리 인스턴스에 동물/사용 면을 연결.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "action-row.edit",
+        "scope": "player",
+        "component_ids": [
+          "actions"
+        ],
+        "field_ids": [
+          "action-row.scene"
+        ],
+        "area_ids": [
+          "action-row"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "다섯 행동 카드의 순서와 앞뒷면. 카드 정체와 강도 위치를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "tableau.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards",
+          "workers",
+          "tracks"
+        ],
+        "field_ids": [
+          "tableau.scene"
+        ],
+        "area_ids": [
+          "tableau"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "설치된 동물·후원, 보전 투입 표식, 자원.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "shared.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards",
+          "workers",
+          "tracks"
+        ],
+        "field_ids": [
+          "shared.scene"
+        ],
+        "area_ids": [
+          "shared"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "진열 순서, 협회 자리, 보전 목표와 점유 표식.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "손패와 개인 최종 목표를 분리해 보존.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "zoo",
+      "action-row",
+      "tableau",
+      "shared",
+      "hand"
+    ],
+    "editable_component_ids": [
+      "tiles",
+      "cards",
+      "actions",
+      "workers",
+      "tracks"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "ark-nova.primary",
+      "title": "Ark Nova — 공식 자료",
+      "url": "https://capstone-games.com/products/ark-nova",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 소개에서 울타리/동물/보전 프로젝트, 매력·과학 명성·보전, 위치에 따라 강도가 달라지는 업그레이드 가능한 5개 행동 카드와 협회 일꾼 확인."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Marine Worlds의 수족관·카드 추가는 패치; 지도 팩은 개인 map_id별 기하를 교체.",
+    "각 동물 카드의 공간 조건과 최종 점수 트랙 교차 계산은 미구현.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

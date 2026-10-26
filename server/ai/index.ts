@@ -5,12 +5,16 @@ import type { AISettings, AIStatus, AnalysisResult, Assertion, Evidence, GamePac
 import { observationPrompt, gamePackPrompt } from './prompt.ts';
 import { normalizeSceneDetailed } from '../../shared/scene.ts';
 import { isSceneField } from '../../shared/sceneFields.ts';
+import { observableFields } from './fields.ts';
 import { assembleSceneAssertions } from './sceneAssembly.ts';
+import { decodeProviderJSON } from './response.ts';
+import { gatewaySettings, gatewayStatus, requestGatewayJSON } from './gateway.ts';
+export { parseModelJSON } from './response.ts';
 
 const dataDir = () => path.resolve(process.env.KEEPBOARD_DATA_DIR || '.keepboard');
 const configFile = () => path.join(dataDir(), 'ai-settings.json');
 
-async function settings(): Promise<AISettings> {
+async function directSettings(): Promise<AISettings> {
   let stored: Partial<AISettings> = {};
   try { stored = JSON.parse(await readFile(configFile(), 'utf8')); }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
@@ -23,15 +27,18 @@ async function settings(): Promise<AISettings> {
   };
 }
 
+async function settings(): Promise<AISettings> { return await gatewaySettings(dataDir()) ?? directSettings(); }
+
 export async function getAIStatus(): Promise<AIStatus> {
   const config = await settings();
+  if (config.provider === 'gateway') return gatewayStatus(config);
   return { configured: Boolean(config.apiKey), provider: config.provider, model: config.model, baseUrl: config.baseUrl };
 }
 
 export async function saveAISettings(input: AISettings): Promise<AIStatus> {
   if (!['gemini', 'openai'].includes(input.provider)) throw new Error('Gemini 또는 OpenAI를 선택해 주세요.');
   if (!input.model?.trim()) throw new Error('사용할 모델 이름을 입력해 주세요.');
-  const previous = await settings();
+  const previous = await directSettings();
   const config: AISettings = {
     provider: input.provider, model: input.model.trim(),
     apiKey: input.apiKey?.trim() || (previous.provider === input.provider ? previous.apiKey : undefined),
@@ -40,12 +47,6 @@ export async function saveAISettings(input: AISettings): Promise<AIStatus> {
   await mkdir(dataDir(), { recursive: true });
   await writeFile(configFile(), JSON.stringify(config, null, 2), { mode: 0o600 });
   return getAIStatus();
-}
-
-export function parseModelJSON(text: string): unknown {
-  const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-  try { return JSON.parse(cleaned); }
-  catch { throw new Error('모델 응답을 읽지 못했습니다. 원본을 유지했습니다. 다시 분석하거나 직접 입력해 주세요.'); }
 }
 
 type ImageInput = { mimeType: string; data: string };
@@ -65,6 +66,7 @@ async function readImage(evidence: Evidence): Promise<ImageInput> {
 }
 
 async function requestJSON(prompt: string, images: ImageInput[], config: AISettings): Promise<unknown> {
+  if (config.provider === 'gateway') return requestGatewayJSON(prompt, images, config);
   if (!config.apiKey) throw new Error('설정에서 AI API 키를 연결해 주세요.');
   const isGemini = config.provider === 'gemini';
   const base = (config.baseUrl || (isGemini ? 'https://generativelanguage.googleapis.com/v1beta' : 'https://api.openai.com/v1')).replace(/\/$/, '');
@@ -92,11 +94,7 @@ async function requestJSON(prompt: string, images: ImageInput[], config: AISetti
     const detail = String(payload.error?.message || payload.message || '').replaceAll(config.apiKey, '[key]').slice(0, 350);
     throw new Error(`AI 연결 오류 (${response.status}): ${detail || '모델 이름과 API 키를 확인해 주세요.'}`);
   }
-  const text = isGemini
-    ? (payload.candidates?.[0]?.content?.parts || []).map((part: any) => part.text || '').join('')
-    : payload.output_text || (payload.output || []).flatMap((item: any) => item.content || []).filter((part: any) => part.type === 'output_text').map((part: any) => part.text).join('');
-  if (!text) throw new Error('모델이 판독 결과를 반환하지 않았습니다. 다른 사진으로 다시 시도해 주세요.');
-  return parseModelJSON(text);
+  return decodeProviderJSON(payload, config.provider, response.status);
 }
 
 function matchesType(value: unknown, type: string): value is Value {
@@ -113,7 +111,7 @@ export function normalizeObservations(raw: unknown, pack: GamePack, evidence: Ev
   const assertions: Assertion[] = [];
   const warnings = Array.isArray(result.warnings) ? result.warnings.filter(v => typeof v === 'string') : [];
   for (const item of result.assertions) {
-    let definition = pack.fields.find(f => f.key === item.field && f.acquisition === 'observe');
+    let definition = observableFields(pack).find(f => f.key === item.field);
     let ownerId = evidence[0]?.ownerId;
     if (!definition || !matchesType(item.value,definition.type)) continue;
     if (definition.scope === 'player') {
@@ -161,7 +159,7 @@ export function normalizeObservations(raw: unknown, pack: GamePack, evidence: Ev
 
 export async function analyzeEvidence(input: { session: Session; evidence: Evidence[]; pack: GamePack; purpose?: string; instruction?: string; timings?: Record<string, number> }): Promise<AnalysisResult> {
   const config = await settings();
-  if (!config.apiKey) return {
+  if (config.provider !== 'gateway' && !config.apiKey) return {
     assertions: [], summary: '사진 원본을 보관했습니다. AI 설정을 연결하면 판독할 수 있습니다. 필요한 상태는 지금 직접 입력할 수도 있습니다.',
     mode: 'manual', warnings: ['실제 사진 분석은 AI API 연결 후 사용할 수 있습니다.'],
   };
@@ -212,7 +210,7 @@ export function validateGeneratedPack(raw: unknown): GamePack {
 export async function generateGamePack(input: { title: string; edition?: string; sourceText: string }): Promise<GamePack> {
   if (!input.title?.trim() || !input.sourceText?.trim()) throw new Error('게임 이름과 규칙 자료를 입력해 주세요.');
   const config = await settings();
-  if (!config.apiKey) throw new Error('게임팩 자동 생성에는 AI 연결이 필요합니다. 설정에서 API 키를 연결해 주세요.');
+  if (config.provider !== 'gateway' && !config.apiKey) throw new Error('게임팩 자동 생성에는 AI 연결이 필요합니다. 설정에서 API 키를 연결해 주세요.');
   const { catanPack } = await import('../../gamepacks/catan.ts');
   return validateGeneratedPack(await requestJSON(gamePackPrompt(input, catanPack), [], config));
 }

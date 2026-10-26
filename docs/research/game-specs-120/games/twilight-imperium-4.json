@@ -1,0 +1,688 @@
+{
+  "schema_version": "1.0",
+  "game_id": "twilight-imperium-4",
+  "name_ko": "트와일라잇 임페리움 4판",
+  "name_en": "Twilight Imperium: Fourth Edition",
+  "edition": {
+    "id": "base",
+    "name": "4판 기본판",
+    "compatibility_notes": [
+      "Prophecy of Kings 및 추가 콘텐츠 제외;초기 공용 사진+수동 개인 기록",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "twilight-imperium-4.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "systems",
+      "name": "시스템 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "행성·이상현상·웜홀 포함 타일 ID와 회전.",
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "units",
+      "name": "함선·지상군·시설",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "우주 공간/개별 행성/수송 상태와 소유자.",
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "command",
+      "name": "지휘·지배 토큰",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "전술/전략/함대 풀 및 시스템 활성화 표식.",
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "행성·기술·전략·목표",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "소유·준비/소진·공개/비밀 및 전략 사용 여부.",
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "trade",
+      "name": "상품·교역품",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "상품과 교역품은 구별되는 수량.",
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "galaxy",
+        "name": "은하 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "systems",
+          "units",
+          "command"
+        ],
+        "anchor_contract": "axial 타일 좌표, 타일 내부 행성별 child anchor와 우주 구역. 웜홀은 별도 연결.",
+        "description": "은하 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "faction",
+        "name": "세력판·지휘 풀",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "command",
+          "cards",
+          "trade"
+        ],
+        "anchor_contract": "세력 ID와 세 지휘 풀, 기술/행성 카드 방향과 상품·교역품.",
+        "description": "세력판·지휘 풀의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "agenda",
+        "name": "전략·목표·의회",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "전략 카드 소유/사용, 공개 목표와 달성자, 현재 의제.",
+        "description": "전략·목표·의회의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "행동·비밀 목표",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "비밀 카드 정체/거래된 약속 카드는 별도 소유자 범위.",
+        "description": "행동·비밀 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "galaxy.scene",
+      "label": "은하 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "axial 타일 좌표, 타일 내부 행성별 child anchor와 우주 구역. 웜홀은 별도 연결. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "systems",
+        "units",
+        "command"
+      ],
+      "area_ids": [
+        "galaxy"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "faction.scene",
+      "label": "세력판·지휘 풀",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "세력 ID와 세 지휘 풀, 기술/행성 카드 방향과 상품·교역품. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "command",
+        "cards",
+        "trade"
+      ],
+      "area_ids": [
+        "faction"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "agenda.scene",
+      "label": "전략·목표·의회",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "전략 카드 소유/사용, 공개 목표와 달성자, 현재 의제. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "agenda"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "행동·비밀 목표",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "비밀 카드 정체/거래된 약속 카드는 별도 소유자 범위. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "phase",
+      "label": "라운드·단계",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "전략/행동/상태/의회 중 실제 지점과 패스 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "active-system",
+      "label": "활성 시스템",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 전술 행동의 시스템 ID와 세부 행동 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pools",
+      "label": "지휘 풀",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "전술·전략·함대의 토큰 수를 별개 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "economy",
+      "label": "상품·교역품·점수",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "재산 유형과 승점은 서로 다른 값.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "speaker",
+      "label": "의장·순서",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "의장과 전략 카드 순서를 현재 차례와 구별.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이동/우주 전투/상륙/지상 전투/생산 또는 전략 보조 응답·의회 투표 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "command",
+      "name": "지휘 분배",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "시스템 활성화, 전략 보조 능력, 함대 풀은 역할이 다른 지휘 토큰 구역이다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "commodities",
+      "name": "상품과 교역품",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "상품은 다른 세력에게 전달되며 교역품으로 바뀌는 구분이 있다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "twilight-imperium-4.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "행동·비밀 목표 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "비밀 카드 정체/거래된 약속 카드는 별도 소유자 범위.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "galaxy.scene",
+      "faction.scene",
+      "agenda.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "비밀 목표·행동 카드·투표 의사, 타일 수로 플레이어 수"
+    ],
+    "correction_targets": [
+      {
+        "id": "galaxy.edit",
+        "scope": "public",
+        "component_ids": [
+          "systems",
+          "units",
+          "command"
+        ],
+        "field_ids": [
+          "galaxy.scene"
+        ],
+        "area_ids": [
+          "galaxy"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "axial 타일 좌표, 타일 내부 행성별 child anchor와 우주 구역. 웜홀은 별도 연결.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "faction.edit",
+        "scope": "player",
+        "component_ids": [
+          "command",
+          "cards",
+          "trade"
+        ],
+        "field_ids": [
+          "faction.scene"
+        ],
+        "area_ids": [
+          "faction"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "세력 ID와 세 지휘 풀, 기술/행성 카드 방향과 상품·교역품.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "agenda.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "agenda.scene"
+        ],
+        "area_ids": [
+          "agenda"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "전략 카드 소유/사용, 공개 목표와 달성자, 현재 의제.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "비밀 카드 정체/거래된 약속 카드는 별도 소유자 범위.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "galaxy",
+      "faction",
+      "agenda",
+      "hand"
+    ],
+    "editable_component_ids": [
+      "systems",
+      "units",
+      "command",
+      "cards",
+      "trade"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "twilight-imperium-4.primary",
+      "title": "Twilight Imperium: Fourth Edition — 공식 자료",
+      "url": "https://www.fantasyflightgames.com/product/twilight-imperium-fourth-edition/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 본문에서 시스템 타일·행성·전략 카드·지휘 토큰 세 풀, 함대/유닛·기술·상품/교역품·의장·비밀 목표 확인. 타일 총수는 지도 칸 고정 수로 쓰지 않는다."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Prophecy of Kings/Codex/Twilight’s Fall의 새 리더·유물·체계는 별도 패치. 기본판에 자동 포함하지 않는다.",
+    "세력별 예외·운송 용량·전투 타이밍·의회 법률의 완전 규칙은 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

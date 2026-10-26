@@ -1,0 +1,350 @@
+{
+  "game_id": "power-grid",
+  "name_ko": "파워그리드",
+  "name_en": "Power Grid",
+  "edition": {
+    "id": "base",
+    "name": "Recharged 기본판",
+    "compatibility_notes": [
+      "구판·지역 지도 차이;모든 지도 자동 지원 아님",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "power-grid.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/power-grid.json",
+  "source_sha256": "04e96eb127f9228e5b222f89c10bf3bdf8fd458682144f03e0d26f54cb9ecc73",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "plants",
+      "name": "발전소 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "번호·연료·공급 도시 수와 소유/시장 위치.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "시설 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-factory",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "fuel",
+      "name": "연료",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "석탄·석유·쓰레기·우라늄, 시장과 발전소별 저장.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "석탄 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coal",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "통 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-barrel",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "석재 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-stone",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "수정 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-crystal",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "houses",
+      "name": "도시 집",
+      "kind": "piece",
+      "source_confidence": "reported",
+      "source_description": "도시 슬롯과 플레이어 소유.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "건물 조각",
+          "layers": [
+            {
+              "asset_id": "common.piece-building"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "money",
+      "name": "돈·순서 표식",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "개인 돈과 라운드 순서.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "원반",
+          "layers": [
+            {
+              "asset_id": "common.disk"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "owner",
+      "owner_color_supported": true,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "network",
+      "name": "도시 네트워크",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "graph",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "graph"
+      ],
+      "component_ids": [
+        "houses"
+      ],
+      "anchor_contract": "도시별 점유 슬롯과 지도 연결 비용을 별개 기록.",
+      "description": "도시 네트워크의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-graph",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "market",
+      "name": "발전소·자원 시장",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "plants",
+        "fuel"
+      ],
+      "anchor_contract": "현재/미래 발전소 줄과 번호 순서, 연료 가격칸.",
+      "description": "발전소·자원 시장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "발전소·저장 연료",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "plants",
+        "fuel"
+      ],
+      "anchor_contract": "각 발전소에 부착된 연료 종류/개수.",
+      "description": "발전소·저장 연료의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "wallet",
+      "name": "개인 돈",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "money"
+      ],
+      "anchor_contract": "확인한 돈만 소유자 범위에 기록.",
+      "description": "개인 돈의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "도시 네트워크 · 구조 예시",
+    "area_id": "network",
+    "layers": [
+      {
+        "asset_id": "common.area-graph"
+      },
+      {
+        "asset_id": "common.piece-building",
+        "transform": "translate(15 29) scale(.36)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "graph",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

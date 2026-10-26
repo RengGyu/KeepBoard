@@ -1,0 +1,712 @@
+{
+  "schema_version": "1.0",
+  "game_id": "kanban-ev",
+  "name_ko": "칸반 EV",
+  "name_en": "Kanban EV",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Driver's Edition과 슬롯/아트 혼용 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "kanban-ev.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "cars",
+      "name": "차량·부품·디자인",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "조립 라인의 차량, 부품과 디자인 타일·업그레이드.",
+      "source_refs": [
+        "kanban-ev.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "workers",
+      "name": "직원·Sandra·인증",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "직원 위치·Sandra·교육/인증 트랙.",
+      "source_refs": [
+        "kanban-ev.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "markers",
+      "name": "근무·책·회의·주기",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "저축 근무·책·상품권·발언·주/주기 마커.",
+      "source_refs": [
+        "kanban-ev.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "goals",
+      "name": "목표·수요·보상",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "공장 목표·성과/최종 목표·수요와 보상.",
+      "source_refs": [
+        "kanban-ev.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "factory",
+        "name": "공장 부서",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cars",
+          "workers",
+          "markers"
+        ],
+        "anchor_contract": "부서별 행동·차량 흐름·부품 저장·디자인 시장을 분리.",
+        "description": "공장 부서의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "line",
+        "name": "조립·시험 트랙",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "cars",
+          "markers"
+        ],
+        "anchor_contract": "조립 라인의 차량 위치와 테스트 트랙·페이스카 위치.",
+        "description": "조립·시험 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "player",
+        "name": "차고·개인판",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cars",
+          "workers",
+          "markers"
+        ],
+        "anchor_contract": "차고 슬롯별 차량/업그레이드·부품·책/상품권·근무 저축.",
+        "description": "차고·개인판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "training",
+        "name": "교육·평가·회의",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "workers",
+          "markers",
+          "goals"
+        ],
+        "anchor_contract": "부서별 교육/인증 위치·Sandra·회의 진행과 제출 목표.",
+        "description": "교육·평가·회의의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "비공개 목표",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "goals"
+        ],
+        "anchor_contract": "해당 판본에서 비공개로 둔 성과/최종 목표만 보관. 공개 범위는 별도 확인.",
+        "description": "비공개 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "factory.scene",
+      "label": "공장 부서",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "부서별 행동·차량 흐름·부품 저장·디자인 시장을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cars",
+        "workers",
+        "markers"
+      ],
+      "area_ids": [
+        "factory"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "line.scene",
+      "label": "조립·시험 트랙",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "조립 라인의 차량 위치와 테스트 트랙·페이스카 위치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cars",
+        "markers"
+      ],
+      "area_ids": [
+        "line"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "player.scene",
+      "label": "차고·개인판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "차고 슬롯별 차량/업그레이드·부품·책/상품권·근무 저축. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cars",
+        "workers",
+        "markers"
+      ],
+      "area_ids": [
+        "player"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "training.scene",
+      "label": "교육·평가·회의",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "부서별 교육/인증 위치·Sandra·회의 진행과 제출 목표. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "workers",
+        "markers",
+        "goals"
+      ],
+      "area_ids": [
+        "training"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "비공개 목표",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "해당 판본에서 비공개로 둔 성과/최종 목표만 보관. 공개 범위는 별도 확인. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "goals"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "cycles",
+      "label": "주·생산 주기·회의",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "주/생산 주기/회의 마커 및 Sandra 모드·위치.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "training-levels",
+      "label": "교육·인증",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "부서별 수준과 인증 잠금, 한 개의 총레벨로 합산 금지.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "assets",
+      "label": "근무·보유 자원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "저축 근무·책·상품권·부품·발언 수와 실제 사용 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "부서 이동/행동·교대 사용/조립 이동/테스트/회의·Sandra 평가 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "factory",
+      "name": "생산과 평가",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "차량 생산/개선과 관리자 평가가 모두 게임 상태에 관여한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "kanban-ev.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "separate-counters",
+      "name": "별개 진행값",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "주·생산 주기·회의를 서로 다른 중단 지점으로 기록한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "비공개 목표 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "해당 판본에서 비공개로 둔 성과/최종 목표만 보관. 공개 범위는 별도 확인.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "factory.scene",
+      "line.scene",
+      "player.scene",
+      "training.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "차량만으로 이미 평가한 목표와 사용한 근무 수, 비공개 목표"
+    ],
+    "correction_targets": [
+      {
+        "id": "factory.edit",
+        "scope": "public",
+        "component_ids": [
+          "cars",
+          "workers",
+          "markers"
+        ],
+        "field_ids": [
+          "factory.scene"
+        ],
+        "area_ids": [
+          "factory"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "부서별 행동·차량 흐름·부품 저장·디자인 시장을 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "line.edit",
+        "scope": "public",
+        "component_ids": [
+          "cars",
+          "markers"
+        ],
+        "field_ids": [
+          "line.scene"
+        ],
+        "area_ids": [
+          "line"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "조립 라인의 차량 위치와 테스트 트랙·페이스카 위치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "player.edit",
+        "scope": "player",
+        "component_ids": [
+          "cars",
+          "workers",
+          "markers"
+        ],
+        "field_ids": [
+          "player.scene"
+        ],
+        "area_ids": [
+          "player"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "차고 슬롯별 차량/업그레이드·부품·책/상품권·근무 저축.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "training.edit",
+        "scope": "public",
+        "component_ids": [
+          "workers",
+          "markers",
+          "goals"
+        ],
+        "field_ids": [
+          "training.scene"
+        ],
+        "area_ids": [
+          "training"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "부서별 교육/인증 위치·Sandra·회의 진행과 제출 목표.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "goals"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "해당 판본에서 비공개로 둔 성과/최종 목표만 보관. 공개 범위는 별도 확인.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "factory",
+      "line",
+      "player",
+      "training",
+      "private"
+    ],
+    "editable_component_ids": [
+      "cars",
+      "workers",
+      "markers",
+      "goals"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "kanban-ev.primary",
+      "title": "Kanban EV — 공식 자료",
+      "url": "https://www.eagle-gryphon.com/products/kanban-ev",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 상품 본문/구성물에서 부품 조달·조립·차량 업그레이드·재활용·Sandra 평가, 부서 교육/인증·저축 근무·회의/주기 마커·디자인/차고/목표 확인. 행동별 비용·평가 계산은 미검증."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Kanban EV 기본판. 구 Kanban·업그레이드팩·프로모 목표는 동일 명세로 확정하지 않는다.",
+    "부서별 정확한 행동 비용·Sandra 모드·회의 평가 및 목표 공개 범위는 규칙 원문 검증 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

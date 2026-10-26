@@ -1,0 +1,719 @@
+{
+  "schema_version": "1.0",
+  "game_id": "clank-catacombs",
+  "name_ko": "클랭크! 카타콤",
+  "name_en": "Clank! Catacombs",
+  "edition": {
+    "id": "base",
+    "name": "독립 기본판",
+    "compatibility_notes": [
+      "원작 Clank 보드·후속 확장과 혼용 안 함",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "clank-catacombs.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "tiles",
+      "name": "던전 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "방·통로·잠금·포털과 회전.",
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "pawns",
+      "name": "플레이어 말·보물",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "플레이어 위치와 유물/죄수/성소 표식.",
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cubes",
+      "name": "클랭크·드래곤·유령 큐브",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "공급/소음 구역/주머니/피해 위치별 구별.",
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "던전·개인 덱 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "진열/손패/사용/버림/덱.",
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "dungeon",
+        "name": "성장 던전",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "tiles",
+          "pawns"
+        ],
+        "anchor_contract": "타일 좌표·회전, 타일 내 방 노드와 통로 방향/잠금, 포털 연결은 별도 관계.",
+        "description": "성장 던전의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "market",
+        "name": "카드·상점 진열",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "pawns"
+        ],
+        "anchor_contract": "구매 카드와 아이템 공급, 유물 스택의 순서.",
+        "description": "카드·상점 진열의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "clank",
+        "name": "소음·피해판",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "cubes"
+        ],
+        "anchor_contract": "아직 주머니에 안 들어간 소음과 피해 트랙을 구별.",
+        "description": "소음·피해판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "이번 손패와 선택/사용 카드를 분리.",
+        "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hidden",
+        "name": "덱·드래곤 주머니",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards",
+          "cubes"
+        ],
+        "anchor_contract": "개인별 덱 묶음과 주머니의 비공개 내용은 별개 인스턴스.",
+        "description": "덱·드래곤 주머니의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "dungeon.scene",
+      "label": "성장 던전",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "타일 좌표·회전, 타일 내 방 노드와 통로 방향/잠금, 포털 연결은 별도 관계. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles",
+        "pawns"
+      ],
+      "area_ids": [
+        "dungeon"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "market.scene",
+      "label": "카드·상점 진열",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "구매 카드와 아이템 공급, 유물 스택의 순서. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "pawns"
+      ],
+      "area_ids": [
+        "market"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "clank.scene",
+      "label": "소음·피해판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "아직 주머니에 안 들어간 소음과 피해 트랙을 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cubes"
+      ],
+      "area_ids": [
+        "clank"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "이번 손패와 선택/사용 카드를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hidden.scene",
+      "label": "덱·드래곤 주머니",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "개인별 덱 묶음과 주머니의 비공개 내용은 별개 인스턴스. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "cubes"
+      ],
+      "area_ids": [
+        "hidden"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "health",
+      "label": "피해·탈출",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "체력 트랙·탈출/기절 선언 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "loot",
+      "label": "보유 유물·돈",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "아이템 종류·값과 보유 동전.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn-resources",
+      "label": "이번 턴 자원",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "남은 이동·검·스킬은 사용자가 확인한 경우만.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이동/발견 타일 배치/포털/드래곤 공격/카드 보충 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "map",
+      "name": "가변 지도",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "타일을 공개하며 던전을 만들어 간다. 기본판 고정 맵을 요구하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "types",
+      "name": "위험 요소",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "드래곤과 유령 큐브를 플레이어 큐브와 구별한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "clank-catacombs.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "이번 손패와 선택/사용 카드를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hidden.preserve",
+        "label": "덱·드래곤 주머니 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "hidden.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "개인별 덱 묶음과 주머니의 비공개 내용은 별개 인스턴스.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "dungeon.scene",
+      "market.scene",
+      "clank.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "주머니 큐브 추출 순서·미공개 타일·이미 쓴 이동량"
+    ],
+    "correction_targets": [
+      {
+        "id": "dungeon.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles",
+          "pawns"
+        ],
+        "field_ids": [
+          "dungeon.scene"
+        ],
+        "area_ids": [
+          "dungeon"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "타일 좌표·회전, 타일 내 방 노드와 통로 방향/잠금, 포털 연결은 별도 관계.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "market.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards",
+          "pawns"
+        ],
+        "field_ids": [
+          "market.scene"
+        ],
+        "area_ids": [
+          "market"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "구매 카드와 아이템 공급, 유물 스택의 순서.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "clank.edit",
+        "scope": "player",
+        "component_ids": [
+          "cubes"
+        ],
+        "field_ids": [
+          "clank.scene"
+        ],
+        "area_ids": [
+          "clank"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "아직 주머니에 안 들어간 소음과 피해 트랙을 구별.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "이번 손패와 선택/사용 카드를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hidden.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards",
+          "cubes"
+        ],
+        "field_ids": [
+          "hidden.scene"
+        ],
+        "area_ids": [
+          "hidden"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "개인별 덱 묶음과 주머니의 비공개 내용은 별개 인스턴스.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "dungeon",
+      "market",
+      "clank",
+      "hand",
+      "hidden"
+    ],
+    "editable_component_ids": [
+      "tiles",
+      "pawns",
+      "cubes",
+      "cards"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "clank-catacombs.primary",
+      "title": "Clank! Catacombs — 공식 자료",
+      "url": "https://direwolfdigital.com/clank-catacombs/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 본문에서 가변 던전 타일, 포털·성소·죄수·유령, 던전 덱, 클랭크판, 드래곤/유령 큐브·주머니 확인. 기존 Clank 덱 혼합 가능하나 기본은 새 Catacombs 덱."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Underworld/Lairs는 별도 지도층/부품 패치. 기존 Clank의 고정 보드와 동일 프로필로 취급하지 않는다.",
+    "포털·자물쇠·유령/성소 세부와 턴 끝 처리 순서는 규칙 PDF 추가 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

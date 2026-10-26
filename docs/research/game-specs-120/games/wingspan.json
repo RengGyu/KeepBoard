@@ -1,0 +1,747 @@
+{
+  "schema_version": "1.0",
+  "game_id": "wingspan",
+  "name_ko": "윙스팬",
+  "name_en": "Wingspan",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판·Swift Start 포함 상품",
+    "compatibility_notes": [
+      "확장 새/해양/아시아 제외;Swift Start 사용 여부 메모",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "wingspan.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "birds",
+      "name": "새 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "서식지에 설치/손패/덱/공개 진열.",
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "eggs",
+      "name": "알",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "새 카드에 부착하는 수량. 장식 색을 플레이어 소유색으로 해석하지 않는다.",
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "food",
+      "name": "먹이·주사위",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "종류별 먹이와 새모이통 주사위 면.",
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "goals",
+      "name": "목표·보너스",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "라운드 목표와 개인 보너스 구분.",
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "actions",
+      "name": "행동 큐브",
+      "kind": "marker",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "남은 행동과 목표판에 놓인 큐브.",
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "habitats",
+        "name": "서식지 개인판",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "birds",
+          "eggs",
+          "food",
+          "actions"
+        ],
+        "anchor_contract": "서식지 행과 카드 순서. 알·저장 먹이·묻힌 카드 수는 해당 새에 부착.",
+        "description": "서식지 개인판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "shared",
+        "name": "새 진열·먹이통",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "birds",
+          "food"
+        ],
+        "anchor_contract": "진열 카드 자리와 주사위 개별 ID/윗면/통 안팎 구별.",
+        "description": "새 진열·먹이통의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "goal-area",
+        "name": "라운드 목표",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "goals",
+          "actions"
+        ],
+        "anchor_contract": "라운드별 목표와 점수 큐브 위치.",
+        "description": "라운드 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "새·보너스 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "birds",
+          "goals"
+        ],
+        "anchor_contract": "새 손패와 보너스 카드 묶음을 분리.",
+        "description": "새·보너스 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "deck",
+        "name": "새 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "birds"
+        ],
+        "anchor_contract": "덱/버림 분리, 덱 내용은 노출하지 않는다.",
+        "description": "새 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "habitats.scene",
+      "label": "서식지 개인판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "서식지 행과 카드 순서. 알·저장 먹이·묻힌 카드 수는 해당 새에 부착. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "birds",
+        "eggs",
+        "food",
+        "actions"
+      ],
+      "area_ids": [
+        "habitats"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "shared.scene",
+      "label": "새 진열·먹이통",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "진열 카드 자리와 주사위 개별 ID/윗면/통 안팎 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "birds",
+        "food"
+      ],
+      "area_ids": [
+        "shared"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "goal-area.scene",
+      "label": "라운드 목표",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "라운드별 목표와 점수 큐브 위치. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "goals",
+        "actions"
+      ],
+      "area_ids": [
+        "goal-area"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "새·보너스 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "새 손패와 보너스 카드 묶음을 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "birds",
+        "goals"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "deck.scene",
+      "label": "새 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "덱/버림 분리, 덱 내용은 노출하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "birds"
+      ],
+      "area_ids": [
+        "deck"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "라운드",
+      "scope": "public",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 라운드; 저장 재열기로 증가하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "food-stock",
+      "label": "먹이 보유",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "종류별 수량을 새 위 저장 먹이와 구별.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "activation",
+      "label": "서식지 처리 지점",
+      "scope": "player",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이번 행동의 처리 중인 새 카드 ID와 아직 남은 능력.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "먹이 선택/알 배치/카드 뽑기/새 능력 연쇄 중 멈춘 지점 기록.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "engine",
+      "name": "서식지 엔진",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "새가 서식지 행동의 연결을 확장한다. 카드의 행/순서가 기록 대상이다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "duration",
+      "name": "라운드 구분",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "기본 게임은 4라운드 후 점수를 비교한다. 앱은 라운드 종료나 점수를 자동 확정하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "wingspan.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "새·보너스 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "새 손패와 보너스 카드 묶음을 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "deck.preserve",
+        "label": "새 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "deck.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "덱/버림 분리, 덱 내용은 노출하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "habitats.scene",
+      "shared.scene",
+      "goal-area.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "개인 보너스와 손패, 겹쳐 숨은 새 정체, 알 색의 소유 의미"
+    ],
+    "correction_targets": [
+      {
+        "id": "habitats.edit",
+        "scope": "player",
+        "component_ids": [
+          "birds",
+          "eggs",
+          "food",
+          "actions"
+        ],
+        "field_ids": [
+          "habitats.scene"
+        ],
+        "area_ids": [
+          "habitats"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "서식지 행과 카드 순서. 알·저장 먹이·묻힌 카드 수는 해당 새에 부착.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "shared.edit",
+        "scope": "public",
+        "component_ids": [
+          "birds",
+          "food"
+        ],
+        "field_ids": [
+          "shared.scene"
+        ],
+        "area_ids": [
+          "shared"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "진열 카드 자리와 주사위 개별 ID/윗면/통 안팎 구별.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "goal-area.edit",
+        "scope": "public",
+        "component_ids": [
+          "goals",
+          "actions"
+        ],
+        "field_ids": [
+          "goal-area.scene"
+        ],
+        "area_ids": [
+          "goal-area"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "라운드별 목표와 점수 큐브 위치.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "birds",
+          "goals"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "새 손패와 보너스 카드 묶음을 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "deck.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "birds"
+        ],
+        "field_ids": [
+          "deck.scene"
+        ],
+        "area_ids": [
+          "deck"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "덱/버림 분리, 덱 내용은 노출하지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "habitats",
+      "shared",
+      "goal-area",
+      "hand",
+      "deck"
+    ],
+    "editable_component_ids": [
+      "birds",
+      "eggs",
+      "food",
+      "goals",
+      "actions"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "wingspan.primary",
+      "title": "Wingspan — 공식 자료",
+      "url": "https://europe.stonemaiergames.com/products/wingspan",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 상품 본문: 서식지 엔진, 먹이 주사위/먹이, 알, 새 카드, 보너스/목표, 행동 큐브, 4라운드 확인. 현재 Swift Start 포함. 숨은 카드·접힌 카드 처리 세부는 규칙서 미대조."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "오세아니아 등의 다른 개인판/먹이와 Asia의 모드는 별도 패치. 독립 Pocket과 합치지 않는다.",
+    "묻힌 카드·먹이 저장 및 카드 능력 시점의 예외는 규칙서 추가 확인 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

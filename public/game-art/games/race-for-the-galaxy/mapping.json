@@ -1,0 +1,316 @@
+{
+  "game_id": "race-for-the-galaxy",
+  "name_ko": "레이스 포 더 갤럭시",
+  "name_en": "Race for the Galaxy",
+  "edition": {
+    "id": "base",
+    "name": "2판 기본판",
+    "compatibility_notes": [
+      "확장·Roll for the Galaxy 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "race-for-the-galaxy.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/race-for-the-galaxy.json",
+  "source_sha256": "362d8692656b981a29dc888351a2a35081bdd348cdd5600c347c59bbf22532c0",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "cards",
+      "name": "세계·발전·행동 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "개인 문명·비공개 손패·선택한 행동과 뒷면 상품.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "행성 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-planet",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "기술 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gear",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "flag 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-flag",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "points",
+      "name": "승점 토큰",
+      "kind": "token",
+      "source_confidence": "verified",
+      "source_description": "승점 칩은1·5·10 값이다. 공용 공급과 개인 획득을 구별하고 끝 라운드용10점 칩의 별도 대기 상태를 기록한다. 카드 점수와 칩 수량은 별도다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "1 승점 칩",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.numeral-1"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(49 29) scale(.18)"
+            }
+          ]
+        },
+        {
+          "name": "5 승점 칩",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.numeral-5"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(49 29) scale(.18)"
+            }
+          ]
+        },
+        {
+          "name": "10 승점 칩",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.numeral-10"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(49 29) scale(.18)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "race-for-the-galaxy.art-confirmation.race-web"
+      ],
+      "source_location": "pp.1–2 Contents/Setup"
+    }
+  ],
+  "areas": [
+    {
+      "id": "tableau",
+      "name": "개인 문명",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "세계/발전 인스턴스와 세계별 상품 부착. 상품 뒷면 정체는 추론하지 않는다.",
+      "description": "개인 문명의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "hand",
+      "name": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "건설 후보·비용으로 낼 카드·남은 손패를 구별.",
+      "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "actions",
+      "name": "비공개 행동 선택",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "선택한 행동과 공개 전 상태; 공개 완료는 phase 필드로 복사.",
+      "description": "비공개 행동 선택의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "덱·버림",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "공용 뽑기·버림·임시 탐사 후보 묶음.",
+      "description": "덱·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "vp",
+      "name": "승점 토큰",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "points"
+      ],
+      "anchor_contract": "공용 남은 토큰과 개인 획득 수.",
+      "description": "승점 토큰의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "개인 문명 · 구조 예시",
+    "area_id": "tableau",
+    "layers": [
+      {
+        "asset_id": "common.area-zone"
+      },
+      {
+        "asset_id": "common.card-shell",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-planet",
+        "transform": "translate(15 29) scale(.36) translate(28 23) scale(.55)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "zone",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

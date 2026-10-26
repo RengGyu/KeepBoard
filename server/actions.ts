@@ -34,7 +34,7 @@ export function planActions(session: Session, questions: Question[]): PlannedAct
     } else groups.set(id, { id, kind, ownerId: question.ownerId, label: labels[kind], description: descriptions[kind], fields: [question.field], evidenceIds: evidence.map(e => e.id), priority: question.priority });
   }
   if (!questions.length && session.stage !== 'restore') {
-    const remaining = session.preservations.filter(p => !p.packed);
+    const remaining = (session.recordingMode === 'simple' && session.gamePackId === 'catan-base' ? [] : session.preservations).filter(p => !p.packed);
     if (remaining.length) groups.set('pack', { id: `${session.captureEpoch}:pack`, kind: 'preparePack', label: '기록한 구성물 정리', description: '게임팩이 안내하는 묶음과 용기를 기록합니다.', fields: [], evidenceIds: [], priority: 0 });
     else groups.set('commit', { id: `${session.captureEpoch}:commit`, kind: 'requestCommit', label: '현재 판 저장', description: '원본과 기록을 하나의 저장본으로 남깁니다.', fields: [], evidenceIds: [], priority: 0 });
   }

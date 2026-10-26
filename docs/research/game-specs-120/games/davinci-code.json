@@ -1,0 +1,499 @@
+{
+  "schema_version": "1.0",
+  "game_id": "davinci-code",
+  "name_ko": "다빈치코드",
+  "name_en": "Da Vinci Code / Coda",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "비밀 숫자는 소유자 입력;통용 한글명 사용",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "davinci-code.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "tiles",
+      "name": "흑백 숫자·조커 타일",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "공개 색/위치·뒤집힘과 소유자만 아는 숫자를 분리.",
+      "source_refs": [],
+      "confidence": "unclear"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "rows",
+        "name": "공개 개인 줄",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "플레이어별 왼쪽→오른쪽 순번·색·공개/비공개 면. 비공개 숫자는 포함하지 않는다.",
+        "description": "공개 개인 줄의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "identity",
+        "name": "개인 숫자 정보",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "공개 줄의 인스턴스 ID와 자기 숫자/조커 정체 대응.",
+        "description": "개인 숫자 정보의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "pool",
+        "name": "미공개 타일 공급",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "뒤집힌 공급의 위치/색과 미공개 정체를 분리.",
+        "description": "미공개 타일 공급의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "rows.scene",
+      "label": "공개 개인 줄",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "플레이어별 왼쪽→오른쪽 순번·색·공개/비공개 면. 비공개 숫자는 포함하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "rows"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "identity.scene",
+      "label": "개인 숫자 정보",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공개 줄의 인스턴스 ID와 자기 숫자/조커 정체 대응. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "identity"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pool.scene",
+      "label": "미공개 타일 공급",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "뒤집힌 공급의 위치/색과 미공개 정체를 분리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "pool"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending-tile",
+      "label": "뽑은 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "아직 줄에 넣거나 공개하지 않은 이번 타일과 삽입 순서.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "guess",
+      "label": "현재 추리",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "가리킨 플레이어·줄 순번·선언 숫자·답변 완료 여부.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round-status",
+      "label": "참가 상태",
+      "scope": "player",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "계속 플레이/탈락/확인 대기 등 실제 선언만.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "타일 뽑기/추리 지목/정답 공개/계속 또는 중단/줄 삽입 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "identity-view",
+      "name": "두 정보층",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "같은 타일의 공용 색/위치와 소유자 숫자를 별도 공개 범위로 저장한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ordering",
+      "name": "배열 규칙 미확인",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "숫자 동률의 색 순서·조커 위치·성공 후 계속 추리 조건은 원문 미확인이다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "unclear"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "identity.preserve",
+        "label": "개인 숫자 정보 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "identity.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "공개 줄의 인스턴스 ID와 자기 숫자/조커 정체 대응.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "pool.preserve",
+        "label": "미공개 타일 공급 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "pool.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "뒤집힌 공급의 위치/색과 미공개 정체를 분리.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "rows.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "정렬을 이용해 상대 비공개 숫자를 확정, 상대 화면에 자기 숫자 자동 공개"
+    ],
+    "correction_targets": [
+      {
+        "id": "rows.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "rows.scene"
+        ],
+        "area_ids": [
+          "rows"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "플레이어별 왼쪽→오른쪽 순번·색·공개/비공개 면. 비공개 숫자는 포함하지 않는다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "identity.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "identity.scene"
+        ],
+        "area_ids": [
+          "identity"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "공개 줄의 인스턴스 ID와 자기 숫자/조커 정체 대응.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "pool.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "pool.scene"
+        ],
+        "area_ids": [
+          "pool"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "뒤집힌 공급의 위치/색과 미공개 정체를 분리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "rows",
+      "identity",
+      "pool"
+    ],
+    "editable_component_ids": [
+      "tiles"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "davinci-code.primary",
+      "title": "Da Vinci Code / Coda — 공식 자료",
+      "url": "https://www.koreaboardgames.com/product/detail?prdCd=PD2024002346M4NG",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 한국 유통 상품에서 기본 다빈치 코드의 판본·게임 존재 확인. 상세가 이미지/영상 중심이라 숫자 배치·조커·추리 규칙 본문은 확인 못함. 세부 상태는 미검증 기록 초안."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "기본 다빈치 코드만. 다빈치 코드 플러스의 추가 부품·규칙을 혼합하지 않는다.",
+    "공식 상세 규칙 텍스트 확보가 필요하다. 현재 수량·숫자 범위·조커·실패 공개 절차는 검증되지 않았다.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

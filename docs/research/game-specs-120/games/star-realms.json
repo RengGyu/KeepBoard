@@ -1,0 +1,685 @@
+{
+  "schema_version": "1.0",
+  "game_id": "star-realms",
+  "name_ko": "스타 렐름",
+  "name_en": "Star Realms",
+  "edition": {
+    "id": "base",
+    "name": "원작 2인 Core Set",
+    "compatibility_notes": [
+      "Frontiers/Colony Wars 등 독립 제품 이번 계수 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "star-realms.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "cards",
+      "name": "함선·기지·탐험선",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "개인 덱/플레이/버림·기지·공용 시장의 카드.",
+      "source_refs": [
+        "star-realms.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "authority",
+      "name": "Authority 기록",
+      "kind": "counter",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "플레이어별 현재 체력과 점수 카드 표현.",
+      "source_refs": [
+        "star-realms.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "market",
+        "name": "교역 줄·탐험선",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "공개 교역 카드 슬롯·보충 전 빈자리·탐험선 공급.",
+        "description": "교역 줄·탐험선의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "play",
+        "name": "함선·지속 기지",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "이번 턴 함선과 남는 기지·Outpost 표시는 카드 ID와 함께.",
+        "description": "함선·지속 기지의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "현재 손패와 아직 낼 카드.",
+        "description": "개인 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "deck",
+        "name": "개인 덱·버림",
+        "scope": "player",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "뽑기/버림/추방 묶음은 서로 다른 컨테이너; 보이는 버림은 선택 별도 공개.",
+        "description": "개인 덱·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "trade-deck",
+        "name": "공용 교역 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "미공개 교역 덱 순서를 유지.",
+        "description": "공용 교역 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "market.scene",
+      "label": "교역 줄·탐험선",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공개 교역 카드 슬롯·보충 전 빈자리·탐험선 공급. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "market"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "play.scene",
+      "label": "함선·지속 기지",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "이번 턴 함선과 남는 기지·Outpost 표시는 카드 ID와 함께. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "play"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "현재 손패와 아직 낼 카드. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "deck.scene",
+      "label": "개인 덱·버림",
+      "scope": "player",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "뽑기/버림/추방 묶음은 서로 다른 컨테이너; 보이는 버림은 선택 별도 공개. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "deck"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "trade-deck.scene",
+      "label": "공용 교역 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "미공개 교역 덱 순서를 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "trade-deck"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "authority",
+      "label": "현재 Authority",
+      "scope": "player",
+      "visibility": "public",
+      "type": "number",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "실제 확인한 값. 공격 선언과 피해 적용 여부는 분리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn-resources",
+      "label": "이번 Trade·Combat",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "turn",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 턴 남은 구매력/공격력. 영구 자원처럼 누적하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "abilities",
+      "label": "능력 사용 진행",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "동맹/폐기 능력·기지 사용 여부·공격 대상과 남은 처리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "함선 플레이/능력·동맹/구입·보충/기지·상대 공격/정리 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "three-values",
+      "name": "세 값",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "Trade·Combat·Authority는 각각 구매력·공격·생존 상태로 다른 값이다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "star-realms.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "decks",
+      "name": "덱 성장",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "공용 교역 줄에서 구입한 카드는 개인 덱 구성을 바꾼다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "star-realms.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "현재 손패와 아직 낼 카드.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "deck.preserve",
+        "label": "개인 덱·버림 보존(선택)",
+        "scope": "player",
+        "visibility": "hidden",
+        "field_ids": [
+          "deck.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "뽑기/버림/추방 묶음은 서로 다른 컨테이너; 보이는 버림은 선택 별도 공개.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "trade-deck.preserve",
+        "label": "공용 교역 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "trade-deck.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "미공개 교역 덱 순서를 유지.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "market.scene",
+      "play.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "현재 함선 수로 이번 남은 구매력·공격력 역산, Authority를 승점과 혼동"
+    ],
+    "correction_targets": [
+      {
+        "id": "market.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "market.scene"
+        ],
+        "area_ids": [
+          "market"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "공개 교역 카드 슬롯·보충 전 빈자리·탐험선 공급.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "play.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "play.scene"
+        ],
+        "area_ids": [
+          "play"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "이번 턴 함선과 남는 기지·Outpost 표시는 카드 ID와 함께.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "현재 손패와 아직 낼 카드.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "deck.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "deck.scene"
+        ],
+        "area_ids": [
+          "deck"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "뽑기/버림/추방 묶음은 서로 다른 컨테이너; 보이는 버림은 선택 별도 공개.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "trade-deck.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "trade-deck.scene"
+        ],
+        "area_ids": [
+          "trade-deck"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "미공개 교역 덱 순서를 유지.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "market",
+      "play",
+      "hand",
+      "deck",
+      "trade-deck"
+    ],
+    "editable_component_ids": [
+      "cards",
+      "authority"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "star-realms.primary",
+      "title": "Star Realms — 공식 자료",
+      "url": "https://www.starrealms.com/learn-to-play",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 Learn to Play에서 개인 시작 덱, Trade로 함선/기지 획득·Combat으로 기지/Authority 공격·Authority0 목표 확인. 전체 능력·동맹·Outpost 예외는 별도 대조 필요."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "원2인 Core Set. Colony Wars/Frontiers·캠페인/다인·영웅 등은 추가 규칙 패치.",
+    "Outpost 우선·동맹/폐기 효과·기지 지속·구매 카드의 위치·2인 시작 손패 세부는 전수 검증 미완료.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

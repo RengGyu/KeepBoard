@@ -1,0 +1,750 @@
+{
+  "schema_version": "1.0",
+  "game_id": "star-wars-outer-rim",
+  "name_ko": "스타워즈: 아우터 림",
+  "name_en": "Star Wars: Outer Rim",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "Unfinished Business 확장 제외",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "star-wars-outer-rim.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "map",
+      "name": "은하 구역·접촉 표식",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "은하 구역",
+        "끝 캡",
+        "접촉 뒷면",
+        "접촉 공개면",
+        "순찰"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "지도 구역 타일과 양 끝 캡, 공개 순찰 토큰과 뒷면 접촉 토큰은 별개다. 접촉의 색/점 개수와 공개면, 지도 구역 순서·행성/항로 위치를 저장한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "star-wars-outer-rim.art-confirmation.outer-rim-web"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "ships",
+      "name": "함선·캐릭터",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "플레이어 위치·함선/캐릭터 카드와 개인 목표 면.",
+      "source_refs": [
+        "star-wars-outer-rim.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "승무원·장비·화물·직업·현상금",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "슬롯별 장착과 진행 중 임무.",
+      "source_refs": [
+        "star-wars-outer-rim.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "markers",
+      "name": "피해·돈·명성·평판",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "피해",
+        "크레딧",
+        "명성 슬라이더",
+        "평판"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "star-wars-outer-rim.art-confirmation.outer-rim-web",
+        "star-wars-outer-rim.art-confirmation.outer-rim-reference"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "galaxy",
+        "name": "외곽 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "map",
+          "ships"
+        ],
+        "anchor_contract": "구역 순서·연결·행성 위치·순찰/플레이어 말과 접촉의 공개 면.",
+        "description": "외곽 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "ship",
+        "name": "개인 함선·캐릭터",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "ships",
+          "cards",
+          "markers"
+        ],
+        "anchor_contract": "함선 장착 슬롯·승무원/화물·캐릭터와 함선 피해, 목표 면.",
+        "description": "개인 함선·캐릭터의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "market",
+        "name": "분류별 시장",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "시장별 공개 위 카드·선택 중 카드·버림/교체 여부.",
+        "description": "분류별 시장의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "private",
+        "name": "미공개 접촉·선택 카드",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards",
+          "map"
+        ],
+        "anchor_contract": "규칙상 개인만 본 정보는 별도 메모. 아직 본 적 없는 접촉은 모름.",
+        "description": "미공개 접촉·선택 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks",
+        "name": "조우·시장 덱",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "종류별 덱/버림/데이터뱅크의 미공개 순서.",
+        "description": "조우·시장 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "galaxy.scene",
+      "label": "외곽 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "구역 순서·연결·행성 위치·순찰/플레이어 말과 접촉의 공개 면. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "map",
+        "ships"
+      ],
+      "area_ids": [
+        "galaxy"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ship.scene",
+      "label": "개인 함선·캐릭터",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "함선 장착 슬롯·승무원/화물·캐릭터와 함선 피해, 목표 면. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "ships",
+        "cards",
+        "markers"
+      ],
+      "area_ids": [
+        "ship"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "market.scene",
+      "label": "분류별 시장",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "시장별 공개 위 카드·선택 중 카드·버림/교체 여부. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "market"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "private.scene",
+      "label": "미공개 접촉·선택 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "규칙상 개인만 본 정보는 별도 메모. 아직 본 적 없는 접촉은 모름. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards",
+        "map"
+      ],
+      "area_ids": [
+        "private"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "decks.scene",
+      "label": "조우·시장 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "종류별 덱/버림/데이터뱅크의 미공개 순서. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "decks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "reputation",
+      "label": "세력별 평판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "각 세력의 현재 관계를 독립 저장하고 명성과 합치지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "assets",
+      "label": "명성·돈·피해",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 명성·크레딧·인물/함선 피해·완료 목표.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "job",
+      "label": "임무 진행",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "진행 중 직업/현상금·배송 목적지·획득/운송/완료 상태.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "계획/이동·순찰/시장 행동/조우·시험/임무 보상 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "personal-ship",
+      "name": "개인 항해",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "개인 함선과 승무원으로 은하를 이동하며 여러 방식으로 명성을 얻는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "star-wars-outer-rim.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "two-damage",
+      "name": "상태 구분",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "인물과 함선 상태·세력별 평판을 같은 체력/인기도 하나로 합치지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "private.preserve",
+        "label": "미공개 접촉·선택 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "private.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "규칙상 개인만 본 정보는 별도 메모. 아직 본 적 없는 접촉은 모름.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "조우·시장 덱 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "종류별 덱/버림/데이터뱅크의 미공개 순서.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "galaxy.scene",
+      "ship.scene",
+      "market.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "접촉 표식 뒷면과 다음 데이터뱅크 지시, 명성으로 세력 평판 추측"
+    ],
+    "correction_targets": [
+      {
+        "id": "galaxy.edit",
+        "scope": "public",
+        "component_ids": [
+          "map",
+          "ships"
+        ],
+        "field_ids": [
+          "galaxy.scene"
+        ],
+        "area_ids": [
+          "galaxy"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "구역 순서·연결·행성 위치·순찰/플레이어 말과 접촉의 공개 면.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "ship.edit",
+        "scope": "player",
+        "component_ids": [
+          "ships",
+          "cards",
+          "markers"
+        ],
+        "field_ids": [
+          "ship.scene"
+        ],
+        "area_ids": [
+          "ship"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "함선 장착 슬롯·승무원/화물·캐릭터와 함선 피해, 목표 면.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "market.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "market.scene"
+        ],
+        "area_ids": [
+          "market"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "시장별 공개 위 카드·선택 중 카드·버림/교체 여부.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "private.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards",
+          "map"
+        ],
+        "field_ids": [
+          "private.scene"
+        ],
+        "area_ids": [
+          "private"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "규칙상 개인만 본 정보는 별도 메모. 아직 본 적 없는 접촉은 모름.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "decks.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "decks.scene"
+        ],
+        "area_ids": [
+          "decks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "종류별 덱/버림/데이터뱅크의 미공개 순서.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "galaxy",
+      "ship",
+      "market",
+      "private",
+      "decks"
+    ],
+    "editable_component_ids": [
+      "map",
+      "ships",
+      "cards",
+      "markers"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "star-wars-outer-rim.primary",
+      "title": "Star Wars: Outer Rim — 공식 자료",
+      "url": "https://drafts.fantasyflightgames.com/en/products/star-wars-outer-rim/",
+      "kind": "official-product",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 기존 상품 검색 본문에서 개인 함선·고용 승무원·은하 이동·현상금/밀수·명성 목표 확인. 신판 Rules Reference 링크와 확장 Unfinished Business는 기본 내용으로 혼합하지 않음."
+    },
+    {
+      "id": "star-wars-outer-rim.art-confirmation.outer-rim-web",
+      "title": "Star Wars Outer Rim Base — Learn to Play v2",
+      "url": "https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/sw06_learn_to_play_v2-compressed.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.2–5 Components/Setup; Rules Reference Reputation p.13 — 피해·크레딧 토큰, 개인판 명성 슬라이더와 세력별 평판 토큰이 다르다. 피해가 인물/함선 중 어디에 놓였는지, 평판의 긍정/중립/부정을 기록한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    },
+    {
+      "id": "star-wars-outer-rim.art-confirmation.outer-rim-reference",
+      "title": "Star Wars Outer Rim base — Rules Reference",
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/01/91/01919a54-ddc4-44e6-a721-068dfb73bca0/sw06_rules_reference-compressed.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "Reputation p.13; Damage/Credits/Fame glossary — 구성물 확인 보조 근거; 전체 규칙 검증으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "기본 Outer Rim. Unfinished Business의 Core Worlds·Favors/Ambitions는 별도 지도/필드 패치.",
+    "캐릭터/함선 목표·순찰/평판 효과·직업과 전투·개인 정보 공개의 정확한 규칙은 미대조.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

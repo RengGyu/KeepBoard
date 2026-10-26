@@ -1,0 +1,798 @@
+{
+  "schema_version": "1.0",
+  "game_id": "sleeping-gods",
+  "name_ko": "슬리핑 갓즈",
+  "name_en": "Sleeping Gods",
+  "edition": {
+    "id": "base",
+    "name": "원작 기본판",
+    "compatibility_notes": [
+      "Distant Skies는 독립 후속작으로 별도 요청",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "sleeping-gods.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "atlas",
+      "name": "아틀라스·함선·기록",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "현재 페이지/지역·함선 위치와 항해 기록.",
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "crew",
+      "name": "선원·능력·레벨",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "담당 선원·능력 장착·체력/피로/상태.",
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "enemies",
+      "name": "적 카드",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "적 배열·방어/심장 칸과 덮은 피해.",
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "assets",
+      "name": "명령·자원·모험·퀘스트",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "개인 명령과 공용 음식/재료/동전·공개 모험·퀘스트.",
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "reported"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "world",
+        "name": "아틀라스 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "graph",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "graph"
+        ],
+        "component_ids": [
+          "atlas"
+        ],
+        "anchor_contract": "페이지ID·지역노드·페이지 연결·함선 위치. 아직 방문하지 않은 이야기 내용 제외.",
+        "description": "아틀라스 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "ship",
+        "name": "함선판",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "atlas",
+          "assets"
+        ],
+        "anchor_contract": "함선 행동 말·손상 칸·자원과 공용 모험 카드 부착 명령.",
+        "description": "함선판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "crew",
+        "name": "선원 구역",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "crew",
+          "assets"
+        ],
+        "anchor_contract": "선원별 담당자·피해/피로/상태·명령·능력/장비.",
+        "description": "선원 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "combat",
+        "name": "적 전투 배열",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "enemies",
+          "assets"
+        ],
+        "anchor_contract": "적 카드 좌우 순서·각 피해칸·현재 행동 토큰과 시너지 대상.",
+        "description": "적 전투 배열의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "개인 능력 손패",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "crew"
+        ],
+        "anchor_contract": "아직 내지 않은 능력 카드. 협력 공개 관례는 선택 메모.",
+        "description": "개인 능력 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks",
+        "name": "사건·운명·퀘스트 묶음",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "topology": "stack",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "stack"
+        ],
+        "component_ids": [
+          "crew",
+          "enemies",
+          "assets"
+        ],
+        "anchor_contract": "덱/버림·활성 퀘스트·미공개 내용을 물리 묶음으로 유지.",
+        "description": "사건·운명·퀘스트 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "world.scene",
+      "label": "아틀라스 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "페이지ID·지역노드·페이지 연결·함선 위치. 아직 방문하지 않은 이야기 내용 제외. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "atlas"
+      ],
+      "area_ids": [
+        "world"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ship.scene",
+      "label": "함선판",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "함선 행동 말·손상 칸·자원과 공용 모험 카드 부착 명령. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "atlas",
+        "assets"
+      ],
+      "area_ids": [
+        "ship"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "crew.scene",
+      "label": "선원 구역",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "선원별 담당자·피해/피로/상태·명령·능력/장비. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "crew",
+        "assets"
+      ],
+      "area_ids": [
+        "crew"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "combat.scene",
+      "label": "적 전투 배열",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "적 카드 좌우 순서·각 피해칸·현재 행동 토큰과 시너지 대상. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "enemies",
+        "assets"
+      ],
+      "area_ids": [
+        "combat"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "개인 능력 손패",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "아직 내지 않은 능력 카드. 협력 공개 관례는 선택 메모. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "crew"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "decks.scene",
+      "label": "사건·운명·퀘스트 묶음",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "덱/버림·활성 퀘스트·미공개 내용을 물리 묶음으로 유지. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "crew",
+        "enemies",
+        "assets"
+      ],
+      "area_ids": [
+        "decks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "story",
+      "label": "이야기·항해 기록",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "campaign",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "이미 읽은 항목·선택 결과·키워드/퀘스트·발견한 토템과 세션 중단 문장.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn-state",
+      "label": "선장·남은 행동",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 선장·함선 행동/사건/두 행동 중 단계와 남은 수.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "ship-damage",
+      "label": "함선·선원 수치",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "함선 손상 위치와 선원별 피해/피로, 값과 자원 수를 분리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "함선 행동/사건/여행·탐험·시장/운명 뽑기·전투 반격/이야기 선택 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "turn",
+      "name": "세 구간",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "함선 행동·사건·선택 행동을 나눠 진행하므로 같은 위치라도 처리 단계가 다르다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "enemy-squares",
+      "name": "적의 피해 위치",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "적 카드의 피해는 가린 심볼/칸과 관련되므로 총 피해만으로 대체하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "sleeping-gods.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "개인 능력 손패 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "아직 내지 않은 능력 카드. 협력 공개 관례는 선택 메모.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "decks.preserve",
+        "label": "사건·운명·퀘스트 묶음 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "decks.scene"
+        ],
+        "method": "ordered-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "덱/버림·활성 퀘스트·미공개 내용을 물리 묶음으로 유지.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "world.scene",
+      "ship.scene",
+      "crew.scene",
+      "combat.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "미방문 이야기·퀘스트 정답·적 뒤 내용, 같은 선원을 플레이어 수 변경 때 복제"
+    ],
+    "correction_targets": [
+      {
+        "id": "world.edit",
+        "scope": "public",
+        "component_ids": [
+          "atlas"
+        ],
+        "field_ids": [
+          "world.scene"
+        ],
+        "area_ids": [
+          "world"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "페이지ID·지역노드·페이지 연결·함선 위치. 아직 방문하지 않은 이야기 내용 제외.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "ship.edit",
+        "scope": "public",
+        "component_ids": [
+          "atlas",
+          "assets"
+        ],
+        "field_ids": [
+          "ship.scene"
+        ],
+        "area_ids": [
+          "ship"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "함선 행동 말·손상 칸·자원과 공용 모험 카드 부착 명령.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "crew.edit",
+        "scope": "player",
+        "component_ids": [
+          "crew",
+          "assets"
+        ],
+        "field_ids": [
+          "crew.scene"
+        ],
+        "area_ids": [
+          "crew"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "선원별 담당자·피해/피로/상태·명령·능력/장비.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "combat.edit",
+        "scope": "public",
+        "component_ids": [
+          "enemies",
+          "assets"
+        ],
+        "field_ids": [
+          "combat.scene"
+        ],
+        "area_ids": [
+          "combat"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment"
+        ],
+        "anchor_strategy": "적 카드 좌우 순서·각 피해칸·현재 행동 토큰과 시너지 대상.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "crew"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "아직 내지 않은 능력 카드. 협력 공개 관례는 선택 메모.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "decks.edit",
+        "scope": "shared-secret",
+        "component_ids": [
+          "crew",
+          "enemies",
+          "assets"
+        ],
+        "field_ids": [
+          "decks.scene"
+        ],
+        "area_ids": [
+          "decks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "덱/버림·활성 퀘스트·미공개 내용을 물리 묶음으로 유지.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "world",
+      "ship",
+      "crew",
+      "combat",
+      "hand",
+      "decks"
+    ],
+    "editable_component_ids": [
+      "atlas",
+      "crew",
+      "enemies",
+      "assets"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "sleeping-gods.primary",
+      "title": "Sleeping Gods — 공식 자료",
+      "url": "https://sleeping-gods.rulepop.com/",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "Red Raven 공식 상품이 직접 연결한 공식 규칙 참조. Your Turn/Combat/Command/Components에서 함선 행동→사건→두 행동, 명령·피로·선원 피해·적 카드 칸별 피해·아틀라스/기록 시트 확인. Saving/Restarting 세부는 전수 대조하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "원 Sleeping Gods. Tides of Ruin은 지도/이야기 추가 패치; Distant Skies/Primeval Peril은 독립 게임.",
+    "공식 저장/재시작의 묶음 절차·사건 덱 주기·모든 키워드/이야기와 실패 규칙은 미검증. 이야기 원문 사전을 복제하지 않는다.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

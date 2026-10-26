@@ -1,0 +1,698 @@
+{
+  "schema_version": "1.0",
+  "game_id": "dominant-species",
+  "name_ko": "도미넌트 스피시즈",
+  "name_en": "Dominant Species",
+  "edition": {
+    "id": "base",
+    "name": "원작 기본판",
+    "compatibility_notes": [
+      "Marine은 독립작이며 이번 목록 미계수",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "dominant-species.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "earth",
+      "name": "지형·툰드라",
+      "kind": "tile",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "확장되는 육각 지형과 툰드라 덮개.",
+      "source_refs": [
+        "dominant-species.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "animals",
+      "name": "종 말·지배 원뿔",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "종의 개체 수와 지배 판정을 서로 다른 말로 기록.",
+      "source_refs": [
+        "dominant-species.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "elements",
+      "name": "원소 원반",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "동물판 및 여러 지형이 공유하는 접점의 원소.",
+      "source_refs": [
+        "dominant-species.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "actions",
+      "name": "행동 말·지배 카드",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [
+        "행동 원기둥",
+        "지배 카드"
+      ],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "source_refs": [
+        "dominant-species.art-confirmation.dominant-species-primary"
+      ],
+      "confidence": "verified"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "earth",
+        "name": "지형·접점 원소",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "earth",
+          "animals",
+          "elements"
+        ],
+        "anchor_contract": "육각 좌표·툰드라 부모 타일·접점 원소의 공유 vertex ID·지형별 동물 종류/개체 수/지배 원뿔.",
+        "description": "지형·접점 원소의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "animal",
+        "name": "동물판",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "elements",
+          "animals"
+        ],
+        "anchor_contract": "동물 종류·적응 원소 슬롯과 종 말의 미사용/제거 구역.",
+        "description": "동물판의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "actions",
+        "name": "행동 화면",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "actions"
+        ],
+        "anchor_contract": "행동 종류·해결 순서의 칸별 말 소유자와 이미 해결한 칸.",
+        "description": "행동 화면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "cards",
+        "name": "공개 지배 카드",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "actions"
+        ],
+        "anchor_contract": "공개 후보·선택 중 카드·해결/제거 구역.",
+        "description": "공개 지배 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "tracks",
+        "name": "점수·주도권",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "animals",
+          "actions"
+        ],
+        "anchor_contract": "승점·주도권·생존 관련 공개 표식과 해당 동물.",
+        "description": "점수·주도권의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "earth.scene",
+      "label": "지형·접점 원소",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "육각 좌표·툰드라 부모 타일·접점 원소의 공유 vertex ID·지형별 동물 종류/개체 수/지배 원뿔. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "earth",
+        "animals",
+        "elements"
+      ],
+      "area_ids": [
+        "earth"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "animal.scene",
+      "label": "동물판",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "동물 종류·적응 원소 슬롯과 종 말의 미사용/제거 구역. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "elements",
+        "animals"
+      ],
+      "area_ids": [
+        "animal"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "actions.scene",
+      "label": "행동 화면",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "행동 종류·해결 순서의 칸별 말 소유자와 이미 해결한 칸. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "actions"
+      ],
+      "area_ids": [
+        "actions"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "cards.scene",
+      "label": "공개 지배 카드",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "공개 후보·선택 중 카드·해결/제거 구역. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "actions"
+      ],
+      "area_ids": [
+        "cards"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tracks.scene",
+      "label": "점수·주도권",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "승점·주도권·생존 관련 공개 표식과 해당 동물. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "animals",
+        "actions"
+      ],
+      "area_ids": [
+        "tracks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "round",
+      "label": "진행 중 행동",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 행동 구역·선택한 지형·남은 처리. 행동 말이 제거됐다고 효과 완료로 단정하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "adaptation",
+      "label": "동물별 원소",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원소 종류별 중복 수와 변이·적응 중 상태.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "endangered",
+      "label": "위기·지배 확인",
+      "scope": "public",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "지형별 관측 지배 원뿔과 위기 여부 확인값. 계산 후보와 관측값을 분리한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "행동 말 배치/지형·원소 변경/이동·경쟁/지배 카드/위기종 제거·생존 득점 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "dominance",
+      "name": "개체 수와 지배 구분",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "지배는 단순 개체 수 최다와 다르다. 지형·동물판 원소의 일치와 해당 종의 존재를 고려하며 동점은 지배 없음이다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "dominant-species.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "shared-elements",
+      "name": "접점 원소",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "한 접점의 원소를 인접 타일마다 별도 실물로 중복 계수하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "earth.scene",
+      "animal.scene",
+      "actions.scene",
+      "cards.scene",
+      "tracks.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "종 말 개수만으로 지배 원뿔 확정, 접점이 가려진 원소 추정"
+    ],
+    "correction_targets": [
+      {
+        "id": "earth.edit",
+        "scope": "public",
+        "component_ids": [
+          "earth",
+          "animals",
+          "elements"
+        ],
+        "field_ids": [
+          "earth.scene"
+        ],
+        "area_ids": [
+          "earth"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "육각 좌표·툰드라 부모 타일·접점 원소의 공유 vertex ID·지형별 동물 종류/개체 수/지배 원뿔.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "animal.edit",
+        "scope": "player",
+        "component_ids": [
+          "elements",
+          "animals"
+        ],
+        "field_ids": [
+          "animal.scene"
+        ],
+        "area_ids": [
+          "animal"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "동물 종류·적응 원소 슬롯과 종 말의 미사용/제거 구역.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "actions.edit",
+        "scope": "public",
+        "component_ids": [
+          "actions"
+        ],
+        "field_ids": [
+          "actions.scene"
+        ],
+        "area_ids": [
+          "actions"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment"
+        ],
+        "anchor_strategy": "행동 종류·해결 순서의 칸별 말 소유자와 이미 해결한 칸.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "cards.edit",
+        "scope": "public",
+        "component_ids": [
+          "actions"
+        ],
+        "field_ids": [
+          "cards.scene"
+        ],
+        "area_ids": [
+          "cards"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "공개 후보·선택 중 카드·해결/제거 구역.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "tracks.edit",
+        "scope": "public",
+        "component_ids": [
+          "animals",
+          "actions"
+        ],
+        "field_ids": [
+          "tracks.scene"
+        ],
+        "area_ids": [
+          "tracks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "승점·주도권·생존 관련 공개 표식과 해당 동물.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "earth",
+      "animal",
+      "actions",
+      "cards",
+      "tracks"
+    ],
+    "editable_component_ids": [
+      "earth",
+      "animals",
+      "elements",
+      "actions"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "dominant-species.primary",
+      "title": "Dominant Species — 공식 자료",
+      "url": "https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf",
+      "kind": "official-rules",
+      "access": "search-index",
+      "checked_at": "2026-10-21",
+      "note": "공식 Living Rules 검색 본문 Dominance에서 동물판/지형의 원소 일치, 종 말 존재, 동점 시 지배 없음과 위기종 예외 확인. 전체 행동 순서·판본 정오는 미대조."
+    },
+    {
+      "id": "dominant-species.art-confirmation.dominant-species-primary",
+      "title": "Dominant Species ©2010 GMT — Rules of Play",
+      "url": "https://www.gmtgames.com/living_rules/DomSpec_Rules_FINAL.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "pp.2–3 Components/Glossary; pp.8–9 Action Display; pp.18–19 Dominance Cards — 행동 말은 나무 원기둥이며 지배 표식 원뿔·종 큐브와 다르다. 지배 카드는 일회 효과 카드, Survival 카드는 별도다. 행동칸 위치와 획득/처리 카드 상태를 기록한다. 전체 규칙/인쇄 변종 확인으로 확대하지 않음."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "Dominant Species 원본 기본판. Marine은 별도 게임이며 지형/행동판을 혼합하지 않는다.",
+    "행동별 세부 순서·생존 득점·멸종·종 특수능력·Ice Age 종료 처리와 실제 지도 접점 등록은 추가 대조 필요.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

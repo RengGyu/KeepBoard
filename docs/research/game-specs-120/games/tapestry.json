@@ -1,0 +1,706 @@
+{
+  "schema_version": "1.0",
+  "game_id": "tapestry",
+  "name_ko": "태피스트리",
+  "name_en": "Tapestry",
+  "edition": {
+    "id": "base",
+    "name": "기본판",
+    "compatibility_notes": [
+      "밸런스 개정 카드 적용판 구분",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "tapestry.primary"
+    ],
+    "confidence": "reported"
+  },
+  "components": [
+    {
+      "id": "buildings",
+      "name": "수입 건물·랜드마크·전초기지",
+      "kind": "piece",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "수입판 공급과 수도/지도 배치.",
+      "source_refs": [
+        "tapestry.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "tiles",
+      "name": "영토·수도·문명판",
+      "kind": "board",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "실제 지도면·개인 수도 격자·개정 문명판.",
+      "source_refs": [
+        "tapestry.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "cards",
+      "name": "태피스트리·기술·함정",
+      "kind": "card",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "손패·시대 칸·기술 단계·공개/가림.",
+      "source_refs": [
+        "tapestry.primary"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "markers",
+      "name": "자원·진보·점수",
+      "kind": "token",
+      "quantity": null,
+      "quantity_scope": "unknown",
+      "variants": [],
+      "properties": [
+        "identity",
+        "face",
+        "owner",
+        "quantity"
+      ],
+      "description": "트랙별 위치와 현재 자원.",
+      "source_refs": [],
+      "confidence": "unclear"
+    }
+  ],
+  "layout": {
+    "areas": [
+      {
+        "id": "map",
+        "name": "공용 영토 지도",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "hex",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "hex"
+        ],
+        "component_ids": [
+          "tiles",
+          "buildings"
+        ],
+        "anchor_contract": "영토 셀·탐험 타일 회전·전초기지 소유와 덮임.",
+        "description": "공용 영토 지도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "capital",
+        "name": "개인 수도",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "grid",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "grid"
+        ],
+        "component_ids": [
+          "tiles",
+          "buildings"
+        ],
+        "anchor_contract": "수도 행열·인쇄 빈칸과 건물/랜드마크 여러 셀의 footprint.",
+        "description": "개인 수도의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "tracks",
+        "name": "공용 진보 트랙",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "track",
+        "dynamic": false,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "track"
+        ],
+        "component_ids": [
+          "markers"
+        ],
+        "anchor_contract": "과학/기술/탐험/군사 위치와 선점 보상.",
+        "description": "공용 진보 트랙의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "income",
+        "name": "수입·기술·시대",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "buildings",
+          "cards",
+          "markers"
+        ],
+        "anchor_contract": "수입판의 빠진 건물 칸·기술 카드 단계·현재 시대 태피스트리.",
+        "description": "수입·기술·시대의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "hand",
+        "name": "비공개 카드",
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "태피스트리/함정 손패와 공개 전 선택.",
+        "description": "비공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "relations": [],
+    "notes": [
+      "좌표/연결은 세션별 실제 판의 기준점으로 등록한다. 확인되지 않은 고정칸 수나 카드별 사전은 생성하지 않는다.",
+      "고정 좌표 사전은 미작성. 구역 이름과 사진 기준점으로 먼저 복원한다."
+    ]
+  },
+  "state_fields": [
+    {
+      "id": "map.scene",
+      "label": "공용 영토 지도",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "영토 셀·탐험 타일 회전·전초기지 소유와 덮임. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles",
+        "buildings"
+      ],
+      "area_ids": [
+        "map"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "capital.scene",
+      "label": "개인 수도",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "수도 행열·인쇄 빈칸과 건물/랜드마크 여러 셀의 footprint. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "tiles",
+        "buildings"
+      ],
+      "area_ids": [
+        "capital"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "tracks.scene",
+      "label": "공용 진보 트랙",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "과학/기술/탐험/군사 위치와 선점 보상. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "markers"
+      ],
+      "area_ids": [
+        "tracks"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "income.scene",
+      "label": "수입·기술·시대",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "수입판의 빠진 건물 칸·기술 카드 단계·현재 시대 태피스트리. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "buildings",
+        "cards",
+        "markers"
+      ],
+      "area_ids": [
+        "income"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "hand.scene",
+      "label": "비공개 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "태피스트리/함정 손패와 공개 전 선택. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "hand"
+      ],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "era",
+      "label": "개인 시대·수입 차례",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "플레이어별 시대와 수입 턴 처리 단계. 공용 라운드 하나로 합치지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "resources",
+      "label": "자원·점수",
+      "scope": "player",
+      "visibility": "public",
+      "type": "json",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "보유 자원별 값과 확정 점수·수입량을 분리.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "civilization",
+      "label": "문명판 버전",
+      "scope": "player",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "문명 ID·보라 개정 아이콘 등 실물 버전과 적용 조정 메모.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "turn",
+      "label": "누구 차례",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "현재 플레이어/진행자. 모르면 null; 사진으로 차례를 추측하지 않는다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "pending",
+      "label": "중단한 지점",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "진보 비용·보상/기술 업그레이드/영토·수도 놓기/개인 수입 턴 중 지점.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    },
+    {
+      "id": "note",
+      "label": "짧은 메모",
+      "scope": "public",
+      "visibility": "public",
+      "type": "text",
+      "lifetime": "session",
+      "acquisition": [
+        "manual"
+      ],
+      "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다.",
+      "component_ids": [],
+      "area_ids": [],
+      "rule_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "rules": [
+    {
+      "id": "tracks",
+      "name": "네 진보축",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "과학·기술·탐험·군사의 진보는 별개이며 수입·수도와 함께 기록한다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "tapestry.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "edition",
+      "name": "개정 문명",
+      "kind": "procedure",
+      "scope": "public",
+      "summary": "현행 상품은 개정 문명판을 명시하므로 구판 능력/시작 수치를 자동 적용하지 않는다.",
+      "field_ids": [],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [
+        "tapestry.primary"
+      ],
+      "confidence": "verified"
+    },
+    {
+      "id": "record-only",
+      "name": "원상태 보존",
+      "kind": "constraint",
+      "scope": "public",
+      "summary": "기록 정정은 실제 게임 행동이 아니다. 불완전·규칙 위반 상태도 저장하며 자동 비용 지불, 점수 확정, 다음 턴 진행을 하지 않는다.",
+      "field_ids": [
+        "turn",
+        "pending"
+      ],
+      "component_ids": [],
+      "area_ids": [],
+      "source_refs": [],
+      "confidence": "recommendation"
+    }
+  ],
+  "resume": {
+    "required_field_ids": [],
+    "pending_action_fields": [
+      "pending"
+    ],
+    "preserve_procedures": [
+      {
+        "id": "hand.preserve",
+        "label": "비공개 카드 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "태피스트리/함정 손패와 공개 전 선택.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다."
+        ],
+        "after": [],
+        "source_refs": [],
+        "confidence": "recommendation"
+      }
+    ],
+    "opening_policy": "retain-saved-turn",
+    "notes": [
+      "모름·나중에·그대로 저장을 허용한다. 재열기 시 턴/라운드/카드 방향/숨은 값을 초기화하지 않는다.",
+      "lifetime은 값의 적용 범위다. 저장본을 여는 동작만으로 턴/라운드/캠페인 값을 지우지 않는다.",
+      "남은 처리만 선택 메모로 남긴다. 값이 없는 상태도 그대로 연다."
+    ]
+  },
+  "recognition_correction": {
+    "photographable_field_ids": [
+      "map.scene",
+      "capital.scene",
+      "tracks.scene",
+      "income.scene"
+    ],
+    "must_ask_field_ids": [],
+    "never_infer": [
+      "가려진 구성물의 정체·수량과 덱 순서",
+      "소유자 비공개 정보와 사진 밖 상태",
+      "이전 행동·자동 점수·승리 확정",
+      "트랙 위치로 지난 수입 횟수·선점 이력, 비공개 함정"
+    ],
+    "correction_targets": [
+      {
+        "id": "map.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles",
+          "buildings"
+        ],
+        "field_ids": [
+          "map.scene"
+        ],
+        "area_ids": [
+          "map"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "영토 셀·탐험 타일 회전·전초기지 소유와 덮임.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "capital.edit",
+        "scope": "player",
+        "component_ids": [
+          "tiles",
+          "buildings"
+        ],
+        "field_ids": [
+          "capital.scene"
+        ],
+        "area_ids": [
+          "capital"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "수도 행열·인쇄 빈칸과 건물/랜드마크 여러 셀의 footprint.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "tracks.edit",
+        "scope": "public",
+        "component_ids": [
+          "markers"
+        ],
+        "field_ids": [
+          "tracks.scene"
+        ],
+        "area_ids": [
+          "tracks"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "과학/기술/탐험/군사 위치와 선점 보상.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "income.edit",
+        "scope": "player",
+        "component_ids": [
+          "buildings",
+          "cards",
+          "markers"
+        ],
+        "field_ids": [
+          "income.scene"
+        ],
+        "area_ids": [
+          "income"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "수입판의 빠진 건물 칸·기술 카드 단계·현재 시대 태피스트리.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "hand.edit",
+        "scope": "player",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "hand.scene"
+        ],
+        "area_ids": [
+          "hand"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "owner"
+        ],
+        "anchor_strategy": "태피스트리/함정 손패와 공개 전 선택.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      }
+    ],
+    "privacy_policy": "owner-scoped"
+  },
+  "extensions": [],
+  "custom_setup": {
+    "allowed": true,
+    "description": "실제로 사용한 배치와 추가 부품을 세션 오버레이로 기록한다. 이는 앱의 기록 허용이며 공식 합법 배치 승인이 아니다.",
+    "editable_area_ids": [
+      "map",
+      "capital",
+      "tracks",
+      "income",
+      "hand"
+    ],
+    "editable_component_ids": [
+      "buildings",
+      "tiles",
+      "cards",
+      "markers"
+    ],
+    "invariant_rule_ids": [
+      "record-only"
+    ]
+  },
+  "sources": [
+    {
+      "id": "tapestry.primary",
+      "title": "Tapestry — 공식 자료",
+      "url": "https://store.stonemaiergames.com/products/tapestry",
+      "kind": "official-product",
+      "access": "opened",
+      "checked_at": "2026-10-21",
+      "note": "공식 현행 상품에서 과학/기술/탐험/군사4트랙·수입·수도 건물·문명 능력·태피스트리 카드 및 보라 아이콘 개정 문명판 확인."
+    }
+  ],
+  "confidence": "reported",
+  "gaps": [
+    "기본판의 문명 개정 여부를 선택. Plans & Ploys/Arts & Architecture/Fantasies & Futures의 새 트랙·카드는 패치.",
+    "개인 시대 비동기 수입·자원 비용·정복/함정·수도 득점·기술 업그레이드 세부는 전수 미검증.",
+    "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+  ]
+}

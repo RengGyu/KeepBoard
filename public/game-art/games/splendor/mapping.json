@@ -1,0 +1,329 @@
+{
+  "game_id": "splendor",
+  "name_ko": "스플렌더",
+  "name_en": "Splendor",
+  "edition": {
+    "id": "base",
+    "name": "현행 기본판",
+    "compatibility_notes": [
+      "리프레시 아트는 같은 게임 판본;Duel은 독립 게임으로 별도 행",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "splendor.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/splendor.json",
+  "source_sha256": "3fb4e4597c322b37a5216fe8c9c9744debccbeb1af4896ce58cd1cf309f2b8fc",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "chips",
+      "name": "보석·금 토큰",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "색 종류와 보유/공급 구분.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "보석 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-gem",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    },
+    {
+      "component_id": "development",
+      "name": "개발 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "레벨·비용·보너스 색·명성, 구매/예약 상태.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "보석 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gem",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "별 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "nobles",
+      "name": "귀족 타일",
+      "kind": "tile",
+      "source_confidence": "reported",
+      "source_description": "공개 후보와 획득한 플레이어.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "도시 지형",
+          "layers": [
+            {
+              "asset_id": "common.terrain-city"
+            }
+          ]
+        },
+        {
+          "name": "인물 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-portrait",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "market",
+      "name": "레벨별 공개 카드",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "grid",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "grid"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "레벨별 줄과 각 카드 자리, 보충 전 빈자리 유지.",
+      "description": "레벨별 공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-grid",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "noble-area",
+      "name": "공개 귀족",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "nobles"
+      ],
+      "anchor_contract": "귀족 ID와 후보/소유자 구역.",
+      "description": "공개 귀족의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "player",
+      "name": "구매 카드·토큰",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "chips",
+        "development",
+        "nobles"
+      ],
+      "anchor_contract": "보너스 색별 카드더미와 개별 카드 식별을 함께 유지.",
+      "description": "구매 카드·토큰의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "reserve",
+      "name": "예약 카드",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
+      "description": "예약 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "decks",
+      "name": "레벨별 덱",
+      "scope": "shared-secret",
+      "visibility": "hidden",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "development"
+      ],
+      "anchor_contract": "레벨별 남은 덱과 위아래 방향을 실물 보존.",
+      "description": "레벨별 덱의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-stack",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "레벨별 공개 카드 · 구조 예시",
+    "area_id": "market",
+    "layers": [
+      {
+        "asset_id": "common.area-grid"
+      },
+      {
+        "asset_id": "common.card-shell",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-gem",
+        "transform": "translate(15 29) scale(.36) translate(28 23) scale(.55)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "grid",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}

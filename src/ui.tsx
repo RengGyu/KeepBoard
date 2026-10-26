@@ -1,6 +1,10 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
-import { ArrowRight, Hexagon, LoaderCircle, X } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import type { Value } from '../shared/types';
+import { ComponentArt } from './ComponentArt';
+import { CarcassonneArt } from './CarcassonneArt';
+import { EmptyBoardArt, LoaderMark, type EmptyScene } from './BoardFeedback';
+import { BRAND_IMAGES } from './brandImages';
 
 export function Modal({ title, children, onClose, wide = false }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
   const titleId = useId();
@@ -33,8 +37,18 @@ export function Modal({ title, children, onClose, wide = false }: { title: strin
   </div>;
 }
 
-export function Busy({ label = '처리하고 있어요' }: { label?: string }) { return <span className="busy"><LoaderCircle size={16} className="spin"/>{label}</span>; }
-export function Empty({ title, children, action }: { title: string; children: ReactNode; action?: ReactNode }) { return <div className="empty"><div className="empty-mark"><Hexagon size={30}/></div><h3>{title}</h3><p>{children}</p>{action}</div>; }
+// A player's colour as that game's own piece; games without piece art keep a plain colour chip.
+export function PlayerPiece({ color, game, size = 22 }: { color?: string; game?: string; size?: number }) {
+  const art = game === 'catan-base' ? <ComponentArt kind="settlement" color={color} size={size}/> : game?.includes('carcassonne') ? <CarcassonneArt kind="follower" color={color} size={size}/> : <i className="player-chip" style={{ background: color, width: size * .62, height: size * .62 }}/>;
+  return <span className="player-piece" aria-hidden="true">{art}</span>;
+}
+export function Busy({ label = '처리하고 있어요', announce = false }: { label?: string; announce?: boolean }) { return <span className="busy" role={announce ? 'status' : undefined}><LoaderMark size={20}/>{label}</span>; }
+export function Empty({ title, children, action, scene }: { title: string; children: ReactNode; action?: ReactNode; scene?: EmptyScene }) {
+  const context = scene ?? (title.includes('검색') ? 'search' : title.includes('삭제') ? 'trash' : /보드|저장한 판|첫 번째 판/.test(title) ? 'boards' : 'quiet');
+  // A first, empty collection gets the illustrated empty table; search/trash keep the small line art.
+  if (context === 'boards') return <div className="empty board-empty has-photo"><img className="empty-photo" src={BRAND_IMAGES.emptyTable} alt="" width={1400} height={933} loading="lazy" decoding="async"/><div className="empty-copy"><h3>{title}</h3><p>{children}</p>{action}</div></div>;
+  return <div className="empty board-empty"><div className="empty-mark"><EmptyBoardArt scene={context}/></div><h3>{title}</h3><p>{children}</p>{action}</div>;
+}
 export function SectionHeading({ number, title, description, children }: { number?: string; title: string; description?: string; children?: ReactNode }) {
   return <div className="section-heading"><div>{number && <span className="eyebrow">{number}</span>}<h2>{title}</h2>{description && <p>{description}</p>}</div>{children}</div>;
 }

@@ -1,0 +1,507 @@
+{
+  "game_id": "voidfall",
+  "name_ko": "보이드폴",
+  "name_en": "Voidfall",
+  "edition": {
+    "id": "base",
+    "name": "Retail 기본판",
+    "compatibility_notes": [
+      "Galactic 재질판 중복 계수 안 함;세부 모드 확인 필요",
+      "선정 판본을 기준으로 하며 다른 언어/인쇄의 아트·기호·부품 대응은 세션에서 확인한다."
+    ],
+    "source_refs": [
+      "voidfall.primary"
+    ],
+    "confidence": "reported"
+  },
+  "source_spec": "docs/research/game-specs-120/games/voidfall.json",
+  "source_sha256": "0d9274ba962ae6fe8388767cd5583480c6a91e500f128e7ab10e4cbd05bd8ab7",
+  "art_scope": "representative-original-presets; never an exhaustive printed inventory",
+  "components": [
+    {
+      "component_id": "sectors",
+      "name": "구역·인구·설치물",
+      "kind": "tile",
+      "source_confidence": "verified",
+      "source_description": "구역은 양면 육각 타일이며 인구 주사위의 눈과 함대/길드·시설·오염 표식이 별개다. 구역ID·면·인구값·부착 구조물을 구별한다. 주사위가 있다는 사실을 임의 굴림 결과로 기록하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "mixed",
+      "variants": [
+        {
+          "name": "구역 타일",
+          "layers": [
+            {
+              "asset_id": "voidfall.sectors.voidfall-sector"
+            }
+          ]
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 1 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-1"
+            }
+          ],
+          "example_face": 1
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 2 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-2"
+            }
+          ],
+          "example_face": 2
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 3 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-3"
+            }
+          ],
+          "example_face": 3
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 4 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-4"
+            }
+          ],
+          "example_face": 4
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 5 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-5"
+            }
+          ],
+          "example_face": 5
+        },
+        {
+          "name": "인구 주사위 예시 · 눈 6 예시",
+          "layers": [
+            {
+              "asset_id": "common.die-6"
+            }
+          ],
+          "example_face": 6
+        },
+        {
+          "name": "길드 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-building",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "시설 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-factory",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "오염",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-skull",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "voidfall.art-confirmation.voidfall-primary"
+      ],
+      "source_location": "pp.3–4 Components; pp.17–19 Sectors/Population"
+    },
+    {
+      "component_id": "houses",
+      "name": "가문·트랙·자원",
+      "kind": "board",
+      "source_confidence": "verified",
+      "source_description": "가문 매트와 자원 다이얼판, 영향력 다이얼판, 문명 트랙 표식은 별개다. 가문 정체·사용면·각 자원/생산 다이얼값과 트랙 위치를 보존한다. 가문 능력 전체 효과는 그림으로 대체하지 않는다. 대표형의 정체와 이 범위만 확인했으며 전체 인쇄 앞면·전체 규칙 검증은 아니다.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "가문 매트",
+          "layers": [
+            {
+              "asset_id": "common.house-mat"
+            }
+          ]
+        },
+        {
+          "name": "자원 다이얼",
+          "layers": [
+            {
+              "asset_id": "common.dial"
+            }
+          ]
+        },
+        {
+          "name": "영향력 다이얼",
+          "layers": [
+            {
+              "asset_id": "common.triple-dial"
+            }
+          ]
+        },
+        {
+          "name": "문명 트랙 표식",
+          "layers": [
+            {
+              "asset_id": "common.cube"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "공식 근거로 확인한 대표 종류와 기록된 상태 의미만 반영했습니다. 모든 인쇄 변종·카드 앞면·실물 수량을 확정한 목록은 아닙니다.",
+      "confirmation_status": "confirmed",
+      "evidence_source_refs": [
+        "voidfall.art-confirmation.voidfall-primary"
+      ],
+      "source_location": "p.3 Components; pp.6–8 House Setup; pp.19–20 Resources; pp.28–29 Civilization"
+    },
+    {
+      "component_id": "cards",
+      "name": "집중·의제·기술 카드",
+      "kind": "card",
+      "source_confidence": "reported",
+      "source_description": "선택·사용한 집중과 지속 기술·해결 중 의제.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "목표 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-target",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "두루마리 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-scroll",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        },
+        {
+          "name": "기술 카드",
+          "layers": [
+            {
+              "asset_id": "common.card-shell"
+            },
+            {
+              "asset_id": "common.symbol-gear",
+              "transform": "translate(28 23) scale(.55)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established.",
+      "hidden_layers": [
+        {
+          "asset_id": "common.card-back"
+        }
+      ]
+    },
+    {
+      "component_id": "tokens",
+      "name": "교역·오염·진행",
+      "kind": "token",
+      "source_confidence": "reported",
+      "source_description": "교역 표식의 면/획득 턴과 공용 진행.",
+      "status": "common-reuse",
+      "variants": [
+        {
+          "name": "동전 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-coin",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "위험 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-skull",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        },
+        {
+          "name": "별 표식",
+          "layers": [
+            {
+              "asset_id": "common.token-shell"
+            },
+            {
+              "asset_id": "common.symbol-star",
+              "transform": "translate(30 30) scale(.5)"
+            }
+          ]
+        }
+      ],
+      "variant_count_is_quantity": false,
+      "source_quantity": null,
+      "quantity_display": {
+        "source": "runtime observed quantity only",
+        "null": "?",
+        "zero": "0",
+        "art_stack_layers": "material depth only"
+      },
+      "rotation": {
+        "center": [
+          60,
+          60
+        ],
+        "allowed": "runtime direction; reflects only when scene/spec permits"
+      },
+      "color_role": "fixed-semantic",
+      "owner_color_supported": false,
+      "gap": null,
+      "preset_inventory_limit": "Representative type silhouettes only; subtype identity/count and commercial printed face inventory not established."
+    }
+  ],
+  "areas": [
+    {
+      "id": "galaxy",
+      "name": "시나리오 구역",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "hex",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "hex"
+      ],
+      "component_ids": [
+        "sectors",
+        "tokens"
+      ],
+      "anchor_contract": "구역ID·회전·인접·소유자·인구 주사위값·함대 종류/전력·시설/오염의 부모 구역.",
+      "description": "시나리오 구역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-hex",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "house",
+      "name": "가문 보드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "track",
+      "dynamic": false,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "track"
+      ],
+      "component_ids": [
+        "houses",
+        "tokens"
+      ],
+      "anchor_contract": "가문ID·생산량과 저장량·문명 트랙·권능/교역 표식의 면.",
+      "description": "가문 보드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-track",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "technology",
+      "name": "기술·공개 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "기술 종류/수준·공개 집중 카드와 사용/미사용 상태.",
+      "description": "기술·공개 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "plans",
+      "name": "선택·개인 의제",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "공개성 미확인 카드 선택과 개인 의제는 소유자 기록으로 두고 확인 후 공개 가능.",
+      "description": "선택·개인 의제의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "cycle",
+      "name": "주기·시나리오 목표",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards",
+        "tokens"
+      ],
+      "anchor_contract": "선택 모드·공개 사건·주기/라운드·시나리오 목표/추가 위기 정보.",
+      "description": "주기·시나리오 목표의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "source_refs": [],
+      "confidence": "recommendation",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    }
+  ],
+  "gaps": [],
+  "area_preview": {
+    "name": "시나리오 구역 · 구조 예시",
+    "area_id": "galaxy",
+    "layers": [
+      {
+        "asset_id": "common.area-hex"
+      },
+      {
+        "asset_id": "voidfall.sectors.voidfall-sector",
+        "transform": "translate(15 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.token-shell",
+        "transform": "translate(63 29) scale(.36)"
+      },
+      {
+        "asset_id": "common.symbol-coin",
+        "transform": "translate(63 29) scale(.36) translate(30 30) scale(.5)"
+      }
+    ],
+    "status": "common-layer-composition",
+    "canonical_layout": false,
+    "fixed_slot_count": null,
+    "topology": "hex",
+    "limits": "Shared topology frame and referenced component assets only; no copied common objects. Actual locations, edges, cell counts and hidden facts come from scene data."
+  }
+}
