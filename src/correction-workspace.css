@@ -3,14 +3,15 @@
  * nav: kept (KeepBoard HUD bar) · signature: the saved board itself, fitted to the first screen · states: loading (busy chip), empty (first photo), error (scan/save line), full
  * axes: light/rounded-sans/cool · posture: workbench · contrast: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R3 V3 · weakest: R, the side column still stacks under the board below 1100px; the state line and save bar keep the essentials on the first phone screen */
-/* Hallmark · waive 24b · the editor helpers below keep their 6px/10px chip insets measured against the 44px touch targets the board editor tests rely on */
+/* Hallmark · dropped onClick={() => fire(flush().then(() => setEditingPlayers(true)))}, onClick={() => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()))} · rewired, not removed: the player button closes the board menu before the same flush-then-edit call, and the scan buttons call the shared capture() helper with the same flush-then-camera behaviour */
+/* Hallmark · waive 24b · se-* editor chips use 6px/10px insets · they are measured against the 44px touch targets the board editor already ships */
 
 /* Board workspace: the saved board is the screen. One top line (title, menu, save), one scope line (shared | personal, plus the state),
    one photo line, then the board fitted to the viewport with the turn and memo beside it. */
 :root{
-  --color-paper:#eef5fc;--color-paper-2:#ffffff;--color-paper-3:#f3f8fe;
+  --color-paper:#eef5fc;--color-paper-2:#fbfdff;--color-paper-3:#f2f7fd;
   --color-ink:#16305c;--color-ink-2:#2f4a75;--color-muted:#4f6688;
-  --color-rule:#d3e1f0;--color-field-edge:#7d97ba;
+  --color-rule:#d3e1f0;--color-field-edge:#728cb0;
   --color-accent:#2b7bea;--color-accent-ink:#1d63c6;--color-accent-soft:#e1efff;--color-focus:#2b7bea;
   --color-private:#fff6dd;--color-private-edge:#e3b341;--color-private-ink:#6b4a00;
   --color-busy:#ffc935;--color-error:#b3261e;--color-ok:#0b7a64;
@@ -19,6 +20,8 @@
 }
 body:has(.correction-workspace){background:var(--color-paper)}
 html,body{overflow-x:clip}
+.correction-workspace{caret-color:var(--color-accent)}
+.correction-workspace ::selection{background:var(--color-accent-soft);color:var(--color-ink)}
 
 .correction-workspace{padding:12px 0 24px;min-width:0;display:flex;flex-direction:column;gap:12px}
 .correction-workspace :is(button,summary,select,input,textarea):focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
@@ -28,7 +31,7 @@ html,body{overflow-x:clip}
 .cw-back{margin-left:-8px}
 .cw-title{flex:1;min-width:0}
 .cw-title-line{display:flex;align-items:center;gap:12px;min-width:0}
-.cw-title h1{flex:1;min-width:0;max-width:none;font-size:1.44rem;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cw-title h1{text-wrap:balance;flex:1;min-width:0;max-width:none;font-size:1.44rem;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cw-title p{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.875rem;color:var(--color-muted);margin-top:4px}
 .cw-title p>span{white-space:nowrap}
 .cw-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
@@ -38,7 +41,7 @@ html,body{overflow-x:clip}
 .cw-more>summary:hover{background:var(--color-accent-soft)}
 .cw-more>summary:active{background:var(--color-rule)}
 .cw-more[open]>summary{background:var(--color-accent-soft);color:var(--color-accent-ink)}
-.cw-more-menu{position:absolute;right:0;top:calc(100% + 4px);z-index:100;display:flex;flex-direction:column;align-items:stretch;min-width:192px;padding:4px;background:var(--color-paper-2);border:1px solid var(--color-rule);border-radius:12px;box-shadow:0 12px 28px var(--color-dot-edge)}
+.cw-more-menu{position:absolute;right:0;top:calc(100% + 4px);z-index:100;display:flex;flex-direction:column;align-items:stretch;min-width:192px;padding:4px;background:var(--color-paper-2);border:1px solid var(--color-field-edge);border-radius:12px}
 .cw-more-menu>.button{justify-content:flex-start;gap:8px;min-height:44px;color:var(--color-ink)}
 
 /* Scope line: shared board first, then the personal tabs behind a labelled divider. The state sits at the end of the same line. */
@@ -56,7 +59,7 @@ html,body{overflow-x:clip}
 .correction-workspace .owner-tabs>button>svg{color:var(--color-muted)}
 .owner-tabs-divider{display:flex;align-items:center;gap:4px;flex:0 0 auto;margin:0 4px 0 8px;padding-left:12px;border-left:1px solid var(--color-rule);font-size:.875rem;color:var(--color-muted);white-space:nowrap}
 
-.board-state{display:flex;flex-wrap:wrap;gap:4px 20px;margin:0;padding:8px 0;font-size:.875rem;min-width:0}
+.board-state{font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;gap:4px 20px;margin:0;padding:8px 0;font-size:.875rem;min-width:0}
 .board-state>div{display:flex;align-items:baseline;gap:8px;min-width:0}
 .board-state dt{color:var(--color-muted)}
 .board-state dd{margin:0;font-weight:700;color:var(--color-ink);overflow-wrap:anywhere}
@@ -92,6 +95,9 @@ html,body{overflow-x:clip}
 .cw-side .cw-photo-bar .lw-method{flex-direction:column;align-items:stretch;gap:4px}
 
 .correction-workspace :where(input:not([type=checkbox]):not([type=color]):not([type=range]):not([type=radio]),select,textarea){border-color:var(--color-field-edge)}
+.correction-workspace .number-stepper{border-color:var(--color-field-edge)}
+.correction-workspace .number-stepper>input[type=number]{background:var(--color-paper-3)}
+.correction-workspace .se-actions .button{white-space:nowrap}
 .correction-workspace :where(input,select,textarea):disabled{background:var(--color-paper-3);color:var(--color-muted)}
 
 /* Status lines: a hairline box, the state named in words. */
@@ -101,7 +107,7 @@ html,body{overflow-x:clip}
 .scan-readout.failed{border-color:var(--color-error);color:var(--color-error)}
 .scan-readout .button{min-height:40px}
 
-/* First photo: one line and its two actions, no illustration on the work screen. */
+/* First photo: one line saying what belongs here; its actions are the photo line's buttons beside it (above on phones). */
 .correction-workspace .capture-start{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-paper-2);border:1px dashed var(--color-field-edge);border-radius:16px;box-shadow:none}
 .capture-start-mark{color:var(--color-accent)}
 .correction-workspace .capture-start>div{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;flex:1;min-width:0}
@@ -138,7 +144,7 @@ html,body{overflow-x:clip}
 .correction-workspace .counts-editor>strong,.correction-workspace .counts-editor>.counts-grid,.correction-workspace .counts-editor>[role=status]{grid-column:1/-1}
 .correction-workspace .counts-editor>p.small{margin:0}
 .correction-workspace .counts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
-.correction-workspace .counts-grid>label{display:grid;grid-template-columns:32px minmax(0,1fr) 64px;align-items:center;gap:8px;margin:0;padding:4px 4px 4px 8px;border:1px solid var(--color-rule);border-radius:12px;background:var(--color-paper-2);font-size:.875rem;text-align:left}
+.correction-workspace .counts-grid>label{font-variant-numeric:tabular-nums;display:grid;grid-template-columns:32px minmax(0,1fr) 64px;align-items:center;gap:8px;margin:0;padding:4px 4px 4px 8px;border:1px solid var(--color-rule);border-radius:12px;background:var(--color-paper-2);font-size:.875rem;text-align:left}
 .correction-workspace .counts-grid>label>:first-child{width:32px;height:32px}
 .correction-workspace .counts-grid>label>input{margin:0;min-height:40px;padding:4px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 
@@ -151,7 +157,8 @@ html,body{overflow-x:clip}
 
 /* The scope tab already names the shared board; its section title stays for screen readers unless it carries a picker. */
 .correction-workspace .scene-workspace{padding:12px}
-.correction-workspace .scene-workspace>.section-heading:not(:has(select)){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* The section keeps its aria-label for screen readers; the duplicate visible title is dropped. */
+.correction-workspace .scene-workspace>.section-heading:not(:has(select)){display:none}
 .correction-workspace .se-toolbar{margin-bottom:8px}
 .correction-workspace .se-hint{margin-top:4px;font-size:.875rem;color:var(--color-muted)}
 
