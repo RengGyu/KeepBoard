@@ -1,0 +1,2699 @@
+{
+  "gameId": "marvel-champions",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "villain-stage",
+      "label": "활성 빌런 단계·체력·부착물",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "스테이지 묶음/현재 면/체력과 부착물·상태를 독립 보존한다. 코어 빌런별 체력·단계 수를 고정하지 않는다.",
+      "bounds": [
+        42,
+        44,
+        175,
+        224
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "scenario.villain",
+      "visibility": "public"
+    },
+    {
+      "id": "main-scheme",
+      "label": "활성 주계략 단계·위협",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "가로형 주계략 카드와 앞/뒷면·단계·위협·가속을 보존한다.",
+      "bounds": [
+        234,
+        44,
+        186,
+        124
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "scenario.mainScheme",
+      "visibility": "public"
+    },
+    {
+      "id": "side-schemes",
+      "label": "모든 부계략·각 위협/부착 상태",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "두 모형은 예시이며 두 장 상한이 아니다. 카드별 위협·위기/가속/위험 등 인쇄 속성을 기록할 수 있다.",
+      "bounds": [
+        439,
+        44,
+        370,
+        124
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "scenario.sideSchemes",
+      "visibility": "public"
+    },
+    {
+      "id": "encounter-discard",
+      "label": "공개 조우 버림 더미",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        235,
+        187,
+        80,
+        100
+      ],
+      "placement": "face-up-ordered-discard-pile",
+      "stateKey": "scenario.encounterDiscard",
+      "visibility": "public"
+    },
+    {
+      "id": "boost-in-resolution",
+      "label": "공개 전/해결 중 부스트 카드",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면을 앞면 정보로 추정하지 않는다. 조우 덱에서 나온 별개 카드 ID와 공개/해결 여부를 보존한다.",
+      "bounds": [
+        442,
+        187,
+        166,
+        100
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "checkpoint.boostCards",
+      "visibility": "hidden-until-revealed"
+    },
+    {
+      "id": "shared-token-status-bank",
+      "label": "피해·위협·용도·가속·상태 공급",
+      "field": "enemy.scene",
+      "scope": "public",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "남은 실물 수량을 기록하되 인쇄 공급 수를 장면 용량으로 강제하지 않는다.",
+      "bounds": [
+        628,
+        187,
+        332,
+        100
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "shared.supply",
+      "visibility": "public"
+    },
+    {
+      "id": "engaged-minions-1",
+      "label": "1번 · 교전 미니언·부착/피해",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "교전 상대와 소유자/제어자를 별도 필드로 둔다. 다른 플레이어의 미니언과 합치지 않는다.",
+      "bounds": [
+        40,
+        343,
+        286,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-1.engagedEnemies",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-identity-1",
+      "label": "1번 · 양면 정체·체력·상태",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "히어로/얼터에고 전환과 준비/소진은 독립 축. 전환 때 부착물·피해·상태를 삭제하지 않는다.",
+      "bounds": [
+        40,
+        414,
+        93,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-1.identity",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-tableau-1",
+      "label": "1번 · 동료·지원·업그레이드·부착물",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "3장 견본은 동료 상한/전체 카드 상한이 아니다. 각 카드와 표식은 대상 ID로 연결한다.",
+      "bounds": [
+        147,
+        414,
+        319,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-1.inPlay",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-hand-1",
+      "label": "1번 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        40,
+        566,
+        270,
+        57
+      ],
+      "placement": "private-ordered-hand",
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "encounter-waiting-1",
+      "label": "1번 · 공개 대기 조우 카드",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "카드 뒷면/수와 공개 순서를 보존한다. hero.scene은 선택적 연결 힌트이며 비공개 앞면을 공개해서는 안 된다.",
+      "bounds": [
+        344,
+        343,
+        122,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-1.dealtEncounterCards",
+      "ownerSide": "player-1",
+      "visibility": "hidden-until-revealed"
+    },
+    {
+      "id": "engaged-minions-2",
+      "label": "2번 · 교전 미니언·부착/피해",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "교전 상대와 소유자/제어자를 별도 필드로 둔다. 다른 플레이어의 미니언과 합치지 않는다.",
+      "bounds": [
+        526,
+        343,
+        286,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-2.engagedEnemies",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-identity-2",
+      "label": "2번 · 양면 정체·체력·상태",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "히어로/얼터에고 전환과 준비/소진은 독립 축. 전환 때 부착물·피해·상태를 삭제하지 않는다.",
+      "bounds": [
+        526,
+        414,
+        93,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-2.identity",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-tableau-2",
+      "label": "2번 · 동료·지원·업그레이드·부착물",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "3장 견본은 동료 상한/전체 카드 상한이 아니다. 각 카드와 표식은 대상 ID로 연결한다.",
+      "bounds": [
+        633,
+        414,
+        319,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-2.inPlay",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-hand-2",
+      "label": "2번 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        526,
+        566,
+        270,
+        57
+      ],
+      "placement": "private-ordered-hand",
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "encounter-waiting-2",
+      "label": "2번 · 공개 대기 조우 카드",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "카드 뒷면/수와 공개 순서를 보존한다. hero.scene은 선택적 연결 힌트이며 비공개 앞면을 공개해서는 안 된다.",
+      "bounds": [
+        830,
+        343,
+        122,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-2.dealtEncounterCards",
+      "ownerSide": "player-2",
+      "visibility": "hidden-until-revealed"
+    },
+    {
+      "id": "engaged-minions-3",
+      "label": "3번 · 교전 미니언·부착/피해",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "교전 상대와 소유자/제어자를 별도 필드로 둔다. 다른 플레이어의 미니언과 합치지 않는다.",
+      "bounds": [
+        40,
+        667,
+        286,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-3.engagedEnemies",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-identity-3",
+      "label": "3번 · 양면 정체·체력·상태",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "히어로/얼터에고 전환과 준비/소진은 독립 축. 전환 때 부착물·피해·상태를 삭제하지 않는다.",
+      "bounds": [
+        40,
+        738,
+        93,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-3.identity",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-tableau-3",
+      "label": "3번 · 동료·지원·업그레이드·부착물",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "3장 견본은 동료 상한/전체 카드 상한이 아니다. 각 카드와 표식은 대상 ID로 연결한다.",
+      "bounds": [
+        147,
+        738,
+        319,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-3.inPlay",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-hand-3",
+      "label": "3번 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        40,
+        890,
+        270,
+        57
+      ],
+      "placement": "private-ordered-hand",
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "encounter-waiting-3",
+      "label": "3번 · 공개 대기 조우 카드",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "카드 뒷면/수와 공개 순서를 보존한다. hero.scene은 선택적 연결 힌트이며 비공개 앞면을 공개해서는 안 된다.",
+      "bounds": [
+        344,
+        667,
+        122,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-3.dealtEncounterCards",
+      "ownerSide": "player-3",
+      "visibility": "hidden-until-revealed"
+    },
+    {
+      "id": "engaged-minions-4",
+      "label": "4번 · 교전 미니언·부착/피해",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "교전 상대와 소유자/제어자를 별도 필드로 둔다. 다른 플레이어의 미니언과 합치지 않는다.",
+      "bounds": [
+        526,
+        667,
+        286,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-4.engagedEnemies",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-identity-4",
+      "label": "4번 · 양면 정체·체력·상태",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "identities",
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "히어로/얼터에고 전환과 준비/소진은 독립 축. 전환 때 부착물·피해·상태를 삭제하지 않는다.",
+      "bounds": [
+        526,
+        738,
+        93,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-4.identity",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-tableau-4",
+      "label": "4번 · 동료·지원·업그레이드·부착물",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "3장 견본은 동료 상한/전체 카드 상한이 아니다. 각 카드와 표식은 대상 ID로 연결한다.",
+      "bounds": [
+        633,
+        738,
+        319,
+        129
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-4.inPlay",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hero-hand-4",
+      "label": "4번 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        526,
+        890,
+        270,
+        57
+      ],
+      "placement": "private-ordered-hand",
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "encounter-waiting-4",
+      "label": "4번 · 공개 대기 조우 카드",
+      "field": "hero.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "카드 뒷면/수와 공개 순서를 보존한다. hero.scene은 선택적 연결 힌트이며 비공개 앞면을 공개해서는 안 된다.",
+      "bounds": [
+        830,
+        667,
+        122,
+        59
+      ],
+      "placement": "variable-card-scene",
+      "stateKey": "players.player-4.dealtEncounterCards",
+      "ownerSide": "player-4",
+      "visibility": "hidden-until-revealed"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "1": {
+      "hideAreas": [
+        "engaged-minions-2",
+        "hero-identity-2",
+        "hero-tableau-2",
+        "hero-hand-2",
+        "encounter-waiting-2",
+        "engaged-minions-3",
+        "hero-identity-3",
+        "hero-tableau-3",
+        "hero-hand-3",
+        "encounter-waiting-3",
+        "engaged-minions-4",
+        "hero-identity-4",
+        "hero-tableau-4",
+        "hero-hand-4",
+        "encounter-waiting-4"
+      ],
+      "hideBoardArtIds": [
+        "player-2-frame",
+        "player-2-minion-guide-0",
+        "player-2-minion-guide-1",
+        "player-2-minion-guide-2",
+        "player-2-encounter-guide-0",
+        "player-2-encounter-guide-1",
+        "player-2-identity-guide",
+        "player-2-hp-guide-outline",
+        "player-2-hp-guide-face",
+        "player-2-hp-guide-pointer",
+        "player-2-in-play-0",
+        "player-2-damage-guide-0",
+        "player-2-in-play-1",
+        "player-2-attachment-guide",
+        "player-2-damage-guide-1",
+        "player-2-in-play-2",
+        "player-2-damage-guide-2",
+        "player-2-draw-deck-under",
+        "player-2-draw-deck-top",
+        "player-2-discard-under",
+        "player-2-discard-top",
+        "player-2-hand-guide-0",
+        "player-2-hand-guide-1",
+        "player-2-hand-guide-2",
+        "player-2-hand-guide-3",
+        "player-2-set-aside-guide",
+        "player-3-frame",
+        "player-3-minion-guide-0",
+        "player-3-minion-guide-1",
+        "player-3-minion-guide-2",
+        "player-3-encounter-guide-0",
+        "player-3-encounter-guide-1",
+        "player-3-identity-guide",
+        "player-3-hp-guide-outline",
+        "player-3-hp-guide-face",
+        "player-3-hp-guide-pointer",
+        "player-3-in-play-0",
+        "player-3-damage-guide-0",
+        "player-3-in-play-1",
+        "player-3-attachment-guide",
+        "player-3-damage-guide-1",
+        "player-3-in-play-2",
+        "player-3-damage-guide-2",
+        "player-3-draw-deck-under",
+        "player-3-draw-deck-top",
+        "player-3-discard-under",
+        "player-3-discard-top",
+        "player-3-hand-guide-0",
+        "player-3-hand-guide-1",
+        "player-3-hand-guide-2",
+        "player-3-hand-guide-3",
+        "player-3-set-aside-guide",
+        "player-4-frame",
+        "player-4-minion-guide-0",
+        "player-4-minion-guide-1",
+        "player-4-minion-guide-2",
+        "player-4-encounter-guide-0",
+        "player-4-encounter-guide-1",
+        "player-4-identity-guide",
+        "player-4-hp-guide-outline",
+        "player-4-hp-guide-face",
+        "player-4-hp-guide-pointer",
+        "player-4-in-play-0",
+        "player-4-damage-guide-0",
+        "player-4-in-play-1",
+        "player-4-attachment-guide",
+        "player-4-damage-guide-1",
+        "player-4-in-play-2",
+        "player-4-damage-guide-2",
+        "player-4-draw-deck-under",
+        "player-4-draw-deck-top",
+        "player-4-discard-under",
+        "player-4-discard-top",
+        "player-4-hand-guide-0",
+        "player-4-hand-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-set-aside-guide"
+      ]
+    },
+    "2": {
+      "hideAreas": [
+        "engaged-minions-3",
+        "hero-identity-3",
+        "hero-tableau-3",
+        "hero-hand-3",
+        "encounter-waiting-3",
+        "engaged-minions-4",
+        "hero-identity-4",
+        "hero-tableau-4",
+        "hero-hand-4",
+        "encounter-waiting-4"
+      ],
+      "hideBoardArtIds": [
+        "player-3-frame",
+        "player-3-minion-guide-0",
+        "player-3-minion-guide-1",
+        "player-3-minion-guide-2",
+        "player-3-encounter-guide-0",
+        "player-3-encounter-guide-1",
+        "player-3-identity-guide",
+        "player-3-hp-guide-outline",
+        "player-3-hp-guide-face",
+        "player-3-hp-guide-pointer",
+        "player-3-in-play-0",
+        "player-3-damage-guide-0",
+        "player-3-in-play-1",
+        "player-3-attachment-guide",
+        "player-3-damage-guide-1",
+        "player-3-in-play-2",
+        "player-3-damage-guide-2",
+        "player-3-draw-deck-under",
+        "player-3-draw-deck-top",
+        "player-3-discard-under",
+        "player-3-discard-top",
+        "player-3-hand-guide-0",
+        "player-3-hand-guide-1",
+        "player-3-hand-guide-2",
+        "player-3-hand-guide-3",
+        "player-3-set-aside-guide",
+        "player-4-frame",
+        "player-4-minion-guide-0",
+        "player-4-minion-guide-1",
+        "player-4-minion-guide-2",
+        "player-4-encounter-guide-0",
+        "player-4-encounter-guide-1",
+        "player-4-identity-guide",
+        "player-4-hp-guide-outline",
+        "player-4-hp-guide-face",
+        "player-4-hp-guide-pointer",
+        "player-4-in-play-0",
+        "player-4-damage-guide-0",
+        "player-4-in-play-1",
+        "player-4-attachment-guide",
+        "player-4-damage-guide-1",
+        "player-4-in-play-2",
+        "player-4-damage-guide-2",
+        "player-4-draw-deck-under",
+        "player-4-draw-deck-top",
+        "player-4-discard-under",
+        "player-4-discard-top",
+        "player-4-hand-guide-0",
+        "player-4-hand-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-set-aside-guide"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "engaged-minions-4",
+        "hero-identity-4",
+        "hero-tableau-4",
+        "hero-hand-4",
+        "encounter-waiting-4"
+      ],
+      "hideBoardArtIds": [
+        "player-4-frame",
+        "player-4-minion-guide-0",
+        "player-4-minion-guide-1",
+        "player-4-minion-guide-2",
+        "player-4-encounter-guide-0",
+        "player-4-encounter-guide-1",
+        "player-4-identity-guide",
+        "player-4-hp-guide-outline",
+        "player-4-hp-guide-face",
+        "player-4-hp-guide-pointer",
+        "player-4-in-play-0",
+        "player-4-damage-guide-0",
+        "player-4-in-play-1",
+        "player-4-attachment-guide",
+        "player-4-damage-guide-1",
+        "player-4-in-play-2",
+        "player-4-damage-guide-2",
+        "player-4-draw-deck-under",
+        "player-4-draw-deck-top",
+        "player-4-discard-under",
+        "player-4-discard-top",
+        "player-4-hand-guide-0",
+        "player-4-hand-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-set-aside-guide"
+      ]
+    },
+    "4": {
+      "hideAreas": [],
+      "hideBoardArtIds": []
+    }
+  },
+  "notes": [
+    "Whole cooperative table for every core player, not only one hero identity and an encounter box.",
+    "Neutral original geometry contains no commercial character image, logo or card wording.",
+    "Printed setup/ally limits are not enforced scene capacities; actual observed irregular or partial state remains representable.",
+    "Current app field names are hints only; this package supplies assets and self-contained JSON, not product integration.",
+    "Later expansions and current Rules Reference changes are not silently applied to this 2019 structural edition."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.fantasyflightgames.com/en/products/marvel-champions-the-card-game/",
+      "location": "Publisher core product/support entry; legacy URL now redirects to product-lines hub",
+      "sourceType": "official-publisher",
+      "access": "opened; redirect noted",
+      "verifiedFacts": "Use linked original core rulebook as edition authority rather than inferring structure from current expansions.",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://images-cdn.fantasyflightgames.com/filer_public/ab/be/abbef836-d5ef-4241-b2bd-1062df73f367/mvc01_learn_to_play_eng-compressed.pdf",
+      "location": "Original core Learn to Play (2019), p.3 inventory; pp.5–9 setup/table/ready; p.11 identity/in-play; pp.15–18 villain boost, encounters and card types",
+      "sourceType": "official-2019-core-rulebook",
+      "access": "pinned local PDF; page text and rendered table/component diagrams directly viewed",
+      "pdfSHA256": "357c9be2010723dd3e8831e81eb140567d0d93f83b803a9040dcad2b8f2730b9",
+      "verifiedFacts": "Separate villain and scheme stages, encounter piles, hero/alter-ego face versus exhaustion, player-engaged minions, player in-play/hand/deck/discard, targeted tokens/status, hidden boost/encounter cards, set-aside nemesis, 1–4 players.",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "full-table-schematic",
+  "assetScope": "2019 core cooperative whole table, 1–4 heroes: scenario/stages/schemes, every player identity/in-play/engagement/hand/deck/discard, hidden pending cards, counters/status and resumable checkpoint. Assets only.",
+  "tableModel": {
+    "schema": "marvel-champions-core-full-table-v1",
+    "edition": "2019 original core set; not a silent migration to later Rules Reference/expansion rules",
+    "assetFiles": {
+      "boardSvg": "board.svg",
+      "boardJson": "board.json",
+      "preview": "board.png",
+      "pieces": "pieces.svg",
+      "cardStateTemplate": "card-state.svg"
+    },
+    "coordinates": {
+      "overviewViewBox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "origin": "top-left",
+      "boxes": "[x,y,width,height]",
+      "playerScene": "unbounded scene per player; overview bounds are viewports, not capacity limits",
+      "cardUnit": [
+        100,
+        140
+      ],
+      "orientation": "rotation in degrees about physical card centre; upright=0, exhausted commonly90; printed landscape is separate from exhaustion"
+    },
+    "playerRange": {
+      "min": 1,
+      "max": 4
+    },
+    "componentInventory": {
+      "gameCards": 343,
+      "playerCards": 199,
+      "encounterCards": 137,
+      "referenceCards": 7,
+      "statusCards": 30,
+      "playerHpDials": 4,
+      "villainHpDials": 1,
+      "damageTokens": 62,
+      "threatTokens": 33,
+      "allPurposeCounters": 16,
+      "accelerationTokens": 5,
+      "firstPlayerTokens": 1,
+      "inventoryIsSceneCapacity": false
+    },
+    "stateShape": {
+      "players": [
+        {
+          "id": "player-id",
+          "seat": null,
+          "identityId": null,
+          "health": null,
+          "hand": {
+            "orderedCardIds": [],
+            "identities": "owner-or-unknown"
+          },
+          "deck": {
+            "order": "hidden-or-unknown",
+            "count": null
+          },
+          "discardCardIds": [],
+          "inPlayCardIds": [],
+          "engagedEnemyIds": [],
+          "dealtEncounterCards": [],
+          "setAsideCardIds": [],
+          "eliminated": null
+        }
+      ],
+      "scenario": {
+        "villainStageIds": [],
+        "activeVillainId": null,
+        "villainHealth": null,
+        "villainAttachmentIds": [],
+        "mainSchemeStageIds": [],
+        "activeMainSchemeId": null,
+        "sideSchemeIds": [],
+        "encounterDeck": {
+          "order": "hidden-or-unknown",
+          "count": null
+        },
+        "encounterDiscard": [],
+        "setAsideCardIds": [],
+        "removedCardIds": []
+      },
+      "cards": [
+        {
+          "id": "stable-card-instance-id",
+          "componentId": "cards|identities",
+          "printedCardId": null,
+          "cardType": null,
+          "ownerId": null,
+          "controllerId": null,
+          "engagedWithPlayerId": null,
+          "attachedToId": null,
+          "zoneId": null,
+          "face": "front|back|unknown",
+          "form": "hero|alter-ego|not-applicable|unknown",
+          "exhausted": null,
+          "x": null,
+          "y": null,
+          "rotation": null,
+          "layer": null,
+          "counters": {
+            "damage": null,
+            "threat": null,
+            "uses": null
+          },
+          "statusCardIds": [],
+          "attachmentIds": [],
+          "visibleAttributes": {},
+          "ownerOnlyAttributes": {}
+        }
+      ],
+      "tokens": [
+        {
+          "id": "token-instance-id",
+          "kind": "damage|threat|uses|acceleration|stunned|confused|tough|first-player|unknown",
+          "amount": null,
+          "attachedToId": null,
+          "ownerId": null,
+          "x": null,
+          "y": null,
+          "layer": null
+        }
+      ],
+      "firstPlayerId": null,
+      "activePlayerId": null,
+      "phase": null,
+      "roundNumber": null,
+      "checkpoint": {
+        "step": null,
+        "resolvingCardId": null,
+        "actingPlayerId": null,
+        "targetIds": [],
+        "paymentCardIds": [],
+        "boostCards": [],
+        "encounterQueue": [],
+        "windowStack": [],
+        "resolvedEffectIds": [],
+        "pendingDamage": null,
+        "chosenDefenderId": null
+      }
+    },
+    "identityAxes": {
+      "face": [
+        "hero",
+        "alter-ego",
+        "unknown"
+      ],
+      "exhaustion": [
+        "ready",
+        "exhausted",
+        "unknown"
+      ],
+      "invariant": "Flipping identity preserves exhaustion, damage, statuses and attached upgrades unless an explicitly recorded effect changes them. Never replace one axis with the other."
+    },
+    "ownership": {
+      "ownerId": "card/deck origin, if known",
+      "controllerId": "current in-play control",
+      "engagedWithPlayerId": "player facing this minion",
+      "attachedToId": "physical parent card; distinct from owner/controller",
+      "orphanPolicy": "preserve unresolved relationship as null, never assign to nearest hero automatically"
+    },
+    "zones": {
+      "shared": [
+        {
+          "id": "encounter-deck",
+          "visibility": "hidden",
+          "boardArtIds": [
+            "encounter-deck-guide-top"
+          ]
+        },
+        {
+          "id": "scenario-set-aside",
+          "visibility": "scenario-dependent",
+          "boardArtIds": [
+            "scenario-set-aside-guide"
+          ]
+        },
+        {
+          "id": "first-player",
+          "visibility": "public",
+          "boardArtIds": [
+            "first-player-marker-guide"
+          ]
+        }
+      ],
+      "perPlayer": [
+        {
+          "id": "draw-deck",
+          "visibility": "hidden",
+          "boardArtPattern": "player-{seat}-draw-deck-top"
+        },
+        {
+          "id": "discard",
+          "visibility": "public",
+          "boardArtPattern": "player-{seat}-discard-top"
+        },
+        {
+          "id": "set-aside",
+          "visibility": "out-of-play; reveal status retained",
+          "boardArtPattern": "player-{seat}-set-aside-guide"
+        }
+      ]
+    },
+    "fieldBindings": {
+      "enemy.scene": "scenario and shared public card/counter scene",
+      "hero.scene": "one player public identity/tableau/engaged-enemy scene",
+      "hand.scene": "one player owner-only hand",
+      "decks.scene": "shared-secret physical deck metadata only",
+      "form": "players[].identity.face",
+      "health": "players[].health",
+      "enemy-stage": "scenario.activeVillainId",
+      "first-player": "firstPlayerId",
+      "round-phase": "phase",
+      "turn": "activePlayerId",
+      "pending": "checkpoint"
+    },
+    "privateState": "Hands/deck orders and unrevealed encounter/boost identities are not exposed by the overview. Unknown IDs may retain count and face without inventing a printed card. Public visibility is not inferred from a public field-binding hint.",
+    "cardLayout": {
+      "normalCardSize": [
+        100,
+        140
+      ],
+      "landscapeSchemeSize": [
+        140,
+        100
+      ],
+      "attachments": "relative x/y/layer and attachedToId chain; parent movement carries child while preserving local transform",
+      "variableZones": "expand scene/camera to actual bounding box, not an arbitrary grid or fixed ally count",
+      "orderedPiles": "orderedCardIds bottom-to-top; front/back and revealed state retained per card"
+    },
+    "resumeSemantics": "Preserve current villain/main-scheme stages, first player, active player, hero face, all physical cards/relationships, exact counters including0 and unknown null, and unresolved action/boost/encounter window. No replay of effects on reopening.",
+    "ruleAutomation": "No effect resolution, damage/cost calculation, deckbuilding, legality validation or expansion support is promised."
+  },
+  "assetCompleteness": {
+    "completeStructures": [
+      "shared villain and main-scheme stage stacks with active faces",
+      "variable side schemes and villain attachments",
+      "encounter deck/discard and transient boost/reveal cards",
+      "all four hero identities, HP dials and face/exhaustion state",
+      "all-player allies/support/upgrades and engagement ownership",
+      "all private hands/decks, public discards and out-of-play cards",
+      "counter/status pools and first-player marker"
+    ],
+    "diagramOnly": [
+      "neutral example card silhouettes are not setup objects or capacity",
+      "four stations are maximum core players, inactive stations can be hidden"
+    ],
+    "notAutomated": [
+      "deckbuilding",
+      "card-specific effects/interrupt/response windows",
+      "scenario setup/HP scaling",
+      "legality/limits/victory and damage computation"
+    ]
+  },
+  "auxiliaryAssets": [
+    {
+      "id": "card-state-axes",
+      "svg": "card-state.svg",
+      "viewBox": [
+        0,
+        0,
+        1000,
+        560
+      ],
+      "purpose": "Original neutral templates: ready/exhausted rotation, hero/alter-ego face, attachment and token targeting. No printed commercial card art."
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "shared-scenario-frame",
+      "type": "rect",
+      "x": 27,
+      "y": 27,
+      "w": 946,
+      "h": 278,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "villain-stage-guide-under",
+      "type": "rect",
+      "x": 63,
+      "y": 65,
+      "w": 64,
+      "h": 88,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "villain-stage-guide-top",
+      "type": "rect",
+      "x": 67,
+      "y": 61,
+      "w": 64,
+      "h": 88,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "villain-hp-guide-outline",
+      "type": "rect",
+      "x": 149,
+      "y": 77,
+      "w": 48,
+      "h": 32,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 13
+    },
+    {
+      "id": "villain-hp-guide-face",
+      "type": "circle",
+      "cx": 173,
+      "cy": 93,
+      "r": 11,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "villain-hp-guide-pointer",
+      "type": "line",
+      "x1": 173,
+      "y1": 93,
+      "x2": 179,
+      "y2": 85,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "villain-attachment-guide-0",
+      "type": "rect",
+      "x": 74,
+      "y": 184,
+      "w": 48,
+      "h": 65,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "villain-attachment-guide-1",
+      "type": "rect",
+      "x": 131,
+      "y": 184,
+      "w": 48,
+      "h": 65,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "main-scheme-guide-under",
+      "type": "rect",
+      "x": 257,
+      "y": 63,
+      "w": 130,
+      "h": 76,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "main-scheme-guide-top",
+      "type": "rect",
+      "x": 261,
+      "y": 59,
+      "w": 130,
+      "h": 76,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "main-threat-guide",
+      "type": "circle",
+      "cx": 372,
+      "cy": 137,
+      "r": 10,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "side-scheme-guide-0",
+      "type": "rect",
+      "x": 457,
+      "y": 64,
+      "w": 144,
+      "h": 76,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "side-scheme-guide-1",
+      "type": "rect",
+      "x": 625,
+      "y": 64,
+      "w": 144,
+      "h": 76,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "encounter-discard-guide-under",
+      "type": "rect",
+      "x": 246,
+      "y": 212,
+      "w": 44,
+      "h": 62,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "encounter-discard-guide-top",
+      "type": "rect",
+      "x": 250,
+      "y": 208,
+      "w": 44,
+      "h": 62,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "encounter-deck-guide-under",
+      "type": "rect",
+      "x": 340,
+      "y": 212,
+      "w": 44,
+      "h": 62,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "encounter-deck-guide-top",
+      "type": "rect",
+      "x": 344,
+      "y": 208,
+      "w": 44,
+      "h": 62,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "boost-guide-0",
+      "type": "rect",
+      "x": 456,
+      "y": 208,
+      "w": 44,
+      "h": 62,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "boost-guide-1",
+      "type": "rect",
+      "x": 527,
+      "y": 208,
+      "w": 44,
+      "h": 62,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "first-player-marker-guide",
+      "type": "rect",
+      "x": 846,
+      "y": 54,
+      "w": 90,
+      "h": 56,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 14
+    },
+    {
+      "id": "first-player-marker-center",
+      "type": "circle",
+      "cx": 891,
+      "cy": 82,
+      "r": 15,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "scenario-set-aside-guide",
+      "type": "rect",
+      "x": 834,
+      "y": 132,
+      "w": 114,
+      "h": 30,
+      "fill": "#e9eef3",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "supply-counter-0",
+      "type": "circle",
+      "cx": 652,
+      "cy": 212,
+      "r": 11,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "supply-counter-1",
+      "type": "circle",
+      "cx": 693,
+      "cy": 212,
+      "r": 11,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "supply-counter-2",
+      "type": "circle",
+      "cx": 734,
+      "cy": 212,
+      "r": 11,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "supply-counter-3",
+      "type": "circle",
+      "cx": 775,
+      "cy": 212,
+      "r": 11,
+      "fill": "#26334a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "supply-status-0",
+      "type": "rect",
+      "x": 833,
+      "y": 203,
+      "w": 28,
+      "h": 40,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 4
+    },
+    {
+      "id": "supply-status-1",
+      "type": "rect",
+      "x": 871,
+      "y": 203,
+      "w": 28,
+      "h": 40,
+      "fill": "#a879d7",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 4
+    },
+    {
+      "id": "supply-status-2",
+      "type": "rect",
+      "x": 909,
+      "y": 203,
+      "w": 28,
+      "h": 40,
+      "fill": "#e58b42",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 4
+    },
+    {
+      "id": "shared-token-divider",
+      "type": "line",
+      "x1": 642,
+      "y1": 236,
+      "x2": 939,
+      "y2": 236,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "supply-spare-0",
+      "type": "circle",
+      "cx": 657,
+      "cy": 262,
+      "r": 9,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "supply-spare-1",
+      "type": "circle",
+      "cx": 701,
+      "cy": 262,
+      "r": 9,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "supply-spare-2",
+      "type": "circle",
+      "cx": 745,
+      "cy": 262,
+      "r": 9,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "supply-spare-3",
+      "type": "circle",
+      "cx": 789,
+      "cy": 262,
+      "r": 9,
+      "fill": "#26334a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-frame",
+      "type": "rect",
+      "x": 28,
+      "y": 331,
+      "w": 458,
+      "h": 310,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 18
+    },
+    {
+      "id": "player-1-minion-guide-0",
+      "type": "rect",
+      "x": 50,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-minion-guide-1",
+      "type": "rect",
+      "x": 132,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-minion-guide-2",
+      "type": "rect",
+      "x": 214,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-encounter-guide-0",
+      "type": "rect",
+      "x": 360,
+      "y": 349,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-encounter-guide-1",
+      "type": "rect",
+      "x": 407,
+      "y": 349,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-identity-guide",
+      "type": "rect",
+      "x": 52,
+      "y": 422,
+      "w": 56,
+      "h": 79,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-hp-guide-outline",
+      "type": "rect",
+      "x": 56,
+      "y": 508,
+      "w": 48,
+      "h": 32,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 13
+    },
+    {
+      "id": "player-1-hp-guide-face",
+      "type": "circle",
+      "cx": 80,
+      "cy": 524,
+      "r": 11,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-hp-guide-pointer",
+      "type": "line",
+      "x1": 80,
+      "y1": 524,
+      "x2": 86,
+      "y2": 516,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-in-play-0",
+      "type": "rect",
+      "x": 160,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-damage-guide-0",
+      "type": "circle",
+      "cx": 198,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-in-play-1",
+      "type": "rect",
+      "x": 257,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-attachment-guide",
+      "type": "rect",
+      "x": 267,
+      "y": 473,
+      "w": 49,
+      "h": 44,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-damage-guide-1",
+      "type": "circle",
+      "cx": 295,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-in-play-2",
+      "type": "rect",
+      "x": 354,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-damage-guide-2",
+      "type": "circle",
+      "cx": 392,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-draw-deck-under",
+      "type": "rect",
+      "x": 331,
+      "y": 570,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-draw-deck-top",
+      "type": "rect",
+      "x": 335,
+      "y": 566,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-discard-under",
+      "type": "rect",
+      "x": 415,
+      "y": 570,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-discard-top",
+      "type": "rect",
+      "x": 419,
+      "y": 566,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-hand-guide-0",
+      "type": "rect",
+      "x": 50,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-hand-guide-1",
+      "type": "rect",
+      "x": 107,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-hand-guide-2",
+      "type": "rect",
+      "x": 164,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-hand-guide-3",
+      "type": "rect",
+      "x": 221,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-1-set-aside-guide",
+      "type": "rect",
+      "x": 155,
+      "y": 526,
+      "w": 301,
+      "h": 22,
+      "fill": "#e9eef3",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-2-frame",
+      "type": "rect",
+      "x": 514,
+      "y": 331,
+      "w": 458,
+      "h": 310,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 18
+    },
+    {
+      "id": "player-2-minion-guide-0",
+      "type": "rect",
+      "x": 536,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-minion-guide-1",
+      "type": "rect",
+      "x": 618,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-minion-guide-2",
+      "type": "rect",
+      "x": 700,
+      "y": 349,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-encounter-guide-0",
+      "type": "rect",
+      "x": 846,
+      "y": 349,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-encounter-guide-1",
+      "type": "rect",
+      "x": 893,
+      "y": 349,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-identity-guide",
+      "type": "rect",
+      "x": 538,
+      "y": 422,
+      "w": 56,
+      "h": 79,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-hp-guide-outline",
+      "type": "rect",
+      "x": 542,
+      "y": 508,
+      "w": 48,
+      "h": 32,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 13
+    },
+    {
+      "id": "player-2-hp-guide-face",
+      "type": "circle",
+      "cx": 566,
+      "cy": 524,
+      "r": 11,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-hp-guide-pointer",
+      "type": "line",
+      "x1": 566,
+      "y1": 524,
+      "x2": 572,
+      "y2": 516,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-in-play-0",
+      "type": "rect",
+      "x": 646,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-damage-guide-0",
+      "type": "circle",
+      "cx": 684,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-in-play-1",
+      "type": "rect",
+      "x": 743,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-attachment-guide",
+      "type": "rect",
+      "x": 753,
+      "y": 473,
+      "w": 49,
+      "h": 44,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-damage-guide-1",
+      "type": "circle",
+      "cx": 781,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-in-play-2",
+      "type": "rect",
+      "x": 840,
+      "y": 426,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-damage-guide-2",
+      "type": "circle",
+      "cx": 878,
+      "cy": 487,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-draw-deck-under",
+      "type": "rect",
+      "x": 817,
+      "y": 570,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-draw-deck-top",
+      "type": "rect",
+      "x": 821,
+      "y": 566,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-discard-under",
+      "type": "rect",
+      "x": 901,
+      "y": 570,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-discard-top",
+      "type": "rect",
+      "x": 905,
+      "y": 566,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-hand-guide-0",
+      "type": "rect",
+      "x": 536,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-hand-guide-1",
+      "type": "rect",
+      "x": 593,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-hand-guide-2",
+      "type": "rect",
+      "x": 650,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-hand-guide-3",
+      "type": "rect",
+      "x": 707,
+      "y": 570,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-2-set-aside-guide",
+      "type": "rect",
+      "x": 641,
+      "y": 526,
+      "w": 301,
+      "h": 22,
+      "fill": "#e9eef3",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-3-frame",
+      "type": "rect",
+      "x": 28,
+      "y": 655,
+      "w": 458,
+      "h": 310,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 18
+    },
+    {
+      "id": "player-3-minion-guide-0",
+      "type": "rect",
+      "x": 50,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-minion-guide-1",
+      "type": "rect",
+      "x": 132,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-minion-guide-2",
+      "type": "rect",
+      "x": 214,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-encounter-guide-0",
+      "type": "rect",
+      "x": 360,
+      "y": 673,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-encounter-guide-1",
+      "type": "rect",
+      "x": 407,
+      "y": 673,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-identity-guide",
+      "type": "rect",
+      "x": 52,
+      "y": 746,
+      "w": 56,
+      "h": 79,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-hp-guide-outline",
+      "type": "rect",
+      "x": 56,
+      "y": 832,
+      "w": 48,
+      "h": 32,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 13
+    },
+    {
+      "id": "player-3-hp-guide-face",
+      "type": "circle",
+      "cx": 80,
+      "cy": 848,
+      "r": 11,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-hp-guide-pointer",
+      "type": "line",
+      "x1": 80,
+      "y1": 848,
+      "x2": 86,
+      "y2": 840,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-in-play-0",
+      "type": "rect",
+      "x": 160,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-damage-guide-0",
+      "type": "circle",
+      "cx": 198,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-in-play-1",
+      "type": "rect",
+      "x": 257,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-attachment-guide",
+      "type": "rect",
+      "x": 267,
+      "y": 797,
+      "w": 49,
+      "h": 44,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-damage-guide-1",
+      "type": "circle",
+      "cx": 295,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-in-play-2",
+      "type": "rect",
+      "x": 354,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-damage-guide-2",
+      "type": "circle",
+      "cx": 392,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-draw-deck-under",
+      "type": "rect",
+      "x": 331,
+      "y": 894,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-draw-deck-top",
+      "type": "rect",
+      "x": 335,
+      "y": 890,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-discard-under",
+      "type": "rect",
+      "x": 415,
+      "y": 894,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-discard-top",
+      "type": "rect",
+      "x": 419,
+      "y": 890,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-hand-guide-0",
+      "type": "rect",
+      "x": 50,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-hand-guide-1",
+      "type": "rect",
+      "x": 107,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-hand-guide-2",
+      "type": "rect",
+      "x": 164,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-hand-guide-3",
+      "type": "rect",
+      "x": 221,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-3-set-aside-guide",
+      "type": "rect",
+      "x": 155,
+      "y": 850,
+      "w": 301,
+      "h": 22,
+      "fill": "#e9eef3",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-4-frame",
+      "type": "rect",
+      "x": 514,
+      "y": 655,
+      "w": 458,
+      "h": 310,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 18
+    },
+    {
+      "id": "player-4-minion-guide-0",
+      "type": "rect",
+      "x": 536,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-minion-guide-1",
+      "type": "rect",
+      "x": 618,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-minion-guide-2",
+      "type": "rect",
+      "x": 700,
+      "y": 673,
+      "w": 34,
+      "h": 46,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-encounter-guide-0",
+      "type": "rect",
+      "x": 846,
+      "y": 673,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-encounter-guide-1",
+      "type": "rect",
+      "x": 893,
+      "y": 673,
+      "w": 32,
+      "h": 46,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-identity-guide",
+      "type": "rect",
+      "x": 538,
+      "y": 746,
+      "w": 56,
+      "h": 79,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-hp-guide-outline",
+      "type": "rect",
+      "x": 542,
+      "y": 832,
+      "w": 48,
+      "h": 32,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 13
+    },
+    {
+      "id": "player-4-hp-guide-face",
+      "type": "circle",
+      "cx": 566,
+      "cy": 848,
+      "r": 11,
+      "fill": "#fff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-hp-guide-pointer",
+      "type": "line",
+      "x1": 566,
+      "y1": 848,
+      "x2": 572,
+      "y2": 840,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-in-play-0",
+      "type": "rect",
+      "x": 646,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-damage-guide-0",
+      "type": "circle",
+      "cx": 684,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-in-play-1",
+      "type": "rect",
+      "x": 743,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-attachment-guide",
+      "type": "rect",
+      "x": 753,
+      "y": 797,
+      "w": 49,
+      "h": 44,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-damage-guide-1",
+      "type": "circle",
+      "cx": 781,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-in-play-2",
+      "type": "rect",
+      "x": 840,
+      "y": 750,
+      "w": 49,
+      "h": 68,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-damage-guide-2",
+      "type": "circle",
+      "cx": 878,
+      "cy": 811,
+      "r": 7,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-draw-deck-under",
+      "type": "rect",
+      "x": 817,
+      "y": 894,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-draw-deck-top",
+      "type": "rect",
+      "x": 821,
+      "y": 890,
+      "w": 46,
+      "h": 61,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-discard-under",
+      "type": "rect",
+      "x": 901,
+      "y": 894,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-discard-top",
+      "type": "rect",
+      "x": 905,
+      "y": 890,
+      "w": 46,
+      "h": 61,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-hand-guide-0",
+      "type": "rect",
+      "x": 536,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-hand-guide-1",
+      "type": "rect",
+      "x": 593,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-hand-guide-2",
+      "type": "rect",
+      "x": 650,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-hand-guide-3",
+      "type": "rect",
+      "x": 707,
+      "y": 894,
+      "w": 53,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "player-4-set-aside-guide",
+      "type": "rect",
+      "x": 641,
+      "y": 850,
+      "w": 301,
+      "h": 22,
+      "fill": "#e9eef3",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    }
+  ]
+}

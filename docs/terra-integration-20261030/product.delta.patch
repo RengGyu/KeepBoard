@@ -1,0 +1,792 @@
+--- a/server/ai/observationAssembly.ts
++++ b/server/ai/observationAssembly.ts
+@@ -67,5 +67,5 @@
+  if(!result.observations.length)warnings.push('확정할 관측값이 없습니다. 원본과 기존 기록은 유지됩니다.');
+  const deferred=input.nativeWire?.deferred.length??0;if(deferred)warnings.push('패널 경계를 확인할 수 없는 숫자 관측 '+deferred+'개를 보류했습니다. 원응답은 보존됩니다.');
+  const candidateObjects=[...groups.values()].reduce((n,items)=>n+items.length,0);
+- return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':'Gemini')+' 사진 관측으로 '+candidateObjects+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 읽지 못한 값은 ?로 표시됩니다.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
++ return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':input.reader.kind==='terra-game-observation-v1'?'Terra':'Gemini')+' 사진 관측으로 '+candidateObjects+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 읽지 못한 값은 ?로 표시됩니다.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
+ }
+--- a/server/ai/catanSceneReading.ts
++++ b/server/ai/catanSceneReading.ts
+@@ -19,7 +19,12 @@
+ export function decodeCatanSceneReading(native:unknown,input:{request:ObservationRequest;definition:PhotoDefinition;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedReaderIdentity;sourceImageSHA:string}):AnalysisResult{
+  const {request,definition,pack,session,evidence,reader}=input;
+  if(definition.nativeBridge!=='catan'||request.areaId!=='board'||request.scope.partition!=='common_public'||evidence.some(e=>e.ownerId))throw Error('카탄 공용 판 영역을 확인하세요.');
+- const wire=decodeProviderJSON(native,'gemini',200) as {assertions?:unknown[]};
++ return decodeCatanScenePayload(decodeProviderJSON(native,'gemini',200),input);
++}
++export function decodeCatanScenePayload(payload:unknown,input:Parameters<typeof decodeCatanSceneReading>[1],hostedWireId:NonNullable<ObservationReceipt['hostedWire']>['id']='gemini-catan-scene-wire-v1',providerResponse?:unknown):AnalysisResult{
++ const {request,definition,pack,session,evidence,reader}=input;
++ if(definition.nativeBridge!=='catan'||request.areaId!=='board'||request.scope.partition!=='common_public'||evidence.some(e=>e.ownerId))throw Error('카탄 공용 판 영역을 확인하세요.');
++ const wire=payload as {assertions?:unknown[]};
+  const normalized=normalizeObservations(wire,pack,evidence,session.turnInstanceId,session.players.map(p=>p.id));
+  normalized.assertions=normalized.assertions.filter(a=>!a.ownerId&&['board.layout','components.observed'].includes(a.field));
+  const refs:Record<string,string>={};
+@@ -39,7 +44,7 @@
+   return {ref,imageIndex:0,panelRef:null,componentId:component?c.kind:null,bbox:c.region,face:c.face??'unknown',quantity:c.quantity,rotationDegrees:null,properties,referenceCandidates:[]};
+  }));
+  const result=validateObservationResult({version:OBSERVATION_VERSION,observations,coverage:'partial',completion:'complete'},request,definition);
+- const receipt:ObservationReceipt={version:OBSERVATION_VERSION,request:structuredClone(request),result,reader:structuredClone(reader),frame:null,transforms:[],geometryCandidates:[],componentRefs:refs,sourceImageSHA:input.sourceImageSHA,hostedWire:{id:'gemini-catan-scene-wire-v1',items:structuredClone(wire.assertions??[]),deferred:[]}};
++ const receipt:ObservationReceipt={version:OBSERVATION_VERSION,request:structuredClone(request),result,reader:structuredClone(reader),frame:null,transforms:[],geometryCandidates:[],componentRefs:refs,sourceImageSHA:input.sourceImageSHA,hostedWire:{id:hostedWireId,...(providerResponse?{providerResponse:structuredClone(providerResponse)}:{}),items:structuredClone(wire.assertions??[]),deferred:[]}};
+  for(const assertion of normalized.assertions)assertion.observationReceipts=[receipt];
+  return {...normalized,observationReceipts:[receipt]};
+ }
+--- a/server/ai/geminiGameReader.ts
++++ b/server/ai/geminiGameReader.ts
+@@ -2,7 +2,7 @@
+ import {catanScenePrompt,catanSceneResponseSchema,decodeCatanSceneReading} from './catanSceneReading';
+ import {createHash} from 'node:crypto';
+ import {readFile,stat} from 'node:fs/promises';
+-import type {HostedReaderIdentity,HostedObservationWire,ObservationRequest,ObservationResult,PhotoDefinition,PhotoComponentDefinition,ObservationUnknownReason} from '../../shared/lightweightRecognition';
++import type {GeminiReaderIdentity,HostedObservationWire,ObservationRequest,ObservationResult,PhotoDefinition,PhotoComponentDefinition,ObservationUnknownReason} from '../../shared/lightweightRecognition';
+ import {OBSERVATION_VERSION,validateObservationResult} from '../../shared/lightweightRecognition';
+ import {validateDetailValue} from '../../shared/readouts/registry';
+ 
+@@ -32,6 +32,11 @@
+  const candidate=native.candidates[0];if(!record(candidate)||candidate.finishReason!=='STOP'||!record(candidate.content)||!Array.isArray(candidate.content.parts))throw new Error('Gemini 응답이 완료되지 않았거나 잘렸습니다. 원본은 유지됩니다.');
+  const parts=candidate.content.parts;if(!parts.length||parts.some((p:unknown)=>!record(p)||p.thought===true||typeof p.text!=='string'))return invalid();
+  let wire:unknown;try{wire=JSON.parse(parts.map((p:{text:string})=>p.text).join(''));}catch{return invalid();}
++ return decodeLiteralObservationPayload(wire,request,definition,trace,transforms);
++}
++
++/** Provider-neutral visible payload decoder; envelopes remain the adapter's responsibility. */
++export function decodeLiteralObservationPayload(wire:unknown,request:ObservationRequest,definition:PhotoDefinition,trace?:HostedObservationWire,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[]):ObservationResult{
+  if(!exact(wire,['items'])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
+  const deferred:HostedObservationWire['deferred']=[];
+  const observations=wire.items.map((raw:unknown,index:number)=>{
+@@ -95,7 +100,7 @@
+  return token;
+ }
+ export class GeminiGameReader{
+- readonly identity:HostedReaderIdentity={kind:'gemini-game-observation-v1',model:MODEL,thinkingLevel:'LOW',mediaResolution:'MEDIA_RESOLUTION_HIGH',maxOutputTokens:32768};
++ readonly identity:GeminiReaderIdentity={kind:'gemini-game-observation-v1',model:MODEL,thinkingLevel:'LOW',mediaResolution:'MEDIA_RESOLUTION_HIGH',maxOutputTokens:32768};
+  async status(){const file=process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE;let available=!!process.env.GEMINI_API_KEY;if(file){try{available=(await stat(file)).isFile();}catch{available=false;}}
+   return {kind:'gemini-game-observation-v1' as const,available,cloudSupported:true as const,identity:available?this.identity:null,...(!available?{reason:'서버에 Gemini 게임 사진 판독용 키가 연결되지 않았습니다.'}:{})};}
+  async readCatanScene(request:ObservationRequest,definition:PhotoDefinition,session:Session,pack:GamePack,evidence:Evidence[],image:Buffer,mimeType:string){
+--- a/shared/lightweightRecognition.ts
++++ b/shared/lightweightRecognition.ts
+@@ -14,15 +14,18 @@
+ export interface ObservationResult {version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
+ export interface GeometryCandidate {observationRef:string;frameId:string;locationCandidate:{type:'hex'|'edge'|'vertex';id:string};method:'confirmed-frame';status:'candidate'}
+ export interface LocalReaderSelection {kind:'local-observation-v1';task?:'catan-numerals-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;inputMode?:'original'|'catan-atlas'}
+-export interface HostedReaderSelection {kind:'gemini-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
++export interface HostedReaderSelection {kind:'gemini-game-observation-v1'|'terra-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
+ export type PhotoReaderSelection=LocalReaderSelection|HostedReaderSelection;
+ export interface LocalTaskProfile {id:'catan-numerals-v1';wire:'qwen-number-grounding-v1';promptSHA256:string;schemaSHA256:string;runtimeSettingsSHA256:string;contextTokens:8192;maxOutputTokens:1024;imageMinTokens:1024;temperature:0;cachePrompt:false;stream:false;automaticRetries:0;parallelRequests:1}
+ export interface LocalReaderTaskCapability {task:'catan-numerals-v1';available:boolean;reason?:string;profile:LocalTaskProfile|null}
+ export interface NativeNumeralWire {id:'qwen-number-grounding-v1';result:{items:{bbox_2d:number[];text:string|null}[]};deferred:{ref:string;reason:string}[]}
+ /** Original visible-only provider wire, separate from the validated facts used by the game. */
+-export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1';items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
++export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1';providerResponse?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
+ export interface ReaderIdentity {kind:'local-observation-v1';model:string;modelRevision:string;weightSHA:string;projectorSHA:string;runtimeRevision:string;contextTokens:number;maxOutputTokens:number}
+-export interface HostedReaderIdentity {kind:'gemini-game-observation-v1';model:'gemini-3.8-flash';thinkingLevel:'LOW';mediaResolution:'MEDIA_RESOLUTION_HIGH';maxOutputTokens:32768}
++export interface GeminiReaderIdentity {kind:'gemini-game-observation-v1';model:'gemini-3.8-flash';thinkingLevel:'LOW';mediaResolution:'MEDIA_RESOLUTION_HIGH';maxOutputTokens:32768}
++export interface TerraReaderIdentity {kind:'terra-game-observation-v1';model:'gpt-6.1-terra';api:'responses';reasoningEffort:'low';imageDetail:'high';maxOutputTokens:32768;adapterVersion:'literal-named-fill-original-v1';automaticRetries:0;timeoutMs:240000}
++export type HostedReaderIdentity=GeminiReaderIdentity|TerraReaderIdentity;
++export const isHostedReader=(value:unknown):value is {kind:HostedReaderIdentity['kind']}=>!!value&&typeof value==='object'&&'kind' in value&&['gemini-game-observation-v1','terra-game-observation-v1'].includes(String(value.kind));
+ export type ObservationReaderIdentity=ReaderIdentity|HostedReaderIdentity;
+ export interface CompileObservationInput {pack:GamePack;definition:PhotoDefinition;areaId:string;scope:ObservationScope;images:ObservationImage[];taskId:string;geometryFrameId?:string;referenceSetId?:string;transforms?:import('./photoGeometry').PhotoTransform[]}
+ // Pure compilation/validation functions are implemented below after focused RED tests.
+@@ -66,4 +69,4 @@
+  return structuredClone(raw) as ObservationResult;
+ }
+ export interface ObservationReceipt {version:typeof OBSERVATION_VERSION;request:ObservationRequest;result:ObservationResult;reader:ObservationReaderIdentity;frame:import('./photoGeometry').ConfirmedPhotoFrame|null;transforms:import('./photoGeometry').PhotoTransform[];geometryCandidates:GeometryCandidate[];componentRefs:Record<string,string>;taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire;hostedWire?:HostedObservationWire;scanBundle?:import('./scanObservation').ScanBundleReceipt;scanUnitId?:string}
+-export interface LocalReaderCapabilities {version:'local-reader-capabilities-v1';readers:({kind:'local-observation-v1';available:boolean;cloudSupported:false;reason?:string;identity:ReaderIdentity|null;tasks?:LocalReaderTaskCapability[]}|{kind:'gemini-game-observation-v1';available:boolean;cloudSupported:true;reason?:string;identity:HostedReaderIdentity|null})[];definitions:{indexSHA:string;version:'game-photo-definitions-v1';count:number}}
++export interface LocalReaderCapabilities {version:'local-reader-capabilities-v1';readers:({kind:'local-observation-v1';available:boolean;cloudSupported:false;reason?:string;identity:ReaderIdentity|null;tasks?:LocalReaderTaskCapability[]}|{kind:HostedReaderIdentity['kind'];available:boolean;cloudSupported:true;reason?:string;identity:HostedReaderIdentity|null})[];definitions:{indexSHA:string;version:'game-photo-definitions-v1';count:number}}
+--- a/server/hostedObservation.ts
++++ b/server/hostedObservation.ts
+@@ -1,8 +1,10 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
++import type {HostedObservationReader} from './ai/hostedReader';
+ import {createHash} from 'node:crypto';
+ import type {AnalysisResult,Evidence,GamePack} from '../shared/types';
+ import {compileObservationTask,type HostedReaderIdentity,type HostedReaderSelection,type ObservationRequest,type PhotoDefinition} from '../shared/lightweightRecognition';
+ import {validatePhotoFrame,type ConfirmedPhotoFrame} from '../shared/photoGeometry';
+-import {GeminiGameReader,hostedVisibleProperty} from './ai/geminiGameReader';
++import {hostedVisibleProperty} from './ai/geminiGameReader';
+ import {assembleObservations} from './ai/observationAssembly';
+ import {photoDefinition} from './photoDefinitions';
+ import {imageDimensions} from './localObservation';
+@@ -10,9 +12,9 @@
+ 
+ const sha=(data:Buffer)=>createHash('sha256').update(data).digest('hex');
+ export interface PinnedHostedObservation {request:ObservationRequest;definition:PhotoDefinition;reader:HostedReaderIdentity;frame?:ConfirmedPhotoFrame;transforms:import('../shared/photoGeometry').PhotoTransform[];sourceImageSHA:string;inputSHA?:string;taskProfile?:undefined}
+-export async function prepareHostedObservation(input:{pack:GamePack;evidence:Evidence[];captureEpoch:string;selection:unknown;taskId:string;reader:GeminiGameReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedHostedObservation>{
+- const s=input.selection as HostedReaderSelection;if(!s||typeof s!=='object'||Object.keys(s).some(k=>!['kind','definitionSHA','areaId','frame'].includes(k))||s.kind!=='gemini-game-observation-v1'||input.evidence.length!==1)throw new AnalysisJobError('Gemini 판독기와 한 촬영 영역·원본 사진을 확인하세요.');
+- if(!(await input.reader.status()).available)throw new AnalysisJobError('서버에 Gemini 게임 사진 판독용 키가 연결되지 않았습니다.',503);
++export async function prepareHostedObservation(input:{pack:GamePack;evidence:Evidence[];captureEpoch:string;selection:unknown;taskId:string;reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedHostedObservation>{
++ const s=input.selection as HostedReaderSelection;if(!s||typeof s!=='object'||Object.keys(s).some(k=>!['kind','definitionSHA','areaId','frame'].includes(k))||!isHostedReader(s)||s.kind!==input.reader.identity.kind||input.evidence.length!==1)throw new AnalysisJobError('사진 판독기와 한 촬영 영역·원본 사진을 확인하세요.');
++ if(!(await input.reader.status()).available)throw new AnalysisJobError('서버에 선택한 게임 사진 판독용 키가 연결되지 않았습니다.',503);
+  const e=input.evidence[0],definition=photoDefinition(input.pack,s.definitionSHA),area=definition.areas.find(a=>a.id===s.areaId);
+  if(!area||(area.partition==='owner_private'?(e.scope!=='player'||!e.ownerId):(e.scope!=='public'||!!e.ownerId)))throw new AnalysisJobError('공용·본인 촬영 영역을 확인하세요.');
+  if(e.captureEpoch!==input.captureEpoch)throw new AnalysisJobError('현재 촬영 단계의 사진만 읽을 수 있습니다. 과거 사진과 저장 기록은 유지됩니다.',409);
+@@ -22,8 +24,8 @@
+  for(const component of definition.components)if(request.allowedPropertyIds[component.id])request.allowedPropertyIds[component.id]=request.allowedPropertyIds[component.id].filter(id=>hostedVisibleProperty(component,id));
+  return {request,definition,reader:structuredClone(input.reader.identity),frame,transforms:[],sourceImageSHA};
+ }
+-export async function analyzeHostedObservation(input:{plan:PinnedHostedObservation;pack:GamePack;session:import('../shared/types').Session;turnInstanceId:string;evidence:Evidence[];reader:GeminiGameReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;timings?:Record<string,number>;literal?:boolean}):Promise<AnalysisResult>{
+- const {plan,reader}=input;if(JSON.stringify(plan.reader)!==JSON.stringify(reader.identity))throw new AnalysisJobError('고정한 Gemini 판독 profile이 바뀌었습니다.',409);
++export async function analyzeHostedObservation(input:{plan:PinnedHostedObservation;pack:GamePack;session:import('../shared/types').Session;turnInstanceId:string;evidence:Evidence[];reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;timings?:Record<string,number>;literal?:boolean}):Promise<AnalysisResult>{
++ const {plan,reader}=input;if(JSON.stringify(plan.reader)!==JSON.stringify(reader.identity))throw new AnalysisJobError('고정한 사진 판독 profile이 바뀌었습니다.',409);
+  const bytes=await input.readImage(input.evidence[0]);if(sha(bytes.data)!==(plan.inputSHA??plan.sourceImageSHA))throw new AnalysisJobError('고정한 원본 사진이 바뀌었습니다.',409);
+  if(!input.literal&&plan.definition.nativeBridge==='catan'&&plan.request.areaId==='board'&&plan.request.scope.partition==='common_public'){
+   const read=await reader.readCatanScene(plan.request,plan.definition,input.session,input.pack,input.evidence,bytes.data,bytes.mimeType);if(input.timings)input.timings.provider=read.timings.readerMs;
+--- a/server/scanObservation.ts
++++ b/server/scanObservation.ts
+@@ -1,3 +1,4 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
+ import {createHash,randomUUID} from 'node:crypto';
+ import type {AnalysisResult,Assertion,Evidence,GamePack,Session,Value} from '../shared/types';
+ import type {PhotoReaderSelection,ObservationReceipt} from '../shared/lightweightRecognition';
+@@ -6,14 +7,14 @@
+ import {normalizeScene,resolveSlotId} from '../shared/scene';
+ import {prepareHostedObservation,analyzeHostedObservation,type PinnedHostedObservation} from './hostedObservation';
+ import {prepareLocalObservation,analyzeLocalObservation,imageDimensions,type PinnedLocalObservation} from './localObservation';
+-import type {GeminiGameReader} from './ai/geminiGameReader';import type {LocalReader} from './ai/localReader';
++import type {HostedObservationReader} from './ai/hostedReader';import type {LocalReader} from './ai/localReader';
+ import {AnalysisJobError} from './analysisJobs';
+ import {projectGenericFusion,supportsGenericFusion} from './observationFusion';
+ export interface PinnedScanObservation {plan:ScanPlan;units:{id:string;evidenceId:string;hosted?:PinnedHostedObservation;local?:PinnedLocalObservation}[]}
+ const sha=(v:Buffer)=>createHash('sha256').update(v).digest('hex');
+ export const observationObjects=(v:any):any[]=>v&&typeof v==='object'?(v.components??v.pieces??[...(v.groups??[]).flatMap((g:any)=>g.tiles??[]),...(v.loose??[])]):[];
+ export function scanSourceEvidence(selected:Evidence[],session:Session){const all=[...selected];for(const e of selected)if(e.sourceRegion&&e.sourceEvidenceId){const source=session.evidence.find(x=>x.id===e.sourceEvidenceId);if(!source||source.sourceRegion||source.scope!==e.scope||source.ownerId!==e.ownerId||source.captureEpoch!==e.captureEpoch)throw new AnalysisJobError('확대 원본의 범위·촬영 단계를 확인하세요.');if(!all.some(x=>x.id===source.id))all.push(source);}return all;}
+-export async function prepareScanObservation(input:{session:Session;pack:GamePack;evidence:Evidence[];selection:PhotoReaderSelection;taskId:string;reader:GeminiGameReader;localReader?:LocalReader;cloud:boolean;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedScanObservation>{
++export async function prepareScanObservation(input:{session:Session;pack:GamePack;evidence:Evidence[];selection:PhotoReaderSelection;taskId:string;reader:HostedObservationReader;localReader?:LocalReader;cloud:boolean;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedScanObservation>{
+  // A caller may share this cache across preparation and execution.
+  const images=new Map<string,ReturnType<typeof input.readImage>>();
+  const readImage=(e:Evidence)=>{
+@@ -33,16 +34,16 @@
+   if(!frame||typeof frame!=='object'||Array.isArray(frame)||index<0)throw new AnalysisJobError('사진 기준점의 선택된 원본을 확인하세요.',409);
+   const {target:_target,...selection}=input.selection as PhotoReaderSelection&{target?:ScanTarget};
+   const common={pack:input.pack,evidence:[input.evidence[index]],captureEpoch:input.session.captureEpoch,selection,taskId:input.taskId+'-unit-'+index,readImage};
+-  framed=selection.kind==='gemini-game-observation-v1'?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
++  framed=isHostedReader(selection)?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
+  }
+  const preparedUnits=await Promise.all(input.evidence.map(async(e,index)=>{
+   const {target:_target,...selection}=input.selection as PhotoReaderSelection&{target?:ScanTarget};
+   if(selection.frame&&selection.frame.sourceEvidenceId!==e.id)delete selection.frame;
+   const id=input.taskId+'-unit-'+index,common={pack:input.pack,evidence:[e],captureEpoch:input.session.captureEpoch,selection,taskId:id,readImage};
+-  const pinned=framed&&input.selection.frame!.sourceEvidenceId===e.id?framed:selection.kind==='gemini-game-observation-v1'?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
++  const pinned=framed&&input.selection.frame!.sourceEvidenceId===e.id?framed:isHostedReader(selection)?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
+   const bytes=await readImage(e);let source=e,sourceSHA=sha(bytes.data);
+   if(e.sourceRegion&&e.sourceEvidenceId){
+-   if(selection.kind!=='gemini-game-observation-v1')throw new AnalysisJobError('로컬 crop 판독은 지원하지 않습니다. 원본은 유지됩니다.');
++   if(!isHostedReader(selection))throw new AnalysisJobError('로컬 crop 판독은 지원하지 않습니다. 원본은 유지됩니다.');
+    source=input.session.evidence.find(x=>x.id===e.sourceEvidenceId)!;const original=await readImage(source);sourceSHA=sha(original.data);
+    const transform=cropPhotoTransform({transformId:id+'-crop',sourceSHA,inputSHA:sha(bytes.data),sourceDimensions:imageDimensions(original.data),inputDimensions:imageDimensions(bytes.data),region:e.sourceRegion});
+    pinned.transforms=[transform];(pinned as PinnedHostedObservation).inputSHA=sha(bytes.data);pinned.sourceImageSHA=sourceSHA;pinned.request.images[0]={...pinned.request.images[0],evidenceId:source.id,transformId:transform.transformId};
+@@ -52,14 +53,14 @@
+    if(!area.fields.includes(a.field)||!pinned.request.allowedComponents.includes(kind))throw new AnalysisJobError('보충할 실물과 촬영 영역이 다릅니다.');
+    pinned.request.allowedComponents=[kind];pinned.request.allowedPropertyIds={[kind]:pinned.request.allowedPropertyIds[kind]};
+   }
+-  const unit={id,evidenceId:e.id,...(selection.kind==='gemini-game-observation-v1'?{hosted:pinned as PinnedHostedObservation}:{local:pinned as PinnedLocalObservation})};
++  const unit={id,evidenceId:e.id,...(isHostedReader(selection)?{hosted:pinned as PinnedHostedObservation}:{local:pinned as PinnedLocalObservation})};
+   const planUnit:ScanPlan['units'][number]={id,evidenceId:e.id,sourceEvidenceId:source.id,sourceSHA,inputSHA:sha(bytes.data),areaId:pinned.request.areaId,role:target?'detail':e.sourceRegion?'crop':index===0?'anchor':'detail',target:target??null};return {unit,planUnit};
+  }));
+  for(const p of preparedUnits){units.push(p.unit);planUnits.push(p.planUnit);}
+  const first=units[0].hosted??units[0].local!;
+  return {plan:{version:'scan-observation-plan-v1',id:input.taskId,gameId:first.request.gameId,definitionSHA:first.request.definitionSHA,scope:first.request.scope,anchorEvidenceId:planUnits[0].sourceEvidenceId,units:planUnits},units};
+ }
+-export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:GeminiGameReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<AnalysisResult>{
++export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedObservationReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<AnalysisResult>{
+  const u=input.scan.units[input.index],unit=input.scan.plan.units[input.index],start=performance.now();if(!u)throw Error('없는 읽기 단위입니다.');
+  try{
+   const evidence=input.evidence.filter(e=>e.id===u.evidenceId),plan=u.hosted??u.local!;
+--- a/server/scanExecution.ts
++++ b/server/scanExecution.ts
+@@ -1,10 +1,11 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
+ import type {Evidence,AnalysisResult} from '../shared/types';
+ import type {HostedReaderSelection,HostedReaderIdentity} from '../shared/lightweightRecognition';
+ import type {ScanTarget} from '../shared/scanObservation';
+ import {prepareScanObservation,analyzeScanUnit} from './scanObservation';
+ import {photoDefinition} from './photoDefinitions';
+ import {taskTarget,type AnalysisTask,digest} from './analysisTask';
+-import type {GeminiGameReader} from './ai/geminiGameReader';
++import type {HostedObservationReader} from './ai/hostedReader';
+ import type {Store} from './store';import type {PrivatePins} from './privatePin';
+ export interface ScanIntent {version:'scan-intent-v1';taskId:string;selection:HostedReaderSelection&{target?:ScanTarget};evidenceIds:string[];reader:HostedReaderIdentity}
+ export interface ScanExecutionJobs {
+@@ -19,7 +20,7 @@
+  return {read(e:Evidence){const key=digest([e.id,e.url,e.kind,e.scope,e.ownerId,e.captureEpoch,e.sourceEvidenceId,e.sourceRegion]);let pending=cache.get(key);if(!pending){pending=Promise.resolve().then(()=>read(e)).then(image=>{bytes+=image.data.length;return image;});cache.set(key,pending);}return pending;},metrics:()=>({uniqueReads:cache.size,imageBytes:bytes}),clear:()=>cache.clear()};
+ }
+ /** One execution shares preparation/image bytes, while every possibly billed unit has an independent durable claim. */
+-export async function runHostedScan(input:{id:string;task:AnalysisTask;jobs:ScanExecutionJobs;store:Store;pins:PrivatePins;reader:GeminiGameReader}){
++export async function runHostedScan(input:{id:string;task:AnalysisTask;jobs:ScanExecutionJobs;store:Store;pins:PrivatePins;reader:HostedObservationReader}){
+  let task=structuredClone(input.task);const intent=task.prepared.scanIntent;
+  if(!intent)throw Error('Hosted scan intent required');
+  const images=cachedScanImages(e=>input.store.readEvidence(e)),start=performance.now();
+--- a/server/analysisJobs.ts
++++ b/server/analysisJobs.ts
+@@ -1,3 +1,4 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
+ import {mkdir,readFile,readdir,rename,writeFile,unlink,open} from 'node:fs/promises';
+ import type {AnalysisTask} from './analysisTask';import type {AnalysisResult} from '../shared/types';
+ import path from 'node:path';import {randomUUID} from 'node:crypto';
+@@ -20,7 +21,7 @@
+    const same=[...this.jobs.values()].filter(j=>j.sessionId===input.sessionId&&j.ownerId===input.ownerId);const prior=same.find(j=>j.requestId===input.requestId);if(prior){if(prior.signature!==input.signature)throw new AnalysisJobError('같은 작업 식별자로 다른 사진을 보낼 수 없어요.',409);out=this.public(prior);return;}
+    const running=same.find(j=>activeAnalysisJob(j));if(running){if(running.signature!==input.signature||running.revision!==input.revision)throw new AnalysisJobError('이 영역의 사진을 읽고 있어요. 완료 후 새 사진을 읽어 주세요.',409);out=this.public(running);return;}
+    if(this.queue.length+this.active+this.hostedActive>=16)throw new AnalysisJobError('사진 읽기 작업이 많아요. 원본은 보관돼요. 잠시 후 시작해 주세요.',503);
+-   const now=new Date().toISOString(),j:StoredJob={...input,id:randomUUID(),state:'queued',createdAt:now,updatedAt:now};await this.save(j);this.jobs.set(j.id,j);if(task){await mkdir(path.join(this.folder(),'tasks'),{recursive:true});await writeFile(path.join(this.folder(),'tasks',j.id+'.json'),JSON.stringify({job:j,task}),{mode:0o600,flag:'wx'});}out=this.public(j);if(task?.prepared.scanIntent?.selection.kind==='gemini-game-observation-v1'||task?.prepared.scanObservation?.units.every(u=>!!u.hosted)){this.hostedActive++;setImmediate(()=>void this.execute(j,run,true));}else{this.queue.push({id:j.id,run});setImmediate(()=>void this.drain());}
++   const now=new Date().toISOString(),j:StoredJob={...input,id:randomUUID(),state:'queued',createdAt:now,updatedAt:now};await this.save(j);this.jobs.set(j.id,j);if(task){await mkdir(path.join(this.folder(),'tasks'),{recursive:true});await writeFile(path.join(this.folder(),'tasks',j.id+'.json'),JSON.stringify({job:j,task}),{mode:0o600,flag:'wx'});}out=this.public(j);if(isHostedReader(task?.prepared.scanIntent?.selection)||task?.prepared.scanObservation?.units.every(u=>!!u.hosted)){this.hostedActive++;setImmediate(()=>void this.execute(j,run,true));}else{this.queue.push({id:j.id,run});setImmediate(()=>void this.drain());}
+   });this.serial=work.then(()=>{},()=>{});await work;return out;}
+  async load(id:string){return JSON.parse(await readFile(path.join(this.folder(),'tasks',id+'.json'),'utf8')) as {job:StoredJob;task:AnalysisTask};}
+  async savePrepared(id:string,task:AnalysisTask){const f=path.join(this.folder(),'tasks',id+'.json'),current=await this.load(id);if(current.task.prepared.scanObservation)return current.task;const next={...current,task};await writeFile(f,JSON.stringify(next),{mode:0o600});return task;}
+--- a/server/cloudRuntime.ts
++++ b/server/cloudRuntime.ts
+@@ -7,7 +7,7 @@
+ import {analysisBatches,taskTarget,commitAnalysisTask,type AnalysisTask} from './analysisTask.ts';
+ import {captureFields} from '../shared/photoCapture.ts';
+ import type {AnalysisResult} from '../shared/types.ts';
+-import {GeminiGameReader} from './ai/geminiGameReader.ts';
++import {hostedReaderFor} from './ai/hostedReader';
+ import {analyzeHostedObservation} from './hostedObservation.ts';
+ export function cloudRuntime(){
+  if(process.env.KEEPBOARD_MOCK_ANALYSIS==='1'&&process.env.VERCEL_ENV==='production')throw Error('Mock analysis is prohibited in production');
+@@ -26,8 +26,8 @@
+  await jobs.update(id,{state:'running'});
+  let result:AnalysisResult;const timings:Record<string,number>={},readImage=async(e:AnalysisTask['prepared']['evidence'][number])=>store.readEvidence(e);
+  if(process.env.KEEPBOARD_MOCK_ANALYSIS==='1')result=mockAnalysis(task,batch);
+- else if(task.prepared.scanObservation)result=await analyzeScanUnit({scan:task.prepared.scanObservation,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:new GeminiGameReader(),readImage,timings});
+- else if(task.prepared.hostedObservation)result=await analyzeHostedObservation({plan:task.prepared.hostedObservation,pack:task.prepared.pack,session:task.prepared.session,evidence:batch,turnInstanceId:task.prepared.session.turnInstanceId,reader:new GeminiGameReader(),readImage,timings});
++ else if(task.prepared.scanObservation)result=await analyzeScanUnit({scan:task.prepared.scanObservation,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:hostedReaderFor(task.prepared.scanObservation.units[index].hosted!.reader.kind),readImage,timings});
++ else if(task.prepared.hostedObservation)result=await analyzeHostedObservation({plan:task.prepared.hostedObservation,pack:task.prepared.pack,session:task.prepared.session,evidence:batch,turnInstanceId:task.prepared.session.turnInstanceId,reader:hostedReaderFor(task.prepared.hostedObservation.reader.kind),readImage,timings});
+  else result=await analyzeEvidence({...task.prepared,evidence:batch,timings,readImage:async e=>{const b=await readImage(e);return {mimeType:b.mimeType,data:b.data.toString('base64')};}});
+  await jobs.finishBatch(id,index,claim,result,timings);
+ }
+@@ -40,4 +40,4 @@
+ export async function finishCloudJob(id:string){const {store,pins,jobs}=cloudRuntime(),{job,task}=await jobs.load(id);const results:AnalysisResult[]=[],timings={...job.timings,providerMs:0,totalMs:Date.now()-Date.parse(job.createdAt)};for(let i=0;i<analysisBatches(task).length;i++){const r=await jobs.batchResult(id,i);if(r?.state!=='completed'||!r.result)throw Error('No completed result');results.push(r.result);timings.providerMs+=r.timings?.provider??0;}try{await jobs.update(id,{...await commitAnalysisTask(store,pins,task,job,results),timings});}catch(error){if(!task.prepared.scanObservation||(error as {status?:number}).status!==409)throw error;await jobs.update(id,{state:'stale',error:'stale',observationReceipts:results.flatMap(r=>r.observationReceipts??[]),scanBundle:{plan:task.prepared.scanObservation.plan,units:results.flatMap(r=>r.scanBundle?.units??[]),links:[]},timings});}await jobs.release(id);}
+ export async function failCloudJob(id:string){const {jobs}=cloudRuntime();await jobs.update(id,{state:'interrupted',error:'interrupted'});await jobs.release(id);}
+ 
+-export async function cloudRunHostedScan(id:string){const {store,pins,jobs}=cloudRuntime(),{task,job}=await jobs.load(id);const latest=(await jobs.list(job.sessionId,job.ownerId)).find(j=>j.id===id);if(latest&&!['queued','running'].includes(latest.state))return false;const run=await runHostedScan({id,task,jobs,store,pins,reader:new GeminiGameReader()});return !!run.results;}
++export async function cloudRunHostedScan(id:string){const {store,pins,jobs}=cloudRuntime(),{task,job}=await jobs.load(id);const latest=(await jobs.list(job.sessionId,job.ownerId)).find(j=>j.id===id);if(latest&&!['queued','running'].includes(latest.state))return false;const run=await runHostedScan({id,task,jobs,store,pins,reader:hostedReaderFor(task.prepared.scanIntent!.reader.kind)});return !!run.results;}
+--- a/server/index.ts
++++ b/server/index.ts
+@@ -1,3 +1,6 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
++import {TerraGameReader} from './ai/terraGameReader';
++import type {HostedObservationReader} from './ai/hostedReader';
+ import {ScanUploadBatches} from './scanUploadBatch';
+ import {analysisBatches} from './analysisTask';
+ import {photoDefinition} from './photoDefinitions';
+@@ -93,7 +96,7 @@
+   session.activity.push({ id: randomUUID(), at: new Date().toISOString(), type, message });
+ }
+ 
+-export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud,localReader,geminiReader=new GeminiGameReader(),uiHmr=true }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>};localReader?:LocalReader;geminiReader?:GeminiGameReader;uiHmr?:boolean } = {}) {
++export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud,localReader,geminiReader=new GeminiGameReader(),terraReader=new TerraGameReader(),uiHmr=true }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>};localReader?:LocalReader;geminiReader?:GeminiGameReader;terraReader?:HostedObservationReader;uiHmr?:boolean } = {}) {
+   if(cloud){const run=analyzer;analyzer=input=>run({...input,readImage:async e=>{const b=await store.readEvidence(e);return {mimeType:b.mimeType,data:b.data.toString('base64')};}});}
+   const app = express();
+   const uploads=cloud?new CloudUploads(cloud.objects):undefined;
+@@ -219,7 +222,7 @@
+   app.get('/api/settings', async (_req, res) => { res.json(await getAIStatus()); });
+   app.get('/api/recognition/readers',async(_req,res)=>{
+     const reader=cloud?{kind:'local-observation-v1',available:false,cloudSupported:false,identity:null,reason:'이 클라우드에는 로컬 모델이 없습니다. 유료 모델로 자동 전환하지 않습니다.'}:localReader?await localReader.status():{kind:'local-observation-v1',available:false,cloudSupported:false,identity:null,reason:'로컬 리더가 설정되지 않았습니다.'};
+-    res.json({version:'local-reader-capabilities-v1',readers:[reader,await geminiReader.status()],definitions:photoDefinitionsMetadata()});
++    res.json({version:'local-reader-capabilities-v1',readers:[reader,await geminiReader.status(),await terraReader.status()],definitions:photoDefinitionsMetadata()});
+   });
+   app.put('/api/settings', async (req, res) => {
+     if (!['gemini', 'openai'].includes(req.body?.provider) || typeof req.body.model !== 'string' || !req.body.model.trim()) throw new HttpError('제공자와 모델을 확인하세요.');
+@@ -437,7 +440,7 @@
+     if(s.room){const a=rooms.actor(req,s);if(owner&&owner!==a.playerId)throw new rooms.RoomError('내 사진 읽기 작업만 볼 수 있어요.');}
+     await pins.require(s.id,owner,credential(req));
+   }
+-  app.get('/api/sessions/:id/analysis-jobs',async(req,res)=>{const {session}=await sessionFor(req.params.id),owner=req.query.ownerId;if(owner!==undefined&&typeof owner!=='string')throw new HttpError('개인 영역을 확인하세요.');await jobScope(req,session,owner);const jobs=await analysisJobs.list(session.id,owner);for(const job of jobs)if(['queued','running'].includes(job.state)&&job.reader?.kind==='gemini-game-observation-v1'&&Date.now()-Date.parse(job.updatedAt)>300000){const {task}=await analysisJobs.load(job.id),scan=task.prepared.scanObservation;const rows=await Promise.all(analysisBatches(task).map((_,i)=>analysisJobs.batchResult(job.id,i)));const patch={state:'interrupted' as const,error:'interrupted' as const,observationReceipts:rows.flatMap(r=>r?.result?.observationReceipts??[]),...(scan?{scanBundle:{plan:scan.plan,units:scan.units.map((u,i)=>rows[i]?.result?.scanBundle?.units[0]??{unitId:u.id,state:'interrupted' as const,observationCount:0}),links:[]}}:{})};await analysisJobs.update(job.id,patch);Object.assign(job,patch);}res.json({jobs});});
++  app.get('/api/sessions/:id/analysis-jobs',async(req,res)=>{const {session}=await sessionFor(req.params.id),owner=req.query.ownerId;if(owner!==undefined&&typeof owner!=='string')throw new HttpError('개인 영역을 확인하세요.');await jobScope(req,session,owner);const jobs=await analysisJobs.list(session.id,owner);for(const job of jobs)if(['queued','running'].includes(job.state)&&isHostedReader(job.reader)&&Date.now()-Date.parse(job.updatedAt)>300000){const {task}=await analysisJobs.load(job.id),scan=task.prepared.scanObservation;const rows=await Promise.all(analysisBatches(task).map((_,i)=>analysisJobs.batchResult(job.id,i)));const patch={state:'interrupted' as const,error:'interrupted' as const,observationReceipts:rows.flatMap(r=>r?.result?.observationReceipts??[]),...(scan?{scanBundle:{plan:scan.plan,units:scan.units.map((u,i)=>rows[i]?.result?.scanBundle?.units[0]??{unitId:u.id,state:'interrupted' as const,observationCount:0}),links:[]}}:{})};await analysisJobs.update(job.id,patch);Object.assign(job,patch);}res.json({jobs});});
+   app.get('/api/sessions/:id/analysis-jobs/:jobId/progress',async(req,res)=>{
+     const {session}=await sessionFor(req.params.id),owner=req.query.ownerId;if(owner!==undefined&&typeof owner!=='string')throw new HttpError('개인 영역을 확인하세요.');await jobScope(req,session,owner);
+     const job=(await analysisJobs.list(session.id,owner)).find(j=>j.id===req.params.jobId);if(!job||job.captureEpoch!==session.captureEpoch)throw new HttpError('현재 스캔 작업을 찾을 수 없습니다.',409);
+@@ -460,12 +463,12 @@
+       validateStaticPhotos(evidence,body.sameStaticState);
+       const input=session.room?rooms.roomInput(session,pack,rooms.actor(req,session),await pins.allowed(session.id,credential(req)),await pins.owners(session.id),!owner):redactSession(session,pack,new Set(session.players.filter(p=>p.id!==owner).map(p=>p.id)),new Set());
+       const taskId=digest([session.id,owner??null,body.requestId,session.captureEpoch]),readImage=(e:Evidence)=>store.readEvidence(e);
+-      const hostedScan=body.reader?.kind==='gemini-game-observation-v1';
+-      if(hostedScan){if(Object.keys(body.reader).some(k=>!['kind','definitionSHA','areaId','frame','target'].includes(k)))throw new HttpError('판독 선택을 확인하세요.');const d=photoDefinition(pack,body.reader.definitionSHA),area=d.areas.find(a=>a.id===body.reader.areaId);if(!area||(owner?area.partition!=='owner_private':area.partition==='owner_private')||evidence.some(e=>e.captureEpoch!==session.captureEpoch))throw new HttpError('현재 사진 영역을 확인하세요.',409);if(!(await geminiReader.status()).available)throw new HttpError('사진 판독기를 사용할 수 없습니다.',503);}
+-      const scanIntent:ScanIntent|undefined=hostedScan?{version:'scan-intent-v1',taskId,selection:structuredClone(body.reader),evidenceIds:[...body.evidenceIds],reader:structuredClone(geminiReader.identity)}:undefined;
+-      const scanObservation=body.reader&&!hostedScan?await prepareScanObservation({session:input,pack,evidence,selection:body.reader,taskId,reader:geminiReader,localReader,cloud:!!cloud,readImage}):undefined;
++      const hostedScan=isHostedReader(body.reader),selectedReader=body.reader?.kind==='terra-game-observation-v1'?terraReader:geminiReader;
++      if(hostedScan){if(Object.keys(body.reader).some(k=>!['kind','definitionSHA','areaId','frame','target'].includes(k)))throw new HttpError('판독 선택을 확인하세요.');const d=photoDefinition(pack,body.reader.definitionSHA),area=d.areas.find(a=>a.id===body.reader.areaId);if(!area||(owner?area.partition!=='owner_private':area.partition==='owner_private')||evidence.some(e=>e.captureEpoch!==session.captureEpoch))throw new HttpError('현재 사진 영역을 확인하세요.',409);if(!(await selectedReader.status()).available)throw new HttpError('사진 판독기를 사용할 수 없습니다.',503);}
++      const scanIntent:ScanIntent|undefined=hostedScan?{version:'scan-intent-v1',taskId,selection:structuredClone(body.reader),evidenceIds:[...body.evidenceIds],reader:structuredClone(selectedReader.identity)}:undefined;
++      const scanObservation=body.reader&&!hostedScan?await prepareScanObservation({session:input,pack,evidence,selection:body.reader,taskId,reader:selectedReader,localReader,cloud:!!cloud,readImage}):undefined;
+       const localObservation=!scanObservation&&body.reader?.kind==='local-observation-v1'?await prepareLocalObservation({pack,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:localReader,cloud:!!cloud,readImage}):undefined;
+-      const hostedObservation=!scanIntent&&!scanObservation&&body.reader?.kind==='gemini-game-observation-v1'?await prepareHostedObservation({pack,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:geminiReader,readImage}):undefined;
++      const hostedObservation=!scanIntent&&!scanObservation&&isHostedReader(body.reader)?await prepareHostedObservation({pack,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:selectedReader,readImage}):undefined;
+       if(body.reader&&!scanIntent&&!scanObservation&&!localObservation&&!hostedObservation)throw new HttpError('사진 판독기 종류를 확인하세요.');
+       const observationPlan=localObservation??hostedObservation??scanObservation?.units[0].hosted??scanObservation?.units[0].local;
+       const taskEvidence=scanObservation||scanIntent?scanSourceEvidence(evidence,session):evidence,sourceEvidence=storedEvidence.concat(taskEvidence.filter(e=>!storedEvidence.some(s=>s.id===e.id)));
+@@ -474,12 +477,12 @@
+       const task:AnalysisTask={prepared,epoch,version,source,pin,owner,actorHash:rooms.deviceHash(req),roomRevisions:body.expectedRevisions};
+       return analysisJobs.start({sessionId:session.id,...(owner?{ownerId:owner}:{}),evidenceIds:[...body.evidenceIds],captureEpoch:epoch,requestId:body.requestId,signature,revision:version,timings:{prepareMs:performance.now()-prepareAt},...(scanIntent?{reader:scanIntent.reader,definitionSHA:scanIntent.selection.definitionSHA}:{}),...(observationPlan?{reader:observationPlan.reader,definitionSHA:observationPlan.request.definitionSHA,inputSHA:observationPlan.request.images[0].sha256,...(observationPlan.taskProfile?{taskProfile:observationPlan.taskProfile}:{})}:{})},async job=>{
+         if(scanIntent){
+-         const run=await runHostedScan({id:job.id,task,jobs:analysisJobs,store,pins,reader:geminiReader});if(!run.results)return {};
++         const run=await runHostedScan({id:job.id,task,jobs:analysisJobs,store,pins,reader:selectedReader});if(!run.results)return {};
+          try{return {...await queued(session.id,()=>commitAnalysisTask(store,pins,run.task,job,run.results)),timings:{...run.metrics,totalMs:Date.now()-Date.parse(job.createdAt)}};}
+          catch(error){if((error as {status?:number}).status!==409)throw error;return {state:'stale',error:'stale',observationReceipts:run.results.flatMap(r=>r.observationReceipts??[]),scanBundle:{plan:run.task.prepared.scanObservation!.plan,units:run.results.flatMap(r=>r.scanBundle?.units??[]),links:[]}};}
+         }
+         await queued(session.id,()=>taskTarget(store,pins,task));
+-        const timings:Record<string,number>={},begin=performance.now();const scanResults=scanObservation?await analyzeScan({scan:scanObservation,pack:prepared.pack,session:prepared.session,evidence:prepared.evidence,reader:geminiReader,localReader,readImage}):undefined;const result=scanResults?undefined:localObservation?await analyzeLocalObservation({plan:localObservation,pack:prepared.pack,evidence:prepared.evidence,turnInstanceId:prepared.session.turnInstanceId,reader:localReader!,readImage,timings}):hostedObservation?await analyzeHostedObservation({plan:hostedObservation,pack:prepared.pack,session:prepared.session,evidence:prepared.evidence,turnInstanceId:prepared.session.turnInstanceId,reader:geminiReader,readImage,timings}):await analyzer({...prepared,timings});
++        const timings:Record<string,number>={},begin=performance.now();const scanResults=scanObservation?await analyzeScan({scan:scanObservation,pack:prepared.pack,session:prepared.session,evidence:prepared.evidence,reader:selectedReader,localReader,readImage}):undefined;const result=scanResults?undefined:localObservation?await analyzeLocalObservation({plan:localObservation,pack:prepared.pack,evidence:prepared.evidence,turnInstanceId:prepared.session.turnInstanceId,reader:localReader!,readImage,timings}):hostedObservation?await analyzeHostedObservation({plan:hostedObservation,pack:prepared.pack,session:prepared.session,evidence:prepared.evidence,turnInstanceId:prepared.session.turnInstanceId,reader:selectedReader,readImage,timings}):await analyzer({...prepared,timings});
+         let commit:Partial<import('../shared/analysisJobs').AnalysisJob>;
+         try{commit=await queued(session.id,()=>commitAnalysisTask(store,pins,task,job,scanResults??[result!]));}catch(error){if(!scanResults||(error as {status?:number}).status!==409)throw error;commit={state:'stale',error:'stale',observationReceipts:scanResults.flatMap(r=>r.observationReceipts??[]),scanBundle:{plan:scanObservation!.plan,units:scanResults.flatMap(r=>r.scanBundle?.units??[]),links:[]}};}
+         return {...commit,timings:{...job.timings,providerMs:timings.provider??0,totalMs:performance.now()-begin}};
+--- a/src/SessionWorkspace.tsx
++++ b/src/SessionWorkspace.tsx
+@@ -1,3 +1,4 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
+ import {ScanObservationResults,ScanProgressPreview} from './ScanObservationResults';
+ import type {LocalReaderSelection,LocalReaderCapabilities,PhotoReaderSelection} from '../shared/lightweightRecognition';
+ import {validatePhotoFrame,type ConfirmedPhotoFrame} from '../shared/photoGeometry';
+@@ -36,7 +37,7 @@
+ import {latestSnapshot} from '../shared/rooms';
+ import './correction-workspace.css';
+ 
+-type ReaderMode='existing'|'local'|'gemini';
++type ReaderMode='existing'|'local'|'gemini'|'terra';
+ interface RunningCapture { reader?:PhotoReaderSelection;readingMode:ReaderMode;batch: ScanBatch; captureTarget?:CaptureTarget; guidance?:string; staged?:Map<string,ScanUploadReady>; photoIds?:Map<PhotoInput,string>;tickets?:Map<string,ScanUploadTicket> }
+ interface GalleryTransfer { run: RunningCapture; uploads: ReturnType<typeof createScanUploadQueue<PhotoInput, Evidence|ScanUploadReady>>; unread: File[]; snapshot: UploadSnapshot<Evidence|ScanUploadReady>; phase: 'reading' | 'sending' | 'failed' }
+ interface BatchReadout { reader?:PhotoReaderSelection;readingMode?:ReaderMode;captureTarget?:CaptureTarget; context: ScanRunContext; evidenceIds: string[]; state: 'manual' | 'analyzing' | 'done' | 'failed'; error?: string; candidateCount?: number }
+@@ -70,7 +71,9 @@
+   const [readers,setReaders]=useState<LocalReaderCapabilities|null>(null);
+   const gemini=readers?.readers.find(r=>r.kind==='gemini-game-observation-v1'),geminiAvailable=!!gemini?.available;
+   // Keep the production reader fixed unless the user explicitly changes the optional settings.
+-  const [readerMode,setReaderMode]=useState<ReaderMode>('gemini');
++  const [readerMode,setReaderMode]=useState<ReaderMode>('terra');
++  const terra=readers?.readers.find(r=>r.kind==='terra-game-observation-v1'),terraAvailable=!!terra?.available;
++  const hostedMode=readerMode==='gemini'||readerMode==='terra',hostedAvailable=readerMode==='terra'?terraAvailable:geminiAvailable;
+   // A scoped scan keeps every selected current-epoch photo as a separate reading unit.
+   const scoped=readerMode!=='existing';
+   const [localTask,setLocalTask]=useState<LocalReaderSelection['task']>();
+@@ -100,8 +103,8 @@
+   const jobPolling=useRef<ReturnType<typeof createJobStatusPolling>|null>(null);
+   useEffect(()=>{let active=true;const received=new Set<number>();let partial:import('../shared/analysisJobs').ScanProgress|null=null;let pendingProgress:import('../shared/analysisJobs').ScanProgress|null=null;let requestedJob:AnalysisJob|null=null;const capturedEpoch=session.captureEpoch;setScanProgress(null);setServerJob(null);setJobConnectionLost(false);setJobAutoPaused(false);if(privateLocked)return;
+     const poller=createJobStatusPolling({
+-      read:async()=>{if(requestedJob?.reader?.kind==='gemini-game-observation-v1'&&activeAnalysisJob(requestedJob)){pendingProgress=await api.scanProgress(session.id,requestedJob.id,ownerId,partial?.jobId===requestedJob.id?[...received]:[]);return pendingProgress.job??requestedJob;}const response=await api.analysisJobs(session.id,ownerId),job=response.jobs[0]??null;
+-        if(job?.reader?.kind==='gemini-game-observation-v1'&&activeAnalysisJob(job)&&job.captureEpoch===capturedEpoch){
++      read:async()=>{if(isHostedReader(requestedJob?.reader)&&activeAnalysisJob(requestedJob)){pendingProgress=await api.scanProgress(session.id,requestedJob.id,ownerId,partial?.jobId===requestedJob.id?[...received]:[]);return pendingProgress.job??requestedJob;}const response=await api.analysisJobs(session.id,ownerId),job=response.jobs[0]??null;
++        if(isHostedReader(job?.reader)&&activeAnalysisJob(job)&&job.captureEpoch===capturedEpoch){
+           pendingProgress=await api.scanProgress(session.id,job.id,ownerId,partial?.jobId===job.id?[...received]:[]);
+         }return job;},
+       onJob:job=>{if(!active)return;requestedJob=job;
+@@ -172,14 +175,14 @@
+     const area=areas.find(a=>a.id===localCaptureAreaId)||(!localCaptureAreaId?areas.find(a=>observablePhotoArea(def,a))??areas[0]:undefined);
+     if(!area||!observablePhotoArea(def,area))return undefined;
+     const framed=mode==='local'&&useFrame&&canUseCatanFrame&&currentFrame?{frame:currentFrame}:{};
+-    return mode==='gemini'?{kind:'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
++    return mode==='gemini'||mode==='terra'?{kind:mode==='terra'?'terra-game-observation-v1':'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
+   }
+   const resolveReaderRef=useRef(resolveReader);resolveReaderRef.current=resolveReader;
+   function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture', useFrame=false): RunningCapture {
+     setLastScan(null);
+     const profile=captureProfile(view.pack),area=captureAreas(view.pack,capturedOwner).find(a=>a.id===(scoped?localArea?.id:captureAreaId));
+     const reader=resolveReader(readerMode,useFrame);
+-    return {reader,readingMode:readerMode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: readerMode==='gemini'?geminiAvailable:scoped?localEnabled&&(!localTask||localInputMode!=='catan-atlas'||useFrame):!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner) }) };
++    return {reader,readingMode:readerMode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: hostedMode?hostedAvailable:scoped?localEnabled&&(!localTask||localInputMode!=='catan-atlas'||useFrame):!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner) }) };
+   }
+   function openCamera(options?: { ownerId?: string; purpose?: 'capture' | 'restore' }) {
+     setCameraRun(newCaptureRun(options ? options.ownerId : ownerId, options?.purpose));
+@@ -187,7 +190,7 @@
+   async function saveRunPhoto(run: RunningCapture, input: PhotoInput): Promise<Evidence|ScanUploadReady> {
+     const context = run.batch.context;
+     if (run.batch.finished || run.batch.evidenceIds.length >= SCAN_LIMIT) throw new Error('마쳤거나 6장을 확보한 스캔입니다. 새 스캔을 시작해 주세요.');
+-    if(run.readingMode==='gemini'){
++    if((run.readingMode==='gemini'||run.readingMode==='terra')){
+       run.photoIds??=new Map();let clientPhotoId=run.photoIds.get(input);if(!clientPhotoId){clientPhotoId='photo-'+run.photoIds.size;run.photoIds.set(input,clientPhotoId);}
+       const ready=run.staged?.get(clientPhotoId);if(ready)return ready;
+       const stage=await api.stageScanPhoto(context.sessionId,context.id,clientPhotoId,{...input,captureTarget:run.captureTarget,scope:context.ownerId?'player':'public',ownerId:context.ownerId,expectedCaptureEpoch:context.captureEpoch},run.tickets?.get(clientPhotoId));
+@@ -227,7 +230,7 @@
+   }
+   async function finishCaptureRun(run: RunningCapture) {
+     if (run.batch.analysisClaimed) return;
+-    if(run.readingMode==='gemini'&&run.staged?.size){
++    if((run.readingMode==='gemini'||run.readingMode==='terra')&&run.staged?.size){
+       await mutate(async()=>{const ids=[...(run.photoIds?.values()??[])].filter(id=>run.staged!.has(id)),response=await api.registerScanPhotos(run.batch.context.sessionId,run.batch.context.id,ids,run.batch.context.captureEpoch);
+         for(const clientId of ids){const e=response.session.evidence.find(e=>e.id===run.staged!.get(clientId)!.evidenceId);if(e&&!run.batch.evidenceIds.includes(e.id))run.batch=addSavedScanEvidence(run.batch,e);}return response;});
+     }
+@@ -258,7 +261,7 @@
+         const start = performance.now();
+         const input = await readPhoto(file);
+         recordScanTiming({ stage: 'gallery-read', ms: performance.now() - start, photos: 1, bytes: file.size });
+-        if(transfer.run.readingMode==='gemini'){if(prepared.reduce((n,i)=>n+i.dataUrl.length*2,0)+input.dataUrl.length*2>SCAN_QUEUE_MAX_BYTES)throw Error('사진 전송 대기 공간 부족');prepared.push({...input,label:file.name});}
++        if((transfer.run.readingMode==='gemini'||transfer.run.readingMode==='terra')){if(prepared.reduce((n,i)=>n+i.dataUrl.length*2,0)+input.dataUrl.length*2>SCAN_QUEUE_MAX_BYTES)throw Error('사진 전송 대기 공간 부족');prepared.push({...input,label:file.name});}
+         else transfer.uploads.enqueue({ ...input, label: file.name }, input.dataUrl.length * 2);
+       } catch { transfer.unread.push(file); }
+     }
+@@ -277,7 +280,7 @@
+     transfer.snapshot = transfer.uploads.snapshot();
+     setUploading(false);
+     if (transfer.unread.length || transfer.snapshot.entries.some(e => e.state === 'failed')) {
+-      transfer.phase = 'failed'; showGallery(transfer);if(transfer.run.readingMode==='gemini'&&transfer.run.staged?.size&&!transfer.run.batch.finished)await finishCaptureRun(transfer.run);return;
++      transfer.phase = 'failed'; showGallery(transfer);if((transfer.run.readingMode==='gemini'||transfer.run.readingMode==='terra')&&transfer.run.staged?.size&&!transfer.run.batch.finished)await finishCaptureRun(transfer.run);return;
+     }
+     try{await finishCaptureRun(transfer.run);galleryRef.current=null;setGallery(null);}catch{transfer.phase='failed';showGallery(transfer);}
+   }
+@@ -302,7 +305,7 @@
+   const savedFrames=session.assertions.flatMap(a=>a.observationReceipts??[]).map(r=>r.frame).filter((f):f is ConfirmedPhotoFrame=>!!f);
+   const latestPhoto=readingPhotos.at(-1);
+   const currentFrame=[frame,...savedFrames.reverse()].find(f=>f?.sourceEvidenceId===latestPhoto?.id&&f?.definitionSHA===definition?.definitionSHA)??null;
+-  const localEnabled=supportedLocalArea&&!definitionLoading&&!definitionError&&(readerMode==='gemini'?geminiAvailable:localTask?numericScope&&!!numberCapability?.available&&!!numberCapability.profile&&(localInputMode!=='catan-atlas'||!!currentFrame):localAvailable);
++  const localEnabled=supportedLocalArea&&!definitionLoading&&!definitionError&&(hostedMode?hostedAvailable:localTask?numericScope&&!!numberCapability?.available&&!!numberCapability.profile&&(localInputMode!=='catan-atlas'||!!currentFrame):localAvailable);
+   const hasPhotos = session.evidence.some(item => item.kind !== 'note' && (ownerId ? item.ownerId === ownerId : !item.ownerId));
+   const owner = ownerId ? session.players.find(player => player.id === ownerId) : undefined;
+   const editable = !privateLocked && !readonlyPublic;
+@@ -330,12 +333,12 @@
+   const photoTools = editable ? <>
+         <div className="cw-photo-bar" role="group" aria-label="사진 찍기와 읽기"><div className="cw-photo-actions"><button className="button secondary small-button" aria-label={captureLabel} disabled={locked} onClick={capture}><Camera size={18}/><span>{view.pack.id === 'rummikub' ? personalRummikub ? '받침대' : '판 찍기' : captureLabel}</span></button><button className="button secondary small-button" aria-label={uploadLabel} disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/><span>{view.pack.id === 'rummikub' ? '사진' : uploadLabel}</span></button></div>
+         <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={scoped?localArea?.id??localCaptureAreaId:captureAreaId} onChange={scoped?id=>{setLocalCaptureAreaId(id);setLocalTask(undefined);setLocalInputMode('original');}:setCaptureAreaId} disabled={locked||!!cameraRun}/>
+-        <LightweightReaderControls mode={readerMode} geminiAvailable={geminiAvailable} geminiReason={gemini&&'reason' in gemini?gemini.reason:undefined} geminiModel={gemini?.identity&&'model' in gemini.identity?gemini.identity.model:undefined} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/></div>
++        <LightweightReaderControls terraAvailable={terraAvailable} terraReason={terra?.reason} mode={readerMode} geminiAvailable={geminiAvailable} geminiReason={gemini&&'reason' in gemini?gemini.reason:undefined} geminiModel={gemini?.identity&&'model' in gemini.identity?gemini.identity.model:undefined} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/></div>
+         {scopedPending&&<section className="panel" aria-label="사진 상태 확인"><p>이 {scopedPending.evidenceIds.length}장은 같은 멈춘 판을 찍은 사진인가요?</p><div className="button-row"><button className="button primary" disabled={locked} onClick={()=>fire(analyzeBatch(scopedPending,true))}>네, 함께 읽기</button><button className="button secondary" disabled={locked} onClick={()=>fire(analyzeBatch({...scopedPending,context:{...scopedPending.context,id:crypto.randomUUID()},evidenceIds:scopedPending.evidenceIds.slice(-1)}))}>마지막 한 장만 읽기</button><button className="button text" onClick={()=>setPendingRead(null)}>지금은 사진만 보관</button></div></section>}
+         {visibleJob&&<p className="scan-readout" role="status">{jobConnectionLost&&activeAnalysisJob(visibleJob)?jobAutoPaused?'자동 상태 확인을 멈췄어요. 서버 작업은 계속될 수 있어요.':'상태를 확인하지 못했어요. 서버 작업은 계속될 수 있어요.':numericJobMessage(visibleJob)||analysisJobMessage(visibleJob)}{jobConnectionLost&&<button className="button text small-button" onClick={()=>jobPolling.current?.refresh()}>상태 다시 확인</button>}</p>}
+         {jobConnectionLost&&!visibleJob&&<p className="scan-readout" role="status">작업 상태를 확인하지 못했어요.<button className="button text small-button" onClick={()=>jobPolling.current?.refresh()}>상태 다시 확인</button></p>}
+         {gallery&&gallery.run.batch.context.ownerId===ownerId && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
+-        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode!=='existing'?(lastScan.readingMode==='gemini'?'Gemini 판독기를 사용할 수 없어 사진만 보관했어요.':lastScan.reader&&'task' in lastScan.reader&&lastScan.reader.task&&lastScan.reader.inputMode==='catan-atlas'?'사진을 보관했어요. 새 원본의 기준점을 확인한 뒤 숫자만 읽기를 눌러 주세요.':'로컬 판독기를 사용할 수 없어 사진만 보관했어요.'):!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '사진에서 읽은 내용을 바로 적용했어요. 필요한 부분만 고쳐 주세요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
++        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode!=='existing'?((lastScan.readingMode==='gemini'||lastScan.readingMode==='terra')?'선택한 판독기를 사용할 수 없어 사진만 보관했어요.':lastScan.reader&&'task' in lastScan.reader&&lastScan.reader.task&&lastScan.reader.inputMode==='catan-atlas'?'사진을 보관했어요. 새 원본의 기준점을 확인한 뒤 숫자만 읽기를 눌러 주세요.':'로컬 판독기를 사용할 수 없어 사진만 보관했어요.'):!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '사진에서 읽은 내용을 바로 적용했어요. 필요한 부분만 고쳐 주세요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
+   </> : null;
+   return <div className={`correction-workspace${view.pack.id === 'rummikub' ? ' rummikub-session' : generic ? ' board-record-session' : ''}${ownerId ? ' is-private' : ' is-public'}`}>
+     <header className="correction-heading"><button className="icon-button cw-back" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={22}/></button><div className="cw-title"><div className="cw-title-line"><h1>{session.name}</h1></div><p><span>{view.pack.title}</span><span>{session.players.length}명</span><span className="cw-saved">{savedLabel}</span></p></div>
+@@ -354,7 +357,7 @@
+         {personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
+         {scanProgress&&visibleJob&&activeAnalysisJob(visibleJob)&&<ScanProgressPreview view={view} progress={scanProgress}/>}
+         {view.pack.id === 'rummikub' ? <RummikubWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })} hasPhotos={hasPhotos} captureLabel={captureLabel} onCapture={gallery || cameraRun ? undefined : () => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()))} onOpenPublic={() => fire(changeOwner(undefined))} onReread={(scoped?localEnabled:status?.configured) && currentPhotos.length > 0 && !(visibleJob&&activeAnalysisJob(visibleJob)) ? () => fire(readStoredPhotos()) : undefined}/>
+-          : !generic && <SceneWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onReadDetail={readerMode==='gemini'&&geminiAvailable?(target)=>{detailTarget.current=target;upload.current?.click();}:undefined} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>}
++          : !generic && <SceneWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onReadDetail={hostedMode&&hostedAvailable?(target)=>{detailTarget.current=target;upload.current?.click();}:undefined} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>}
+         {!wide && <div className="board-dock" ref={dockRoot} role="toolbar" aria-label="보드 아래 메뉴">{dockItems.filter(item => dockKeys.split(',').includes(item.key)).map(({ key, label, Icon }) => <button type="button" key={key} className="dock-chip" aria-expanded={dockOpen === key} onClick={() => toggleDock(key)}><Icon size={16} aria-hidden="true"/>{label}</button>)}</div>}
+         {/* On a phone the board leads; the scan tools sit right under it. */}
+         {!wide && photoTools && <details className="cw-mobile-photo-tools" open={photoToolsOpen??(!snapshot&&!readingKey)} onToggle={event=>setPhotoToolsOpen(event.currentTarget.open)}><summary><Camera size={18}/>스캔·사진{visibleJob&&activeAnalysisJob(visibleJob)&&<span role="status">읽는 중…</span>}{visibleJob?.state==='failed'&&<span role="status">읽기 확인 필요</span>}</summary>{photoTools}</details>}
+@@ -377,17 +380,17 @@
+     <input hidden ref={upload} type="file" accept="image/*" multiple onChange={async event => {
+       const files = Array.from(event.target.files || []); event.target.value = ''; if (!files.length) return;
+       setUploading(true); const run = newCaptureRun(ownerId);
+-      if(detailTarget.current&&run.reader?.kind==='gemini-game-observation-v1')run.reader={...run.reader,target:detailTarget.current};detailTarget.current=null;
++      if(detailTarget.current&&isHostedReader(run.reader))run.reader={...run.reader,target:detailTarget.current};detailTarget.current=null;
+       try {
+         await flush(PHOTO_INPUT_SAVE_OPTIONS);
+         const transfer = { run, unread: [], snapshot: { entries: [], active: false, retainedBytes: 0 }, phase: 'reading' } as unknown as GalleryTransfer;
+-        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,run.readingMode==='gemini'?6:1);
++        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,(run.readingMode==='gemini'||run.readingMode==='terra')?6:1);
+         galleryRef.current = transfer; showGallery(transfer);
+         if (files.length > SCAN_LIMIT) onToast(`처음 ${SCAN_LIMIT}장을 추가해요`);
+         await sendGalleryFiles(transfer, files.slice(0, SCAN_LIMIT));
+       } catch (reason) { setUploading(false); onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
+     }}/>
+-    {cameraRun && <CameraDialog parallelUpload={cameraRun.readingMode==='gemini'} guidance={cameraRun.guidance} key={cameraRun.batch.context.id} onClose={() => finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
++    {cameraRun && <CameraDialog parallelUpload={(cameraRun.readingMode==='gemini'||cameraRun.readingMode==='terra')} guidance={cameraRun.guidance} key={cameraRun.batch.context.id} onClose={() => finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
+     {canUseCatanFrame&&framePhoto&&definition&&<CatanPhotoFrame photo={framePhoto.photo} sourceSHA={framePhoto.sha} definitionSHA={definition.definitionSHA} initial={currentFrame?.sourceEvidenceId===framePhoto.photo.id?currentFrame:undefined} validate={f=>validatePhotoFrame(f,{evidenceId:framePhoto.photo.id,sourceSHA:framePhoto.sha,definitionSHA:definition.definitionSHA})} onClose={()=>setFramePhoto(null)} onConfirm={f=>{setFrame(f);setFramePhoto(null);}}/>}
+     {photo && <PhotoDialog evidence={photo.evidence} region={photo.region} onClose={() => setPhoto(null)} onCrop={async input => { await mutate(() => api.evidence(session.id, { ...input, scope: photo.evidence.scope, ownerId: photo.evidence.ownerId, sourceEvidenceId: photo.evidence.id }), '확대한 사진을 추가했어요'); }}/>} 
+     {(busy || working || uploading) && <div className="mutation-indicator" role="status"><Busy label={lastScan?.state === 'analyzing' ? '사진을 읽고 있어요' : uploading || cameraRun ? '사진을 보내고 있어요' : '저장하고 있어요'}/></div>}
+--- a/src/jobStatusPolling.ts
++++ b/src/jobStatusPolling.ts
+@@ -1,3 +1,4 @@
++import {isHostedReader} from '../shared/lightweightRecognition';
+ import {activeAnalysisJob,type AnalysisJob} from '../shared/analysisJobs';
+ 
+ const MAX_AUTO_CHECKS = 10;
+@@ -21,9 +22,9 @@
+   const schedule = () => {
+     clear();
+     if (!stopped && !failed && options.visible() && current && activeAnalysisJob(current)) {
+-      if (autoChecks >= (current?.reader?.kind==='gemini-game-observation-v1'?140:MAX_AUTO_CHECKS)) { failed = true; options.onError('auto-limit'); return; }
++      if (autoChecks >= (isHostedReader(current?.reader)?140:MAX_AUTO_CHECKS)) { failed = true; options.onError('auto-limit'); return; }
+       if(current.createdAt&&Date.now()-Date.parse(current.createdAt)>300000){failed=true;options.onError('auto-limit');return;}
+-      const fast=current.reader?.kind==='gemini-game-observation-v1';
++      const fast=isHostedReader(current.reader);
+       const limit=fast?140:MAX_AUTO_CHECKS;
+       if(autoChecks>=limit){failed=true;options.onError('auto-limit');return;}
+       const delay = fast?(autoChecks<60?1000:3000):[10000, 20000, 30000][Math.min(autoChecks, 2)];
+@@ -46,7 +47,7 @@
+   async function check(manual = false) {
+     if (stopped || inFlight || !options.visible()) return;
+     if (!manual && current && activeAnalysisJob(current)) {
+-      if (autoChecks >= (current?.reader?.kind==='gemini-game-observation-v1'?140:MAX_AUTO_CHECKS)) { failed = true; clear(); options.onError('auto-limit'); return; }
++      if (autoChecks >= (isHostedReader(current?.reader)?140:MAX_AUTO_CHECKS)) { failed = true; clear(); options.onError('auto-limit'); return; }
+       autoChecks++;
+     }
+     clear();
+--- a/src/LightweightReaderControls.tsx
++++ b/src/LightweightReaderControls.tsx
+@@ -1,25 +1,25 @@
+ import './lightweight-reader.css';
+ import type {LocalReaderSelection,LocalReaderTaskCapability} from '../shared/lightweightRecognition';
+-type Mode='existing'|'local'|'gemini';
+-const parse=(value:string):Mode=>value==='local'||value==='gemini'?value:'existing';
++type Mode='existing'|'local'|'gemini'|'terra';
++const parse=(value:string):Mode=>value==='local'||value==='gemini'||value==='terra'?value:'existing';
+ /** UI selection never writes credentials. One row = method + read; the rest opens on demand. */
+-export function LightweightReaderControls({mode,onMode,available,availabilityMessage,geminiAvailable=false,geminiReason,geminiModel,busy,hasDefinition,definitionLoading=false,definitionError='',supportedArea=true,hasPhotos,onRead,onFrame,frameConfirmed,existingAvailable=true,showReadButton=true,numericScope=false,task,onTask,numberCapability,inputMode='original',onInputMode}:{mode:Mode;onMode:(mode:Mode)=>void;available:boolean;availabilityMessage?:string;geminiAvailable?:boolean;geminiReason?:string;geminiModel?:string;busy:boolean;hasDefinition:boolean;definitionLoading?:boolean;definitionError?:string;supportedArea?:boolean;hasPhotos:boolean;onRead:()=>void;onFrame?:()=>void;frameConfirmed?:boolean;existingAvailable?:boolean;showReadButton?:boolean;numericScope?:boolean;task?:LocalReaderSelection['task'];onTask?:(task:LocalReaderSelection['task'])=>void;numberCapability?:LocalReaderTaskCapability;inputMode?:LocalReaderSelection['inputMode'];onInputMode?:(mode:NonNullable<LocalReaderSelection['inputMode']>)=>void}){
+- const local=mode==='local',gemini=mode==='gemini',scoped=local||gemini,numeric=local&&task==='catan-numerals-v1',numberReady=!!numberCapability?.available&&!!numberCapability.profile;
+- const providerReady=gemini?geminiAvailable:numeric?numberReady:available;
++export function LightweightReaderControls({mode,onMode,available,availabilityMessage,terraAvailable=false,terraReason,geminiAvailable=false,geminiReason,geminiModel,busy,hasDefinition,definitionLoading=false,definitionError='',supportedArea=true,hasPhotos,onRead,onFrame,frameConfirmed,existingAvailable=true,showReadButton=true,numericScope=false,task,onTask,numberCapability,inputMode='original',onInputMode}:{mode:Mode;onMode:(mode:Mode)=>void;available:boolean;availabilityMessage?:string;terraAvailable?:boolean;terraReason?:string;geminiAvailable?:boolean;geminiReason?:string;geminiModel?:string;busy:boolean;hasDefinition:boolean;definitionLoading?:boolean;definitionError?:string;supportedArea?:boolean;hasPhotos:boolean;onRead:()=>void;onFrame?:()=>void;frameConfirmed?:boolean;existingAvailable?:boolean;showReadButton?:boolean;numericScope?:boolean;task?:LocalReaderSelection['task'];onTask?:(task:LocalReaderSelection['task'])=>void;numberCapability?:LocalReaderTaskCapability;inputMode?:LocalReaderSelection['inputMode'];onInputMode?:(mode:NonNullable<LocalReaderSelection['inputMode']>)=>void}){
++ const local=mode==='local',gemini=mode==='gemini',terra=mode==='terra',hosted=gemini||terra,scoped=local||hosted,numeric=local&&task==='catan-numerals-v1',numberReady=!!numberCapability?.available&&!!numberCapability.profile;
++ const providerReady=terra?terraAvailable:gemini?geminiAvailable:numeric?numberReady:available;
+  const enabled=scoped?(numeric?numericScope&&numberReady&&(inputMode!=='catan-atlas'||!!frameConfirmed):providerReady)&&hasDefinition&&supportedArea&&!definitionLoading&&!definitionError:existingAvailable;
+- const selector=available||geminiAvailable||numberReady||scoped,read=hasPhotos&&showReadButton;
++ const selector=available||terraAvailable||geminiAvailable||numberReady||scoped,read=hasPhotos&&showReadButton;
+  if(!selector&&!read)return null;
+- const name=gemini?'Gemini':'로컬 판독기';
++ const name=terra?'Terra':gemini?'Gemini':'로컬 판독기';
+  // Only a blocker is shown inline; how the reader works lives under "읽기 설정".
+- const blocker=scoped?(definitionLoading?'촬영 정의를 준비하고 있어요…':definitionError||(!hasDefinition?'이 저장본의 판본·촬영 정의가 일치하지 않아 시작하지 않아요.':!supportedArea?'이 촬영 부분은 수동 기록·실물 보관만 지원해요.':!providerReady?(numeric?numberCapability?.reason||'숫자 전용 판독기가 준비되지 않았어요.':(gemini?geminiReason:availabilityMessage)||`${name}에 연결할 수 없어요.`):undefined)):!existingAvailable&&read?'기존 AI 미연결 · 원본은 보관돼요.':undefined;
++ const blocker=scoped?(definitionLoading?'촬영 정의를 준비하고 있어요…':definitionError||(!hasDefinition?'이 저장본의 판본·촬영 정의가 일치하지 않아 시작하지 않아요.':!supportedArea?'이 촬영 부분은 수동 기록·실물 보관만 지원해요.':!providerReady?(numeric?numberCapability?.reason||'숫자 전용 판독기가 준비되지 않았어요.':(terra?terraReason:gemini?geminiReason:availabilityMessage)||`${name}에 연결할 수 없어요.`):undefined)):!existingAvailable&&read?'기존 AI 미연결 · 원본은 보관돼요.':undefined;
+  return <section className="lightweight-reader is-compact" aria-label="사진 판독기">
+  {read&&<div className="lw-bar"><button className="button secondary lw-read" disabled={busy||!enabled} onClick={onRead}>{numeric?'숫자만 읽기':'사진 읽기'}</button></div>}
+  {blocker&&<p role="status" className="small">{blocker}{scoped?' 원본은 보관돼요.':''}</p>}
+  {numeric&&!numericScope&&<p role="status" className="small">현재 게임·공용 판에서는 숫자 전용 판독을 사용할 수 없어요.</p>}
+  {numeric&&inputMode==='catan-atlas'&&!frameConfirmed&&<p role="status" className="small">맞춘 판으로 읽으려면 현재 사진의 기준점을 먼저 확인해 주세요.</p>}
+  {selector&&<details className="lw-more"><summary>읽기 설정</summary>
+-  <label className="field lw-method">사진 읽기 방식<select aria-label="사진 읽기 방식" value={mode} disabled={busy} onChange={e=>onMode(parse(e.target.value))}><option value="existing">기존 AI</option><option value="local">로컬 경량 판독</option>{(geminiAvailable||gemini)&&<option value="gemini">Gemini 판독</option>}</select></label>
+-  {scoped&&<p className="small muted">{gemini?`Gemini${geminiModel?`(${geminiModel})`:''}는 이번 촬영 단계의 마지막 원본 한 장을 읽어요. 사진은 판독 요청에만 쓰이고, 읽은 값은 후보로만 남아요. 가리거나 읽지 못한 값은 ‘?’로 표시돼요.`:'로컬 판독은 이번 촬영 단계의 마지막 원본 한 장을 읽어요.'} 후보는 필요하면 고친 뒤 직접 반영할 수 있어요.</p>}
++  <label className="field lw-method">사진 읽기 방식<select aria-label="사진 읽기 방식" value={mode} disabled={busy} onChange={e=>onMode(parse(e.target.value))}><option value="existing">기존 AI</option><option value="local">로컬 경량 판독</option>{(geminiAvailable||gemini)&&<option value="gemini">Gemini 판독</option>}{(terraAvailable||terra)&&<option value="terra">Terra 판독</option>}</select></label>
++  {scoped&&<p className="small muted">{hosted?`${name}${gemini&&geminiModel?`(${geminiModel})`:''}는 선택한 현재 사진을 각각 읽어요. 읽은 내용은 기존 그림에 연결되고, 불확실한 값은 ‘?’와 원사진으로 남아요. 필요한 부분만 직접 고칠 수 있어요.`:'로컬 판독은 현재 촬영 단계의 사진을 읽어요. 후보는 필요하면 고친 뒤 직접 반영할 수 있어요.'}</p>}
+   {local&&numericScope&&<><label className="field">판독할 항목<select aria-label="판독할 항목" value={task??'general'} disabled={busy} onChange={e=>onTask?.(e.target.value==='catan-numerals-v1'?'catan-numerals-v1':undefined)}><option value="general">일반 로컬 판독</option><option value="catan-numerals-v1">카탄 숫자만 읽기</option></select></label>{numeric&&<label className="field">숫자 판독 입력<select aria-label="숫자 판독 입력" value={inputMode} disabled={busy} onChange={e=>onInputMode?.(e.target.value==='catan-atlas'?'catan-atlas':'original')}><option value="original">원본으로 읽기</option><option value="catan-atlas">맞춘 판으로 읽기 (기준점 필요)</option></select></label>}</>}
+   {onFrame&&hasPhotos&&<><button className="button secondary" disabled={busy||!hasDefinition||!supportedArea||definitionLoading||!!definitionError} onClick={onFrame}>{frameConfirmed?'사진 위치 다시 맞추기':'사진 위치 맞추기'}</button><p className="small muted">{frameConfirmed?'기준점을 확인했어요. 계산된 위치도 반영 전에 확인해 주세요.':'위치를 맞추지 않으면 읽은 값은 미배치 후보로 남아요.'}</p></>}
+  </details>}
+--- a/tests/lightweight-reader-ui.test.ts
++++ b/tests/lightweight-reader-ui.test.ts
+@@ -187,7 +187,7 @@
+  const off=renderToStaticMarkup(React.createElement(LightweightReaderControls,base));assert.doesNotMatch(off,/Gemini 판독/);
+  const on=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,geminiAvailable:true}));assert.match(on,/<option value="gemini">Gemini 판독/);assert.match(on,/aria-label="사진 읽기 방식"/);assert.match(on,/<button[^>]*>사진 읽기<\/button>/);
+  const blocked=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:false,geminiReason:'합성 Gemini 연결 없음'}));assert.match(blocked,/합성 Gemini 연결 없음/);assert.match(blocked,/<button[^>]*disabled[^>]*>사진 읽기/);
+- const ready=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:true}));assert.doesNotMatch(ready,/<p role="status"/,'a ready reader shows no inline notice');assert.match(ready,/<details class="lw-more"><summary>읽기 설정<\/summary>[\s\S]*마지막 원본 한 장/);assert.doesNotMatch(ready,/판독할 항목/);
++ const ready=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:true}));assert.doesNotMatch(ready,/<p role="status"/,'a ready reader shows no inline notice');assert.match(ready,/<details class="lw-more"><summary>읽기 설정<\/summary>[\s\S]*선택한 현재 사진을 각각/);assert.doesNotMatch(ready,/판독할 항목/);
+ });
+ test('workspace sends the chosen provider: Gemini scoped selection, then local, then existing without a reader',async()=>{
+  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{photoDefinitionFor,loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();
+@@ -246,18 +246,18 @@
+  assert.match(html,/<details class="lightweight-reader is-result" open="">/);assert.match(html,/lw-photo-review is-compact/);assert.match(html,/<span>\?<\/span>/,'unreadable stays ?');
+  assert.match(html,/<details class="lw-list-fold"><summary>목록으로 보기 3개/);assert.match(html,/틀린 값이 있으면 아래 ‘직접 고치기’에서 고칠 수 있어요/);assert.doesNotMatch(html,/명시적으로 반영해 주세요/);
+ });
+-test('without a chosen provider the photo read stays on Gemini (loading or unavailable): preserved photo, clear blocker, never a silent existing-AI start',async()=>{
++test('without a chosen provider the photo read stays on Terra (loading or unavailable): preserved photo, clear blocker, never a silent existing-AI start',async()=>{
+  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();
+  const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob};
+- const gemini=(available:boolean)=>async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'gemini-game-observation-v1',available,cloudSupported:true,identity:null,...(available?{}:{reason:'Gemini 연결 설정이 없어요.'})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}} as any);
+- for(const [label,readers,wantStart] of [['gemini offered',gemini(true),true],['gemini unavailable',gemini(false),false],['capabilities still loading',()=>new Promise<any>(()=>{}),false],['capabilities failed',async()=>{throw new Error('offline');},false]] as const){
++ const terra=(available:boolean)=>async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'terra-game-observation-v1',available,cloudSupported:true,identity:null,...(available?{}:{reason:'Terra 연결 설정이 없어요.'})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}} as any);
++ for(const [label,readers,wantStart] of [['terra offered',terra(true),true],['terra unavailable',terra(false),false],['capabilities still loading',()=>new Promise<any>(()=>{}),false],['capabilities failed',async()=>{throw new Error('offline');},false]] as const){
+   const f=candidateFixture();Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const bodies:any[]=[];
+   api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=readers as any;api.startAnalysisJob=async(_id,body)=>{bodies.push(body);return{job:{id:'job',sessionId:f.view.session.id,state:'completed',evidenceIds:body.evidenceIds,captureEpoch:'epoch',createdAt:'',updatedAt:''}};};
+   const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true,provider:'gateway',model:'synthetic'},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}});
+   try{await new Promise(r=>setTimeout(r,0));ui.render();await new Promise(r=>setTimeout(r,0));ui.render();
+-   const c=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(c.props.mode,'gemini',label);c.props.onRead();await new Promise(r=>setTimeout(r,0));
++   const c=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(c.props.mode,'terra',label);c.props.onRead();await new Promise(r=>setTimeout(r,0));
+    assert.equal(bodies.length,wantStart?1:0,label);
+-   if(wantStart){assert.equal(bodies[0].reader.kind,'gemini-game-observation-v1',label);assert.deepEqual(Object.keys(bodies[0].reader).sort(),['areaId','definitionSHA','kind']);}
++   if(wantStart){assert.equal(bodies[0].reader.kind,'terra-game-observation-v1',label);assert.deepEqual(Object.keys(bodies[0].reader).sort(),['areaId','definitionSHA','kind']);}
+   }finally{ui.dispose();}
+  }
+  api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;
+--- /dev/null
++++ b/server/ai/terraGameReader.ts
+@@ -0,0 +1,78 @@
++import {createHash} from 'node:crypto';
++import {readFile,stat} from 'node:fs/promises';
++import type {ObservationRequest,PhotoDefinition,TerraReaderIdentity,HostedObservationWire} from '../../shared/lightweightRecognition';
++import type {Evidence,GamePack,Session} from '../../shared/types';
++import type {PhotoTransform} from '../../shared/photoGeometry';
++import {buildGeminiGameBody,decodeLiteralObservationPayload} from './geminiGameReader';
++import {catanScenePrompt,catanSceneResponseSchema,decodeCatanScenePayload} from './catanSceneReading';
++import {parseModelJSON} from './response';
++const object=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
++export const TERRA_FILL_SENTENCE='For every returned object, include exactly one attribute row for each listed property of its kind; when a property is not visible use valueJson null with its reason, and when two listed properties describe the same visible fact, fill both.';
++export const TERRA_IDENTITY:TerraReaderIdentity={kind:'terra-game-observation-v1',model:'gpt-6.1-terra',api:'responses',reasoningEffort:'low',imageDetail:'high',maxOutputTokens:32768,adapterVersion:'literal-named-fill-original-v1',automaticRetries:0,timeoutMs:240000};
++/** Only changes JSON Schema representation. Optional fields become required nullable, never disappear. */
++export function strictTerraSchema(raw:any):any{
++ if(Array.isArray(raw))return raw.map(strictTerraSchema);if(!object(raw))return raw;
++ const out=Object.fromEntries(Object.entries(raw).map(([k,v])=>[k,strictTerraSchema(v)]));
++ if(object(out.properties)){
++  const required=Array.isArray(raw.required)?raw.required:[];
++  for(const [id,field]of Object.entries(out.properties))if(!required.includes(id)){
++   const p=field as any;
++   if(p.type){p.type=[...new Set([...(Array.isArray(p.type)?p.type:[p.type]),'null'])];if(Array.isArray(p.enum)&&!p.enum.includes(null))p.enum.push(null);}
++   else out.properties[id]={anyOf:[p,{type:'null'}]};
++  }
++  out.required=Object.keys(out.properties);out.additionalProperties=false;
++ }
++ return out;
++}
++function body(prompt:string,schema:unknown,image:Buffer,mimeType:string){return {model:TERRA_IDENTITY.model,store:false,service_tier:'default',max_output_tokens:32768,reasoning:{effort:'low'},input:[{role:'user',content:[{type:'input_text',text:prompt},{type:'input_image',image_url:`data:${mimeType};base64,${image.toString('base64')}`,detail:'high'}]}],text:{format:{type:'json_schema',name:'game_observation',strict:true,schema}}};}
++export function buildTerraGameBody(request:ObservationRequest,definition:PhotoDefinition,image:Buffer,mimeType:string){
++ const original=buildGeminiGameBody(request,definition,image,mimeType);
++ const prompt=original.contents[0].parts[0].text!.replace('Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain.','Box each whole object as box_1000 = {"ymin":…, "xmin":…, "ymax":…, "xmax":…} in coordinates 0..1000 with ymin<ymax and xmin<xmax, or null when uncertain.').replace(' Include no manual properties.',' '+TERRA_FILL_SENTENCE+' Include no manual properties.');
++ const schema:any=structuredClone(original.generationConfig.responseFormat.text.schema),coordinate={type:'number',minimum:0,maximum:1000};
++ schema.properties.items.items.properties.box_1000={anyOf:[{type:'object',properties:{ymin:coordinate,xmin:coordinate,ymax:coordinate,xmax:coordinate},required:['ymin','xmin','ymax','xmax'],additionalProperties:false},{type:'null'}]};
++ return body(prompt,schema,image,mimeType);
++}
++export function terraResponsePayload(native:unknown):unknown{
++ if(!object(native)||native.status!=='completed'||native.error||native.incomplete_details||!Array.isArray(native.output))throw Error('Terra 응답이 완료되지 않았습니다. 원본은 유지됩니다.');
++ const messages=native.output.filter((m:any)=>m?.type==='message');
++ if(!messages.length||messages.some((m:any)=>m.status&&m.status!=='completed'||!Array.isArray(m.content)||!m.content.length||m.content.some((p:any)=>p?.type!=='output_text'||typeof p.text!=='string')))throw Error('Terra 응답에 판독 결과가 없거나 거절되었습니다. 원본은 유지됩니다.');
++ return parseModelJSON(messages.flatMap((m:any)=>m.content).map((p:any)=>p.text).join(''));
++}
++export function decodeTerraGameObservation(native:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[]=[]){
++ const payload=terraResponsePayload(native);if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).length!==1)throw Error('Terra 관측 형식을 확인하세요.');
++ const items=payload.items.map((item:any)=>{
++  if(!object(item))throw Error('Terra 실물 형식을 확인하세요.');const b=item.box_1000;
++  if(b===null)return item;
++  if(!object(b)||Object.keys(b).length!==4||!['ymin','xmin','ymax','xmax'].every(k=>typeof b[k]==='number'))throw Error('Terra 명명 좌표 형식을 확인하세요.');
++  return {...item,box_1000:[b.ymin,b.xmin,b.ymax,b.xmax]};
++ });
++ const trace:HostedObservationWire={id:'terra-game-wire-v1',items:[],deferred:[],providerResponse:structuredClone(native)};
++ const raw=decodeLiteralObservationPayload({items},request,definition,trace,transforms);
++ trace.items=structuredClone(payload.items);return {raw,hostedWire:trace};
++}
++export function extractOpenAIKey(value:string):string{
++ const source=value.trim().replace(/^\ufeff/,'' );let token:unknown=source;
++ if(source.startsWith('{')){let parsed:unknown;try{parsed=JSON.parse(source);}catch{throw Error('OpenAI 인증 형식을 확인하세요.');}if(!object(parsed)||Object.keys(parsed).length!==1||!['OPENAI_API_KEY','api_key','apiKey'].includes(Object.keys(parsed)[0]))throw Error('OpenAI 인증 형식을 확인하세요.');token=Object.values(parsed)[0];}
++ else{const named=source.match(/^([^:=\n]+)\s*[:=\n]\s*([^\n]+)$/);if(named){if(!['OPENAI','OPENAIKEY','OPENAIAPI','OPENAIAPIKEY'].includes(named[1].replace(/[ _-]/g,'').toUpperCase()))throw Error('OpenAI 인증 형식을 확인하세요.');token=named[2].trim();}}
++ if(typeof token==='string'&&['"',"'",'`'].includes(token[0])&&token.at(-1)===token[0])token=token.slice(1,-1);
++ if(typeof token!=='string'||!/^sk-[A-Za-z0-9_-]{16,}$/.test(token))throw Error('OpenAI 인증 형식을 확인하세요.');return token;
++}
++async function configuredKey(){const file=process.env.KEEPBOARD_OPENAI_API_KEY_FILE;return extractOpenAIKey(file?await readFile(file,'utf8'):process.env.OPENAI_API_KEY??'');}
++export class TerraGameReader{
++ readonly identity=TERRA_IDENTITY;
++ constructor(private readonly config:{key?:()=>Promise<string>;fetch?:typeof fetch}={}){}
++ async status(){let available=!!this.config.key||!!process.env.OPENAI_API_KEY;const file=process.env.KEEPBOARD_OPENAI_API_KEY_FILE;if(file&&!this.config.key){try{available=(await stat(file)).isFile();}catch{available=false;}}return {kind:this.identity.kind,available,cloudSupported:true as const,identity:available?this.identity:null,...(!available?{reason:'서버에 Terra 게임 사진 판독용 키가 연결되지 않았습니다.'}:{})};}
++ private async invoke(request:ObservationRequest,image:Buffer,mimeType:string,requestBody:unknown){
++  if(request.images.length!==1||createHash('sha256').update(image).digest('hex')!==request.images[0].sha256||!['image/jpeg','image/png','image/webp'].includes(mimeType))throw Error('고정한 원본 사진을 확인하세요.');
++  const key=await (this.config.key??configuredKey)(),start=performance.now();
++  const response=await (this.config.fetch??fetch)('https://api.openai.com/v1/responses',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${key}`},body:JSON.stringify(requestBody),signal:AbortSignal.timeout(this.identity.timeoutMs),redirect:'error'});
++  if(!response.ok)throw Error(`Terra 판독 요청이 실패했습니다 (${response.status}). 원본과 기존 기록은 유지됩니다.`);
++  const native:unknown=await response.json();if(object(native)&&native.model!==this.identity.model)throw Error('고정한 Terra 모델과 응답이 다릅니다.');
++  return {native,timings:{readerMs:performance.now()-start}};
++ }
++ async read(request:ObservationRequest,definition:PhotoDefinition,image:Buffer,mimeType:string,transforms:PhotoTransform[]=[]){const read=await this.invoke(request,image,mimeType,buildTerraGameBody(request,definition,image,mimeType));return {...decodeTerraGameObservation(read.native,request,definition,transforms),timings:read.timings};}
++ async readCatanScene(request:ObservationRequest,definition:PhotoDefinition,session:Session,pack:GamePack,evidence:Evidence[],image:Buffer,mimeType:string){
++  const read=await this.invoke(request,image,mimeType,body(catanScenePrompt(session,pack,evidence),strictTerraSchema(catanSceneResponseSchema(evidence)),image,mimeType));
++  return {result:decodeCatanScenePayload(terraResponsePayload(read.native),{request,definition,session,pack,evidence,reader:this.identity,sourceImageSHA:request.images[0].sha256},'terra-catan-scene-wire-v1',read.native),timings:read.timings};
++ }
++}
+--- /dev/null
++++ b/server/ai/hostedReader.ts
+@@ -0,0 +1,16 @@
++import type {GeminiGameReader} from './geminiGameReader';
++import {GeminiGameReader as Gemini} from './geminiGameReader';
++import {TerraGameReader} from './terraGameReader';
++import type {HostedReaderIdentity} from '../../shared/lightweightRecognition';
++/** Structural interface lets each real provider retain its own wire and pinned profile. */
++export interface HostedObservationReader {
++ identity:HostedReaderIdentity;
++ status():Promise<{kind:HostedReaderIdentity['kind'];available:boolean;cloudSupported:true;identity:HostedReaderIdentity|null;reason?:string}>;
++ read:GeminiGameReader['read'];
++ readCatanScene:GeminiGameReader['readCatanScene'];
++}
++export function hostedReaderFor(kind:HostedReaderIdentity['kind']):HostedObservationReader{
++ if(kind==='terra-game-observation-v1')return new TerraGameReader();
++ if(kind==='gemini-game-observation-v1')return new Gemini();
++ throw Error('지원하지 않는 hosted 판독기입니다. 자동 대체하지 않습니다.');
++}
+--- /dev/null
++++ b/tests/terra-game-observation.test.ts
+@@ -0,0 +1,39 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {catalogPacks} from '../gamepacks/catalog';
++import {photoDefinition} from '../server/photoDefinitions';
++import {compileObservationTask} from '../shared/lightweightRecognition';
++import {buildTerraGameBody,decodeTerraGameObservation,terraResponsePayload,TerraGameReader,strictTerraSchema} from '../server/ai/terraGameReader';
++import {catanSceneResponseSchema} from '../server/ai/catanSceneReading';
++const pack=catalogPacks.find(p=>p.id==='catan-base')!,definition=photoDefinition(pack);
++const request=compileObservationTask({pack,definition,areaId:'board',taskId:'synthetic',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'photo',inputId:'photo',sha256:'a'.repeat(64),width:1000,height:800,transformId:null}]});
++const item={kind:'number-token',box_1000:{ymin:100,xmin:200,ymax:300,xmax:400},face:'front',quantity:1,attributes:[{id:'number',valueJson:'8',unknownReason:null}]};
++const response=(payload:unknown)=>({model:'gpt-6.1-terra',status:'completed',output:[{type:'message',status:'completed',content:[{type:'output_text',text:JSON.stringify(payload)}]}]});
++test('Terra named literal body keeps original bytes and all allowed fields; fill does not supply answers',()=>{
++ const body=buildTerraGameBody(request,definition,Buffer.from('original'),'image/png');
++ assert.equal(body.model,'gpt-6.1-terra');assert.equal(body.reasoning.effort,'low');assert.equal(body.max_output_tokens,32768);assert.equal(body.store,false);
++ assert.equal(body.input[0].content[1].image_url,'data:image/png;base64,b3JpZ2luYWw=');assert.equal(body.input[0].content[1].detail,'high');
++ assert.match(body.input[0].content[0].text!,/include exactly one attribute row/);
++ const result=decodeTerraGameObservation(response({items:[item]}),request,definition);
++ assert.equal(result.raw.observations[0].properties.number.value,8);assert.deepEqual(result.raw.observations[0].bbox,{x:.2,y:.1,width:.2,height:.2});assert.equal(result.hostedWire.id,'terra-game-wire-v1');assert.deepEqual(result.hostedWire.items,[item]);
++ assert.throws(()=>decodeTerraGameObservation(response({items:[{...item,box_1000:{...item.box_1000,xmax:100}}]}),request,definition));
++});
++test('Responses empty completion is distinct from refusal, incomplete, error or truncated JSON',()=>{
++ assert.deepEqual(terraResponsePayload(response({items:[]})),{items:[]});
++ for(const bad of [{...response({items:[]}),status:'incomplete'},{...response({items:[]}),error:{code:'error'}},{...response({}),output:[{type:'message',content:[{type:'refusal',refusal:'no'}]}]},{...response({}),output:[{type:'message',content:[{type:'output_text',text:'{'}]}]}])assert.throws(()=>terraResponsePayload(bad));
++});
++test('native strict schema retains every original property and nullable optional values',()=>{
++ const original=catanSceneResponseSchema([{id:'photo'} as any]),schema=strictTerraSchema(original);
++ const visit=(s:any)=>{if(s.properties){assert.equal(s.additionalProperties,false);assert.deepEqual(s.required,Object.keys(s.properties));for(const p of Object.values(s.properties))visit(p);}if(s.items)visit(s.items);if(s.anyOf)s.anyOf.forEach(visit);};visit(schema);
++ const scene=schema.properties.assertions.items.properties.value;assert.deepEqual(Object.keys(scene.properties),Object.keys(original.properties.assertions.items.properties.value.properties));assert(scene.properties.components.items.properties.number.type.includes('null'));
++});
++test('every catalog definition area can build a Terra request without per-game adapter branches',()=>{
++ let games=0,areas=0;
++ for(const p of catalogPacks){const d=photoDefinition(p);games++;for(const a of d.areas){if(!a.componentIds.length)continue;const r=compileObservationTask({pack:p,definition:d,areaId:a.id,taskId:'catalog',scope:{partition:a.partition,ownerId:a.partition==='owner_private'?'synthetic-owner':null,captureEpoch:'epoch'},images:request.images});const b=buildTerraGameBody(r,d,Buffer.from('original'),'image/png');assert.equal(b.model,'gpt-6.1-terra');assert.deepEqual([...(b.text.format.schema as any).properties.items.items.properties.kind.enum].sort(),[...r.allowedComponents].sort());areas++;}}
++ assert.equal(games,120);assert(areas>=120);
++});
++test('an HTTP rejection causes exactly one request and no fallback',async()=>{
++ let calls=0;const reader=new TerraGameReader({key:async()=> 'synthetic',fetch:async()=>{calls++;return new Response(null,{status:429});}});
++ const {createHash}=await import('node:crypto'),bytes=Buffer.from('original'),pinned={...request,images:[{...request.images[0],sha256:createHash('sha256').update(bytes).digest('hex')}]};
++ await assert.rejects(()=>reader.read(pinned,definition,bytes,'image/png'),/429/);assert.equal(calls,1);
++});
+--- /dev/null
++++ b/tests/terra-game-api.test.ts
+@@ -0,0 +1,43 @@
++import test from 'node:test';import assert from 'node:assert/strict';
++import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
++import {createApp} from '../server/index';import {Store} from '../server/store';import {TerraGameReader} from '../server/ai/terraGameReader';
++import defs from '../game-photo-definitions/index.json';
++const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
++const envelope=(payload:unknown)=>({model:'gpt-6.1-terra',status:'completed',output:[{type:'message',status:'completed',content:[{type:'output_text',text:JSON.stringify(payload)}]}],usage:{input_tokens:1,output_tokens:1,total_tokens:2}});
++test('actual Terra HTTP job uses native Catan and generic Splendor, once per intent; edits/receipts save and reopen',async()=>{
++ const root=await mkdtemp(path.join(os.tmpdir(),'kb-terra-api-'));let calls=0,legacyCalls=0;
++ const reader=new TerraGameReader({key:async()=> 'synthetic',fetch:async(_url,init)=>{
++  calls++;const body=JSON.parse(String(init!.body));assert.equal(body.model,'gpt-6.1-terra');
++  if(body.input[0].content[0].text.includes('COMPONENT SCENE OUTPUT')){
++   const evidenceId=body.text.format.schema.properties.assertions.items.properties.evidenceIds.items.enum[0];
++   return Response.json(envelope({summary:'native fixture',assertions:[{field:'components.observed',evidenceIds:[evidenceId],value:{version:2,coverage:'partial',components:[{id:'terrain',kind:'terrain',variant:'forest',face:'front',quantity:1,location:{type:'hex',id:'r1c1'},evidenceId,region:{x:.1,y:.1,width:.2,height:.2}},{id:'number',kind:'number-token',number:null,face:'front',quantity:1,location:{type:'hex',id:'r1c1'},evidenceId,region:{x:.15,y:.15,width:.05,height:.05}}]}}],warnings:[]}));
++  }
++  return Response.json(envelope({items:[{kind:'development',box_1000:{ymin:100,xmin:100,ymax:300,xmax:300},face:'front',quantity:1,attributes:[{id:'kind',valueJson:'"development"',unknownReason:null},{id:'bonus',valueJson:'"red"',unknownReason:null},{id:'points',valueJson:'0',unknownReason:null}]}]}));
++ }});
++ const app=await createApp({store:new Store(root),terraReader:reader,analyzer:async()=>{legacyCalls++;throw Error('legacy called');}}),server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));
++ const base='http://127.0.0.1:'+(server.address()as any).port;let revision:string|undefined;
++ async function call(route:string,body?:unknown,method=body?'POST':'GET'){const r=await fetch(base+'/api'+route,{method,headers:{'Content-Type':'application/json',...(revision?{'X-KeepBoard-Revision':revision}:{})},body:body===undefined?undefined:JSON.stringify(body)}),v=await r.json();if(v.session?.storageRevision)revision=v.session.storageRevision;return {status:r.status,body:v};}
++ try{
++  assert.equal((await call('/recognition/readers')).body.readers.find((r:any)=>r.kind==='terra-game-observation-v1').available,true);
++  for(const id of ['catan','splendor']){
++   revision=undefined;const d=defs.games.find(d=>d.gameId===id)!;
++   const created=await call('/sessions',{gamePackId:d.packId,name:'synthetic Terra integration'}),p='/sessions/'+created.body.session.id;
++   const upload=await call(p+'/evidence',{scope:'public',dataUrl:image});assert.equal(upload.status,200);
++   const task={requestId:'terra-once',evidenceIds:[upload.body.createdEvidenceId],expectedCaptureEpoch:upload.body.session.captureEpoch,reader:{kind:'terra-game-observation-v1',definitionSHA:d.definitionSHA,areaId:id==='catan'?'board':'market'}};
++   const first=await call(p+'/analysis-jobs',task);assert.equal(first.status,202);const jobId=first.body.job.id;
++   let job:any;for(let n=0;n<100;n++){job=(await call(p+'/analysis-jobs')).body.jobs[0];if(!['queued','running'].includes(job.state))break;await new Promise(r=>setTimeout(r,10));}
++   assert.equal(job.state,'completed');assert.equal(job.reader.kind,'terra-game-observation-v1');
++   assert.equal((await call(p+'/analysis-jobs',task)).body.job.id,jobId);assert.equal(calls,id==='catan'?1:2);
++   const view=(await call(p)).body,a=view.session.assertions.find((a:any)=>a.status==='accepted'&&a.observationReceipts?.length);assert(a);
++   const original=JSON.stringify(a.observationReceipts),value=structuredClone(a.value);
++   if(id==='catan'){assert.equal(value.components[0].location.id,'r1c1');assert.equal(value.components[1].number,null);value.components[0].variant='pasture';}
++   else{assert.equal(value.pieces[0].readout.points,0);assert.equal(value.pieces[0].readout.bonus,'red');value.pieces[0].readout.points=2;}
++   assert.equal((await call(p,{answers:[{field:a.field,value}]},'PATCH')).status,200);
++   assert.equal((await call(p+'/commit',{allowIncomplete:true})).status,200);assert.equal((await call(p+'/resume',{scope:'public'})).status,200);
++   const reopened=(await call(p)).body.session.assertions.find((x:any)=>x.status==='accepted'&&x.field===a.field);
++   assert.deepEqual(reopened.value,value);assert.equal(JSON.stringify(reopened.observationReceipts),original);assert.equal(reopened.observationReceipts[0].reader.kind,'terra-game-observation-v1');
++   assert.match(reopened.observationReceipts[0].hostedWire.id,/^terra-/);
++  }
++  assert.equal(calls,2);assert.equal(legacyCalls,0);
++ }finally{server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));await rm(root,{recursive:true,force:true});}
++});
+--- /dev/null
++++ b/tests/terra-cloud-execution.test.ts
+@@ -0,0 +1,23 @@
++import test from 'node:test';import assert from 'node:assert/strict';
++import {MemoryObjects} from '../server/objects';import {BlobObjects} from '../server/blobObjects';import {BlobStore} from '../server/blobStore';
++import {createApp} from '../server/index';import {cloudRunHostedScan,finishCloudJob} from '../server/cloudRuntime';
++import defs from '../game-photo-definitions/index.json';
++const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
++test('cloud factory uses pinned Terra, durable unit claims prevent redelivery requests, raw/value/timing survive commit',async t=>{
++ const o=new MemoryObjects();for(const method of ['read','write','remove','list'] as const)t.mock.method(BlobObjects.prototype,method,o[method].bind(o));
++ const names=['KEEPBOARD_BLOB_PREFIX','KEEPBOARD_CLOUD_AI','OPENAI_API_KEY','KEEPBOARD_OPENAI_API_KEY_FILE','KEEPBOARD_MOCK_ANALYSIS'] as const,old=Object.fromEntries(names.map(k=>[k,process.env[k]]));
++ process.env.KEEPBOARD_BLOB_PREFIX='terra-synthetic';process.env.OPENAI_API_KEY='sk-synthetic_1234567890123456789';delete process.env.KEEPBOARD_OPENAI_API_KEY_FILE;delete process.env.KEEPBOARD_MOCK_ANALYSIS;
++ t.after(()=>{for(const name of names)if(old[name]===undefined)delete process.env[name];else process.env[name]=old[name];});
++ let calls=0,jobId='';
++ t.mock.method(globalThis,'fetch',async(url:any,init:any)=>{
++  calls++;assert.equal(String(url),'https://api.openai.com/v1/responses');const b=JSON.parse(String(init.body));assert.equal(b.model,'gpt-6.1-terra');
++  return Response.json({model:'gpt-6.1-terra',status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify({items:[{kind:'chips',box_1000:null,quantity:1,face:'front',attributes:[{id:'color',valueJson:'"red"',unknownReason:null}]}]})}]}],usage:{input_tokens:1,output_tokens:2,total_tokens:3}});
++ });
++ const {request}=await import('node:http'),app=await createApp({store:new BlobStore(o),cloud:{objects:o,dispatch:async id=>{jobId=id;}}}),server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));t.after(()=>{server.closeAllConnections();server.close();});
++ const call=(route:string,body?:unknown):Promise<any>=>new Promise((resolve,reject)=>{const data=body===undefined?undefined:JSON.stringify(body),req=request({hostname:'127.0.0.1',port:(server.address()as any).port,path:'/api'+route,method:data?'POST':'GET',headers:data?{'Content-Type':'application/json'}:{}},res=>{let text='';res.on('data',c=>text+=c);res.on('end',()=>{try{assert(res.statusCode!<300,text);resolve(JSON.parse(text));}catch(e){reject(e);}});});req.on('error',reject);req.end(data);});
++ const d=defs.games.find(d=>d.gameId==='splendor')!,v=await call('/sessions',{gamePackId:d.packId,name:'synthetic Terra cloud'}),p='/sessions/'+v.session.id,e=await call(p+'/evidence',{scope:'public',dataUrl:image});
++ await call(p+'/analysis-jobs',{requestId:'terra-cloud-once',evidenceIds:[e.createdEvidenceId],expectedCaptureEpoch:e.session.captureEpoch,reader:{kind:'terra-game-observation-v1',definitionSHA:d.definitionSHA,areaId:'chip-supply'}});
++ await cloudRunHostedScan(jobId);await cloudRunHostedScan(jobId);await finishCloudJob(jobId);await cloudRunHostedScan(jobId);
++ assert.equal(calls,1);const job=(await call(p+'/analysis-jobs')).jobs[0];assert.equal(job.state,'completed',JSON.stringify(job));assert.equal(job.reader.kind,'terra-game-observation-v1');assert(job.timings.providerMs>=0);
++ const a=(await call(p)).session.assertions.find((a:any)=>a.status==='accepted'&&a.observationReceipts?.length);assert.equal(a.value.pieces[0].readout.color,'red');assert.equal(a.observationReceipts[0].hostedWire.providerResponse.model,'gpt-6.1-terra');assert.equal(a.observationReceipts[0].reader.kind,'terra-game-observation-v1');
++});

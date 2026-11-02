@@ -1,0 +1,418 @@
+{
+  "schema": "keepboard-scan-token-research-v1",
+  "date": "2026-10-28",
+  "captured_at_utc": "2026-10-28T10:01:52.861674+00:00",
+  "authority": {
+    "product_changes": 0,
+    "existing_design_changes": 0,
+    "model_api_calls": 0,
+    "experiments_run": 0,
+    "camera_activated": false,
+    "new_agents": 0,
+    "training_or_install": 0
+  },
+  "source_context": "Current shared source during active implementation; no deployed-parity claim. Prior design supervisor correction read and followed: automatic result display, optional correction, no mandatory per-item confirmation.",
+  "inputs": [
+    {
+      "path": "src/scanQuality.ts",
+      "sha256_at_inspection": "9c4ada95e3e21ead00c9deb186b0601d9f133c7f18720588be9d046fcef0f50a",
+      "sha256_at_handoff": "9c4ada95e3e21ead00c9deb186b0601d9f133c7f18720588be9d046fcef0f50a",
+      "unchanged_during_review": true,
+      "symbols": [
+        {
+          "name": "SCAN_LIMIT",
+          "first_occurrence_line": 2,
+          "first_occurrence_line_at_handoff": 2
+        },
+        {
+          "name": "SCAN_SAMPLE_INTERVAL_MS",
+          "first_occurrence_line": 3,
+          "first_occurrence_line_at_handoff": 3
+        },
+        {
+          "name": "stepScanSelector",
+          "first_occurrence_line": 92,
+          "first_occurrence_line_at_handoff": 92
+        },
+        {
+          "name": "sameScanView",
+          "first_occurrence_line": 84,
+          "first_occurrence_line_at_handoff": 84
+        },
+        {
+          "name": "reserveScanFrame",
+          "first_occurrence_line": 117,
+          "first_occurrence_line_at_handoff": 117
+        },
+        {
+          "name": "settleScanFrame",
+          "first_occurrence_line": 121,
+          "first_occurrence_line_at_handoff": 121
+        }
+      ]
+    },
+    {
+      "path": "src/scanBatch.ts",
+      "sha256_at_inspection": "0433155f5a585ffbcdbecd0bec9db33644c8936a63bc175d6da76d7bf960c5d0",
+      "sha256_at_handoff": "0433155f5a585ffbcdbecd0bec9db33644c8936a63bc175d6da76d7bf960c5d0",
+      "unchanged_during_review": true,
+      "symbols": [
+        {
+          "name": "addSavedScanEvidence",
+          "first_occurrence_line": 11,
+          "first_occurrence_line_at_handoff": 11
+        },
+        {
+          "name": "finishScanBatch",
+          "first_occurrence_line": 20,
+          "first_occurrence_line_at_handoff": 20
+        }
+      ]
+    },
+    {
+      "path": "src/scanUploads.ts",
+      "sha256_at_inspection": "61d697f2fde8a04286ecae7e95a005311e06bc6c3551415b858fa702f0103d5d",
+      "sha256_at_handoff": "61d697f2fde8a04286ecae7e95a005311e06bc6c3551415b858fa702f0103d5d",
+      "unchanged_during_review": true,
+      "symbols": [
+        {
+          "name": "SCAN_QUEUE_MAX_BYTES",
+          "first_occurrence_line": 3,
+          "first_occurrence_line_at_handoff": 3
+        },
+        {
+          "name": "createScanUploadQueue",
+          "first_occurrence_line": 9,
+          "first_occurrence_line_at_handoff": 9
+        }
+      ]
+    },
+    {
+      "path": "src/Capture.tsx",
+      "sha256_at_inspection": "682c5dfefa86702f505c3a541775df19fa59404dd36d445ece3c49d2e35bd878",
+      "sha256_at_handoff": "6aad0143bda3928c08fcf13c569390c6a06ac74d9b305996e658c6a3e94e4fae",
+      "unchanged_during_review": false,
+      "symbols": [
+        {
+          "name": "sampleFrame",
+          "first_occurrence_line": 59,
+          "first_occurrence_line_at_handoff": 59
+        },
+        {
+          "name": "takePhoto",
+          "first_occurrence_line": 89,
+          "first_occurrence_line_at_handoff": 89
+        },
+        {
+          "name": "startCamera",
+          "first_occurrence_line": 121,
+          "first_occurrence_line_at_handoff": 121
+        }
+      ]
+    },
+    {
+      "path": "src/SessionWorkspace.tsx",
+      "sha256_at_inspection": "5370a3c7f8e0437ebdf5ace90aed6318b488827a49c7aff229134da08fa0ac46",
+      "sha256_at_handoff": "21ea37b3750517f95c07ecc7abf7064db843ca32a4a468a5f240ffcfff5cef82",
+      "unchanged_during_review": false,
+      "symbols": [
+        {
+          "name": "analyzeBatch",
+          "first_occurrence_line": 180,
+          "first_occurrence_line_at_handoff": 180
+        },
+        {
+          "name": "readStoredPhotos",
+          "first_occurrence_line": 190,
+          "first_occurrence_line_at_handoff": 190
+        },
+        {
+          "name": "finishCaptureRun",
+          "first_occurrence_line": 201,
+          "first_occurrence_line_at_handoff": 201
+        }
+      ]
+    },
+    {
+      "path": "server/ai/geminiGameReader.ts",
+      "sha256_at_inspection": "82850b9bc1d0b6d8099da2b8f49d1cfb4b66fa46db320287dec7a9ce2e91a311",
+      "sha256_at_handoff": "82850b9bc1d0b6d8099da2b8f49d1cfb4b66fa46db320287dec7a9ce2e91a311",
+      "unchanged_during_review": true,
+      "symbols": [
+        {
+          "name": "buildGeminiGameBody",
+          "first_occurrence_line": 17,
+          "first_occurrence_line_at_handoff": 17
+        },
+        {
+          "name": "GeminiGameReader",
+          "first_occurrence_line": 97,
+          "first_occurrence_line_at_handoff": 97
+        }
+      ]
+    },
+    {
+      "path": "docs/scan-recognition-design-20261028/README.md",
+      "sha256_at_inspection": "b386ccd40baa967bcb7e5d1056878f4c43835df799266c4ac9cad7f07e60683f",
+      "sha256_at_handoff": "b386ccd40baa967bcb7e5d1056878f4c43835df799266c4ac9cad7f07e60683f",
+      "unchanged_during_review": true,
+      "symbols": []
+    },
+    {
+      "path": "docs/scan-recognition-design-20261028/implementation-plan.md",
+      "sha256_at_inspection": "95459677e91fc805dbca4c9b165ee6f3e686a8ed9dcee889423cf4158b42d117",
+      "sha256_at_handoff": "95459677e91fc805dbca4c9b165ee6f3e686a8ed9dcee889423cf4158b42d117",
+      "unchanged_during_review": true,
+      "symbols": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Gemini GenerateContent video understanding",
+      "urls": [
+        "https://ai.google.dev/gemini-api/docs/generate-content/video-understanding"
+      ],
+      "kind": "official API documentation",
+      "status": "OPENED",
+      "findings": [
+        "Default static sampling1fps; configurable videoMetadata.fps.",
+        "Agentic is also documented for GenerateContent via media_processing; not only Interactions.",
+        "Short clips or broad queries may incur more latency/tokens.",
+        "Technical section states66/258 tokens per low/non-low frame and32 audio tokens per second."
+      ],
+      "limits": [
+        "Not implemented by current image reader.",
+        "Current endpoint billing and account availability not tested.",
+        "No provider long-video saving percentage transferred to KeepBoard."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S2",
+      "title": "Gemini media resolution",
+      "urls": [
+        "https://ai.google.dev/gemini-api/docs/media-resolution#token-counts"
+      ],
+      "kind": "official API documentation",
+      "status": "OPENED",
+      "findings": [
+        "Gemini3/4 table: approximate image low280/high1120, video low70/high280, audio25 per second.",
+        "Resolution and video navigation mode are separate controls."
+      ],
+      "limits": [
+        "Numbers differ from S1 technical section; cause UNKNOWN.",
+        "Do not mix tables into guaranteed price/savings or equate video frame and still image detail."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S3",
+      "title": "PySceneDetect detectors",
+      "urls": [
+        "https://www.scenedetect.com/docs/latest/api/detectors.html"
+      ],
+      "kind": "official implementation documentation",
+      "status": "OPENED",
+      "findings": [
+        "ContentDetector uses HSV changes, HashDetector perceptual hashes, AdaptiveDetector rolling comparison."
+      ],
+      "limits": [
+        "Shot detection is not gameboard spatial coverage.",
+        "Smooth pan and repeated board patterns require application-specific validation; no library installed."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S4",
+      "title": "MDP3",
+      "urls": [
+        "https://arxiv.org/abs/2501.02885",
+        "https://openaccess.thecvf.com/content/ICCV2025/papers/Sun_MDP3_A_Training-free_Approach_for_List-wise_Frame_Selection_in_Video-LLMs_ICCV_2025_paper.pdf",
+        "https://github.com/sunh-23/MDP3"
+      ],
+      "kind": "primary paper and author implementation",
+      "status": "ARXIV_AND_REPO_OPENED; official PDF search text inspected",
+      "findings": [
+        "Query relevance, list-wise diversity and sequentiality.",
+        "Paper evaluation reports128 candidates to8 selected frames.",
+        "README reproduction uses A100 and MiniCPM/Video-MME."
+      ],
+      "limits": [
+        "Training-free is not zero device compute.",
+        "Evaluation setup is not a required game frame count or measured KeepBoard savings.",
+        "No benchmark reproduction or code execution."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S5",
+      "title": "Flexible Frame Selection for Efficient Video Reasoning, CVPR2025",
+      "urls": [
+        "https://ffs-video.github.io/",
+        "https://openaccess.thecvf.com/content/CVPR2025/papers/Buch_Flexible_Frame_Selection_for_Efficient_Video_Reasoning_CVPR_2025_paper.pdf"
+      ],
+      "kind": "author project page and primary paper",
+      "status": "AUTHOR_PAGE_OPENED; official PDF search text inspected; CVF landing403",
+      "findings": [
+        "Learned adaptive selection policy; videoQA/reasoning evaluation."
+      ],
+      "limits": [
+        "Not a trained boardgame selector and no deployment measurement.",
+        "Only motivates variable selection count; training/runtime not adopted."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S6",
+      "title": "Google ML Kit Document Scanner",
+      "urls": [
+        "https://developers.google.com/ml-kit/vision/doc-scanner"
+      ],
+      "kind": "official deployed SDK documentation",
+      "status": "OPENED",
+      "findings": [
+        "On-device Android document detection and automatic capture/editing."
+      ],
+      "limits": [
+        "A capture pattern, not a web-boardgame coverage component.",
+        "No SDK or dependency introduced."
+      ],
+      "checked_date": "2026-10-28"
+    },
+    {
+      "id": "S7",
+      "title": "Gemini current video understanding (Interactions examples)",
+      "urls": [
+        "https://ai.google.dev/gemini-api/docs/video-understanding.md"
+      ],
+      "kind": "official API documentation",
+      "status": "OPENED",
+      "findings": [
+        "Interactions processing config differs from GenerateContent videoMetadata/mediaProcessing."
+      ],
+      "limits": [
+        "No inference test; use actual endpoint adapter contract rather than copy incompatible fields."
+      ],
+      "checked_date": "2026-10-28"
+    }
+  ],
+  "claims": [
+    {
+      "id": "L1",
+      "level": "VERIFIED",
+      "claim": "Camera quality samples use192px long edge every250ms at most; stable1000ms/cooldown1800ms/max6 are current settings, not optimized thresholds.",
+      "paths": [
+        "src/Capture.tsx",
+        "src/scanQuality.ts"
+      ]
+    },
+    {
+      "id": "L2",
+      "level": "VERIFIED",
+      "claim": "Camera path has audio:false and no MediaRecorder; selected current full-size frames becomeJPEG(.94).",
+      "paths": [
+        "src/Capture.tsx"
+      ]
+    },
+    {
+      "id": "L3",
+      "level": "VERIFIED",
+      "claim": "Upload queue is sequential with96MiB UTF16dataURL accounting; changing API selection after upload does not save those uploaded bytes.",
+      "paths": [
+        "src/scanUploads.ts",
+        "src/Capture.tsx"
+      ]
+    },
+    {
+      "id": "L4",
+      "level": "VERIFIED",
+      "claim": "Current fingerprint-only accepted set lacks quality-aware replacement of a similar view.",
+      "paths": [
+        "src/scanQuality.ts"
+      ]
+    },
+    {
+      "id": "L5",
+      "level": "INFERRED",
+      "claim": "Global similarity may confuse repeated board areas or exclude a useful glare-free view; incidence is not measured."
+    },
+    {
+      "id": "L6",
+      "level": "RECOMMENDATION",
+      "claim": "Local quality/novelty gate, variable API-selected representative set, bounded call/image/output plan, optional targeted follow-up. Keep ongoing bundle implementation unblocked."
+    },
+    {
+      "id": "L7",
+      "level": "UNKNOWN",
+      "claim": "Game-specific optimal counts, phone CPU/battery, spatial coverage quality, token savings and end-to-end correction/save time."
+    }
+  ],
+  "recommendation": {
+    "capture_style": "video-like preview; selected still photographs only",
+    "original_video_storage_default": false,
+    "device_sample_policy": "reuse192px/250ms initially; adaptive interval only after actual device-cost evidence",
+    "api_selection": "variable number of useful views within existing cap; best representative of repeated view and preserve useful complementary views",
+    "initial_existing_still_cap": 6,
+    "proposed_automatic_request_cap": 6,
+    "cap_semantics": "resource ceiling, not per-game target, not guaranteed completeness; imageParts/crops/output also budgeted",
+    "automatic_crop_multiplication": false,
+    "per_frame_model_selection_calls": false,
+    "new_required_user_confirmation_steps": 0,
+    "coverage_without_registration": "UNKNOWN; view diversity is not board coverage",
+    "next_step": "small optional selector/plan enhancement after existing bundle path",
+    "later_optional": [
+      "pre-upload best-frame holding if upload/device measurements justify",
+      "one user-initiated targeted supplementary read; no automatic null-elimination loop"
+    ]
+  },
+  "minimal_validation": {
+    "executed": false,
+    "local_test_clips_proposed": 3,
+    "scenarios": [
+      "pause/pan/distinct region",
+      "return/zoom/repeated board patterns",
+      "glare/occlusion change and an object moving across state boundary"
+    ],
+    "compare": [
+      "current selector",
+      "proposed bounded selector",
+      "optional uniform sampling under same cap"
+    ],
+    "measure": [
+      "lost uniquely legible regions",
+      "redundancy and complementary views",
+      "state mixing",
+      "selected and uploaded bytes",
+      "sample/encode time and memory on actual phones",
+      "later actual API usage and capture-to-save time separately"
+    ],
+    "paid_validation": "none authorized; use later separately fixed implementation validation inputs and receipts",
+    "unknown_data_availability": true
+  },
+  "outputs": [
+    "README.md",
+    "research.json"
+  ],
+  "handoff_source_changes": [
+    {
+      "path": "src/Capture.tsx",
+      "verified_change": "crop sourceRegion added;192px sample/JPEG capture settings reread unchanged",
+      "runtime_validation": "NOT RUN"
+    },
+    {
+      "path": "src/SessionWorkspace.tsx",
+      "verified_change": "readStoredPhotos now passes last up toSCAN_LIMIT;finishCaptureRun passes all saved evidenceIds. Earlier last-single selection observation is historical.",
+      "runtime_validation": "NOT RUN"
+    }
+  ],
+  "verification": {
+    "json_parse": "PASS",
+    "local_links": "PASS",
+    "listed_symbols_found": true,
+    "source_changes": "active worker changes preserved and narrowly reread; no frozen-source claim",
+    "product_tests": "NOT RUN",
+    "model_or_camera_experiments": "NOT RUN",
+    "problems": []
+  }
+}

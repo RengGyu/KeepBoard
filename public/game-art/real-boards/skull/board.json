@@ -1,0 +1,1989 @@
+{
+  "gameId": "skull",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "player-1-stack",
+      "label": "1번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-1-normal-stack-region",
+          "x": 399,
+          "y": 90,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-1-last-chance-pocket",
+          "x": 464,
+          "y": 108,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        387,
+        66,
+        112,
+        112
+      ],
+      "stateKey": "players.player-1.playedDiscs",
+      "ownerSide": "player-1",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-1-mat",
+      "label": "1번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-1-mat-face",
+          "x": 516,
+          "y": 73,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        507,
+        56,
+        106,
+        80
+      ],
+      "stateKey": "players.player-1.mat",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "player-1-private",
+      "label": "1번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-1-private-hand-region",
+          "x": 515,
+          "y": 162,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        507,
+        145,
+        106,
+        65
+      ],
+      "stateKey": "players.player-1.privateDiscKnowledge",
+      "ownerSide": "player-1",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    },
+    {
+      "id": "player-2-stack",
+      "label": "2번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-2-normal-stack-region",
+          "x": 718,
+          "y": 258,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-2-last-chance-pocket",
+          "x": 783,
+          "y": 276,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        706,
+        234,
+        112,
+        112
+      ],
+      "stateKey": "players.player-2.playedDiscs",
+      "ownerSide": "player-2",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-2-mat",
+      "label": "2번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-2-mat-face",
+          "x": 835,
+          "y": 241,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        826,
+        224,
+        106,
+        80
+      ],
+      "stateKey": "players.player-2.mat",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "player-2-private",
+      "label": "2번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-2-private-hand-region",
+          "x": 834,
+          "y": 330,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        826,
+        313,
+        106,
+        65
+      ],
+      "stateKey": "players.player-2.privateDiscKnowledge",
+      "ownerSide": "player-2",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    },
+    {
+      "id": "player-3-stack",
+      "label": "3번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-3-normal-stack-region",
+          "x": 718,
+          "y": 660,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-3-last-chance-pocket",
+          "x": 783,
+          "y": 678,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        706,
+        636,
+        112,
+        112
+      ],
+      "stateKey": "players.player-3.playedDiscs",
+      "ownerSide": "player-3",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-3-mat",
+      "label": "3번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-3-mat-face",
+          "x": 835,
+          "y": 643,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        826,
+        626,
+        106,
+        80
+      ],
+      "stateKey": "players.player-3.mat",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "player-3-private",
+      "label": "3번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-3-private-hand-region",
+          "x": 834,
+          "y": 732,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        826,
+        715,
+        106,
+        65
+      ],
+      "stateKey": "players.player-3.privateDiscKnowledge",
+      "ownerSide": "player-3",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    },
+    {
+      "id": "player-4-stack",
+      "label": "4번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-4-normal-stack-region",
+          "x": 399,
+          "y": 828,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-4-last-chance-pocket",
+          "x": 464,
+          "y": 846,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        387,
+        804,
+        112,
+        112
+      ],
+      "stateKey": "players.player-4.playedDiscs",
+      "ownerSide": "player-4",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-4-mat",
+      "label": "4번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-4-mat-face",
+          "x": 516,
+          "y": 811,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        507,
+        794,
+        106,
+        80
+      ],
+      "stateKey": "players.player-4.mat",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "player-4-private",
+      "label": "4번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-4-private-hand-region",
+          "x": 515,
+          "y": 900,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        507,
+        883,
+        106,
+        65
+      ],
+      "stateKey": "players.player-4.privateDiscKnowledge",
+      "ownerSide": "player-4",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    },
+    {
+      "id": "player-5-stack",
+      "label": "5번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-5-normal-stack-region",
+          "x": 54,
+          "y": 660,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-5-last-chance-pocket",
+          "x": 119,
+          "y": 678,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        42,
+        636,
+        112,
+        112
+      ],
+      "stateKey": "players.player-5.playedDiscs",
+      "ownerSide": "player-5",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-5-mat",
+      "label": "5번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-5-mat-face",
+          "x": 171,
+          "y": 643,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        162,
+        626,
+        106,
+        80
+      ],
+      "stateKey": "players.player-5.mat",
+      "ownerSide": "player-5",
+      "visibility": "public"
+    },
+    {
+      "id": "player-5-private",
+      "label": "5번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-5-private-hand-region",
+          "x": 170,
+          "y": 732,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        162,
+        715,
+        106,
+        65
+      ],
+      "stateKey": "players.player-5.privateDiscKnowledge",
+      "ownerSide": "player-5",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    },
+    {
+      "id": "player-6-stack",
+      "label": "6번 자리 · 공개 디스크 더미",
+      "field": "stacks.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "skull-skull-player-6-normal-stack-region",
+          "x": 54,
+          "y": 258,
+          "w": 64,
+          "h": 64,
+          "capacity": 4,
+          "shape": "circle",
+          "fill": "#fffdf8",
+          "role": "one-variable-ordered-stack-region",
+          "discPositionIsInTableModel": true
+        },
+        {
+          "id": "skull-skull-player-6-last-chance-pocket",
+          "x": 119,
+          "y": 276,
+          "w": 20,
+          "h": 20,
+          "capacity": 1,
+          "shape": "circle",
+          "fill": "#f3d9dc",
+          "role": "optional-separate-last-chance-token"
+        }
+      ],
+      "bounds": [
+        42,
+        234,
+        112,
+        112
+      ],
+      "stateKey": "players.player-6.playedDiscs",
+      "ownerSide": "player-6",
+      "visibility": "public",
+      "capacityPolicy": "The main location is an ordered, variable stack of the owner’s normal discs (max four); the Last Chance token has a separate optional pocket and is only used in its awarded next round."
+    },
+    {
+      "id": "player-6-mat",
+      "label": "6번 자리 · 한 장의 양면 매트",
+      "field": "mats.scene",
+      "scope": "player",
+      "accepts": [
+        "mats"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-player-6-mat-face",
+          "x": 171,
+          "y": 241,
+          "w": 88,
+          "h": 48,
+          "shape": "rect",
+          "fill": "#fffaf0",
+          "capacity": 1,
+          "role": "single-double-sided-player-mat",
+          "states": [
+            "blank",
+            "flower"
+          ],
+          "placeholder": true
+        }
+      ],
+      "bounds": [
+        162,
+        224,
+        106,
+        80
+      ],
+      "stateKey": "players.player-6.mat",
+      "ownerSide": "player-6",
+      "visibility": "public"
+    },
+    {
+      "id": "player-6-private",
+      "label": "6번 자리 · 소유자만 아는 디스크 정체/손",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "discs"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "skull-skull-player-6-private-hand-region",
+          "x": 170,
+          "y": 330,
+          "w": 90,
+          "h": 32,
+          "capacity": 4,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "owner-private-identity-and-reserve-container"
+        }
+      ],
+      "bounds": [
+        162,
+        313,
+        106,
+        65
+      ],
+      "stateKey": "players.player-6.privateDiscKnowledge",
+      "ownerSide": "player-6",
+      "visibility": "owner",
+      "capacityPolicy": "Do not infer opponent identities for face-down discs. Known identity may be stored only for its owner or after a public reveal."
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "3": {
+      "hideAreas": [
+        "player-4-stack",
+        "player-4-mat",
+        "player-4-private",
+        "player-5-stack",
+        "player-5-mat",
+        "player-5-private",
+        "player-6-stack",
+        "player-6-mat",
+        "player-6-private"
+      ]
+    },
+    "4": {
+      "hideAreas": [
+        "player-5-stack",
+        "player-5-mat",
+        "player-5-private",
+        "player-6-stack",
+        "player-6-mat",
+        "player-6-private"
+      ]
+    },
+    "5": {
+      "hideAreas": [
+        "player-6-stack",
+        "player-6-mat",
+        "player-6-private"
+      ]
+    },
+    "6": {
+      "hideAreas": []
+    }
+  },
+  "notes": [
+    "Asset scope is the complete 3–6 seat physical tabletop and a self-contained declarative state schema; it is not app-wired or a rules engine.",
+    "Six reusable player stations expose stack, one double-sided mat, and owner-private disc identity/reserve positions. Hide unused seats for 3–5 players.",
+    "The central state JSON carries bid, pass, challenge, flip history, passed-mat position, round wins, elimination and Last Chance lifecycle. The SVG shows a six-entry reveal window; longer histories remain in JSON and must not be truncated.",
+    "The six seat pips and slot circles are layout guides, not initialized player identities or claims that pieces are currently present.",
+    "Do not replace unknown private disc identity with a guess. Physical stack counts/ordering and face-up values are distinct.",
+    "The renderer has no board-wide runtime field for the shared center; `tableZones` and `tableModel` are intentionally self-contained JSON for a later consumer."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.spacecowboys-games.com/game/skull/",
+      "location": "official product page, player count and contents",
+      "verifiedFacts": "3–6 players; six player sets each containing one mat, four discs (3 flowers,1 skull) and one Last Chance disc.",
+      "access": "verified",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/SKULL_RULES_EN.pdf",
+      "location": "pp.2–9",
+      "verifiedFacts": "Setup and clockwise turns; four-disc facedown stacks and offset visibility; bidding/pass/mat-to-center; challenge flip order and topmost restriction; success mat side and two-win condition; failure/removal/elimination; next-round first-player; Last Chance eligibility, known-flower identity, one-next-round use, return and once-per-player limit.",
+      "access": "verified",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "assetScope": "complete physical table layout and resumable state-shape only; application rendering/storage integration is a separate consumer task",
+  "tableModel": {
+    "schemaId": "skull-session-state-v1",
+    "purpose": "Declarative physical-state shape for later app integration; this blueprint is not an initialized game and does not choose hidden disc identities.",
+    "edition": "Space Cowboys / Asmodee current Skull rules, base game",
+    "players": {
+      "minimum": 3,
+      "maximum": 6,
+      "seatOrder": "clockwise",
+      "perActivePlayerComponents": {
+        "playerMat": 1,
+        "normalDiscs": {
+          "total": 4,
+          "flowers": 3,
+          "skulls": 1,
+          "backsIdentical": true
+        },
+        "lastChanceDisc": 1
+      },
+      "setupRule": "Use only the selected 3–6 clockwise seats; each active player chooses one set and places one mat blank-side-up."
+    },
+    "playerRecord": {
+      "id": "stable player id",
+      "seat": {
+        "type": "integer",
+        "range": [
+          1,
+          6
+        ]
+      },
+      "active": {
+        "type": "boolean",
+        "meaning": "false for unused seat"
+      },
+      "eliminated": {
+        "type": "boolean",
+        "meaning": "true when no normal disc remains and mat returned"
+      },
+      "mat": {
+        "state": [
+          "blank",
+          "flower",
+          "returned"
+        ],
+        "tablePosition": [
+          "seat",
+          "center"
+        ],
+        "meaning": "one double-sided mat; pass moves it to the center; a successful challenge changes blank to flower; a later successful challenge while flower wins",
+        "physicalItemCount": 1,
+        "statesMeaning": {
+          "blank": "starting face",
+          "flower": "one successful challenger round recorded",
+          "returned": "mat returned after elimination"
+        }
+      },
+      "roundWins": {
+        "type": "integer",
+        "range": [
+          0,
+          2
+        ],
+        "meaning": "successful challenge rounds, not an automatic result unless game-end rule is applied"
+      },
+      "playedDiscs": {
+        "type": "array",
+        "order": "bottom-to-top",
+        "item": {
+          "instanceId": "string",
+          "discKind": [
+            "flower",
+            "skull",
+            "last-chance-flower"
+          ],
+          "face": [
+            "down",
+            "up"
+          ],
+          "faceIdentityVisibility": "owner-while-down; public-after-reveal",
+          "tablePosition": [
+            "on-own-mat",
+            "center-after-pass",
+            "resolved-area"
+          ],
+          "roundNumber": "integer-or-null"
+        },
+        "lastChanceConstraint": "Optional add-on disc; known flower, only the round immediately after award, then returned; each player at most once per game."
+      },
+      "privateDiscKnowledge": {
+        "type": "array",
+        "visibility": "owner-only",
+        "item": {
+          "instanceId": "string-or-null",
+          "knownKind": [
+            "flower",
+            "skull",
+            "unknown"
+          ],
+          "location": [
+            "in-hand",
+            "face-down-on-own-stack",
+            "privately-removed",
+            "unknown"
+          ],
+          "reason": "optional source/event"
+        },
+        "rule": "Never infer another player’s face-down disc identity."
+      },
+      "remainingNormalDiscCount": {
+        "type": "integer-or-null",
+        "range": [
+          0,
+          4
+        ],
+        "meaning": "count only; exact identity can remain unknown"
+      },
+      "lastChance": {
+        "status": [
+          "not-awarded",
+          "awarded-next-round",
+          "in-play-this-round",
+          "returned-after-round",
+          "spent-on-failed-challenge",
+          "unknown"
+        ],
+        "awardedAfterRound": "integer-or-null",
+        "oncePerPlayerPerGame": true,
+        "knownIdentity": "flower",
+        "mayBeUsedOnlyInNextRound": true
+      }
+    },
+    "roundRecord": {
+      "number": "integer",
+      "phase": [
+        "setup",
+        "initial-placement",
+        "placing-or-open-bid",
+        "bidding",
+        "challenge-resolution",
+        "round-cleanup",
+        "game-over",
+        "unknown"
+      ],
+      "firstPlayerId": "player id or null",
+      "activePlayerId": "player id or null",
+      "placedAtLeastOneDiscByPlayerIds": "ordered array",
+      "bid": {
+        "amount": "integer-or-null",
+        "openedByPlayerId": "player id or null",
+        "challengerId": "player id or null",
+        "outbidHistory": "ordered array of {playerId,amount}",
+        "passedPlayerIds": "clockwise-ordered array"
+      },
+      "challenge": {
+        "targetFlipCount": "integer-or-null",
+        "flipHistory": "ordered array of {sequence,playerId,instanceId,face,sourceMatPlayerId}",
+        "ownDiscsMustBeFlippedFirst": true,
+        "onlyTopmostFaceDownDiscPerMat": true,
+        "afterSkullStopImmediately": true,
+        "resolution": [
+          "pending",
+          "success",
+          "skull-revealed",
+          "unknown"
+        ],
+        "lossKnowledge": "A non-self skull loss can be identity-unknown; a self-selected loss may be owner-private. Store counts separately from identity."
+      },
+      "nextRoundFirstPlayerId": "player id or null"
+    },
+    "gameEnd": {
+      "winCondition": [
+        "one player reaches two successful challenger rounds",
+        "last non-eliminated player"
+      ],
+      "winnerPlayerId": "player id or null"
+    },
+    "publicState": {
+      "includes": [
+        "active seats and clockwise order",
+        "mat face and seat-or-center position",
+        "public stack counts/order",
+        "revealed disc faces",
+        "bids and passes",
+        "challenge/flip history",
+        "round wins",
+        "elimination",
+        "Last Chance token use state"
+      ]
+    },
+    "privateState": {
+      "includes": [
+        "owner known identities for own face-down discs",
+        "owner private disc-loss identity only when known"
+      ],
+      "prohibitions": [
+        "do not populate opponent hidden identities",
+        "unknown remains null/unknown"
+      ]
+    },
+    "physicalConstraints": [
+      "Each active player starts with one mat and four normal discs (3 flowers,1 skull), plus one Last Chance disc.",
+      "A player receives Last Chance only after failing as challenger and having one normal disc left after the loss; it is usable only in the next round, then returned.",
+      "Passing moves that player’s mat toward the center while its played discs remain on it.",
+      "Placed discs are stacked with a small visible offset; the physical stack is ordered.",
+      "Challenge flips one disc at a time; own discs first; only each mat’s topmost face-down disc is eligible.",
+      "A revealed skull immediately ends the challenge and causes a disc loss; when all normal discs are lost, the player is eliminated and returns the mat.",
+      "The state model stores observed/recorded facts; it does not implement legal-move enforcement or infer unrevealed identities."
+    ],
+    "recordConventions": {
+      "unknown": "null or explicit unknown; never fill a hidden disc from its probability or component inventory",
+      "instanceIdentity": "stable only within a saved session; do not use face identity as a public identifier",
+      "stackOrdering": "bottom-to-top in JSON; render visible offsets and flip only the topmost face-down disc",
+      "matLocation": "seat while participating; center once passed in the current bidding round; return on elimination",
+      "phaseAndHistory": "preserve completed bid and reveal events so resume starts at the saved physical step, without replaying resolved flips"
+    }
+  },
+  "assetCompleteness": "six-seat complete-table layout with declarative public and owner-private state schema",
+  "tableZones": [
+    {
+      "id": "shared-challenge-panel",
+      "label": "공용 라운드·입찰·도전 상태",
+      "bounds": [
+        345,
+        300,
+        310,
+        400
+      ],
+      "stateKeys": [
+        "round.number",
+        "round.phase",
+        "turn.activePlayerId",
+        "turn.firstPlayerId",
+        "bid.amount",
+        "bid.bidders",
+        "bid.passedPlayerIds",
+        "challenge.challengerId",
+        "challenge.flipHistory",
+        "round.outcome"
+      ]
+    },
+    {
+      "id": "shared-bid-state-window",
+      "label": "현재 입찰·도전자 상태",
+      "bounds": [
+        380,
+        327,
+        240,
+        58
+      ],
+      "dynamic": true,
+      "fixedNumericTrack": false
+    },
+    {
+      "id": "shared-clockwise-pass-window",
+      "label": "시계방향 차례·통과 순서",
+      "bounds": [
+        380,
+        401,
+        240,
+        50
+      ],
+      "dynamic": true,
+      "order": "clockwise-from-first-player"
+    },
+    {
+      "id": "shared-reveal-history-window",
+      "label": "뒤집기 순서의 공개 기록 창",
+      "bounds": [
+        380,
+        468,
+        240,
+        74
+      ],
+      "dynamic": true,
+      "visibleWindowPositions": 6,
+      "overflow": "retain full history in JSON and scroll/expand in consumer"
+    },
+    {
+      "id": "shared-passed-mat-parking",
+      "label": "입찰 통과자가 중앙으로 이동시킨 매트의 위치 영역",
+      "bounds": [
+        380,
+        557,
+        240,
+        53
+      ],
+      "dynamic": true
+    },
+    {
+      "id": "shared-returned-disc-box",
+      "label": "상자에 돌아간 디스크·정체 미상 제거",
+      "bounds": [
+        420,
+        624,
+        160,
+        42
+      ],
+      "dynamic": true
+    }
+  ],
+  "boardArt": [
+    {
+      "type": "rect",
+      "id": "player-1-panel",
+      "x": 375,
+      "y": 22,
+      "w": 250,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-1-seat-pip-1",
+      "cx": 393,
+      "cy": 38,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-1-mat-face-divider",
+      "x1": 560,
+      "y1": 74,
+      "x2": 560,
+      "y2": 120,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-1-mat-blank-state",
+      "cx": 538,
+      "cy": 97,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-1-mat-flower-state",
+      "cx": 582,
+      "cy": 97,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "player-2-panel",
+      "x": 694,
+      "y": 190,
+      "w": 276,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-2-seat-pip-1",
+      "cx": 712,
+      "cy": 206,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-2-seat-pip-2",
+      "cx": 723,
+      "cy": 206,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-2-mat-face-divider",
+      "x1": 879,
+      "y1": 242,
+      "x2": 879,
+      "y2": 288,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-2-mat-blank-state",
+      "cx": 857,
+      "cy": 265,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-2-mat-flower-state",
+      "cx": 901,
+      "cy": 265,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "player-3-panel",
+      "x": 694,
+      "y": 592,
+      "w": 276,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-1",
+      "cx": 712,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-2",
+      "cx": 723,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-3",
+      "cx": 734,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-3-mat-face-divider",
+      "x1": 879,
+      "y1": 644,
+      "x2": 879,
+      "y2": 690,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-3-mat-blank-state",
+      "cx": 857,
+      "cy": 667,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-3-mat-flower-state",
+      "cx": 901,
+      "cy": 667,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "player-4-panel",
+      "x": 375,
+      "y": 760,
+      "w": 250,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-1",
+      "cx": 393,
+      "cy": 776,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-2",
+      "cx": 404,
+      "cy": 776,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-3",
+      "cx": 415,
+      "cy": 776,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-4",
+      "cx": 393,
+      "cy": 787,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-4-mat-face-divider",
+      "x1": 560,
+      "y1": 812,
+      "x2": 560,
+      "y2": 858,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-4-mat-blank-state",
+      "cx": 538,
+      "cy": 835,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-4-mat-flower-state",
+      "cx": 582,
+      "cy": 835,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "player-5-panel",
+      "x": 30,
+      "y": 592,
+      "w": 276,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-1",
+      "cx": 48,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-2",
+      "cx": 59,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-3",
+      "cx": 70,
+      "cy": 608,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-4",
+      "cx": 48,
+      "cy": 619,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-5",
+      "cx": 59,
+      "cy": 619,
+      "r": 3.2,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-5-mat-face-divider",
+      "x1": 215,
+      "y1": 644,
+      "x2": 215,
+      "y2": 690,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-5-mat-blank-state",
+      "cx": 193,
+      "cy": 667,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-5-mat-flower-state",
+      "cx": 237,
+      "cy": 667,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "player-6-panel",
+      "x": 30,
+      "y": 190,
+      "w": 276,
+      "h": 218,
+      "fill": "#f9fbfd",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-1",
+      "cx": 48,
+      "cy": 206,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-2",
+      "cx": 59,
+      "cy": 206,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-3",
+      "cx": 70,
+      "cy": 206,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-4",
+      "cx": 48,
+      "cy": 217,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-5",
+      "cx": 59,
+      "cy": 217,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-6",
+      "cx": 70,
+      "cy": 217,
+      "r": 3.2,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "player-6-mat-face-divider",
+      "x1": 215,
+      "y1": 242,
+      "x2": 215,
+      "y2": 288,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "player-6-mat-blank-state",
+      "cx": 193,
+      "cy": 265,
+      "r": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-6-mat-flower-state",
+      "cx": 237,
+      "cy": 265,
+      "r": 7,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "rect",
+      "id": "shared-challenge-panel",
+      "x": 345,
+      "y": 300,
+      "w": 310,
+      "h": 400,
+      "fill": "#f5f8fb",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "type": "rect",
+      "id": "shared-bid-state-window",
+      "x": 380,
+      "y": 327,
+      "w": 240,
+      "h": 58,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 10
+    },
+    {
+      "type": "rect",
+      "id": "shared-clockwise-pass-window",
+      "x": 380,
+      "y": 401,
+      "w": 240,
+      "h": 50,
+      "fill": "#eaf5fb",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 10
+    },
+    {
+      "type": "rect",
+      "id": "shared-reveal-history-window",
+      "x": 380,
+      "y": 468,
+      "w": 240,
+      "h": 74,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 10
+    },
+    {
+      "type": "rect",
+      "id": "shared-passed-mat-parking",
+      "x": 380,
+      "y": 557,
+      "w": 240,
+      "h": 53,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 10
+    },
+    {
+      "type": "rect",
+      "id": "shared-returned-disc-box",
+      "x": 420,
+      "y": 624,
+      "w": 160,
+      "h": 42,
+      "fill": "#f5ebeb",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 10
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-1",
+      "cx": 500,
+      "cy": 286,
+      "r": 11,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-2",
+      "cx": 675,
+      "cy": 385,
+      "r": 11,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-3",
+      "cx": 675,
+      "cy": 605,
+      "r": 11,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-4",
+      "cx": 500,
+      "cy": 714,
+      "r": 11,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-5",
+      "cx": 325,
+      "cy": 605,
+      "r": 11,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-6",
+      "cx": 325,
+      "cy": 385,
+      "r": 11,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-1",
+      "cx": 400,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-2",
+      "cx": 440,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-3",
+      "cx": 480,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-4",
+      "cx": 520,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-5",
+      "cx": 560,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "reveal-window-position-6",
+      "cx": 600,
+      "cy": 505,
+      "r": 12,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "line",
+      "id": "shared-bid-divider",
+      "x1": 393,
+      "y1": 392,
+      "x2": 607,
+      "y2": 392,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "line",
+      "id": "shared-reveal-divider",
+      "x1": 393,
+      "y1": 548,
+      "x2": 607,
+      "y2": 548,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.4
+    },
+    {
+      "type": "circle",
+      "id": "player-1-stack-disc-back-1",
+      "cx": 417,
+      "cy": 135,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-1-stack-disc-back-2",
+      "cx": 426,
+      "cy": 127,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-1-stack-disc-back-3",
+      "cx": 435,
+      "cy": 119,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-1-stack-disc-back-4",
+      "cx": 444,
+      "cy": 111,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-2-stack-disc-back-1",
+      "cx": 736,
+      "cy": 303,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-2-stack-disc-back-2",
+      "cx": 745,
+      "cy": 295,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-2-stack-disc-back-3",
+      "cx": 754,
+      "cy": 287,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-2-stack-disc-back-4",
+      "cx": 763,
+      "cy": 279,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-3-stack-disc-back-1",
+      "cx": 736,
+      "cy": 705,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-3-stack-disc-back-2",
+      "cx": 745,
+      "cy": 697,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-3-stack-disc-back-3",
+      "cx": 754,
+      "cy": 689,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-3-stack-disc-back-4",
+      "cx": 763,
+      "cy": 681,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-4-stack-disc-back-1",
+      "cx": 417,
+      "cy": 873,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-4-stack-disc-back-2",
+      "cx": 426,
+      "cy": 865,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-4-stack-disc-back-3",
+      "cx": 435,
+      "cy": 857,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-4-stack-disc-back-4",
+      "cx": 444,
+      "cy": 849,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-5-stack-disc-back-1",
+      "cx": 72,
+      "cy": 705,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-5-stack-disc-back-2",
+      "cx": 81,
+      "cy": 697,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-5-stack-disc-back-3",
+      "cx": 90,
+      "cy": 689,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-5-stack-disc-back-4",
+      "cx": 99,
+      "cy": 681,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-6-stack-disc-back-1",
+      "cx": 72,
+      "cy": 303,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-6-stack-disc-back-2",
+      "cx": 81,
+      "cy": 295,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-6-stack-disc-back-3",
+      "cx": 90,
+      "cy": 287,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "player-6-stack-disc-back-4",
+      "cx": 99,
+      "cy": 279,
+      "r": 16,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    }
+  ]
+}

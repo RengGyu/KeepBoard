@@ -5,6 +5,7 @@ import {componentDefinition,emptyGameReadout,gameReadoutView,setReadoutValue} fr
 import {inputNumber} from '../../shared/readouts/presentation';
 import type {DetailValue,GameReadout,LocalFeature,PieceReference,PropertySpec,SymbolValue} from '../../shared/readouts/types';
 import './game-detail-readout.css';
+import {ChipPick,Stepper} from '../QuickPick';
 interface Props {pack:GamePack;piece:GenericPiece;record:GenericRecord;players:readonly Player[];disabled:boolean;onPatch:(change:Partial<GenericPiece>)=>void;gaps?:Readonly<Record<string,string>>}
 export function GameDetailFields({pack,piece,record,players,disabled,onPatch,gaps={}}:Props){
  const definition=componentDefinition(pack,piece.componentId);if(!definition)return null;
@@ -18,11 +19,13 @@ export function GameDetailFields({pack,piece,record,players,disabled,onPatch,gap
    if(f.type==='marks')return <MarksField key={f.id} field={f} value={value as SymbolValue[]|null} disabled={locked} onChange={v=>set(f,v)}/>;
    if(f.type==='features')return <FeaturesField key={f.id} field={f} value={value as LocalFeature[]|null} disabled={locked} onChange={v=>set(f,v)}/>;
    if(f.type==='reference')return <ReferenceField key={f.id} field={f} value={value as PieceReference|null} piece={piece} record={record} disabled={locked} onChange={v=>set(f,v)}/>;
+   const gap=gaps[f.id]&&value===null?<small className="gdr-gap">{gaps[f.id]}</small>:null;
+   if(f.type==='enum'&&f.options&&f.options.length<=10)return <div key={f.id} className={'gdr-pick'+(gap?' is-gap':'')}><ChipPick label={f.label} disabled={locked} value={value as string|number|null} options={f.options.map(o=>({value:o.value as string|number,label:o.label}))} onChange={v=>set(f,v as DetailValue)}/>{gap}</div>;
+   if(f.type==='boolean')return <div key={f.id} className={'gdr-pick'+(gap?' is-gap':'')}><ChipPick label={f.label} disabled={locked} value={value as boolean|null} options={[{value:true,label:'있음'},{value:false,label:'없음'}]} onChange={v=>set(f,v)}/>{gap}</div>;
+   if(f.type==='player')return <div key={f.id} className={'gdr-pick'+(gap?' is-gap':'')}><ChipPick label={f.label} disabled={locked} value={value as string|null} options={players.map(p=>({value:p.id,label:p.name}))} onChange={v=>set(f,v)}/>{gap}</div>;
+   if(f.type==='integer')return <div key={f.id} className={'gdr-pick'+(gap?' is-gap':'')}><Stepper label={f.label} disabled={locked} value={value as number|null} min={f.min??0} max={f.max} onChange={v=>set(f,v)}/>{gap}</div>;
    return <label key={f.id} className={'gdr-field'+(gaps[f.id]&&value===null?' is-gap':'')}><span>{f.label}{gaps[f.id]&&value===null?<small className="gdr-gap">{gaps[f.id]}</small>:f.acquisition==='manual'&&<small>직접 확인</small>}</span>
     {f.type==='enum'?<select aria-label={f.label} disabled={locked} value={value===null?'':String(value)} onChange={e=>set(f,e.target.value===''?null:f.options!.find(o=>String(o.value)===e.target.value)!.value)}><option value="">모름</option>{f.options!.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select>:
-    f.type==='boolean'?<select aria-label={f.label} disabled={locked} value={value===null?'':value?'yes':'no'} onChange={e=>set(f,e.target.value===''?null:e.target.value==='yes')}><option value="">모름</option><option value="yes">있음</option><option value="no">없음</option></select>:
-    f.type==='player'?<select aria-label={f.label} disabled={locked} value={value===null?'':String(value)} onChange={e=>set(f,e.target.value||null)}><option value="">모름</option>{players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>:
-    f.type==='integer'?<input aria-label={f.label} type="number" step="1" min={f.min} max={f.max} inputMode={f.min!==undefined&&f.min>=0?'numeric':'text'} disabled={locked} placeholder="모름" value={value===null?'':String(value)} onChange={e=>{try{const n=inputNumber(e.target.value);set(f,n);e.target.setCustomValidity('');}catch(err){e.target.setCustomValidity((err as Error).message);e.target.reportValidity();}}}/>:
     <input aria-label={f.label} type="text" maxLength={160} disabled={locked} placeholder="모름" value={value===null?'':String(value)} onChange={e=>set(f,e.target.value.trim()?e.target.value:null)}/>} </label>;
   })}
  </section>;

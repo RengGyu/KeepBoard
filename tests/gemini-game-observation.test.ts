@@ -35,6 +35,16 @@ test('Gemini task body keeps visible game scope and sufficient fixed output prof
  assert(!JSON.stringify(body).includes('a'.repeat(64)));
 });
 
+test('Catan board instructions distinguish land regions from number discs without specifying inventory or applying to other games',()=>{
+ const prompt=buildGeminiGameBody(request,definition,Buffer.from('image'),'image/png').contents[0].parts[0].text!;
+ assert(prompt.includes('each visible hexagonal land region'));
+ assert(prompt.includes('including printed regions'));
+ assert(prompt.includes('Do not infer hidden terrain or an expected count'));
+ const otherPack=catalogPacks.find(p=>p.id==='carcassonne')!,otherDefinition=photoDefinition(otherPack),otherRequest=compileObservationTask({pack:otherPack,definition:otherDefinition,areaId:'map',taskId:'synthetic-other',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:request.images});
+ const other=buildGeminiGameBody(otherRequest,otherDefinition,Buffer.from('image'),'image/png').contents[0].parts[0].text!;
+ assert(!other.includes('including printed regions'));assert(other.includes('distinct from the printed board'));
+});
+
 test('completed native observations preserve visible value and box, unknown stays null',()=>{
  const result=decodeGeminiGameObservation(payload([item(),item('number-token',[{id:'number',valueJson:null,unknownReason:'occluded'}])]),request,definition);
  assert.equal(result.observations.length,2);
@@ -44,10 +54,11 @@ test('completed native observations preserve visible value and box, unknown stay
  assert.equal(validateObservationResult(result,request,definition).observations.length,2);
 });
 
-test('incomplete, invented manual field and invalid domain fail without usable candidate',()=>{
+test('incomplete and manual fields fail, invalid visible domain stays unknown',()=>{
  assert.throws(()=>decodeGeminiGameObservation({candidates:[{finishReason:'MAX_TOKENS',content:{parts:[{text:'{"items":[]}'}]}}]},request,definition),/완료|잘렸/);
  assert.throws(()=>decodeGeminiGameObservation(payload([item('terrain',[{id:'ownerId',valueJson:'"p1"',unknownReason:null}])]),request,definition));
- assert.throws(()=>decodeGeminiGameObservation(payload([item('terrain',[{id:'variant',valueJson:'"purple"',unknownReason:null}])]),request,definition));
+ const result=decodeGeminiGameObservation(payload([item('terrain',[{id:'variant',valueJson:'"purple"',unknownReason:null}])]),request,definition);
+ assert.deepEqual(result.observations[0].properties.variant,{state:'unknown',value:null,reason:'unreadable'});
 });
 
 test('even a mistaken visible definition cannot turn owner or role into photo observations',()=>{

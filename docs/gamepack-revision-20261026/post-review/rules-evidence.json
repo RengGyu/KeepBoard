@@ -1,0 +1,97 @@
+{
+  "scope": "Three bounded source-spec corrections from review-four-game-rules.md; not full-rulebook verification or runtime regeneration.",
+  "base_commit": "993bc4461baff9708b92c5a209ee8a7ac957f9cf",
+  "review_date": "2026-10-26",
+  "games": [
+    {
+      "game_id": "azul",
+      "primary_rule": {
+        "url": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
+        "edition": "Next Move English Azul base game",
+        "location": "PDF pp. 2–5, Game Setup / Wall-tiling / Preparing the next round",
+        "checked_fact": "Colored tiles begin in the opaque bag. Removed tiles go to the box lid. Lid tiles return to the bag only when it empties while factory displays are refilled."
+      },
+      "implementation": {
+        "source_change": "bag / bag.scene now mean only the hidden bag; box-lid / box-lid.scene model the separate public discarded tile pool; preservation, correction and vision partitions include the new area.",
+        "recommendation": "Preserve the bag and lid as separate physical stocks; record lid contents only when observed."
+      },
+      "remaining_uncertainty": [
+        "Gray-wall variant details, all scoring cases and actual photo recognition were not checked."
+      ],
+      "files": {
+        "spec": {
+          "path": "docs/research/game-specs-120/games/azul.json",
+          "before_sha256": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
+          "after_sha256": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38"
+        },
+        "profile": {
+          "path": "docs/vision-research-astra/games/azul.json",
+          "before_sha256": "4e3f590ef0afec18206da261dc1cf74a05072cbb1ce7e53b1d1bd043f30a3cc4",
+          "after_sha256": "a702b78a271bd15a60a1e26eeb2835c24ca68af2b28c51ec7570231805d5ff3f"
+        }
+      }
+    },
+    {
+      "game_id": "ticket-to-ride",
+      "primary_rule": {
+        "url": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2025/07/7201N_TICKET2RIDEV2_RULES_EN_20250425_WEB.pdf",
+        "edition": "Days of Wonder North America English ©2025",
+        "location": "PDF pp. 2–4, Setting up the Game / The Game Turn / Draw Tickets / Game End",
+        "checked_fact": "Each player starts with 45 trains. Spent train cards form a face-up discard to be reshuffled when the train deck empties. Kept destination tickets remain secret; 0–2 remaining trains at turn end start the last-turn cycle."
+      },
+      "implementation": {
+        "source_change": "decks / decks.scene now exclude public discard; train-discard / train-discard.scene is common public; train-stock / train-stock.scene and existing remaining-trains bind to player-public stock. Owner-private hand / tickets stay unchanged.",
+        "recommendation": "Keep public discard, private tickets, hidden draw decks and each player train stock in distinct saved physical locations."
+      },
+      "remaining_uncertainty": [
+        "Older North America printings and detailed route-legality/score adjudication were not checked."
+      ],
+      "files": {
+        "spec": {
+          "path": "docs/research/game-specs-120/games/ticket-to-ride.json",
+          "before_sha256": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
+          "after_sha256": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17"
+        },
+        "profile": {
+          "path": "docs/vision-research-astra/games/ticket-to-ride.json",
+          "before_sha256": "ed2fd38941cec9274a8b523ab0e02b6de419b0614fa4d79e38291674b220081f",
+          "after_sha256": "3da2d05e1907f35d8b2fbe4d76adcb6687913f039f54e43f9a23cfcfb2078bf8"
+        }
+      }
+    },
+    {
+      "game_id": "hanabi",
+      "primary_rule": {
+        "url": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf",
+        "edition": "Abacusspiele German base game",
+        "location": "PDF p. 2 (printed pp. 3–4), Spielvorbereitung / Einen Hinweis geben; PDF p. 1 (printed pp. 5–6), Wichtige Hinweise",
+        "checked_fact": "The holder cannot see own card fronts while others can. A clue associates the indicated color/number with matching cards in a recipient hand. This edition permits hand rearrangement/reorientation."
+      },
+      "implementation": {
+        "source_change": "hand.preserve is order_sensitive=true with steps to retain the current order, orientation and card-instance-to-clue association; hand remains own-hidden, not owner-private.",
+        "recommendation": "Preserve each hand physically with backs toward its holder and link clues to current card instances rather than former slots."
+      },
+      "remaining_uncertainty": [
+        "Other language printings and variant clue rules were not checked."
+      ],
+      "files": {
+        "spec": {
+          "path": "docs/research/game-specs-120/games/hanabi.json",
+          "before_sha256": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+          "after_sha256": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb"
+        },
+        "profile": {
+          "path": "docs/vision-research-astra/games/hanabi.json",
+          "before_sha256": "805ea09dc4b39f222cb604a1cee27e25594a36739df4ee0294f84c282d7ac4ce",
+          "after_sha256": "c1a9e8bd58fb51fda0fb58353571767c8458ad2402dcbd1453e3ca3c69ef55f9"
+        }
+      }
+    }
+  ],
+  "validation": {
+    "command": "node --import tsx tools/game-specs/cli.ts validate <individual canonical spec>",
+    "result": "All three individual specs valid with zero issues; each retains its declared research-gap warning.",
+    "factual_verification": false
+  },
+  "runtime_status": "Generated packs and capture definitions remain at base commit; source profiles mark runtime_match=false."
+}

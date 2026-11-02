@@ -6,23 +6,22 @@ export interface ScanUpload<R> { id: string; state: UploadState; bytes: number; 
 export interface UploadSnapshot<R> { entries: ScanUpload<R>[]; retainedBytes: number; active: boolean }
 
 /** One network request at a time; enqueue never waits for the network. Originals survive failed attempts. */
-export function createScanUploadQueue<T, R>(upload: (payload: T) => Promise<R>, changed: (snapshot: UploadSnapshot<R>) => void = () => {}, maxBytes = SCAN_QUEUE_MAX_BYTES) {
+export function createScanUploadQueue<T, R>(upload: (payload: T) => Promise<R>, changed: (snapshot: UploadSnapshot<R>) => void = () => {}, maxBytes = SCAN_QUEUE_MAX_BYTES, concurrency = 1) {
   const entries: (ScanUpload<R> & { payload?: T })[] = [];
-  let active = false, stopped = false, sequence = 0;
+  let activeCount=0;let active = false, stopped = false, sequence = 0;
   const waiters = new Set<() => void>();
   const snapshot = (): UploadSnapshot<R> => ({ entries: entries.map(({ payload: _, ...entry }) => ({ ...entry })), retainedBytes: entries.reduce((sum, entry) => sum + (entry.payload === undefined ? 0 : entry.bytes), 0), active });
   const notify = () => changed(snapshot());
   const settle = () => { if (!active && !entries.some(e => e.state === 'pending')) { for (const resolve of waiters) resolve(); waiters.clear(); } };
   async function pump() {
-    if (active || stopped) return;
-    active = true;
-    for (let entry = entries.find(e => e.state === 'pending'); entry && !stopped; entry = entries.find(e => e.state === 'pending')) {
-      entry.state = 'uploading'; notify(); const start = performance.now();
-      try { entry.result = await upload(entry.payload!); entry.state = 'saved'; entry.payload = undefined; entry.error = undefined; }
-      catch (error) { entry.state = 'failed'; entry.error = error instanceof Error ? error.message : '사진 전송 실패'; }
-      entry.uploadMs = performance.now() - start; notify();
+    if(stopped)return;
+    while(activeCount<Math.min(SCAN_LIMIT,Math.max(1,concurrency))){
+      const entry=entries.find(e=>e.state==='pending');if(!entry)break;
+      activeCount++;active=true;entry.state='uploading';notify();const start=performance.now();
+      void(async()=>{try{entry.result=await upload(entry.payload!);entry.state='saved';entry.payload=undefined;entry.error=undefined;}
+      catch(error){entry.state='failed';entry.error=error instanceof Error?error.message:'사진 전송 실패';}
+      finally{entry.uploadMs=performance.now()-start;activeCount--;active=activeCount>0;notify();void pump();settle();}})();
     }
-    active = false; notify(); settle();
   }
   return {
     snapshot,

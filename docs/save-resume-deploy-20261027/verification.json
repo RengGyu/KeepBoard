@@ -1,0 +1,57 @@
+{
+  "at": "2026-10-27T06:20:44.706Z",
+  "base": "https://keepboard-kappa.vercel.app",
+  "deployment": "dpl_EELAnrHAztMhkUb5gHYo8fhGq5jb",
+  "syntheticReadings": true,
+  "modelCalls": 0,
+  "results": [
+    {
+      "game": "carcassonne",
+      "id": "f2c013b3-01c0-4415-bd9b-5d2f2b264242",
+      "photoByteExact": true,
+      "piecesExact": true,
+      "zeroAndNullPreserved": true,
+      "placementsPreserved": true,
+      "notesPreserved": true,
+      "storageLocationPreserved": true,
+      "uiSaveAndRestore": true
+    },
+    {
+      "game": "catan",
+      "id": "b387725b-b795-4cae-8f63-428b5bd547af",
+      "uiSave": true,
+      "valuesPreserved": true,
+      "owner": null
+    },
+    {
+      "game": "rummikub",
+      "id": "6819a640-a13f-4c58-92b4-33744e5a71e3",
+      "uiSave": true,
+      "valuesPreserved": true,
+      "owner": "p1"
+    }
+  ],
+  "checks": {
+    "cloudFocusedTests": "7/7 passed, rerun by supervisor",
+    "typecheck": "passed",
+    "productionBuild": "Vercel READY",
+    "health": "ok"
+  },
+  "fix": {
+    "file": "server/cloudJobs.ts",
+    "sha256": "e10fae964d5b7b343f29af7e18af79388b16d1085c4701f6bcefe3b29514fde3",
+    "behavior": "Keep observation receipts available after 24 hours and subsequent job creation."
+  },
+  "limits": [
+    "Synthetic readings; no additional model inference.",
+    "Browser upload blocked by extension file URL permission; photo and readings seeded via API into a new test board.",
+    "Physical tabletop packing/restoration was not performed.",
+    "Production default AI settings retained; Gemini game reader reports unavailable because production key is not connected."
+  ],
+  "browser": {
+    "carcassonne": "save, public snapshot restore, reload, source photo 1024x768 loaded, zero/?/placement/notes/container persisted",
+    "catan": "UI save, reload, public snapshot restore, forest at r3c3 persisted",
+    "rummikub": "UI owner save, reload, owner API resume, unknown-color number8 remained private; public board excluded it"
+  },
+  "priorProduction": "dpl_G7KsobFRw4ZHZU9iM9Ac7sEXab3R"
+}

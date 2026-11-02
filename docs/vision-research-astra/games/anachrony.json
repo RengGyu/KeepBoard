@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/anachrony.json",
-    "sha256": "adb8889e47b70049325298ae62297f9f0493c9f7e10d94432351411327dada5b",
+    "sha256": "31ccc0706faa9fa0207b1f38f923cc7cf31a974c7c59b359fd6ac00b5d5abec0",
     "runtime_pack_id": "anachrony",
-    "runtime_pack_version": "1.0.0-essentials-2.adb8889e47b7",
+    "runtime_pack_version": "1.0.0-essentials-2.31ccc0706faa",
     "runtime_match": true
   },
   "basis": {
@@ -36,7 +36,8 @@
       "inherited::anachrony.essentials.rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "타임라인·워프, 공용 행동과 개인 건물 격자",
   "critical_resume_distinction": "일꾼 종류/상태·엑소슈트·워프 출처/시대 관계 분리",
@@ -49,7 +50,9 @@
       "player",
       "supply"
     ],
-    "owner_private": [],
+    "owner_private": [
+      "warp-hand"
+    ],
     "do_not_infer": []
   },
   "areas": [
@@ -70,7 +73,7 @@
         "buildings"
       ],
       "anchor_contract": "시대별 워프 타일·충돌 표식·시간 초점, 프로젝트 연결.",
-      "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "시대와 워프의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 아직 뒤집지 않은 슈퍼프로젝트는 뒷면 그대로 두고 정체를 기록하지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "common_public",
@@ -260,6 +263,56 @@
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
         "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "warp-hand",
+      "name": "숨겨 고른 워프 타일",
+      "scope": "player",
+      "visibility": "owner",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "resources"
+      ],
+      "anchor_contract": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다.",
+      "description": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "anachrony.art-confirmation.anachrony-primary"
+      ],
+      "confidence": "verified",
+      "partition": "owner_private",
+      "source_field_ids": [
+        "warp-hand.scene"
+      ],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [],
+      "current_manual_target_fields": [
+        "warp-hand.scene"
+      ],
+      "allowed_component_ids": [
+        "resources"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_access": "owner evidence, this owner only; public holdings in same photo remain private tray",
+      "capture_instruction": "숨겨 고른 워프 타일: 워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다. 읽을 수 없는 값은 미상으로 남기세요.",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry",
+        "source_anchor": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다."
       },
       "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
     }
@@ -548,6 +601,14 @@
     ],
     "excluded_bindings": [
       {
+        "key": "player.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "supply.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "era",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       },
@@ -593,6 +654,10 @@
       },
       {
         "key": "pool-decks.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "warp-hand.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
@@ -646,13 +711,6 @@
       "scope": "public",
       "visibility": "public",
       "description": "현재 배너 보유자와 시계방향 좌석 순서. 시대가 바뀌어도 World Council로 바뀐 실제 보유자를 유지."
-    },
-    {
-      "id": "pool-decks.scene",
-      "label": "모집·채광 풀 덱",
-      "scope": "shared-secret",
-      "visibility": "hidden",
-      "description": "Recruit와 Mine pool 미공개 덱을 각각 별도 묶음으로, 현재 공개된 풀 카드와 구분한다. 위/아래와 보관 위치를 기록하고 내부 순서는 펼치지 않고 유지."
     }
   ],
   "never_infer": [
@@ -737,6 +795,27 @@
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "warp-hand.preserve",
+        "label": "숨겨 고른 워프 타일 보존(선택)",
+        "scope": "player",
+        "visibility": "owner",
+        "field_ids": [
+          "warp-hand.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": false,
+        "steps": [
+          "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "opening_policy": "retain-saved-turn",
@@ -805,6 +884,12 @@
         "name": "보유·연구",
         "needs": "자원별 수량과 연구 모양/기호, 진영 특수 상태.",
         "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "warp-hand",
+        "name": "숨겨 고른 워프 타일",
+        "needs": "워프 단계에서 손에 숨겨 고른 워프 타일(0–2개)은 공개 전까지 본인만 안다. 공개 뒤에는 시대 트랙에 공개 기록한다.",
+        "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
       }
     ],
     "do_not_collect": [],
@@ -814,7 +899,7 @@
   "current_board_mapping": {
     "gameId": "anachrony",
     "editionId": "base",
-    "sourceSHA": "adb8889e47b70049325298ae62297f9f0493c9f7e10d94432351411327dada5b",
+    "sourceSHA": "31ccc0706faa9fa0207b1f38f923cc7cf31a974c7c59b359fd6ac00b5d5abec0",
     "status": "reuse",
     "areas": [
       {
@@ -897,6 +982,27 @@
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
         "artComponentId": "boards"
+      },
+      {
+        "areaId": "warp-hand",
+        "label": "숨겨 고른 워프 타일",
+        "fieldKeys": [
+          "warp-hand.scene"
+        ],
+        "componentIds": [
+          "resources"
+        ],
+        "scope": "player",
+        "visibility": "owner",
+        "topology": "zone",
+        "sourceRefs": [
+          "anachrony.art-confirmation.anachrony-primary"
+        ],
+        "sourceConfidence": "verified",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "artComponentId": null
       }
     ],
     "fidelityPending": []

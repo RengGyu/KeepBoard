@@ -1,0 +1,140 @@
+{
+  "at": "2026-10-27T15:03:38.345Z",
+  "provider": "Vercel only",
+  "sourceStore": {
+    "name": "keepboard-state",
+    "id": "store_Xk8tUv2qKYHBTQbi",
+    "status": "suspended",
+    "reportedSimpleOperations": 12800,
+    "includedSimpleOperations": 10000,
+    "reportedResumeDate": "2026-11-26"
+  },
+  "migration": {
+    "status": "blocked_by_provider_quota",
+    "createAttempt": {
+      "name": "keepboard-state-recovery-20261027",
+      "access": "private",
+      "region": "iad1",
+      "connectEnvironment": "development only; production untouched",
+      "exit": 1,
+      "error": "Cannot create another store when usage threshold limit is reached (400)"
+    },
+    "sourceInventory": {
+      "productionObjects": 117,
+      "counts": {
+        "jobs": 19,
+        "private-pins.json": 1,
+        "session-list.json": 1,
+        "sessions": 50,
+        "upload-tickets": 9,
+        "uploads": 37
+      },
+      "listingComplete": true
+    },
+    "download": {
+      "uncached": "403 Forbidden",
+      "cached": "403 Forbidden"
+    },
+    "objectsCopied": 0,
+    "productionStorageConnectionChanged": false,
+    "originalObjectsDeleted": 0,
+    "newStoreCreated": false,
+    "awsResourcesCreated": 0,
+    "awsSourceChanges": 0,
+    "paidPlanChanged": false
+  },
+  "queryFix": {
+    "status": "deployed and production asset verified",
+    "files": [
+      "src/App.tsx",
+      "src/SessionWorkspace.tsx",
+      "src/jobStatusPolling.ts"
+    ],
+    "behavior": [
+      "No periodic full-session refresh.",
+      "One-time job discovery; empty/completed/failed results stop.",
+      "Only active work checks at10/20/30sec; at most10 automatic checks after discovery.",
+      "Hidden document pauses checks. Returning to tab does not reset consumed budget.",
+      "Error or budget exhaustion stops; explicit status refresh does not rerun the model.",
+      "A distinct new job receives a new budget."
+    ],
+    "tests": {
+      "rootFocused": {
+        "pass": 38,
+        "fail": 0
+      },
+      "workerFocused": {
+        "pass": 10,
+        "fail": 0
+      },
+      "build": "passed",
+      "typecheck": "passed via build",
+      "diffCheck": "passed"
+    },
+    "limits": [
+      "Status endpoint calls are not identical to Blob operation counts; an endpoint may read several objects.",
+      "Cross-device edits no longer refresh automatically; explicitly reopen/reload for the latest board.",
+      "Production save/reopen verification is blocked by the suspended storage service."
+    ]
+  },
+  "billingAttribution": "12.8k is store usage, not model invocations. Per-caller attribution has not been established.",
+  "sourceHashes": {
+    "src/App.tsx": "b8ffdfed89b402748decb39ee0d51b76d776929c882fa3872191fa40dbe3ba74",
+    "src/SessionWorkspace.tsx": "84f7aa0bc60dfe9c6da34dbfdee857d7c5bbaf0e42b4627e44d149d75f7bc850",
+    "src/jobStatusPolling.ts": "ffead04bbca2e804319df60f39480a10e4cd82a831001da025b79c2952efc6f9",
+    "tests/job-status-polling.test.ts": "0d8ec29136db1bb003f52d3f337f2e615a83b790fc9f5045009327ec76fdf50e",
+    "tests/app-storage-polling.test.ts": "9416bdcdb4e385e2ada7e74cbdc3a5f3caf8a724c67fe3b11dc058d55d5e05ed"
+  },
+  "deployment": {
+    "id": "dpl_6L6ntNAZFcgp5wFLBXdUWAR1tjj4",
+    "url": "https://keepboard-kappa.vercel.app",
+    "readyState": "READY",
+    "previous": "dpl_DxjufGPk1hwU5eECCLbLpnTfua9j",
+    "changedSourceFiles": [
+      "src/App.tsx",
+      "src/SessionWorkspace.tsx",
+      "src/jobStatusPolling.ts"
+    ],
+    "baselineSourcePreserved": true
+  },
+  "productionCheck": {
+    "at": "2026-10-27T15:03:07.726Z",
+    "homeStatus": 200,
+    "mainAsset": "/assets/index-DeZN0EdO.js",
+    "assetStatus": 200,
+    "assetSHA256": "b68ed3b4612310828801ce87a497e2aa2c8e6d2f978bd9d40da91df7cf121617",
+    "finitePollingCodePresent": true,
+    "sessionListStatus": 400,
+    "sessionListError": "Vercel Blob: Failed to fetch blob: 403 Forbidden"
+  },
+  "handoff": {
+    "mustReadDiffs": [
+      {
+        "file": "src/App.tsx",
+        "point": "Removed automatic whole-board interval."
+      },
+      {
+        "file": "src/jobStatusPolling.ts",
+        "point": "Only active visible jobs get at most10 checks; terminal/error/hidden pauses stop timers."
+      }
+    ],
+    "flow": "Initial discovery -> limited status checks only for active work -> one completed refresh; explicit status read after a stop does not run a model.",
+    "userAction": "Reload any already-open app tab to load the new client. Provider suspension remains a separate blocker.",
+    "keywords": [
+      "polling: 반복 조회",
+      "quota: 사용량 한도",
+      "suspended: 사용 중지"
+    ],
+    "phrases": [
+      "The automatic checks stop.",
+      "The storage limit blocks migration."
+    ],
+    "sentences": [
+      "The new client no longer refreshes the whole board in a loop.",
+      "Vercel rejected the new store because the account is over its usage limit."
+    ],
+    "ownershipQuestion": "상태 조회를 줄이는 수정과 이미 중지된 저장소를 복구하는 조치는 왜 별개일까요?",
+    "delegationSkill": "/Users/jeonggyuju/.agents/skills/paseo/SKILL.md"
+  },
+  "stageFilesVerified": 980
+}

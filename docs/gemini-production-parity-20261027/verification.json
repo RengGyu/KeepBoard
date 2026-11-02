@@ -1,0 +1,155 @@
+{
+  "at": "2026-10-27T08:43:16.035Z",
+  "status": "deployed; tested Gemini execution restored; recognition and topology limitations remain",
+  "deployment": {
+    "id": "dpl_DxjufGPk1hwU5eECCLbLpnTfua9j",
+    "url": "https://keepboard-kappa.vercel.app",
+    "readyState": "READY",
+    "stagedFiles": 979,
+    "stagedHashMismatches": 0
+  },
+  "rootCause": {
+    "verified": "Previous production photo ran the legacy default DeepSeek path, while the tested Gemini path was unavailable in production and cloud execution did not honor hostedObservation.",
+    "oldJobElapsedMs": 117514
+  },
+  "changes": [
+    "Cloud and local Gemini use the same hosted observation pipeline and pinned identity.",
+    "Default photo reader is Gemini; no automatic provider/model fallback.",
+    "CSS shade names such as dark blue render without changing the observed wording or inferred ownership.",
+    "Catan board terrain guide distinguishes visible land regions from number discs; no expected count, coordinates or picture answers."
+  ],
+  "verification": {
+    "tests": {
+      "pass": 725,
+      "fail": 0
+    },
+    "afterLabelEditsFocusedTests": {
+      "pass": 30,
+      "fail": 0
+    },
+    "build": "passed",
+    "diffCheck": "passed",
+    "claude": "Source review only; no blocking defect found. Root ran tests/build/live calls.",
+    "live": {
+      "at": "2026-10-27T08:41:54.608Z",
+      "sessionId": "a2d30e33-7678-486d-8c0d-4252ab5f50d6",
+      "url": "https://keepboard-kappa.vercel.app/?session=a2d30e33-7678-486d-8c0d-4252ab5f50d6",
+      "sourceSHA": "28ce72a474b4cd06f0995427a53a1c8ab815e0c3e3fa656143f91836c8254dbc",
+      "reader": {
+        "kind": "gemini-game-observation-v1",
+        "model": "gemini-3.8-flash",
+        "thinkingLevel": "LOW",
+        "mediaResolution": "MEDIA_RESOLUTION_HIGH",
+        "maxOutputTokens": 32768
+      },
+      "analysisElapsedSeconds": 53.30109975,
+      "checkTotalSeconds": 56.325326084,
+      "jobTimings": {
+        "prepareMs": 87.81877899999381,
+        "providerMs": 49534.968217,
+        "totalMs": 51899
+      },
+      "observations": 49,
+      "counts": {
+        "terrain": 19,
+        "number-token": 17,
+        "robber": 1,
+        "city": 2,
+        "road": 4,
+        "settlement": 6
+      },
+      "saveReopen": true,
+      "providerRequests": 1,
+      "comparisonLimit": "Counts and selected visible objects only; not full-board accuracy or confirmed topology."
+    },
+    "directUserPhoto": {
+      "providerMs": 49520.419665999994,
+      "counts": {
+        "terrain": 19,
+        "number-token": 17,
+        "robber": 1,
+        "settlement": 5,
+        "city": 2,
+        "road": 7
+      },
+      "resultSHA": "f13afe7c06b9f24eb92820f351d1cc194dd2b6d9be0467cd8f1ce25d3338b161"
+    },
+    "directControlPhoto": {
+      "providerMs": 38216.709125,
+      "counts": {
+        "robber": 1,
+        "terrain": 19,
+        "number-token": 18
+      },
+      "resultSHA": "f800c3692b262b5524dab1f143767a975541555e65b646163a28580f308cae96"
+    },
+    "uiApplyWithoutEditing": {
+      "sameComponentsAfterUIApply": true,
+      "stage": "saved",
+      "status": "accepted",
+      "components": 49,
+      "unplaced": 49,
+      "receipts": 1,
+      "metadataNormalization": {
+        "before": {},
+        "after": {
+          "terrain": "unknown",
+          "numbers": "unknown",
+          "buildings": "unknown",
+          "roads": "unknown"
+        },
+        "meaning": "Missing coverage labels made explicit unknown; observed components unchanged."
+      }
+    }
+  },
+  "limits": [
+    "Single final production run; times are not an SLA or average.",
+    "Counts are not accuracy scores. Small roads and object-kind mistakes remain possible.",
+    "Final production result has 49 unplaced objects: original-photo bounding boxes and observed values survive; automatic board cell/edge/vertex placement is not established.",
+    "The number disc covered by the robber was not returned. No hidden value was invented.",
+    "Only two Catan photos were used for this prompt change; no claim that all 120 games were rerun.",
+    "API upload used the same production evidence/job endpoints; browser file-picker upload was not exercised."
+  ],
+  "evidence": {
+    "claudeReportSHA": "e4e455947964f999d771a27725a122e2f410745941b86721bae369ff115dd402",
+    "liveResultSHA": "1662fbb2ccac2fde15035acd13644e06ffb7668324fa5c879e4c08e77b37ccf0",
+    "stageManifestSHA": "0e708075c2769abcc5fac8b59669d9962c9a6c3ca4060ecddbaa216b01f687e1"
+  },
+  "handoff": {
+    "mustReadDiffs": [
+      {
+        "file": "server/cloudRuntime.ts",
+        "line": 23,
+        "importance": "high",
+        "before": "Cloud execution used the legacy analyzer despite a hosted reader plan.",
+        "after": "The persisted hosted plan goes through analyzeHostedObservation; pinned model identity and source photo checks remain.",
+        "failureCase": "Unsupported plan or unavailable reader fails explicitly; it does not silently use another provider.",
+        "test": "tests/cloud-gemini-execution.test.ts"
+      },
+      {
+        "file": "server/ai/geminiGameReader.ts",
+        "line": 17,
+        "importance": "high",
+        "before": "Only generic movable-object wording described terrain.",
+        "after": "Only the Catan board terrain contract explains visible hexagonal land regions independently from number discs.",
+        "failureCase": "The model can still omit small pieces; no expected count is used to fill them in.",
+        "test": "tests/gemini-game-observation.test.ts"
+      }
+    ],
+    "flow": "Photo -> pinned Gemini request -> observations and photo boxes -> explicit same-value apply -> saved components and original receipt. Board cell/edge placement remains unplaced.",
+    "keywords": [
+      "reader: 판독기",
+      "deploy: 배포",
+      "unplaced: 보드 위치 미확정"
+    ],
+    "phrases": [
+      "The deploy is ready.",
+      "Check the saved values."
+    ],
+    "sentences": [
+      "The cloud now uses the tested reader.",
+      "The values are saved, but board positions are still unknown."
+    ],
+    "ownershipQuestion": "사진에서 물체를 찾은 것과 보드의 칸을 정한 것은 어떤 차이가 있을까요?"
+  }
+}

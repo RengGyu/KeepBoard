@@ -1,0 +1,35 @@
+{
+  "version": "terra-whole-roi-plan-v1",
+  "frozenBeforeNewOutputs": true,
+  "newModelOutputsRead": false,
+  "method": "Direct original-photo inspection; one rectangular physical foreground play area per photo, not per-answer or GT-object crops",
+  "cases": [
+    {
+      "gameId": "cascadia",
+      "path": "/Users/jeonggyuju/Library/Application Support/KeepBoard/research/twenty-games-pack-study-20261029/cascadia.jpg",
+      "sha256": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+      "width": 960,
+      "height": 960,
+      "areaId": "ecosystem",
+      "partition": "player_public",
+      "roiPx": [60,560,710,940],
+      "reason": "Front connected habitat patch and tokens, with table margin; other players and central market excluded",
+      "limitations": ["Loose nature tokens at the left can be clipped or excluded; classified separately after fixed ROI, not silently removed", "Printed habitat animal icons are distinct from placed round wildlife tokens"]
+    },
+    {
+      "gameId": "sagrada",
+      "path": "/Users/jeonggyuju/Library/Application Support/KeepBoard/research/twenty-games-pack-study-20261029/sagrada.jpg",
+      "sha256": "2eff2ac9593ad4faa2eed32ac850af89105b3b1fc710990d7dfb1d429ce0cbdf",
+      "width": 1024,
+      "height": 768,
+      "areaId": "window",
+      "partition": "player_public",
+      "roiPx": [430,350,750,768],
+      "reason": "Whole foreground stained-glass player frame and its dice, including physical surround; rear window excluded",
+      "limitations": ["Frame meets the original bottom image boundary; clipped frame geometry separated from readable dice", "Pips on top face must not be inferred from side faces"]
+    }
+  ],
+  "sharedSettings": {"model":"gpt-6.1-terra","effort":"low","detail":"high","maxOutputTokens":32768,"wire":"terra-game-wire-v2","physicalUnit":"single|group|unknown, independent of quantity","maxCalls":4,"retries":0,"externalUpscale":false},
+  "preprocessing": "Original JPEG unchanged for whole; ROI is lossless PNG encoding of exact decoded original pixels, no resampling",
+  "referencePolicy": "Existing immutable AI partial references only; full/partly-clipped/outside ROI classified after ROI freeze; no answer labels/counts/GT boxes in prompt"
+}

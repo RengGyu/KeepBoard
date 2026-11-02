@@ -17,10 +17,10 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/pandemic-legacy-1.json",
-    "sha256": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+    "sha256": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
     "runtime_pack_id": "pandemic-legacy-1",
-    "runtime_pack_version": "1.0.0-essentials-2.8e0f96155c30",
-    "runtime_match": false
+    "runtime_pack_version": "1.0.0-essentials-2.af498bfba9fd",
+    "runtime_match": true
   },
   "basis": {
     "contract": "RECOMMENDATION",
@@ -39,7 +39,7 @@
     ],
     "whole_game_rules_verified": false,
     "real_photo_accuracy_verified": false,
-    "source_revision_pending_runtime_regeneration": true
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "현재 공개 도시판과 스티커/캐릭터 공개 부분",
   "critical_resume_distinction": "봉인 패킷·미공개 캠페인 내용 제외, 현재 날짜/단계는 확인 입력",
@@ -278,9 +278,13 @@
       ],
       "confidence": "recommendation",
       "partition": "player_public",
-      "capture_allowed_current": false,
-      "current_ai_destination_fields": [],
-      "current_manual_target_fields": [],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "character-card.scene"
+      ],
       "source_field_ids": [
         "character-card.scene"
       ],
@@ -289,7 +293,7 @@
       ],
       "owner_binding": "explicit user/roster binding only; no seat/color inference",
       "capture_instruction": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
-      "capture_access": "public evidence; explicit owner binding for player areas",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
       "evidence_contract": {
         "original_id_required": true,
         "original_region": "normalized crop in this source only; not game coordinates",
@@ -633,6 +637,10 @@
       {
         "key": "note",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "character-card.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -759,6 +767,26 @@
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "character-card.preserve",
+        "label": "공개된 인물 카드·기록 실물 묶음 보존(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "character-card.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+          "보이지 않는 면을 열지 않고 구역·소유자·묶음 방향을 남긴다."
+        ],
+        "after": [],
+        "source_refs": [
+          "pandemic-legacy-1.product-current"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "opening_policy": "retain-saved-turn",
@@ -774,7 +802,8 @@
     "시즌1 Red/Blue는 같은 게임. 시즌0/2는 별개이며 아직 열지 않은 캠페인 내용을 사전 생성하지 않는다.",
     "캠페인 중 추가되는 비공개 규칙은 공개 후 기록해야 하며 이번 명세는 전체 스포일러 사전이 아니다.",
     "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
-    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+    "신규 character-card.scene은 공개된 앞면만 기록한다. 기존 저장본의 players.scene에 혼재된 인물 기록을 자동 이동/공개하지 않는다. 기존 팩 핀 보존과 수동 확인이 필요하다."
   ],
   "schema_gaps": [
     {
@@ -823,9 +852,15 @@
       },
       {
         "area_id": "players",
-        "name": "인물과 손패",
-        "needs": "인물 영구 변경과 이번 손패를 분리. 공개 협의 정보는 메모로만 복사.",
+        "name": "이번 게임의 개인 손패",
+        "needs": "이번 게임의 플레이어 카드 손패만 소유자 범위로 기록한다. 인물의 공개 앞면 기록과 섞지 않는다.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "character-card",
+        "name": "공개된 인물 카드·기록",
+        "needs": "각 플레이어가 실제로 공개한 인물 카드/시트 앞면과 영구 변경만 기록한다. 봉인되거나 가려진 내용은 공개값으로 채우지 않는다.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
       }
     ],
     "do_not_collect": [
@@ -841,7 +876,7 @@
   "current_board_mapping": {
     "gameId": "pandemic-legacy-1",
     "editionId": "base",
-    "sourceSHA": "8e0f96155c307681e6dd33789e71372858fabb02e16387ec43846372408ede60",
+    "sourceSHA": "af498bfba9fd1ae47ed63de3c72f93aded116f14cf4fc3752c1143cbc317576f",
     "status": "reuse",
     "areas": [
       {
@@ -886,13 +921,12 @@
       },
       {
         "areaId": "players",
-        "label": "인물과 손패",
+        "label": "이번 게임의 개인 손패",
         "fieldKeys": [
           "players.scene"
         ],
         "componentIds": [
-          "cards",
-          "record"
+          "cards"
         ],
         "scope": "player",
         "visibility": "owner",
@@ -921,6 +955,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "character-card",
+        "label": "공개된 인물 카드·기록",
+        "fieldKeys": [
+          "character-card.scene"
+        ],
+        "componentIds": [
+          "record"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "pandemic-legacy-1.product-current"
+        ],
+        "sourceConfidence": "recommendation",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

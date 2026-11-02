@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/agricola.json",
-    "sha256": "a0327f3809605f8d0d3ef4d9a08a74fbb586b804efca178a581112b1d1d62d84",
+    "sha256": "381e90234df217da06548c4d77c91bf1ff30f6d1f337182d0886de93a1118e4b",
     "runtime_pack_id": "agricola",
-    "runtime_pack_version": "1.0.0-essentials-2.a0327f380960",
+    "runtime_pack_version": "1.0.0-essentials-2.381e90234df2",
     "runtime_match": true
   },
   "basis": {
@@ -36,7 +36,8 @@
       "inherited::agricola.essentials.rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "개인 농장 셀과 방·울타리·동물·작물의 겹침",
   "critical_resume_distinction": "공급/배치 가족, 설비/직업 손패, 집 종류와 수확 처리 별도",
@@ -125,7 +126,7 @@
         "cards"
       ],
       "anchor_contract": "라운드 행동 카드와 누적 자원, 배치된 가족을 각 공간에 연결.",
-      "description": "공용 행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "공용 행동 공간의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 놓인 주요 설비 보급판도 공용 공개 정보다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "common_public",
@@ -178,7 +179,7 @@
         "cards"
       ],
       "anchor_contract": "미사용 자원/음식과 사용 설비를 구별.",
-      "description": "개인 보유·설비의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "개인 보유·설비의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 내려놓은 직업·보조 설비도 이 개인 공개 영역에 둔다. 손에 든 카드는 hand에 남는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "player_public",
@@ -553,6 +554,14 @@
     ],
     "excluded_bindings": [
       {
+        "key": "farm-area.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "stock.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "round",
         "reason": "원명세가 사진 관측을 허용하지 않음"
       },
@@ -658,13 +667,6 @@
       "scope": "public",
       "visibility": "public",
       "description": "현재 표식 보유자와 실제 시계방향 좌석 순서를 기록. 현재 행동 중인 turn과 다음 라운드 시작자는 별개다. 모르면 비워 둔다."
-    },
-    {
-      "id": "round-deck.scene",
-      "label": "미공개 라운드 행동 카드",
-      "scope": "shared-secret",
-      "visibility": "hidden",
-      "description": "단계별 미공개 행동 카드의 실물 묶음과 위/아래 및 단계 경계 보존. 내용 확인을 위해 펼치지 않는다. 이미 공개된 행동은 actions.scene에 둔다."
     }
   ],
   "never_infer": [
@@ -846,7 +848,7 @@
   "current_board_mapping": {
     "gameId": "agricola",
     "editionId": "base",
-    "sourceSHA": "a0327f3809605f8d0d3ef4d9a08a74fbb586b804efca178a581112b1d1d62d84",
+    "sourceSHA": "381e90234df217da06548c4d77c91bf1ff30f6d1f337182d0886de93a1118e4b",
     "status": "new",
     "areas": [
       {

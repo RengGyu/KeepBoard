@@ -1,0 +1,84 @@
+{
+  "gameId": "halligalli",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "bell",
+      "label": "종·처리 대기",
+      "field": "bell.scene",
+      "scope": "public",
+      "accepts": [
+        "bell"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "halligalli-bell-r1-c1",
+          "x": 395.0,
+          "y": 145.0,
+          "w": 210.0,
+          "h": 210.0,
+          "capacity": 1,
+          "shape": "circle"
+        }
+      ],
+      "bounds": [
+        330,
+        80,
+        340,
+        340
+      ]
+    },
+    {
+      "id": "open-stack",
+      "label": "플레이어별 공개 카드",
+      "field": "open.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "halligalli-open-stack-r1-c1",
+          "x": 300.0,
+          "y": 570.0,
+          "w": 400.0,
+          "h": 270.0,
+          "capacity": 56,
+          "shape": "rect"
+        }
+      ],
+      "note": "한 사람 공개더미 전체순서. 용량56은 공식전체카드수의 물리상한, 손패수/라운드정답아님.",
+      "bounds": [
+        160,
+        520,
+        680,
+        400
+      ]
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {},
+  "notes": [
+    "개인 공개더미 한장(scopeplayer)을 앱이복제하는 구성. 비공개뽑기더미는 현재component바인딩 밖이라 SVG에 가짜공개로 넣지 않음. 벨/카드가 놓이는 실제 자리는 자유로운게임으로 이 보드 좌표는 정리 제안."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.amigo-spiele.de/halli-galli_1700_1077",
+      "location": "officialcomponents/rulessteps1–8",
+      "verifiedFacts": "onecentralbell;56cards;eachplayerorderedopenstack; winnercollectsstacks",
+      "access": "opened",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": []
+}

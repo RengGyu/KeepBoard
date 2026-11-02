@@ -1,0 +1,538 @@
+{
+  "gameId": "dixit",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "display",
+      "label": "공개 그림카드 8자리",
+      "field": "display.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "dixit-display-r1-c1",
+          "x": 245.0,
+          "y": 275.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r1-c2",
+          "x": 374.5,
+          "y": 275.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r1-c3",
+          "x": 504.0,
+          "y": 275.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r1-c4",
+          "x": 633.5,
+          "y": 275.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r2-c1",
+          "x": 245.0,
+          "y": 449.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r2-c2",
+          "x": 374.5,
+          "y": 449.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r2-c3",
+          "x": 504.0,
+          "y": 449.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-display-r2-c4",
+          "x": 633.5,
+          "y": 449.0,
+          "w": 121.5,
+          "h": 166.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "공식판의 카드 슬롯 8개. 세 명 게임은 특수 규칙에 따라 다섯 장이 표시될 수 있음.",
+      "bounds": [
+        210,
+        230,
+        580,
+        450
+      ]
+    },
+    {
+      "id": "hand",
+      "label": "개인 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "dixit-hand-r1-c1",
+          "x": 235.0,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c2",
+          "x": 311.857143,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c3",
+          "x": 388.714286,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c4",
+          "x": 465.571429,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c5",
+          "x": 542.428571,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c6",
+          "x": 619.285714,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-hand-r1-c7",
+          "x": 696.142857,
+          "y": 790.0,
+          "w": 68.857143,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "기본은 손패6장, 세 명 게임은 7장; 남은 카드/보충은 규칙대로 변함.",
+      "bounds": [
+        220,
+        780,
+        560,
+        90
+      ]
+    },
+    {
+      "id": "vote",
+      "label": "본인 투표 다이얼",
+      "field": "vote.scene",
+      "scope": "player",
+      "accepts": [
+        "votes"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "dixit-vote-r1-c1",
+          "x": 60.0,
+          "y": 900.0,
+          "w": 90.0,
+          "h": 55.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        40,
+        885,
+        140,
+        85
+      ]
+    },
+    {
+      "id": "score-track",
+      "label": "점수 0–30",
+      "field": "scores.scene",
+      "scope": "public",
+      "accepts": [
+        "votes"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "dixit-score-0",
+          "x": 130,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-1",
+          "x": 234,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-2",
+          "x": 338,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-3",
+          "x": 442,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-4",
+          "x": 546,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-5",
+          "x": 650,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-6",
+          "x": 754,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-7",
+          "x": 858,
+          "y": 60,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-8",
+          "x": 858,
+          "y": 130,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-9",
+          "x": 858,
+          "y": 200,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-10",
+          "x": 858,
+          "y": 270,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-11",
+          "x": 858,
+          "y": 340,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-12",
+          "x": 858,
+          "y": 410,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-13",
+          "x": 858,
+          "y": 480,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-14",
+          "x": 858,
+          "y": 550,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-15",
+          "x": 858,
+          "y": 620,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-16",
+          "x": 858,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-17",
+          "x": 754,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-18",
+          "x": 650,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-19",
+          "x": 546,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-20",
+          "x": 442,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-21",
+          "x": 338,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-22",
+          "x": 234,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-23",
+          "x": 130,
+          "y": 710,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-24",
+          "x": 74,
+          "y": 640,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-25",
+          "x": 74,
+          "y": 570,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-26",
+          "x": 74,
+          "y": 500,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-27",
+          "x": 74,
+          "y": 430,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-28",
+          "x": 74,
+          "y": 360,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-29",
+          "x": 74,
+          "y": 290,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        },
+        {
+          "id": "dixit-score-30",
+          "x": 74,
+          "y": 220,
+          "w": 62,
+          "h": 42,
+          "capacity": 8,
+          "shape": "rect"
+        }
+      ],
+      "note": "31개의 점수위치. 최대8개 토끼말이 같은 점수에 겹칠 수 있음; 30 이상은 종료조건이며 이후 상태표시는 별도 확인.",
+      "bounds": [
+        40,
+        40,
+        920,
+        720
+      ]
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {},
+  "notes": [
+    "기본판의 실제 기능을 중심으로 8장 공개공간, 개인 손패/투표, 31칸 점수길을 제작. 인쇄판의 카드 그림/로고는 복제하지 않음.",
+    "점수 트랙 비율/색/글자는 추상화했고 각 슬롯번호는 구조 순서 0–30. 30 넘김/최종 점수 계산과 이야기/제출시점은 앱 상태/사용자 입력이 필요."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.libellud.com/game/dixit/",
+      "location": "officialcomponents",
+      "verifiedFacts": "current3–8edition has8cardslots,8votingdials,8rabbits",
+      "access": "opened",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://cdn.svc.asmodee.net/production-libellud/uploads/2022/03/DIXIT_REFRESH_RULES_US-UK-AU_BD.pdf",
+      "location": "publisher rulebook pp.2–3 direct setup and score-board diagrams",
+      "verifiedFacts": "84장, 투표 다이얼/토끼 말 8개, 보드의 8 카드 슬롯과 0–30 점수 위치 확인. 손패는 보통6장, 3인 규칙은7장. 공개 카드 수는 인원/3인 제출 규칙에 따라 변함. 30점 이상 도달 시 종료.",
+      "access": "downloaded-pdf-and-direct-page-view",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-pdf",
+      "pdfSHA256": "26365f602d44493cb38f63459a904d653c31ac93eb5543f899ca0da20cfd51b7",
+      "pdfBytes": 1652951
+    }
+  ],
+  "omittedBindings": []
+}

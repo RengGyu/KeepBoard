@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/hanabi.json",
-    "sha256": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+    "sha256": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
     "runtime_pack_id": "hanabi",
-    "runtime_pack_version": "1.0.0-essentials-2.b9f638a79062",
+    "runtime_pack_version": "1.0.0-essentials-2.0b8fb054dd44",
     "runtime_match": true
   },
   "basis": {
@@ -34,10 +34,11 @@
       "hanabi::essentials.storage-guidance"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "공용 불꽃/버림·단서/실수 표식만",
-  "critical_resume_distinction": "자기 손패는 본인에게 보여주면 안 됨; 다른 손패도 일반 공용/owner 저장 제외",
+  "critical_resume_distinction": "자기 손패는 본인에게 보여주면 안 됨; 다른 손패도 일반 공용/owner 저장 제외 손패는 현재 순서·방향과 카드별 힌트 연결을 함께 보존한다.",
   "partitions": {
     "common_public": [
       "fireworks",
@@ -66,9 +67,11 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+      "anchor_contract": "현재 각 손패 카드 인스턴스의 소유자 기준 순서·방향과 받은 힌트의 연결을 유지한다. 카드 앞면은 손패 소유자에게 보이지 않게 둔다.",
       "description": "자기에게 숨겨진 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "hanabi.primary"
+      ],
       "confidence": "recommendation",
       "partition": "do_not_infer",
       "capture_allowed_current": false,
@@ -88,7 +91,7 @@
         "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
       },
       "display_resume": {
-        "source_anchor": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+        "source_anchor": "현재 각 손패 카드 인스턴스의 소유자 기준 순서·방향과 받은 힌트의 연결을 유지한다. 카드 앞면은 손패 소유자에게 보이지 않게 둔다.",
         "source_relations": [],
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
@@ -560,14 +563,15 @@
           "hand.scene"
         ],
         "method": "sealed-bundle",
-        "order_sensitive": false,
+        "order_sensitive": true,
         "steps": [
-          "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "각 플레이어 손패의 현재 카드 순서와 앞뒷면 방향을 유지해 묶고, 카드 앞면이 소유자에게 보이지 않게 한다.",
+          "이미 받은 색/숫자 힌트는 현재 해당 카드 인스턴스와 함께 식별한다. 손패를 재배열했다면 이전 슬롯 순서가 아닌 재배열 후 현재 순서를 기록한다.",
+          "묶음 ID·실제 소유자·보관 위치를 기록한다. 정체를 확인하려 소유자의 카드를 뒤집지 않는다."
         ],
         "after": [],
         "source_refs": [
+          "hanabi.primary",
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
@@ -703,7 +707,7 @@
   "current_board_mapping": {
     "gameId": "hanabi",
     "editionId": "base",
-    "sourceSHA": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+    "sourceSHA": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
     "status": "new",
     "areas": [
       {
@@ -721,7 +725,9 @@
         "template": "track-mat",
         "status": "not-needed",
         "geometryStatus": "manual-surface",
-        "sourceRefs": [],
+        "sourceRefs": [
+          "hanabi.primary"
+        ],
         "sourceConfidence": "recommendation",
         "artComponentId": null
       },

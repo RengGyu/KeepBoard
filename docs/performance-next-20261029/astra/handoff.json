@@ -1,0 +1,40 @@
+{
+  "status": "FAILED_REAL_PHOTO_ACCEPTANCE_WITHHOLD_SHORT_PROMPT_AND_OPTIONAL_SCHEMA",
+  "supersededBy": "live-followup.md",
+  "historicalStatus": "DESIGN_HANDED_OFF_IMPLEMENTATION_AUTHORIZED_BY_SUPERVISOR",
+  "date": "2026-10-29",
+  "package": "Native single-photo Catan prompt and optional-field reduction",
+  "recommendedFiles": {
+    "implementationSol2": ["server/ai/catanSceneReading.ts", "tests/catan-native-scene-connection.test.ts"],
+    "supervisor": ["shared/scene.ts: normalizeComponent quantity fallback", "focused scene quantity regression test"]
+  },
+  "do": [
+    "Replace only catanScenePrompt with a concise single-photo public-board prompt; keep small pieces, unknown objects, placement, coverage, owner/color distinction, hidden/history prohibition.",
+    "Keep the scene envelope, kinds and keys; remove only variant, ownerId, evidenceId from component required. Keep id, kind, quantity, location, region required.",
+    "Preserve visible non-null optional values; omit null/non-applicable variant/owner and repeated single-photo evidenceId.",
+    "Keep original wire immutable for receipt.hostedWire.items; normalize a separate clone whose genuinely missing evidenceId is filled from the sole pinned source.",
+    "Keep legacy full scene decoding, hostedWire id, request/result/refs/sourceSHA/frame/scan/commit contracts unchanged.",
+    "Fix explicit quantity null fallback in shared/scene.ts independently: fallback to raw.count only when quantity is undefined. Preserve zero and legacy omitted-field behavior."
+  ],
+  "doNot": ["new compact array or abbreviation wire", "generic reader changes", "model or media changes", "smaller token/object caps", "additional API calls or automatic retries", "manual-value overwrite", "source or raw receipt deletion", "product UI changes", "paid calls", "deployment"],
+  "evidence": {
+    "VERIFIED_RECORD": {"nativeProviderMs":42297,"nativeTotalMs":56650,"unattributedRemainderMs":14353,"cropCap1Ms":101206,"cropCap2Ms":50910,"cropInputTokensBoth":5192,"cropOutputTokens":[15333,15197]},
+    "VERIFIED_OFFLINE_BASELINE": {"nativePromptUtf8Bytes":15731,"nativeSchemaUtf8Bytes":4263,"explicitNullQuantityBecomesOne":true,"zeroPreserved":true,"originalWireUnmutated":true},
+    "REPORTED": ["Native real photo misses visible roads/city/building pieces", "Supervisor reran 14 existing scan/workflow/HTTP regressions successfully"],
+    "INFERRED": ["Reducing repeated generated fields can reduce generation burden without removing object rows", "Dedicated small-object instructions may help omissions but require real-photo comparison"],
+    "UNKNOWN": ["Native usage and time split inside reader", "Cause of 14.353 second remainder", "Actual revised-schema acceptance", "Token/latency/recognition improvement", "30 second product target"]
+  },
+  "sourceSemantics": "Expansion fills only absent own evidenceId on a valid single-source native request. Explicit null or invalid IDs are untouched by expansion. Existing downstream null-plus-region first-photo convention and invalid-source clearing remain.",
+  "acceptance": [
+    "Full/sparse semantic equivalence including color, owner, null/0, box/slot, direction 0 and attachments",
+    "Raw wire exact preservation and legacy face-optional/full-scene acceptance",
+    "Missing/null/invalid source cases, single-source guard and source/SHA/receipt roundtrip",
+    "No object row cap; unknown/unplaced small pieces retained",
+    "Existing one-call native, scan source-order/manual-value/partial-failure/store-reopen regressions",
+    "Focused tests, project build and diff check; byte reduction is not a token or latency claim"
+  ],
+  "paidComparisonProposalOnly": {"photos":2,"arms":["old native prompt/schema","proposed native prompt/schema"],"repetitionsPerArmPerPhoto":2,"maximumRequests":8,"retries":0,"sameImageBytesAndModelSettings":true,"annotationBeforeModelOutputs":true,"excludeOldFlatCropAsBaseline":true,"noFullRecallWithoutFullGT":true},
+  "artifacts": ["design.md", "offline-evidence.mts", "offline-evidence.json"],
+  "researchExecution": {"productEdits":0,"providerCalls":0,"deployments":0,"privateDataReads":0},
+  "blocker": null
+}

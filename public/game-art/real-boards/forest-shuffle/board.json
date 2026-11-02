@@ -1,0 +1,2728 @@
+{
+  "gameId": "forest-shuffle",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "forest-player-1",
+      "label": "1번 자리 · 나무/분할카드 전체 숲",
+      "field": "forest.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "유한한 나무 칸으로 제한하지 않는다. 개별 나무/묘목과 카드의 실제 좌표·선택 반쪽·부착 방향·겹침 순서를 기록한다. 두 나무 모형은 배치 문법 설명이며 실제 개수가 아니다.",
+      "bounds": [
+        34,
+        56,
+        280,
+        140
+      ],
+      "placement": "unbounded-card-attachment-forest",
+      "stateKey": "players.player-1.forest",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-1",
+      "label": "1번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패의 카드 ID와 앞면은 소유자 범위로 분리한다. 정상 손패 상한 10장은 참고 규칙이며 미완료 상태를 자동 삭제/보정하지 않는다.",
+      "bounds": [
+        34,
+        216,
+        176,
+        54
+      ],
+      "placement": "private-hand-card-row",
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "cave-player-1",
+      "label": "1번 자리 · 동굴/뒤쪽 저장 카드",
+      "field": "cave.scene",
+      "scope": "player",
+      "accepts": [
+        "cave",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "동굴 카드와 그 뒤에 보관된 카드를 별도 물체로 둔다. 저장 카드는 개수/불명확 ID와 소유자 범위를 유지하며 임의 용량을 두지 않는다.",
+      "bounds": [
+        225,
+        210,
+        89,
+        64
+      ],
+      "placement": "cave-with-face-down-tucked-card-pile",
+      "stateKey": "players.player-1.cave",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "forest-player-2",
+      "label": "2번 자리 · 나무/분할카드 전체 숲",
+      "field": "forest.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "유한한 나무 칸으로 제한하지 않는다. 개별 나무/묘목과 카드의 실제 좌표·선택 반쪽·부착 방향·겹침 순서를 기록한다. 두 나무 모형은 배치 문법 설명이며 실제 개수가 아니다.",
+      "bounds": [
+        686,
+        56,
+        280,
+        140
+      ],
+      "placement": "unbounded-card-attachment-forest",
+      "stateKey": "players.player-2.forest",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-2",
+      "label": "2번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패의 카드 ID와 앞면은 소유자 범위로 분리한다. 정상 손패 상한 10장은 참고 규칙이며 미완료 상태를 자동 삭제/보정하지 않는다.",
+      "bounds": [
+        686,
+        216,
+        176,
+        54
+      ],
+      "placement": "private-hand-card-row",
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "cave-player-2",
+      "label": "2번 자리 · 동굴/뒤쪽 저장 카드",
+      "field": "cave.scene",
+      "scope": "player",
+      "accepts": [
+        "cave",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "동굴 카드와 그 뒤에 보관된 카드를 별도 물체로 둔다. 저장 카드는 개수/불명확 ID와 소유자 범위를 유지하며 임의 용량을 두지 않는다.",
+      "bounds": [
+        877,
+        210,
+        89,
+        64
+      ],
+      "placement": "cave-with-face-down-tucked-card-pile",
+      "stateKey": "players.player-2.cave",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "forest-player-3",
+      "label": "3번 자리 · 나무/분할카드 전체 숲",
+      "field": "forest.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "유한한 나무 칸으로 제한하지 않는다. 개별 나무/묘목과 카드의 실제 좌표·선택 반쪽·부착 방향·겹침 순서를 기록한다. 두 나무 모형은 배치 문법 설명이며 실제 개수가 아니다.",
+      "bounds": [
+        686,
+        422,
+        280,
+        140
+      ],
+      "placement": "unbounded-card-attachment-forest",
+      "stateKey": "players.player-3.forest",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-3",
+      "label": "3번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패의 카드 ID와 앞면은 소유자 범위로 분리한다. 정상 손패 상한 10장은 참고 규칙이며 미완료 상태를 자동 삭제/보정하지 않는다.",
+      "bounds": [
+        686,
+        582,
+        176,
+        54
+      ],
+      "placement": "private-hand-card-row",
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "cave-player-3",
+      "label": "3번 자리 · 동굴/뒤쪽 저장 카드",
+      "field": "cave.scene",
+      "scope": "player",
+      "accepts": [
+        "cave",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "동굴 카드와 그 뒤에 보관된 카드를 별도 물체로 둔다. 저장 카드는 개수/불명확 ID와 소유자 범위를 유지하며 임의 용량을 두지 않는다.",
+      "bounds": [
+        877,
+        576,
+        89,
+        64
+      ],
+      "placement": "cave-with-face-down-tucked-card-pile",
+      "stateKey": "players.player-3.cave",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "forest-player-4",
+      "label": "4번 자리 · 나무/분할카드 전체 숲",
+      "field": "forest.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "유한한 나무 칸으로 제한하지 않는다. 개별 나무/묘목과 카드의 실제 좌표·선택 반쪽·부착 방향·겹침 순서를 기록한다. 두 나무 모형은 배치 문법 설명이며 실제 개수가 아니다.",
+      "bounds": [
+        360,
+        748,
+        280,
+        140
+      ],
+      "placement": "unbounded-card-attachment-forest",
+      "stateKey": "players.player-4.forest",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-4",
+      "label": "4번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패의 카드 ID와 앞면은 소유자 범위로 분리한다. 정상 손패 상한 10장은 참고 규칙이며 미완료 상태를 자동 삭제/보정하지 않는다.",
+      "bounds": [
+        360,
+        908,
+        176,
+        54
+      ],
+      "placement": "private-hand-card-row",
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "cave-player-4",
+      "label": "4번 자리 · 동굴/뒤쪽 저장 카드",
+      "field": "cave.scene",
+      "scope": "player",
+      "accepts": [
+        "cave",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "동굴 카드와 그 뒤에 보관된 카드를 별도 물체로 둔다. 저장 카드는 개수/불명확 ID와 소유자 범위를 유지하며 임의 용량을 두지 않는다.",
+      "bounds": [
+        551,
+        902,
+        89,
+        64
+      ],
+      "placement": "cave-with-face-down-tucked-card-pile",
+      "stateKey": "players.player-4.cave",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "forest-player-5",
+      "label": "5번 자리 · 나무/분할카드 전체 숲",
+      "field": "forest.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "유한한 나무 칸으로 제한하지 않는다. 개별 나무/묘목과 카드의 실제 좌표·선택 반쪽·부착 방향·겹침 순서를 기록한다. 두 나무 모형은 배치 문법 설명이며 실제 개수가 아니다.",
+      "bounds": [
+        34,
+        422,
+        280,
+        140
+      ],
+      "placement": "unbounded-card-attachment-forest",
+      "stateKey": "players.player-5.forest",
+      "ownerSide": "player-5",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-5",
+      "label": "5번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패의 카드 ID와 앞면은 소유자 범위로 분리한다. 정상 손패 상한 10장은 참고 규칙이며 미완료 상태를 자동 삭제/보정하지 않는다.",
+      "bounds": [
+        34,
+        582,
+        176,
+        54
+      ],
+      "placement": "private-hand-card-row",
+      "stateKey": "players.player-5.hand",
+      "ownerSide": "player-5",
+      "visibility": "owner"
+    },
+    {
+      "id": "cave-player-5",
+      "label": "5번 자리 · 동굴/뒤쪽 저장 카드",
+      "field": "cave.scene",
+      "scope": "player",
+      "accepts": [
+        "cave",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "동굴 카드와 그 뒤에 보관된 카드를 별도 물체로 둔다. 저장 카드는 개수/불명확 ID와 소유자 범위를 유지하며 임의 용량을 두지 않는다.",
+      "bounds": [
+        225,
+        576,
+        89,
+        64
+      ],
+      "placement": "cave-with-face-down-tucked-card-pile",
+      "stateKey": "players.player-5.cave",
+      "ownerSide": "player-5",
+      "visibility": "owner"
+    },
+    {
+      "id": "shared-clearing",
+      "label": "공용 공터 · 공개 지불/뽑기 카드",
+      "field": "clearing.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "10칸 용량이 아니다. 행동 도중에는 10장 이상일 수 있으며 턴 종료 공터 확인/비우기 체크포인트와 분리한다.",
+      "bounds": [
+        385,
+        434,
+        285,
+        136
+      ],
+      "placement": "variable-public-clearing",
+      "stateKey": "shared.clearing",
+      "visibility": "public"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "forest-player-3",
+        "hand-player-3",
+        "cave-player-3",
+        "forest-player-4",
+        "hand-player-4",
+        "cave-player-4",
+        "forest-player-5",
+        "hand-player-5",
+        "cave-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-3-station",
+        "player-3-tree-guide-top-full-card",
+        "player-3-tree-guide-bottom-full-card",
+        "player-3-tree-guide-left-full-card",
+        "player-3-tree-guide-right-full-card",
+        "player-3-tree-guide-tree-card",
+        "player-3-tree-guide-trunk",
+        "player-3-tree-guide-canopy",
+        "player-3-sapling-guide-top-full-card",
+        "player-3-sapling-guide-bottom-full-card",
+        "player-3-sapling-guide-left-full-card",
+        "player-3-sapling-guide-right-full-card",
+        "player-3-sapling-guide-tree-card",
+        "player-3-sapling-guide-sapling-stem",
+        "player-3-sapling-guide-sapling-leaf",
+        "player-3-hand-guide-1",
+        "player-3-hand-guide-2",
+        "player-3-hand-guide-3",
+        "player-3-cave-storage-guide",
+        "player-3-cave-guide",
+        "player-4-station",
+        "player-4-tree-guide-top-full-card",
+        "player-4-tree-guide-bottom-full-card",
+        "player-4-tree-guide-left-full-card",
+        "player-4-tree-guide-right-full-card",
+        "player-4-tree-guide-tree-card",
+        "player-4-tree-guide-trunk",
+        "player-4-tree-guide-canopy",
+        "player-4-sapling-guide-top-full-card",
+        "player-4-sapling-guide-bottom-full-card",
+        "player-4-sapling-guide-left-full-card",
+        "player-4-sapling-guide-right-full-card",
+        "player-4-sapling-guide-tree-card",
+        "player-4-sapling-guide-sapling-stem",
+        "player-4-sapling-guide-sapling-leaf",
+        "player-4-hand-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-cave-storage-guide",
+        "player-4-cave-guide",
+        "player-5-station",
+        "player-5-tree-guide-top-full-card",
+        "player-5-tree-guide-bottom-full-card",
+        "player-5-tree-guide-left-full-card",
+        "player-5-tree-guide-right-full-card",
+        "player-5-tree-guide-tree-card",
+        "player-5-tree-guide-trunk",
+        "player-5-tree-guide-canopy",
+        "player-5-sapling-guide-top-full-card",
+        "player-5-sapling-guide-bottom-full-card",
+        "player-5-sapling-guide-left-full-card",
+        "player-5-sapling-guide-right-full-card",
+        "player-5-sapling-guide-tree-card",
+        "player-5-sapling-guide-sapling-stem",
+        "player-5-sapling-guide-sapling-leaf",
+        "player-5-hand-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-cave-storage-guide",
+        "player-5-cave-guide"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "forest-player-4",
+        "hand-player-4",
+        "cave-player-4",
+        "forest-player-5",
+        "hand-player-5",
+        "cave-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-4-station",
+        "player-4-tree-guide-top-full-card",
+        "player-4-tree-guide-bottom-full-card",
+        "player-4-tree-guide-left-full-card",
+        "player-4-tree-guide-right-full-card",
+        "player-4-tree-guide-tree-card",
+        "player-4-tree-guide-trunk",
+        "player-4-tree-guide-canopy",
+        "player-4-sapling-guide-top-full-card",
+        "player-4-sapling-guide-bottom-full-card",
+        "player-4-sapling-guide-left-full-card",
+        "player-4-sapling-guide-right-full-card",
+        "player-4-sapling-guide-tree-card",
+        "player-4-sapling-guide-sapling-stem",
+        "player-4-sapling-guide-sapling-leaf",
+        "player-4-hand-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-cave-storage-guide",
+        "player-4-cave-guide",
+        "player-5-station",
+        "player-5-tree-guide-top-full-card",
+        "player-5-tree-guide-bottom-full-card",
+        "player-5-tree-guide-left-full-card",
+        "player-5-tree-guide-right-full-card",
+        "player-5-tree-guide-tree-card",
+        "player-5-tree-guide-trunk",
+        "player-5-tree-guide-canopy",
+        "player-5-sapling-guide-top-full-card",
+        "player-5-sapling-guide-bottom-full-card",
+        "player-5-sapling-guide-left-full-card",
+        "player-5-sapling-guide-right-full-card",
+        "player-5-sapling-guide-tree-card",
+        "player-5-sapling-guide-sapling-stem",
+        "player-5-sapling-guide-sapling-leaf",
+        "player-5-hand-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-cave-storage-guide",
+        "player-5-cave-guide"
+      ]
+    },
+    "4": {
+      "hideAreas": [
+        "forest-player-5",
+        "hand-player-5",
+        "cave-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-5-station",
+        "player-5-tree-guide-top-full-card",
+        "player-5-tree-guide-bottom-full-card",
+        "player-5-tree-guide-left-full-card",
+        "player-5-tree-guide-right-full-card",
+        "player-5-tree-guide-tree-card",
+        "player-5-tree-guide-trunk",
+        "player-5-tree-guide-canopy",
+        "player-5-sapling-guide-top-full-card",
+        "player-5-sapling-guide-bottom-full-card",
+        "player-5-sapling-guide-left-full-card",
+        "player-5-sapling-guide-right-full-card",
+        "player-5-sapling-guide-tree-card",
+        "player-5-sapling-guide-sapling-stem",
+        "player-5-sapling-guide-sapling-leaf",
+        "player-5-hand-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-cave-storage-guide",
+        "player-5-cave-guide"
+      ]
+    },
+    "5": {
+      "hideAreas": [],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": []
+    }
+  },
+  "notes": [
+    "Full base-game table asset, not just one sampled tree. The five independent forest canvases and private zones describe all players.",
+    "Exact root/card coordinates and occlusion relations describe variable forests; tree/clearing examples are not setup counts.",
+    "Alpine, Woodland Edge, Exploration, Dartmoor, and Smoky Mountains are excluded.",
+    "Card rule exceptions and version-dependent effect policy remain manual metadata; no rules engine or app integration is supplied."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.lookout-spiele.de/en/games/forrestshuffle.html",
+      "location": "Official publisher game page and FAQ",
+      "verifiedFacts": "Original base game is 2–5 players; clearing, forest and cave card states are distinct; cave storage is produced by card effects.",
+      "sourceType": "official-product-page",
+      "access": "directly-opened",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://www.lookout-spiele.de/upload/en_forrestshuffle.html_Forest_Shuffle_175_Rules_EN_WEB_260209.pdf",
+      "location": "Official English base rulebook: all page text read; setup p.2 and card-attachment/scoring diagrams pp.4–5,7 directly inspected",
+      "verifiedFacts": "Complete component decomposition, all-player cave/hand setup, four-sided half-card tucking, face-down saplings, shared-slot examples, clearing/deck/winter/reference/scorepad table roles.",
+      "sourceType": "official-publisher-rulebook-pdf",
+      "access": "local pinned PDF and direct rendered pages",
+      "pdfSHA256": "954277ea8560222391a7d41227b98c5650adb11edddd66ca365de081d1b50643",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://www.lookout-spiele.de/upload/en_forrestshuffle.html_Forest_Shuffle_175_Rules_EN_WEB_230516.pdf",
+      "location": "Official original base rules, card-attachment section",
+      "verifiedFacts": "The four-side tucking and selected-visible-half structure are common to the original base release.",
+      "sourceType": "official-original-rulebook",
+      "access": "publisher-indexed-text-reviewed",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "full-table-schematic",
+  "assetScope": "Base Forest Shuffle whole-table asset and self-contained card-attachment JSON. Five independent forests, all private hands/caves, shared clearing/draw deck/winter row/reference cards/scorepad. App integration is separate.",
+  "tableModel": {
+    "schema": "forest-shuffle-full-table-v1",
+    "edition": "Original European forest base game (2023); structural crosscheck with current official English base rules dated 2026-02-09. No expansions or standalone sequels.",
+    "assetFiles": {
+      "boardSvg": "board.svg",
+      "boardJson": "board.json",
+      "boardPreview": "board.png",
+      "attachmentTemplate": "tree-assembly.svg",
+      "attachmentPreview": "tree-assembly.png"
+    },
+    "applicationIntegration": "asset-only; current field names are optional mapping hints",
+    "coordinates": {
+      "overviewViewBox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "origin": "top-left",
+      "areaBounds": "[x,y,width,height]",
+      "forestScene": "unbounded per-player scene coordinates; a physical card is 100 by 150 scene units and the overview station is a pan/zoom viewport"
+    },
+    "playerRange": {
+      "min": 2,
+      "max": 5
+    },
+    "componentInventory": {
+      "totalCards": 180,
+      "trees": 66,
+      "topBottomSplitCards": 48,
+      "leftRightSplitCards": 44,
+      "winterCards": 3,
+      "referenceCards": 14,
+      "caveCards": 5,
+      "clearingBoards": 1,
+      "scorepads": 1,
+      "countIdentity": "66+48+44+3+14+5=180; references and caves are included in 180 and are not part of the normal shuffled play-card deck"
+    },
+    "setup": {
+      "startingHandEach": 6,
+      "handLimit": 10,
+      "unseenRemovedPlayCardsByPlayers": {
+        "2": 30,
+        "3": 20,
+        "4": 10,
+        "5": 0
+      },
+      "winterDeckPreparation": "After removing play cards, split the remaining deck into three similar piles. Two winter cards are shuffled into the bottom pile and the third is placed atop that bottom pile. Preserve the hidden sequence, never expose it to players.",
+      "currentRulesDifference": "The official product FAQ removes the old no-tree starting-hand mulligan. This asset does not execute setup or effects, and does not silently migrate rule-edition choices."
+    },
+    "fieldBindings": {
+      "forest.scene": {
+        "state": "players[].forest",
+        "visibility": "public",
+        "areas": [
+          "forest-player-1",
+          "forest-player-2",
+          "forest-player-3",
+          "forest-player-4",
+          "forest-player-5"
+        ]
+      },
+      "hand.scene": {
+        "state": "players[].hand",
+        "visibility": "owner",
+        "areas": [
+          "hand-player-1",
+          "hand-player-2",
+          "hand-player-3",
+          "hand-player-4",
+          "hand-player-5"
+        ]
+      },
+      "cave.scene": {
+        "state": "players[].cave",
+        "visibility": "owner",
+        "areas": [
+          "cave-player-1",
+          "cave-player-2",
+          "cave-player-3",
+          "cave-player-4",
+          "cave-player-5"
+        ]
+      },
+      "clearing.scene": {
+        "state": "shared.clearing",
+        "visibility": "public",
+        "areas": [
+          "shared-clearing"
+        ]
+      },
+      "deck.scene": {
+        "state": "shared.deck",
+        "visibility": "hidden"
+      },
+      "winter": {
+        "state": "shared.revealedWinterIds"
+      },
+      "half-choice": {
+        "state": "pendingPlay.selectedHalf"
+      },
+      "cave-count": {
+        "state": "players[].cave.count"
+      },
+      "turn": {
+        "state": "activePlayerId"
+      },
+      "pending": {
+        "state": "checkpoint"
+      }
+    },
+    "cardAssembly": {
+      "unitCardSize": [
+        100,
+        150
+      ],
+      "treeRoot": {
+        "bbox": [
+          0,
+          0,
+          100,
+          150
+        ],
+        "layer": 10,
+        "face": "tree-front|sapling-back|unknown"
+      },
+      "attachments": {
+        "top": {
+          "fullCardBox": [
+            0,
+            -75,
+            100,
+            150
+          ],
+          "visibleCrop": [
+            0,
+            0,
+            100,
+            75
+          ],
+          "selectedPrintedHalf": "top",
+          "normalLayer": 0
+        },
+        "bottom": {
+          "fullCardBox": [
+            0,
+            75,
+            100,
+            150
+          ],
+          "visibleCrop": [
+            0,
+            75,
+            100,
+            75
+          ],
+          "selectedPrintedHalf": "bottom",
+          "normalLayer": 0
+        },
+        "left": {
+          "fullCardBox": [
+            -50,
+            0,
+            100,
+            150
+          ],
+          "visibleCrop": [
+            0,
+            0,
+            50,
+            150
+          ],
+          "selectedPrintedHalf": "left",
+          "normalLayer": 0
+        },
+        "right": {
+          "fullCardBox": [
+            50,
+            0,
+            100,
+            150
+          ],
+          "visibleCrop": [
+            50,
+            0,
+            50,
+            150
+          ],
+          "selectedPrintedHalf": "right",
+          "normalLayer": 0
+        }
+      },
+      "cropCoordinates": "visibleCrop is in the attached card’s own [0,0,100,150] coordinates; fullCardBox is relative to the tree root. Tree layer covers the unused half.",
+      "sameSideMultipleCards": "Store a side as a list, never cap it at one. Preserve the actual x/y/layer and tuckedUnderCardId chain; some printed card effects permit sharing. A generic renderer must not invent legality or remove observed cards.",
+      "inactiveHalf": "The occluded half is not a second played inhabitant. Do not score/count it or replace the physical card with two independent cards.",
+      "forestLayout": "No fixed maximum tree count, grid or adjacency path. Roots have independent scene coordinates; attachments move with their root while maintaining local coordinates. Pan/zoom an expanded bounding box when needed."
+    },
+    "stateShape": {
+      "playerCount": null,
+      "seatOrder": [
+        "player-1",
+        "player-2",
+        "player-3",
+        "player-4",
+        "player-5"
+      ],
+      "activePlayerId": null,
+      "ruleEdition": null,
+      "players": [
+        {
+          "id": "player-id",
+          "forest": {
+            "roots": [
+              {
+                "id": "tree-card-id",
+                "mode": "tree|sapling|unknown",
+                "species": null,
+                "x": null,
+                "y": null,
+                "rotation": 0,
+                "layer": 10,
+                "sides": {
+                  "top": [],
+                  "bottom": [],
+                  "left": [],
+                  "right": []
+                }
+              }
+            ],
+            "attachedCards": [
+              {
+                "id": "card-id",
+                "rootId": "tree-card-id",
+                "side": "top|bottom|left|right|unknown",
+                "selectedHalf": null,
+                "x": null,
+                "y": null,
+                "rotation": 0,
+                "layer": null,
+                "tuckedUnderCardId": null,
+                "visibleCrop": null,
+                "attributes": {},
+                "hiddenHalfActive": false
+              }
+            ]
+          },
+          "hand": {
+            "orderedCardIds": [],
+            "cards": "owner-only-or-unknown"
+          },
+          "cave": {
+            "cardId": "cave-id",
+            "storedCardIds": "owner-only-or-unknown",
+            "count": null
+          },
+          "score": null
+        }
+      ],
+      "shared": {
+        "deck": {
+          "remainingCount": null,
+          "cardOrder": "hidden-or-unknown"
+        },
+        "clearing": [],
+        "revealedWinterIds": [],
+        "removedCards": {
+          "count": null,
+          "ids": "hidden-or-unknown"
+        },
+        "referenceCardIds": [],
+        "finalScores": []
+      },
+      "pendingPlay": {
+        "cardId": null,
+        "selectedHalf": null,
+        "paymentCardIds": [],
+        "targetRootId": null,
+        "targetSide": null,
+        "effectResolved": null,
+        "bonusResolved": null,
+        "treeRevealResolved": null
+      },
+      "checkpoint": "draw-first|draw-second|winter-replacement|pay|attach|tree-reveal|effect|bonus|check-clearing|end-turn|ended-on-third-winter|unknown"
+    },
+    "visibility": {
+      "public": [
+        "forest roots and exposed selected halves",
+        "clearing cards",
+        "revealed winter cards"
+      ],
+      "owner": [
+        "hand identities",
+        "cave stored identities/count mapped to current owner scope"
+      ],
+      "hidden": [
+        "deck order",
+        "unseen removed card identities",
+        "sapling face hidden by its back"
+      ]
+    },
+    "visualZones": [
+      {
+        "areaId": "forest-player-1",
+        "role": "expandable card-attachment forest",
+        "boardArtIds": [
+          "player-1-station",
+          "player-1-tree-guide-tree-card",
+          "player-1-sapling-guide-tree-card"
+        ]
+      },
+      {
+        "areaId": "forest-player-2",
+        "role": "expandable card-attachment forest",
+        "boardArtIds": [
+          "player-2-station",
+          "player-2-tree-guide-tree-card",
+          "player-2-sapling-guide-tree-card"
+        ]
+      },
+      {
+        "areaId": "forest-player-3",
+        "role": "expandable card-attachment forest",
+        "boardArtIds": [
+          "player-3-station",
+          "player-3-tree-guide-tree-card",
+          "player-3-sapling-guide-tree-card"
+        ]
+      },
+      {
+        "areaId": "forest-player-4",
+        "role": "expandable card-attachment forest",
+        "boardArtIds": [
+          "player-4-station",
+          "player-4-tree-guide-tree-card",
+          "player-4-sapling-guide-tree-card"
+        ]
+      },
+      {
+        "areaId": "forest-player-5",
+        "role": "expandable card-attachment forest",
+        "boardArtIds": [
+          "player-5-station",
+          "player-5-tree-guide-tree-card",
+          "player-5-sapling-guide-tree-card"
+        ]
+      },
+      {
+        "areaId": "cave-player-1",
+        "role": "cave with tucked cards",
+        "boardArtIds": [
+          "player-1-cave-guide",
+          "player-1-cave-storage-guide"
+        ]
+      },
+      {
+        "areaId": "cave-player-2",
+        "role": "cave with tucked cards",
+        "boardArtIds": [
+          "player-2-cave-guide",
+          "player-2-cave-storage-guide"
+        ]
+      },
+      {
+        "areaId": "cave-player-3",
+        "role": "cave with tucked cards",
+        "boardArtIds": [
+          "player-3-cave-guide",
+          "player-3-cave-storage-guide"
+        ]
+      },
+      {
+        "areaId": "cave-player-4",
+        "role": "cave with tucked cards",
+        "boardArtIds": [
+          "player-4-cave-guide",
+          "player-4-cave-storage-guide"
+        ]
+      },
+      {
+        "areaId": "cave-player-5",
+        "role": "cave with tucked cards",
+        "boardArtIds": [
+          "player-5-cave-guide",
+          "player-5-cave-storage-guide"
+        ]
+      },
+      {
+        "areaId": "shared-clearing",
+        "role": "variable face-up clearing",
+        "boardArtIds": [
+          "clearing-card-guide-1",
+          "clearing-card-guide-2",
+          "clearing-card-guide-3"
+        ]
+      },
+      {
+        "role": "hidden deck, shared reference cards, scorepad and 0–3 revealed winters",
+        "boardArtIds": [
+          "draw-deck-back",
+          "draw-deck-top",
+          "reference-card-stack-top",
+          "scorepad-guide",
+          "winter-reveal-guide-1",
+          "winter-reveal-guide-2",
+          "winter-reveal-guide-3"
+        ]
+      }
+    ],
+    "unknownPolicy": "Preserve unknown card/half/attribute facts and actual observed overlays. Do not infer hidden halves, reorder the deck, count the sapling’s hidden printed tree type or turn example cards into real state.",
+    "ruleAutomation": "No card-specific legality, cost/effect/bonus execution, cleanup, scoring or game-end automation; retain pending action flags so a later consumer can resume without double application."
+  },
+  "assetCompleteness": {
+    "completeStructures": [
+      "all five forests with tree/sapling and four-side attachment syntax",
+      "all five private hands and cave storage piles",
+      "shared long clearing with deck to its left",
+      "three revealed-winter positions",
+      "shared reference-card and scorepad zones",
+      "variable forest geometry, selected visible half and occlusion graph"
+    ],
+    "diagramOnly": [
+      "two card-assembly examples per forest are not an initial tree count",
+      "three clearing cards and winter placeholders are not revealed state"
+    ],
+    "notAutomated": [
+      "card costs/effects/bonuses",
+      "card-specific shared-slot exceptions",
+      "clearing cleanup, draw replacement and winter end trigger",
+      "card-specific scoring"
+    ]
+  },
+  "auxiliaryAssets": [
+    {
+      "id": "tree-assembly-template",
+      "svg": "tree-assembly.svg",
+      "viewBox": [
+        0,
+        0,
+        1000,
+        500
+      ],
+      "purpose": "Original blank example: four correctly tucked half-card directions, a same-side card chain, and a face-down sapling. Not an initial game state."
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "player-1-station",
+      "type": "rect",
+      "x": 24,
+      "y": 24,
+      "w": 300,
+      "h": 260,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "player-1-tree-guide-top-full-card",
+      "type": "rect",
+      "x": 96,
+      "y": 73.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-tree-guide-bottom-full-card",
+      "type": "rect",
+      "x": 96,
+      "y": 133.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-tree-guide-left-full-card",
+      "type": "rect",
+      "x": 76.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-tree-guide-right-full-card",
+      "type": "rect",
+      "x": 116.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-tree-guide-tree-card",
+      "type": "rect",
+      "x": 96,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#e9f6e6",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-1-tree-guide-trunk",
+      "type": "rect",
+      "x": 113.2,
+      "y": 136.0,
+      "w": 5.6000000000000005,
+      "h": 15.0,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 1
+    },
+    {
+      "id": "player-1-tree-guide-canopy",
+      "type": "polygon",
+      "points": [
+        [
+          116.0,
+          112.0
+        ],
+        [
+          102.0,
+          137.2
+        ],
+        [
+          130.0,
+          137.2
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-sapling-guide-top-full-card",
+      "type": "rect",
+      "x": 240,
+      "y": 73.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-sapling-guide-bottom-full-card",
+      "type": "rect",
+      "x": 240,
+      "y": 133.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-sapling-guide-left-full-card",
+      "type": "rect",
+      "x": 220.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-sapling-guide-right-full-card",
+      "type": "rect",
+      "x": 260.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-1-sapling-guide-tree-card",
+      "type": "rect",
+      "x": 240,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#c8e5fa",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-1-sapling-guide-sapling-stem",
+      "type": "line",
+      "x1": 260.0,
+      "y1": 146.2,
+      "x2": 260.0,
+      "y2": 121.0,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-sapling-guide-sapling-leaf",
+      "type": "polygon",
+      "points": [
+        [
+          260.0,
+          134.2
+        ],
+        [
+          251.2,
+          119.8
+        ],
+        [
+          266.4,
+          121.6
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-1-hand-guide-1",
+      "type": "rect",
+      "x": 44,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-1-hand-guide-2",
+      "type": "rect",
+      "x": 86,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-1-hand-guide-3",
+      "type": "rect",
+      "x": 128,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-1-cave-storage-guide",
+      "type": "rect",
+      "x": 245,
+      "y": 214,
+      "w": 48,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-1-cave-guide",
+      "type": "polygon",
+      "points": [
+        [
+          232,
+          266
+        ],
+        [
+          241,
+          233
+        ],
+        [
+          268,
+          222
+        ],
+        [
+          298,
+          234
+        ],
+        [
+          308,
+          266
+        ],
+        [
+          291,
+          266
+        ],
+        [
+          279,
+          248
+        ],
+        [
+          263,
+          248
+        ],
+        [
+          249,
+          266
+        ]
+      ],
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-station",
+      "type": "rect",
+      "x": 676,
+      "y": 24,
+      "w": 300,
+      "h": 260,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "player-2-tree-guide-top-full-card",
+      "type": "rect",
+      "x": 748,
+      "y": 73.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-tree-guide-bottom-full-card",
+      "type": "rect",
+      "x": 748,
+      "y": 133.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-tree-guide-left-full-card",
+      "type": "rect",
+      "x": 728.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-tree-guide-right-full-card",
+      "type": "rect",
+      "x": 768.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-tree-guide-tree-card",
+      "type": "rect",
+      "x": 748,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#e9f6e6",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-2-tree-guide-trunk",
+      "type": "rect",
+      "x": 765.2,
+      "y": 136.0,
+      "w": 5.6000000000000005,
+      "h": 15.0,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 1
+    },
+    {
+      "id": "player-2-tree-guide-canopy",
+      "type": "polygon",
+      "points": [
+        [
+          768.0,
+          112.0
+        ],
+        [
+          754.0,
+          137.2
+        ],
+        [
+          782.0,
+          137.2
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-sapling-guide-top-full-card",
+      "type": "rect",
+      "x": 892,
+      "y": 73.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-sapling-guide-bottom-full-card",
+      "type": "rect",
+      "x": 892,
+      "y": 133.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-sapling-guide-left-full-card",
+      "type": "rect",
+      "x": 872.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-sapling-guide-right-full-card",
+      "type": "rect",
+      "x": 912.0,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-2-sapling-guide-tree-card",
+      "type": "rect",
+      "x": 892,
+      "y": 103,
+      "w": 40,
+      "h": 60,
+      "fill": "#c8e5fa",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-2-sapling-guide-sapling-stem",
+      "type": "line",
+      "x1": 912.0,
+      "y1": 146.2,
+      "x2": 912.0,
+      "y2": 121.0,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-sapling-guide-sapling-leaf",
+      "type": "polygon",
+      "points": [
+        [
+          912.0,
+          134.2
+        ],
+        [
+          903.2,
+          119.8
+        ],
+        [
+          918.4,
+          121.6
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-2-hand-guide-1",
+      "type": "rect",
+      "x": 696,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-2-hand-guide-2",
+      "type": "rect",
+      "x": 738,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-2-hand-guide-3",
+      "type": "rect",
+      "x": 780,
+      "y": 222,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-2-cave-storage-guide",
+      "type": "rect",
+      "x": 897,
+      "y": 214,
+      "w": 48,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-2-cave-guide",
+      "type": "polygon",
+      "points": [
+        [
+          884,
+          266
+        ],
+        [
+          893,
+          233
+        ],
+        [
+          920,
+          222
+        ],
+        [
+          950,
+          234
+        ],
+        [
+          960,
+          266
+        ],
+        [
+          943,
+          266
+        ],
+        [
+          931,
+          248
+        ],
+        [
+          915,
+          248
+        ],
+        [
+          901,
+          266
+        ]
+      ],
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-station",
+      "type": "rect",
+      "x": 676,
+      "y": 390,
+      "w": 300,
+      "h": 260,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "player-3-tree-guide-top-full-card",
+      "type": "rect",
+      "x": 748,
+      "y": 439.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-tree-guide-bottom-full-card",
+      "type": "rect",
+      "x": 748,
+      "y": 499.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-tree-guide-left-full-card",
+      "type": "rect",
+      "x": 728.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-tree-guide-right-full-card",
+      "type": "rect",
+      "x": 768.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-tree-guide-tree-card",
+      "type": "rect",
+      "x": 748,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#e9f6e6",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-3-tree-guide-trunk",
+      "type": "rect",
+      "x": 765.2,
+      "y": 502.0,
+      "w": 5.6000000000000005,
+      "h": 15.0,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 1
+    },
+    {
+      "id": "player-3-tree-guide-canopy",
+      "type": "polygon",
+      "points": [
+        [
+          768.0,
+          478.0
+        ],
+        [
+          754.0,
+          503.2
+        ],
+        [
+          782.0,
+          503.2
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-sapling-guide-top-full-card",
+      "type": "rect",
+      "x": 892,
+      "y": 439.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-sapling-guide-bottom-full-card",
+      "type": "rect",
+      "x": 892,
+      "y": 499.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-sapling-guide-left-full-card",
+      "type": "rect",
+      "x": 872.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-sapling-guide-right-full-card",
+      "type": "rect",
+      "x": 912.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-3-sapling-guide-tree-card",
+      "type": "rect",
+      "x": 892,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#c8e5fa",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-3-sapling-guide-sapling-stem",
+      "type": "line",
+      "x1": 912.0,
+      "y1": 512.2,
+      "x2": 912.0,
+      "y2": 487.0,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-sapling-guide-sapling-leaf",
+      "type": "polygon",
+      "points": [
+        [
+          912.0,
+          500.2
+        ],
+        [
+          903.2,
+          485.8
+        ],
+        [
+          918.4,
+          487.6
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-3-hand-guide-1",
+      "type": "rect",
+      "x": 696,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-3-hand-guide-2",
+      "type": "rect",
+      "x": 738,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-3-hand-guide-3",
+      "type": "rect",
+      "x": 780,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-3-cave-storage-guide",
+      "type": "rect",
+      "x": 897,
+      "y": 580,
+      "w": 48,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-3-cave-guide",
+      "type": "polygon",
+      "points": [
+        [
+          884,
+          632
+        ],
+        [
+          893,
+          599
+        ],
+        [
+          920,
+          588
+        ],
+        [
+          950,
+          600
+        ],
+        [
+          960,
+          632
+        ],
+        [
+          943,
+          632
+        ],
+        [
+          931,
+          614
+        ],
+        [
+          915,
+          614
+        ],
+        [
+          901,
+          632
+        ]
+      ],
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-station",
+      "type": "rect",
+      "x": 350,
+      "y": 716,
+      "w": 300,
+      "h": 260,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "player-4-tree-guide-top-full-card",
+      "type": "rect",
+      "x": 422,
+      "y": 765.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-tree-guide-bottom-full-card",
+      "type": "rect",
+      "x": 422,
+      "y": 825.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-tree-guide-left-full-card",
+      "type": "rect",
+      "x": 402.0,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-tree-guide-right-full-card",
+      "type": "rect",
+      "x": 442.0,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-tree-guide-tree-card",
+      "type": "rect",
+      "x": 422,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#e9f6e6",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-4-tree-guide-trunk",
+      "type": "rect",
+      "x": 439.2,
+      "y": 828.0,
+      "w": 5.6000000000000005,
+      "h": 15.0,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 1
+    },
+    {
+      "id": "player-4-tree-guide-canopy",
+      "type": "polygon",
+      "points": [
+        [
+          442.0,
+          804.0
+        ],
+        [
+          428.0,
+          829.2
+        ],
+        [
+          456.0,
+          829.2
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-sapling-guide-top-full-card",
+      "type": "rect",
+      "x": 566,
+      "y": 765.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-sapling-guide-bottom-full-card",
+      "type": "rect",
+      "x": 566,
+      "y": 825.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-sapling-guide-left-full-card",
+      "type": "rect",
+      "x": 546.0,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-sapling-guide-right-full-card",
+      "type": "rect",
+      "x": 586.0,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-4-sapling-guide-tree-card",
+      "type": "rect",
+      "x": 566,
+      "y": 795,
+      "w": 40,
+      "h": 60,
+      "fill": "#c8e5fa",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-4-sapling-guide-sapling-stem",
+      "type": "line",
+      "x1": 586.0,
+      "y1": 838.2,
+      "x2": 586.0,
+      "y2": 813.0,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-sapling-guide-sapling-leaf",
+      "type": "polygon",
+      "points": [
+        [
+          586.0,
+          826.2
+        ],
+        [
+          577.2,
+          811.8
+        ],
+        [
+          592.4,
+          813.6
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-4-hand-guide-1",
+      "type": "rect",
+      "x": 370,
+      "y": 914,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-4-hand-guide-2",
+      "type": "rect",
+      "x": 412,
+      "y": 914,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-4-hand-guide-3",
+      "type": "rect",
+      "x": 454,
+      "y": 914,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-4-cave-storage-guide",
+      "type": "rect",
+      "x": 571,
+      "y": 906,
+      "w": 48,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-4-cave-guide",
+      "type": "polygon",
+      "points": [
+        [
+          558,
+          958
+        ],
+        [
+          567,
+          925
+        ],
+        [
+          594,
+          914
+        ],
+        [
+          624,
+          926
+        ],
+        [
+          634,
+          958
+        ],
+        [
+          617,
+          958
+        ],
+        [
+          605,
+          940
+        ],
+        [
+          589,
+          940
+        ],
+        [
+          575,
+          958
+        ]
+      ],
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-station",
+      "type": "rect",
+      "x": 24,
+      "y": 390,
+      "w": 300,
+      "h": 260,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "id": "player-5-tree-guide-top-full-card",
+      "type": "rect",
+      "x": 96,
+      "y": 439.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-tree-guide-bottom-full-card",
+      "type": "rect",
+      "x": 96,
+      "y": 499.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-tree-guide-left-full-card",
+      "type": "rect",
+      "x": 76.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-tree-guide-right-full-card",
+      "type": "rect",
+      "x": 116.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-tree-guide-tree-card",
+      "type": "rect",
+      "x": 96,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#e9f6e6",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-5-tree-guide-trunk",
+      "type": "rect",
+      "x": 113.2,
+      "y": 502.0,
+      "w": 5.6000000000000005,
+      "h": 15.0,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 1
+    },
+    {
+      "id": "player-5-tree-guide-canopy",
+      "type": "polygon",
+      "points": [
+        [
+          116.0,
+          478.0
+        ],
+        [
+          102.0,
+          503.2
+        ],
+        [
+          130.0,
+          503.2
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-5-sapling-guide-top-full-card",
+      "type": "rect",
+      "x": 240,
+      "y": 439.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-sapling-guide-bottom-full-card",
+      "type": "rect",
+      "x": 240,
+      "y": 499.0,
+      "w": 40,
+      "h": 60,
+      "fill": "#d7c5ea",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-sapling-guide-left-full-card",
+      "type": "rect",
+      "x": 220.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-sapling-guide-right-full-card",
+      "type": "rect",
+      "x": 260.0,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "player-5-sapling-guide-tree-card",
+      "type": "rect",
+      "x": 240,
+      "y": 469,
+      "w": 40,
+      "h": 60,
+      "fill": "#c8e5fa",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "id": "player-5-sapling-guide-sapling-stem",
+      "type": "line",
+      "x1": 260.0,
+      "y1": 512.2,
+      "x2": 260.0,
+      "y2": 487.0,
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-sapling-guide-sapling-leaf",
+      "type": "polygon",
+      "points": [
+        [
+          260.0,
+          500.2
+        ],
+        [
+          251.2,
+          485.8
+        ],
+        [
+          266.4,
+          487.6
+        ]
+      ],
+      "fill": "#76b979",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "player-5-hand-guide-1",
+      "type": "rect",
+      "x": 44,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-5-hand-guide-2",
+      "type": "rect",
+      "x": 86,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-5-hand-guide-3",
+      "type": "rect",
+      "x": 128,
+      "y": 588,
+      "w": 58,
+      "h": 39,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-5-cave-storage-guide",
+      "type": "rect",
+      "x": 245,
+      "y": 580,
+      "w": 48,
+      "h": 51,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "player-5-cave-guide",
+      "type": "polygon",
+      "points": [
+        [
+          232,
+          632
+        ],
+        [
+          241,
+          599
+        ],
+        [
+          268,
+          588
+        ],
+        [
+          298,
+          600
+        ],
+        [
+          308,
+          632
+        ],
+        [
+          291,
+          632
+        ],
+        [
+          279,
+          614
+        ],
+        [
+          263,
+          614
+        ],
+        [
+          249,
+          632
+        ]
+      ],
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-table-outline",
+      "type": "rect",
+      "x": 325,
+      "y": 304,
+      "w": 350,
+      "h": 390,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 20
+    },
+    {
+      "id": "draw-deck-back",
+      "type": "rect",
+      "x": 331,
+      "y": 462,
+      "w": 45,
+      "h": 68,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 5
+    },
+    {
+      "id": "draw-deck-top",
+      "type": "rect",
+      "x": 336,
+      "y": 456,
+      "w": 45,
+      "h": 68,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 5
+    },
+    {
+      "id": "clearing-card-guide-1",
+      "type": "rect",
+      "x": 401,
+      "y": 452,
+      "w": 60,
+      "h": 96,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "clearing-card-guide-2",
+      "type": "rect",
+      "x": 484,
+      "y": 452,
+      "w": 60,
+      "h": 96,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "clearing-card-guide-3",
+      "type": "rect",
+      "x": 567,
+      "y": 452,
+      "w": 60,
+      "h": 96,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "reference-card-stack-back",
+      "type": "rect",
+      "x": 347,
+      "y": 326,
+      "w": 50,
+      "h": 70,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "reference-card-stack-top",
+      "type": "rect",
+      "x": 352,
+      "y": 321,
+      "w": 50,
+      "h": 70,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "scorepad-guide",
+      "type": "rect",
+      "x": 603,
+      "y": 321,
+      "w": 48,
+      "h": 70,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "scorepad-line-0",
+      "type": "line",
+      "x1": 612,
+      "y1": 340,
+      "x2": 642,
+      "y2": 340,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "scorepad-line-1",
+      "type": "line",
+      "x1": 612,
+      "y1": 353,
+      "x2": 642,
+      "y2": 353,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "scorepad-line-2",
+      "type": "line",
+      "x1": 612,
+      "y1": 366,
+      "x2": 642,
+      "y2": 366,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "winter-reveal-guide-1",
+      "type": "rect",
+      "x": 398,
+      "y": 604,
+      "w": 58,
+      "h": 72,
+      "fill": "#eaf5ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 7
+    },
+    {
+      "id": "winter-1-snow-v",
+      "type": "line",
+      "x1": 427,
+      "y1": 620,
+      "x2": 427,
+      "y2": 660,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-1-snow-d1",
+      "type": "line",
+      "x1": 411,
+      "y1": 628,
+      "x2": 443,
+      "y2": 652,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-1-snow-d2",
+      "type": "line",
+      "x1": 411,
+      "y1": 652,
+      "x2": 443,
+      "y2": 628,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-reveal-guide-2",
+      "type": "rect",
+      "x": 482,
+      "y": 604,
+      "w": 58,
+      "h": 72,
+      "fill": "#eaf5ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 7
+    },
+    {
+      "id": "winter-2-snow-v",
+      "type": "line",
+      "x1": 511,
+      "y1": 620,
+      "x2": 511,
+      "y2": 660,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-2-snow-d1",
+      "type": "line",
+      "x1": 495,
+      "y1": 628,
+      "x2": 527,
+      "y2": 652,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-2-snow-d2",
+      "type": "line",
+      "x1": 495,
+      "y1": 652,
+      "x2": 527,
+      "y2": 628,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-reveal-guide-3",
+      "type": "rect",
+      "x": 566,
+      "y": 604,
+      "w": 58,
+      "h": 72,
+      "fill": "#eaf5ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 7
+    },
+    {
+      "id": "winter-3-snow-v",
+      "type": "line",
+      "x1": 595,
+      "y1": 620,
+      "x2": 595,
+      "y2": 660,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-3-snow-d1",
+      "type": "line",
+      "x1": 579,
+      "y1": 628,
+      "x2": 611,
+      "y2": 652,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    },
+    {
+      "id": "winter-3-snow-d2",
+      "type": "line",
+      "x1": 579,
+      "y1": 652,
+      "x2": 611,
+      "y2": 628,
+      "stroke": "#5598c5",
+      "strokeWidth": 2
+    }
+  ]
+}

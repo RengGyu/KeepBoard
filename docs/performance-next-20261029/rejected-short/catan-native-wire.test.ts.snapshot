@@ -1,0 +1,86 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {catalogPacks} from '../gamepacks/catalog';
+import {photoDefinition} from '../server/photoDefinitions';
+import {compileObservationTask} from '../shared/lightweightRecognition';
+import {CATAN_TOPOLOGY,normalizeScene,sceneJSONSchema} from '../shared/scene';
+import {catanScenePrompt,catanSceneResponseSchema,decodeCatanSceneReading} from '../server/ai/catanSceneReading';
+import type {Session,Evidence} from '../shared/types';
+
+const pack=catalogPacks.find(p=>p.id==='catan-base')!,definition=photoDefinition(pack);
+const evidence=[{id:'photo',kind:'photo',scope:'public',captureEpoch:'epoch',url:'/uploads/synthetic.png',label:'synthetic'}] as Evidence[];
+const session={assertions:[],players:[{id:'p',name:'하나',color:'red'}],turnInstanceId:'turn'} as unknown as Session;
+const request=compileObservationTask({pack,definition,areaId:'board',taskId:'synthetic-wire',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'photo',inputId:'photo',sha256:'a'.repeat(64),width:1000,height:800,transformId:null}]});
+const reader={kind:'gemini-game-observation-v1',model:'gemini-3.8-flash',thinkingLevel:'LOW',mediaResolution:'MEDIA_RESOLUTION_HIGH',maxOutputTokens:32768} as const;
+const input={request,definition,pack,session,evidence,reader,sourceImageSHA:'a'.repeat(64)};
+const part=(id:string,kind:string,location:unknown,extra:Record<string,unknown>={})=>({id,kind,quantity:1,location,region:null,...extra});
+const wire=(components:unknown[])=>({summary:'관측',assertions:[{field:'components.observed',value:{version:2,coverage:'partial',components},evidenceIds:['photo']}],warnings:[]});
+const payload=(value:unknown)=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(value)}]}}]});
+const decode=(value:unknown)=>decodeCatanSceneReading(payload(value),input);
+
+test('single-public prompt is bounded and retains small-object, source, ownership and unknown instructions',()=>{
+ const prompt=catanScenePrompt({...session,assertions:[{value:'DO_NOT_COPY_ACCEPTED_CONTEXT'}] as any},pack,evidence);
+ assert(prompt.length<4000);assert(!prompt.includes('DO_NOT_COPY_ACCEPTED_CONTEXT'));assert(!prompt.includes('Allowed field definitions'));assert(!prompt.includes('MULTI-VIEW'));
+ for(const instruction of ['small, overlapping and edge objects','road, settlement, city, robber, harbor','number disc is separate','uncountable','zero requires observed zero','ownerId','observedColor','attachment','evidenceId may be omitted'])assert(prompt.includes(instruction));
+ assert(prompt.includes('"id":"p","color":"red"'));
+});
+
+test('native schema changes only three component required keys and never mutates the shared schema',()=>{
+ const original=JSON.stringify(sceneJSONSchema),schema=catanSceneResponseSchema(evidence),component=schema.properties.assertions.items.properties.value.properties.components.items;
+ assert.deepEqual(component.required,['id','kind','quantity','location','region']);
+ for(const key of ['variant','ownerId','evidenceId','observedColor','number','ratio','direction','face','attachedToId'])assert(key in component.properties);
+ assert.equal(JSON.stringify(sceneJSONSchema),original);
+});
+
+test('omitted sole source expands on a clone while receipt keeps the exact provider assertions',()=>{
+ const original=wire([part('a','terrain',{type:'hex',id:'r1c1'},{variant:'forest',face:'front'}),part('b','number-token',{type:'hex',id:'r1c1'},{number:8,face:'front'})]),before=JSON.stringify(original),result=decode(original),scene=normalizeScene(result.assertions[0].value),receipt=result.observationReceipts![0];
+ assert.equal(JSON.stringify(original),before);assert(scene.components.every(c=>c.evidenceId==='photo'));
+ assert.deepEqual(receipt.hostedWire!.items,original.assertions);assert.equal(receipt.hostedWire!.id,'gemini-catan-scene-wire-v1');assert.equal(receipt.sourceImageSHA,'a'.repeat(64));assert.deepEqual(receipt.request,request);
+ assert(scene.components.every(c=>c.ownerId===null));assert.equal(receipt.result.observations.length,2);assert.equal(Object.keys(receipt.componentRefs).length,2);
+ assert.deepEqual(JSON.parse(JSON.stringify(receipt.hostedWire!.items)),original.assertions);
+ assert(!Object.hasOwn((receipt.hostedWire!.items[0] as any).value.components[0],'evidenceId'));
+});
+
+test('explicit null and invalid source ids remain in raw wire, using existing normalized-source semantics',()=>{
+ const original=wire([part('null','road',{type:'edge',id:CATAN_TOPOLOGY.edges[0].id},{evidenceId:null}),part('invalid','settlement',{type:'vertex',id:CATAN_TOPOLOGY.vertices[0].id},{evidenceId:'not-this-photo',region:{x:.1,y:.1,width:.1,height:.1}}),part('null-crop','city',{type:'unplaced',id:null},{evidenceId:null,region:{x:.2,y:.2,width:.1,height:.1}})]),result=decode(original),scene=normalizeScene(result.assertions[0].value);
+ assert.equal(scene.components[0].evidenceId,null);assert.equal(scene.components[1].evidenceId,null);assert.equal(scene.components[1].region,null);assert.equal(scene.components[2].evidenceId,'photo');assert.deepEqual(result.observationReceipts![0].hostedWire!.items,original.assertions);
+});
+
+test('compact and legacy full scenes normalize equivalently with readable values and attachments intact',()=>{
+ const components=[...CATAN_TOPOLOGY.hexes.map((hex,index)=>part('t'+index,'terrain',{type:'hex',id:hex.id},{variant:'forest',face:'front',ownerId:null,evidenceId:'photo'})),
+  part('n','number-token',{type:'hex',id:'r1c1'},{number:8,face:'front',attachedToId:'t0',ownerId:null,variant:null,evidenceId:'photo'}),
+  part('h','harbor',{type:'edge',id:CATAN_TOPOLOGY.edges.find(e=>e.hexIds.length===1)!.id},{variant:'generic',ratio:3,direction:0,ownerId:null,evidenceId:'photo'}),
+  part('r','robber',{type:'unplaced',id:null},{quantity:null,variant:null,ownerId:null,evidenceId:'photo'})];
+ const legacy=wire(components);legacy.assertions[0].field='board.layout';legacy.assertions[0].value.coverage='full';
+ const compact=structuredClone(legacy);for(const component of compact.assertions[0].value.components){delete (component as any).evidenceId;if((component as any).ownerId===null)delete (component as any).ownerId;if((component as any).variant===null)delete (component as any).variant;}
+ const full=decode(legacy),small=decode(compact),scene=normalizeScene(small.assertions[0].value);
+ assert.equal(full.assertions[0].field,'board.layout');assert.equal(small.assertions[0].field,'board.layout');assert.deepEqual(small.assertions[0].value,full.assertions[0].value);assert.equal(scene.coverage,'full');assert.equal(scene.components.length,22);
+ assert.equal(scene.components[19].number,8);assert.equal(scene.components[19].attachedToId,'t0');assert.equal(scene.components[20].ratio,3);assert.equal(scene.components[20].direction,0);assert.equal(scene.components[21].quantity,null);
+ assert.deepEqual(small.observationReceipts![0].hostedWire!.items,compact.assertions);assert.deepEqual(full.observationReceipts![0].hostedWire!.items,legacy.assertions);
+});
+
+test('small placed and unplaced objects keep values, null quantities and observed zero without inventory completion',()=>{
+ const original=wire([
+  part('r','road',{type:'edge',id:CATAN_TOPOLOGY.edges[0].id},{observedColor:'red',quantity:null}),
+  part('s','settlement',{type:'vertex',id:CATAN_TOPOLOGY.vertices[0].id},{observedColor:'blue',ownerId:'p'}),
+  part('c','city',{type:'unplaced',id:null},{observedColor:null,quantity:null}),
+  part('n','number-token',{type:'hex',id:'r1c1'},{number:null,face:'front',quantity:0}),
+  part('u','unknown',{type:'unplaced',id:null},{quantity:null})
+ ]),result=decode(original),scene=normalizeScene(result.assertions[0].value),receipt=result.observationReceipts![0];
+ assert.equal(scene.components.length,5);assert.deepEqual(scene.components.map(c=>c.quantity),[null,1,null,0,null]);assert.deepEqual(receipt.result.observations.map(o=>o.quantity),[null,1,null,0,null]);
+ assert.equal(scene.components[0].observedColor,'red');assert.equal(scene.components[1].ownerId,'p');assert.equal(scene.components[2].location.type,'unplaced');assert.equal(receipt.result.observations[3].properties.number.state,'unknown');assert.equal(scene.components[4].kind,'unknown');assert.deepEqual(receipt.hostedWire!.items,original.assertions);
+});
+
+test('omitted, unsupported and wrong-face attributes leave objects present and receipt values unknown',()=>{
+ const original=wire([part('a','terrain',{type:'hex',id:'r1c1'},{variant:'unsupported-artwork',face:'front'}),part('b','number-token',{type:'hex',id:'r1c1'},{face:'front'}),part('c','number-token',{type:'unplaced',id:null},{number:8})]),result=decode(original),scene=normalizeScene(result.assertions[0].value),observations=result.observationReceipts![0].result.observations;
+ assert.equal(scene.components.length,3);assert.equal(scene.components[0].variant,'unsupported-artwork');assert.deepEqual(observations[0].properties.variant,{state:'unknown',value:null,reason:'unsupported'});assert.deepEqual(observations[1].properties.number,{state:'unknown',value:null,reason:'unreadable'});assert.equal(observations[2].properties.number,undefined);assert.equal(scene.components[2].number,8);
+});
+
+test('single-photo source expansion rejects multi-source or mismatched input and malformed scenes',()=>{
+ const native=payload(wire([part('a','terrain',{type:'hex',id:'r1c1'},{variant:'forest'})]));
+ assert.throws(()=>decodeCatanSceneReading(native,{...input,evidence:[...evidence,{...evidence[0],id:'second'}]}),/카탄 공용 판/);
+ assert.throws(()=>decodeCatanSceneReading(native,{...input,request:{...request,images:[...request.images,{...request.images[0],evidenceId:'second'}]}}),/카탄 공용 판/);
+ assert.throws(()=>decodeCatanSceneReading(native,{...input,evidence:[{...evidence[0],id:'other'}]}),/카탄 공용 판/);
+ assert.throws(()=>decode({items:[]}));assert.throws(()=>decode(null));
+ const malformed=decode({assertions:[{field:'components.observed',value:{components:[null,'invalid']},evidenceIds:['photo']}]});assert.equal(malformed.assertions.length,0);assert.equal(malformed.observationReceipts![0].result.observations.length,0);
+});

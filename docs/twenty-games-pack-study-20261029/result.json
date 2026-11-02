@@ -1,0 +1,888 @@
+{
+  "status": "COMPLETED_BASELINE_AND_FOUR_DATA_PAIRS",
+  "scope": "20 non-Catan selected photograph areas / visible AI reference targets; not whole-photo human-verified accuracy or placement accuracy",
+  "totals": {
+    "referenceObjects": 376,
+    "individualDetected": 201,
+    "correctKind": 187,
+    "kindDenominator": 362,
+    "readableAttributes": 819,
+    "correctAttributes": 446,
+    "individualRecoveryPercent": 53.45744680851064,
+    "kindRecoveryPercent": 51.65745856353591,
+    "requestedReadableAttributeRecoveryPercent": 54.456654456654455
+  },
+  "macroAcross20Games": {
+    "individualRecoveryPercent": 61.01745163438712,
+    "semanticAttributeRecoveryPercent": 55.296199692303716
+  },
+  "semanticAttributesExcludingFace": {
+    "readableAttributes": 636,
+    "correctAttributes": 317,
+    "percent": 49.84276729559748
+  },
+  "games": [
+    {
+      "gameId": "azul",
+      "referenceObjects": 5,
+      "individualDetected": 5,
+      "correctKind": 5,
+      "readableAttributes": 9,
+      "correctAttributes": 9,
+      "attributeUncertain": 0,
+      "outputRows": 5,
+      "kindDenominator": 5,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 5,
+        "correctAttributes": 5
+      }
+    },
+    {
+      "gameId": "blokus",
+      "referenceObjects": 2,
+      "individualDetected": 0,
+      "correctKind": 0,
+      "readableAttributes": 2,
+      "correctAttributes": 0,
+      "attributeUncertain": 0,
+      "outputRows": 0,
+      "kindDenominator": 2,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 2,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "bohnanza",
+      "referenceObjects": 4,
+      "individualDetected": 0,
+      "correctKind": 0,
+      "readableAttributes": 6,
+      "correctAttributes": 0,
+      "attributeUncertain": 0,
+      "outputRows": 0,
+      "kindDenominator": 4,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 2,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "calico",
+      "referenceObjects": 24,
+      "individualDetected": 11,
+      "correctKind": 11,
+      "readableAttributes": 58,
+      "correctAttributes": 18,
+      "attributeUncertain": 2,
+      "outputRows": 15,
+      "kindDenominator": 24,
+      "referenceIssues": [
+        {
+          "id": "calico-crescent-kind",
+          "objectIds": [
+            "scoring-01",
+            "scoring-04"
+          ],
+          "attributeIds": [
+            "itemType"
+          ],
+          "status": "reference-error",
+          "reason": "원본 재열람에서 초승달 위에 실밥/구멍을 나타내는 표기가 보이며 고양이 얼굴/몸 그림이 없음. reference의 crescent-shaped cat token은 버튼 토큰 명칭 오류. 원문과 분모는 유지하며 모델을 오류로 단정하지 않음."
+        }
+      ],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 45,
+        "correctAttributes": 18
+      }
+    },
+    {
+      "gameId": "carcassonne",
+      "referenceObjects": 31,
+      "individualDetected": 17,
+      "correctKind": 17,
+      "readableAttributes": 60,
+      "correctAttributes": 32,
+      "attributeUncertain": 0,
+      "outputRows": 26,
+      "kindDenominator": 31,
+      "referenceIssues": [
+        {
+          "id": "carcassonne-additional-green",
+          "objectIds": [],
+          "predictedRefs": [
+            "item-13"
+          ],
+          "status": "reference-incomplete",
+          "reason": "원사진 x약550/y약261의 초록 미플은 실제 놓여 있으나 reference에 별도 물체가 없음. 기존 exhaustive=false와 함께 유지."
+        }
+      ],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 46,
+        "correctAttributes": 32
+      }
+    },
+    {
+      "gameId": "cascadia",
+      "referenceObjects": 39,
+      "individualDetected": 17,
+      "correctKind": 17,
+      "readableAttributes": 78,
+      "correctAttributes": 34,
+      "attributeUncertain": 0,
+      "outputRows": 29,
+      "kindDenominator": 39,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 57,
+        "correctAttributes": 34
+      }
+    },
+    {
+      "gameId": "codenames",
+      "referenceObjects": 25,
+      "individualDetected": 25,
+      "correctKind": 25,
+      "readableAttributes": 48,
+      "correctAttributes": 42,
+      "attributeUncertain": 6,
+      "outputRows": 29,
+      "kindDenominator": 25,
+      "referenceIssues": [
+        {
+          "id": "codenames-reference-words",
+          "objectIds": [
+            "grid-r1c5",
+            "grid-r2c2",
+            "grid-r3c1",
+            "grid-r3c2",
+            "grid-r5c2",
+            "grid-r5c5"
+          ],
+          "attributeIds": [
+            "word"
+          ],
+          "status": "suspected-reference-error",
+          "reason": "원본 재열람에서 각각 PITCH/YARD/CZECH/TAPE/WATER/MAPLE로 읽히며 frozen DITCH/FUND/STOCK/TAP/WATCH/BAND와 다름. 작은 글씨 판독을 모델 값에 맞춰 GT 수정하거나 자동 크레딧하지 않음. 원문/분모 유지, 값 판정은 reference-disputed로 분리."
+        }
+      ],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 23,
+        "correctAttributes": 17
+      }
+    },
+    {
+      "gameId": "dominion",
+      "referenceObjects": 13,
+      "individualDetected": 13,
+      "correctKind": 13,
+      "readableAttributes": 39,
+      "correctAttributes": 39,
+      "attributeUncertain": 0,
+      "outputRows": 13,
+      "kindDenominator": 13,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 26,
+        "correctAttributes": 26
+      }
+    },
+    {
+      "gameId": "kingdomino",
+      "referenceObjects": 7,
+      "individualDetected": 6,
+      "correctKind": 6,
+      "readableAttributes": 31,
+      "correctAttributes": 25,
+      "attributeUncertain": 0,
+      "outputRows": 12,
+      "kindDenominator": 7,
+      "referenceIssues": [
+        {
+          "id": "kingdomino-top-yellow-boundary",
+          "objectIds": [
+            "domino-top-yellow"
+          ],
+          "status": "suspected-reference-error",
+          "reason": "원본 상단 노랑 두 칸 사이에 실물 경계가 보임. 출력 item9/10은 각각 노랑+광산, 노랑+갈색을 세로 물체로 읽음. 두 칸을 한 실물로 만든 frozen reference가 틀렸을 가능성이 큼. 분모7/기존 속성 유지하고 그 하나는 미확정으로 기록; 이를 서비스 누락으로 단정하지 않음.",
+          "independentSourceReview": "원사진을 다시 열어 두 노랑 칸 사이의 세로 경계를 확인했으나 어느 전체 도미노 외곽인지 단일 시점으로 확정하지 못함. frozen 가로 pairing도 모델의 세로 pairing도 최종 정답으로 강제하지 않음.",
+          "sensitivityExclusion": {
+            "referenceObjectIds": [
+              "domino-top-yellow"
+            ],
+            "attributeIds": [
+              "face",
+              "firstTerrain",
+              "firstCrowns",
+              "secondTerrain",
+              "secondCrowns"
+            ],
+            "strictFrozenCountsRemainUnchanged": true,
+            "alternateCountsIfOnlyThisDisputedReferenceRemoved": {
+              "referenceObjects": 6,
+              "individualDetected": 6,
+              "correctKind": 6,
+              "readableAttributes": 26,
+              "correctAttributes": 25
+            },
+            "note": "민감도만 표시. 확정 모델 정답률/GT 수정 아님."
+          }
+        }
+      ],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 25,
+        "correctAttributes": 20
+      }
+    },
+    {
+      "gameId": "patchwork",
+      "referenceObjects": 5,
+      "individualDetected": 5,
+      "correctKind": 5,
+      "readableAttributes": 14,
+      "correctAttributes": 11,
+      "attributeUncertain": 1,
+      "outputRows": 6,
+      "kindDenominator": 5,
+      "referenceIssues": [
+        {
+          "id": "patchwork-green-shape-description",
+          "objectIds": [
+            "ring-patch-green"
+          ],
+          "attributeIds": [
+            "shape"
+          ],
+          "status": "evaluation-uncertain",
+          "reason": "frozen small bent green patch는 고유 모양 값이 아닌 시각 서술이며 모델 T-shape와 정확한 등가 판정 근거가 부족. 정답을 바꾸지 않고 미확정."
+        }
+      ],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 10,
+        "correctAttributes": 7
+      }
+    },
+    {
+      "gameId": "quacks",
+      "referenceObjects": 11,
+      "individualDetected": 1,
+      "correctKind": 1,
+      "readableAttributes": 28,
+      "correctAttributes": 0,
+      "kindDenominator": 11,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 28,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "rummikub",
+      "referenceObjects": 59,
+      "individualDetected": 59,
+      "correctKind": 45,
+      "readableAttributes": 147,
+      "correctAttributes": 147,
+      "kindDenominator": 45,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 88,
+        "correctAttributes": 88
+      }
+    },
+    {
+      "gameId": "sagrada",
+      "referenceObjects": 21,
+      "individualDetected": 21,
+      "correctKind": 21,
+      "readableAttributes": 59,
+      "correctAttributes": 40,
+      "kindDenominator": 21,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 59,
+        "correctAttributes": 40
+      }
+    },
+    {
+      "gameId": "scout",
+      "referenceObjects": 10,
+      "individualDetected": 10,
+      "correctKind": 10,
+      "readableAttributes": 30,
+      "correctAttributes": 28,
+      "kindDenominator": 10,
+      "referenceIssues": [
+        {
+          "objectId": "hand-card-06",
+          "attributeId": "bottomNumber",
+          "frozenExpected": 7,
+          "sourceReinspection": 1,
+          "classification": "confirmed-reference-error",
+          "reason": "Original red 10 card has paired oval 1. Frozen expected 7 retained unchanged; strict mismatch not charged as model-value error."
+        }
+      ],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 20,
+        "correctAttributes": 18
+      }
+    },
+    {
+      "gameId": "hanabi",
+      "referenceObjects": 5,
+      "individualDetected": 4,
+      "correctKind": 4,
+      "readableAttributes": 15,
+      "correctAttributes": 12,
+      "kindDenominator": 5,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 10,
+        "correctAttributes": 8
+      }
+    },
+    {
+      "gameId": "jaipur",
+      "referenceObjects": 5,
+      "individualDetected": 5,
+      "correctKind": 5,
+      "readableAttributes": 9,
+      "correctAttributes": 8,
+      "kindDenominator": 5,
+      "referenceIssues": [
+        {
+          "objectId": "hide-card",
+          "attributeId": "goodsType",
+          "frozenExpected": "leather",
+          "sourceReinspection": "spice",
+          "classification": "confirmed-reference-error",
+          "reason": "Enlarged original shows spice sacks/loose spice; frozen leather label retained unchanged. Model spice is not treated as a proven model error."
+        }
+      ],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 4,
+        "correctAttributes": 3
+      }
+    },
+    {
+      "gameId": "splendor",
+      "referenceObjects": 6,
+      "individualDetected": 0,
+      "correctKind": 0,
+      "readableAttributes": 6,
+      "correctAttributes": 0,
+      "kindDenominator": 6,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 6,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "splendor-duel",
+      "referenceObjects": 25,
+      "individualDetected": 0,
+      "correctKind": 0,
+      "readableAttributes": 25,
+      "correctAttributes": 0,
+      "kindDenominator": 25,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 25,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "ticket-to-ride",
+      "referenceObjects": 78,
+      "individualDetected": 1,
+      "correctKind": 1,
+      "readableAttributes": 154,
+      "correctAttributes": 0,
+      "kindDenominator": 78,
+      "referenceIssues": [],
+      "regionExhaustive": false,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 154,
+        "correctAttributes": 0
+      }
+    },
+    {
+      "gameId": "tiny-towns",
+      "referenceObjects": 1,
+      "individualDetected": 1,
+      "correctKind": 1,
+      "readableAttributes": 1,
+      "correctAttributes": 1,
+      "kindDenominator": 1,
+      "referenceIssues": [],
+      "regionExhaustive": true,
+      "semanticAttributesExcludingFace": {
+        "readableAttributes": 1,
+        "correctAttributes": 1
+      }
+    }
+  ],
+  "referenceIssues": [
+    {
+      "gameId": "calico",
+      "issues": [
+        {
+          "id": "calico-crescent-kind",
+          "objectIds": [
+            "scoring-01",
+            "scoring-04"
+          ],
+          "attributeIds": [
+            "itemType"
+          ],
+          "status": "reference-error",
+          "reason": "원본 재열람에서 초승달 위에 실밥/구멍을 나타내는 표기가 보이며 고양이 얼굴/몸 그림이 없음. reference의 crescent-shaped cat token은 버튼 토큰 명칭 오류. 원문과 분모는 유지하며 모델을 오류로 단정하지 않음."
+        }
+      ]
+    },
+    {
+      "gameId": "carcassonne",
+      "issues": [
+        {
+          "id": "carcassonne-additional-green",
+          "objectIds": [],
+          "predictedRefs": [
+            "item-13"
+          ],
+          "status": "reference-incomplete",
+          "reason": "원사진 x약550/y약261의 초록 미플은 실제 놓여 있으나 reference에 별도 물체가 없음. 기존 exhaustive=false와 함께 유지."
+        }
+      ]
+    },
+    {
+      "gameId": "codenames",
+      "issues": [
+        {
+          "id": "codenames-reference-words",
+          "objectIds": [
+            "grid-r1c5",
+            "grid-r2c2",
+            "grid-r3c1",
+            "grid-r3c2",
+            "grid-r5c2",
+            "grid-r5c5"
+          ],
+          "attributeIds": [
+            "word"
+          ],
+          "status": "suspected-reference-error",
+          "reason": "원본 재열람에서 각각 PITCH/YARD/CZECH/TAPE/WATER/MAPLE로 읽히며 frozen DITCH/FUND/STOCK/TAP/WATCH/BAND와 다름. 작은 글씨 판독을 모델 값에 맞춰 GT 수정하거나 자동 크레딧하지 않음. 원문/분모 유지, 값 판정은 reference-disputed로 분리."
+        }
+      ]
+    },
+    {
+      "gameId": "kingdomino",
+      "issues": [
+        {
+          "id": "kingdomino-top-yellow-boundary",
+          "objectIds": [
+            "domino-top-yellow"
+          ],
+          "status": "suspected-reference-error",
+          "reason": "원본 상단 노랑 두 칸 사이에 실물 경계가 보임. 출력 item9/10은 각각 노랑+광산, 노랑+갈색을 세로 물체로 읽음. 두 칸을 한 실물로 만든 frozen reference가 틀렸을 가능성이 큼. 분모7/기존 속성 유지하고 그 하나는 미확정으로 기록; 이를 서비스 누락으로 단정하지 않음.",
+          "independentSourceReview": "원사진을 다시 열어 두 노랑 칸 사이의 세로 경계를 확인했으나 어느 전체 도미노 외곽인지 단일 시점으로 확정하지 못함. frozen 가로 pairing도 모델의 세로 pairing도 최종 정답으로 강제하지 않음.",
+          "sensitivityExclusion": {
+            "referenceObjectIds": [
+              "domino-top-yellow"
+            ],
+            "attributeIds": [
+              "face",
+              "firstTerrain",
+              "firstCrowns",
+              "secondTerrain",
+              "secondCrowns"
+            ],
+            "strictFrozenCountsRemainUnchanged": true,
+            "alternateCountsIfOnlyThisDisputedReferenceRemoved": {
+              "referenceObjects": 6,
+              "individualDetected": 6,
+              "correctKind": 6,
+              "readableAttributes": 26,
+              "correctAttributes": 25
+            },
+            "note": "민감도만 표시. 확정 모델 정답률/GT 수정 아님."
+          }
+        }
+      ]
+    },
+    {
+      "gameId": "patchwork",
+      "issues": [
+        {
+          "id": "patchwork-green-shape-description",
+          "objectIds": [
+            "ring-patch-green"
+          ],
+          "attributeIds": [
+            "shape"
+          ],
+          "status": "evaluation-uncertain",
+          "reason": "frozen small bent green patch는 고유 모양 값이 아닌 시각 서술이며 모델 T-shape와 정확한 등가 판정 근거가 부족. 정답을 바꾸지 않고 미확정."
+        }
+      ]
+    },
+    {
+      "gameId": "scout",
+      "issues": [
+        {
+          "objectId": "hand-card-06",
+          "attributeId": "bottomNumber",
+          "frozenExpected": 7,
+          "sourceReinspection": 1,
+          "classification": "confirmed-reference-error",
+          "reason": "Original red 10 card has paired oval 1. Frozen expected 7 retained unchanged; strict mismatch not charged as model-value error."
+        }
+      ]
+    },
+    {
+      "gameId": "jaipur",
+      "issues": [
+        {
+          "objectId": "hide-card",
+          "attributeId": "goodsType",
+          "frozenExpected": "leather",
+          "sourceReinspection": "spice",
+          "classification": "confirmed-reference-error",
+          "reason": "Enlarged original shows spice sacks/loose spice; frozen leather label retained unchanged. Model spice is not treated as a proven model error."
+        }
+      ]
+    }
+  ],
+  "scoreFiles": [
+    {
+      "path": "scores-sol1.json",
+      "sha256": "ae67bdcb1557c3d3647be7962d9f50407511948a462fad92616cf0136f87a9a9"
+    },
+    {
+      "path": "scores-sol2.json",
+      "sha256": "aeb41cf59f7850c071e0539ffb5a12c477d4ca6038946488fdb56f46be9cc6cc"
+    },
+    {
+      "path": "scores-sol1-augmented.json",
+      "sha256": "11170f0794de06f2939f44219457140f3867b35a03180749e08d11121dffa418"
+    },
+    {
+      "path": "scores-sol2-augmented.json",
+      "sha256": "35df3c0cf10066657b84cde8273904156393ba8526920c19ca17107a59372584"
+    }
+  ],
+  "timing": {
+    "calls": 20,
+    "http200": 20,
+    "decoded": 20,
+    "emptyResults": [
+      "blokus",
+      "bohnanza",
+      "splendor-duel"
+    ],
+    "seconds": {
+      "mean": 16.34635,
+      "median": 13.3815,
+      "min": 3.251,
+      "max": 60.955,
+      "batchWall": 88.34
+    },
+    "peakConcurrency": 5,
+    "tokens": {
+      "promptTokenCount": 33665,
+      "candidatesTokenCount": 40197,
+      "totalTokenCount": 76722
+    },
+    "reportedThoughtTokens": 2860,
+    "thoughtTokenReportingCalls": 2,
+    "accuracyPending": true,
+    "notDeployedEndToEndTiming": true
+  },
+  "interpretation": "Grouped outputs are not individual recovery. Missing/unknown requested readable attributes remain failures. Colour aliases can occur in separate schema fields; these are field-level counts, not independent semantic facts. Frozen reference issues remain separately visible; mismatches at those entries are not confirmed model errors.",
+  "dataPackExperiment": {
+    "pairs": [
+      {
+        "gameId": "cascadia",
+        "baseline": {
+          "referenceObjects": 39,
+          "individualDetected": 17,
+          "correctKind": 17,
+          "readableAttributes": 78,
+          "correctAttributes": 34
+        },
+        "augmented": {
+          "referenceObjects": 39,
+          "individualDetected": 18,
+          "correctKind": 18,
+          "readableAttributes": 78,
+          "correctAttributes": 36,
+          "attributeUncertain": 0,
+          "outputRows": 26
+        }
+      },
+      {
+        "gameId": "kingdomino",
+        "baseline": {
+          "referenceObjects": 7,
+          "individualDetected": 6,
+          "correctKind": 6,
+          "readableAttributes": 31,
+          "correctAttributes": 25
+        },
+        "augmented": {
+          "referenceObjects": 7,
+          "individualDetected": 6,
+          "correctKind": 6,
+          "readableAttributes": 31,
+          "correctAttributes": 25,
+          "attributeUncertain": 0,
+          "outputRows": 12
+        }
+      },
+      {
+        "gameId": "dominion",
+        "baseline": {
+          "referenceObjects": 13,
+          "individualDetected": 13,
+          "correctKind": 13,
+          "readableAttributes": 39,
+          "correctAttributes": 39
+        },
+        "augmented": {
+          "referenceObjects": 13,
+          "individualDetected": 13,
+          "correctKind": 13,
+          "readableAttributes": 39,
+          "correctAttributes": 39,
+          "attributeUncertain": 0,
+          "outputRows": 13
+        }
+      },
+      {
+        "gameId": "tiny-towns",
+        "baseline": {
+          "referenceObjects": 1,
+          "individualDetected": 1,
+          "correctKind": 1,
+          "readableAttributes": 1,
+          "correctAttributes": 1
+        },
+        "augmented": {
+          "referenceObjects": 1,
+          "individualDetected": 1,
+          "correctKind": 1,
+          "readableAttributes": 1,
+          "correctAttributes": 1
+        }
+      }
+    ],
+    "callEvidence": {
+      "calls": 4,
+      "http200": 4,
+      "decoded": 4,
+      "retries": 0,
+      "appendixOnlyChangeVerified": true,
+      "pairedCalls": [
+        {
+          "gameId": "cascadia",
+          "sourceSHA": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+          "bodySHA": "87a841adefa9874f5e67932292ddf18af5ace1b1d39d462b1f05532a77007c17",
+          "rawSHA": "fcef5ce58dc35db1a1829d3590119246676367bbe7ccdbd6c90a31f605b682b1",
+          "baselineMs": 24083,
+          "augmentedMs": 18775,
+          "baselineUsage": {
+            "promptTokenCount": 1706,
+            "candidatesTokenCount": 3661,
+            "totalTokenCount": 5367,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1089
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 617
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "augmentedUsage": {
+            "promptTokenCount": 1918,
+            "candidatesTokenCount": 3158,
+            "totalTokenCount": 5076,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1089
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 829
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "baselineOutputRows": 29,
+          "augmentedOutputRows": 26,
+          "parsedExactlyEqual": false
+        },
+        {
+          "gameId": "dominion",
+          "sourceSHA": "f7228db87b131d2036af758973ea20e0da01cdcb7f99bca313fc281543c2078f",
+          "bodySHA": "0c10a48e1b2bfd0df3b4788c61af3d2ec02a4d8a5f81472d61f537056fa174d3",
+          "rawSHA": "c76c647126ad9ad15c1a5b6007b489ccbc20f9c34f91a0ef27b180c9331f6912",
+          "baselineMs": 13076,
+          "augmentedMs": 12804,
+          "baselineUsage": {
+            "promptTokenCount": 1676,
+            "candidatesTokenCount": 1777,
+            "totalTokenCount": 3453,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1085
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 591
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "augmentedUsage": {
+            "promptTokenCount": 1901,
+            "candidatesTokenCount": 1777,
+            "totalTokenCount": 3678,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 816
+              },
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1085
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "baselineOutputRows": 13,
+          "augmentedOutputRows": 13,
+          "parsedExactlyEqual": false
+        },
+        {
+          "gameId": "kingdomino",
+          "sourceSHA": "93ca427021922281a6c001ede9176206ffbf17ae296e2c27955e8fdc37ce28fd",
+          "bodySHA": "a20c795cfd104d192c3330dc91b2c793d7c402d163ccda42c0d449d8eae22e8f",
+          "rawSHA": "07ee84ad17110962215affa3a3d82dec6b3281da5871b2963ec886006324f8a8",
+          "baselineMs": 15466,
+          "augmentedMs": 18489,
+          "baselineUsage": {
+            "promptTokenCount": 1761,
+            "candidatesTokenCount": 2684,
+            "totalTokenCount": 4445,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1064
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 697
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "augmentedUsage": {
+            "promptTokenCount": 1977,
+            "candidatesTokenCount": 2685,
+            "totalTokenCount": 4662,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1064
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 913
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "baselineOutputRows": 12,
+          "augmentedOutputRows": 12,
+          "parsedExactlyEqual": false
+        },
+        {
+          "gameId": "tiny-towns",
+          "sourceSHA": "9ff0bf69d7710e35b96ab829fa6631a1fbaa7c194daa0fa47b8a4a4fc7c3e97c",
+          "bodySHA": "24039eb0fa95e2c30e57c2faa0e84657e0832106d649a8e51af6ecded8834a8a",
+          "rawSHA": "5ab230737edd1b05e03b891a4227688f37cb0fa3eab3b4b9383b36925788cb46",
+          "baselineMs": 19415,
+          "augmentedMs": 5111,
+          "baselineUsage": {
+            "promptTokenCount": 1630,
+            "candidatesTokenCount": 665,
+            "totalTokenCount": 2295,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1064
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 566
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "augmentedUsage": {
+            "promptTokenCount": 1856,
+            "candidatesTokenCount": 367,
+            "totalTokenCount": 2223,
+            "promptTokensDetails": [
+              {
+                "modality": "IMAGE",
+                "tokenCount": 1064
+              },
+              {
+                "modality": "TEXT",
+                "tokenCount": 792
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "baselineOutputRows": 5,
+          "augmentedOutputRows": 5,
+          "parsedExactlyEqual": false
+        }
+      ],
+      "accuracyPending": true,
+      "inputTokensAdded": 879,
+      "augmentedTotalTokens": 15639
+    },
+    "singlePairsOnly": true,
+    "notAutomaticPlacementValidation": true
+  }
+}

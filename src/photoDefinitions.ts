@@ -3,9 +3,9 @@ import type {PhotoDefinition} from '../shared/lightweightRecognition';
 import type {GamePack} from '../shared/types';
 let definitions:PhotoDefinition[]|undefined;
 let pending:Promise<void>|undefined;
-/** This dynamic import is the only runtime dependency on the 120-game definition data. */
+/** Definition data is loaded only when a reader is selected; exact historical definitions keep saved boards readable. */
 export function loadPhotoDefinitions():Promise<void>{
- return pending??=import('../game-photo-definitions/index.json').then(module=>{definitions=module.default.games as PhotoDefinition[];}).catch(error=>{pending=undefined;throw error;});
+ return pending??=Promise.all([import('../game-photo-definitions/index.json'),import('../docs/gamepack-revision-20261026/history/before-runtime-revision/game-photo-definitions/index.json')]).then(([current,retired])=>{definitions=[...current.default.games,...retired.default.games] as PhotoDefinition[];}).catch(error=>{pending=undefined;throw error;});
 }
 /** Lookup only; the shared task compiler revalidates pinned scope and allowed literals. */
 export function photoDefinitionFor(pack:GamePack):PhotoDefinition|undefined {

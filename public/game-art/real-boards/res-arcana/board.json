@@ -1,0 +1,1562 @@
+{
+  "gameId": "res-arcana",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "player-1-engine",
+      "label": "1번 자리 · 개인 엔진",
+      "field": "engine.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "places",
+        "essences"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "선택 마법사, 공개된 유물/기념물/힘의 장소/마법 물품을 이어서 놓는 가변 엔진. 카드별 회전과 카드 위 정수 부착은 tableModel에 기록한다.",
+      "bounds": [
+        34,
+        92,
+        250,
+        172
+      ],
+      "placement": "variable-player-engine-with-component-relative-essence-attachments",
+      "stateKey": "players.player-1.engine",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "player-1-hand",
+      "label": "1번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "선택된 소유자만 정체를 볼 수 있는 현재 손패. 초기 3장으로 고정하지 않고 실제 인스턴스를 보존한다.",
+      "bounds": [
+        34,
+        292,
+        250,
+        80
+      ],
+      "placement": "private-variable-artifact-hand",
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "player-2-engine",
+      "label": "2번 자리 · 개인 엔진",
+      "field": "engine.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "places",
+        "essences"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "1번 자리와 같은 재사용 좌석 구조. 실제 게임 상태를 추측하지 않는다.",
+      "bounds": [
+        716,
+        92,
+        250,
+        172
+      ],
+      "placement": "variable-player-engine-with-component-relative-essence-attachments",
+      "stateKey": "players.player-2.engine",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "player-2-hand",
+      "label": "2번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "소유자 비공개 손패; 보드 정적인 예시에는 카드 정체를 넣지 않는다.",
+      "bounds": [
+        716,
+        292,
+        250,
+        80
+      ],
+      "placement": "private-variable-artifact-hand",
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "player-3-engine",
+      "label": "3번 자리 · 개인 엔진",
+      "field": "engine.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "places",
+        "essences"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "3인 이상일 때 사용하는 동일 좌석 템플릿.",
+      "bounds": [
+        34,
+        654,
+        250,
+        172
+      ],
+      "placement": "variable-player-engine-with-component-relative-essence-attachments",
+      "stateKey": "players.player-3.engine",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "player-3-hand",
+      "label": "3번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "소유자 비공개 손패.",
+      "bounds": [
+        34,
+        854,
+        250,
+        80
+      ],
+      "placement": "private-variable-artifact-hand",
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "player-4-engine",
+      "label": "4번 자리 · 개인 엔진",
+      "field": "engine.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "places",
+        "essences"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "4인 게임에서 사용하는 동일 좌석 템플릿.",
+      "bounds": [
+        716,
+        654,
+        250,
+        172
+      ],
+      "placement": "variable-player-engine-with-component-relative-essence-attachments",
+      "stateKey": "players.player-4.engine",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "player-4-hand",
+      "label": "4번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "소유자 비공개 손패.",
+      "bounds": [
+        716,
+        854,
+        250,
+        80
+      ],
+      "placement": "private-variable-artifact-hand",
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "shared-market",
+      "label": "공용 공급 · 힘의 장소/기념물/마법 물품",
+      "field": "market.scene",
+      "scope": "public",
+      "accepts": [
+        "cards",
+        "places"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "공용으로 공개된 기념물과 힘의 장소, 사용 가능한 마법 물품. 정수 공급과 첫 플레이어 표식은 인스턴스 컴포넌트 바인딩이 없어 tableModel의 sharedZones로 별도 정의한다.",
+      "bounds": [
+        316,
+        194,
+        368,
+        610
+      ],
+      "placement": "dynamic-shared-market-and-public-piles",
+      "stateKey": "shared.market",
+      "visibility": "public"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "player-3-engine",
+        "player-3-hand",
+        "player-4-engine",
+        "player-4-hand"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "player-4-engine",
+        "player-4-hand"
+      ]
+    },
+    "4": {
+      "hideAreas": []
+    }
+  },
+  "notes": [
+    "Official English base rules (2020-10-03); expansion components and 5th player are excluded.",
+    "The game has no fixed physical board. The SVG is an original, text-free tabletop map for the full shared supply and 2–4 reusable player seats; it is not a reproduction of the commercial art.",
+    "Areas are free-placement regions; the exact card/component identity, owner, turned state, face, private visibility, and attached essence piles live in tableModel rather than fixed slots.",
+    "The shared essence bank and First Player token are drawn as geometry because the current runtime component-catalog binding does not expose a public essence-supply/token area; tableModel retains their state contract for a later consumer.",
+    "No application integration or rule engine is included in this asset package."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://sandcastle-games.com/assets/PDFs/ResArcanaRulesEN20201003.pdf",
+      "location": "Official English base rules 2020-10-03, pp.2–9 and 11; components, setup, turn sequence, passing, victory and component states",
+      "verifiedFacts": "10 mages, 40 artifacts (8 per player, 3 initial hand), 10 monuments (2 face-up and 8 draw), 5 double-sided Places of Power, 8 Magic Items, 30 of each of five essences, twelve 5x chips, First Player token; components can turn and hold essences; public engine, private hand/deck, discard and round checkpoint.",
+      "access": "official-rulebook-directly-opened",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-pdf",
+      "localFile": "docs/art-confirmation/sources/res-arcana-rules.pdf",
+      "localSHA256": "22d26b975ecf3127f2e98c3bc2e467d8fe073a0d9537474986edd654eaebec96",
+      "extractedTextFile": "docs/art-confirmation/sources/res-arcana-rules.txt",
+      "extractedTextSHA256": "5d0418f73e3a7eb923e797dca779f21d4756eaf72b04b5143647142dc34c3c93"
+    },
+    {
+      "url": "https://sandcastle-games.com/res-arcana",
+      "location": "Official publisher page: player count, personal artifact deck and expansions",
+      "verifiedFacts": "Base game is for 2–4 players and each player uses a personal deck of 8 artifacts. Lux et Tenebrae adds a fifth player, demons and scrolls; Perlae Imperii adds pearls and a 13-point threshold; both are excluded.",
+      "access": "official-page-opened",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-publisher-page"
+    }
+  ],
+  "omittedBindings": [],
+  "assetScope": "Complete base-game tabletop layout and declarative resumable physical-state schema; application consumer integration is separate.",
+  "tableModel": {
+    "schema": "res-arcana-table-v1",
+    "edition": "base",
+    "applicationIntegration": "not-included; this is a self-contained asset/state contract for a later consumer",
+    "playerRange": {
+      "minimum": 2,
+      "maximum": 4,
+      "seatIds": [
+        "player-1",
+        "player-2",
+        "player-3",
+        "player-4"
+      ]
+    },
+    "componentInventory": {
+      "mages": {
+        "count": 10,
+        "selection": "Each player is dealt 2 and selects 1; first-game setup uses the matching preset mage."
+      },
+      "artifacts": {
+        "count": 40,
+        "personalDeckSize": 8,
+        "initialHandSize": 3,
+        "initialDrawPileSize": 5
+      },
+      "monuments": {
+        "count": 10,
+        "faceUpOfferAtSetup": 2,
+        "drawPileAtSetup": 8
+      },
+      "placesOfPower": {
+        "count": 5,
+        "doubleSided": true
+      },
+      "magicItems": {
+        "count": 8
+      },
+      "essences": {
+        "types": [
+          "red",
+          "blue",
+          "green",
+          "gold",
+          "death"
+        ],
+        "physicalCountPerType": 30,
+        "fiveEssenceChips": 12
+      },
+      "firstPlayerTokens": {
+        "count": 1
+      },
+      "referenceCards": {
+        "count": 4,
+        "tableState": false
+      }
+    },
+    "fieldBindings": [
+      {
+        "state": "players[].engine",
+        "field": "engine.scene",
+        "scope": "player",
+        "components": [
+          "cards",
+          "places",
+          "essences"
+        ],
+        "visibility": "public"
+      },
+      {
+        "state": "players[].hand",
+        "field": "hand.scene",
+        "scope": "player",
+        "components": [
+          "cards"
+        ],
+        "visibility": "owner"
+      },
+      {
+        "state": "players[].artifactDeck",
+        "field": "deck.scene",
+        "scope": "player",
+        "components": [
+          "cards"
+        ],
+        "visibility": "hidden",
+        "editor": "physical-only"
+      },
+      {
+        "state": "shared.market",
+        "field": "market.scene",
+        "scope": "public",
+        "components": [
+          "cards",
+          "places"
+        ],
+        "visibility": "public"
+      },
+      {
+        "state": "players[].essencePool",
+        "field": "essence-counts",
+        "scope": "player",
+        "editor": "opaque-preserve"
+      },
+      {
+        "state": "roundCheckpoint",
+        "field": "round",
+        "scope": "public",
+        "editor": "opaque-preserve"
+      },
+      {
+        "state": "players[].powerCheckpoint",
+        "field": "power",
+        "scope": "player",
+        "editor": "opaque-preserve"
+      },
+      {
+        "state": "activePlayerId",
+        "field": "turn",
+        "scope": "public",
+        "editor": "scalar"
+      },
+      {
+        "state": "pendingCheckpoint",
+        "field": "pending",
+        "scope": "public",
+        "editor": "scalar"
+      },
+      {
+        "state": "firstPlayerId",
+        "field": "starting-player",
+        "scope": "public",
+        "editor": "scalar"
+      }
+    ],
+    "sharedZones": [
+      {
+        "id": "places-of-power",
+        "component": "places",
+        "count": 5,
+        "sides": [
+          "side-a",
+          "side-b"
+        ],
+        "state": "selected side per tile; claimed tiles move to one owner engine and cannot return to offer"
+      },
+      {
+        "id": "monument-offer",
+        "component": "cards",
+        "count": 2,
+        "state": "face-up offer; replace a claimed displayed monument from draw pile when available"
+      },
+      {
+        "id": "monument-draw-pile",
+        "component": "cards",
+        "initialCount": 8,
+        "orderVisibility": "hidden"
+      },
+      {
+        "id": "magic-item-supply",
+        "component": "places",
+        "totalInventory": 8,
+        "count": "variable as players choose/swap items",
+        "faceState": "normal-or-passed"
+      },
+      {
+        "id": "essence-bank",
+        "component": "essences",
+        "types": [
+          "red",
+          "blue",
+          "green",
+          "gold",
+          "death"
+        ],
+        "initialPhysicalCountPerType": 30,
+        "fiveEssenceChips": 12,
+        "countMayExceedPhysicalSupply": true
+      },
+      {
+        "id": "first-player-token",
+        "component": "token-not-in-runtime-catalog",
+        "count": 1,
+        "holderPlayerId": "player-id-or-unknown",
+        "faceState": "normal-or-passed"
+      }
+    ],
+    "playerState": {
+      "requiredPerActivePlayer": {
+        "selectedMageInstanceId": "instance-or-unknown",
+        "magicItemInstanceId": "instance-or-unknown",
+        "magicItemFaceState": "normal-or-passed-or-unknown",
+        "artifactPool": {
+          "initialTotal": 8,
+          "handInstanceIds": [],
+          "drawPile": {
+            "count": "number-or-unknown",
+            "orderKnown": "boolean-or-unknown"
+          },
+          "discardPileInstanceIds": [],
+          "inPlayInstanceIds": []
+        },
+        "essencePool": {
+          "red": "count-or-unknown",
+          "blue": "count-or-unknown",
+          "green": "count-or-unknown",
+          "gold": "count-or-unknown",
+          "death": "count-or-unknown"
+        },
+        "passedThisRound": "boolean-or-unknown",
+        "victoryPointsAtLastCheck": "number-or-unknown"
+      },
+      "zoneSemantics": {
+        "artifactDrawPile": "hidden identity/order; count may be unknown; when empty, discarded artifacts are shuffled to form a new draw pile",
+        "artifactDiscardPile": "public, face-up, each card sideways and tucked under the draw pile; keep separate from turned in-play components",
+        "hand": "owner-private card identities; do not copy into public player views",
+        "engine": "public variable placement of mage, played artifacts, claimed monuments/Places of Power and magic item; each physical instance remains separately addressable"
+      },
+      "componentInstance": {
+        "required": [
+          "instanceId",
+          "componentId",
+          "role",
+          "ownerPlayerId",
+          "zoneId"
+        ],
+        "optionalPreservedState": [
+          "faceSide",
+          "turnedState",
+          "relativePosition",
+          "attachedEssenceInstances",
+          "visibleIdentity",
+          "identityKnown"
+        ],
+        "turnedStateValues": [
+          "upright",
+          "turned",
+          "unknown"
+        ],
+        "essenceAttachment": {
+          "essenceType": "red|blue|green|gold|death",
+          "count": "known-count-or-unknown",
+          "attachedToInstanceId": "component-instance-id"
+        }
+      }
+    },
+    "roundCheckpoint": {
+      "roundNumber": "number-or-unknown",
+      "phase": [
+        "collect",
+        "actions",
+        "victory-check",
+        "straighten",
+        "ended",
+        "unknown"
+      ],
+      "activePlayerId": "player-id-or-unknown",
+      "clockwisePlayerOrder": "ordered-player-ids-or-unknown",
+      "passedPlayerIds": "player-ids-or-unknown",
+      "firstPlayerId": "player-id-or-unknown",
+      "pendingAction": {
+        "kind": "place-artifact|claim-monument|claim-place|discard-for-essence|use-power|pass|unknown",
+        "sourceInstanceId": "optional",
+        "targetInstanceId": "optional",
+        "completedSubsteps": [],
+        "remainingSubsteps": []
+      },
+      "passSubsteps": [
+        "take-first-player-token-if-first-to-pass",
+        "swap-magic-item-and-mark-passed-side",
+        "draw-one-artifact-if-possible"
+      ],
+      "victoryCheck": {
+        "threshold": 10,
+        "winnerPlayerId": "explicit-or-unknown",
+        "countsStoredEssencesOnComponents": true,
+        "tieBreak": "most essences in pool, Gold counts double; remaining tie may be shared victory"
+      }
+    },
+    "visualZones": {
+      "sharedMarket": [
+        "five-place-of-power-offer",
+        "two-face-up-monuments",
+        "monument-draw-pile",
+        "eight-magic-item-supply",
+        "five-essence-pools",
+        "twelve-five-essence-chips",
+        "first-player-token"
+      ],
+      "eachPlayerSeat": [
+        "mage",
+        "owned-magic-item",
+        "artifact-draw-pile",
+        "face-up-discard-pile",
+        "variable-engine",
+        "owner-private-hand",
+        "five-type-essence-pool"
+      ],
+      "areaRepeatSemantics": "seat areas are player-scoped reusable templates; hidden/owner-only contents must not be copied into public views"
+    },
+    "unknownPolicy": [
+      "Do not infer hidden artifact identities or deck order.",
+      "Keep unknown counts null/unknown; do not treat five-essence chips as a physical supply cap.",
+      "Keep component identity, owner, turned state, and attached essences separately addressable.",
+      "Do not infer turn order, pass completion, or victory from board appearance; store explicit checkpoint values."
+    ],
+    "ruleAutomation": "No action legality, power resolution, essence arithmetic, victory adjudication, or automatic round advancement is implemented by this asset. Preserve the physical state and the explicit checkpoint only."
+  },
+  "assetCompleteness": "Base Res Arcana table: 2–4 player mats, private hands and hidden decks, individual engine/card/resource relationships, shared Places of Power, monument offer/deck, Magic Item supply, essence bank, First Player marker and round checkpoint state.",
+  "boardArt": [
+    {
+      "id": "player-1-panel",
+      "type": "rect",
+      "x": 24,
+      "y": 24,
+      "w": 270,
+      "h": 390,
+      "rx": 24,
+      "fill": "#eaf5ff",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "player-1-engine-frame",
+      "type": "rect",
+      "x": 34,
+      "y": 92,
+      "w": 250,
+      "h": 172,
+      "rx": 16,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-hand-frame",
+      "type": "rect",
+      "x": 34,
+      "y": 292,
+      "w": 250,
+      "h": 80,
+      "rx": 14,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-mage-anchor",
+      "type": "circle",
+      "cx": 53,
+      "cy": 57,
+      "r": 18,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-magic-item-anchor",
+      "type": "rect",
+      "x": 79,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-deck-anchor",
+      "type": "rect",
+      "x": 111,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-discard-anchor",
+      "type": "rect",
+      "x": 143,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-essence-red",
+      "type": "circle",
+      "cx": 188,
+      "cy": 48,
+      "r": 7,
+      "fill": "#e65b55"
+    },
+    {
+      "id": "player-1-essence-blue",
+      "type": "circle",
+      "cx": 207,
+      "cy": 48,
+      "r": 7,
+      "fill": "#3388cc"
+    },
+    {
+      "id": "player-1-essence-green",
+      "type": "circle",
+      "cx": 226,
+      "cy": 48,
+      "r": 7,
+      "fill": "#45a46a"
+    },
+    {
+      "id": "player-1-essence-gold",
+      "type": "circle",
+      "cx": 245,
+      "cy": 48,
+      "r": 7,
+      "fill": "#e8bb35"
+    },
+    {
+      "id": "player-1-essence-death",
+      "type": "circle",
+      "cx": 264,
+      "cy": 48,
+      "r": 7,
+      "fill": "#26334a"
+    },
+    {
+      "id": "player-2-panel",
+      "type": "rect",
+      "x": 706,
+      "y": 24,
+      "w": 270,
+      "h": 390,
+      "rx": 24,
+      "fill": "#fff6dc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "player-2-engine-frame",
+      "type": "rect",
+      "x": 716,
+      "y": 92,
+      "w": 250,
+      "h": 172,
+      "rx": 16,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-hand-frame",
+      "type": "rect",
+      "x": 716,
+      "y": 292,
+      "w": 250,
+      "h": 80,
+      "rx": 14,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-mage-anchor",
+      "type": "circle",
+      "cx": 735,
+      "cy": 57,
+      "r": 18,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-magic-item-anchor",
+      "type": "rect",
+      "x": 761,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-deck-anchor",
+      "type": "rect",
+      "x": 793,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-discard-anchor",
+      "type": "rect",
+      "x": 825,
+      "y": 35,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-essence-red",
+      "type": "circle",
+      "cx": 870,
+      "cy": 48,
+      "r": 7,
+      "fill": "#e65b55"
+    },
+    {
+      "id": "player-2-essence-blue",
+      "type": "circle",
+      "cx": 889,
+      "cy": 48,
+      "r": 7,
+      "fill": "#3388cc"
+    },
+    {
+      "id": "player-2-essence-green",
+      "type": "circle",
+      "cx": 908,
+      "cy": 48,
+      "r": 7,
+      "fill": "#45a46a"
+    },
+    {
+      "id": "player-2-essence-gold",
+      "type": "circle",
+      "cx": 927,
+      "cy": 48,
+      "r": 7,
+      "fill": "#e8bb35"
+    },
+    {
+      "id": "player-2-essence-death",
+      "type": "circle",
+      "cx": 946,
+      "cy": 48,
+      "r": 7,
+      "fill": "#26334a"
+    },
+    {
+      "id": "player-3-panel",
+      "type": "rect",
+      "x": 24,
+      "y": 586,
+      "w": 270,
+      "h": 390,
+      "rx": 24,
+      "fill": "#e8f6ec",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "player-3-engine-frame",
+      "type": "rect",
+      "x": 34,
+      "y": 654,
+      "w": 250,
+      "h": 172,
+      "rx": 16,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-hand-frame",
+      "type": "rect",
+      "x": 34,
+      "y": 854,
+      "w": 250,
+      "h": 80,
+      "rx": 14,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-mage-anchor",
+      "type": "circle",
+      "cx": 53,
+      "cy": 619,
+      "r": 18,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-magic-item-anchor",
+      "type": "rect",
+      "x": 79,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-deck-anchor",
+      "type": "rect",
+      "x": 111,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-discard-anchor",
+      "type": "rect",
+      "x": 143,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-essence-red",
+      "type": "circle",
+      "cx": 188,
+      "cy": 610,
+      "r": 7,
+      "fill": "#e65b55"
+    },
+    {
+      "id": "player-3-essence-blue",
+      "type": "circle",
+      "cx": 207,
+      "cy": 610,
+      "r": 7,
+      "fill": "#3388cc"
+    },
+    {
+      "id": "player-3-essence-green",
+      "type": "circle",
+      "cx": 226,
+      "cy": 610,
+      "r": 7,
+      "fill": "#45a46a"
+    },
+    {
+      "id": "player-3-essence-gold",
+      "type": "circle",
+      "cx": 245,
+      "cy": 610,
+      "r": 7,
+      "fill": "#e8bb35"
+    },
+    {
+      "id": "player-3-essence-death",
+      "type": "circle",
+      "cx": 264,
+      "cy": 610,
+      "r": 7,
+      "fill": "#26334a"
+    },
+    {
+      "id": "player-4-panel",
+      "type": "rect",
+      "x": 706,
+      "y": 586,
+      "w": 270,
+      "h": 390,
+      "rx": 24,
+      "fill": "#f2eaff",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "player-4-engine-frame",
+      "type": "rect",
+      "x": 716,
+      "y": 654,
+      "w": 250,
+      "h": 172,
+      "rx": 16,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-hand-frame",
+      "type": "rect",
+      "x": 716,
+      "y": 854,
+      "w": 250,
+      "h": 80,
+      "rx": 14,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-mage-anchor",
+      "type": "circle",
+      "cx": 735,
+      "cy": 619,
+      "r": 18,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-magic-item-anchor",
+      "type": "rect",
+      "x": 761,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-deck-anchor",
+      "type": "rect",
+      "x": 793,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-discard-anchor",
+      "type": "rect",
+      "x": 825,
+      "y": 597,
+      "w": 26,
+      "h": 42,
+      "rx": 5,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-essence-red",
+      "type": "circle",
+      "cx": 870,
+      "cy": 610,
+      "r": 7,
+      "fill": "#e65b55"
+    },
+    {
+      "id": "player-4-essence-blue",
+      "type": "circle",
+      "cx": 889,
+      "cy": 610,
+      "r": 7,
+      "fill": "#3388cc"
+    },
+    {
+      "id": "player-4-essence-green",
+      "type": "circle",
+      "cx": 908,
+      "cy": 610,
+      "r": 7,
+      "fill": "#45a46a"
+    },
+    {
+      "id": "player-4-essence-gold",
+      "type": "circle",
+      "cx": 927,
+      "cy": 610,
+      "r": 7,
+      "fill": "#e8bb35"
+    },
+    {
+      "id": "player-4-essence-death",
+      "type": "circle",
+      "cx": 946,
+      "cy": 610,
+      "r": 7,
+      "fill": "#26334a"
+    },
+    {
+      "id": "shared-market-panel",
+      "type": "rect",
+      "x": 310,
+      "y": 188,
+      "w": 380,
+      "h": 624,
+      "rx": 26,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "shared-market-places-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 204,
+      "w": 352,
+      "h": 132,
+      "rx": 14,
+      "fill": "#eaf5ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-market-monuments-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 345,
+      "w": 352,
+      "h": 126,
+      "rx": 14,
+      "fill": "#fff6dc",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-market-items-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 480,
+      "w": 352,
+      "h": 112,
+      "rx": 14,
+      "fill": "#f2eaff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-market-essences-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 601,
+      "w": 352,
+      "h": 194,
+      "rx": 14,
+      "fill": "#e8f6ec",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "power-place-card-1",
+      "type": "rect",
+      "x": 338,
+      "y": 236,
+      "w": 54,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "power-place-card-2",
+      "type": "rect",
+      "x": 403,
+      "y": 236,
+      "w": 54,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "power-place-card-3",
+      "type": "rect",
+      "x": 468,
+      "y": 236,
+      "w": 54,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "power-place-card-4",
+      "type": "rect",
+      "x": 533,
+      "y": 236,
+      "w": 54,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "power-place-card-5",
+      "type": "rect",
+      "x": 598,
+      "y": 236,
+      "w": 54,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "monument-faceup-1",
+      "type": "rect",
+      "x": 362,
+      "y": 367,
+      "w": 52,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "monument-faceup-2",
+      "type": "rect",
+      "x": 430,
+      "y": 367,
+      "w": 52,
+      "h": 82,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "monument-draw-pile",
+      "type": "rect",
+      "x": 506,
+      "y": 373,
+      "w": 48,
+      "h": 70,
+      "rx": 7,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "monument-draw-pile-edge",
+      "type": "rect",
+      "x": 513,
+      "y": 367,
+      "w": 48,
+      "h": 70,
+      "rx": 7,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-1",
+      "type": "rect",
+      "x": 350,
+      "y": 495,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-2",
+      "type": "rect",
+      "x": 424,
+      "y": 495,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-3",
+      "type": "rect",
+      "x": 498,
+      "y": 495,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-4",
+      "type": "rect",
+      "x": 572,
+      "y": 495,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-5",
+      "type": "rect",
+      "x": 350,
+      "y": 539,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-6",
+      "type": "rect",
+      "x": 424,
+      "y": 539,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-7",
+      "type": "rect",
+      "x": 498,
+      "y": 539,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "magic-item-slot-8",
+      "type": "rect",
+      "x": 572,
+      "y": 539,
+      "w": 36,
+      "h": 32,
+      "rx": 8,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "essence-bank-red",
+      "type": "circle",
+      "cx": 359,
+      "cy": 637,
+      "r": 16,
+      "fill": "#e65b55",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "essence-bank-blue",
+      "type": "circle",
+      "cx": 424,
+      "cy": 637,
+      "r": 16,
+      "fill": "#3388cc",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "essence-bank-green",
+      "type": "circle",
+      "cx": 489,
+      "cy": 637,
+      "r": 16,
+      "fill": "#45a46a",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "essence-bank-gold",
+      "type": "circle",
+      "cx": 554,
+      "cy": 637,
+      "r": 16,
+      "fill": "#e8bb35",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "essence-bank-death",
+      "type": "circle",
+      "cx": 619,
+      "cy": 637,
+      "r": 16,
+      "fill": "#26334a",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "five-essence-chip-1",
+      "type": "circle",
+      "cx": 356,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-2",
+      "type": "circle",
+      "cx": 380,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-3",
+      "type": "circle",
+      "cx": 404,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-4",
+      "type": "circle",
+      "cx": 428,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-5",
+      "type": "circle",
+      "cx": 452,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-6",
+      "type": "circle",
+      "cx": 476,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-7",
+      "type": "circle",
+      "cx": 500,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-8",
+      "type": "circle",
+      "cx": 524,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-9",
+      "type": "circle",
+      "cx": 548,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-10",
+      "type": "circle",
+      "cx": 572,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-11",
+      "type": "circle",
+      "cx": 596,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "five-essence-chip-12",
+      "type": "circle",
+      "cx": 620,
+      "cy": 688,
+      "r": 8,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "first-player-token-ring",
+      "type": "circle",
+      "cx": 652,
+      "cy": 748,
+      "r": 18,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "first-player-token-mark",
+      "type": "polygon",
+      "points": [
+        [
+          652,
+          735
+        ],
+        [
+          656,
+          744
+        ],
+        [
+          666,
+          745
+        ],
+        [
+          659,
+          752
+        ],
+        [
+          661,
+          762
+        ],
+        [
+          652,
+          757
+        ],
+        [
+          643,
+          762
+        ],
+        [
+          645,
+          752
+        ],
+        [
+          638,
+          745
+        ],
+        [
+          648,
+          744
+        ]
+      ],
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    }
+  ]
+}

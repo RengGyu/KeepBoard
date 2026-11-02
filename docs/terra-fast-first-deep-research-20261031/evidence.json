@@ -1,0 +1,486 @@
+{
+  "version": "keepboard-fast-first-primary-evidence-v1",
+  "checkedDate": "2026-10-31",
+  "scope": "Bounded primary-source methods and implementation review, not an exhaustive systematic review.",
+  "newInferenceCalls": 0,
+  "downloadedCodeExecuted": false,
+  "modelWeightsDownloaded": false,
+  "sources": [
+    {
+      "id": "P1",
+      "title": "PP-OCRv6 / official PaddleOCR.js",
+      "class": "specialist OCR",
+      "paper": "https://arxiv.org/html/2606.13108",
+      "sections": [
+        "§2.2–2.3",
+        "§3.1",
+        "§3.3.3",
+        "§3.4 Table 9"
+      ],
+      "method": "Text detector → polygon crop → CTC recognition; NRTR training branch is discarded at inference. Separate detector and recognizer evidence is useful.",
+      "reportedMeasurement": "200 general-scene/document images including disk I/O and pre/postprocessing. PP-OCRv6 small: native ONNX Runtime 1.23.2 Apple M4 1.29 s/image; tiny 0.35 s/image. Neither is a browser/phone or board-game benchmark.",
+      "license": "Official code Apache-2.0; selected small det/rec ONNX model cards also Apache-2.0.",
+      "versions": "Repository dab3fe3 (2026-09-16); JS package metadata 0.4.2, onnxruntime-web ^1.22.0. Paper June 2026. Implementation/version and benchmark backend are not identical.",
+      "availability": "Official JS Worker implementation with WebGPU/WASM backend selection. Two HF ONNX files listed as 21.2 MB recognition +9.88 MB detection; not downloaded. Runtime and image memory are additional.",
+      "links": [
+        "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_rec_onnx",
+        "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_det_onnx",
+        "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_rec_onnx/tree/main",
+        "https://huggingface.co/PaddlePaddle/PP-OCRv6_small_det_onnx/tree/main",
+        "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/index.ts"
+      ],
+      "code": [
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/pipelines/ocr/core.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/pipelines/ocr/core.ts",
+          "sha256": "4fdb157717f433fef9b28d2fcc0565f685134d2b770cacf879315111a637706a",
+          "symbols": [
+            "OcrPipelineRunner.initialize",
+            "OcrPipelineRunner.predict"
+          ],
+          "inspection": "Det+rec assets load in parallel; detector boxes drive cropByPoly. predict returns text items only when rec.text exists and score passes; empty box coordinates are not exposed in high-level result.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/models/rec.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/models/rec.ts",
+          "sha256": "cbf13aa70e340fb9db2eaa6db368999415f9f46dcbc6d29d2ecf6f8acf7cdbdc",
+          "symbols": [
+            "decodeCTCSample"
+          ],
+          "inspection": "Greedy CTC decode with mean character probability; score is not a calibrated board-state correctness probability.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/models/det.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/models/det.ts",
+          "sha256": "8ea4378c7cda0df51b605eacdd91aca9a4ea77025ff34dcb4d8d20a00ec6e5e7",
+          "symbols": [
+            "createDetModel",
+            "decodeDetOutput"
+          ],
+          "inspection": "Polygon detection postprocessing is a distinct stage. Exported package index exposes types, not the createDetModel factory.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/pipelines/ocr/worker-backed.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/pipelines/ocr/worker-backed.ts",
+          "sha256": "81ce1f74fbace5909a3ac39f660037778c7684f26a2653f61a479b2650ff6839",
+          "symbols": [
+            "createWorkerBackedPaddleOCR"
+          ],
+          "inspection": "Module Worker isolates processing; runtime/asset URLs must be version-pinned.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/runtime/ort.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/runtime/ort.ts",
+          "sha256": "cfad473a5b42bbb04d6d501cb7257ecf6a2827fec4555e31a9e09098f4f3a866",
+          "symbols": [
+            "getProviderCandidates",
+            "createSession"
+          ],
+          "inspection": "Auto can use WebGPU or WASM; explicit GPU failure is not proof all clients support GPU.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "PaddlePaddle/PaddleOCR",
+          "commit": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+          "path": "paddleocr-js/packages/core/src/resources/model-asset.ts",
+          "url": "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf/paddleocr-js/packages/core/src/resources/model-asset.ts",
+          "sha256": "4e79fb183ee8cdf5332b18c3db2a7f751c24415e86a11f5e732af54e1eac94b7",
+          "symbols": [
+            "DEFAULT_MODEL_ASSETS",
+            "loadModelAsset"
+          ],
+          "inspection": "Fetches complete tar bytes and extracts ONNX/yml. SDK does not implement a persistent model cache itself.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "ADOPT_FOR_BOUNDED_PROTOTYPE",
+      "transferLimit": "Text regions are not physical object footprints; no dice-pip/meeple/card-identity guarantee. CTC scores do not fix 6/9. Selected unified language list does not establish Korean support; use separately verified Korean assets if needed. Phone cold/warm latency, rotation and game-font accuracy UNKNOWN.",
+      "mapping": [
+        "src/Capture.tsx",
+        "proposed src/perception/ocrWorker.ts",
+        "proposed shared/perceptionEvidence.ts",
+        "shared/photoGeometry.ts"
+      ]
+    },
+    {
+      "id": "P2",
+      "title": "Determining Chess Game State from an Image / chesscog",
+      "class": "working board-state pipeline",
+      "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8321354/",
+      "sections": [
+        "§4.1–4.4",
+        "§5",
+        "Tables 1 and 3"
+      ],
+      "method": "RANSAC/grid localization → occupancy classifier → piece classifier; context around a square matters. Novel piece appearance is adapted using known starting-position images.",
+      "reportedMeasurement": "Authors report just over 2 s on Intel i5-6500 3.20GHz quad-core, under 0.5 s on GTX1060 6GB. New-piece evaluation has 27 real board images: without adaptation 9.33 errors/board; after adaptation 0.11 and 88.89% perfect boards. Not generic zero-shot recognition.",
+      "license": "Code MIT; separately downloadable pretrained weights were not downloaded or license-audited in this task.",
+      "versions": "Pinned master 4e9c22d (2025-01-11); paper 2021; old Python/PyTorch dependency stack requires maintenance.",
+      "availability": "Working academic/personal public code, not evidence of a production 120-game service.",
+      "links": [
+        "https://github.com/georg-wolflein/chesscog"
+      ],
+      "code": [
+        {
+          "repo": "georg-wolflein/chesscog",
+          "commit": "4e9c22d76c75615d4e9a4cd567679f4caa00dec7",
+          "path": "chesscog/corner_detection/detect_corners.py",
+          "url": "https://raw.githubusercontent.com/georg-wolflein/chesscog/4e9c22d76c75615d4e9a4cd567679f4caa00dec7/chesscog/corner_detection/detect_corners.py",
+          "sha256": "3dbcf396aa35838e35b3d329a9b26ed67535299eea5034b7c086513f37ff1699",
+          "symbols": [
+            "find_corners",
+            "_detect_edges",
+            "_detect_lines",
+            "_compute_homography"
+          ],
+          "inspection": "Canny/Hough lines followed by grid/RANSAC reasoning; strongly depends on chess-board structure.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "georg-wolflein/chesscog",
+          "commit": "4e9c22d76c75615d4e9a4cd567679f4caa00dec7",
+          "path": "chesscog/recognition/recognition.py",
+          "url": "https://raw.githubusercontent.com/georg-wolflein/chesscog/4e9c22d76c75615d4e9a4cd567679f4caa00dec7/chesscog/recognition/recognition.py",
+          "sha256": "264a17a4a574d06fb34ea15244e6a403ac42807a34b1655b60bdbb0b64f4243d",
+          "symbols": [
+            "ChessRecognizer.predict",
+            "TimedChessRecognizer"
+          ],
+          "inspection": "64-square occupancy precedes piece classification; illegal-board warning does not rewrite values into a legal state.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "ADOPT_SEPARATION_PRINCIPLE_NOT_WEIGHTS",
+      "transferLimit": "Known board geometry can constrain coordinates, not hidden occupancy. Catan hexes, variable tiles and freely placed card rows need different geometric evidence. Starting inventory labels must not enter midgame requests.",
+      "mapping": [
+        "shared/photoGeometry.ts",
+        "game-photo-definitions/index.json",
+        "server/ai/observationAssembly.ts"
+      ]
+    },
+    {
+      "id": "P3",
+      "title": "SAHI: Slicing Aided Hyper Inference",
+      "class": "detection slicing",
+      "paper": "https://arxiv.org/html/2202.06934",
+      "sections": [
+        "§3",
+        "§4, VisDrone/xView experiments"
+      ],
+      "method": "Overlapping slices are resized for an existing detector, shifted back to source coordinates and merged; optional whole-image detection preserves large-object context.",
+      "reportedMeasurement": "VisDrone AP50 improvements from slicing alone: +6.8/+5.1/+5.3 points for FCOS/VFNet/TOOD. Evaluated 640x640 VisDrone or 400x400 xView slices with detector scaling. Large-object fragmentation and overlap tradeoffs remain.",
+      "license": "Canonical obss/sahi MIT.",
+      "versions": "Canonical main b5a153e (2026-10-16). Small-Object-Detection/SAHI inspected metadata is a stale fork and excluded from current-code claims.",
+      "availability": "Python wrapper around a detector; neither a trained game-object model nor an API parallel-scheduling framework.",
+      "links": [
+        "https://github.com/obss/sahi"
+      ],
+      "code": [
+        {
+          "repo": "obss/sahi",
+          "commit": "b5a153ee7bcb1fd84a7b868575ff14131e7423ce",
+          "path": "sahi/predict.py",
+          "url": "https://raw.githubusercontent.com/obss/sahi/b5a153ee7bcb1fd84a7b868575ff14131e7423ce/sahi/predict.py",
+          "sha256": "1e431b102c70af84545b3701531df1b56deba72b08989718d92631fe99f711aa",
+          "symbols": [
+            "get_sliced_prediction"
+          ],
+          "inspection": "Calls detector on slices, shifts boxes to source, optionally runs full image, then postprocesses.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "obss/sahi",
+          "commit": "b5a153ee7bcb1fd84a7b868575ff14131e7423ce",
+          "path": "sahi/postprocess/combine.py",
+          "url": "https://raw.githubusercontent.com/obss/sahi/b5a153ee7bcb1fd84a7b868575ff14131e7423ce/sahi/postprocess/combine.py",
+          "sha256": "f9017441e788d62370e2ac3c647aa5572a5c106f8b61bfa93bb5cafd806a4f2c",
+          "symbols": [
+            "NMMPostprocess",
+            "GreedyNMMPostprocess",
+            "_apply_merge"
+          ],
+          "inspection": "NMS discards and NMM may merge clusters; these cannot directly preserve KeepBoard layers, conflicting values and immutable evidence.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "ADOPT_TRANSFORM_AND_CONTEXT_PRINCIPLE",
+      "transferLimit": "Detection AP is not VLM board-state accuracy. More crops add work and repeated image tokens. Existing KeepBoard exact crop transforms should be reused; no universal IoU or overlap copied as product truth.",
+      "mapping": [
+        "shared/photoGeometry.ts::mapObservationRegion",
+        "server/scanObservation.ts",
+        "server/observationFusion.ts"
+      ]
+    },
+    {
+      "id": "P4",
+      "title": "YOLO-World",
+      "class": "open-vocabulary detector",
+      "paper": "https://arxiv.org/html/2401.17270",
+      "sections": [
+        "§3.1–3.3",
+        "§4.1–4.2, Table 2"
+      ],
+      "method": "Text/image region alignment and offline vocabulary reparameterization; outputs object boxes/classes, not full semantic game state.",
+      "reportedMeasurement": "YOLO-World-L reports 35.4 AP on LVIS minival and 52 FPS on NVIDIA V100 with reparameterized vocabulary. Not CPU/mobile timing or small game numeral accuracy.",
+      "license": "Official repo GPL-3.0; commercial licensing path mentioned by maintainers. Do not assume a wrapper relicenses the model.",
+      "versions": "Pinned official main 4f70adb (2025-02-26). Static AST parsing of yolo_world.py at this revision fails at line61; downloaded implementation was never executed.",
+      "availability": "Official weights and ONNX example exist; this inspected main is not a verified deployable runtime. No managed endpoint authentication or account availability tested.",
+      "links": [
+        "https://github.com/AILab-CVC/YOLO-World"
+      ],
+      "code": [
+        {
+          "repo": "AILab-CVC/YOLO-World",
+          "commit": "4f70adbaacf5685bd9ec5bea85f1f91057f6fc0b",
+          "path": "yolo_world/models/detectors/yolo_world.py",
+          "url": "https://raw.githubusercontent.com/AILab-CVC/YOLO-World/4f70adbaacf5685bd9ec5bea85f1f91057f6fc0b/yolo_world/models/detectors/yolo_world.py",
+          "sha256": "2aaa1dbbd7dcd3117f5ef34ae756d56a7eb1c48c4bb808ecb645d8bd638811ae",
+          "symbols": [
+            "YOLOWorldDetector.predict",
+            "reparameterize",
+            "extract_feat"
+          ],
+          "inspection": "Caches text features and emits detections; exact main parse failure recorded in offline-audit.json.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "AILab-CVC/YOLO-World",
+          "commit": "4f70adbaacf5685bd9ec5bea85f1f91057f6fc0b",
+          "path": "deploy/onnx_demo.py",
+          "url": "https://raw.githubusercontent.com/AILab-CVC/YOLO-World/4f70adbaacf5685bd9ec5bea85f1f91057f6fc0b/deploy/onnx_demo.py",
+          "sha256": "d262da370a449aa496a64508f45c1fde1780b499a0d69fc4af66bd7bb6b2bb92",
+          "symbols": [
+            "preprocess",
+            "inference",
+            "inference_with_postprocessing"
+          ],
+          "inspection": "Uses 640x640 preprocessing and ONNX; one postprocessing path explicitly moves tensors to cuda:0. Not an out-of-box browser implementation.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "LATER_DETECTOR_COMPARATOR_NOT_FIRST_DEPENDENCY",
+      "transferLimit": "Common noun prompts may find cards/dice, but must measure game-piece recall, adjacent-object splits and false positives. No implied card identity, ownership or numeral decoding.",
+      "mapping": [
+        "proposed perception candidate interface",
+        "game-photo-definitions/index.json allowed component labels"
+      ]
+    },
+    {
+      "id": "P5",
+      "title": "V*: Guided Visual Search / SEAL",
+      "class": "coarse-to-fine VLM search",
+      "paper": "https://arxiv.org/html/2312.14135v2",
+      "sections": [
+        "§3.3",
+        "§5.1–5.3, Tables 1–3"
+      ],
+      "method": "Target-conditioned priority search over subimages and visual working memory; separates search from downstream question answering.",
+      "reportedMeasurement": "V*Bench VQA overall 75.39 vs GPT-4V 54.97; mean search 6.0 s/target on one A100. Guided search 4.65 steps vs BFS6.62. Neither is whole-object recall or phone/API latency.",
+      "license": "Repo MIT; Vicuna/LLaVA/search model checkpoint conditions are separate and not established as one permissive product bundle here.",
+      "versions": "Official code 4ede664 (2024-01-07); CVPR2024 paper.",
+      "availability": "CUDA/BF16 7B-based research stack, not a cheap CPU local pass.",
+      "links": [
+        "https://github.com/penghao-wu/vstar"
+      ],
+      "code": [
+        {
+          "repo": "penghao-wu/vstar",
+          "commit": "4ede6647959cfb59eeabd09286adf6a5f9478da0",
+          "path": "visual_search.py",
+          "url": "https://raw.githubusercontent.com/penghao-wu/vstar/4ede6647959cfb59eeabd09286adf6a5f9478da0/visual_search.py",
+          "sha256": "f58eddc2416705f32ac80b52f5e1f9ad1bbe801dece13232131b462053bc0b0d",
+          "symbols": [
+            "visual_search_queue"
+          ],
+          "inspection": "Target detections stop search; multiple-instance return is limited to the whole-image branch. Weak heatmap can trigger a common-sense search cue, then four-way subdivision.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "ADOPT_BOUNDED_PRIORITY_SEARCH_ONLY",
+      "transferLimit": "A question-specific search cannot certify that every repeated game piece was found. Commonsense expected locations are search hypotheses, not observed coordinates. Avoid recursive paid search agents.",
+      "mapping": [
+        "proposed selectRefinementRegions",
+        "server/scanExecution.ts bounded unit claims"
+      ]
+    },
+    {
+      "id": "P6",
+      "title": "LLaVA-UHD",
+      "class": "internal dynamic-resolution VLM",
+      "paper": "https://arxiv.org/html/2403.11703v1",
+      "sections": [
+        "§3.1–3.3",
+        "§4.1, Table 1"
+      ],
+      "method": "Aspect-aware tiling plus overview, learned visual resampler and explicit spatial separators; 576 visual tokens per slice compressed to64.",
+      "reportedMeasurement": "Paper evaluates a CLIP ViT-L/14 + Vicuna13B model, up to six slices plus overview at 672x1008. Training uses 8 A100 GPUs. Its visual-token compression is learned inside the model.",
+      "license": "Repo Apache-2.0; individual base/checkpoint licenses remain separate.",
+      "versions": "Inspected current repo aa2dac5 (2026-07-06) includes UHD v3 announcements and retained v1 modules. Not claimed to be the exact 2024 benchmark checkout.",
+      "availability": "Self-hosted/trainable model architecture; not a switch exposed by Terra's public API.",
+      "links": [
+        "https://github.com/thunlp/LLaVA-UHD"
+      ],
+      "code": [
+        {
+          "repo": "thunlp/LLaVA-UHD",
+          "commit": "aa2dac531cd96b0102318884ccf4ef0f3206d5eb",
+          "path": "llava/slice_process.py",
+          "url": "https://raw.githubusercontent.com/thunlp/LLaVA-UHD/aa2dac531cd96b0102318884ccf4ef0f3206d5eb/llava/slice_process.py",
+          "sha256": "a5859e11a0bf56e98d013b07ffaae62954da2b348d6f0a238410f0c5c05bfa6f",
+          "symbols": [
+            "slice_image_minicpm"
+          ],
+          "inspection": "Returns overview, patches and grid; preserves spatial sequence.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "thunlp/LLaVA-UHD",
+          "commit": "aa2dac531cd96b0102318884ccf4ef0f3206d5eb",
+          "path": "llava/model/multimodal_projector/uhd_v1_resampler.py",
+          "url": "https://raw.githubusercontent.com/thunlp/LLaVA-UHD/aa2dac531cd96b0102318884ccf4ef0f3206d5eb/llava/model/multimodal_projector/uhd_v1_resampler.py",
+          "sha256": "65fe2ffe70a72c50bae25ccc474a665169ccaedfbf7e629ede16101f29e5001e",
+          "symbols": [
+            "AdaptSpatialResampler_v1.forward"
+          ],
+          "inspection": "Learned queries/cross-attention compress visual tokens. External crop/atlas cannot reproduce this billing/compute effect.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "ADOPT_OVERVIEW_AND_SPATIAL_PROVENANCE_NOT_MODEL_TRAINING",
+      "transferLimit": "Not evidence that sending many crops to Terra is cheaper/faster. Cannot control Terra internal layer exits/resampler.",
+      "mapping": [
+        "shared/photoGeometry.ts",
+        "possible future multi-image ObservationRequest"
+      ]
+    },
+    {
+      "id": "P7",
+      "title": "RouteLLM",
+      "class": "learned routing / negative transfer evidence",
+      "paper": "https://arxiv.org/html/2406.18665v2",
+      "sections": [
+        "§2",
+        "§3.1",
+        "§4.1–4.2, Tables 1–3"
+      ],
+      "method": "Learn prompt-conditioned preference between stronger and weaker language models; calibrate threshold for desired strong-model call share.",
+      "reportedMeasurement": "Arena-trained routers are near random on MMLU and below random APGR on GSM8K; domain-related augmentation improves them. Language-task results do not calibrate vision correctness.",
+      "license": "Apache-2.0.",
+      "versions": "Official repo 0b64fda (2024-08-10); ICLR2025 paper.",
+      "availability": "MF implementation uses text-embedding-3-small via an API plus a learned model; it is not a no-call geometric router.",
+      "links": [
+        "https://github.com/lm-sys/RouteLLM"
+      ],
+      "code": [
+        {
+          "repo": "lm-sys/RouteLLM",
+          "commit": "0b64fdafe049e596a3f5657c219329f24af24198",
+          "path": "routellm/calibrate_threshold.py",
+          "url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/0b64fdafe049e596a3f5657c219329f24af24198/routellm/calibrate_threshold.py",
+          "sha256": "bb0684e5437c56e1fa4eb69e1d84aa36d99ec9620962413adb45e6e99dff062d",
+          "symbols": [
+            "quantile threshold selection"
+          ],
+          "inspection": "Chooses score quantile to reach call proportion; not an accuracy guarantee.",
+          "execution": "NOT_RUN"
+        },
+        {
+          "repo": "lm-sys/RouteLLM",
+          "commit": "0b64fdafe049e596a3f5657c219329f24af24198",
+          "path": "routellm/routers/matrix_factorization/model.py",
+          "url": "https://raw.githubusercontent.com/lm-sys/RouteLLM/0b64fdafe049e596a3f5657c219329f24af24198/routellm/routers/matrix_factorization/model.py",
+          "sha256": "81072b840e6dd389888e9f7a7198342693beab37b06aeab690083d67663da7ba",
+          "symbols": [
+            "MFModel.forward",
+            "pred_win_rate"
+          ],
+          "inspection": "Calls embedding API and scores relative model preference, not factual visual observations.",
+          "execution": "NOT_RUN"
+        }
+      ],
+      "decision": "DO_NOT_DEPLOY_LEARNED_ROUTER_WITHOUT_TASK_DATA",
+      "transferLimit": "Use explicit evidence-gap reasons now. Evaluate false-safe cases and missed objects; do not treat model confidence or agreement as truth.",
+      "mapping": [
+        "proposed selectRefinementRegions",
+        "evaluation-plan.md routing audit"
+      ]
+    },
+    {
+      "id": "P8",
+      "title": "OpenCV planar feature matching + homography",
+      "class": "deterministic geometry",
+      "paper": "https://docs.opencv.org/4.13.0/d7/dff/tutorial_feature_homography.html",
+      "sections": [
+        "Code: keypoints → matching → findHomography(RANSAC) → perspectiveTransform"
+      ],
+      "method": "Estimate a planar projective transform from visual point correspondences. Official tutorial uses SURF; mentions ORB/KAZE alternatives.",
+      "reportedMeasurement": "No board-game performance benchmark in this tutorial.",
+      "license": "Official documentation/code example inspected; no new OpenCV build shipped. Any chosen JS distribution/version must retain its license notices.",
+      "versions": "Documentation resolved to4.13.0; existing Paddle JS dependency specifies OpenCV.js4.10 series.",
+      "availability": "Geometry can run locally; robust matching still needs visible distinctive correspondences.",
+      "links": [],
+      "code": [],
+      "decision": "REUSE_EXISTING_CONFIRMED_FRAME_FIRST",
+      "transferLimit": "Repeated tiles, occlusion, mirrored rotations and raised pieces can invalidate registration. Exact same-source crop mapping is different from inferred cross-view matching.",
+      "mapping": [
+        "shared/photoGeometry.ts::photoFrameTransform",
+        "geometryCandidates"
+      ]
+    },
+    {
+      "id": "P9",
+      "title": "OpenAI Terra / image / latency / streaming API contracts",
+      "class": "current API boundary",
+      "paper": "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
+      "sections": [
+        "model capabilities",
+        "images and vision",
+        "streaming",
+        "latency optimization",
+        "pricing"
+      ],
+      "method": "Hosted image input with reasoning configuration and structured output; multiple images supported by API, not by current KeepBoard compiler.",
+      "reportedMeasurement": "Official latency advice is general guidance, not KeepBoard measurement. No 30s guarantee, no reported Terra game-state benchmark.",
+      "license": "Commercial API terms/pricing; no downloadable model/runtime assumed.",
+      "versions": "Official pages fetched 2026-10-31 via OpenAI docs tools. gpt-6.1-terra supports none/low/medium/high/xhigh/max. Current KeepBoard pinned product profile remains low.",
+      "availability": "Streaming and structured outputs supported. Every image contributes input tokens. Model-specific image sizing/multiplier for6.1 Terra was not established from the general vision table.",
+      "links": [
+        "https://developers.openai.com/api/docs/guides/images-vision",
+        "https://developers.openai.com/api/docs/guides/latency-optimization",
+        "https://developers.openai.com/api/docs/guides/streaming-responses",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "code": [],
+      "decision": "USE_EXPLICIT_TASK_PROFILES_AND_BOUNDED_REQUESTS",
+      "transferLimit": "Cannot configure internal early-exit/visual resampler. Streaming partial JSON is not a valid editable board. HTTP abort is not a refund contract. No live calls or account inspection in this task.",
+      "mapping": [
+        "server/ai/terraGameReader.ts",
+        "shared/lightweightRecognition.ts",
+        "server/scanExecution.ts",
+        "server/analysisTask.ts"
+      ]
+    }
+  ],
+  "accessLimitations": [
+    "CVF YOLO-World PDF403; accessible official arXiv full methods used.",
+    "MDPI chesscog429; author article on PMC used, no repeated bypass.",
+    "Roboflow source pointer returned404; no managed endpoint availability claim made.",
+    "npm package page403; official source package.json version0.4.2 is verified, published npm artifact is UNKNOWN.",
+    "HF model cards have some templated heading/language-count inconsistencies; selected model identity, license and file list checked separately."
+  ],
+  "classification": "Primary sources verify their own methods/results; KeepBoard application recommendations are INFERRED; local/game runtime accuracy is UNKNOWN."
+}

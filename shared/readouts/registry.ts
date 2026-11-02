@@ -1,5 +1,6 @@
 import type {GamePack} from '../types.ts';
 import {GAME_READOUTS} from './catalog.ts';
+import retired from './retired.json';
 import type {ComponentSpec,DetailValue,GameReadout,GameReadoutDefinition,PropertySpec,ReadoutContext} from './types.ts';
 export type {GameReadout,GameReadoutDefinition,PropertySpec,DetailValue,ReadoutContext} from './types.ts';
 const fail=(message:string):never=>{throw new Error(message);};
@@ -9,8 +10,11 @@ const exact=(v:unknown,keys:readonly string[],name:string):Record<string,unknown
 };
 const nonempty=(v:unknown,max=160)=>typeof v==='string'&&v.trim().length>0&&v.length<=max;
 export function readoutDefinition(pack:GamePack):GameReadoutDefinition|undefined {
- const s=pack.runtime?.source,d=s&&GAME_READOUTS[s.gameId];
- return d&&s.editionId===d.editionId&&s.sha256===d.sourceSHA&&pack.id===d.runtimePackId&&pack.version===d.packVersion?d:undefined;
+ const s=pack.runtime?.source;
+ if(!s)return undefined;
+ const matches=(d:GameReadoutDefinition|undefined)=>d&&s.editionId===d.editionId&&s.sha256===d.sourceSHA&&pack.id===d.runtimePackId&&pack.version===d.packVersion;
+ const current=GAME_READOUTS[s.gameId],old=(retired as Record<string,GameReadoutDefinition>)[s.gameId];
+ return matches(current)?current:matches(old)?old:undefined;
 }
 export function componentDefinition(pack:GamePack,componentId:string|null):ComponentSpec|undefined{return readoutDefinition(pack)?.components.find(c=>c.id===componentId);}
 export function emptyGameReadout(pack:GamePack,kind:string|null):GameReadout {

@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-30 Asia/Seoul",
+  "method": "OpenAI Docs exact model search, then actual fetch/open; authenticated exact-model GET before inference",
+  "sources": [
+    {"url":"https://developers.openai.com/api/docs/models/gpt-6.1-terra","confirmed":["exact API model gpt-6.1-terra","image input","Responses endpoint","structured outputs","reasoning.effort low","maximum output128000"]},
+    {"url":"https://developers.openai.com/api/docs/guides/images-vision","confirmed":["Responses input_image base64 data URL","detail high","PNG supported"],"limit":"Exact Terra resizing/token multiplier not established by the general guide table; no equivalence with Gemini HIGH claimed"},
+    {"url":"https://developers.openai.com/api/docs/guides/structured-outputs","confirmed":["text.format json_schema/name/schema/strict","required keys and additionalProperties false","minimum/maximum/minItems/maxItems supported"]},
+    {"url":"https://developers.openai.com/api/reference/resources/responses/methods/create","confirmed":["POST /v1/responses","input image and JSON output","response output/usage fields"],"method":"Official endpoint OpenAPI examples also retrieved"},
+    {"url":"https://developers.openai.com/api/reference/resources/models/methods/retrieve","confirmed":["Exact-model metadata retrieval documented"],"actualAccountEvidence":"access.json"},
+    {"url":"https://developers.openai.com/api/docs/pricing","confirmed":["Standard short-context Terra input$1/output$5/cached-read$0.05 per1M tokens","cache-write30min$1.25/12h$2.50 per1M tokens"],"limit":"Usage-based standard-price conversion is not an invoice or actual charged amount"},
+    {"url":"https://developers.openai.com/api/docs/guides/prompt-caching","confirmed":["Omitting prompt_cache_options ttl uses default30m","Cache-write token rate replaces uncached token rate, not an additional fee","Legacy prompt_cache_retention maximum policy is independent of minimum cache lifetime"],"application":"Responses return prompt_cache_retention24h; this does not imply12h write pricing. No TTL override was sent; estimate uses official default30m."}
+  ],
+  "pricing": {"currency":"USD","perTokens":1000000,"standardShortContext":{"input":1,"output":5,"cachedRead":0.05,"cacheWrite30min":1.25,"cacheWrite12h":2.5}},
+  "credential":"provided-upload; accessed in memory only",
+  "modelSubstitution":false,
+  "productModelChange":false
+}

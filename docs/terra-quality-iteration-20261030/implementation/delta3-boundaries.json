@@ -1,0 +1,387 @@
+{
+  "kind": "synthetic-offline-not-vision-quality",
+  "newProviderCalls": 0,
+  "sourceFiles": [
+    {
+      "path": "server/observationFusion.ts",
+      "sha256": "c38bae0c582c0a059cf12872f044af4a6adc2807f0f0aa110f29341d2e5c681a"
+    },
+    {
+      "path": "shared/scanObservation.ts",
+      "sha256": "7b978067a0f2230a0d4007454ad129fe0211e18b8e1e26000cc8879765e94e8b"
+    },
+    {
+      "path": "src/ScanObservationResults.tsx",
+      "sha256": "de3e0f904fa98a26afdf58c7ae82ff6a502cfa5549cbf7f33ca74850d77985c6"
+    },
+    {
+      "path": "tests/terra-crop-fusion.test.ts",
+      "sha256": "065b324b231c2939b14934a2775584306c02c9db52528bf634b8041a67ff2898"
+    },
+    {
+      "path": "tests/observation-group-http.test.ts",
+      "sha256": "87e4e1edf40c32690397dba40cd5de3bddff1677111d43a97738b6945c3e59c6"
+    }
+  ],
+  "findings": [
+    {
+      "id": "group-cluster-child",
+      "expected": "one editable single plus preserved retired group surface, not ambiguous duplicate parents",
+      "actual": {
+        "pieces": [
+          {
+            "id": "scan-e109bcf5aa3ce99fba1bdc754c7e",
+            "kind": "dice",
+            "quantity": null,
+            "value": 5
+          }
+        ],
+        "refinements": [
+          {
+            "aggregateMember": {
+              "unitId": "independent-group-child-unit-0",
+              "observationRef": "item-1"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-group-child-unit-2",
+                "observationRef": "item-1"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": true
+          },
+          {
+            "aggregateMember": {
+              "unitId": "independent-group-child-unit-1",
+              "observationRef": "item-1"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-group-child-unit-2",
+                "observationRef": "item-1"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": true
+          }
+        ],
+        "decisions": [
+          {
+            "pieceId": "scan-e109bcf5aa3ce99fba1bdc754c7e",
+            "fieldPath": "readout.values.dieValue",
+            "chosenMember": {
+              "unitId": "independent-group-child-unit-2",
+              "observationRef": "item-1"
+            },
+            "basis": "observed",
+            "alternativeMembers": [],
+            "conflict": false
+          }
+        ],
+        "links": [
+          {
+            "members": [
+              {
+                "unitId": "independent-group-child-unit-2",
+                "observationRef": "item-1"
+              }
+            ],
+            "status": "linked",
+            "basis": "model-proposal",
+            "conflicts": [],
+            "targetPieceId": "scan-e109bcf5aa3ce99fba1bdc754c7e"
+          }
+        ],
+        "unresolved": []
+      },
+      "observedIssue": false,
+      "orderInvariant": true
+    },
+    {
+      "id": "retired-parent-reappearance",
+      "expected": "same source retired group preserved as nonadditive evidence on subsequent job",
+      "initial": {
+        "pieces": [
+          {
+            "id": "scan-5815fdab226f2f6c81dfb87e51fe",
+            "kind": "dice",
+            "quantity": null,
+            "value": 5
+          }
+        ],
+        "refinements": [
+          {
+            "aggregateMember": {
+              "unitId": "independent-first-unit-0",
+              "observationRef": "item-1"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-first-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": false
+          }
+        ],
+        "decisions": [
+          {
+            "pieceId": "scan-5815fdab226f2f6c81dfb87e51fe",
+            "fieldPath": "readout.values.dieValue",
+            "chosenMember": {
+              "unitId": "independent-first-unit-1",
+              "observationRef": "item-1"
+            },
+            "basis": "observed",
+            "alternativeMembers": [],
+            "conflict": false
+          }
+        ],
+        "links": [
+          {
+            "members": [
+              {
+                "unitId": "independent-first-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "status": "linked",
+            "basis": "model-proposal",
+            "conflicts": [],
+            "targetPieceId": "scan-5815fdab226f2f6c81dfb87e51fe"
+          }
+        ],
+        "unresolved": []
+      },
+      "actual": {
+        "pieces": [
+          {
+            "id": "scan-5815fdab226f2f6c81dfb87e51fe",
+            "kind": "dice",
+            "quantity": null,
+            "value": 5
+          }
+        ],
+        "refinements": [
+          {
+            "aggregateMember": {
+              "unitId": "independent-first-unit-0",
+              "observationRef": "item-1"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-first-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": false
+          }
+        ],
+        "decisions": [],
+        "links": [
+          {
+            "members": [
+              {
+                "unitId": "independent-later-unit-0",
+                "observationRef": "item-1"
+              }
+            ],
+            "status": "unlinked",
+            "basis": "unlinked",
+            "conflicts": [],
+            "targetPieceId": null
+          }
+        ],
+        "unresolved": [
+          {
+            "id": "scan-group-d709351863078faa7500c264d527",
+            "reason": "possible-same-object",
+            "members": [
+              {
+                "unitId": "independent-later-unit-0",
+                "observationRef": "item-1"
+              }
+            ],
+            "relatedPieceIds": [
+              "scan-5815fdab226f2f6c81dfb87e51fe"
+            ]
+          }
+        ]
+      },
+      "observedIssue": false
+    },
+    {
+      "id": "quantity-difference",
+      "expected": "anchor quantity retained, alternatives raw, optional quantity disagreement metadata",
+      "actual": {
+        "pieces": [
+          {
+            "id": "scan-9fb198440e667136db371ab9df5e",
+            "kind": "dice",
+            "quantity": 2,
+            "value": 3
+          }
+        ],
+        "refinements": [],
+        "decisions": [
+          {
+            "pieceId": "scan-9fb198440e667136db371ab9df5e",
+            "fieldPath": "quantity",
+            "chosenMember": {
+              "unitId": "independent-quantity-unit-0",
+              "observationRef": "item-1"
+            },
+            "basis": "unresolved",
+            "alternativeMembers": [
+              {
+                "unitId": "independent-quantity-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "conflict": true
+          },
+          {
+            "pieceId": "scan-9fb198440e667136db371ab9df5e",
+            "fieldPath": "readout.values.dieValue",
+            "chosenMember": {
+              "unitId": "independent-quantity-unit-1",
+              "observationRef": "item-1"
+            },
+            "basis": "observed",
+            "alternativeMembers": [
+              {
+                "unitId": "independent-quantity-unit-0",
+                "observationRef": "item-1"
+              }
+            ],
+            "conflict": false
+          }
+        ],
+        "links": [
+          {
+            "members": [
+              {
+                "unitId": "independent-quantity-unit-0",
+                "observationRef": "item-1"
+              },
+              {
+                "unitId": "independent-quantity-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "status": "linked",
+            "basis": "same-source-overlap",
+            "conflicts": [
+              "quantity"
+            ],
+            "targetPieceId": "scan-9fb198440e667136db371ab9df5e",
+            "relation": "same-visible-group-surface"
+          }
+        ],
+        "unresolved": []
+      },
+      "rawQuantities": [
+        2,
+        4
+      ],
+      "observedIssue": false
+    },
+    {
+      "id": "retired-parent-related-scope",
+      "expected": "only children of the matched retired parent are related to its new observation; unrelated retired group children not linked",
+      "actual": {
+        "pieces": [
+          {
+            "id": "scan-ce69a8ae0746b855cb96524f2575",
+            "kind": "dice",
+            "quantity": null,
+            "value": 3
+          },
+          {
+            "id": "scan-40c3f090059db02b3b52d2728c6c",
+            "kind": "dice",
+            "quantity": null,
+            "value": 5
+          }
+        ],
+        "refinements": [
+          {
+            "aggregateMember": {
+              "unitId": "independent-two-parents-unit-0",
+              "observationRef": "item-1"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-two-parents-unit-1",
+                "observationRef": "item-1"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": true
+          },
+          {
+            "aggregateMember": {
+              "unitId": "independent-two-parents-unit-0",
+              "observationRef": "item-2"
+            },
+            "childMembers": [
+              {
+                "unitId": "independent-two-parents-unit-1",
+                "observationRef": "item-2"
+              }
+            ],
+            "relation": "refines-partially-not-identity",
+            "exhaustive": false,
+            "residualQuantity": null,
+            "cropCoversAggregateBox": true
+          }
+        ],
+        "decisions": [],
+        "links": [
+          {
+            "members": [
+              {
+                "unitId": "independent-only-parent-a-unit-0",
+                "observationRef": "item-1"
+              }
+            ],
+            "status": "unlinked",
+            "basis": "unlinked",
+            "conflicts": [],
+            "targetPieceId": null
+          }
+        ],
+        "unresolved": [
+          {
+            "id": "scan-group-1bdfc59694e5451e0d33902989af",
+            "reason": "possible-same-object",
+            "members": [
+              {
+                "unitId": "independent-only-parent-a-unit-0",
+                "observationRef": "item-1"
+              }
+            ],
+            "relatedPieceIds": [
+              "scan-ce69a8ae0746b855cb96524f2575"
+            ]
+          }
+        ]
+      },
+      "observedIssue": false,
+      "unrelatedChildIncluded": false
+    }
+  ]
+}

@@ -7325,6 +7325,22 @@
       },
       {
         "acquisition": "ask",
+        "description": "상자 뚜껑에 있는 버린 타일의 관측 수량·색·묶음 위치. 주머니 내용과 합치지 않는다.",
+        "group": "essentials",
+        "key": "box-lid.scene",
+        "label": "상자 뚜껑 버림",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
         "description": "아직 벽/바닥 점수를 처리하지 않았다면 보이는 값을 유지.",
         "group": "essentials",
         "key": "score",
@@ -7335,7 +7351,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 4
+          "order": 5
         },
         "visibility": "public"
       },
@@ -7351,7 +7367,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 5
+          "order": 6
         },
         "visibility": "public"
       },
@@ -7367,7 +7383,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 6
+          "order": 7
         },
         "visibility": "public"
       },
@@ -7383,7 +7399,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 7
+          "order": 8
         },
         "visibility": "public"
       },
@@ -7399,7 +7415,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 8
+          "order": 9
         },
         "visibility": "public"
       },
@@ -7415,7 +7431,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 9
+          "order": 10
         },
         "visibility": "public"
       }
@@ -7424,14 +7440,13 @@
     "preservationTemplates": [
       {
         "conditions": [
-          "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "미공개 타일 주머니를 상자 뚜껑의 버린 타일과 별도 묶음으로 보관한다.",
+          "주머니 내용은 펼쳐 확인하지 않고 위치·봉인 상태만 기록한다."
         ],
         "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
         "externalOnly": true,
         "id": "spec.bag.preserve",
-        "label": "주머니·버림 보존(선택)",
+        "label": "주머니 보존(선택)",
         "method": "sealed-bundle",
         "orderSensitive": false,
         "restoreAfter": [],
@@ -7577,11 +7592,26 @@
           ],
           "editor": "physical-only",
           "key": "bag.scene",
-          "label": "주머니·버림",
+          "label": "주머니",
           "lifetime": "session",
           "scope": "shared-secret",
           "sourceId": "bag.scene",
           "visibility": "hidden"
+        },
+        {
+          "areaIds": [
+            "box-lid"
+          ],
+          "componentIds": [
+            "tiles"
+          ],
+          "editor": "component-catalog",
+          "key": "box-lid.scene",
+          "label": "상자 뚜껑 버림",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "box-lid.scene",
+          "visibility": "public"
         },
         {
           "areaIds": [],
@@ -7697,7 +7727,7 @@
         "editionName": "원작 기본판",
         "gameId": "azul",
         "schemaVersion": "1.0",
-        "sha256": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3"
+        "sha256": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38"
       },
       "support": {
         "illustration": "catalog",
@@ -7709,7 +7739,7 @@
     "sources": [
       {
         "id": "spec.azul.primary",
-        "section": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인.",
+        "section": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인. 이번 검토: PDF pp.2–5에서 제거 타일은 상자 뚜껑에 놓고, 공장 재충전 중 주머니가 비었을 때만 다시 섞음을 확인.",
         "title": "Azul — 공식 자료",
         "url": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf"
       },
@@ -7728,7 +7758,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "아줄",
-    "version": "1.0.0-essentials-2.26f3d7a3f3a5"
+    "version": "1.0.0-essentials-2.e1ca1494e4dc"
   },
   {
     "derivedRules": [],
@@ -12242,6 +12272,29 @@
     "version": "1.0.0-essentials-2.8babfb12296e"
   },
   {
+    "catanNumberInventory": {
+      "sourceId": "rules-number-inventory",
+      "values": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        8,
+        8,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12
+      ]
+    },
     "derivedRules": [
       {
         "field": "player.development.newActionCardUnavailableThisTurn",
@@ -16499,6 +16552,12 @@
         "section": "이전 직접 조사 docs/catan-placement-research.md 및 catan-information-priority-research.md의 6판 규칙 5–12쪽/FAQ 검증을 재사용. 이번 패키지에서 원문을 다시 조회하지 않았다. 배치·항구·공개/비공개 상태와 앱 정정 정책은 별개.",
         "title": "CATAN — 공식 자료",
         "url": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf"
+      },
+      {
+        "id": "rules-number-inventory",
+        "section": "p.10: Number Tokens; Resource Production",
+        "title": "CATAN Game Rules & Almanac (2020)",
+        "url": "https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf"
       }
     ],
     "supportGaps": [
@@ -32841,16 +32900,17 @@
     "preservationTemplates": [
       {
         "conditions": [
-          "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "각 플레이어 손패의 현재 카드 순서와 앞뒷면 방향을 유지해 묶고, 카드 앞면이 소유자에게 보이지 않게 한다.",
+          "이미 받은 색/숫자 힌트는 현재 해당 카드 인스턴스와 함께 식별한다. 손패를 재배열했다면 이전 슬롯 순서가 아닌 재배열 후 현재 순서를 기록한다.",
+          "묶음 ID·실제 소유자·보관 위치를 기록한다. 정체를 확인하려 소유자의 카드를 뒤집지 않는다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
         ],
         "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
         "externalOnly": true,
         "id": "spec.hand.preserve",
         "label": "자기에게 숨겨진 손패 보존(선택)",
         "method": "sealed-bundle",
-        "orderSensitive": false,
+        "orderSensitive": true,
         "restoreAfter": [],
         "scope": "player",
         "sourceVisibility": "own-hidden"
@@ -33151,7 +33211,7 @@
         "editionName": "기본판",
         "gameId": "hanabi",
         "schemaVersion": "1.0",
-        "sha256": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad"
+        "sha256": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb"
       },
       "support": {
         "illustration": "catalog",
@@ -33163,7 +33223,7 @@
     "sources": [
       {
         "id": "spec.hanabi.primary",
-        "section": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분.",
+        "section": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분. 이번 검토: PDF p.2(인쇄 pp.3–4)의 손패 재배열 허용과 힌트 전달 대상 카드 규칙을 재확인.",
         "title": "Hanabi — 공식 자료",
         "url": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf"
       },
@@ -33182,7 +33242,7 @@
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "하나비",
-    "version": "1.0.0-essentials-2.b9f638a79062"
+    "version": "1.0.0-essentials-2.0b8fb054dd44"
   },
   {
     "derivedRules": [],
@@ -63840,6 +63900,38 @@
       },
       {
         "acquisition": "ask",
+        "description": "앞면으로 공개된 사용 열차 카드 버림의 현재 장면. 뽑기 더미나 비공개 티켓은 포함하지 않는다.",
+        "group": "essentials",
+        "key": "train-discard.scene",
+        "label": "공개 열차 카드 버림",
+        "lifetime": "session",
+        "scope": "public",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 3
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
+        "description": "플레이어별 실제 남은 열차 말의 공개 위치·관측 수량. 사진 밖 말은 추측하지 않는다.",
+        "group": "essentials",
+        "key": "train-stock.scene",
+        "label": "플레이어별 남은 열차 말",
+        "lifetime": "session",
+        "scope": "player",
+        "type": "json",
+        "ui": {
+          "editor": "default",
+          "level": "detail",
+          "order": 4
+        },
+        "visibility": "public"
+      },
+      {
+        "acquisition": "ask",
         "description": "점수판 표시와 최종 티켓 득실은 별도.",
         "group": "essentials",
         "key": "score",
@@ -63850,7 +63942,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 3
+          "order": 5
         },
         "visibility": "public"
       },
@@ -63866,7 +63958,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 4
+          "order": 6
         },
         "visibility": "public"
       },
@@ -63882,7 +63974,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 5
+          "order": 7
         },
         "visibility": "public"
       },
@@ -63898,7 +63990,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 6
+          "order": 8
         },
         "visibility": "public"
       },
@@ -63914,7 +64006,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 7
+          "order": 9
         },
         "visibility": "public"
       },
@@ -63930,7 +64022,7 @@
         "ui": {
           "editor": "default",
           "level": "detail",
-          "order": 8
+          "order": 10
         },
         "visibility": "public"
       }
@@ -63955,7 +64047,7 @@
       },
       {
         "conditions": [
-          "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+          "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
           "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
           "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다.",
           "순서를 섞지 않고 앞뒤 방향을 유지하세요."
@@ -63963,7 +64055,7 @@
         "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
         "externalOnly": true,
         "id": "spec.decks.preserve",
-        "label": "뽑기·버림 보존(선택)",
+        "label": "뽑기 더미 보존(선택)",
         "method": "ordered-bundle",
         "orderSensitive": true,
         "restoreAfter": [],
@@ -63985,6 +64077,21 @@
         "orderSensitive": false,
         "restoreAfter": [],
         "scope": "public",
+        "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "지도 위에 놓인 열차와 각 플레이어에게 남은 열차 말을 별도 묶음으로 기록한다.",
+          "실제 소유자·보관 위치·관측 수량을 확인하고, 사진 밖의 말 수는 추측하지 않는다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.train-stock.preserve",
+        "label": "플레이어별 남은 열차 말 보존(선택)",
+        "method": "manual-note",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
         "sourceVisibility": "public"
       }
     ],
@@ -64081,11 +64188,41 @@
           ],
           "editor": "physical-only",
           "key": "decks.scene",
-          "label": "뽑기·버림",
+          "label": "뽑기 더미",
           "lifetime": "session",
           "scope": "shared-secret",
           "sourceId": "decks.scene",
           "visibility": "hidden"
+        },
+        {
+          "areaIds": [
+            "train-discard"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "editor": "component-catalog",
+          "key": "train-discard.scene",
+          "label": "공개 열차 카드 버림",
+          "lifetime": "session",
+          "scope": "public",
+          "sourceId": "train-discard.scene",
+          "visibility": "public"
+        },
+        {
+          "areaIds": [
+            "train-stock"
+          ],
+          "componentIds": [
+            "trains"
+          ],
+          "editor": "component-catalog",
+          "key": "train-stock.scene",
+          "label": "플레이어별 남은 열차 말",
+          "lifetime": "session",
+          "scope": "player",
+          "sourceId": "train-stock.scene",
+          "visibility": "public"
         },
         {
           "areaIds": [],
@@ -64099,8 +64236,12 @@
           "visibility": "public"
         },
         {
-          "areaIds": [],
-          "componentIds": [],
+          "areaIds": [
+            "train-stock"
+          ],
+          "componentIds": [
+            "trains"
+          ],
           "editor": "scalar",
           "key": "remaining-trains",
           "label": "남은 열차",
@@ -64156,7 +64297,7 @@
       ],
       "gaps": [
         "유럽·다른 독립 지도판은 별도 지도 프로필; 지도 확장은 기본 게임과 요구 부품을 별도 연결.",
-        "복선의 인원별 사용 제한, 기관차 선택 예외, 종료 순서는 원문 규칙서 미대조.",
+        "복선의 인원별 사용 제한과 기관차 선택 예외의 상세 자동 판정은 범위 밖이다. ©2025 북미판의 설정·차례·공개성·종료 흐름만 대조했다.",
         "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
         "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
       ],
@@ -64201,7 +64342,7 @@
         "editionName": "북미 기본판",
         "gameId": "ticket-to-ride",
         "schemaVersion": "1.0",
-        "sha256": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c"
+        "sha256": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17"
       },
       "support": {
         "illustration": "catalog",
@@ -64222,17 +64363,23 @@
         "section": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다.",
         "title": "KeepBoard 저장·보존 데이터 보완 정책 — 앱 권고, 공식 규칙 아님",
         "url": null
+      },
+      {
+        "id": "spec.ticket-to-ride.rules.2025",
+        "section": "PDF pp.2–4: 플레이어별45열차, 공개 열차 카드 진열, 사용한 열차 카드 공개 버림 후 덱 소진 시 재섞기, 비공개 목적지 티켓, 남은 열차0–2개 종료 촉발.",
+        "title": "Ticket to Ride North America Rules, English ©2025",
+        "url": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2025/07/7201N_TICKET2RIDEV2_RULES_EN_20250425_WEB.pdf"
       }
     ],
     "supportGaps": [
       "유럽·다른 독립 지도판은 별도 지도 프로필; 지도 확장은 기본 게임과 요구 부품을 별도 연결.",
-      "복선의 인원별 사용 제한, 기관차 선택 예외, 종료 순서는 원문 규칙서 미대조.",
+      "복선의 인원별 사용 제한과 기관차 선택 예외의 상세 자동 판정은 범위 밖이다. ©2025 북미판의 설정·차례·공개성·종료 흐름만 대조했다.",
       "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
       "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
       "명세 기반 수동 기록·실물 보존 지원이며 120게임의 자동 인식·전체 규칙 판정을 뜻하지 않습니다."
     ],
     "title": "티켓 투 라이드",
-    "version": "1.0.0-essentials-2.9b65a4586519"
+    "version": "1.0.0-essentials-2.1c8ca9d2e289"
   },
   {
     "derivedRules": [],

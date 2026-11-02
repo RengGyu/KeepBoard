@@ -17,10 +17,10 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/concordia.json",
-    "sha256": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+    "sha256": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
     "runtime_pack_id": "concordia",
-    "runtime_pack_version": "1.0.0-essentials-2.6c1b7ca22813",
-    "runtime_match": false
+    "runtime_pack_version": "1.0.0-essentials-2.f7717930ce6b",
+    "runtime_match": true
   },
   "basis": {
     "contract": "RECOMMENDATION",
@@ -41,7 +41,7 @@
     ],
     "whole_game_rules_verified": false,
     "real_photo_accuracy_verified": false,
-    "source_revision_pending_runtime_regeneration": true
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "육로/해로·도시 주택, 개인 창고 칸",
   "critical_resume_distinction": "경로 위 개척자와 도시 주택 구별, 창고 점유 상품/개척자와 카드 순서 보존",
@@ -230,7 +230,7 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "사용 전 카드와 사용 더미를 별개 보존.",
+      "anchor_contract": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
       "description": "성격 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
@@ -258,7 +258,7 @@
         "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
       },
       "display_resume": {
-        "source_anchor": "사용 전 카드와 사용 더미를 별개 보존.",
+        "source_anchor": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
         "source_relations": [],
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
@@ -287,9 +287,13 @@
       ],
       "confidence": "recommendation",
       "partition": "player_public",
-      "capture_allowed_current": false,
-      "current_ai_destination_fields": [],
-      "current_manual_target_fields": [],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "played-personality.scene"
+      ],
       "source_field_ids": [
         "played-personality.scene"
       ],
@@ -298,7 +302,7 @@
       ],
       "owner_binding": "explicit user/roster binding only; no seat/color inference",
       "capture_instruction": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
-      "capture_access": "public evidence; explicit owner binding for player areas",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
       "evidence_contract": {
         "original_id_required": true,
         "original_region": "normalized crop in this source only; not game coordinates",
@@ -596,6 +600,10 @@
     ],
     "excluded_bindings": [
       {
+        "key": "store.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "money",
         "reason": "원명세가 사진 관측을 허용하지 않음"
       },
@@ -618,6 +626,10 @@
       {
         "key": "note",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "played-personality.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -730,7 +742,8 @@
         "scope": "player",
         "visibility": "public",
         "field_ids": [
-          "store.scene"
+          "store.scene",
+          "played-personality.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -816,8 +829,14 @@
       {
         "area_id": "hand",
         "name": "성격 손패",
-        "needs": "사용 전 카드와 사용 더미를 별개 보존.",
+        "needs": "아직 사용하지 않은 성격 카드만; 사용 카드는 별도 개인 더미.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "played-personality",
+        "name": "사용한 성격 카드 더미",
+        "needs": "개인 사용 더미의 맨 위 카드만 공개 정체로 기록한다. 아래 카드의 순서는 실물로 보존하며 사진에서 정체를 채우지 않는다.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
       }
     ],
     "do_not_collect": [],
@@ -827,7 +846,7 @@
   "current_board_mapping": {
     "gameId": "concordia",
     "editionId": "base",
-    "sourceSHA": "6c1b7ca22813798baf91cddf8a9bb60ae0426664b4e4f0e9aea4a83c96181e0a",
+    "sourceSHA": "f7717930ce6bc2bd118fc81145fab738748ced35de1b1be058efb38fe84e5178",
     "status": "source-pending",
     "areas": [
       {
@@ -907,6 +926,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "played-personality",
+        "label": "사용한 성격 카드 더미",
+        "fieldKeys": [
+          "played-personality.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "concordia.art-confirmation.concordia-web"
+        ],
+        "sourceConfidence": "recommendation",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

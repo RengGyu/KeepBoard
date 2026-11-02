@@ -28,6 +28,7 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
  const incoming=useMemo(()=>source?normalizeRummikubDetailed(source.value,{ownerId,evidenceIds:evidence.map(e=>e.id)}):{scene:emptyRummikub(ownerId),recognized:true,warnings:[] as string[]},[source?.value,context,evidenceKey]);
  const incomingKey=keyOf(incoming.scene);
  const [state,setState]=useState<{context:string;history:RummikubHistory;base:string}>({context,history:{past:[],present:incoming.scene},base:incomingKey});
+ const [quickId,setQuickId]=useState<string|null>(null),quickTimer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
  const [selectedId,setSelectedId]=useState<string|null>(null),[adding,setAdding]=useState(false),[error,setError]=useState(''),[saving,setSaving]=useState(false),[saved,setSaved]=useState(false);
  const [draft,setDraft]=useState(()=>createRummikubTile('draft')),[target,setTarget]=useState<string>(''),[mergeTarget,setMergeTarget]=useState('');
  const openedAssertion=view.session.assertions.filter(a=>a.field==='opened'&&a.ownerId===ownerId&&a.status==='accepted').at(-1);
@@ -90,6 +91,10 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
  function addTile(){const id=crypto.randomUUID();change({type:'add',tile:{...draft,id},groupId:target||null});setSelectedId(id);setAdding(false);}
  function patch(patch:Partial<Omit<RummikubTile,'id'>>){if(selected)change({type:'edit',tileId:selected.id,patch});else setDraft(d=>({...d,...patch}));}
  const editing=selected??draft;
+ const quickTile=quickId?all.find(t=>t.id===quickId):undefined;
+ function closeQuick(){clearTimeout(quickTimer.current);setQuickId(null);}
+ // A tap fixes the tile at once; the sheet closes itself a beat later unless another tap follows (number then color).
+ function quickPatch(next:Partial<Omit<RummikubTile,'id'>>){if(!quickTile)return;change({type:'edit',tileId:quickTile.id,patch:next});clearTimeout(quickTimer.current);quickTimer.current=setTimeout(()=>setQuickId(null),900);}
  const status=needsReview&&!reviewing&&!showAccepted?'새 사진 결과예요 · 기존 판과 함께 정정한 뒤 반영해 주세요':reviewing&&!dirty?'기존 판과 새 사진 후보를 함께 확인 중이에요 · 중복 실물은 직접 빼고 저장해 주세요':dirty||contextDirty?'고친 내용이 있어요':forceSave?'사진에서 읽은 후보예요 · 저장하면 기록돼요':saved?'저장했어요':'';
  const zoomIndex=ZOOMS.indexOf(zoom as typeof ZOOMS[number]);
  const baseTile=rack?42:28;
@@ -105,11 +110,16 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
   </div></header>
   {dirty&&incomingKey!==state.base&&<p role="status" className="small muted">편집 중인 타일을 유지하고 있어요.</p>}
   {incoming.warnings.length>0&&<details className="rt-notes"><summary>사진 판독 확인</summary>{incoming.warnings.map(w=><p key={w}>{w}</p>)}</details>}
-  {all.length||scene.groups.length?<div className="rt-board" style={boardStyle(baseTile)}><RummikubBoardView scene={scene} rack={rack} disabled={blocked} onOpenGroup={openGroup} onAddGroup={newGroup}/></div>
+  {all.length||scene.groups.length?<div className="rt-board" style={boardStyle(baseTile)}><RummikubBoardView scene={scene} rack={rack} disabled={blocked} onOpenGroup={openGroup} onOpenTile={id=>{clearTimeout(quickTimer.current);setQuickId(id);}} onAddGroup={newGroup}/></div>
    :<div className="rt-empty-board"><p className="rt-empty-title">{hasPhotos?'타일을 놓아 주세요':rack?'내 받침대를 찍어 주세요':'판을 찍어 주세요'}</p><div className="button-row">{onCapture&&<button className="button primary" disabled={blocked} onClick={onCapture}><Camera size={18}/>{captureLabel??(rack?'받침대 찍기':'판 찍기')}</button>}<button className="button secondary" disabled={blocked} onClick={newGroup}><Plus size={17}/>직접 놓기</button></div></div>}
   <details className="rt-notes"><summary>{rack?'최초 등록 · 선택':'재배열 메모 · 선택'}</summary>{rack?<label>최초 등록<select value={opened} disabled={blocked} onChange={e=>setOpened(e.target.value)}><option value="">모름</option><option value="true">등록함</option><option value="false">아직</option></select></label>:<label>멈춘 지점<textarea value={pending} disabled={blocked} placeholder="예: 조커를 옮기는 중" onChange={e=>setPending(e.target.value)}/></label>}</details>
   {error&&!sheetOpen&&<p role="alert" className="rt-error">{error}</p>}
   {status&&<p className="rt-status small muted" role="status">{status}</p>}
+  {quickTile&&overlay(<Modal title="타일 고치기" onClose={closeQuick}><div className="modal-body rt-quick">
+   <div className="rt-quick-row" role="group" aria-label="색">{CLASSIC_COLORS.map(color=><button type="button" key={color} className="rt-quick-tile" aria-pressed={quickTile.kind==='number'&&quickTile.color===color} aria-label={colorNames[color]} disabled={blocked} onClick={()=>quickPatch({kind:'number',face:'front',color})}><TileFace tile={{...quickTile,kind:'number',face:'front',color,number:quickTile.kind==='number'?quickTile.number:null}}/></button>)}</div>
+   <div className="rt-quick-numbers" role="group" aria-label="숫자">{Array.from({length:13},(_,i)=><button type="button" key={i+1} aria-pressed={quickTile.kind==='number'&&quickTile.number===i+1} disabled={blocked} style={{color:quickTile.kind==='number'&&quickTile.color?colors[quickTile.color]:undefined}} onClick={()=>quickPatch({kind:'number',face:'front',number:i+1})}>{i+1}</button>)}<button type="button" className="rt-quick-joker" aria-pressed={quickTile.kind==='joker'} aria-label="조커" disabled={blocked} onClick={()=>quickPatch({kind:'joker',face:'front'})}><TileFace tile={{...quickTile,kind:'joker',face:'front'}}/></button></div>
+   <div className="rt-quick-more"><button type="button" className="button text small-button" disabled={blocked} onClick={()=>{const id=quickTile.id,group=scene.groups.find(g=>g.tiles.some(t=>t.id===id));closeQuick();openGroup(group?.id??'loose');setSelectedId(id);}}>자리·순서 바꾸기</button><button type="button" className="button text small-button" disabled={blocked} onClick={()=>{change({type:'remove',tileId:quickTile.id});closeQuick();}}><Trash2 size={15}/>빼기</button></div>
+  </div></Modal>)}
   {full&&overlay(<Modal title={rack?'내 받침대 크게 보기':'공용판 크게 보기'} wide onClose={()=>setFull(false)}><div className="modal-body rt-full">
    <div className="rt-zoom" role="group" aria-label="확대·축소"><button className="icon-button" aria-label="축소" disabled={zoomIndex<=0} onClick={()=>setZoom(ZOOMS[Math.max(0,zoomIndex-1)])}><Minus size={18}/></button><span aria-live="polite">{Math.round(zoom*100)}%</span><button className="icon-button" aria-label="확대" disabled={zoomIndex>=ZOOMS.length-1} onClick={()=>setZoom(ZOOMS[Math.min(ZOOMS.length-1,zoomIndex+1)])}><Plus size={18}/></button></div>
    <div className="rt-pan" tabIndex={0} aria-label="가로·세로로 밀어 보기"><div className="rt-board" style={{...boardStyle(Math.round(baseTile*zoom)),width:`${Math.round(360*zoom)}px`}}><RummikubBoardView scene={scene} rack={rack} disabled={blocked} onOpenGroup={openGroup}/></div></div>

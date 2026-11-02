@@ -1,0 +1,756 @@
+{
+ "version": "argon-opus-independent-audit-v1",
+ "reviewer": {
+  "model": "claude-opus-5-5",
+  "modelEvidence": "VERIFIED: 이 세션 시스템 컨텍스트의 모델 ID",
+  "effort": "high",
+  "effortEvidence": "REPORTED: 루트가 claude-opus-5-5/high/effective-high 스냅숏을 확인. 이 세션은 자기 effort 값을 직접 관찰할 수 없음.",
+  "method": "원사진 31장 직접 열람, 두 모델 상자를 원사진에 그린 비공개 스크래치 오버레이로 대조, 근거가 되는 속성 행 확인. 이 검토도 AI 시각 해석이며 인간 인증 정답이 아님.",
+  "newProviderCalls": 0,
+  "newAgents": 0,
+  "frozenInputsModified": false
+ },
+ "inputs": {
+  "selectionSHA256": "54f6c42322bff2d72e46c354bf0032d4f47f08daf4e88aefb599349d30f826d5",
+  "coverageChecklistSHA256": "965f80c43a6c9af13d8597f54cb5309945b517dee425a2d64c553fe625cc193f",
+  "summarySHA256AtAudit": "08ede7d307d4cab00e61994977c2f44ec6206874e27deca99c0f8aef6f8053e3",
+  "review1SHA256": "b6efad2f1aaa01a4d8276c1864412d334ca07eddbfe6eca154dc4d9c6c602b80",
+  "review2SHA256": "ffe0f20dd2df0139c1741acff7ab3a0627fe4896c2b31fda05d2d38437a33c43",
+  "review3SHA256": "7e1b2407a7da1af8b31e23384b9572f5e4f45d966bb36147dee439e6cbdd49a0",
+  "provenanceErrataSHA256": "62aeebb9cb683e738fe9b7b49239fb12d039047beefde7bf3814683c02cc3daf",
+  "compareScriptSHA256": "b56635e0237e9b622d1d10add8123dd91c3723e64f07162f5b45fcab880f2421"
+ },
+ "sameBodyInvariance": {
+  "status": "VERIFIED",
+  "pairs": 31,
+  "calls": 62,
+  "checks": [
+   "비교 쌍 31개(30게임+카탄) 모두 두 모델의 ledger bodySHA가 같고, 저장된 request.json 재해시와 일치",
+   "native 응답 62개 모두 rawSHA 일치, modelVersion은 요청 모델명, HTTP 200, finishReason STOP",
+   "generationConfig는 모든 요청에서 thinkingLevel LOW, MEDIA_RESOLUTION_HIGH, maxOutputTokens 32768",
+   "plan automaticRetries 0, ledger의 (게임, 모델) 중복 없음",
+   "이미지 토큰 수는 쌍마다 동일"
+  ],
+  "observations": [
+   "같은 본문인데 promptTokenCount가 Argon에서 약 500 높음: 텍스트 토크나이저 또는 서버 측 차이로 보이며 본문 차이 증거는 아님(UNCLEAR)",
+   "두 모델 모두 thoughtsTokenCount가 보고되지 않음: LOW 사고 수준이 실제로 얼마나 쓰였는지는 관찰 불가(UNCLEAR)"
+  ]
+ },
+ "latencySeconds30Games": {
+  "gemini-3.8-flash": {
+   "n": 30,
+   "mean": 14.33,
+   "median": 11.45,
+   "min": 4.3,
+   "max": 42.8
+  },
+  "gemini-4-argon": {
+   "n": 30,
+   "mean": 37.32,
+   "median": 28.14,
+   "min": 9.76,
+   "max": 119.25
+  }
+ },
+ "latencyCatanSeconds": {
+  "gemini-3.8-flash": 24.32,
+  "gemini-4-argon": 95.77
+ },
+ "kindPresenceDenominator": {
+  "status": "VERIFIED-RECOMPUTED",
+  "visibleKindAreaUnits": 54,
+  "composition": "visible-uncensused 48 + visible-exact-count 6 (모두 선택 영역)",
+  "excluded": {
+   "not-assessable": 14,
+   "not-visible-in-selected-area": 1,
+   "no-area-pinned-photo": 137
+  },
+  "entireKindAbsent": {
+   "gemini-3.8-flash": [
+    "blokus/pieces",
+    "bohnanza/cards",
+    "castles-burgundy/hexes",
+    "dominant-species/animals"
+   ],
+   "gemini-4-argon": []
+  },
+  "qualifications": [
+   "종류 존재(행 1개 이상)일 뿐 재현율이나 정확도가 아니다.",
+   "Argon의 존재 중 일부는 묶음 또는 영역 밖 행뿐이다: castles-burgundy/hexes는 개인판 전체 묶음 2행, blokus/pieces는 큰 색 영역 묶음.",
+   "Flash의 존재 중 일부는 판 전체 묶음 1행이다(age-of-innovation/map, cascadia/habitat 대부분): 종류가 있다고 저장 단위가 맞는 것은 아니다.",
+   "카탄은 이 분모 밖이며 Flash는 종류 5개를 통째로 누락했다."
+  ]
+ },
+ "verdictTally": {
+  "prior": {
+   "개선": 13,
+   "악화": 3,
+   "개선·오류 혼재": 13,
+   "비슷": 1
+  },
+  "opus": {
+   "개선": 12,
+   "개선·오류 혼재": 10,
+   "비슷": 5,
+   "부분 개선(종류 존재만)": 1,
+   "경미 악화(저신뢰)": 1,
+   "판정 보류": 1
+  },
+  "changed": [
+   "anachrony",
+   "arcs",
+   "ark-nova",
+   "arkham-lcg",
+   "blokus",
+   "charterstone",
+   "eclipse-second-dawn",
+   "expeditions",
+   "stone-age",
+   "tiny-towns",
+   "twilight-imperium-4"
+  ]
+ },
+ "groundTruthProvenance": [
+  "census-1/2/3, catan-visible-reference, grand-dice-independent는 AI 보조 시각 해석이다(Sol 실제 Medium, Luna 실제 effective LOW, 루트 직접 열람). census-2의 'Direct human viewing' 문구는 인간 인증으로 읽으면 안 된다.",
+  "희소 기준점 대응(예: 55/56)은 전체 정확도가 아니다. 선택 영역 밖 137개 영역-종류 단위는 사진이 없다.",
+  "이전 검토 1·2는 카드에 High로 적혔지만 실제 Medium 세션이다. 이 검토는 그 주장을 그대로 받지 않고 원사진에 다시 대조했다."
+ ],
+ "games": [
+  {
+   "gameId": "age-of-innovation",
+   "areaId": "world",
+   "partition": "common_public",
+   "sourceSHA256": "c15df4bb700bcf952273abfa5f8b8a255c5c09a0639433098fc4480c4176b549",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "a53a5b43fe6be7e5d353ff6e14c0e913c3ab458f5e1565906ecb76c9a3f36011",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "b4c72527e82d7deb5a43793a1f539af084a3e2f32f22e43b68ebceeb25b554bd",
+    "gemini-4-argon": "e464257bc71be9a7d4777a863a50bace91166f4f618fa0637ebf7a4eff227cf2"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:grouping-slot-loss"
+   ],
+   "basis": "Flash는 판 전체를 기물 종류 한 행으로 반환(묶음·슬롯 손실). Argon은 판 위 기물을 개별 상자로 분리. 중복·속성값은 미검증."
+  },
+  {
+   "gameId": "anachrony",
+   "areaId": "actions",
+   "partition": "common_public",
+   "sourceSHA256": "c73b44639e5f4c1f34f6130f22d33b20dcda186ef3141952e86858fe1cbfb008",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "f3a085c6cc4129331147ee1a7c68bb045ce7c281ae74216bc6fabec40e7e289f",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "af1652c3a76005cdf02a835392a99e61392bc6c03db2927774c8004308370d3c",
+    "gemini-4-argon": "5e1b46ff1ecb01b2707191e886b0cf608783e8c81fb720d2bb37b2cc7dd19b6b"
+   },
+   "priorVerdict": "악화",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "CORRECTED",
+   "classes": [
+    "both:in-area-equal",
+    "argon:off-area",
+    "argon:grouping-quantity"
+   ],
+   "basis": "상단 행동판 외골격 6개는 양쪽 동일. Argon 11번(행동판 위 소형 일꾼 묶음 x6)은 영역 내 추가일 수 있으나 미확정. 12·13번(개인판 일꾼 타일 x10, x6)과 9·10번은 영역 밖이며 수량 합산 시 부풀림. 삭제로 정정 가능한 오염이라 전체 악화 단정은 과함."
+  },
+  {
+   "gameId": "arcs",
+   "areaId": "map",
+   "partition": "common_public",
+   "sourceSHA256": "f48625e53b533aec737585137e5052bf1bdaa2906eaf40b919a0cca11111bfa3",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "96d6438c8e3ca74d32a32511afac71ff5e146eb58dd7c6ac3eac5de9ed7970be",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "1e09c83f9d13062325398e0713ea9c76a562d13e6e60613d6cda86adecb2d2b7",
+    "gemini-4-argon": "e9fd6e0223e14a5beeaa356aaad9df3d1ec242100ddef06cc087705a25b0a92c"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선",
+   "status": "CORRECTED",
+   "classes": [
+    "both:off-area",
+    "argon:more-on-board-pieces"
+   ],
+   "basis": "판 밖 공급물 혼입은 Flash도 하단 5행으로 동일하게 있어 Argon 고유 오류가 아님. 눕힌 함선=damaged는 Arcs의 눈에 보이는 손상 표시라 근거 없는 단정으로 보기 어려움. Argon이 판 위 말을 더 분리."
+  },
+  {
+   "gameId": "ark-nova",
+   "areaId": "tableau",
+   "partition": "player_public",
+   "sourceSHA256": "254424739a4d8333cce705192687245e734175c6573f3bcc50b8d21280cafdf0",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "4e6cbbc9248a9b7bd061e0d036eded6ea7623837caf9bcb3ea2a7e56a33a8b14",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "6f8021a5d7b08ce5632c2087ded34c0e843cf815de8874ba9606c64ca10f6e44",
+    "gemini-4-argon": "363587164989704ac55b1aae4103a2b993db37848e3436bb392ec1273a9e01ba"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "비슷",
+   "status": "CORRECTED",
+   "classes": [
+    "both:in-area-equal",
+    "argon:off-area",
+    "ambiguous-GT:cube-kind"
+   ],
+   "basis": "tableau 안은 양쪽 모두 카드 4장+카드 위 큐브. 우측 열 큐브를 Flash=tracks, Argon=workers로 다르게 분류했는데 정답 종류가 불명확. Argon 추가 행 대부분은 공용판·공급 큐브(영역 밖). 영역 내 개선 근거 없음."
+  },
+  {
+   "gameId": "arkham-lcg",
+   "areaId": "map",
+   "partition": "common_public",
+   "sourceSHA256": "a1d02dc5e087f8873ffa7f03e18a744ce08b17d85c69ca4c7c9b81bf2178fcd0",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "efb214944d8523a59d39d08993e48568410f641d274d11ccd7e290fd065a0492",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "91de08aab0ff0c213bccc00b1935ef6cf46d153b9d9469d4f396749635152425",
+    "gemini-4-argon": "86c17511b2a2c7ed9ff0e9c2cbbff0495d4f28242006ef7694b62b2d3d4a1447"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "비슷",
+   "status": "CORRECTED",
+   "classes": [
+    "both:misclassification",
+    "flash:misclassification",
+    "tolerable:observed-zero"
+   ],
+   "basis": "적(Kapłan ghouli)·자산(Lita Chantler)을 investigators로 분류한 것은 양쪽 공통. Flash는 우상단 장소 카드도 investigators로 오분류, Argon은 locations로 맞춤. 토큰이 없는 카드의 healthMarks/horrorMarks=0은 관측 가능한 0이라 치명 오류가 아님."
+  },
+  {
+   "gameId": "barrage",
+   "areaId": "basin",
+   "partition": "common_public",
+   "sourceSHA256": "dc95438e58403429ae1bfaeda43a38734d80909edd689139786e4b0c686f0fff",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "2cbdb6234e52010449053cab51dbd27f83a7bf8be7b8b1f89d6b4ab26a02a11f",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "6487aa797be0f9f5b4df1d6d346fcbf8b02481e16f47a7527f0b2a573342da0b",
+    "gemini-4-argon": "65e162e7992e12d1f2149d52364a7856bc1aaa03183ffcca425559cf148b3c1a"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "unverified:one-to-one"
+   ],
+   "basis": "Argon 구조물·물 토큰 행이 더 많음. 일대일 대응·유형·높이는 사선 시점 때문에 미확정."
+  },
+  {
+   "gameId": "blokus",
+   "areaId": "board",
+   "partition": "common_public",
+   "sourceSHA256": "b1ab75693b4033886557fe41f027567e72ca0aaea10e2f116eb106cac0b9f1d9",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "408d10c41d2f5a96f4304e06aa8039d8628b35f0f4e7bc3c84e2ea448b516ec7",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "5c92c7d083905e0025788b0eeca7ce52d64a453596483c6b3f13946c63cf25d9",
+    "gemini-4-argon": "5dab8048f0662ec63351f4caa12818179d66877639a60dd25f5f0aea4c5b4949"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "부분 개선(종류 존재만)",
+   "status": "QUALIFIED",
+   "classes": [
+    "flash:entire-kind-missing",
+    "argon:grouping",
+    "argon:off-area"
+   ],
+   "basis": "Flash는 pieces 종류를 통째로 누락. Argon pieces 13행은 여러 조각을 덮는 큰 색 영역 묶음과 판 밖 낱개라 개별 폴리오미노 저장 단위로는 불충분. 종류 존재만 개선."
+  },
+  {
+   "gameId": "bohnanza",
+   "areaId": "fields",
+   "partition": "player_public",
+   "sourceSHA256": "97150ad98e5c2eb7d9b601c76a6d6748d25f828c714e59b60d02cefde8d09622",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "36e7e6d6cf225c6c1091f8c2d3d65852f4995b68eea8a5c32d1b7ea421cb8e2f",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "cf8edee43db7572dfdb86935672fee0be7a8aa33f3580ba9bf8de1b8b9dcef97",
+    "gemini-4-argon": "2680d7b1a26b78a12e105900e805768a6883a4f0c226ab4899eee986c65ee761"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:entire-kind-missing",
+    "argon:off-area"
+   ],
+   "basis": "Flash는 cards 종류 누락. Argon은 필드 카드를 분리. 다른 플레이어 필드·손패 행이 섞여(영역 밖) 개별 장수·속성 정확도는 미확정."
+  },
+  {
+   "gameId": "brass-birmingham",
+   "areaId": "network",
+   "partition": "common_public",
+   "sourceSHA256": "82365f7f6c27e718f755eef0125b04344132d87c77e95b5a8dbca97293a5571a",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "864dfa89d21dc38a7cf8e10cc67ad2e01edf7139bfa037d53457d95b04b56c0f",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "36682fefc685e497545d76e086234e9bf317e4f1c3ee05a1fd4523b254ce85ae",
+    "gemini-4-argon": "430d13364ec7df065979f2810a135cae4cfd4ec6ccdc91dcb436f6d38f5dfb41"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "ambiguous-area:market",
+    "unverified:flippedFace"
+   ],
+   "basis": "혼재 판정은 유지. 다만 석탄·철 시장 큐브는 같은 인쇄판 위에 있어 network 영역 포함 여부는 영역 정의 문제(모델 실패로 단정 불가)."
+  },
+  {
+   "gameId": "calico",
+   "areaId": "quilt",
+   "partition": "player_public",
+   "sourceSHA256": "9ef7522d60700101defc2bd4772698f23010262f86c12acad69a2ef403d6b710",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "9aa15d137148c81e0f27f3301518403bca95cfea7ca4d6b7fd63ba2af81686c6",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "783ea31cefc832805f4737cf3ff6b7e76c489795318a6ad0950e894d6b4c94e8",
+    "gemini-4-argon": "4b1547d01c60657a24f44320e876eb46e10eb23b3b3fe88f22a1b7db860131b7"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "argon:misclassification"
+   ],
+   "basis": "Argon 패치 분리는 크게 개선. 목표 육각을 boards로 분류한 오분류는 정정 가능."
+  },
+  {
+   "gameId": "carcassonne",
+   "areaId": "map",
+   "partition": "common_public",
+   "sourceSHA256": "4dba02af3eb3ceccb8f095692b6c1c1a4cd96306bd6719f5f74b785498b2795c",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "8056f1f72fc83a05fb8e2d4e97e070f7d3e78b411439521390aeb34d403400c1",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "19be6e089ac3ea8d5a917d0f6661795949a1eb66ca82bce24cf025b160d0cb6c",
+    "gemini-4-argon": "a13a39146d133d52cb8465d40ca32716adc437b3e3b960abbf90e844e50753c0"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:partial-objects"
+   ],
+   "basis": "Flash는 중앙 지도 타일 대부분 누락, Argon은 타일 62행. follower는 유사."
+  },
+  {
+   "gameId": "cascadia",
+   "areaId": "ecosystem",
+   "partition": "player_public",
+   "sourceSHA256": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "7d9dba4dda72ac5f6fbe0ab45677d5de436bc4ee839a4f4bf25a4745a0fd398b",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "c4b9cb4a95f78c269305a19183f8b756deb641e4e8e992730a4f1d779404fd6a",
+    "gemini-4-argon": "9278a2a9ba7e563be824e5a66df216531556be7eb6de97fe8b9aef1b2590fec0"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:grouping-slot-loss",
+    "both:off-area"
+   ],
+   "basis": "Flash는 서식지 전체를 한 행으로 묶음. Argon은 개별 서식지 분리. 양쪽 모두 시장·타 플레이어 묶음 포함."
+  },
+  {
+   "gameId": "castles-burgundy",
+   "areaId": "player",
+   "partition": "player_public",
+   "sourceSHA256": "78e3275d72f14dcfb9502138e47e94908613c7663c40e0f9e157f9874c8cbca3",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "11bde954b95029721535b6c28388a4f25d4dcc4424813720c63d56e9eaf6619a",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "bc618d3276b2792fc19bd2bcf400ef04f4c03cc3b84510224d9b5e29de649a11",
+    "gemini-4-argon": "c8f93b1fba639cce717b73006c37ce51ecee472f3e71d1eb4b507bf06a88a663"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "photo-scope:distance",
+    "argon:grouping",
+    "argon:misclassification"
+   ],
+   "basis": "원거리 사진 한계가 지배적. Argon hexes는 개인판 전체를 덮는 수량 null 묶음 2행이라, Flash의 hexes 부재와 비교해도 실물 재현율 개선으로 볼 수 없음. worker를 money로 분류한 것은 정정 가능."
+  },
+  {
+   "gameId": "charterstone",
+   "areaId": "village",
+   "partition": "common_public",
+   "sourceSHA256": "54b229920b2d2e0323f89dbbc8a5ab1e21ff1000ec526d12c2f984fa41a993a6",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "ff11157eee74b23c30013d6f8e3f462f5a903208fb40a2acc9d8f9da9cfc9129",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "6fceb6b86dba16a2bef561627b7b0106ded26d97a0ea2132397d2974b3ce3168",
+    "gemini-4-argon": "08fb8264bdd43ccb9c34f54883013b81d741232de0eec62615bb6f5d213e4225"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "비슷",
+   "status": "CORRECTED",
+   "classes": [
+    "argon:off-area"
+   ],
+   "basis": "Argon workers 7행 중 5행은 판 위쪽 공급 기물(영역 밖). 판 위는 양쪽 동일한 노랑 묶음, Argon만 판 가장자리 파랑 1개(불확실) 추가. 개선 근거 약함."
+  },
+  {
+   "gameId": "coup",
+   "areaId": "public",
+   "partition": "player_public",
+   "sourceSHA256": "00dadd81a10eb50fd4820a9373f3af2a400805df9b08da7202582b2eb25732f3",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "179178d181360514b12ecb359b942e00fe402b6e42fe5edaee18fac2ce4affd9",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "64dc6c5a3da92750034368cb1379c7f7c3e5912edd3e49eac01cae85c54b3192",
+    "gemini-4-argon": "18cad7d443d8917eaa8a93275013de5f49c7df0b8afc526e7ff23532ca43307b"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "tolerable:group-null-quantity"
+   ],
+   "basis": "Argon이 코인·카드 위치를 더 포착. 금고 더미는 수량 null 묶음, 덱을 roles 뒷면으로 표기한 것은 정정 가능 수준."
+  },
+  {
+   "gameId": "crew-deep-sea",
+   "areaId": "trick",
+   "partition": "common_public",
+   "sourceSHA256": "0b0f4921ca5f102c098ec695d04240313e80d80120f1d14b7c60926e0a26a8a2",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "ccabe5f3355efefa987f7b690649c9d1ebd9f7f896f15b6ab066da537addb160",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "50d945ed79c67a48e4d4ab1cee499a788968511241e09bdd0cd4d3ee9ad22f91",
+    "gemini-4-argon": "bd96bd1b553da143c9b796d30ac5c94c5977c1d5714020727a1722873dc43c7f"
+   },
+   "priorVerdict": "비슷",
+   "opusVerdict": "비슷",
+   "status": "VALID",
+   "classes": [
+    "photo-scope:display-photo"
+   ],
+   "basis": "가시 카드 대응 유사. 전시 사진이라 진행 상태 분모로 부적합."
+  },
+  {
+   "gameId": "dominant-species",
+   "areaId": "earth",
+   "partition": "common_public",
+   "sourceSHA256": "4ee3e73d83b7e6018f6d397b80b438c4295bda0ed94c80c26c0230f4c89f29f4",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "4a12b64506a52f492fab22a036249d9fc61e5889abec104db3e6ccd88e33684a",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "5e85e27c9ff487c3e8aa0f045b599b4390c0c7236ba6a3ebef4d663458892f5f",
+    "gemini-4-argon": "31ecc3455d7843ded3cd29936678d71b1866412a87b58d69436396eac02cf709"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:entire-kind-missing"
+   ],
+   "basis": "Flash는 animals·elements 행 없음. Argon은 두 종류를 추가. 동물 묶음·mixed 색은 미완성."
+  },
+  {
+   "gameId": "eclipse-second-dawn",
+   "areaId": "galaxy",
+   "partition": "common_public",
+   "sourceSHA256": "5fe1cdc3b1d229e78ce3b4b3f688a3f49d03eb25ec3dc9c959c8b53324c05120",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "9bceea14c2a5f0b726d845274c7131c0121b47e3e0a5e5f6fe49b0ff8e603fcb",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "accd1b31ce51c6b0e6c9a9f70dc4a7e2d5296c191652df33b0a7a768a16f1b12",
+    "gemini-4-argon": "e411dcefb4da0651d20bb22612d4228afd8953fb6f2dd8a692d18ee657a7d454"
+   },
+   "priorVerdict": "악화",
+   "opusVerdict": "경미 악화(저신뢰)",
+   "status": "QUALIFIED",
+   "classes": [
+    "photo-scope:distance",
+    "argon:grouping",
+    "both:off-area"
+   ],
+   "basis": "원거리 은하라 영역 내 개별 복원은 양쪽 모두 실패. Flash는 섹터 4개를 부분 분리, Argon은 은하 전체 1행+판 밖 타일 2행. ships 행은 Flash도 대부분 영역 밖 공급물. 차이는 작고 사진 한계가 지배적."
+  },
+  {
+   "gameId": "everdell",
+   "areaId": "common",
+   "partition": "common_public",
+   "sourceSHA256": "0ac6201d236749946778970f3c23b69c30ba03e6f2e02a2d80ffd8b4a8eca0dc",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "58a1cc7090aedab2e0c60a40a9b5a61ccd234e5a3b8231c7eeba5df152e59019",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "f57c0eb991830c8ebc84d6689c792e971e3ef1599f43a026595cf33b0eab9c0c",
+    "gemini-4-argon": "fe06da8cc21c490c4cd0142be487c04b89a209c2e9cb21b7ef385a3c5559ade3"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "unverified:prior-claim"
+   ],
+   "basis": "혼재는 유지. 이전 근거의 'workers 누락 공통'은 미검증: 양쪽 workers 14행 위치가 거의 같고 누락분 기준이 제시되지 않음."
+  },
+  {
+   "gameId": "expeditions",
+   "areaId": "map",
+   "partition": "common_public",
+   "sourceSHA256": "e31f8a69926a99182f163a4dad03e42410358d1aae8fd23d67fc027479823803",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "b6392597898210bee6e80a3528c6f9640db008b5131d523c7ab39925b16aa365",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "57828683e80fc6574a834f65bedb44a266acb2004d8083d1f53f7607f5a3d935",
+    "gemini-4-argon": "83560802c47a30b43f1a95d0d1c9274808c00c263674bf6c348c82017acf197f"
+   },
+   "priorVerdict": "악화",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "CORRECTED",
+   "classes": [
+    "argon:misclassification",
+    "argon:additional-real-object"
+   ],
+   "basis": "Argon 15번 행(좌하단)은 Flash가 놓친 실제 육각 지형 타일을 덮음(속성 미판독). 주황 숫자 큐브를 tiles로 분류한 오분류 1건은 삭제로 정정 가능. 악화 단정은 과함."
+  },
+  {
+   "gameId": "frosthaven",
+   "areaId": "battle",
+   "partition": "common_public",
+   "sourceSHA256": "7327b3fa1a8266200b514a1a2944831933d47e25b91c82535f2faa61d1a578b5",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "5243353c21e77c2230a2dfbe3c06b2058fbdb2e74f6de7353c5977424b255cb9",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "a280f346ef9dc5e3dbc835c6e1a48f70c8f2d8570e0800b8e2a8eb2edc489722",
+    "gemini-4-argon": "7a2228f1829254a829e5c67ba38fd021cb77ad6c856bf95dbc1d17578219ce2b"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [],
+   "basis": "통로의 받침대 말을 Argon이 더 분리. rank/health는 미확인."
+  },
+  {
+   "gameId": "grand-austria-hotel",
+   "areaId": "actions",
+   "partition": "common_public",
+   "sourceSHA256": "c3fe7f95ae6b8fe0b63cb249fef79db703868e124f357da260fa79036e9ec22b",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "2b66a2171efa759ff7a689caf0f597882060a06eb43cdac02a2b323f65bd715c",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "6a1137694eb87732d4cd5b704c6ae4dbf12582a7ccd67b9287fdef0e187f6510",
+    "gemini-4-argon": "db908649630088a095ce8e40c3f1b5e90dee5f4929ad59d0a89a741b11b0df33"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "ambiguous-GT:dice-count",
+    "argon:off-area"
+   ],
+   "basis": "Argon 주사위 행 증가. 독립 계수가 9~11 범위라 정확 재현율 산출 제외. 직원 카드·덱을 guests로 혼입."
+  },
+  {
+   "gameId": "le-havre",
+   "areaId": "town",
+   "partition": "common_public",
+   "sourceSHA256": "6820e52692e5fed5c016575832d920950ea7c4b05321748a31769b933715097b",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "f87d17c45870e151d8e1ad5f1838fe011d0b0b978e4412de12478637f1a4ab39",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "b41e43503c2be1ad96dc5911da0b7d49c5077300a66117100450bcd33e2652f8",
+    "gemini-4-argon": "e47cdb56457867fe7f2597602e6dca8bc10cda5b67c1b4c9bb7c92bb0a866ca2"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "argon:misclassification",
+    "both:misclassification"
+   ],
+   "basis": "건물 행 증가, 칩·선박 토큰을 workers로 혼입."
+  },
+  {
+   "gameId": "marvel-champions",
+   "areaId": "enemy",
+   "partition": "common_public",
+   "sourceSHA256": "94e58ac7e77338d481efc86e2e3c2d6714fead63f1c7be00543b4bd21dd02e86",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "fa5b2a92d823c6a2b113da3c8cbd527ef629cb92472dd2cc1a15e760f7cb8bd6",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "9c790ac2fcd9c8d4e644afa8c37b93de8fb17b274255f1e04a9dc71176cafa61",
+    "gemini-4-argon": "23048ed88512cd989084c24a9ebe37271f70658164dda2081773cae11679f58a"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선·오류 혼재",
+   "status": "VALID",
+   "classes": [
+    "argon:misclassification",
+    "argon:off-area",
+    "correct-scope:flash"
+   ],
+   "basis": "루트 주석과 일치: Flash에 Spider-Man이 없는 것은 enemy 범위상 맞음. Argon은 main scheme을 identities로 오분류하고 영웅 identity(영역 밖)를 포함."
+  },
+  {
+   "gameId": "pandemic",
+   "areaId": "world",
+   "partition": "common_public",
+   "sourceSHA256": "5ab1328da244c24d28306efde3734c54714b033612aa60214e35a2225ed7dff2",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "50ba953919d9df005ee2a05eab41c9c021a33aaa92ec59f5361115f57befcd80",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "c3904b12e02b2c510bf19a0dae6bc29cabd946f0c69b68404d674e6fde89b950",
+    "gemini-4-argon": "7f1139341f6fb3dbb02b2599978d3f067388d9e4b021c225d7ac6cc1120c72e6"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "both:grouping"
+   ],
+   "basis": "소폭 개선. 파랑 큐브 대군은 양쪽 모두 묶음."
+  },
+  {
+   "gameId": "stone-age",
+   "areaId": "actions",
+   "partition": "common_public",
+   "sourceSHA256": "8d47cc55b513d4f9d82ab6ae7a2be141025ea105f1fdeaad541ebbc48e468400",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "58a6100dbc1ee1d20dac31842ce8acefd43f8531db9b0125cf5683811b7a912c",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "87ef91dba27cb75098e1f84807a7f17050b37120835f8f10d60734d495adc555",
+    "gemini-4-argon": "9b9698821f918f8c90868d00b4f67c0f3f090bed570f601b3a3d692682c24b36"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "판정 보류",
+   "status": "CORRECTED",
+   "classes": [
+    "photo-scope:distance",
+    "both:grouping"
+   ],
+   "basis": "원거리 사진이라 모든 행이 묶음·수량 불명. Argon cards 행은 플레이어 앞 카드로 actions 영역 귀속도 불명확. 개선이라고 판정할 근거가 부족."
+  },
+  {
+   "gameId": "terraforming-mars",
+   "areaId": "mars",
+   "partition": "common_public",
+   "sourceSHA256": "ba1dc924593ddb03ca1f8f7e5f1265f4a6d8285e3f6f6eb129708d8a209c4f9d",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "64a297aaac4a2677d65d0d2dca72b51d3ae56d487ab28e3ee4c429514b6d81f9",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "c0704ee863ce436632833e84cc9602648e47499d96b3c6369c3393a9fb5e3bcc",
+    "gemini-4-argon": "f66beff7404c286ebee3f2312c63a4d527c848fbfed7f3fd74dd79bea1e4ed6e"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "unverified:duplicates"
+   ],
+   "basis": "terrain 개별 분리 개선. cubes는 유사. Argon terrain 중복·빈 칸 포함 여부는 미검증."
+  },
+  {
+   "gameId": "ticket-to-ride",
+   "areaId": "map-area",
+   "partition": "common_public",
+   "sourceSHA256": "9db2793990720dc676c5edf731b5043b802d8e162b8b4393bf35dd46a997b0c6",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "adeb0a21529933d0af4df3d1111a10a12cf114672f79cdf5bb51f06876ab2841",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "66cbfdd3ff4d991318915905585d55128b46d52707e80129d3877cba55b34491",
+    "gemini-4-argon": "6d4f015c7b78fc16d4a5a274ab472b5a58968f3e03f1823adce64d1308c1035e"
+   },
+   "priorVerdict": "개선",
+   "opusVerdict": "개선",
+   "status": "VALID",
+   "classes": [
+    "flash:grouping-slot-loss"
+   ],
+   "basis": "Flash는 노선 여러 개를 큰 상자로 묶고, Argon은 기차를 개별 상자로 반환. 85행의 중복은 미검증."
+  },
+  {
+   "gameId": "tiny-towns",
+   "areaId": "town",
+   "partition": "player_public",
+   "sourceSHA256": "9ff0bf69d7710e35b96ab829fa6631a1fbaa7c194daa0fa47b8a4a4fc7c3e97c",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "3945deb55df6a259883ac4b85703678b1c2fd60bdc3f55334a98581b267b1d41",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "d016097854396782b29ba251f40c3b2ff47e50431f235c475a1b411c36b90631",
+    "gemini-4-argon": "faf941a848a2b545a113ca52192f396e7825f5a583e4e9e7e21e568047fc2f7f"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "비슷",
+   "status": "CORRECTED",
+   "classes": [
+    "both:in-area-equal",
+    "both:off-area"
+   ],
+   "basis": "선택 town 격자 위 자원은 양쪽 동일(노랑 큐브). '표본 건물 종류를 더 포착'한 근거는 카드 위·중앙 공급 기물(영역 밖)이며, Flash도 카드 위 건물을 영역 밖으로 반환. 영역 내 개선 근거 없음."
+  },
+  {
+   "gameId": "twilight-imperium-4",
+   "areaId": "galaxy",
+   "partition": "common_public",
+   "sourceSHA256": "324f7f0dba850c3c90b638b6cfb4cbd984db77f9dc95d4c8f50459cb53a9f729",
+   "sourceHashVerified": true,
+   "requestBodySHA256": "5527191dd00ede33c1018d989cf7547f88bf8e481630213d156a1e7e41910197",
+   "parsedOutputSHA256": {
+    "gemini-3.8-flash": "93f8ed20e74301d94d8ed408bf1433653f253b0f3fe707ee8d809dd3814d188f",
+    "gemini-4-argon": "a17560021c840e6f96cd20ff1d60874d7d97ae56ca1b12521dff9bf369722dd8"
+   },
+   "priorVerdict": "개선·오류 혼재",
+   "opusVerdict": "개선",
+   "status": "CORRECTED",
+   "classes": [
+    "argon:grouping",
+    "both:off-area"
+   ],
+   "basis": "Argon systems 38행이 은하 대부분을 덮고, Flash는 7행. 유닛은 시스템별 묶음이라 개별 유닛 복원은 아님. 명령 토큰은 양쪽 모두 영역 밖. 지도 복원 단위로 보면 개선."
+  }
+ ],
+ "catan": {
+  "gameId": "catan-user",
+  "sourceSHA256": "29f02bc870a2ef7cd4ec8425d50f4f6d552288564306c04c42664ae7bb6a3dee",
+  "sourceHashVerified": true,
+  "requestBodySHA256": "85b1dcd49aae1dc1c1550fc0458d629208983cac9e16300cf6d507e9b74dc39e",
+  "parsedOutputSHA256": {
+   "gemini-3.8-flash": "cee5cfee3d3e3306e710c44d4ce9b745efdcd6225ea6a7cb045293da6d85cf7e",
+   "gemini-4-argon": "3753312eff196a32a646e2d02f3cb982271f8c4754890ba892c596a856c87f1e"
+  },
+  "outputKindCounts": {
+   "gemini-3.8-flash": {
+    "terrain": 19,
+    "robber": 1
+   },
+   "gemini-4-argon": {
+    "terrain": 19,
+    "number-token": 18,
+    "road": 8,
+    "harbor": 7,
+    "city": 4,
+    "settlement": 3,
+    "robber": 1
+   }
+  },
+  "opusVerdict": "개선",
+  "status": "VALID-WITH-QUALIFICATIONS",
+  "findings": [
+   "Flash는 coverage=full이라고 주장하지만 number-token(별도 원판), road, settlement, city, harbor 종류를 통째로 누락했다(종류 전체 누락). 숫자는 지형 속성으로만 있다.",
+   "Argon은 보이는 7개 종류를 모두 반환했다. 이전 검토의 55/56 대응은 AI가 해석한 희소 기준(인간 인증 아님)에 대한 대응이라 정확도가 아니다. 정착지·도시 종류 7개는 채점하지 않았고, n06 숫자(9/4)는 분쟁 중, n01은 판독 불가로 제외했다.",
+   "추가 행은 자동으로 거짓이 아니다. 원사진 확대에서 산 육각 '3' 아래·오른쪽의 흰 도로(road-white-2 px[410,796,468,842], road-white-3)와 흰 도시(city-white-1)는 실제 흰 나무 기물로 보인다. 따라서 road-white-2는 기준의 누락·병합 가능성이 높다(이 판단도 AI 시각 해석). road-blue-1, road-white-1, harbor-r3c5-e는 미판정.",
+   "소유자 ID, 정규 변·꼭짓점 슬롯, 항구 교역 종류는 독립 주석이 없어 미검증이다."
+  ]
+ },
+ "conclusionsSupported": [
+  "같은 사진·본문·설정에서 Argon은 Flash가 묶거나 빠뜨린 개별 실물을 더 자주 분리했다(이 검토 기준 30게임 중 12개 개선, 1개 부분 개선).",
+  "Argon이 늘린 행의 상당수는 선택 영역 밖, 묶음, 오분류이며 대부분 삭제·재분류로 정정 가능하다. 다만 수량이 큰 묶음(anachrony x10/x6, tiny-towns 공급 더미)은 그대로 합산하면 상태를 오염시킨다.",
+  "Argon 응답 시간은 이 30회에서 Flash의 약 2.6배(평균)였다."
+ ],
+ "conclusionsNotSupported": [
+  "게임 전체 저장·복원 정확도, 객체 재현율·정밀도, 속성 정답률: 완전한 분모가 없다.",
+  "반복 안정성: 모델당 한 번씩만 호출했다.",
+  "출력 행 수가 많은 것이 더 좋다는 해석."
+ ],
+ "pending": []
+}

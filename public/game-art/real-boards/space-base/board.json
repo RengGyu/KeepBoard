@@ -1,0 +1,6535 @@
+{
+  "gameId": "space-base",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "sector-1",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-1-station-card",
+          "x": 43,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        35,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-1-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            42,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            43,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-2",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-2-station-card",
+          "x": 121,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        113,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-2-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            120,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            121,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-3",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-3-station-card",
+          "x": 199,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        191,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-3-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            198,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            199,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-4",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-4-station-card",
+          "x": 277,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        269,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-4-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            276,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            277,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-5",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-5-station-card",
+          "x": 355,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        347,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-5-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            354,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            355,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-6",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-6-station-card",
+          "x": 433,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        425,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-6-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            432,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            433,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-7",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-7-station-card",
+          "x": 511,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        503,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-7-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            510,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            511,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-8",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-8-station-card",
+          "x": 589,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        581,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-8-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            588,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            589,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-9",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-9-station-card",
+          "x": 667,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        659,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-9-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            666,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            667,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-10",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-10-station-card",
+          "x": 745,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        737,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-10-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            744,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            745,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-11",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-11-station-card",
+          "x": 823,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        815,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-11-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            822,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            823,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "sector-12",
+      "label": "개인 섹터",
+      "field": "sectors.scene",
+      "scope": "player",
+      "accepts": [
+        "ships",
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-space-base-sector-12-station-card",
+          "x": 901,
+          "y": 57,
+          "w": 56,
+          "h": 82,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "정박함선은 0–1장, 배치함선은 아래에 겹쳐 누적(고정 최대량 없음). 콜로니는 정박 위치를 덮고 이후 함선 배치를 막으며 이미 배치된 함선은 남는다.",
+      "bounds": [
+        893,
+        35,
+        72,
+        380
+      ],
+      "zones": {
+        "stationCard": {
+          "slotId": "space-base-sector-12-station-card",
+          "cardinality": "zero-or-one",
+          "orientation": "upright",
+          "occupiesSectorTop": true
+        },
+        "deployedShips": {
+          "bounds": [
+            900,
+            157,
+            58,
+            170
+          ],
+          "cardinality": "zero-to-unbounded",
+          "orientation": "upside-down",
+          "stackOrder": "preserve-all-visible-rewards",
+          "visualStackHint": "overlap-fan"
+        },
+        "colonyOverlay": {
+          "bounds": [
+            901,
+            57,
+            56,
+            82
+          ],
+          "cardinality": "zero-or-one",
+          "overlays": "stationCard",
+          "blocksFurtherShipPlacement": true,
+          "deployedShipsRemain": true
+        },
+        "chargeAttachments": {
+          "cardinality": "zero-to-many",
+          "attachedTo": "cardInstanceId",
+          "face": [
+            "station",
+            "deployed"
+          ],
+          "transferOnDeployment": "if-possible"
+        }
+      }
+    },
+    {
+      "id": "shipyard",
+      "label": "조선소·식민지",
+      "field": "market.scene",
+      "scope": "public",
+      "accepts": [
+        "ships"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "space-base-shipyard-r1-c1",
+          "x": 55.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r1-c2",
+          "x": 158.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r1-c3",
+          "x": 261.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r1-c4",
+          "x": 364.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r1-c5",
+          "x": 467.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r1-c6",
+          "x": 570.0,
+          "y": 660.0,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c1",
+          "x": 55.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c2",
+          "x": 158.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c3",
+          "x": 261.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c4",
+          "x": 364.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c5",
+          "x": 467.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r2-c6",
+          "x": 570.0,
+          "y": 757.666667,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c1",
+          "x": 55.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c2",
+          "x": 158.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c3",
+          "x": 261.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c4",
+          "x": 364.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c5",
+          "x": 467.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-shipyard-r3-c6",
+          "x": 570.0,
+          "y": 855.333333,
+          "w": 95.0,
+          "h": 89.666667,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        35,
+        640,
+        650,
+        325
+      ]
+    },
+    {
+      "id": "roll",
+      "label": "공용 굴림",
+      "field": "roll.scene",
+      "scope": "public",
+      "accepts": [
+        "dice"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "space-base-roll-r1-c1",
+          "x": 755.0,
+          "y": 850.0,
+          "w": 83.5,
+          "h": 80.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-roll-r1-c2",
+          "x": 846.5,
+          "y": 850.0,
+          "w": 83.5,
+          "h": 80.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        725,
+        820,
+        235,
+        140
+      ]
+    },
+    {
+      "id": "track-credits",
+      "label": "개인 자원 트랙",
+      "field": "tracks.scene",
+      "scope": "player",
+      "accepts": [
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-track-credits-r1-c1",
+          "x": 45.0,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c2",
+          "x": 67.243902,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c3",
+          "x": 89.487805,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c4",
+          "x": 111.731707,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c5",
+          "x": 133.97561,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c6",
+          "x": 156.219512,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c7",
+          "x": 178.463415,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c8",
+          "x": 200.707317,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c9",
+          "x": 222.95122,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c10",
+          "x": 245.195122,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c11",
+          "x": 267.439024,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c12",
+          "x": 289.682927,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c13",
+          "x": 311.926829,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c14",
+          "x": 334.170732,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c15",
+          "x": 356.414634,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c16",
+          "x": 378.658537,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c17",
+          "x": 400.902439,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c18",
+          "x": 423.146341,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c19",
+          "x": 445.390244,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c20",
+          "x": 467.634146,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c21",
+          "x": 489.878049,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c22",
+          "x": 512.121951,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c23",
+          "x": 534.365854,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c24",
+          "x": 556.609756,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c25",
+          "x": 578.853659,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c26",
+          "x": 601.097561,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c27",
+          "x": 623.341463,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c28",
+          "x": 645.585366,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c29",
+          "x": 667.829268,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c30",
+          "x": 690.073171,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c31",
+          "x": 712.317073,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c32",
+          "x": 734.560976,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c33",
+          "x": 756.804878,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c34",
+          "x": 779.04878,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c35",
+          "x": 801.292683,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c36",
+          "x": 823.536585,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c37",
+          "x": 845.780488,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c38",
+          "x": 868.02439,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c39",
+          "x": 890.268293,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c40",
+          "x": 912.512195,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-credits-r1-c41",
+          "x": 934.756098,
+          "y": 450.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "0→40 pointer positions. capacity1은 해당색 주표식만;40초과를 자원최대40으로 제한하지 않음.",
+      "bounds": [
+        35,
+        440,
+        930,
+        45
+      ]
+    },
+    {
+      "id": "track-income",
+      "label": "개인 자원 트랙",
+      "field": "tracks.scene",
+      "scope": "player",
+      "accepts": [
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-track-income-r1-c1",
+          "x": 45.0,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c2",
+          "x": 67.243902,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c3",
+          "x": 89.487805,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c4",
+          "x": 111.731707,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c5",
+          "x": 133.97561,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c6",
+          "x": 156.219512,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c7",
+          "x": 178.463415,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c8",
+          "x": 200.707317,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c9",
+          "x": 222.95122,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c10",
+          "x": 245.195122,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c11",
+          "x": 267.439024,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c12",
+          "x": 289.682927,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c13",
+          "x": 311.926829,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c14",
+          "x": 334.170732,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c15",
+          "x": 356.414634,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c16",
+          "x": 378.658537,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c17",
+          "x": 400.902439,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c18",
+          "x": 423.146341,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c19",
+          "x": 445.390244,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c20",
+          "x": 467.634146,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c21",
+          "x": 489.878049,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c22",
+          "x": 512.121951,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c23",
+          "x": 534.365854,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c24",
+          "x": 556.609756,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c25",
+          "x": 578.853659,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c26",
+          "x": 601.097561,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c27",
+          "x": 623.341463,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c28",
+          "x": 645.585366,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c29",
+          "x": 667.829268,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c30",
+          "x": 690.073171,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c31",
+          "x": 712.317073,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c32",
+          "x": 734.560976,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c33",
+          "x": 756.804878,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c34",
+          "x": 779.04878,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c35",
+          "x": 801.292683,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c36",
+          "x": 823.536585,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c37",
+          "x": 845.780488,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c38",
+          "x": 868.02439,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c39",
+          "x": 890.268293,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c40",
+          "x": 912.512195,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-income-r1-c41",
+          "x": 934.756098,
+          "y": 505.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "0→40 pointer positions. capacity1은 해당색 주표식만;40초과를 자원최대40으로 제한하지 않음.",
+      "bounds": [
+        35,
+        495,
+        930,
+        45
+      ]
+    },
+    {
+      "id": "track-vp",
+      "label": "개인 자원 트랙",
+      "field": "tracks.scene",
+      "scope": "player",
+      "accepts": [
+        "markers"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "space-base-track-vp-r1-c1",
+          "x": 45.0,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c2",
+          "x": 67.243902,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c3",
+          "x": 89.487805,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c4",
+          "x": 111.731707,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c5",
+          "x": 133.97561,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c6",
+          "x": 156.219512,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c7",
+          "x": 178.463415,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c8",
+          "x": 200.707317,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c9",
+          "x": 222.95122,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c10",
+          "x": 245.195122,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c11",
+          "x": 267.439024,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c12",
+          "x": 289.682927,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c13",
+          "x": 311.926829,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c14",
+          "x": 334.170732,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c15",
+          "x": 356.414634,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c16",
+          "x": 378.658537,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c17",
+          "x": 400.902439,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c18",
+          "x": 423.146341,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c19",
+          "x": 445.390244,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c20",
+          "x": 467.634146,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c21",
+          "x": 489.878049,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c22",
+          "x": 512.121951,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c23",
+          "x": 534.365854,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c24",
+          "x": 556.609756,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c25",
+          "x": 578.853659,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c26",
+          "x": 601.097561,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c27",
+          "x": 623.341463,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c28",
+          "x": 645.585366,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c29",
+          "x": 667.829268,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c30",
+          "x": 690.073171,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c31",
+          "x": 712.317073,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c32",
+          "x": 734.560976,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c33",
+          "x": 756.804878,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c34",
+          "x": 779.04878,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c35",
+          "x": 801.292683,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c36",
+          "x": 823.536585,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c37",
+          "x": 845.780488,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c38",
+          "x": 868.02439,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c39",
+          "x": 890.268293,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c40",
+          "x": 912.512195,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "space-base-track-vp-r1-c41",
+          "x": 934.756098,
+          "y": 560.0,
+          "w": 20.243902,
+          "h": 25.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "0→40 pointer positions. capacity1은 해당색 주표식만;40초과를 자원최대40으로 제한하지 않음.",
+      "bounds": [
+        35,
+        550,
+        930,
+        45
+      ]
+    },
+    {
+      "id": "track-overflow",
+      "label": "개인 자원 트랙",
+      "field": "tracks.scene",
+      "scope": "player",
+      "accepts": [
+        "markers"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "40초과 charge 표식 별도 자유 부착. 이미점유된40/39칸에 추가되는 표식은 주포인터 슬롯과 별개.",
+      "bounds": [
+        725,
+        640,
+        235,
+        150
+      ]
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {},
+  "notes": [
+    "전체 테이블은 5개 개인 콘솔과 공용 시장/식민지/주사위/충전/시작자 영역으로 표현한다. 플레이 인원에 따라 사용하지 않는 콘솔을 숨긴다.",
+    "개인 콘솔의 12개 섹터마다 정박 위치 0–1장, 배치 함선 0–무제한 겹침 스택, 선택적 콜로니 덮어쓰기를 분리한다. 배치 스택에 임의의 최대 장수를 두지 않는다.",
+    "자원 트랙은 크레딧·수입·승점 각각 0–40 포인터와 40 초과 charge marker를 분리 저장한다. 총량과 포인터 위치가 모순되면 원상태를 보존하고 자동 보정하지 않는다.",
+    "공용 shipyard는 레벨별 6장 공개 제안과 보충용 숨은 덱을 분리하며, 콜로니 12장은 오름차순 공개되고 구매 후 보충되지 않는다.",
+    "SVG의 카드·토큰 윤곽은 위치 표시용 도식일 뿐 실제 패/자원 초기화가 아니다. 전체 턴 중단 위치와 모든 플레이어의 굴림 배분 완료 상태는 JSON 계약으로 보존하며 규칙을 자동 실행하지 않는다."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://alderac.com/wp-content/uploads/2018/01/SpaceBase-Rulebook-Nov29-Rulebook.pdf",
+      "location": "printed pp.4–8 (PDF pages 3–7)",
+      "verifiedFacts": "2–5 players; 5 consoles; 60 starting ships in five sets of 12; 132 ships (48/48/36); 12 colonies; 30 charges; 2 d6; 12 sectors; three 0–40 resource tracks.",
+      "access": "official publisher PDF directly reviewed",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://alderac.com/wp-content/uploads/2018/01/SpaceBase-Rulebook-Nov29-Rulebook.pdf",
+      "location": "printed pp.7–13 (PDF pages 6–12)",
+      "verifiedFacts": "one upright station and upside-down deployed stacks per sector; 18 face-up offers (6 per level); 12 face-up colonies ascending/no refill; active and passive players independently allocate sum or individual dice; optional one-card purchase and shipyard refill.",
+      "access": "official publisher PDF directly reviewed",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://alderac.com/wp-content/uploads/2018/01/SpaceBase-Rulebook-Nov29-Rulebook.pdf",
+      "location": "printed p.14 (PDF page 13)",
+      "verifiedFacts": "40 VP triggers current-round completion with equal turns; ties continue full extra rounds; charge markers encode resource totals beyond 40 and 80.",
+      "access": "official publisher PDF directly reviewed",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "tableModel": {
+    "id": "space-base-full-table-state-v1",
+    "edition": "base",
+    "assetScope": "complete-static-layout-and-state-schema",
+    "rulesAutomation": "none",
+    "playerRange": {
+      "minimum": 2,
+      "maximum": 5,
+      "consoleCount": 5,
+      "activePlayerOrder": "clockwise"
+    },
+    "views": {
+      "personalConsoleTemplate": {
+        "svg": "board.svg",
+        "viewBox": [
+          0,
+          0,
+          1000,
+          1000
+        ],
+        "reusedPerPlayer": true,
+        "sectorAreaIds": [
+          "sector-1",
+          "sector-2",
+          "sector-3",
+          "sector-4",
+          "sector-5",
+          "sector-6",
+          "sector-7",
+          "sector-8",
+          "sector-9",
+          "sector-10",
+          "sector-11",
+          "sector-12"
+        ],
+        "trackAreaIds": [
+          "track-credits",
+          "track-income",
+          "track-vp",
+          "track-overflow"
+        ]
+      },
+      "fullTableOverview": {
+        "svg": "table-overview.svg",
+        "viewBox": [
+          0,
+          0,
+          1800,
+          1500
+        ],
+        "consoleInstances": [
+          {
+            "playerIndex": 1,
+            "instanceId": "console-1",
+            "box": [
+              30,
+              28,
+              560,
+              385
+            ],
+            "sectorCells": [
+              {
+                "sectorNumber": 1,
+                "box": [
+                  46,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    54,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    54,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 2,
+                "box": [
+                  133,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    141,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    141,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 3,
+                "box": [
+                  220,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    228,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    228,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 4,
+                "box": [
+                  307,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    315,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    315,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 5,
+                "box": [
+                  394,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    402,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    402,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 6,
+                "box": [
+                  481,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    489,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    489,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 7,
+                "box": [
+                  46,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    54,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    54,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 8,
+                "box": [
+                  133,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    141,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    141,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 9,
+                "box": [
+                  220,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    228,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    228,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 10,
+                "box": [
+                  307,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    315,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    315,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 11,
+                "box": [
+                  394,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    402,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    402,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 12,
+                "box": [
+                  481,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    489,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    489,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              }
+            ],
+            "resourceTracks": [
+              {
+                "id": "credits",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  46,
+                  291,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "income",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  46,
+                  321,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "victoryPoints",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  46,
+                  351,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              }
+            ],
+            "overflowBox": [
+              484,
+              318,
+              88,
+              68
+            ],
+            "overflowMarkerDisplay": {
+              "type": "open-stack-cue",
+              "fixedCapacity": false,
+              "note": "decorative stack symbol; exact marker instances stored per resource"
+            }
+          },
+          {
+            "playerIndex": 2,
+            "instanceId": "console-2",
+            "box": [
+              620,
+              28,
+              560,
+              385
+            ],
+            "sectorCells": [
+              {
+                "sectorNumber": 1,
+                "box": [
+                  636,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    644,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    644,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 2,
+                "box": [
+                  723,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    731,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    731,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 3,
+                "box": [
+                  810,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    818,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    818,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 4,
+                "box": [
+                  897,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    905,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    905,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 5,
+                "box": [
+                  984,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    992,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    992,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 6,
+                "box": [
+                  1071,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1079,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1079,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 7,
+                "box": [
+                  636,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    644,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    644,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 8,
+                "box": [
+                  723,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    731,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    731,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 9,
+                "box": [
+                  810,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    818,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    818,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 10,
+                "box": [
+                  897,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    905,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    905,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 11,
+                "box": [
+                  984,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    992,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    992,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 12,
+                "box": [
+                  1071,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1079,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1079,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              }
+            ],
+            "resourceTracks": [
+              {
+                "id": "credits",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  636,
+                  291,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "income",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  636,
+                  321,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "victoryPoints",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  636,
+                  351,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              }
+            ],
+            "overflowBox": [
+              1074,
+              318,
+              88,
+              68
+            ],
+            "overflowMarkerDisplay": {
+              "type": "open-stack-cue",
+              "fixedCapacity": false,
+              "note": "decorative stack symbol; exact marker instances stored per resource"
+            }
+          },
+          {
+            "playerIndex": 3,
+            "instanceId": "console-3",
+            "box": [
+              1210,
+              28,
+              560,
+              385
+            ],
+            "sectorCells": [
+              {
+                "sectorNumber": 1,
+                "box": [
+                  1226,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1234,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1234,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 2,
+                "box": [
+                  1313,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1321,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1321,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 3,
+                "box": [
+                  1400,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1408,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1408,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 4,
+                "box": [
+                  1487,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1495,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1495,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 5,
+                "box": [
+                  1574,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1582,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1582,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 6,
+                "box": [
+                  1661,
+                  73,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1669,
+                    80,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1669,
+                    130,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 7,
+                "box": [
+                  1226,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1234,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1234,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 8,
+                "box": [
+                  1313,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1321,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1321,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 9,
+                "box": [
+                  1400,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1408,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1408,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 10,
+                "box": [
+                  1487,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1495,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1495,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 11,
+                "box": [
+                  1574,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1582,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1582,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 12,
+                "box": [
+                  1661,
+                  179,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1669,
+                    186,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1669,
+                    236,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              }
+            ],
+            "resourceTracks": [
+              {
+                "id": "credits",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  1226,
+                  291,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "income",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  1226,
+                  321,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "victoryPoints",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  1226,
+                  351,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              }
+            ],
+            "overflowBox": [
+              1664,
+              318,
+              88,
+              68
+            ],
+            "overflowMarkerDisplay": {
+              "type": "open-stack-cue",
+              "fixedCapacity": false,
+              "note": "decorative stack symbol; exact marker instances stored per resource"
+            }
+          },
+          {
+            "playerIndex": 4,
+            "instanceId": "console-4",
+            "box": [
+              325,
+              430,
+              560,
+              385
+            ],
+            "sectorCells": [
+              {
+                "sectorNumber": 1,
+                "box": [
+                  341,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    349,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    349,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 2,
+                "box": [
+                  428,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    436,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    436,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 3,
+                "box": [
+                  515,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    523,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    523,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 4,
+                "box": [
+                  602,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    610,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    610,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 5,
+                "box": [
+                  689,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    697,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    697,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 6,
+                "box": [
+                  776,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    784,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    784,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 7,
+                "box": [
+                  341,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    349,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    349,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 8,
+                "box": [
+                  428,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    436,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    436,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 9,
+                "box": [
+                  515,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    523,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    523,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 10,
+                "box": [
+                  602,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    610,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    610,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 11,
+                "box": [
+                  689,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    697,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    697,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 12,
+                "box": [
+                  776,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    784,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    784,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              }
+            ],
+            "resourceTracks": [
+              {
+                "id": "credits",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  341,
+                  693,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "income",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  341,
+                  723,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "victoryPoints",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  341,
+                  753,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              }
+            ],
+            "overflowBox": [
+              779,
+              720,
+              88,
+              68
+            ],
+            "overflowMarkerDisplay": {
+              "type": "open-stack-cue",
+              "fixedCapacity": false,
+              "note": "decorative stack symbol; exact marker instances stored per resource"
+            }
+          },
+          {
+            "playerIndex": 5,
+            "instanceId": "console-5",
+            "box": [
+              915,
+              430,
+              560,
+              385
+            ],
+            "sectorCells": [
+              {
+                "sectorNumber": 1,
+                "box": [
+                  931,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    939,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    939,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 2,
+                "box": [
+                  1018,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1026,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1026,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 3,
+                "box": [
+                  1105,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1113,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1113,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 4,
+                "box": [
+                  1192,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1200,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1200,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 5,
+                "box": [
+                  1279,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1287,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1287,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 6,
+                "box": [
+                  1366,
+                  475,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1374,
+                    482,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1374,
+                    532,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 7,
+                "box": [
+                  931,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    939,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    939,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 8,
+                "box": [
+                  1018,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1026,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1026,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 9,
+                "box": [
+                  1105,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1113,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1113,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 10,
+                "box": [
+                  1192,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1200,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1200,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 11,
+                "box": [
+                  1279,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1287,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1287,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              },
+              {
+                "sectorNumber": 12,
+                "box": [
+                  1366,
+                  581,
+                  82,
+                  98
+                ],
+                "stationCard": {
+                  "box": [
+                    1374,
+                    588,
+                    66,
+                    43
+                  ],
+                  "cardinality": "zero-or-one",
+                  "orientation": "upright"
+                },
+                "deployedStack": {
+                  "box": [
+                    1374,
+                    638,
+                    66,
+                    31
+                  ],
+                  "cardinality": "zero-to-unbounded",
+                  "orientation": "upside-down",
+                  "allCardsRetained": true
+                },
+                "colonyOverlay": {
+                  "sameBoxAs": "stationCard",
+                  "cardinality": "zero-or-one",
+                  "replacesStation": true
+                }
+              }
+            ],
+            "resourceTracks": [
+              {
+                "id": "credits",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  931,
+                  693,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "income",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  931,
+                  723,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              },
+              {
+                "id": "victoryPoints",
+                "valueRange": [
+                  0,
+                  40
+                ],
+                "bounds": [
+                  931,
+                  753,
+                  420,
+                  14
+                ],
+                "pointerValueIsIndependentOfOverflow": true
+              }
+            ],
+            "overflowBox": [
+              1369,
+              720,
+              88,
+              68
+            ],
+            "overflowMarkerDisplay": {
+              "type": "open-stack-cue",
+              "fixedCapacity": false,
+              "note": "decorative stack symbol; exact marker instances stored per resource"
+            }
+          }
+        ],
+        "sharedZones": {
+          "shipyard": {
+            "box": [
+              30,
+              970,
+              1120,
+              300
+            ],
+            "offers": [
+              {
+                "id": "level-1-offer-1",
+                "level": 1,
+                "offerIndex": 1,
+                "box": [
+                  50,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-1-offer-2",
+                "level": 1,
+                "offerIndex": 2,
+                "box": [
+                  230,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-1-offer-3",
+                "level": 1,
+                "offerIndex": 3,
+                "box": [
+                  410,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-1-offer-4",
+                "level": 1,
+                "offerIndex": 4,
+                "box": [
+                  590,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-1-offer-5",
+                "level": 1,
+                "offerIndex": 5,
+                "box": [
+                  770,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-1-offer-6",
+                "level": 1,
+                "offerIndex": 6,
+                "box": [
+                  950,
+                  990,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-1-deck"
+              },
+              {
+                "id": "level-2-offer-1",
+                "level": 2,
+                "offerIndex": 1,
+                "box": [
+                  50,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-2-offer-2",
+                "level": 2,
+                "offerIndex": 2,
+                "box": [
+                  230,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-2-offer-3",
+                "level": 2,
+                "offerIndex": 3,
+                "box": [
+                  410,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-2-offer-4",
+                "level": 2,
+                "offerIndex": 4,
+                "box": [
+                  590,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-2-offer-5",
+                "level": 2,
+                "offerIndex": 5,
+                "box": [
+                  770,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-2-offer-6",
+                "level": 2,
+                "offerIndex": 6,
+                "box": [
+                  950,
+                  1078,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-2-deck"
+              },
+              {
+                "id": "level-3-offer-1",
+                "level": 3,
+                "offerIndex": 1,
+                "box": [
+                  50,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              },
+              {
+                "id": "level-3-offer-2",
+                "level": 3,
+                "offerIndex": 2,
+                "box": [
+                  230,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              },
+              {
+                "id": "level-3-offer-3",
+                "level": 3,
+                "offerIndex": 3,
+                "box": [
+                  410,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              },
+              {
+                "id": "level-3-offer-4",
+                "level": 3,
+                "offerIndex": 4,
+                "box": [
+                  590,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              },
+              {
+                "id": "level-3-offer-5",
+                "level": 3,
+                "offerIndex": 5,
+                "box": [
+                  770,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              },
+              {
+                "id": "level-3-offer-6",
+                "level": 3,
+                "offerIndex": 6,
+                "box": [
+                  950,
+                  1166,
+                  168,
+                  78
+                ],
+                "visibility": "public-face-up",
+                "replacementDeckId": "level-3-deck"
+              }
+            ],
+            "drawDecks": [
+              {
+                "id": "level-1-deck",
+                "level": 1,
+                "componentTotal": 48,
+                "box": [
+                  1205,
+                  970,
+                  170,
+                  300
+                ],
+                "cardIdentityVisibility": "hidden",
+                "remainingCount": "record-exact-or-unknown"
+              },
+              {
+                "id": "level-2-deck",
+                "level": 2,
+                "componentTotal": 48,
+                "box": [
+                  1390,
+                  970,
+                  170,
+                  300
+                ],
+                "cardIdentityVisibility": "hidden",
+                "remainingCount": "record-exact-or-unknown"
+              },
+              {
+                "id": "level-3-deck",
+                "level": 3,
+                "componentTotal": 36,
+                "box": [
+                  1575,
+                  970,
+                  170,
+                  300
+                ],
+                "cardIdentityVisibility": "hidden",
+                "remainingCount": "record-exact-or-unknown"
+              }
+            ]
+          },
+          "colonyRow": {
+            "box": [
+              30,
+              1290,
+              1120,
+              180
+            ],
+            "cards": [
+              {
+                "id": "colony-sector-1",
+                "sectorNumber": 1,
+                "box": [
+                  48,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 1,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 1
+              },
+              {
+                "id": "colony-sector-2",
+                "sectorNumber": 2,
+                "box": [
+                  139,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 2,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 2
+              },
+              {
+                "id": "colony-sector-3",
+                "sectorNumber": 3,
+                "box": [
+                  230,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 3,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 3
+              },
+              {
+                "id": "colony-sector-4",
+                "sectorNumber": 4,
+                "box": [
+                  321,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 4,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 4
+              },
+              {
+                "id": "colony-sector-5",
+                "sectorNumber": 5,
+                "box": [
+                  412,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 5,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 5
+              },
+              {
+                "id": "colony-sector-6",
+                "sectorNumber": 6,
+                "box": [
+                  503,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 6,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 6
+              },
+              {
+                "id": "colony-sector-7",
+                "sectorNumber": 7,
+                "box": [
+                  594,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 7,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 7
+              },
+              {
+                "id": "colony-sector-8",
+                "sectorNumber": 8,
+                "box": [
+                  685,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 8,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 8
+              },
+              {
+                "id": "colony-sector-9",
+                "sectorNumber": 9,
+                "box": [
+                  776,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 9,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 9
+              },
+              {
+                "id": "colony-sector-10",
+                "sectorNumber": 10,
+                "box": [
+                  867,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 10,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 10
+              },
+              {
+                "id": "colony-sector-11",
+                "sectorNumber": 11,
+                "box": [
+                  958,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 11,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 11
+              },
+              {
+                "id": "colony-sector-12",
+                "sectorNumber": 12,
+                "box": [
+                  1049,
+                  1306,
+                  82,
+                  144
+                ],
+                "initialOrder": 12,
+                "visibility": "public-face-up",
+                "replenishesAfterPurchase": false,
+                "occupiesPlayerSector": 12
+              }
+            ]
+          },
+          "dice": {
+            "count": 2,
+            "boxes": [
+              [
+                1200,
+                1310,
+                52,
+                52
+              ],
+              [
+                1264,
+                1310,
+                52,
+                52
+              ]
+            ]
+          },
+          "startingPlayerMarker": {
+            "box": [
+              1345,
+              1310,
+              70,
+              86
+            ],
+            "cardCount": 1
+          },
+          "chargePool": {
+            "physicalCount": 30,
+            "markerCenters": [
+              [
+                1450,
+                1316
+              ],
+              [
+                1495,
+                1316
+              ],
+              [
+                1540,
+                1316
+              ],
+              [
+                1585,
+                1316
+              ],
+              [
+                1630,
+                1316
+              ],
+              [
+                1675,
+                1316
+              ],
+              [
+                1450,
+                1343
+              ],
+              [
+                1495,
+                1343
+              ],
+              [
+                1540,
+                1343
+              ],
+              [
+                1585,
+                1343
+              ],
+              [
+                1630,
+                1343
+              ],
+              [
+                1675,
+                1343
+              ],
+              [
+                1450,
+                1370
+              ],
+              [
+                1495,
+                1370
+              ],
+              [
+                1540,
+                1370
+              ],
+              [
+                1585,
+                1370
+              ],
+              [
+                1630,
+                1370
+              ],
+              [
+                1675,
+                1370
+              ],
+              [
+                1450,
+                1397
+              ],
+              [
+                1495,
+                1397
+              ],
+              [
+                1540,
+                1397
+              ],
+              [
+                1585,
+                1397
+              ],
+              [
+                1630,
+                1397
+              ],
+              [
+                1675,
+                1397
+              ],
+              [
+                1450,
+                1424
+              ],
+              [
+                1495,
+                1424
+              ],
+              [
+                1540,
+                1424
+              ],
+              [
+                1585,
+                1424
+              ],
+              [
+                1630,
+                1424
+              ],
+              [
+                1675,
+                1424
+              ]
+            ]
+          }
+        },
+        "playerAccentColors": {
+          "meaning": "diagram-only seat distinction; not a physical color assignment",
+          "colors": [
+            "#8fd3ff",
+            "#ffc935",
+            "#46aa6a",
+            "#ee6055",
+            "#a879d7"
+          ]
+        }
+      }
+    },
+    "components": {
+      "commandConsoles": {
+        "physicalCount": 5,
+        "usedCount": "one-per-player",
+        "contains": "12 numbered sectors and three resource tracks"
+      },
+      "startingShipSets": {
+        "physicalCount": 5,
+        "cardsPerSet": 12,
+        "totalCards": 60,
+        "setup": "each player lays one starting ship into each matching numbered sector"
+      },
+      "shipCards": {
+        "physicalCount": 132,
+        "byLevel": {
+          "1": 48,
+          "2": 48,
+          "3": 36
+        },
+        "faceUpOffersPerLevel": 6,
+        "faceUpOfferTotal": 18,
+        "hiddenDeckRemaining": "record exact or unknown; do not derive from total if identities are unknown"
+      },
+      "colonyCards": {
+        "physicalCount": 12,
+        "initialOrder": "ascending sector 1..12",
+        "faceUp": true,
+        "replenishAfterPurchase": false
+      },
+      "chargeTokens": {
+        "physicalCount": 30,
+        "locations": [
+          "shared-pool",
+          "player-track-overflow",
+          "card-activation"
+        ]
+      },
+      "dice": {
+        "physicalCount": 2,
+        "sides": 6
+      },
+      "startingPlayerCard": {
+        "physicalCount": 1
+      }
+    },
+    "playerState": {
+      "identity": "playerId-and-seat",
+      "consoleInstanceId": "console-N",
+      "resources": {
+        "credits": {
+          "exactTotal": "number-or-unknown",
+          "trackPointer": {
+            "minimum": 0,
+            "maximum": 40
+          },
+          "overflowChargeMarkers": "ordered-or-unordered-instance-list"
+        },
+        "income": {
+          "exactTotal": "number-or-unknown",
+          "trackPointer": {
+            "minimum": 0,
+            "maximum": 40
+          },
+          "overflowChargeMarkers": "ordered-or-unordered-instance-list"
+        },
+        "victoryPoints": {
+          "exactTotal": "number-or-unknown",
+          "trackPointer": {
+            "minimum": 0,
+            "maximum": 40
+          },
+          "overflowChargeMarkers": "ordered-or-unordered-instance-list"
+        }
+      },
+      "sectors": {
+        "numberRange": [
+          1,
+          12
+        ],
+        "eachSector": {
+          "stationCard": {
+            "cardInstanceId": "nullable",
+            "cardLevel": "nullable",
+            "cardData": "preserve-observed-fields",
+            "orientation": "upright"
+          },
+          "deployedCards": {
+            "cardInstanceIds": "ordered-array-oldest-to-newest",
+            "orientation": "upside-down",
+            "allVisibleRewardsPreserved": true
+          },
+          "colonyCard": {
+            "cardInstanceId": "nullable",
+            "overlaysStation": true,
+            "preventsFutureShipReplacement": true,
+            "deployedCardsRemain": true
+          },
+          "chargeAttachments": [
+            {
+              "chargeTokenInstanceId": "id-or-unknown",
+              "cardInstanceId": "id-or-unknown",
+              "abilityFace": "station-or-deployed"
+            }
+          ]
+        }
+      }
+    },
+    "sharedState": {
+      "shipyardOffers": "18 individually identified public offers, six per level; each purchased slot links to its source level deck for refill",
+      "levelDecks": {
+        "levels": [
+          1,
+          2,
+          3
+        ],
+        "cardIdentityVisibility": "hidden",
+        "remainingCount": "exact-or-unknown"
+      },
+      "colonyMarket": "12 ordered public cards; each removed card leaves a vacancy and is never replenished",
+      "chargeTokenInventory": "30 physical tokens with exact-known-or-unknown locations; never infer unobserved zero",
+      "dice": {
+        "count": 2,
+        "values": [
+          1,
+          2
+        ],
+        "lastRoll": "nullable pair",
+        "rollHistory": "optional"
+      },
+      "startingPlayerMarker": "playerId-or-unknown",
+      "startingPlayerCardLocation": "shared-marker-or-player-held"
+    },
+    "turnState": {
+      "round": "integer-or-unknown",
+      "turnIndex": "integer-or-unknown",
+      "activePlayerId": "nullable",
+      "phase": [
+        "setup",
+        "roll",
+        "allocate",
+        "buy",
+        "refill",
+        "end-turn",
+        "round-complete",
+        "game-over",
+        "unknown"
+      ],
+      "diceAllocationMode": [
+        "sum",
+        "individual",
+        "unknown"
+      ],
+      "allocationsByPlayer": "one record per active/passive player: selected sectorNumbers (duplicates allowed for doubles), resolved flag, rewards/activations already resolved, unresolved action note",
+      "buyResolution": {
+        "purchaseType": [
+          "none",
+          "ship",
+          "colony",
+          "unknown"
+        ],
+        "sourceMarketSlotId": "nullable",
+        "destinationSector": "nullable",
+        "oldStationDeployed": "unknown-or-card-id",
+        "creditsResetDone": "boolean-or-unknown",
+        "refillPending": "boolean-or-unknown"
+      },
+      "activeAndPassiveResolution": "preserve per-player partial progress because all players allocate after the active roll",
+      "endGame": {
+        "trigger": "any player reaches at least 40 VP",
+        "finishCurrentRound": true,
+        "equalTurns": true,
+        "lastTurnRelativeToStartingPlayer": "right-neighbor-of-starting-player",
+        "tieBreak": "continue full extra rounds until a highest score is unique"
+      }
+    },
+    "setupState": {
+      "startingShipSetsPlaced": "12 per participating player in matching sectors",
+      "resourceMarkers": "record each initial marker position; do not assume initialized values when reconstructing a mid-setup photo",
+      "randomLevel1StartCard": "drawn per player, paid by cost, placed in matching sector and replaces/deploys prior card; preserve card identities and setup progress",
+      "turnOrderResourceBonuses": "record actually assigned values by seat; no automatic application"
+    },
+    "preservation": {
+      "unknowns": "retain null/unknown card identities, quantities, markers, allocations and phase without dropping physical objects",
+      "projections": "static SVG placeholders are not actual current cards/tokens; state is stored separately",
+      "gameRules": "asset identifies state needed to resume; it does not validate legal actions, resolve rewards or advance turns"
+    }
+  },
+  "assetCompleteness": {
+    "complete": true,
+    "includes": [
+      "five reusable console instances",
+      "12 station sectors per player",
+      "unbounded deployed ship stacks and colony overlay semantics",
+      "three resource tracks and overflow marker zones per player",
+      "18 face-up shipyard offers and three hidden level decks",
+      "12 ascending colony slots",
+      "two dice",
+      "30 shared charge-token locations",
+      "starting-player marker",
+      "turn/allocation/purchase/refill/end-round resume state schema",
+      "diagram-only player accents are not stored player colors; overflow marker illustration is open-ended, not a four-token capacity"
+    ],
+    "notClaimed": [
+      "application integration",
+      "rules engine",
+      "actual game state",
+      "complete card-by-card catalog or card-effect automation"
+    ]
+  },
+  "auxiliaryAssets": [
+    {
+      "svg": "table-overview.svg",
+      "viewBox": [
+        0,
+        0,
+        1800,
+        1500
+      ],
+      "purpose": "Five player command-console instances plus the complete shared setup zones; static schematic, not a dealt game state."
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "sector-1-deployed-zone",
+      "type": "rect",
+      "x": 42,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-1-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 48,
+      "y1": 172,
+      "x2": 94,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-1-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 52,
+      "y1": 180,
+      "x2": 98,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-1-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 56,
+      "y1": 188,
+      "x2": 102,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-1-stack-open-1",
+      "type": "circle",
+      "cx": 61.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-1-stack-open-2",
+      "type": "circle",
+      "cx": 71.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-1-stack-open-3",
+      "type": "circle",
+      "cx": 81.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-2-deployed-zone",
+      "type": "rect",
+      "x": 120,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-2-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 126,
+      "y1": 172,
+      "x2": 172,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-2-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 130,
+      "y1": 180,
+      "x2": 176,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-2-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 134,
+      "y1": 188,
+      "x2": 180,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-2-stack-open-1",
+      "type": "circle",
+      "cx": 139.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-2-stack-open-2",
+      "type": "circle",
+      "cx": 149.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-2-stack-open-3",
+      "type": "circle",
+      "cx": 159.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-3-deployed-zone",
+      "type": "rect",
+      "x": 198,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-3-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 204,
+      "y1": 172,
+      "x2": 250,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-3-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 208,
+      "y1": 180,
+      "x2": 254,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-3-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 212,
+      "y1": 188,
+      "x2": 258,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-3-stack-open-1",
+      "type": "circle",
+      "cx": 217.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-3-stack-open-2",
+      "type": "circle",
+      "cx": 227.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-3-stack-open-3",
+      "type": "circle",
+      "cx": 237.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-4-deployed-zone",
+      "type": "rect",
+      "x": 276,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-4-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 282,
+      "y1": 172,
+      "x2": 328,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-4-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 286,
+      "y1": 180,
+      "x2": 332,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-4-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 290,
+      "y1": 188,
+      "x2": 336,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-4-stack-open-1",
+      "type": "circle",
+      "cx": 295.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-4-stack-open-2",
+      "type": "circle",
+      "cx": 305.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-4-stack-open-3",
+      "type": "circle",
+      "cx": 315.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-5-deployed-zone",
+      "type": "rect",
+      "x": 354,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-5-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 360,
+      "y1": 172,
+      "x2": 406,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-5-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 364,
+      "y1": 180,
+      "x2": 410,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-5-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 368,
+      "y1": 188,
+      "x2": 414,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-5-stack-open-1",
+      "type": "circle",
+      "cx": 373.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-5-stack-open-2",
+      "type": "circle",
+      "cx": 383.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-5-stack-open-3",
+      "type": "circle",
+      "cx": 393.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-6-deployed-zone",
+      "type": "rect",
+      "x": 432,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-6-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 438,
+      "y1": 172,
+      "x2": 484,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-6-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 442,
+      "y1": 180,
+      "x2": 488,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-6-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 446,
+      "y1": 188,
+      "x2": 492,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-6-stack-open-1",
+      "type": "circle",
+      "cx": 451.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-6-stack-open-2",
+      "type": "circle",
+      "cx": 461.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-6-stack-open-3",
+      "type": "circle",
+      "cx": 471.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-7-deployed-zone",
+      "type": "rect",
+      "x": 510,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-7-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 516,
+      "y1": 172,
+      "x2": 562,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-7-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 520,
+      "y1": 180,
+      "x2": 566,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-7-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 524,
+      "y1": 188,
+      "x2": 570,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-7-stack-open-1",
+      "type": "circle",
+      "cx": 529.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-7-stack-open-2",
+      "type": "circle",
+      "cx": 539.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-7-stack-open-3",
+      "type": "circle",
+      "cx": 549.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-8-deployed-zone",
+      "type": "rect",
+      "x": 588,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-8-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 594,
+      "y1": 172,
+      "x2": 640,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-8-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 598,
+      "y1": 180,
+      "x2": 644,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-8-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 602,
+      "y1": 188,
+      "x2": 648,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-8-stack-open-1",
+      "type": "circle",
+      "cx": 607.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-8-stack-open-2",
+      "type": "circle",
+      "cx": 617.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-8-stack-open-3",
+      "type": "circle",
+      "cx": 627.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-9-deployed-zone",
+      "type": "rect",
+      "x": 666,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-9-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 672,
+      "y1": 172,
+      "x2": 718,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-9-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 676,
+      "y1": 180,
+      "x2": 722,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-9-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 680,
+      "y1": 188,
+      "x2": 726,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-9-stack-open-1",
+      "type": "circle",
+      "cx": 685.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-9-stack-open-2",
+      "type": "circle",
+      "cx": 695.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-9-stack-open-3",
+      "type": "circle",
+      "cx": 705.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-10-deployed-zone",
+      "type": "rect",
+      "x": 744,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-10-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 750,
+      "y1": 172,
+      "x2": 796,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-10-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 754,
+      "y1": 180,
+      "x2": 800,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-10-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 758,
+      "y1": 188,
+      "x2": 804,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-10-stack-open-1",
+      "type": "circle",
+      "cx": 763.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-10-stack-open-2",
+      "type": "circle",
+      "cx": 773.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-10-stack-open-3",
+      "type": "circle",
+      "cx": 783.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-11-deployed-zone",
+      "type": "rect",
+      "x": 822,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-11-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 828,
+      "y1": 172,
+      "x2": 874,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-11-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 832,
+      "y1": 180,
+      "x2": 878,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-11-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 836,
+      "y1": 188,
+      "x2": 882,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-11-stack-open-1",
+      "type": "circle",
+      "cx": 841.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-11-stack-open-2",
+      "type": "circle",
+      "cx": 851.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-11-stack-open-3",
+      "type": "circle",
+      "cx": 861.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-12-deployed-zone",
+      "type": "rect",
+      "x": 900,
+      "y": 157,
+      "w": 58,
+      "h": 175,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "fillOpacity": ".10",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-12-deployed-stack-edge-1",
+      "type": "line",
+      "x1": 906,
+      "y1": 172,
+      "x2": 952,
+      "y2": 172,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-12-deployed-stack-edge-2",
+      "type": "line",
+      "x1": 910,
+      "y1": 180,
+      "x2": 956,
+      "y2": 180,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-12-deployed-stack-edge-3",
+      "type": "line",
+      "x1": 914,
+      "y1": 188,
+      "x2": 960,
+      "y2": 188,
+      "fill": "none",
+      "stroke": "#49718e",
+      "strokeWidth": 2
+    },
+    {
+      "id": "sector-12-stack-open-1",
+      "type": "circle",
+      "cx": 919.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-12-stack-open-2",
+      "type": "circle",
+      "cx": 929.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "sector-12-stack-open-3",
+      "type": "circle",
+      "cx": 939.0,
+      "cy": 315,
+      "r": 2.6,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    }
+  ]
+}

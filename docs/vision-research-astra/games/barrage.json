@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/barrage.json",
-    "sha256": "eeb9e974a3a9427a4588764075817f97503a644ad78b60bcef01058a5aa0ac2e",
+    "sha256": "f47a620237a6394412aa18d25a7c2e575733ab016996359bcb5c7bd662c03ad4",
     "runtime_pack_id": "barrage",
-    "runtime_pack_version": "1.0.0-essentials-2.eeb9e974a3a9",
+    "runtime_pack_version": "1.0.0-essentials-2.f47a620237a6",
     "runtime_match": true
   },
   "basis": {
@@ -36,7 +36,8 @@
       "inherited::barrage.essentials.rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "유역·도관·발전소의 입출구와 공사바퀴",
   "critical_resume_distinction": "상류/하류·바퀴 칸/회전과 묶인 기계·기술을 보존",
@@ -222,7 +223,7 @@
         "machinery"
       ],
       "anchor_contract": "남은 시설·가용 기계·계약과 현재 돈.",
-      "description": "회사판·계약의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "회사판·계약의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 수행한 계약은 뒷면으로 개인 공급에 두며 개수는 최종 점수에 쓰인다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "player_public",
@@ -537,6 +538,14 @@
     ],
     "excluded_bindings": [
       {
+        "key": "wheel.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "company.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "energy",
         "reason": "원명세가 사진 관측을 허용하지 않음"
       },
@@ -571,6 +580,10 @@
       {
         "key": "record-note.turn-order",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "contract-piles.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -685,6 +698,27 @@
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "contract-piles.preserve",
+        "label": "개인 계약 타일 더미 보존(선택)",
+        "scope": "shared-secret",
+        "visibility": "hidden",
+        "field_ids": [
+          "contract-piles.scene"
+        ],
+        "method": "sealed-bundle",
+        "order_sensitive": true,
+        "steps": [
+          "뒷면 종류별로 나눈 세 개의 개인 계약 타일 더미는 뒷면으로 쌓여 있다. 더미별 위/아래와 경계만 실물로 보존하고 정체를 펼쳐 기록하지 않는다.",
+          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
+          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
       }
     ],
     "opening_policy": "retain-saved-turn",
@@ -767,7 +801,7 @@
   "current_board_mapping": {
     "gameId": "barrage",
     "editionId": "base",
-    "sourceSHA": "eeb9e974a3a9427a4588764075817f97503a644ad78b60bcef01058a5aa0ac2e",
+    "sourceSHA": "f47a620237a6394412aa18d25a7c2e575733ab016996359bcb5c7bd662c03ad4",
     "status": "source-pending",
     "areas": [
       {

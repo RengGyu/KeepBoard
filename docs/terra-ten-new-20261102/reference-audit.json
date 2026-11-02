@@ -1,0 +1,228 @@
+{
+  "annotationSource": "independent Claude visual audit, not human-certified",
+  "method": "Original JPGs and frozen root reference/definition files only; local zoom crops in /private/tmp/claude-ref-audit-20261102; originals and reference files unchanged; no model outputs, scores or execution files read.",
+  "status": "complete for this pass: sagrada/carcassonne zoom-audited; rummikub/splendor/ticket-to-ride checked once on the original with reference-box overlay (no repeated crops)",
+  "cases": [
+    {
+      "caseId": "sagrada",
+      "confirmed": false,
+      "issues": [
+        {
+          "referenceId": "dice-10",
+          "propertyId": "dieValue",
+          "expectedInReference": "unknown (ambiguous)",
+          "suggestedValue": 5,
+          "certainty": "clear",
+          "reason": "Top face zoomed: four corner pips in diamond orientation plus a centre pip."
+        },
+        {
+          "referenceId": "dice-13",
+          "propertyId": "dieValue",
+          "expectedInReference": "unknown (ambiguous)",
+          "suggestedValue": 4,
+          "certainty": "uncertain",
+          "reason": "Top face shows four pips in a diamond with no centre pip; perspective and blur make a hidden fifth pip unlikely but not impossible."
+        }
+      ],
+      "inventoryIssues": [
+        {
+          "type": "missing-object",
+          "suggestedObject": {
+            "componentId": "dice",
+            "boxPx": [
+              125,
+              235,
+              195,
+              300
+            ],
+            "physicalUnit": "single",
+            "quantity": 1,
+            "attributes": {
+              "observedColor": "red",
+              "dieColor": "red",
+              "dieValue": 2
+            }
+          },
+          "certainty": "clear",
+          "valueCertainty": "clear",
+          "reason": "Red die on the window between green dice-10, dark green dice-02 and red dice-09 has no reference box. Its top face shows two pips. Visible dice total 20 (13 on window, 7 loose), not 19."
+        }
+      ],
+      "verifiedWithoutChange": [
+        "dice-01 3",
+        "dice-02 4",
+        "dice-03 2",
+        "dice-04 5",
+        "dice-05 2",
+        "dice-06 5",
+        "dice-07 1",
+        "dice-08 1",
+        "dice-09 4",
+        "dice-11 3",
+        "dice-12 5",
+        "dice-14 3",
+        "dice-15 2",
+        "dice-16 6",
+        "dice-17 5",
+        "dice-18 2",
+        "dice-19 6",
+        "all 19 referenced dice colours"
+      ],
+      "limitations": [
+        "dieValue is read as the upward face from an oblique view; diamond/square orientation of 4/5 can be confused under blur.",
+        "windows-20 printed constraints left as reference (not audited in detail)."
+      ]
+    },
+    {
+      "caseId": "carcassonne",
+      "confirmed": false,
+      "issues": [
+        {
+          "referenceId": "tiles-05",
+          "propertyId": "city",
+          "expectedInReference": false,
+          "suggestedValue": true,
+          "certainty": "clear",
+          "reason": "City wall arc with houses lies below the tiles-02/tiles-05 seam (about x 200-360, y 265-335), i.e. a city cap on the top edge of tiles-05."
+        },
+        {
+          "referenceId": "tiles-15",
+          "propertyId": "road",
+          "expectedInReference": "unknown (out-of-frame)",
+          "suggestedValue": true,
+          "certainty": "clear",
+          "reason": "Road continues from tiles-10 across the seam and ends at the city gate inside tiles-15 (about x 575-610, y 700-760)."
+        },
+        {
+          "referenceId": "tiles-06",
+          "propertyId": "monastery",
+          "expectedInReference": false,
+          "suggestedValue": "unknown (ambiguous)",
+          "certainty": "uncertain",
+          "reason": "Central building with red spire under standing yellow follower-21 resembles a cloister; road continues above and below it, so cloister vs roadside building cannot be decided from this view."
+        },
+        {
+          "referenceId": "followers-23",
+          "propertyId": "posture",
+          "expectedInReference": "unknown (out-of-frame)",
+          "suggestedValue": "unknown (ambiguous)",
+          "certainty": "uncertain",
+          "reason": "Follower is fully inside the frame; posture is unclear (could be lying) rather than out-of-frame."
+        }
+      ],
+      "inventoryIssues": [
+        {
+          "type": "possible-missing-object",
+          "suggestedObject": {
+            "componentId": "followers",
+            "boxPx": [
+              1245,
+              760,
+              1280,
+              835
+            ],
+            "physicalUnit": "single",
+            "quantity": 1,
+            "attributes": {
+              "observedColor": "green"
+            },
+            "unknownAttributes": {
+              "posture": "out-of-frame"
+            }
+          },
+          "certainty": "uncertain",
+          "valueCertainty": "uncertain",
+          "reason": "Dark green blurred shape clipped at the right frame edge on tiles-17; colour/shape suggest a green follower but it is too clipped to confirm."
+        }
+      ],
+      "verifiedWithoutChange": [
+        "17 tile fragments as gridded",
+        "tiles-02 city/shield 1",
+        "tiles-03 road",
+        "tiles-07 road+monastery",
+        "tiles-09/11 road+city",
+        "tiles-10 road no city",
+        "tiles-17 city shield 1",
+        "followers-18..22, 24, 25 colours",
+        "followers-20 lying"
+      ],
+      "limitations": [
+        "Edge fragments (tiles-01/04/08/12/13) not audited for every feature.",
+        "Follower posture judged from an oblique blurred view."
+      ]
+    },
+    {
+      "caseId": "rummikub",
+      "confirmed": false,
+      "issues": [
+        {
+          "referenceId": "numbers-30",
+          "propertyId": "number",
+          "expectedInReference": "unknown (ambiguous)",
+          "suggestedValue": 6,
+          "certainty": "clear",
+          "reason": "Black upright '6' fully visible on the tile at bottom centre-right (about x 690-740, y 785-825)."
+        },
+        {
+          "referenceId": "numbers-28",
+          "propertyId": "number",
+          "expectedInReference": "unknown (ambiguous)",
+          "suggestedValue": 6,
+          "certainty": "uncertain",
+          "reason": "Red digit reads as '6' in the same upright orientation as numbers-30/31; slight blur and 6/9 orientation risk."
+        },
+        {
+          "referenceId": "numbers-33",
+          "propertyId": "componentId",
+          "expectedInReference": "numbers (orange, number occluded)",
+          "suggestedValue": "possibly jokers",
+          "certainty": "uncertain",
+          "reason": "Under the hand the visible mark is a round red/orange face-like symbol rather than a digit; joker vs numbered tile cannot be confirmed in one look."
+        }
+      ],
+      "inventoryIssues": [],
+      "unverified": [
+        "Digits in the upside-down/oblique orange run numbers-04..09, numbers-18, numbers-23 and the top-left group numbers-01..03 were not individually verified; no values suggested from run/sequence logic.",
+        "Whether a fourth tile sits behind numbers-25..27 was not verified.",
+        "Black vs blue colour for small far tiles not individually verified."
+      ],
+      "limitations": [
+        "Single look at 1280px original; 6/9 depends on tile orientation."
+      ]
+    },
+    {
+      "caseId": "splendor",
+      "confirmed": true,
+      "issues": [],
+      "inventoryIssues": [],
+      "verifiedWithoutChange": [
+        "development-01 points 1, bonus red, cost white 2/red 2/black 3, front",
+        "chips 2 white, 2 red, 3 black; 8 objects total"
+      ],
+      "limitations": [
+        "Card level not printed on front; reference 'wrong-face' kept."
+      ]
+    },
+    {
+      "caseId": "ticket-to-ride",
+      "confirmed": false,
+      "issues": [
+        {
+          "referenceId": "map-21",
+          "propertyId": "cityLabel",
+          "expectedInReference": "unknown (out-of-frame)",
+          "suggestedValue": "Santa Fe",
+          "certainty": "clear",
+          "reason": "Printed city name 'SANTA FE' is visible at the right edge (about x 3800-4032, y 1400-2000 in original px). Other route values are multi-valued rather than out-of-frame; 'ambiguous' would be a more accurate reason for routeColor/routeLength."
+        }
+      ],
+      "inventoryIssues": [],
+      "verifiedWithoutChange": [
+        "7 green (01-07), 7 red (08-14), 6 yellow (15-20) train cars matched one-to-one with boxes; colours correct"
+      ],
+      "limitations": [
+        "Checked once on a 1500px downscale; heavily blurred background cars beyond the referenced rows were not audited."
+      ]
+    }
+  ]
+}

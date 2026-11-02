@@ -1,0 +1,2071 @@
+{
+  "gameId": "love-letter",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "player-1-hand",
+      "label": "1번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-1-hand-container",
+          "x": 401,
+          "y": 78,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        385,
+        64,
+        105,
+        78
+      ],
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-1-play",
+      "label": "1번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        500,
+        64,
+        113,
+        130
+      ],
+      "stateKey": "players.player-1.faceUpPlayedAndOutCards",
+      "ownerSide": "player-1",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-1-favor",
+      "label": "1번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        385,
+        150,
+        105,
+        58
+      ],
+      "stateKey": "players.player-1.favorTokens",
+      "ownerSide": "player-1",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    },
+    {
+      "id": "player-2-hand",
+      "label": "2번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-2-hand-container",
+          "x": 720,
+          "y": 246,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        704,
+        232,
+        105,
+        78
+      ],
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-2-play",
+      "label": "2번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        819,
+        232,
+        139,
+        130
+      ],
+      "stateKey": "players.player-2.faceUpPlayedAndOutCards",
+      "ownerSide": "player-2",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-2-favor",
+      "label": "2번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        704,
+        318,
+        105,
+        58
+      ],
+      "stateKey": "players.player-2.favorTokens",
+      "ownerSide": "player-2",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    },
+    {
+      "id": "player-3-hand",
+      "label": "3번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-3-hand-container",
+          "x": 720,
+          "y": 648,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        704,
+        634,
+        105,
+        78
+      ],
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-3-play",
+      "label": "3번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        819,
+        634,
+        139,
+        130
+      ],
+      "stateKey": "players.player-3.faceUpPlayedAndOutCards",
+      "ownerSide": "player-3",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-3-favor",
+      "label": "3번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        704,
+        720,
+        105,
+        58
+      ],
+      "stateKey": "players.player-3.favorTokens",
+      "ownerSide": "player-3",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    },
+    {
+      "id": "player-4-hand",
+      "label": "4번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-4-hand-container",
+          "x": 401,
+          "y": 816,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        385,
+        802,
+        105,
+        78
+      ],
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-4-play",
+      "label": "4번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        500,
+        802,
+        113,
+        130
+      ],
+      "stateKey": "players.player-4.faceUpPlayedAndOutCards",
+      "ownerSide": "player-4",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-4-favor",
+      "label": "4번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        385,
+        888,
+        105,
+        58
+      ],
+      "stateKey": "players.player-4.favorTokens",
+      "ownerSide": "player-4",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    },
+    {
+      "id": "player-5-hand",
+      "label": "5번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-5-hand-container",
+          "x": 56,
+          "y": 648,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        40,
+        634,
+        105,
+        78
+      ],
+      "stateKey": "players.player-5.hand",
+      "ownerSide": "player-5",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-5-play",
+      "label": "5번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        155,
+        634,
+        139,
+        130
+      ],
+      "stateKey": "players.player-5.faceUpPlayedAndOutCards",
+      "ownerSide": "player-5",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-5-favor",
+      "label": "5번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        40,
+        720,
+        105,
+        58
+      ],
+      "stateKey": "players.player-5.favorTokens",
+      "ownerSide": "player-5",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    },
+    {
+      "id": "player-6-hand",
+      "label": "6번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "love-letter-player-6-hand-container",
+          "x": 56,
+          "y": 246,
+          "w": 58,
+          "h": 52,
+          "capacity": 3,
+          "shape": "rect",
+          "fill": "#fffdf8",
+          "role": "private-hand-container",
+          "maxDuringEffect": 3,
+          "ordinaryAfterPlay": 1
+        }
+      ],
+      "bounds": [
+        40,
+        232,
+        105,
+        78
+      ],
+      "stateKey": "players.player-6.hand",
+      "ownerSide": "player-6",
+      "visibility": "owner",
+      "capacityPolicy": "Normally one hidden card; transient hand can reach three while resolving Chancellor."
+    },
+    {
+      "id": "player-6-play",
+      "label": "6번 자리 · 공개 플레이·탈락 카드",
+      "field": "play.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        155,
+        232,
+        139,
+        130
+      ],
+      "stateKey": "players.player-6.faceUpPlayedAndOutCards",
+      "ownerSide": "player-6",
+      "visibility": "public",
+      "capacityPolicy": "Unbounded within a round; keep every played/discarded card face up and ordered."
+    },
+    {
+      "id": "player-6-favor",
+      "label": "6번 자리 · 공개 호감 토큰",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        40,
+        318,
+        105,
+        58
+      ],
+      "stateKey": "players.player-6.favorTokens",
+      "ownerSide": "player-6",
+      "visibility": "public",
+      "capacityPolicy": "Variable count from the shared 13-token supply; no fixed personal score cap."
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "player-3-hand",
+        "player-3-play",
+        "player-3-favor",
+        "player-4-hand",
+        "player-4-play",
+        "player-4-favor",
+        "player-5-hand",
+        "player-5-play",
+        "player-5-favor",
+        "player-6-hand",
+        "player-6-play",
+        "player-6-favor"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "player-4-hand",
+        "player-4-play",
+        "player-4-favor",
+        "player-5-hand",
+        "player-5-play",
+        "player-5-favor",
+        "player-6-hand",
+        "player-6-play",
+        "player-6-favor"
+      ]
+    },
+    "4": {
+      "hideAreas": [
+        "player-5-hand",
+        "player-5-play",
+        "player-5-favor",
+        "player-6-hand",
+        "player-6-play",
+        "player-6-favor"
+      ]
+    },
+    "5": {
+      "hideAreas": [
+        "player-6-hand",
+        "player-6-play",
+        "player-6-favor"
+      ]
+    },
+    "6": {
+      "hideAreas": []
+    }
+  },
+  "notes": [
+    "The SVG is an original text-free tabletop layout; JSON labels carry zone meanings. No commercial character illustration is copied.",
+    "Player areas repeat for 2–6 active seats and hide unused seats. The hand container allows up to three cards for the Chancellor resolution; ordinary play keeps one.",
+    "The shared center distinguishes the draw pile, one hidden set-aside card, the two-player three-card face-up reserve, and remaining favor-token supply.",
+    "All used/discarded cards are public and remain in the owner’s row for the round; eliminated players reveal their hand and reference card state changes to broken-seal.",
+    "Current 21-card edition is default. Classic 16-card option is separately declared and restricted to 2–4 players.",
+    "This asset package does not claim app integration, automatic card-effect resolution, or an initialized game state."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.zmangames.com/game/love-letter/",
+      "location": "official product page, player count and contents",
+      "verifiedFacts": "Current new edition: 2–6 players, 21 character cards, six reference cards, thirteen favor tokens.",
+      "access": "verified",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://cdn.svc.asmodee.net/production-zman/uploads/2026/04/LL_Rulebook_with_Bag.pdf",
+      "location": "official English rulebook, pp.1–15",
+      "verifiedFacts": "21-card setup; one hidden set-aside and three extra face-up set-asides in a 2-player game; deal, clockwise turn, hand privacy and face-up discard; round end, thresholds, card effects, Spy bonus, 16-card classic variant.",
+      "access": "verified",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "assetScope": "complete current-edition tabletop layout and declarative session-state shape; application consumer integration remains separate",
+  "tableModel": {
+    "schemaId": "love-letter-current-session-v1",
+    "edition": "Z-Man Games current 21-character-card edition; classic 16-card option described separately",
+    "purpose": "Complete physical/resume state description only. This is not a rules engine and does not initialize or reveal random cards.",
+    "players": {
+      "minimum": 2,
+      "maximum": 6,
+      "clockwise": true,
+      "perActivePlayerComponents": {
+        "referenceCard": 1,
+        "favorTokenCount": "0..13 shared total"
+      }
+    },
+    "cardInventory": [
+      {
+        "kind": "spy",
+        "value": 0,
+        "copies": 2
+      },
+      {
+        "kind": "guard",
+        "value": 1,
+        "copies": 6
+      },
+      {
+        "kind": "priest",
+        "value": 2,
+        "copies": 2
+      },
+      {
+        "kind": "baron",
+        "value": 3,
+        "copies": 2
+      },
+      {
+        "kind": "handmaid",
+        "value": 4,
+        "copies": 2
+      },
+      {
+        "kind": "prince",
+        "value": 5,
+        "copies": 2
+      },
+      {
+        "kind": "chancellor",
+        "value": 6,
+        "copies": 2
+      },
+      {
+        "kind": "king",
+        "value": 7,
+        "copies": 1
+      },
+      {
+        "kind": "countess",
+        "value": 8,
+        "copies": 1
+      },
+      {
+        "kind": "princess",
+        "value": 9,
+        "copies": 1
+      }
+    ],
+    "sharedInventory": {
+      "characterCards": 21,
+      "referenceCards": 6,
+      "favorTokens": 13,
+      "roundSetup": {
+        "setAsideFaceDown": 1,
+        "twoPlayerAdditionalFaceUp": 3,
+        "dealOneCardEach": true
+      }
+    },
+    "playerRecord": {
+      "id": "stable session player id",
+      "seat": {
+        "integerRange": [
+          1,
+          6
+        ]
+      },
+      "active": {
+        "boolean": true
+      },
+      "outOfRound": {
+        "boolean": true
+      },
+      "hand": {
+        "visibility": "owner except hand becomes public face up on elimination or round-end reveal",
+        "cardCountRange": [
+          0,
+          3
+        ],
+        "normalTurnCount": 1,
+        "transientMaximum": "3 while resolving Chancellor"
+      },
+      "faceUpPlayedAndDiscardedCards": {
+        "visibility": "public",
+        "orderedByEvent": true,
+        "keepThroughRoundEnd": true
+      },
+      "referenceCardSide": [
+        "normal",
+        "broken-seal"
+      ],
+      "favorTokens": {
+        "type": "integer",
+        "range": [
+          0,
+          13
+        ]
+      },
+      "protectedUntilOwnerTurnBegins": {
+        "booleanOrNull": true
+      },
+      "privateKnowledge": {
+        "visibility": "only the player who observed the information",
+        "items": [
+          "own hidden hand identities",
+          "hand identity seen through Priest or other effect",
+          "other permitted private card knowledge"
+        ]
+      },
+      "spyWasPlayedOrDiscarded": {
+        "boolean": true
+      }
+    },
+    "roundRecord": {
+      "number": "integer",
+      "phase": [
+        "setup",
+        "deal",
+        "draw",
+        "choose-play",
+        "resolve-effect",
+        "awaiting-target-or-guess",
+        "end-turn",
+        "round-end-reveal",
+        "award-token",
+        "next-round",
+        "game-end",
+        "unknown"
+      ],
+      "firstPlayerId": "player id or null",
+      "activePlayerId": "player id or null",
+      "drawDeck": {
+        "remainingCount": "integer",
+        "topToBottomIdentity": "unknown unless the recording authority knows it",
+        "chancellorBottomInsertions": "preserve order and keep identities private when hidden"
+      },
+      "setAsideCards": {
+        "faceDownHiddenIdentityCount": 1,
+        "twoPlayerFaceUpCardIds": "three only when playerCount=2"
+      },
+      "discardAndPlayEvents": "ordered public card events per player, including forced hand discard without effect",
+      "pendingEffect": {
+        "kind": [
+          "guard",
+          "priest",
+          "baron",
+          "handmaid",
+          "prince",
+          "chancellor",
+          "king",
+          "countess",
+          "princess",
+          "spy",
+          "unknown"
+        ],
+        "sourcePlayerId": "player id or null",
+        "targetPlayerId": "player id or null",
+        "guess": "owner/public per rule; nullable",
+        "status": [
+          "pending",
+          "resolved",
+          "no-effect",
+          "unknown"
+        ]
+      },
+      "eliminationReason": "optional confirmed effect/card event",
+      "roundWinnerPlayerIds": "array, ties allowed",
+      "spyBonusWinnerPlayerIds": "array, separate from round winner",
+      "nextRoundFirstPlayerId": "player id or null"
+    },
+    "gameState": {
+      "favorTargetByPlayerCount": {
+        "2": 6,
+        "3": 5,
+        "4": 4,
+        "5": 3,
+        "6": 3
+      },
+      "winnerPlayerIds": "array because simultaneous winners are possible",
+      "roundEndConditions": [
+        "draw deck empty; surviving players reveal hands and highest value wins, ties each gain a favor token",
+        "only one player remains in round"
+      ]
+    },
+    "variantProfiles": {
+      "current-21-cards": {
+        "playerCount": [
+          2,
+          6
+        ],
+        "deckCardCount": 21
+      },
+      "classic-16-cards": {
+        "playerCount": [
+          2,
+          4
+        ],
+        "removeFromCurrentDeck": [
+          "1 guard",
+          "2 chancellors",
+          "2 spies"
+        ],
+        "otherRules": "current rulebook says all other rules unchanged"
+      }
+    },
+    "recordConventions": {
+      "unknown": "null/unknown; never infer a hidden card from deck counts",
+      "publicity": "played/discarded cards remain public; hand is private until eliminated/revealed",
+      "history": "persist completed card effects and ordered public events so resume does not re-resolve them",
+      "multiCardEffect": "Chancellor may temporarily hold three cards; its two bottom-deck returns preserve their order without leaking identities"
+    },
+    "physicalConstraints": [
+      "Each turn draws one card, then plays one of the player’s two cards and resolves its effect.",
+      "Each player normally holds one card; Chancellor can transiently expand hand to three before returning two cards facedown to the deck bottom.",
+      "All played or discarded cards remain face up and visible; a hand discarded when knocked out is revealed without resolving its effect.",
+      "Every round sets one card aside facedown; a two-player round also sets three cards aside face up.",
+      "A round ends when the deck is empty or only one player remains.",
+      "Winning a round grants a favor token; the Spy may separately grant a bonus token under its condition.",
+      "The first player for the next round is the previous round winner; tied round winners select randomly, so the selected starter is a recorded fact.",
+      "Card identity knowledge from a Priest effect is private to the observer; do not copy it into public state."
+    ]
+  },
+  "assetCompleteness": "full 2-6 player table, player-private/public card zones, shared round zones, and resumable round/game state schema",
+  "tableZones": [
+    {
+      "id": "shared-round-panel",
+      "label": "공용 라운드·차례·준비 영역",
+      "bounds": [
+        337,
+        306,
+        326,
+        388
+      ],
+      "stateKeys": [
+        "round.number",
+        "round.phase",
+        "turn.firstPlayerId",
+        "turn.activePlayerId",
+        "round.deckRemainingCount",
+        "round.outcome"
+      ]
+    },
+    {
+      "id": "shared-character-deck-zone",
+      "label": "21장 현행 캐릭터 덱",
+      "bounds": [
+        370,
+        390,
+        94,
+        126
+      ],
+      "visibility": "face-down; card order unknown except permitted owner knowledge",
+      "dynamic": true
+    },
+    {
+      "id": "shared-face-down-set-aside-zone",
+      "label": "매 라운드 비공개 제거 카드 1장",
+      "bounds": [
+        486,
+        397,
+        56,
+        82
+      ],
+      "visibility": "hidden identity; out of round and not resolved",
+      "dynamic": false
+    },
+    {
+      "id": "shared-two-player-face-up-reserve",
+      "label": "2인용 추가 공개 제외 카드 3장",
+      "bounds": [
+        564,
+        390,
+        66,
+        126
+      ],
+      "condition": "only current 21-card rules at playerCount=2",
+      "visibility": "face-up and publicly inspectable"
+    },
+    {
+      "id": "shared-favor-token-supply-zone",
+      "label": "전체 13개 호감 토큰의 남은 공급",
+      "bounds": [
+        370,
+        540,
+        260,
+        116
+      ],
+      "totalTokens": 13,
+      "dynamic": true,
+      "displayCirclesAreSupplyPositionsNotInitialAssignments": true
+    },
+    {
+      "id": "clockwise-turn-order",
+      "label": "시계 방향 좌석 순서",
+      "seatOrder": [
+        "player-1",
+        "player-2",
+        "player-3",
+        "player-4",
+        "player-5",
+        "player-6"
+      ],
+      "activeSeatCount": [
+        2,
+        6
+      ]
+    }
+  ],
+  "boardArt": [
+    {
+      "type": "rect",
+      "id": "player-1-table-panel",
+      "x": 375,
+      "y": 22,
+      "w": 250,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-1-seat-pip-1",
+      "cx": 393,
+      "cy": 38,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-1-reference-aid-outline",
+      "x": 577,
+      "y": 34,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-1-played-card-schematic-1",
+      "x": 508,
+      "y": 90,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-1-played-card-schematic-2",
+      "x": 521,
+      "y": 90,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-1-played-card-schematic-3",
+      "x": 534,
+      "y": 90,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-1-played-card-schematic-4",
+      "x": 547,
+      "y": 90,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-1-favor-token-schematic-1",
+      "cx": 409,
+      "cy": 185,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-1-favor-token-schematic-2",
+      "cx": 434,
+      "cy": 185,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-1-favor-token-schematic-3",
+      "cx": 459,
+      "cy": 185,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "player-2-table-panel",
+      "x": 694,
+      "y": 190,
+      "w": 276,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-2-seat-pip-1",
+      "cx": 712,
+      "cy": 206,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-2-seat-pip-2",
+      "cx": 723,
+      "cy": 206,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-2-reference-aid-outline",
+      "x": 922,
+      "y": 202,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-2-played-card-schematic-1",
+      "x": 827,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-2-played-card-schematic-2",
+      "x": 840,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-2-played-card-schematic-3",
+      "x": 853,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-2-played-card-schematic-4",
+      "x": 866,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-2-favor-token-schematic-1",
+      "cx": 728,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-2-favor-token-schematic-2",
+      "cx": 753,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-2-favor-token-schematic-3",
+      "cx": 778,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "player-3-table-panel",
+      "x": 694,
+      "y": 592,
+      "w": 276,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-1",
+      "cx": 712,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-2",
+      "cx": 723,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-3-seat-pip-3",
+      "cx": 734,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-3-reference-aid-outline",
+      "x": 922,
+      "y": 604,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-3-played-card-schematic-1",
+      "x": 827,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-3-played-card-schematic-2",
+      "x": 840,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-3-played-card-schematic-3",
+      "x": 853,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-3-played-card-schematic-4",
+      "x": 866,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-3-favor-token-schematic-1",
+      "cx": 728,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-3-favor-token-schematic-2",
+      "cx": 753,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-3-favor-token-schematic-3",
+      "cx": 778,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "player-4-table-panel",
+      "x": 375,
+      "y": 760,
+      "w": 250,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-1",
+      "cx": 393,
+      "cy": 776,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-2",
+      "cx": 404,
+      "cy": 776,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-3",
+      "cx": 415,
+      "cy": 776,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-4-seat-pip-4",
+      "cx": 393,
+      "cy": 787,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-4-reference-aid-outline",
+      "x": 577,
+      "y": 772,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-4-played-card-schematic-1",
+      "x": 508,
+      "y": 828,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-4-played-card-schematic-2",
+      "x": 521,
+      "y": 828,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-4-played-card-schematic-3",
+      "x": 534,
+      "y": 828,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-4-played-card-schematic-4",
+      "x": 547,
+      "y": 828,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-4-favor-token-schematic-1",
+      "cx": 409,
+      "cy": 923,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-4-favor-token-schematic-2",
+      "cx": 434,
+      "cy": 923,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-4-favor-token-schematic-3",
+      "cx": 459,
+      "cy": 923,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "player-5-table-panel",
+      "x": 30,
+      "y": 592,
+      "w": 276,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-1",
+      "cx": 48,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-2",
+      "cx": 59,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-3",
+      "cx": 70,
+      "cy": 608,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-4",
+      "cx": 48,
+      "cy": 619,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-5-seat-pip-5",
+      "cx": 59,
+      "cy": 619,
+      "r": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-5-reference-aid-outline",
+      "x": 258,
+      "y": 604,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-5-played-card-schematic-1",
+      "x": 163,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-5-played-card-schematic-2",
+      "x": 176,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-5-played-card-schematic-3",
+      "x": 189,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-5-played-card-schematic-4",
+      "x": 202,
+      "y": 660,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-5-favor-token-schematic-1",
+      "cx": 64,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-5-favor-token-schematic-2",
+      "cx": 89,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-5-favor-token-schematic-3",
+      "cx": 114,
+      "cy": 755,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "player-6-table-panel",
+      "x": 30,
+      "y": 190,
+      "w": 276,
+      "h": 218,
+      "fill": "#fbfcff",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-1",
+      "cx": 48,
+      "cy": 206,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-2",
+      "cx": 59,
+      "cy": 206,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-3",
+      "cx": 70,
+      "cy": 206,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-4",
+      "cx": 48,
+      "cy": 217,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-5",
+      "cx": 59,
+      "cy": 217,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "player-6-seat-pip-6",
+      "cx": 70,
+      "cy": 217,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "player-6-reference-aid-outline",
+      "x": 258,
+      "y": 202,
+      "w": 32,
+      "h": 46,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "player-6-played-card-schematic-1",
+      "x": 163,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-6-played-card-schematic-2",
+      "x": 176,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-6-played-card-schematic-3",
+      "x": 189,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "player-6-played-card-schematic-4",
+      "x": 202,
+      "y": 258,
+      "w": 28,
+      "h": 42,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "player-6-favor-token-schematic-1",
+      "cx": 64,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-6-favor-token-schematic-2",
+      "cx": 89,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "circle",
+      "id": "player-6-favor-token-schematic-3",
+      "cx": 114,
+      "cy": 353,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3
+    },
+    {
+      "type": "rect",
+      "id": "shared-round-panel",
+      "x": 337,
+      "y": 306,
+      "w": 326,
+      "h": 388,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 4,
+      "rx": 20
+    },
+    {
+      "type": "rect",
+      "id": "shared-turn-and-phase-window",
+      "x": 370,
+      "y": 324,
+      "w": 260,
+      "h": 52,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 9
+    },
+    {
+      "type": "rect",
+      "id": "shared-character-deck-zone",
+      "x": 370,
+      "y": 390,
+      "w": 94,
+      "h": 126,
+      "fill": "#e9f4fb",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "type": "rect",
+      "id": "shared-face-down-set-aside-zone",
+      "x": 486,
+      "y": 397,
+      "w": 56,
+      "h": 82,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 7
+    },
+    {
+      "type": "rect",
+      "id": "shared-two-player-face-up-reserve",
+      "x": 564,
+      "y": 390,
+      "w": 66,
+      "h": 126,
+      "fill": "#fff7df",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 8
+    },
+    {
+      "type": "rect",
+      "id": "shared-favor-token-supply-zone",
+      "x": 370,
+      "y": 540,
+      "w": 260,
+      "h": 116,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 9
+    },
+    {
+      "type": "rect",
+      "id": "shared-deck-layer-1",
+      "x": 382,
+      "y": 410,
+      "w": 64,
+      "h": 88,
+      "fill": "#dff0fa",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "shared-deck-layer-2",
+      "x": 385,
+      "y": 413,
+      "w": 64,
+      "h": 88,
+      "fill": "#dff0fa",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "shared-deck-layer-3",
+      "x": 388,
+      "y": 416,
+      "w": 64,
+      "h": 88,
+      "fill": "#dff0fa",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "shared-deck-layer-4",
+      "x": 391,
+      "y": 419,
+      "w": 64,
+      "h": 88,
+      "fill": "#dff0fa",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "shared-hidden-exile-card",
+      "x": 494,
+      "y": 412,
+      "w": 40,
+      "h": 56,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.3,
+      "rx": 5
+    },
+    {
+      "type": "rect",
+      "id": "two-player-face-up-reserve-card-1",
+      "x": 570,
+      "y": 400,
+      "w": 52,
+      "h": 31,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "two-player-face-up-reserve-card-2",
+      "x": 570,
+      "y": 437,
+      "w": 52,
+      "h": 31,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "rect",
+      "id": "two-player-face-up-reserve-card-3",
+      "x": 570,
+      "y": 474,
+      "w": 52,
+      "h": 31,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2,
+      "rx": 4
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-1",
+      "cx": 391,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-2",
+      "cx": 426,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-3",
+      "cx": 461,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-4",
+      "cx": 496,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-5",
+      "cx": 531,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-6",
+      "cx": 566,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-7",
+      "cx": 601,
+      "cy": 566,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-8",
+      "cx": 391,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-9",
+      "cx": 426,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-10",
+      "cx": 461,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-11",
+      "cx": 496,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-12",
+      "cx": 531,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "favor-supply-position-13",
+      "cx": 566,
+      "cy": 597,
+      "r": 8,
+      "fill": "#fff5df",
+      "stroke": "#16305c",
+      "strokeWidth": 1.2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-1",
+      "cx": 500,
+      "cy": 286,
+      "r": 10,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-2",
+      "cx": 675,
+      "cy": 385,
+      "r": 10,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-3",
+      "cx": 675,
+      "cy": 605,
+      "r": 10,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-4",
+      "cx": 500,
+      "cy": 714,
+      "r": 10,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-5",
+      "cx": 325,
+      "cy": 605,
+      "r": 10,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "clockwise-seat-node-6",
+      "cx": 325,
+      "cy": 385,
+      "r": 10,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "shared-panel-divider",
+      "x1": 380,
+      "y1": 527,
+      "x2": 620,
+      "y2": 527,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    }
+  ]
+}

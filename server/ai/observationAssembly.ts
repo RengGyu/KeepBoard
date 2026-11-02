@@ -7,14 +7,18 @@ import {runtimeBinding} from '../../shared/gameEssentials';
 import {emptyGameReadout,validateGameReadout} from '../../shared/readouts/registry';
 import {emptySplendorObservation,unknownGemCounts,validateSplendorObservation,SPLENDOR_GEMS,type SplendorGem,type SplendorKind} from '../../shared/splendor';
 import {validateGenericRecord,type GenericPiece} from '../../shared/genericRecord';
-import {validateObservationResult,OBSERVATION_VERSION,type ObservationRequest,type ObservationResult,type PhotoDefinition,type ObservationReaderIdentity,type ObservationReceipt,type LiteralObservation,type LocalTaskProfile,type NativeNumeralWire} from '../../shared/lightweightRecognition';
+import {validateObservationResult,OBSERVATION_VERSION,type ObservationRequest,type ObservationResult,type PhotoDefinition,type ObservationReaderIdentity,type ObservationReceipt,type LiteralObservation,type LocalTaskProfile,type NativeNumeralWire,type HostedObservationWire} from '../../shared/lightweightRecognition';
 import {geometryCandidates,mapObservationRegion,type ConfirmedPhotoFrame,type PhotoTransform} from '../../shared/photoGeometry';
-export interface AssemblyInput {request:ObservationRequest;result:ObservationResult;definition:PhotoDefinition;pack:GamePack;turnInstanceId:string;reader:ObservationReaderIdentity;frame?:ConfirmedPhotoFrame;transforms?:PhotoTransform[];taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire}
+export interface AssemblyInput {request:ObservationRequest;result:ObservationResult;definition:PhotoDefinition;pack:GamePack;turnInstanceId:string;reader:ObservationReaderIdentity;frame?:ConfirmedPhotoFrame;transforms?:PhotoTransform[];taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire;hostedWire?:HostedObservationWire}
 const literal=(o:LiteralObservation,key:string)=>o.properties[key]?.state==='observed'?o.properties[key].value:null;
 export function assembleObservations(input:AssemblyInput):AnalysisResult {
  const {request,definition,pack}=input,transforms=input.transforms??[],result=validateObservationResult(input.result,request,definition,transforms),ownerId=request.scope.ownerId??undefined,area=definition.areas.find(a=>a.id===request.areaId)!,groups=new Map<string,any[]>(),refs:Record<string,string>={},warnings:string[]=[];
  const add=(field:string,value:any)=>{groups.set(field,[...(groups.get(field)??[]),value]);};
  for(const o of result.observations){
+  if(definition.nativeBridge==='rummikub'&&o.componentId==='racks'){
+   warnings.push(`${o.ref}: 받침대 관측은 원관측으로 보존하며 타일로 추가하지 않습니다.`);
+   continue;
+  }
   const image=request.images[o.imageIndex],region=mapObservationRegion(o,request,transforms),evidenceId=image.evidenceId,id=randomUUID();refs[o.ref]=id;
   if(definition.nativeBridge==='catan'){
    const kind=(o.componentId??'unknown') as SceneKind,c:SceneComponent={id,kind,variant:literal(o,'variant') as string|null,ownerId:null,quantity:o.quantity,location:{type:'unplaced',id:null},region,evidenceId,face:o.face==='unknown'?null:o.face,observedColor:literal(o,'observedColor') as string|null};
@@ -49,7 +53,7 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
    add(field,piece);
   }
  }
- const receipt:ObservationReceipt={version:OBSERVATION_VERSION,request:structuredClone(request),result,reader:structuredClone(input.reader),frame:input.frame??null,transforms:structuredClone(transforms),geometryCandidates:input.frame?geometryCandidates(request,result,input.frame,transforms):[],componentRefs:refs,...(input.taskProfile?{taskProfile:structuredClone(input.taskProfile)}:{}),...(input.sourceImageSHA?{sourceImageSHA:input.sourceImageSHA}:{}),...(input.nativeWire?{nativeWire:structuredClone(input.nativeWire)}:{})};
+ const receipt:ObservationReceipt={version:OBSERVATION_VERSION,request:structuredClone(request),result,reader:structuredClone(input.reader),frame:input.frame??null,transforms:structuredClone(transforms),geometryCandidates:input.frame?geometryCandidates(request,result,input.frame,transforms):[],componentRefs:refs,...(input.taskProfile?{taskProfile:structuredClone(input.taskProfile)}:{}),...(input.sourceImageSHA?{sourceImageSHA:input.sourceImageSHA}:{}),...(input.nativeWire?{nativeWire:structuredClone(input.nativeWire)}:{}),...(input.hostedWire?{hostedWire:structuredClone(input.hostedWire)}:{})};
  const assertions:Assertion[]=[];
  for(const [field,items]of groups){
   let value:unknown;
@@ -62,5 +66,6 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
  }
  if(!result.observations.length)warnings.push('확정할 관측값이 없습니다. 원본과 기존 기록은 유지됩니다.');
  const deferred=input.nativeWire?.deferred.length??0;if(deferred)warnings.push('패널 경계를 확인할 수 없는 숫자 관측 '+deferred+'개를 보류했습니다. 원응답은 보존됩니다.');
- return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':'Gemini')+' 사진 관측으로 '+result.observations.length+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 정정·확인 후 반영해 주세요.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
+ const candidateObjects=[...groups.values()].reduce((n,items)=>n+items.length,0);
+ return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':input.reader.kind==='terra-game-observation-v1'?'Terra':'Gemini')+' 사진 관측으로 '+candidateObjects+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 읽지 못한 값은 ?로 표시됩니다.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
 }

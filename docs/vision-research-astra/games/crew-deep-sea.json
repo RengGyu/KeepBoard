@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/crew-deep-sea.json",
-    "sha256": "bd1a3b71ef099ef0bb5069d95eb7ce877fa70eee3c5b1afb7da905149b4393a5",
+    "sha256": "8debb9a644cee08777f86c642f2cee37a900dec2cc63642bf282ecf39d1d9e8a",
     "runtime_pack_id": "crew-deep-sea",
-    "runtime_pack_version": "1.0.0-essentials-2.bd1a3b71ef09",
+    "runtime_pack_version": "1.0.0-essentials-2.8debb9a644ce",
     "runtime_match": true
   },
   "basis": {
@@ -34,7 +34,8 @@
       "inherited::crew-deep-sea.art-confirmation.crew-deep-sea-rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "트릭 자리와 임무/통신 카드·표식",
   "critical_resume_distinction": "통신 위치 의미와 과거 힌트/달성 여부 구분; 미공개 손패 유추 금지",
@@ -272,7 +273,7 @@
         "cards"
       ],
       "anchor_contract": "획득한 트릭을 묶음 ID와 순서로 보존. 아직 판정 안 된 트릭은 분리.",
-      "description": "획득 트릭 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "획득 트릭 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 획득한 트릭은 뒷면으로 자기 앞에 쌓으며 가장 최근 트릭만 다시 볼 수 있다. 이전 트릭의 앞면은 펼쳐 기록하지 않는다. 임무 카드 아래 앞면으로 둔 카드는 공개다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "player_public",
@@ -561,6 +562,14 @@
     ],
     "excluded_bindings": [
       {
+        "key": "communication.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "won.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "mission",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       },
@@ -832,7 +841,7 @@
   "current_board_mapping": {
     "gameId": "crew-deep-sea",
     "editionId": "base",
-    "sourceSHA": "bd1a3b71ef099ef0bb5069d95eb7ce877fa70eee3c5b1afb7da905149b4393a5",
+    "sourceSHA": "8debb9a644cee08777f86c642f2cee37a900dec2cc63642bf282ecf39d1d9e8a",
     "status": "new",
     "areas": [
       {

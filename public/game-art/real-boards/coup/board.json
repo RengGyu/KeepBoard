@@ -1,0 +1,962 @@
+{
+  "gameId": "coup",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "influence",
+      "label": "비공개 영향력 카드",
+      "field": "private.scene",
+      "scope": "player",
+      "accepts": [
+        "roles"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "선택 플레이어의 뒤집힌 영향력 카드들. 카드 수/교환중 상태는 사진만으로 한정하지 않음. This is a coarse legacy field hint; seat geometry and shared Court/Treasury zones are defined in tableModel and boardArt."
+    },
+    {
+      "id": "revealed",
+      "label": "공개로 뒤집힌 영향력",
+      "field": "public.scene",
+      "scope": "player",
+      "accepts": [
+        "roles"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "해당 플레이어가 잃어 공개된 역할 카드. This is a coarse legacy field hint; seat geometry and shared Court/Treasury zones are defined in tableModel and boardArt."
+    },
+    {
+      "id": "coins",
+      "label": "플레이어 동전",
+      "field": "public.scene",
+      "scope": "player",
+      "accepts": [
+        "coins"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "현재 수량대로 자유 배치; 은행은 공용이지만 현재 public.scene 바인딩은 player 범위. This is a coarse legacy field hint; seat geometry and shared Court/Treasury zones are defined in tableModel and boardArt."
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {},
+  "notes": [
+    "인쇄 게임판이 없는 Coup 기본판의 전체 테이블을 2–6인용 중립 좌석 템플릿과 공유 Court/Treasury 중심으로 도식화했다. 여섯 좌석은 사용 가능한 최대 배치일 뿐이며 실제 인원에 맞춰 비활성 좌석을 숨긴다.",
+    "인물 카드 15장(5역할 각 3장), 요약 카드 6장, 동전 50개의 기본판 수량과 시작 배치를 JSON에 기록했다. 활성 영향력 카드는 소유자에게만 보이고 잃은 카드는 공개되는 범위를 분리했다.",
+    "SVG의 카드·동전 그림은 수량을 표시하지 않는 빈 안내 실루엣이다. 중앙 체크포인트는 물리 구성물이 아니라 재개 상태를 기록하기 위한 빈 도식이다. 역할 주장, 미공개 카드, Court 덱 순서는 추론하지 않는다.",
+    "Reformation 및 Rebellion G54는 별도 판본/확장이라 이 자산에서 제외한다. 게임의 합법성·도전 해결·지불·턴 자동 진행은 포함하지 않는다."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://indieboardsandcards.com/our-games/coup/",
+      "location": "product description",
+      "verifiedFacts": "influence is face-down character cards in playerarea",
+      "access": "verified",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://indieboardsandcards.com/our-games/coup/",
+      "location": "official publisher Coup page, directly opened",
+      "verifiedFacts": "출판사 기본판 페이지에서 2–6인 및 영향력 카드가 플레이어 앞에 뒷면으로 놓인다는 설명을 확인. 이 페이지는 card-count/setup 상세규칙 PDF를 제공하지 않아 정량 슬롯은 추가하지 않음.",
+      "access": "official-publisher-page-direct-view",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-product-page"
+    },
+    {
+      "url": "https://officialgamerules.org/wp-content/uploads/2025/02/Coup-Rulebook.pdf",
+      "location": "Published base-game rulebook copy, pages 1–6, directly inspected online; hosted by a third-party mirror, not the publisher domain",
+      "verifiedFacts": "Contents and setup: 15 character cards (three each of five roles), 6 summary cards, 50 coins; two face-down influence cards per player, remaining Court deck, visible coins/Treasury, face-up cards after influence loss; turns, challenge/counteraction checkpoints, role exchange, elimination; two-player starting-coin exception and optional two-player card variant.",
+      "access": "online-pdf-direct-view",
+      "checkedAt": "2026-10-30",
+      "sourceType": "published-rulebook-copy-third-party-host"
+    }
+  ],
+  "omittedBindings": [],
+  "assetScope": "Coup 2012 base-game whole-table schematic. This package describes every source-verified physical component and the public, owner-private, and hidden table states. Application wiring and rule enforcement are separate.",
+  "tableModel": {
+    "schema": "real-board-table-model-v1",
+    "edition": {
+      "game": "Coup",
+      "publisher": "Indie Boards & Cards",
+      "edition": "base game",
+      "releaseYear": 2012,
+      "expansionsExcluded": [
+        "Coup: Reformation",
+        "Coup: Rebellion G54"
+      ],
+      "evidenceRefs": [
+        0,
+        2
+      ]
+    },
+    "players": {
+      "minimum": 2,
+      "maximum": 6,
+      "activeSeats": "Use 2..6 of the six schematic seat templates; seat positions are not official fixed table positions."
+    },
+    "physicalInventory": [
+      {
+        "kind": "character-influence-card",
+        "count": 15,
+        "roles": [
+          "Duke",
+          "Assassin",
+          "Captain",
+          "Ambassador",
+          "Contessa"
+        ],
+        "copiesPerRole": 3,
+        "initialLocation": "Court deck; two cards dealt face down to each player; remaining cards stay in Court deck"
+      },
+      {
+        "kind": "summary-card",
+        "count": 6,
+        "initialLocation": "one reference card per active player"
+      },
+      {
+        "kind": "coin",
+        "count": 50,
+        "initialLocation": "two visible coins per player; all remaining coins in the central Treasury"
+      }
+    ],
+    "layout": {
+      "topology": "variable player ring with a shared center; six seats are templates, not six required players",
+      "seatTemplates": [
+        "coup-seat-1",
+        "coup-seat-2",
+        "coup-seat-3",
+        "coup-seat-4",
+        "coup-seat-5",
+        "coup-seat-6"
+      ],
+      "sharedCenter": [
+        "coup-court-deck",
+        "coup-treasury",
+        "coup-resume-checkpoint"
+      ],
+      "seatContents": {
+        "ownerPrivate": [
+          "up to two active influence cards, face down; identities visible only to that owner"
+        ],
+        "commonPublic": [
+          "zero to two lost influence cards, face up",
+          "current visible coin count",
+          "one summary-card reference slot"
+        ],
+        "dynamic": "A player with zero active influence is eliminated; inactive seat templates are omitted."
+      }
+    },
+    "tableZones": [
+      {
+        "id": "player-seats",
+        "partition": "mixed-by-field-visibility",
+        "boardArtPrefix": "coup-seat-",
+        "players": "2..6",
+        "contents": [
+          "private active influence",
+          "public revealed/lost influence",
+          "public coins",
+          "summary-card guide"
+        ],
+        "notes": [
+          "The six seat positions are a neutral schematic, not a publisher board layout.",
+          "Card guides distinguish hidden active cards from face-up lost cards; they do not contain role identities."
+        ]
+      },
+      {
+        "id": "court-deck",
+        "partition": "shared-secret",
+        "visibility": "face-down",
+        "boardArtIds": [
+          "coup-court-deck-back",
+          "coup-court-deck-front"
+        ],
+        "components": [
+          "character-influence-card"
+        ],
+        "initialCount": "15 minus cards dealt at setup; later changes only through observed game actions or exchange"
+      },
+      {
+        "id": "treasury",
+        "partition": "common_public",
+        "boardArtIds": [
+          "coup-treasury-outline",
+          "coup-treasury-coin-1",
+          "coup-treasury-coin-2",
+          "coup-treasury-coin-3"
+        ],
+        "components": [
+          "coin"
+        ],
+        "initialCount": "50 minus starting player coins; remaining amount is variable and must not be inferred from icon count"
+      },
+      {
+        "id": "resume-checkpoint",
+        "partition": "common_public",
+        "boardArtIds": [
+          "coup-resume-checkpoint"
+        ],
+        "kind": "nonphysical-state-reference",
+        "fields": [
+          "active player",
+          "declared action and target",
+          "challenge/counteraction response pending",
+          "influence reveal or card-exchange checkpoint",
+          "completed payment/transfer checkpoint"
+        ],
+        "notes": [
+          "This is a blank resume aid, not a printed game component or rules engine."
+        ]
+      }
+    ],
+    "stateGroups": [
+      {
+        "id": "player-influence",
+        "visibility": "split",
+        "entries": [
+          "owner-private identities of active face-down cards",
+          "public count of active influence",
+          "public identities and order/placement of cards revealed after influence loss"
+        ]
+      },
+      {
+        "id": "player-coins",
+        "visibility": "common_public",
+        "entries": [
+          "each active player coin total",
+          "central Treasury total when observed"
+        ]
+      },
+      {
+        "id": "court-deck-state",
+        "visibility": "shared-secret",
+        "entries": [
+          "face-down Court deck count when observed",
+          "exchange-in-progress cards and return checkpoint when applicable"
+        ],
+        "unknowns": "Do not expose the remaining deck order or another owner’s face-down influence."
+      },
+      {
+        "id": "turn-checkpoint",
+        "visibility": "common_public",
+        "entries": [
+          "active player",
+          "declared action/target",
+          "pending challenge or counteraction",
+          "pending influence loss/reveal or card exchange",
+          "whether the associated visible coin movement was already recorded"
+        ]
+      },
+      {
+        "id": "elimination-checkpoint",
+        "visibility": "common_public",
+        "entries": [
+          "whether a player has zero active influence and is eliminated",
+          "eliminated player cards remain face up",
+          "eliminated player coins return to the Treasury"
+        ],
+        "evidenceRef": 2
+      }
+    ],
+    "setupSequence": [
+      "Shuffle the 15 character cards (three each for Duke, Assassin, Captain, Ambassador, and Contessa).",
+      "Deal two cards face down to each active player; the dealt identities remain owner-private.",
+      "Place the remaining character cards as the face-down Court deck in the shared center.",
+      "Give each player two coins and keep player coin totals visible; in a two-player game the starting player receives only one coin. Place the remaining coins in the shared Treasury.",
+      "Give one summary card to each active player."
+    ],
+    "resumeRequirements": [
+      "Preserve active face-down identities only in their owner-private state; preserve their public count separately.",
+      "Preserve each face-up lost influence card and each player’s visible coin total.",
+      "Preserve Court-deck count/order only when actually recorded; never derive hidden card identities from a count.",
+      "If paused mid-turn, record the declared action, target, response window, pending reveal/exchange, and completed versus pending coin movements.",
+      "For a two-player game, preserve whether the standard setup or the optional card variant was used; do not reconstruct one from card counts alone."
+    ],
+    "assetLimitations": [
+      "The six-seat ring is an original neutral arrangement for the variable 2–6 player table, not a fixed printed board.",
+      "The Court deck and Treasury card/coin icons are schematic and do not encode live quantities.",
+      "No role claim is evidence of the private character card actually held.",
+      "This asset describes state placement; it does not validate actions, resolve challenges, perform payments, or advance turns."
+    ],
+    "setupVariants": [
+      {
+        "id": "two-player-card-variant",
+        "edition": "base-game rulebook optional variant",
+        "players": 2,
+        "steps": [
+          "Divide the 15 cards into three sets of five, each containing one of every character.",
+          "Each player secretly keeps one card from one set and discards the rest of that set.",
+          "Shuffle the third set, deal one card to each player, and place the remaining three cards face down as the Court deck."
+        ],
+        "defaultSetup": false,
+        "evidenceRef": 2
+      }
+    ]
+  },
+  "assetCompleteness": "complete-whole-table-reference-asset",
+  "boardArt": [
+    {
+      "type": "rect",
+      "id": "coup-seat-1",
+      "x": 35,
+      "y": 35,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-active-card-1",
+      "x": 65,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-active-card-2",
+      "x": 119,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-revealed-card-1",
+      "x": 65,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-revealed-card-2",
+      "x": 119,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-summary-card",
+      "x": 211,
+      "y": 73,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-1-coin-area",
+      "x": 197,
+      "y": 167,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-1-coin-icon",
+      "cx": 240,
+      "cy": 194,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2",
+      "x": 357,
+      "y": 35,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-active-card-1",
+      "x": 387,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-active-card-2",
+      "x": 441,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-revealed-card-1",
+      "x": 387,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-revealed-card-2",
+      "x": 441,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-summary-card",
+      "x": 533,
+      "y": 73,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-2-coin-area",
+      "x": 519,
+      "y": 167,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-2-coin-icon",
+      "cx": 562,
+      "cy": 194,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3",
+      "x": 679,
+      "y": 35,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-active-card-1",
+      "x": 709,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-active-card-2",
+      "x": 763,
+      "y": 73,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-revealed-card-1",
+      "x": 709,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-revealed-card-2",
+      "x": 763,
+      "y": 160,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-summary-card",
+      "x": 855,
+      "y": 73,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-3-coin-area",
+      "x": 841,
+      "y": 167,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-3-coin-icon",
+      "cx": 884,
+      "cy": 194,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4",
+      "x": 679,
+      "y": 705,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-active-card-1",
+      "x": 709,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-active-card-2",
+      "x": 763,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-revealed-card-1",
+      "x": 709,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-revealed-card-2",
+      "x": 763,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-summary-card",
+      "x": 855,
+      "y": 743,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-4-coin-area",
+      "x": 841,
+      "y": 837,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-4-coin-icon",
+      "cx": 884,
+      "cy": 864,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5",
+      "x": 357,
+      "y": 705,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-active-card-1",
+      "x": 387,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-active-card-2",
+      "x": 441,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-revealed-card-1",
+      "x": 387,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-revealed-card-2",
+      "x": 441,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-summary-card",
+      "x": 533,
+      "y": 743,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-5-coin-area",
+      "x": 519,
+      "y": 837,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-5-coin-icon",
+      "cx": 562,
+      "cy": 864,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6",
+      "x": 35,
+      "y": 705,
+      "w": 286,
+      "h": 260,
+      "rx": 16,
+      "fill": "#f5f8fc",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-active-card-1",
+      "x": 65,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-active-card-2",
+      "x": 119,
+      "y": 743,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-revealed-card-1",
+      "x": 65,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-revealed-card-2",
+      "x": 119,
+      "y": 830,
+      "w": 44,
+      "h": 64,
+      "rx": 7,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-summary-card",
+      "x": 211,
+      "y": 743,
+      "w": 48,
+      "h": 64,
+      "rx": 7,
+      "fill": "#fff5d8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-seat-6-coin-area",
+      "x": 197,
+      "y": 837,
+      "w": 86,
+      "h": 55,
+      "rx": 8,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-seat-6-coin-icon",
+      "cx": 240,
+      "cy": 864,
+      "r": 16,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-shared-center",
+      "x": 365,
+      "y": 342,
+      "w": 270,
+      "h": 316,
+      "rx": 18,
+      "fill": "#f9fbfe",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "coup-court-deck-back",
+      "x": 397,
+      "y": 385,
+      "w": 72,
+      "h": 100,
+      "rx": 9,
+      "fill": "#dceaf4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-court-deck-front",
+      "x": 389,
+      "y": 377,
+      "w": 72,
+      "h": 100,
+      "rx": 9,
+      "fill": "#edf7ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-treasury-outline",
+      "x": 505,
+      "y": 376,
+      "w": 100,
+      "h": 116,
+      "rx": 12,
+      "fill": "#fff8e4",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-treasury-coin-1",
+      "cx": 535,
+      "cy": 422,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-treasury-coin-2",
+      "cx": 565,
+      "cy": 422,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "coup-treasury-coin-3",
+      "cx": 550,
+      "cy": 452,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "coup-resume-checkpoint",
+      "x": 388,
+      "y": 520,
+      "w": 224,
+      "h": 105,
+      "rx": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    }
+  ]
+}

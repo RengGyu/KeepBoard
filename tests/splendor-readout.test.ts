@@ -32,22 +32,22 @@ test('noble requirements are labelled as owned bonuses, distinct from cost',()=>
 
 test('null stays unknown and is never drawn as 0; 0 stays 0',()=>{
  const unknown=html({points:null,bonus:null,cost:{red:null,green:2}});
- assert.match(unknown,/점수 확인 필요, 보너스 확인 필요, 비용 초록 2 빨강 개수 확인 필요/);
- assert.match(unknown,/확인 필요<\/span>/);assert.doesNotMatch(text(unknown),/\b0\b/);
+ assert.match(unknown,/점수 \?, 보너스 \?, 비용 초록 2 빨강 \?/);
+ assert.match(unknown,/sr-flag">\?<\/span>/);assert.doesNotMatch(text(unknown),/\b0\b/);
  assert.match(text(unknown),/\?/);
  const zero=html({points:0,bonus:'black',cost:{green:3,white:0}});
  assert.match(zero,/0점, 보너스 검정, 비용 초록 3"/);assert.match(zero,/sr-points is-zero/);assert.doesNotMatch(zero,/확인 필요<\/span>/);
  assert.match(html({points:1,bonus:'red',cost:{}}),/비용 없음/);
- assert.match(html({points:1,bonus:'red',cost:null}),/비용 확인 필요/);
+ assert.match(html({points:1,bonus:'red',cost:null}),/비용 \?/);
 });
 
 test('token, deck and unknown kinds',()=>{
  assert.match(html({kind:'token',color:'gold',quantity:5}),/aria-label="보석 토큰, 금, 5개"/);
  const unread=html({kind:'token',color:'white',quantity:null});
- assert.match(unread,/흰색, 수량 확인 필요/);assert.doesNotMatch(text(unread),/\b0\b/);
+ assert.match(unread,/흰색, 수량 \?/);assert.doesNotMatch(text(unread),/\b0\b/);
  assert.match(html({kind:'token',color:'green',quantity:0}),/초록, 0개/);
  const deck=html({kind:'deck',level:2,color:null});
  assert.match(deck,/카드 더미 2레벨/);assert.match(deck,/2레벨 더미/);assert.doesNotMatch(deck,/수량/);
  assert.match(html({kind:'deck',level:1,quantity:30}),/30장/);
- assert.match(html({kind:'unknown'}),/구성물, 종류 확인 필요/);
+ assert.match(html({kind:'unknown'}),/구성물, 종류 \?/);
 });

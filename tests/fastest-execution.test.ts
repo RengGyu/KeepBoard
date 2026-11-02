@@ -1,0 +1,32 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import {AnalysisJobs} from '../server/analysisJobs';import {catalogPacks} from '../gamepacks/catalog';import {photoDefinition} from '../server/photoDefinitions';import {GeminiGameReader} from '../server/ai/geminiGameReader';
+test('hosted jobs do not wait behind two legacy jobs; unit claims/results and task survive reload',async()=>{
+ const root=await mkdtemp('/private/tmp/kb-fastest-jobs-');try{const jobs=new AnalysisJobs(root);let release!:()=>void;const wait=new Promise<void>(r=>{release=r;});let started=0;
+ const task={prepared:{scanIntent:{selection:{kind:'gemini-game-observation-v1'},evidenceIds:['e']}}} as any;
+ const base={evidenceIds:['e'],captureEpoch:'epoch'};
+ const first=await jobs.start({...base,sessionId:'1',requestId:'1',signature:'1'},async()=>{started++;await wait;return {state:'completed'};},task);
+ await jobs.start({...base,sessionId:'2',requestId:'2',signature:'2'},async()=>{started++;await wait;return {state:'completed'};},task);
+ await jobs.start({...base,sessionId:'3',requestId:'3',signature:'3'},async()=>{started++;await wait;return {state:'completed'};},task);
+ for(let i=0;i<50&&started<3;i++)await new Promise(r=>setTimeout(r,2));assert.equal(started,3);release();await new Promise(r=>setTimeout(r,20));
+ const claim=await jobs.claimBatch(first.id,0);assert(claim);assert.equal(await jobs.claimBatch(first.id,0),null);
+ await jobs.finishBatch(first.id,0,claim,{assertions:[],warnings:[],summary:'test',mode:'live'});
+ const reloaded=new AnalysisJobs(root);assert.equal((await reloaded.batchResult(first.id,0))?.state,'completed');assert((await reloaded.load(first.id)).task.prepared.scanIntent);
+ }finally{await rm(root,{recursive:true,force:true});}
+});
+test('cloud hosted workflow uses one scan step, no job lease and exactly one final commit',async()=>{
+ const {readFile}=await import('node:fs/promises'),ts=await import('typescript'),vm=await import('node:vm');const source=await readFile(new URL('../workflows/analyze.ts',import.meta.url),'utf8');const body=source.slice(0,source.indexOf('\nasync function batchPlan'));
+ const exports:any={},events:string[]=[];vm.runInNewContext(ts.transpileModule(body,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,{exports,require:()=>({sleep:()=>{throw Error('must not wait');}}),batchPlan:async()=>({count:6,concurrency:6,hostedScan:true}),reserve:()=>assert.fail('hosted lease'),runScan:async()=>{events.push('scan');return true;},commit:async()=>{events.push('commit');},interrupted:()=>assert.fail('interrupted')});await exports.analyzeWorkflow('job');assert.deepEqual(events,['scan','commit']);
+});
+test('durable scan keeps a live competing claim untouched, expires abandoned claims without provider retry, and salvages finish failure',async t=>{
+ const {CloudJobs}=await import('../server/cloudJobs'),{MemoryObjects,readJSON,writeJSON}=await import('../server/objects'),{runHostedScan}=await import('../server/scanExecution'),{scopeVersion,digest}=await import('../server/analysisTask'),{assembleObservations}=await import('../server/ai/observationAssembly'),{decodeGeminiGameObservation}=await import('../server/ai/geminiGameReader');
+ const pack=catalogPacks.find(p=>p.id==='catan-base')!,definition=photoDefinition(pack),evidence=[{id:'e',kind:'photo',scope:'public',captureEpoch:'epoch',url:'/x',label:'synthetic'}],session={id:'s',captureEpoch:'epoch',turnInstanceId:'turn',evidence,assertions:[],players:[],notes:{},activity:[],snapshots:[],gamePack:pack} as any;
+ const image=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=','base64');let reads=0,calls=0;
+ class Reader extends GeminiGameReader{async status(){return {kind:'gemini-game-observation-v1' as const,available:true,cloudSupported:true as const,identity:this.identity};}async readCatanScene(request:any,definition:any,s:any,p:any){calls++;const native={candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({items:[{kind:'number-token',box_1000:[100,100,200,200],face:'front',quantity:1,attributes:[{id:'number',valueJson:'8',unknownReason:null}]}]})}]}}]};return {result:assembleObservations({request,result:decodeGeminiGameObservation(native,request,definition),pack:p,definition,turnInstanceId:s.turnInstanceId,reader:this.identity,sourceImageSHA:request.images[0].sha256}),timings:{readerMs:0}};}}
+ const reader=new Reader(),store={getSession:async()=>structuredClone(session),readEvidence:async()=>{reads++;return {data:image,mimeType:'image/png'};}} as any,pins={configurationStamp:async()=> 'pin'} as any;
+ const makeTask=()=>({prepared:{session,pack,evidence,purpose:'capture',sameStaticState:true,scanIntent:{version:'scan-intent-v1',taskId:'scan',selection:{kind:'gemini-game-observation-v1',definitionSHA:definition.definitionSHA,areaId:'board'},evidenceIds:['e'],reader:reader.identity}},epoch:'epoch',version:scopeVersion(session,pack),source:digest(evidence),pin:'pin'}) as any;
+ const objects=new MemoryObjects(),jobs=new CloudJobs(objects,async()=>{}),task=makeTask(),job=await jobs.start({sessionId:'s',captureEpoch:'epoch',requestId:'a',signature:'a',evidenceIds:['e']},null,task);
+ const claim=await jobs.claimBatch(job.id,0);assert(claim);const active=await runHostedScan({id:job.id,task,jobs,store,pins,reader});assert.equal(active.results,null);assert.equal(calls,0);assert.equal((await jobs.list('s'))[0].state,'running');
+ const key=`jobs/batches/${job.id}/0.json`,started=await readJSON<any>(objects,key);await writeJSON(objects,key,{...started!.value,startedAt:new Date(Date.now()-301000).toISOString()},started!.etag);
+ const saved=(await jobs.load(job.id)).task;const expired=await runHostedScan({id:job.id,task:saved,jobs,store,pins,reader});assert.equal(expired.results,null);assert.equal(calls,0);assert.equal((await jobs.list('s'))[0].state,'interrupted');
+ const task2=makeTask(),job2=await jobs.start({sessionId:'s2',captureEpoch:'epoch',requestId:'b',signature:'b',evidenceIds:['e']},null,task2);t.mock.method(jobs,'finishBatch',async()=>{throw Error('synthetic storage loss after provider');});
+ const failed=await runHostedScan({id:job2.id,task:task2,jobs,store,pins,reader});assert.equal(failed.results,null);assert.equal(calls,1);const terminal=(await jobs.list('s2'))[0];assert.equal(terminal.state,'interrupted');assert.equal(terminal.observationReceipts?.[0].result.observations.length,1);assert(reads>=1);
+});

@@ -1,0 +1,323 @@
+{
+  "gameId": "akropolis",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "city",
+      "label": "수평 확장·수직 적층 도시",
+      "field": "city.scene",
+      "scope": "player",
+      "accepts": [
+        "tiles",
+        "starting-tiles"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "시작 네 육각은 방향/구조 안내이며 슬롯/도시 경계가 아님.",
+      "bounds": [
+        40,
+        40,
+        580,
+        920
+      ],
+      "placement": "unbounded-hex-layers",
+      "illustration": [
+        {
+          "type": "polygon",
+          "points": [
+            [
+              384.951905,
+              437.5
+            ],
+            [
+              320.0,
+              475.0
+            ],
+            [
+              255.048095,
+              437.5
+            ],
+            [
+              255.048095,
+              362.5
+            ],
+            [
+              320.0,
+              325.0
+            ],
+            [
+              384.951905,
+              362.5
+            ]
+          ],
+          "fill": "#8fd3ff"
+        },
+        {
+          "type": "polygon",
+          "points": [
+            [
+              384.951905,
+              307.5
+            ],
+            [
+              320.0,
+              345.0
+            ],
+            [
+              255.048095,
+              307.5
+            ],
+            [
+              255.048095,
+              232.5
+            ],
+            [
+              320.0,
+              195.0
+            ],
+            [
+              384.951905,
+              232.5
+            ]
+          ],
+          "fill": "#ffffff"
+        },
+        {
+          "type": "polygon",
+          "points": [
+            [
+              272.368905,
+              502.5
+            ],
+            [
+              207.417,
+              540.0
+            ],
+            [
+              142.465095,
+              502.5
+            ],
+            [
+              142.465095,
+              427.5
+            ],
+            [
+              207.417,
+              390.0
+            ],
+            [
+              272.368905,
+              427.5
+            ]
+          ],
+          "fill": "#ffffff"
+        },
+        {
+          "type": "polygon",
+          "points": [
+            [
+              497.534905,
+              502.5
+            ],
+            [
+              432.583,
+              540.0
+            ],
+            [
+              367.631095,
+              502.5
+            ],
+            [
+              367.631095,
+              427.5
+            ],
+            [
+              432.583,
+              390.0
+            ],
+            [
+              497.534905,
+              427.5
+            ]
+          ],
+          "fill": "#ffffff"
+        }
+      ]
+    },
+    {
+      "id": "market-base",
+      "label": "공사장 기본 네 자리",
+      "field": "market.scene",
+      "scope": "public",
+      "accepts": [
+        "tiles"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "akropolis-market-base-r1-c1",
+          "x": 700.0,
+          "y": 70.0,
+          "w": 240.0,
+          "h": 105.5,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "akropolis-market-base-r2-c1",
+          "x": 700.0,
+          "y": 181.5,
+          "w": 240.0,
+          "h": 105.5,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "akropolis-market-base-r3-c1",
+          "x": 700.0,
+          "y": 293.0,
+          "w": 240.0,
+          "h": 105.5,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "akropolis-market-base-r4-c1",
+          "x": 700.0,
+          "y": 404.5,
+          "w": 240.0,
+          "h": 105.5,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        680,
+        50,
+        280,
+        480
+      ]
+    },
+    {
+      "id": "market-three",
+      "label": "3인 이상 다섯째 자리",
+      "field": "market.scene",
+      "scope": "public",
+      "accepts": [
+        "tiles"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "akropolis-market-three-r1-c1",
+          "x": 700.0,
+          "y": 565.0,
+          "w": 240.0,
+          "h": 80.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        680,
+        550,
+        280,
+        110
+      ]
+    },
+    {
+      "id": "market-four",
+      "label": "4인 여섯째 자리",
+      "field": "market.scene",
+      "scope": "public",
+      "accepts": [
+        "tiles"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "akropolis-market-four-r1-c1",
+          "x": 700.0,
+          "y": 695.0,
+          "w": 240.0,
+          "h": 80.0,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "bounds": [
+        680,
+        680,
+        280,
+        110
+      ]
+    },
+    {
+      "id": "stones",
+      "label": "석재와 건축가 표식",
+      "field": "supply.scene",
+      "scope": "player",
+      "accepts": [
+        "stones",
+        "chief-architect"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        680,
+        830,
+        280,
+        130
+      ]
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "market-three",
+        "market-four"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "market-four"
+      ]
+    },
+    "4": {
+      "hideAreas": []
+    }
+  },
+  "notes": [
+    "기존 삼중 시작타일/사람형 표식 초안을 공식 네 육각/원반으로 수정. 2/3/4인 공사장4/5/6칸, 자유 도시 구조 제작.",
+    "정적 SVG는 빈도시 확장 상한을 정하지 않는다. 실제 저장/재개에서는 타일 방향·각 육각 지구/광장·층높이를 보존해야 하며 앱 연결은 이번 자산 범위 밖."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://en.gigamic.com/games-for-family/1115-product.html",
+      "location": "publisher description",
+      "verifiedFacts": "districts/plazas and stonequarries support building upward",
+      "access": "opened",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://export.gigamic.com/wp-content/uploads/2022/01/GIGAMIC_AKROPOLIS_RULES_EN_23-12.pdf",
+      "location": "pp.2–3, direct setup/starting tile diagram",
+      "verifiedFacts": "시작 타일은 중앙 광장+엇갈린 세 지구의 네 육각. 건축가 표식은 원반. 공사장은 인원수+2; 도시타일은 삼중육각, 도시 수평 확장·수직 적층.",
+      "access": "downloaded-pdf-and-direct-page-view",
+      "checkedAt": "2026-10-30",
+      "pdfSHA256": "8060f7d96eae0a3715c1a90dcd8cafbe375a88c80fa9d39d5b42fdfcc235708b",
+      "pdfBytes": 23215398,
+      "privateSource": "/private/tmp/kb-realboards94/akropolis/manual.pdf"
+    }
+  ],
+  "omittedBindings": []
+}

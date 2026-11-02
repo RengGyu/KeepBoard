@@ -1,0 +1,4030 @@
+{
+  "version": "astra-practical-review-v1",
+  "reviewDate": "2026-10-27",
+  "scope": "기존 57종의 이번 사진 판독 차이. 제품 배포 승인이나 120게임 정확도 인증 아님.",
+  "sourceResultsSHA": "51a348efa740aa24c067bfb38c1ef7f60bb56e3f7b869a7f7926fb0872e21f9b",
+  "inputs": [
+    {
+      "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+      "sha256": "fbbb53f8818e1fc6ecea83fb8c3796e3bd2124bdbb3001057e51c2d1907065d4"
+    },
+    {
+      "path": "docs/service-all-games-20261027/analysis/missed-counts.md",
+      "sha256": "ee23515ca71023c664a8899f9af68bf8fcf7d046eb9ba1a402027fbc3d213834"
+    },
+    {
+      "path": "docs/service-all-games-20261027/results/results.json",
+      "sha256": "51a348efa740aa24c067bfb38c1ef7f60bb56e3f7b869a7f7926fb0872e21f9b"
+    },
+    {
+      "path": "server/ai/geminiGameReader.ts",
+      "sha256": "a669683b3e2b8dcbfd1c3ec60a3405a683c60ee11a05eb23f26e0e1575627813"
+    },
+    {
+      "path": "server/ai/observationAssembly.ts",
+      "sha256": "5d5850847453590bb58dc46a91259f901bc61c061dd2397124193465298ad89b"
+    },
+    {
+      "path": "shared/lightweightRecognition.ts",
+      "sha256": "1f985fe0879b972d6961c976f4929a791537d4103a8a9acededfeffaafce6846"
+    },
+    {
+      "path": "shared/readouts/registry.ts",
+      "sha256": "37572f10ec17c9b52cfbb4301336d6ed5fadb73b31617984dd5e7ffd441a8dce"
+    },
+    {
+      "path": "game-photo-definitions/index.json",
+      "sha256": "eb1ced17ede58ab3dbeb0a30e4fb8fb29eb62a5125c3b7e07b0d8093d13a8b8a"
+    },
+    {
+      "path": "src/analysisJobMessage.ts",
+      "sha256": "faa7e93f36f8a13bb2b1b5b24db145d3039d73e48712cd9874e2df820a5f4108"
+    },
+    {
+      "path": "src/GameEssentials.tsx",
+      "sha256": "4ce7a47c2e9b337a7e95bf3f1329c19d9d7efbf872e00aa5064f171d2be158d9"
+    },
+    {
+      "path": "src/readouts/GameDetailFields.tsx",
+      "sha256": "5635d45d37ac7febc4e7a64aa446f30de171db5a5f7665d9a25678290609833c"
+    },
+    {
+      "path": "src/GameBoardRecord.tsx",
+      "sha256": "e723aecfcb17dea0aa47a91b1edfbf8faa46996b11404b43ca356f1d10784dd1"
+    },
+    {
+      "path": "src/SessionWorkspace.tsx",
+      "sha256": "92f3ff5d9856f9c8801c3038fb93042b74901ae0180d72a008b9c20f8d0d0cb5"
+    }
+  ],
+  "method": {
+    "photoViews": 57,
+    "parsedNativeResponses": 57,
+    "referenceFilesRead": 57,
+    "sourceReferenceNativeHashComparisons": 171,
+    "hashMismatches": 0,
+    "liveModelCalls": 0,
+    "productTestsExecuted": false,
+    "uiInteractionPerformed": false,
+    "newGTWritten": false,
+    "writeScope": [
+      "astra-practical-review.json",
+      "astra-practical-review.md"
+    ],
+    "factJudgmentSeparation": "직접 파일/원응답/사진/소스 확인은 VERIFIED, 기존 표본별 대조 결과는 REPORTED, 이번 허용성·최소 조치는 RECOMMENDATION. 모든 bbox와 속성에 대한 새로운 정답 주석은 만들지 않았다."
+  },
+  "decisionPolicy": [
+    "필수 수정은 이번 입력에서 확인된 처리 손실 또는 광범위 관측 실패의 우선 보완 권고다. 사진만 저장/복원하는 기능을 막거나 서비스 전체를 불합격시키는 뜻은 아니다.",
+    "수동 허용은 구체적인 정정/사진·실물 보존 조건부다. 누구나 빠르게 고칠 수 있다는 실측 주장이 아니다.",
+    "판 전체를 그림으로 재구성하지 않아도 사진을 위치/방향 기준으로 보존할 수 있다. 공급·동일 종류의 묶음은 필요한 수량만 기록해도 된다.",
+    "잘못 읽은 숫자도 후보 상태에서 두 값을 직접 정정할 수 있으면 곧바로 필수 수정으로 분류하지 않는다. 자동 확정/저장 손실과 구분한다.",
+    "참조 오류와 기대 필드 차이는 인식 오류에서 분리한다. 사진이 작거나 대응이 불명확하면 일부 행만 근거 부족으로 둔다."
+  ],
+  "counts": {
+    "필수 수정(명백한 제품/인식 오류)": 18,
+    "수동 정정으로 허용": 27,
+    "평가자료 수정 대상": 6,
+    "근거 부족": 6
+  },
+  "frozenAccounting": {
+    "requestedGames": 57,
+    "frozenTargetsIncludingInvalidReferences": 174,
+    "exactGames": 50,
+    "rangeGames": 3,
+    "referenceExcludedGames": 4,
+    "exactTargetCount": 152,
+    "exactDeficitCount": 95,
+    "exactMissingOrUnconfirmedCount": 72,
+    "exactGroupedCount": 23,
+    "exactMinimumPerGame": 0,
+    "exactMaximumPerGame": 4,
+    "exactMeanPerGame": 1.9,
+    "exactMedianPerGame": 2.0,
+    "exactPooledDeficitPercent": 62.5,
+    "exactDistribution": {
+      "0": 8,
+      "1": 15,
+      "2": 3,
+      "3": 22,
+      "4": 2
+    },
+    "validTargetCount": 162,
+    "validDeficitMin": 97,
+    "validDeficitMax": 105,
+    "validMeanPerGameMin": 1.830188679245283,
+    "validMeanPerGameMax": 1.9811320754716981,
+    "emptyOutputGames": 13,
+    "emptyOutputMissedTargets": 38,
+    "processingFailureGames": 4,
+    "processingFailureUnusableTargets": 13,
+    "confirmedWrongValues": 2
+  },
+  "accountingNote": "주판정 분류와 수량의 신뢰도 분류는 서로 다른 축이다. 평가자료 수정 대상 6종 중 Avalon/Expeditions는 원래 exact(미확보 0)이며 reference-excluded 4종에 새로 더하지 않았다. 처리 실패와 빈 응답도 다른 집계에 중복 포함되므로 가산하지 않는다.",
+  "commonVerifiedBehavior": [
+    {
+      "fact": "빈 결과는 새 후보 없음/원본 보관으로 표시하며 전부 읽었다고 알리지 않는다.",
+      "source": "src/analysisJobMessage.ts:2; src/SessionWorkspace.tsx:251"
+    },
+    {
+      "fact": "후보는 아직 적용하지 않았다고 표시하고 명시 확인·수정 후 적용한다. 기존 부분 스캔은 실물 연결을 통해 더하거나 정정한다.",
+      "source": "src/GameEssentials.tsx:GameEssentials / candidateView / applyCandidate"
+    },
+    {
+      "fact": "구성물 추가·종류·수량(null 허용)·표시 메모·사진 기준 위치·원본 연결·삭제·저장이 존재한다. 자동 묶음 분할 버튼은 확인되지 않았다.",
+      "source": "src/GameEssentials.tsx:91-110 GenericComponents"
+    },
+    {
+      "fact": "숫자·열거·문자 속성을 수정하고 모름을 유지할 수 있다. 원본 관측은 사용자 수정 근거로 바뀌며 0과 모름을 구분한다.",
+      "source": "src/readouts/GameDetailFields.tsx:GameDetailFields; shared/readouts/registry.ts:setReadoutValue"
+    },
+    {
+      "fact": "저장 전 초안을 flush하고 commit하며 원본은 범위별 열람/저장본 재개 경로에 남는다. 개별 정정 사용성은 새로 실행하지 않았다.",
+      "source": "src/SessionWorkspace.tsx:128 saveBoard; src/GameEssentials.tsx 저장 기록 복원"
+    }
+  ],
+  "priorityGroups": [
+    {
+      "id": "P0-format-isolation",
+      "priority": "P0",
+      "games": [
+        "age-of-innovation",
+        "dominant-species",
+        "marvel-champions",
+        "terraforming-mars"
+      ],
+      "finding": "형식/속성 오류가 유효 관측까지 버려 4종의 후보가 0이 됨. 13개 표본 사용 불가이며 그중 3종 10개는 원응답에 있었음.",
+      "minimumFix": "구성물별 속성 출력 계약을 정리하고 문제 속성/객체를 미확인으로 격리해 다른 유효 후보를 보존. 문자열 null을 0/없음으로 바꾸지 않음. 권한/근거/게임 범위 검사는 유지.",
+      "files": [
+        "server/ai/geminiGameReader.ts:decodeGeminiGameObservation",
+        "server/ai/geminiGameReader.ts:buildGeminiGameBody",
+        "shared/lightweightRecognition.ts:validateObservationResult",
+        "server/ai/observationAssembly.ts"
+      ],
+      "acceptance": "동결 원응답을 오프라인 재사용해 유효 후보가 정정 화면까지 남고, 잘못된 속성은 모름으로 남는지 확인. 후보는 명시 적용 전 accepted가 되면 안 됨. 이번 작업에서는 실행하지 않음."
+    },
+    {
+      "id": "P1-broad-observation-loss",
+      "priority": "P1",
+      "games": [
+        "anachrony",
+        "arcs",
+        "ark-nova",
+        "blokus",
+        "calico",
+        "cascadia",
+        "eclipse-second-dawn",
+        "gaia-project",
+        "galaxy-trucker",
+        "istanbul",
+        "le-havre",
+        "small-world",
+        "twilight-imperium-4",
+        "underwater-cities"
+      ],
+      "finding": "읽을 판/다수 기물이 보이는데 빈 응답 또는 정적인 판·소수 대상만 출력. 전체 상태 완벽 복원이 아니라 스캔의 실질적 출발점이 부족한 사례.",
+      "minimumFix": "해당 게임의 실제 선택 영역·구성물 종류에 맞게 대상 정의/입력 범위를 좁혀 보완. 같은 종류의 묶음·모름·사진 기준 복원 허용. 게임별 새 엔진이나 모든 낱장 추출은 요구하지 않음.",
+      "files": [
+        "game-photo-definitions/index.json (해당 gameId의 area/component만)",
+        "server/ai/geminiGameReader.ts:buildGeminiGameBody"
+      ],
+      "acceptance": "기존 사진에서 현재 움직이는 핵심 대상이 후보로 남는지와 남은 수동 기록 범위를 확인. 표본 개수만 채우거나 사진 전체를 한 건으로 바꿔 통과시키지 않음. 새 호출은 이 카드에서 실행하지 않음."
+    }
+  ],
+  "remainingUnknowns": [
+    "실제 사용자 정정 소요시간·클릭 수",
+    "표본 외 모든 기물/값의 정확도 및 완전성",
+    "사진으로 확인 안 되는 손패·덱 순서·턴 이력",
+    "대상 인식 실패의 모델/입력/프롬프트 기여도와 수정 후 개선량",
+    "일부 커스텀 구성/판본의 정체 및 실물 보존 후 복원 사용성"
+  ],
+  "rows": [
+    {
+      "gameId": "age-of-innovation",
+      "name": "혁신의 시대",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P0",
+      "reason": "판 전체 map 1건뿐이며 문자열 null 때문에 후보도 사라졌다. 형식 문제와 개별 건물 미관측은 별개다.",
+      "minimumAction": "P0: null 표현을 미확인으로 보존하고 나머지 유효 항목을 살린다. 그 뒤 현재 map/structure 정의로 실제 건물 위치를 남길 수 있는지 좁게 보완한다. 사진 원본으로 계속 저장하는 길은 막지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "map": 1
+        },
+        "recordedJobState": "failed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "world",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "c15df4bb700bcf952273abfa5f8b8a255c5c09a0639433098fc4480c4176b549",
+        "referenceSHA": "c320df8abbab11a230fe9370a80b2249157173fc92ff81d5255ea85e5157fec8",
+        "nativeSHA": "64d6df5a0364395dade5c92c1ba42de6d57a4380ec7ed2d138b4f5fcf7403311"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 3
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판 전체 1건으로 묶음; 처리도 실패",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=age-of-innovation] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=age-of-innovation]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "decodeGeminiGameObservation"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "anachrony",
+      "name": "아나크로니",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "실제 작업자·개인판이 있는 넓은 장면인데 관측 0이다. 표본 3개 추가만으로 끝난다고 볼 수 없다.",
+      "minimumAction": "P1: 작업자 배치 영역을 대상으로 인식 입력·대상 정의를 보완한다. 빈 후보 안내는 유지하고, 그 전에는 사진 보존과 필요한 작업자 상태 직접 기록으로 제한한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "actions",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "c73b44639e5f4c1f34f6130f22d33b20dcda186ef3141952e86858fe1cbfb008",
+        "referenceSHA": "c6763d9f75c6041e9e17fc0f186d56cb305c71808893aa0434ac6e0901633eca",
+        "nativeSHA": "667d4e60f0dfe75faf31c79133787b56709e156c127c67a03b6d140fc149d144"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=anachrony] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=anachrony]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "arcs",
+      "name": "아크스",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "판과 일부 말 8개는 있으나 사진의 여러 함대·쌓인 말에 비해 배치 관측이 희박하다. 표본 3개만 빠진 문제로 축소할 수 없다.",
+      "minimumAction": "P1: 함대·기물 묶음을 구역별로 읽는 대상 단위를 보완한다. 겹친 수량은 모름으로 두고 사용자에게 확인; 전체 판을 빈칸부터 재작성시키는 것을 기본 정정으로 간주하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 9,
+        "nativeKinds": {
+          "map": 1,
+          "pieces": 8
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "f48625e53b533aec737585137e5052bf1bdaa2906eaf40b919a0cca11111bfa3",
+        "referenceSHA": "2fbe08fd1e77204650e005770662dc61e359b4ac5b748333e0b525da3aeb376c",
+        "nativeSHA": "ea9da6c2b265aad1cf95076be81a5e23516ba15962a171c48ec00b327dbd1f0d"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 3개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=arcs] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=arcs]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "ark-nova",
+      "name": "아크 노바",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "카드와 개인판이 보이는 사진에서 관측이 전혀 없어 읽기 결과로 시작할 기록이 없다.",
+      "minimumAction": "P1: 선택 영역의 앞면 카드부터 관측되도록 입력·대상 계약을 확인한다. 글자가 작으면 모름으로 남기되 카드 존재까지 누락되는 현상부터 다룬다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "tableau",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "254424739a4d8333cce705192687245e734175c6573f3bcc50b8d21280cafdf0",
+        "referenceSHA": "6728e526f249b8064c7e2e57ee670e66ac1a0589c3a1b75b34e0e353dfc974f4",
+        "nativeSHA": "4106fb252c6a6b6b578efffc4b5e68f28c3482dc7cd50258aff1315e46de8537"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 4,
+        "individualRecordDeficitMax": 4,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=ark-nova] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=ark-nova]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "arkham-horror-3",
+      "name": "아컴호러 3판",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "지도와 말 후보는 남아 있고 표본에서 말 1개가 빠졌다. 색 대신 재질을 쓴 표현만으로 전체 실패는 아니다.",
+      "minimumAction": "빠진 상단 파란 말의 종류·현재 위치를 추가한다. 나머지는 사진을 위치 기준으로 보존하고 소유자는 직접 확인한다. 표본 밖 완전성은 보장하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 9,
+        "nativeKinds": {
+          "map": 5,
+          "pieces": 4
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "20ed87cde6f84a43cb456e854ec6ccc668a5c730a31e0b3cebf784916fde6a9e",
+        "referenceSHA": "bf91706728c16b4557b8d1fd4ce442c45aaa1af13487e586444118af0885041c",
+        "nativeSHA": "844d3fba684972e3db380fcb8a313a1e9e22c0fd4b94a8c963cd2fb6e5d37d48"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "말 1개 누락; 나머지 말의 색상 대신 재질 표현도 있음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=arkham-horror-3] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=arkham-horror-3]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "arkham-lcg",
+      "name": "아컴호러 카드게임",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "장소 카드 후보가 있고 그 위에 겹친 조사자 1개가 빠졌다. 장소 전체를 다시 입력할 필요는 없다.",
+      "minimumAction": "조사자 카드를 추가해 어느 장소 위인지 위치 메모로 남긴다. 가려진 카드 내용·체력은 추측하지 않고 사용자 확인 또는 실물 보존으로 남긴다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 5,
+        "nativeKinds": {
+          "locations": 4,
+          "tokens": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "a1d02dc5e087f8873ffa7f03e18a744ce08b17d85c69ca4c7c9b81bf2178fcd0",
+        "referenceSHA": "1b948afad471f370a6c026437a42b24688548d1a6c415a31ce1f455acf6d2447",
+        "nativeSHA": "bc4b8998d6ba70c21bcc853d08642c38d1dcc5702d7a2a1d4ed699caf5c87aa2"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=arkham-lcg] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=arkham-lcg]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "avalon",
+      "name": "레지스탕스: 아발론",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "카드 1개와 MERLIN 인쇄명은 읽었다. 역할 속성은 현 호출에서 금지되어 있고 본인 비공개 범위다.",
+      "minimumAction": "인쇄명 관측 성공과 역할 수동 확인을 별도 평가한다. 역할 필드 공란을 사진 인식 실패로 세지 말고 본인 화면에서만 확인한다. 기존 참조값 자체를 이번에 변경하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "roles": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "role",
+          "partition": "owner_private"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "c6ad50558e7ceedc00ffea00717d0268527f5b95adaf0708a8959dbc41b39f5e",
+        "referenceSHA": "6fa57c22f13d30e9cddf6d806602123a2c0d2dff0bdb3bcb5fe4e310a603a176",
+        "nativeSHA": "e3fadaedec2397e240391807604e8b3edc171b232e919613cb5f7c2b6abc2383"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 1,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "물체 1개·인쇄 이름은 읽음; 역할 필드는 사용자 입력 대상",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=avalon] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=avalon]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "barrage",
+      "name": "바라지",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "구조물·물 후보가 남아 있으며 표본의 검은 구조물 1개가 빠졌다.",
+      "minimumAction": "그 구조물의 종류·색·사진상 위치를 추가하고 댐 높이 등 가려진 값만 묻는다. 원본과 남은 후보를 유지한 채 확인·저장한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 24,
+        "nativeKinds": {
+          "water": 6,
+          "structures": 18
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "basin",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "dc95438e58403429ae1bfaeda43a38734d80909edd689139786e4b0c686f0fff",
+        "referenceSHA": "d7681848ef0587608fb3ecd90d3db7993f0117164b392747d619d388c3bbc3ac",
+        "nativeSHA": "d6e7bc593b9d997c975983be9b4725c7d3fea33cc0f7b419fc586b9203cd47f1"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=barrage] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=barrage]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "blokus",
+      "name": "블로커스",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "여러 색의 폴리오미노가 놓인 판을 board 1건으로만 출력했다. 개별 배치 그림을 만들려면 대부분을 사람이 새로 입력해야 한다.",
+      "minimumAction": "P1: 보드 표면과 실제 조각을 구분하는 대상 관측부터 보완한다. 당장은 원본 사진을 복원 기준으로 저장할 수 있으며 모든 칸 자동 판정은 요구하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "board": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "board",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "b1ab75693b4033886557fe41f027567e72ca0aaea10e2f116eb106cac0b9f1d9",
+        "referenceSHA": "63847e25623be51f6fcc4cac3bb7a56ccdb17463f4007c6030202d6ac57e0c96",
+        "nativeSHA": "7e8caf06bb6e409a50e9c4b80ed5e13b32258e1c6a3fcb00995ae39781af65a4"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 4,
+        "individualRecordDeficitMax": 4,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=blokus] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=blokus]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "bohnanza",
+      "name": "보난자",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "3개의 밭 보드 묶음은 남았다. 동일 콩 카드의 겹친 밭은 낱장 모두를 디지털화하지 않아도 종류·누적 장수로 기록할 수 있다.",
+      "minimumAction": "보드 한 줄을 서로 다른 콩밭으로 나누어 필요한 항목만 추가하고 beanType·겹친 장수를 직접 확인한다. 한 버튼 자동 분할은 없으므로 추가·삭제를 사용한다. 손패 순서는 사진에서 추측하지 않고 실물 그대로 보존한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 3,
+        "nativeKinds": {
+          "fields": 3
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "fields",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "97150ad98e5c2eb7d9b601c76a6d6748d25f828c714e59b60d02cefde8d09622",
+        "referenceSHA": "6ab7a7bb762ffb65796561b297a6dec7fc69546b38a2d56a7ca9980e5fb144c0",
+        "nativeSHA": "603c47c6e92a86ac99ba0c9f7d11f6caae9694ed385384fcb2544c858b487fe1"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=bohnanza] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=bohnanza]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "brass-birmingham",
+      "name": "브라스: 버밍엄",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "산업·연결 후보가 다수 남고 표본에서 산업 2개가 빠졌다.",
+      "minimumAction": "빠진 산업의 종류·레벨·뒤집힌 면과 도시 위치만 확인해 추가한다. 원본의 연결 배치를 유지하며 소유색은 사용자 확인으로 남긴다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 34,
+        "nativeKinds": {
+          "resources": 2,
+          "industries": 16,
+          "links": 16
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "network",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "82365f7f6c27e718f755eef0125b04344132d87c77e95b5a8dbca97293a5571a",
+        "referenceSHA": "db2cfea1646274922a5754fed7426700deb6bbeaa1dc3f78c57dafb55252ef08",
+        "nativeSHA": "081d150f2ff0a12c730cf3f0bc2398d55a268cc5cf8cedf0b2b074908d882575"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 2,
+        "individualRecordDeficitMax": 2,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 4개 중 2개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=brass-birmingham] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=brass-birmingham]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "calico",
+      "name": "칼리코",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "점수 토큰 위주로 읽고 채워진 퀼트의 패치는 1건뿐이다. 패치 간 배치·무늬 기록을 후보에서 복원하기 어렵다.",
+      "minimumAction": "P1: 패치를 개별 관측 대상으로 구분하는 최소 보완을 우선한다. 모든 점수 규칙은 불필요하며 원본 사진 복원은 계속 허용한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 15,
+        "nativeKinds": {
+          "boards": 1,
+          "scoring": 13,
+          "patches": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "quilt",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "9ef7522d60700101defc2bd4772698f23010262f86c12acad69a2ef403d6b710",
+        "referenceSHA": "ef2330eeae7cb2af90f28037dbca249b58e8b4fe8f5c39c1d1c1c0e59b94a12d",
+        "nativeSHA": "489a1093ba0f6944b64b5dd8a72846bfcd3fdd09e0810ee227c6334a5cb9b0ef"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=calico] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=calico]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "carcassonne",
+      "name": "카르카손",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "미플 후보는 23개지만 타일은 3개뿐이다. 표본 1개 누락만 고치면 타일 전체가 완성된다고 말할 수 없다.",
+      "minimumAction": "원본 사진을 타일 배치·방향의 복원 기준으로 쓰는 조건에서 빠진 타일/미플과 필요한 위치 관계만 추가한다. 모든 타일을 디지털 그림으로 다시 만드는 요구는 두지 않는다. 사진 밖 들판 연결은 미확인 유지.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 26,
+        "nativeKinds": {
+          "followers": 23,
+          "tiles": 3
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "4dba02af3eb3ceccb8f095692b6c1c1a4cd96306bd6719f5f74b785498b2795c",
+        "referenceSHA": "6c8f3c23e7d76368738b1ce81e49b0b7ebd32f0141f9a286fa8ae63d14acb086",
+        "nativeSHA": "9a78f8a66078ad3a8281de47054f226103ced21423cb584633a75235d419003c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 4개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=carcassonne] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=carcassonne]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "cascadia",
+      "name": "캐스캐디아",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "여러 서식지와 동물 토큰이 보이는 판인데 관측 0이다.",
+      "minimumAction": "P1: 한 생태계 영역의 토큰·타일 존재부터 읽도록 입력 범위를 보완한다. 사진 보존은 가능하지만 이것을 몇 항목만 고치는 정상 스캔 결과로 부르지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "ecosystem",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+        "referenceSHA": "2582df0edc5813f76eb2aed65cd841ff7b05e1d4f8799fa3ad6d08f0b82970f7",
+        "nativeSHA": "7363ba78fc6b7a1e52c2e2ffb77911f20924e09d30526e86ce52ad574bf2bf53"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=cascadia] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=cascadia]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "castles-burgundy",
+      "name": "버건디의 성",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "빈 응답은 확인되나 사진이 사람 중심이고 게임판은 작고 일부 잘려 있다. 이 사진으로 보통 촬영 상황의 수정 부담을 판단하기 어렵다.",
+      "minimumAction": "판과 주사위가 크게 보이는 자료에서 같은 관측 범위를 확인한다. 기존 표본 3개 미확보 수는 유지하되 제품 결함·허용 중 어느 쪽도 확정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "player",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "78e3275d72f14dcfb9502138e47e94908613c7663c40e0f9e157f9874c8cbca3",
+        "referenceSHA": "d96746abe6cbcc97b1811511bbc4704508e39e108547a6d67facf6d6989a11e4",
+        "nativeSHA": "0d318fc3e0114a1aac941725b281a795af999cf3cea34caf803c465c9bbe072c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=castles-burgundy] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=castles-burgundy]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "charterstone",
+      "name": "차터스톤",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "인쇄된 보드 1건으로 묶었고 작업자 표본은 개별화하지 않았다. 영구 인쇄/스티커 배치를 전부 입력할 필요는 없다.",
+      "minimumAction": "현재 보드를 사진으로 보존하고 움직이는 작업자의 색·위치만 직접 추가하는 조건으로 허용한다. 스티커·상자·미공개 내용은 사진으로 추론하거나 지우지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "board": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "village",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "54b229920b2d2e0323f89dbbc8a5ab1e21ff1000ec526d12c2f984fa41a993a6",
+        "referenceSHA": "053a3f4d02cbff27184e64d6f4c2fc21bbf33f7db85f926bc9dc2a51c2989c3c",
+        "nativeSHA": "4517cf83c76e23b1b7f4caf75697b9a6d03bce28f7f967be5be30139b1783c34"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=charterstone] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=charterstone]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "clank-catacombs",
+      "name": "클랭크! 카타콤",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "타일·말 후보는 남고 표본의 작은 파란 말 1개가 빠졌다.",
+      "minimumAction": "그 말의 종류와 타일 위 위치만 추가한다. 보드 위 공급 큐브와 현재 탐험가 위치를 구분하고 소유자는 확인한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 5,
+        "nativeKinds": {
+          "tiles": 3,
+          "pawns": 2
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "dungeon",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "d2e90638fcbcfa60850d8305b00e95c3af86642c1c2c6c6b0041a968edb833ba",
+        "referenceSHA": "3879a6d34c3823a5120576c3f052938a8c58732806bbf1440cf6a80a3a265bda",
+        "nativeSHA": "b946d051f6e13b5fa11d9657aff505fcdd35a4d7020a0ef0a797c330f2d1d21b"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 4개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=clank-catacombs] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=clank-catacombs]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "concordia",
+      "name": "콩코르디아",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "집·이동 말 후보는 다수 있지만 작은 집과 배의 표본 대응이 0~4개 범위로 불명확하다.",
+      "minimumAction": "도시/항로별 원본 확대 대조로 집과 배 대응만 확정한다. 대응이 불명확한 객체를 누락 또는 오독으로 강제 확정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 51,
+        "nativeKinds": {
+          "colonists": 11,
+          "houses": 40
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "28c43624fa0e37d068c86a720742d04dec96b470e896b1fef2b44f58ae678bef",
+        "referenceSHA": "2d2eaa7d87f05a1ab686ba023820a6af048a4a1103b595b5d978b9b0aca12e16",
+        "nativeSHA": "cf5291e513fba8b48669cfb3d75ab93152caedf3312e539cb0193ba2c7a48119"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "range",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 4,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "작은 말의 대응 불확실: 0~4개 범위만 가능",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=concordia] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=concordia]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "coup",
+      "name": "쿠",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "관측은 비었지만 이 사례의 확인 대상은 공개된 Duke 카드 1장이다. 역할 필드 제한과 물체 자체 누락은 구분해야 한다.",
+      "minimumAction": "공개 역할 카드 1장을 앞면·인쇄명으로 직접 추가한다. 다른 뒷면 카드의 정체는 묻거나 추측하지 않는다. 사진 전체 상태를 1장 입력으로 복구했다는 뜻은 아니다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "public",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "00dadd81a10eb50fd4820a9373f3af2a400805df9b08da7202582b2eb25732f3",
+        "referenceSHA": "223914bbff74f70eb6036ad0aa787653f70db349cf7a49d333b96a806f38b666",
+        "nativeSHA": "15d20e6e90c664eb1c71b2ca20fb2738be67768091fc2ec4ce813e25f9ea7339"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 1,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=coup] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=coup]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "crew-deep-sea",
+      "name": "크루: 심해의 모험",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "상품 배치 성격의 사진에서 하단 카드 3장이 경계에 잘렸고 관측은 비었다. 완전한 플레이판 자료는 아니다.",
+      "minimumAction": "보이는 5·7·6 카드의 색과 숫자만 필요하면 직접 입력하고 순서/차례는 확인한다. 사진을 실제 완료 트릭으로 단정하지 않는다. 이 제한된 기록에서 허용하며 전체 게임 복원 평가는 별도다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "trick",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "0b0f4921ca5f102c098ec695d04240313e80d80120f1d14b7c60926e0a26a8a2",
+        "referenceSHA": "7535415a2a4dbadf84220becda98bc10c0bd194198e50513d6547307ffa30fd1",
+        "nativeSHA": "74c457265974e67897b3cab69a63b858e97202ade9c3a0da389c308af16f2f0d"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=crew-deep-sea] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=crew-deep-sea]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "descent-legends-dark",
+      "name": "디센트: 어둠의 전설",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "지형과 피겨 후보가 남았고 앞쪽 피겨 1개가 빠졌다. 깊이·가림이 큰 사진이다.",
+      "minimumAction": "빠진 피겨의 이름/인스턴스와 위치를 직접 추가하고 높이·층 관계는 원본과 짧은 위치 메모로 보존한다. 정체를 사진만으로 강제 확정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 11,
+        "nativeKinds": {
+          "figures": 3,
+          "terrain": 8
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "8d3e5eabe47246282da24495723a58a0fe679f465a8f137b052a24922d4f5f5b",
+        "referenceSHA": "0b42bb461ae92834860bd652d0191db138b3de945175f9a1862b80cb251b9a02",
+        "nativeSHA": "6c3e5c09f5323f0a168e8d732047ccb683804894f3099b2042db0f66beb6589a"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=descent-legends-dark] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=descent-legends-dark]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "dobble",
+      "name": "도블",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "일부 카드가 잡히고 손에 가려진 왼쪽 카드가 대응되지 않았다.",
+      "minimumAction": "필요한 카드/더미 하나를 추가하거나 원본과 더미 순서를 실물 보존한다. 카드의 모든 기호와 게임 판정을 자동 입력할 필요는 없다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 3,
+        "nativeKinds": {
+          "cards": 3
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "center",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "49207b8e923b32e0d3c7a6f3d2e8087b0dbb9e06b6613d5dc008300557950262",
+        "referenceSHA": "222794176863c2596a82c984d4c42d251cff0c0c40aa860da7a49f87444ee6f1",
+        "nativeSHA": "0bf85e0bbb8ac2e588d0083ffd96b0289179bf1832759baf18a97a66bbabf5dd"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=dobble] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=dobble]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "dominant-species",
+      "name": "도미넌트 스피시즈",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P0",
+      "reason": "earth 27건과 표본 타일은 원응답에 있지만 overlay의 문자열 null로 처리 실패하여 후보 0이다.",
+      "minimumAction": "P0: 잘못 인코딩된 null은 해당 속성 미확인으로 분리하고 유효한 타일을 후보로 보존한다. overlay를 없음/0으로 바꾸지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 27,
+        "nativeKinds": {
+          "earth": 27
+        },
+        "recordedJobState": "failed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "earth",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "4ee3e73d83b7e6018f6d397b80b438c4295bda0ed94c80c26c0230f4c89f29f4",
+        "referenceSHA": "ed8928e6ae00af8c33eece5b5e7fbbf42c2399cca28363cd10f8e60aaf874d38",
+        "nativeSHA": "72a379c84ae64ec4fc7b4ac77e580f76e16ae4fcc9b7b0a0dd7472a4f6633bc8"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 3
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개는 읽음; 처리 실패로 저장 후보 0",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=dominant-species] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=dominant-species]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "decodeGeminiGameObservation"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "eclipse-second-dawn",
+      "name": "이클립스: 두 번째 여명",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "은하 타일·함선·개인판이 넓게 보이지만 관측 0이다. 몇 개 말 추가로 해결할 규모라고 볼 근거가 없다.",
+      "minimumAction": "P1: 선택한 은하 영역의 섹터·함선 관측부터 보완하고 작은 상태는 근접 사진/직접 기록으로 남긴다. 사진 자체 저장은 계속 가능하다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "galaxy",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "5fe1cdc3b1d229e78ce3b4b3f688a3f49d03eb25ec3dc9c959c8b53324c05120",
+        "referenceSHA": "7f60e24b2335767672b45a32e51905d75268be64edb9e41a94180da374c5f1d8",
+        "nativeSHA": "b0135d7e96fce3f9a0540e458d336613ebb354a6a8495033d6a0661b0d759262"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=eclipse-second-dawn] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=eclipse-second-dawn]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "eldritch-horror",
+      "name": "엘드리치 호러",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "사진의 Byakhee를 기존 참조가 Dybbuk으로 적었다. 이름 차이를 모델 오독으로 셀 수 없다.",
+      "minimumAction": "참조 이름을 원본 표기로 대조·수정한 뒤 채점한다. 현 결과의 물체 누락으로 전가하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 7,
+        "nativeKinds": {
+          "pieces": 5,
+          "markers": 1,
+          "world": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "21f87bff2ed0ec4313c1a5869abd64b7a9c8dcce053c89b2429cd64a4b98ad77",
+        "referenceSHA": "8129fe25f7a9a25e1adfdbc55d10380801731087b918356b8452e786722c8856",
+        "nativeSHA": "f799dd9f3c80469a9b78fbfe227b9f65c9cdc74ba88ab6c7375f9468d392c2c4"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "reference-excluded",
+        "targetCount": 3,
+        "individualRecordDeficitMin": null,
+        "individualRecordDeficitMax": null,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "참조 이름 1개 오류; 물체 누락으로 세지 않음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=eldritch-horror] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=eldritch-horror]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "everdell",
+      "name": "에버델",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "카드·이벤트·일꾼 후보가 있고 나무 위 빨간 일꾼 표본만 빠졌다.",
+      "minimumAction": "나무 위 예비 일꾼과 배치된 일꾼을 구분해 수량·위치 메모를 확인한다. 모든 자원 공급물을 낱개로 입력하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 16,
+        "nativeKinds": {
+          "cards": 8,
+          "events": 2,
+          "workers": 6
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "common",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "0ac6201d236749946778970f3c23b69c30ba03e6f2e02a2d80ffd8b4a8eca0dc",
+        "referenceSHA": "7cc9372cfe9d5646fccf9e5a4602f172555c448839511287e27adedfc7483317",
+        "nativeSHA": "57f091d29af9d71de470cf97af8d3825f67b2596318cc56ad2b5fd9085044c14"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=everdell] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=everdell]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "expeditions",
+      "name": "익스페디션",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "표본 객체와 인쇄 이름은 남았고 두 타일의 locationLabel에는 번호가 들어갔다. 명칭이 다른 필드에 있다고 미인식은 아니다.",
+      "minimumAction": "printedName과 locationLabel의 의미를 구분해 평가한다. 사용자가 사진·이름·번호로 같은 타일을 식별하면 허용하며 이름을 억지로 중복 입력하게 하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 13,
+        "nativeKinds": {
+          "mechs": 1,
+          "tiles": 12
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "e31f8a69926a99182f163a4dad03e42410358d1aae8fd23d67fc027479823803",
+        "referenceSHA": "8f5d34e49c2d8ef3c62e0ae52a40de6f6b29b3780e7968fadc26a2f9d8edab45",
+        "nativeSHA": "0cfe662c150a1dae588837ea9a422ebef03c3a2c96727ebe91222471b2028bd4"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "물체 3개 모두 찾음; 이름·위치 필드 배정 차이 2개",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=expeditions] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=expeditions]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "five-tribes",
+      "name": "다섯 부족",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "타일 30개 등 다수 후보가 남고 표본의 분홍·파란 말 2개가 빠졌다.",
+      "minimumAction": "해당 타일의 말 색·수량을 직접 보완한다. 같은 종류의 말은 타일별 묶음 기록도 허용하고 나머지 배치 사진을 유지한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 59,
+        "nativeKinds": {
+          "tiles": 30,
+          "tribes": 9,
+          "ownership": 20
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "board",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "33cb0025555bc524ec6c237658be6166abd296981781c02ba1c308e6a8a62ce9",
+        "referenceSHA": "7fc2b77f2a7401af779298de184a2e520608f6447d2f9aa9becde6f1a0cf2903",
+        "nativeSHA": "e899949785eb678a639eeea5e003a0a7339c5fdc64fc38e8b22ef6e7970292c1"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 2,
+        "individualRecordDeficitMax": 2,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 4개 중 2개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=five-tribes] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=five-tribes]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "frosthaven",
+      "name": "프로스트헤이븐",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "입체 커스텀 지형·가림이 큰 사진에서 지도 1건만 읽었다. 표준판 일반 오류와 사진의 특수성 영향을 분리할 근거가 없다.",
+      "minimumAction": "앞쪽 피겨와 가려지지 않은 지형의 대응을 확인할 자료가 필요하다. 현재는 원본+피겨 위치/인스턴스 메모로 보존하고 보이지 않는 체력·상태는 추정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "map": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "battle",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "7327b3fa1a8266200b514a1a2944831933d47e25b91c82535f2faa61d1a578b5",
+        "referenceSHA": "4878600363478143334749b687d16aa3259e7daebf6f3846d966d54f7c765357",
+        "nativeSHA": "2129edec75b67546da2ef558a04cfe84392c538231fb2881d8fc17e6e7f0395f"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=frosthaven] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=frosthaven]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "gaia-project",
+      "name": "가이아 프로젝트",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "색별 건물이 놓인 판이 보이지만 관측 0이다. 전체 공간 상태를 수동으로 다시 적는 부담이 남는다.",
+      "minimumAction": "P1: 구조물 존재·위치의 기본 관측을 보완한다. 건물 종류가 모호하면 종류만 미확인으로 남기고 후보 전체를 비우지 않는 방향을 우선한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "galaxy",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "8bf79bf44f3b777b54d41558a2300f617a247b97586d802ffd177f2c3465d860",
+        "referenceSHA": "a143d1703aa86e73b86f2655d2651e131cc26f166249543adc05fe9667fc5bb3",
+        "nativeSHA": "a7f0ee9f8abc80694de924cfec7d30bbe08f0f581430baf6e8e7f0819311588d"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=gaia-project] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=gaia-project]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "galaxy-trucker",
+      "name": "갤럭시 트러커",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "전경 우주선 부품의 배열이 보이나 관측 0이다. 연결·방향이 핵심인 배치를 사람이 새로 만들어야 한다.",
+      "minimumAction": "P1: 우주선 부품 영역의 존재·배치부터 보완한다. 연결 규칙 자동 심판은 요구하지 않고 원본 사진으로 방향을 확인할 수 있게 유지한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "ship",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "deeb36d97a14eb2b2d061691cc89b60c561959464112b343e2ec7bb8450bdc4c",
+        "referenceSHA": "25d10a270d8c29745cfba17097f851ed2cfedfcbfaed99ea28610b45f8fd0fc5",
+        "nativeSHA": "34bf090446069427bfd2d62334db174b8d4180a67ab4b843d666b685109719c7"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=galaxy-trucker] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=galaxy-trucker]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "grand-austria-hotel",
+      "name": "그랜드 오스트리아 호텔",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "주사위는 찾았고 기존 대조의 눈 2개 오독이 남는다. 후보는 자동 확정값이 아니다.",
+      "minimumAction": "적용 전 해당 두 눈을 5와 4로 확인·정정한다. 사진에서 읽기 어렵다면 모름으로 두고 실물 확인한다. 이 2개 수정 가능성을 전체 주사위 정확도로 확대하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 7,
+        "nativeKinds": {
+          "dice": 7
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "actions",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "c3fe7f95ae6b8fe0b63cb249fef79db703868e124f357da260fa79036e9ec22b",
+        "referenceSHA": "3aa6cdf1fb45ec436d34cb02375a601214e4b28e4923901726bdd09dc0a0de05",
+        "nativeSHA": "2101309fff039f62ff0318272ee54cefad8a5290467923fc1b89fd01fd963c1f"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": 2,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "주사위 3개 모두 찾음; 숫자 2개 오독(5→1, 4→2)",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=grand-austria-hotel] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=grand-austria-hotel]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "great-western-trail",
+      "name": "그레이트 웨스턴 트레일",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "타일 후보가 다수 있고 파란 말 1개의 대응이 확인되지 않았다. 근처 타일을 그 말로 취급해서는 안 된다.",
+      "minimumAction": "중복 여부를 먼저 확인한 뒤 파란 말만 추가하고 경로상의 위치를 기록한다. 표본의 대응 실패를 판 전체 재입력으로 확대하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 27,
+        "nativeKinds": {
+          "pieces": 5,
+          "tiles": 22
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "trail",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "9f14e3a4ebe99c52c8262502e5efc46f01ec9918fe18f27eac499108da50361b",
+        "referenceSHA": "14e5db45f4bcb5ae5ea505201542c9c3428c8bbe9d946ad4316798ca1ea424e1",
+        "nativeSHA": "967bbbbe345bf0e43ffb65ffb384e969de92efda76624bc1f2665e4dcc9f9a3c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "타일 2개 대응; 파란 말 1개 개별 대응 확인 안 됨",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=great-western-trail] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=great-western-trail]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "isle-of-cats",
+      "name": "아일 오브 캣",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "근접 사진의 순서/진행 말 표본 3개는 빠졌지만 필요한 움직이는 표식이 제한된 영역이다.",
+      "minimumAction": "세 표식의 색·종류·진행 위치를 직접 적고 원본을 보존한다. 쌓인 수량은 직접 확인한다. 개인 배의 모든 고양이 배치까지 판독됐다고 주장하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 5,
+        "nativeKinds": {
+          "tokens": 3,
+          "cards": 2
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "player",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "2b54440fbcec29b001cf8f893f74cb32aef11a20742b0bf2689c0501b98070ca",
+        "referenceSHA": "dac487d0fef5ff1efe4b8c8450e5ad4906424943642d1914aafd99b02fa6055a",
+        "nativeSHA": "8f8be65bce3c9e8bfa0c753bb49aa190c917c6842bf1a9fdb009f73da5a8031c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 3개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=isle-of-cats] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=isle-of-cats]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "istanbul",
+      "name": "이스탄불",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "장소 16개만 읽고 사진에 여러 곳에 놓인 상인·조수류를 읽지 않았다. 정적인 지도만 남고 현재 이동 상태가 빠진다.",
+      "minimumAction": "P1: 사람 말 관측 범위를 우선 보완한다. 쌓인 조수는 위치별 묶음+수량 미확인으로 허용하되 정적 장소 출력만으로 상태 읽기 완료라 평가하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 16,
+        "nativeKinds": {
+          "places": 16
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "city",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "4c28b6ac48bad4465db88d84ceddca23701e2bbe9f26421934fd9db5a2e43efd",
+        "referenceSHA": "a8e6543738ab477e7adabe69fda90c1e0d02cae9cc04ec90a5880addd300077b",
+        "nativeSHA": "0ca1eb4a12404c714465efc2956c30c913c4e0355e3a6ff84de3b6debec0c4e8"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "장소 타일은 출력했지만 표본 사람 말 3개 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=istanbul] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=istanbul]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "kingdomino",
+      "name": "킹도미노",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "참조 상자 두 개가 실제 도미노 경계를 가로질러 묶였다.",
+      "minimumAction": "물리 도미노 한 장씩 참조 범위를 바로잡고 지형 두 칸을 구분해 평가한다. 기존 3표본은 현 분모에서 제외 유지한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 11,
+        "nativeKinds": {
+          "markers": 1,
+          "dominoes": 10
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "kingdom",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "93ca427021922281a6c001ede9176206ffbf17ae296e2c27955e8fdc37ce28fd",
+        "referenceSHA": "4592556d8614e1c1b37ba36f75a7f00968c29c5426540bdc13f977889d2e3f2b",
+        "nativeSHA": "b42fb4ad180cfb5848f8d2bc3647e44d8d7052817f1bfb98822d135d41faeb4c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "reference-excluded",
+        "targetCount": 3,
+        "individualRecordDeficitMin": null,
+        "individualRecordDeficitMax": null,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "참조 상자 2개가 실물 경계를 걸침; 점수 계산 제외",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=kingdomino] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=kingdomino]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "le-havre",
+      "name": "르 아브르",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "앞면 건물들이 여럿 보이는 공용 영역인데 관측 0이다.",
+      "minimumAction": "P1: 건물 카드 존재와 인쇄명 관측부터 보완한다. 가려진 자원 수량은 질문/실물 보존으로 두고 건물 전체 수동 재입력을 기본 정정이라고 보지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "town",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "6820e52692e5fed5c016575832d920950ea7c4b05321748a31769b933715097b",
+        "referenceSHA": "9d9c290b69da036146a812f1a850ba5a9a5b92e6d36860b8568ce74220f6539e",
+        "nativeSHA": "61fd7180fa777d7033a2b02957a5fc82ec3f3491b4936520b1a0c877f95c4aa2"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=le-havre] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=le-havre]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "love-letter",
+      "name": "러브레터",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "Handmaid는 읽고 테이블의 Guard 1개가 빠졌다.",
+      "minimumAction": "공개 Guard 카드만 추가한다. 손에 든 카드와 버림 카드의 위치/공개 범위를 구분해 기록하고 덱 순서는 실물 보존한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "cards": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "hand",
+          "partition": "owner_private"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "5eddd9c4f1efbb870df6f8b438245b68a18e097b8c9f6e169830abbbafad7ba0",
+        "referenceSHA": "9d912b9271a07cf2e236a51a7d631e2cdafff4263be9964bb08178618c1c22fe",
+        "nativeSHA": "8a127bb99e662bbc56579d2b74f3d9e76f6dba7f578f0461dc9076f5682ca75f"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 2,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 2개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=love-letter] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=love-letter]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "marvel-champions",
+      "name": "마블 챔피언스 카드게임",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P0",
+      "reason": "카드·토큰 18건이 있지만 stage/health가 숫자 문자열이라 처리 단계에서 후보가 전부 사라졌다.",
+      "minimumAction": "P0: 계약에 맞는 숫자 출력 또는 해당 속성만 미확인 처리로 유효 카드·토큰을 살린다. 인쇄 체력을 현재 체력으로 임의 해석하지 않으며 자동 확정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 18,
+        "nativeKinds": {
+          "identities": 1,
+          "cards": 5,
+          "tokens": 12
+        },
+        "recordedJobState": "failed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "enemy",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "94e58ac7e77338d481efc86e2e3c2d6714fead63f1c7be00543b4bd21dd02e86",
+        "referenceSHA": "3f953e4d026f23e35935200e1a1e28cbb2517b2d024c398d9bfb071a9b499e86",
+        "nativeSHA": "29028f7e56734eb80850ad71f518942e8bfe6dee7fe848cda290e96d0d5d6bd4"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 3
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개는 읽음; 처리 실패로 저장 후보 0",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=marvel-champions] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=marvel-champions]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "decodeGeminiGameObservation"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "monopoly",
+      "name": "모노폴리",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "참조가 빨간 호텔을 tokens로 분류했다. 사진과 모델의 건물 표현을 서비스 오독으로 볼 근거가 없다.",
+      "minimumAction": "참조 종류를 호텔/부동산 건물 분류와 맞춘 뒤 평가한다. 소유자나 호텔 수를 규칙으로 역산하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 14,
+        "nativeKinds": {
+          "board": 1,
+          "tokens": 3,
+          "property": 10
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "track",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "f05e78a4a93e54c229f861131b4366f95541a279785b15e7e680c8eb3b3d5f5b",
+        "referenceSHA": "0e96cb2fa5da3f8e0353c6e5c77e2f53022cfb8d7fe61c7b92f6d16148cfaa6a",
+        "nativeSHA": "f7dda79a2436daffde531f806b05b9f4eef708bef3c8c8ba49d5213fcdab2f26"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "reference-excluded",
+        "targetCount": 3,
+        "individualRecordDeficitMin": null,
+        "individualRecordDeficitMax": null,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "참조의 호텔 분류 1개 오류; 물체 누락으로 세지 않음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=monopoly] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=monopoly]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "paleo",
+      "name": "팔레오",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "관측 0이지만 확인 대상은 전경 인물 카드 3장이고 공급 더미의 낱개 위치까지 재현할 필요는 없다.",
+      "minimumAction": "인물 3장의 이름·상처 표식을 필요할 만큼 직접 기록한다. 자원은 종류별 묶음과 확인한 수량으로, 덱/숨은 순서는 실물 보존한다. 전체 판이 자동 기록됐다는 의미는 아니다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "groups",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "f4fbfba7036a6daa45e280fc802fa770bedd7b6264fc742d47dfe8d9a5b8cfc9",
+        "referenceSHA": "e2f1a654a1140d8668bbd2ddbc1359f7bd64cc1d6c15783c7663b3ae8e39795b",
+        "nativeSHA": "46e4ffb2355db495a57bea281631f7f4e3eec21da6f3d83b5949c274bb3f8aa9"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=paleo] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=paleo]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "pandemic",
+      "name": "팬데믹",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "말·질병 후보가 남고 표본의 파란 큐브가 빠졌다. 도시별 묶음 기록으로 이어갈 수 있다.",
+      "minimumAction": "파란 큐브가 있는 도시와 수량을 원본/실물로 확인해 보완한다. 원본 지도는 보존하고 다른 도시의 누락 여부는 사용자 검토로 남긴다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 12,
+        "nativeKinds": {
+          "pieces": 5,
+          "disease": 7
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "world",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "5ab1328da244c24d28306efde3734c54714b033612aa60214e35a2225ed7dff2",
+        "referenceSHA": "2d73ea05cbe225c292d05c4e7cedfe6e1a0a13dd25600102affad55c3ca9d204",
+        "nativeSHA": "37cac70c5a05cac75db240e43fbf5a915154798db24aa41b42226a418c468cb7"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=pandemic] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=pandemic]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "pandemic-legacy-1",
+      "name": "팬데믹 레거시: 시즌 1",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "표본 물체는 대응되고 투명/검은 재질·색 표현의 차이만 남아 있다.",
+      "minimumAction": "복원에 필요한 질병 종류가 모호할 때만 직접 정한다. 위치·수량을 사진과 함께 보존하면 표현 차이 자체는 필수 수정이 아니다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 12,
+        "nativeKinds": {
+          "map": 1,
+          "pieces": 11
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "005daeaef0b94358ec5fd51f062d59ec5c64ef65b3fd5baaa5cd437ba5b89bd2",
+        "referenceSHA": "ddc724426fe9336b18c75141c3ef0870a992e73b5e76e1607d9014839d4334bb",
+        "nativeSHA": "3e73e07e32f2d3fe42c0eedf1be250d500d9fcc824dff1f308197da4cf7375b8"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "물체는 대응; 색상·투명 재질 표현 차이는 미채점",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=pandemic-legacy-1] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=pandemic-legacy-1]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "power-grid",
+      "name": "파워그리드",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "사진의 도시에 놓인 집은 제한되어 있고 표본의 녹색 집 2개가 빠졌다.",
+      "minimumAction": "해당 도시의 녹색 집을 추가하고 플레이어는 직접 확인한다. 공급 집·자원은 묶음으로 보존하며 전부 개별화할 필요가 없다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 2,
+        "nativeKinds": {
+          "houses": 2
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "network",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "b59a54ad3cc667ed4885395a6c8e1182c770658a33f93c8edc4f7952bd3186cc",
+        "referenceSHA": "b61f4635d147f76f75a2f82ee724b3c8ad93012178a6507da7cb7796cf92754b",
+        "nativeSHA": "31cc5522de2a4e994ecc7bbb7e3a78afcb09d589aa89a858570a2661ece9bf75"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 2,
+        "individualRecordDeficitMax": 2,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 2개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=power-grid] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=power-grid]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "robinson-crusoe",
+      "name": "로빈슨 크루소: 저주받은 섬의 모험",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "섬 타일 후보는 남고 어두운 말 1개가 빠졌다.",
+      "minimumAction": "말의 종류와 놓인 타일을 직접 추가한다. 시나리오·라운드·숨은 덱 순서는 사진으로 추정하지 않고 필요한 확인/실물 보존 경로를 쓴다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 10,
+        "nativeKinds": {
+          "island": 10
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "island-map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "6afb95b2faf5ba6cc7c2756b6b20b6766a541de137baee0c5b36ef75c221bd61",
+        "referenceSHA": "07ca856d89f713eef34d9bc9669d475bc01746848e4a592ae6cbeef71bd30a96",
+        "nativeSHA": "2c56e64e1569800101a0fb91375e8445e01eb6ce780edb4400f56c14ff685f4a"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=robinson-crusoe] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=robinson-crusoe]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "seti",
+      "name": "세티",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "탐사선 후보는 있으나 작은 동일색 물체의 개별 대응이 0~3개 범위로 불확실하다.",
+      "minimumAction": "탐사선 위치를 원본 확대/명확한 영역 자료로 맞춘 뒤 누락인지 판단한다. 현재 단계에서 좌표 차이만으로 오독이나 수동 정정 부담을 단정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 13,
+        "nativeKinds": {
+          "system": 1,
+          "probes": 12
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "solar-system",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "c4239ad220c3986fdf33eef43d45a894a6e813aee0163b1282e5a9ab55877a7f",
+        "referenceSHA": "969995af92af28cd63c024007d452ac860d37ba0b227fcc6246277133ce7ba62",
+        "nativeSHA": "62a2eb6a2a4cd38a1091e58995fb48f6e998ef09fd0bf6e3c9fe19e5ffa2dd63"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "range",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "탐사선의 개별 대응 불확실: 0~3개 범위만 가능",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=seti] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=seti]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "small-world",
+      "name": "스몰 월드",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "여러 지역에 놓인 종족 토큰을 지도 1건으로만 출력했다. 현재 점유 상태가 후보에 거의 없다.",
+      "minimumAction": "P1: 지역별 종족 토큰 묶음을 읽는 범위를 보완한다. 낱장 완전 분리 대신 지역·표면 종족·사용자 확인 수량을 허용한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "map": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "81a0c1706d08ea60f0706f1d9778a5013feaa828547ddc65d8e2a50f861a319f",
+        "referenceSHA": "bb97d42abb57dbd44405308b8781b8488fd73de11f9c8d8f4ac22245728eeb3d",
+        "nativeSHA": "7759d9507fd7eeff8ed4d201005c8fe39ceb9a83f82006ec2b4eff5fad80ccf2"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "판·영역·묶음으로 표현해 표본 실물의 개별 기록 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=small-world] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=small-world]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "spirit-island",
+      "name": "정령섬",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "표본 물체는 잡혔고 파란 원형 말의 figures/markers 분류가 미확정이다.",
+      "minimumAction": "사용자가 현신 표식 등 실제 종류만 확인해 바꾸고 위치는 유지한다. 모양·분류 경계가 애매한 것을 확정 오독으로 승격하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 22,
+        "nativeKinds": {
+          "figures": 18,
+          "markers": 2,
+          "lands": 2
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "island",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "f14cac1c5eec2b782366e93adf8f40580aacdb73dcd7310a731235de787992a8",
+        "referenceSHA": "e7987a2fa6b416ff9cc99687df53ef0ffc622c6ec984db06a9b7a851c04cb898",
+        "nativeSHA": "d133e2d488eb17498800952527f30b93f9ecfdc2db4e83ee21134cf28544f57a"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "물체는 대응; 구성물 종류 분류 1개는 미확정",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=spirit-island] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=spirit-island]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "star-wars-outer-rim",
+      "name": "스타워즈: 아우터 림",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "사진에는 다수의 추가 모형과 정리용 배치가 보이며 3개 함선 표본이 실제 이동 상태인지 확정되지 않았다.",
+      "minimumAction": "모형이 플레이 중 함선인지 장식/공급인지 먼저 확인한다. 기본판 후보 부족과 커스텀 구성 영향을 분리하기 전 광범위 필수 인식 오류로 단정하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 4,
+        "nativeKinds": {
+          "map": 1,
+          "ships": 3
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "galaxy",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "d06df601359ca3c026a714ce00adbf031982565b0dd7393ec8ba795a21cee98f",
+        "referenceSHA": "063bda43c19068b18270b70c88db9f94a5e6dc7ca2066c8240b42055fbd86e16",
+        "nativeSHA": "3dba614cbb12254c2d233836a837b4e90e029d593980480ef47eee9f9ea379af"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "우주선 2개 누락·1개 묶음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=star-wars-outer-rim] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=star-wars-outer-rim]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "stone-age",
+      "name": "스톤 에이지",
+      "primaryVerdict": "근거 부족",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "관측 0이지만 인물·병에 가리고 작은 게임판이 멀리 촬영됐다.",
+      "minimumAction": "게임 내용 중심 사진에서 작업자 위치를 확인한 뒤 판단한다. 기존 표본 누락은 유지하되 일반적인 수동 정정 부담이나 제품 실패로 일반화하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "actions",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "8d47cc55b513d4f9d82ab6ae7a2be141025ea105f1fdeaad541ebbc48e468400",
+        "referenceSHA": "c5772e204ea15a8657bae18292e151337875b64b252fb82843aa285b925f4b03",
+        "nativeSHA": "08f1bb9b8990b132d980ff104eeb6e03efde3306c0804ec60416945ffe21f368"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=stone-age] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=stone-age]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "terraforming-mars",
+      "name": "테라포밍 마스",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P0",
+      "reason": "큐브·타일 43건이 있으나 cubes에 terrain 전용 face/printedName/tileType이 섞여 후보 전체가 처리 실패했다.",
+      "minimumAction": "P0: 구성물별 허용 속성을 출력 단계에서 구분하고 잘못 붙은 속성만 격리한다. 큐브를 타일로 임의 재분류하지 말고 유효한 색·위치와 다른 타일 후보를 보존한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 43,
+        "nativeKinds": {
+          "cubes": 34,
+          "terrain": 9
+        },
+        "recordedJobState": "failed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "mars",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "ba1dc924593ddb03ca1f8f7e5f1265f4a6d8285e3f6f6eb129708d8a209c4f9d",
+        "referenceSHA": "8df2e2cd6d8132ab146aac03ba6b2134be754e2416f7def5e81d3eaa33e2b931",
+        "nativeSHA": "3b228f236860f23e27d503c0cb5ce5c4037afd2c503bd683e77594718f8cf71a"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 4,
+        "individualRecordDeficitMin": 0,
+        "individualRecordDeficitMax": 0,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 4
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 4개는 읽음; 처리 실패로 저장 후보 0",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=terraforming-mars] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=terraforming-mars]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "decodeGeminiGameObservation"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "ticket-to-ride",
+      "name": "티켓 투 라이드",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "일부 긴 기차 구간을 한 물체로 묶었고 quantity 1이다. 도시 사이 노선 단위 기록으로 복원하는 것은 가능하다.",
+      "minimumAction": "묶음 1을 실제 차량 1개로 믿지 말고 색·양끝 도시·확인한 수량/위치 메모로 정정한다. 사진 기준 복원이라면 모든 차량을 분할할 필요는 없다. 수량 확인 전 합계에 사용하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 24,
+        "nativeKinds": {
+          "map": 1,
+          "trains": 23
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "map-area",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "9db2793990720dc676c5edf731b5043b802d8e162b8b4393bf35dd46a997b0c6",
+        "referenceSHA": "0db4708a1f3471fe480720579687006515e7b49ed4d0b097a1b81c3314bf6af7",
+        "nativeSHA": "7a41bd1a2b2b282c880b338e3cc4865e26288b9d941b6e78037929abdadad2c2"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "range",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 2,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "2개는 확실히 여러 기차로 묶음; 나머지 1개 개별 대응 미확정",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=ticket-to-ride] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=ticket-to-ride]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "tiny-towns",
+      "name": "타이니 타운",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "표본의 갈색 자원 1개가 빠졌지만 노란 개인판 자원은 잡혔다. 공급 더미 낱개는 필수가 아니다.",
+      "minimumAction": "해당 자원이 공급인지 개인판 위인지 먼저 확인해 필요한 범위에만 추가한다. 개인판 칸 위치는 사진/위치 메모로 남긴다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 5,
+        "nativeKinds": {
+          "resources": 5
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "town",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "9ff0bf69d7710e35b96ab829fa6631a1fbaa7c194daa0fa47b8a4a4fc7c3e97c",
+        "referenceSHA": "6c6f1875371e9d10b7fb7ea365b123f901a4ebf244f1819f5b44e3ba275bee24",
+        "nativeSHA": "ed3ccb78968eb693967c368f29a339d72a3bbec8da13e23e58aa76a70b38e7da"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=tiny-towns] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=tiny-towns]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "twilight-imperium-4",
+      "name": "트와일라잇 임페리움 4판",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "함대가 많은 판을 중심 성계 1건으로만 읽어 부대 배치가 거의 후보에 없다.",
+      "minimumAction": "P1: 성계별 부대 존재·종류 관측부터 보완한다. 같은 부대는 묶음 수량 확인을 허용하며 모든 카드 효과/비밀 목표 자동 읽기는 요구하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 1,
+        "nativeKinds": {
+          "systems": 1
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "galaxy",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "324f7f0dba850c3c90b638b6cfb4cbd984db77f9dc95d4c8f50459cb53a9f729",
+        "referenceSHA": "c85cd3db3f8607b724b59ab3044a06e72b2d2fe56e7685e373b37a3947bc21c6",
+        "nativeSHA": "5770642b8e986bbd19b9dcb4b38ec8128782f53797fa7084c976e99390c18350"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 3개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=twilight-imperium-4] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=twilight-imperium-4]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "underwater-cities",
+      "name": "언더워터 시티즈",
+      "primaryVerdict": "필수 수정(명백한 제품/인식 오류)",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "P1",
+      "reason": "공용판에 앞면 카드와 표식이 보이는데 관측 0이다.",
+      "minimumAction": "P1: 선택 영역의 앞면 카드 관측을 우선 보완한다. 개인 도시판이 사진 밖인 것은 별도 미확인으로 남기고 빈 응답을 전체 판 상태 부재로 해석하지 않는다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 0,
+        "nativeKinds": {},
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 0,
+        "scope": {
+          "areaId": "tableau",
+          "partition": "player_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "ab084df6b2bdfba7e8e9c1975b89924ba5d076a0ce6b0f2ad21aebc73de023e6",
+        "referenceSHA": "14e4a722922d4f1df1384a8a9ce83a88e833d5715babc7fae7b7f0d7ff07ced0",
+        "nativeSHA": "b486a6b6ccf1680e3ad128a63661ee00934b3ca634c66ed4789dbc04d8b98a9a"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 3,
+        "individualRecordDeficitMax": 3,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "빈 응답: 표본 전부 누락",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=underwater-cities] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=underwater-cities]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "war-of-the-ring-2",
+      "name": "반지전쟁 2판",
+      "primaryVerdict": "수동 정정으로 허용",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "군대·표식 후보가 다수 있고 표본의 왼쪽 빨간 부대 1개가 빠졌다.",
+      "minimumAction": "부대를 지역별 묶음으로 보완하고 종류·수량을 확인한다. 미니어처 하나하나의 자세/재질 일치는 요구하지 않고 원본 배치를 보존한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 20,
+        "nativeKinds": {
+          "armies": 18,
+          "markers": 2
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "middle-earth",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "fbaca46c34b66a2aa3aa52194def3ad417305179aa9c55646bc89041c14611ff",
+        "referenceSHA": "01058be8f26ade0ea8a1e1b40f0991c56b41aee9ac991497713400f9cb9286d6",
+        "nativeSHA": "edc37b1eecee77adf78e08b60329b49de5077bdde622d20562ac9664cab0610c"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "exact",
+        "targetCount": 3,
+        "individualRecordDeficitMin": 1,
+        "individualRecordDeficitMax": 1,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "표본 3개 중 1개 개별 대응 없음",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=war-of-the-ring-2] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=war-of-the-ring-2]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    },
+    {
+      "gameId": "wyrmspan",
+      "name": "웜스팬",
+      "primaryVerdict": "평가자료 수정 대상",
+      "judgmentLevel": "RECOMMENDATION",
+      "priority": "review-or-test",
+      "reason": "참조 3상자가 각각 위·아래 카드 2장을 묶었고 모델은 용/동굴 카드를 개별 출력했다.",
+      "minimumAction": "실제 카드 단위로 참조 상자를 나누어 평가한다. 사진 전체 시장의 모든 카드가 맞았다는 뜻은 아니며 기존 12개 참조 제외 집계는 유지한다.",
+      "verifiedFacts": {
+        "level": "VERIFIED",
+        "photoOpened": true,
+        "nativeJSONParsed": true,
+        "nativeObjectCount": 6,
+        "nativeKinds": {
+          "cards": 6
+        },
+        "recordedJobState": "completed",
+        "recordedCandidateCount": 1,
+        "scope": {
+          "areaId": "market",
+          "partition": "common_public"
+        },
+        "hashesMatch": true,
+        "sourceSHA": "806f4202b0a3c408b9db8655d2b0edcd4670b7755685de040e9e206b90d7765f",
+        "referenceSHA": "63b40b4e944d20a273d6337971a5c5d6c214ec9e063e5ef07a78e6933ccc7165",
+        "nativeSHA": "17aa3e7cb3c44480ba6a1dcf408c6f9c20e64f5e355ee0aa57b9f1d75ee857ff"
+      },
+      "frozenSampleAccounting": {
+        "countStatus": "reference-excluded",
+        "targetCount": 3,
+        "individualRecordDeficitMin": null,
+        "individualRecordDeficitMax": null,
+        "confirmedWrongValueCount": null,
+        "processingFailureUnusableTargetCount": 0
+      },
+      "priorTargetFinding": {
+        "level": "REPORTED",
+        "note": "참조 상자 3개가 각각 카드 2장을 걸침; 점수 계산 제외",
+        "restriction": "기존 표본별 대응 판정이며 새 전물체 GT를 작성하지 않았다. 원사진을 직접 열어 판정의 실용적 영향을 재검토했다."
+      },
+      "evidence": [
+        {
+          "path": "docs/service-all-games-20261027/analysis/missed-counts.json",
+          "pointer": "rows[gameId=wyrmspan] (evidencePaths의 원참조/원응답 포함)"
+        },
+        {
+          "path": "docs/service-all-games-20261027/results/results.json",
+          "pointer": "entries[gameId=wyrmspan]"
+        },
+        {
+          "path": "server/ai/geminiGameReader.ts",
+          "symbol": "buildGeminiGameBody / hostedVisibleProperty"
+        },
+        {
+          "path": "src/GameEssentials.tsx",
+          "symbol": "GenericComponents / candidateView / applyCandidate"
+        },
+        {
+          "path": "src/readouts/GameDetailFields.tsx",
+          "symbol": "GameDetailFields"
+        }
+      ],
+      "limits": [
+        "정정 UI는 소스 확인이며 이 작업에서 실제 조작·시간·클릭 수를 측정하지 않았다.",
+        "게임당 사진 1장과 사전 표본 1~4개이며 판 전체 완전성·다른 사진의 성능을 보장하지 않는다."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4512 @@
+{
+  "gameId": "agricola",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "farm-tiles",
+      "label": "개인 농장 5×3",
+      "field": "farm-area.scene",
+      "scope": "player",
+      "accepts": [
+        "farm",
+        "people",
+        "goods"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-farm-tiles-r1-c1",
+          "x": 55.0,
+          "y": 55.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r1-c2",
+          "x": 127.0,
+          "y": 55.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r1-c3",
+          "x": 199.0,
+          "y": 55.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r1-c4",
+          "x": 271.0,
+          "y": 55.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r1-c5",
+          "x": 343.0,
+          "y": 55.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r2-c1",
+          "x": 55.0,
+          "y": 125.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#c98c58"
+        },
+        {
+          "id": "agricola-farm-tiles-r2-c2",
+          "x": 127.0,
+          "y": 125.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r2-c3",
+          "x": 199.0,
+          "y": 125.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r2-c4",
+          "x": 271.0,
+          "y": 125.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r2-c5",
+          "x": 343.0,
+          "y": 125.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r3-c1",
+          "x": 55.0,
+          "y": 195.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#c98c58"
+        },
+        {
+          "id": "agricola-farm-tiles-r3-c2",
+          "x": 127.0,
+          "y": 195.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r3-c3",
+          "x": 199.0,
+          "y": 195.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r3-c4",
+          "x": 271.0,
+          "y": 195.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        },
+        {
+          "id": "agricola-farm-tiles-r3-c5",
+          "x": 343.0,
+          "y": 195.0,
+          "w": 72.0,
+          "h": 70.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfeccb"
+        }
+      ],
+      "note": "15개 농장칸. 방·밭·목초지 바닥은 한 칸 단위이고, 사람·가축·작물·외양간은 칸/목초지 위에 놓이는 겹침 상태. 시작 목재 방은 왼쪽 열의 중·하단 칸. 울타리는 아래 JSON의 경계 ID를 사용.",
+      "bounds": [
+        30,
+        30,
+        400,
+        285
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "base-actions",
+      "label": "기본 행동 공간",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-base-actions-r1-c1",
+          "x": 42.0,
+          "y": 335.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-base-actions-r1-c2",
+          "x": 118.4,
+          "y": 335.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e5f0d9"
+        },
+        {
+          "id": "agricola-base-actions-r1-c3",
+          "x": 194.8,
+          "y": 335.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        },
+        {
+          "id": "agricola-base-actions-r1-c4",
+          "x": 271.2,
+          "y": 335.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        },
+        {
+          "id": "agricola-base-actions-r1-c5",
+          "x": 347.6,
+          "y": 335.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        },
+        {
+          "id": "agricola-base-actions-r2-c1",
+          "x": 42.0,
+          "y": 399.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        },
+        {
+          "id": "agricola-base-actions-r2-c2",
+          "x": 118.4,
+          "y": 399.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7eef8"
+        },
+        {
+          "id": "agricola-base-actions-r2-c3",
+          "x": 194.8,
+          "y": 399.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7eef8"
+        },
+        {
+          "id": "agricola-base-actions-r2-c4",
+          "x": 271.2,
+          "y": 399.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f7e4d4"
+        },
+        {
+          "id": "agricola-base-actions-r2-c5",
+          "x": 347.6,
+          "y": 399.0,
+          "w": 70.4,
+          "h": 58.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f7e4d4"
+        }
+      ],
+      "note": "기본 행동 공간. 각 칸에는 행동한 가족원 1명만 놓고, 누적 공간은 자원을 겹쳐 보유하므로 누적 자원량은 별도 상태입니다.",
+      "bounds": [
+        30,
+        325,
+        400,
+        142
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "two-player-action-tile",
+      "label": "2인 선택 추가 행동 타일",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-two-player-action-tile-r1-c1",
+          "x": 42.0,
+          "y": 485.0,
+          "w": 185.0,
+          "h": 30.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        },
+        {
+          "id": "agricola-two-player-action-tile-r1-c2",
+          "x": 233.0,
+          "y": 485.0,
+          "w": 185.0,
+          "h": 30.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        },
+        {
+          "id": "agricola-two-player-action-tile-r2-c1",
+          "x": 42.0,
+          "y": 521.0,
+          "w": 185.0,
+          "h": 30.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-two-player-action-tile-r2-c2",
+          "x": 233.0,
+          "y": 521.0,
+          "w": 185.0,
+          "h": 30.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f7e4d4"
+        }
+      ],
+      "note": "공식 부록의 2인 선택 타일 네 칸. 설정에 따라 타일을 도입하지 않는 경우가 있어 선택 상태를 별도로 보존.",
+      "bounds": [
+        30,
+        477,
+        400,
+        82
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "three-four-action-tile",
+      "label": "3·4인 추가 타일 2칸",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-three-four-action-tile-r1-c1",
+          "x": 42.0,
+          "y": 575.0,
+          "w": 185.0,
+          "h": 56.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-three-four-action-tile-r1-c2",
+          "x": 233.0,
+          "y": 575.0,
+          "w": 185.0,
+          "h": 56.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        }
+      ],
+      "note": "3·4인용 추가 타일의 Animal Market·Modest Wish 선택 공간. 한 라운드에 타일 자체는 한 번만 사용 가능.",
+      "bounds": [
+        30,
+        568,
+        400,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "three-player-extension",
+      "label": "3인 추가 행동 공간",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-three-player-extension-r1-c1",
+          "x": 42.0,
+          "y": 655.0,
+          "w": 89.5,
+          "h": 61.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-three-player-extension-r1-c2",
+          "x": 137.5,
+          "y": 655.0,
+          "w": 89.5,
+          "h": 61.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        },
+        {
+          "id": "agricola-three-player-extension-r1-c3",
+          "x": 233.0,
+          "y": 655.0,
+          "w": 89.5,
+          "h": 61.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        },
+        {
+          "id": "agricola-three-player-extension-r1-c4",
+          "x": 328.5,
+          "y": 655.0,
+          "w": 89.5,
+          "h": 61.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f7e4d4"
+        }
+      ],
+      "note": "Grove·Hollow·Resource Market·Lessons(직업 비용 2 food)",
+      "bounds": [
+        30,
+        647,
+        400,
+        77
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "four-player-extension",
+      "label": "4인 추가 행동 공간",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "people",
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-four-player-extension-r1-c1",
+          "x": 42.0,
+          "y": 741.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-four-player-extension-r1-c2",
+          "x": 169.333333,
+          "y": 741.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e8f3dc"
+        },
+        {
+          "id": "agricola-four-player-extension-r1-c3",
+          "x": 296.666667,
+          "y": 741.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        },
+        {
+          "id": "agricola-four-player-extension-r2-c1",
+          "x": 42.0,
+          "y": 786.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#fff0c8"
+        },
+        {
+          "id": "agricola-four-player-extension-r2-c2",
+          "x": 169.333333,
+          "y": 786.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f7e4d4"
+        },
+        {
+          "id": "agricola-four-player-extension-r2-c3",
+          "x": 296.666667,
+          "y": 786.0,
+          "w": 121.333333,
+          "h": 39.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dce9f4"
+        }
+      ],
+      "note": "Copse·Grove·Hollow·Resource Market·Lessons·Traveling Players",
+      "bounds": [
+        30,
+        733,
+        400,
+        100
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "personal-stock",
+      "label": "개인 자원·사용 설비",
+      "field": "stock.scene",
+      "scope": "player",
+      "accepts": [
+        "goods",
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "자원 보유량과 이미 사용한 직업·보조/주요 설비를 배치하는 개인 영역. 용량 상한은 없으며 같은 종류의 자원은 수량으로 보존.",
+      "bounds": [
+        30,
+        842,
+        400,
+        128
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-1",
+      "label": "제1단계 · 1–4라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-1-r1-c1",
+          "x": 462.0,
+          "y": 35.0,
+          "w": 121.5,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-1-r1-c2",
+          "x": 588.5,
+          "y": 35.0,
+          "w": 121.5,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        },
+        {
+          "id": "agricola-stage-1-r1-c3",
+          "x": 715.0,
+          "y": 35.0,
+          "w": 121.5,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-1-r1-c4",
+          "x": 841.5,
+          "y": 35.0,
+          "w": 121.5,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        30,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-2",
+      "label": "제2단계 · 5–7라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-2-r1-c1",
+          "x": 462.0,
+          "y": 113.0,
+          "w": 163.666667,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-2-r1-c2",
+          "x": 630.666667,
+          "y": 113.0,
+          "w": 163.666667,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        },
+        {
+          "id": "agricola-stage-2-r1-c3",
+          "x": 799.333333,
+          "y": 113.0,
+          "w": 163.666667,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        108,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-3",
+      "label": "제3단계 · 8–9라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-3-r1-c1",
+          "x": 462.0,
+          "y": 191.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-3-r1-c2",
+          "x": 715.0,
+          "y": 191.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        186,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-4",
+      "label": "제4단계 · 10–11라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-4-r1-c1",
+          "x": 462.0,
+          "y": 269.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-4-r1-c2",
+          "x": 715.0,
+          "y": 269.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        264,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-5",
+      "label": "제5단계 · 12–13라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-5-r1-c1",
+          "x": 462.0,
+          "y": 347.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        },
+        {
+          "id": "agricola-stage-5-r1-c2",
+          "x": 715.0,
+          "y": 347.0,
+          "w": 248.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e7f3fa"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        342,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "stage-6",
+      "label": "제6단계 · 14라운드",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-stage-6-r1-c1",
+          "x": 462.0,
+          "y": 425.0,
+          "w": 501.0,
+          "h": 60.0,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#ffffff"
+        }
+      ],
+      "note": "Round card position; card face/identity and the worker/resource overlay are separate state.",
+      "bounds": [
+        455,
+        420,
+        515,
+        70
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "major-improvements",
+      "label": "공용 주요 설비 10장",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "agricola-major-improvements-r1-c1",
+          "x": 462.0,
+          "y": 518.0,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f2e1bb"
+        },
+        {
+          "id": "agricola-major-improvements-r1-c2",
+          "x": 563.2,
+          "y": 518.0,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#f2e1bb"
+        },
+        {
+          "id": "agricola-major-improvements-r1-c3",
+          "x": 664.4,
+          "y": 518.0,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e9d5b4"
+        },
+        {
+          "id": "agricola-major-improvements-r1-c4",
+          "x": 765.6,
+          "y": 518.0,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e9d5b4"
+        },
+        {
+          "id": "agricola-major-improvements-r1-c5",
+          "x": 866.8,
+          "y": 518.0,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#e9d5b4"
+        },
+        {
+          "id": "agricola-major-improvements-r2-c1",
+          "x": 462.0,
+          "y": 582.5,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfc28c"
+        },
+        {
+          "id": "agricola-major-improvements-r2-c2",
+          "x": 563.2,
+          "y": 582.5,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfc28c"
+        },
+        {
+          "id": "agricola-major-improvements-r2-c3",
+          "x": 664.4,
+          "y": 582.5,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfc28c"
+        },
+        {
+          "id": "agricola-major-improvements-r2-c4",
+          "x": 765.6,
+          "y": 582.5,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfc28c"
+        },
+        {
+          "id": "agricola-major-improvements-r2-c5",
+          "x": 866.8,
+          "y": 582.5,
+          "w": 96.2,
+          "h": 59.5,
+          "capacity": 1,
+          "shape": "rect",
+          "fill": "#dfc28c"
+        }
+      ],
+      "note": "개정판 기본판 주요 설비 10장. 실제 카드 종류는 구매/건설 후 개인 설비 영역으로 이동하며 공용 공급에서 제거.",
+      "bounds": [
+        455,
+        510,
+        515,
+        140
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "general-supply",
+      "label": "공용 자원 공급처",
+      "field": "actions.scene",
+      "scope": "public",
+      "accepts": [
+        "goods"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "공용 공급 자원 카테고리. 이 도식 아이콘은 수량을 나타내지 않으며 수량은 tableModel.generalSupply 기준.",
+      "bounds": [
+        455,
+        660,
+        515,
+        170
+      ],
+      "visibility": "public"
+    },
+    {
+      "id": "owner-hand",
+      "label": "개인 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "선택한 소유자에게만 보이는 직업/보조 설비 손패. 소유권과 카드 순서는 그대로 보존.",
+      "bounds": [
+        455,
+        842,
+        515,
+        128
+      ],
+      "visibility": "owner"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "1": {
+      "hideAreas": [
+        "two-player-action-tile",
+        "three-four-action-tile",
+        "three-player-extension",
+        "four-player-extension"
+      ]
+    },
+    "2": {
+      "hideAreas": [
+        "three-four-action-tile",
+        "three-player-extension",
+        "four-player-extension"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "two-player-action-tile",
+        "four-player-extension"
+      ]
+    },
+    "4": {
+      "hideAreas": [
+        "two-player-action-tile",
+        "three-player-extension"
+      ]
+    }
+  },
+  "notes": [
+    "Agricola Revised Edition (2016) base game, 1–4 players; not the 2007 five-player edition and not the 5–6 player expansion.",
+    "Dashed farm boundary marks indicate available fence placements only. The initial farm has no fences built.",
+    "Action card identities and resources accumulated on action spaces vary during play and are modeled as state rather than printed labels.",
+    "The SVG is an original neutral diagram and does not reproduce commercial Agricola artwork or card text.",
+    "Farm-cell geometry is fixed for the 15 printed spaces; fence state is represented on 38 independent boundaries so a later consumer can record enclosure topology without inventing a rectangular fixed pasture layout."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.lookout-spiele.de/upload/en_agricolare.html_Rules_Agricola-RE_EN.pdf",
+      "location": "Rules pp.2–4, Revised Edition 2016 setup/board/component description",
+      "verifiedFacts": "1–4 player base edition; 3×5 farmyard; 14 round cards grouped 4/3/2/2/2/1; 10 public major improvements; 5 family members, 4 stables and 15 fences per player; starting two wood rooms occupied by two people.",
+      "access": "downloaded-pdf-and-direct-page-view",
+      "checkedAt": "2026-10-30",
+      "pdfSHA256": "1aa612ed43bdde109a0bfff900cf9322bae02e5b53f4ee3fe9f37d264ca8bc70",
+      "pdfBytes": 4016686,
+      "privateSource": "/private/tmp/kb-realboards94/agricola/manual.pdf"
+    },
+    {
+      "url": "https://lookout-spiele.de/upload/en_agricolare.html_Appendix_Agricola-RE_EN.pdf",
+      "location": "Official appendix pp.6–7, action spaces and 2/3/4-player action-space variants",
+      "verifiedFacts": "Common accumulation/action-space identities and 2-player four-choice optional tile; 3/4-player supplemental two-action tile; 3-player and 4-player extension spaces and Lessons costs.",
+      "access": "official-pdf-opened-and-text-checked",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://lookout-spiele.de/upload/en_agricolare.html_Appendix_Agricola-RE_EN.pdf",
+      "location": "Official appendix pp.10–11, farm scoring/animal accommodation; rules pp.8–9",
+      "verifiedFacts": "15-cell farmyard; fences form closed pastures across cell edges; stable/pasture animal capacity and room pet capacity; crop/animal overlays remain farm-cell state.",
+      "access": "official-pdf-opened-and-text-checked",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://www.lookout-spiele.de/en/games/agricolare.html",
+      "location": "Official product page, revised edition edition/player-count clarification",
+      "verifiedFacts": "Revised 2016 base edition supports 1–4 players; five-player mode belongs to separate expansion.",
+      "access": "official-page-opened",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "assetScope": "Whole-table Agricola Revised Edition 2016 base game reference: farmyard, fence topology, public action spaces/round cards/major improvements, resource supply, personal stock, and owner-private hand zones.",
+  "tableModel": {
+    "schema": "keepboard.real-board.asset.v1",
+    "gameId": "agricola",
+    "edition": {
+      "name": "Agricola Revised Edition 2016",
+      "playerCount": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "baseGameOnly": true
+    },
+    "purpose": "Self-contained visual/state reference for a later consumer. Contains board geometry and semantic state coordinates; it does not implement rules, validation, or an application editor.",
+    "coordinates": {
+      "unit": "board.svg viewBox units",
+      "origin": "top-left",
+      "box": "[x,y,width,height]",
+      "farmCellId": "r{row}c{column}, row-major, 1-based"
+    },
+    "tableAreas": [
+      {
+        "id": "farm-tiles",
+        "field": "farm-area.scene",
+        "scope": "player",
+        "visibility": "public",
+        "semantics": "15 fixed farm cells with overlaid room/field/pasture tile states, occupants, animals, crops, stable and fence-boundary references."
+      },
+      {
+        "id": "base-actions",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "10 public common action spaces; a family member and any accumulated resources are separate overlapping state layers."
+      },
+      {
+        "id": "two-player-action-tile",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Optional four-space 2-player variant tile; tile-use lock and selected action are distinct state."
+      },
+      {
+        "id": "three-four-action-tile",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Optional shared two-space tile for 3-/4-player modes; one tile use per round."
+      },
+      {
+        "id": "three-player-extension",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Four 3-player action spaces."
+      },
+      {
+        "id": "four-player-extension",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Six 4-player action spaces."
+      },
+      {
+        "id": "personal-stock",
+        "field": "stock.scene",
+        "scope": "player",
+        "visibility": "public",
+        "semantics": "Player-scoped resources and played occupation/improvement cards; no fixed storage capacity."
+      },
+      {
+        "id": "stage-1",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Four public round-card positions for rounds 1–4."
+      },
+      {
+        "id": "stage-2",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Three public round-card positions for rounds 5–7."
+      },
+      {
+        "id": "stage-3",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Two public round-card positions for rounds 8–9."
+      },
+      {
+        "id": "stage-4",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Two public round-card positions for rounds 10–11."
+      },
+      {
+        "id": "stage-5",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Two public round-card positions for rounds 12–13."
+      },
+      {
+        "id": "stage-6",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "One public round-card position for round 14."
+      },
+      {
+        "id": "major-improvements",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Ten public major improvement cards; selected card identity moves to an owning player tableau when built."
+      },
+      {
+        "id": "general-supply",
+        "field": "actions.scene",
+        "scope": "public",
+        "visibility": "public",
+        "semantics": "Shared resource supply; pictograms indicate categories only and do not encode remaining count."
+      },
+      {
+        "id": "owner-hand",
+        "field": "hand.scene",
+        "scope": "player",
+        "visibility": "owner",
+        "semantics": "Owner-private occupation/minor-improvement cards and their order."
+      }
+    ],
+    "farm": {
+      "areaId": "farm-tiles",
+      "rows": 3,
+      "columns": 5,
+      "cells": [
+        {
+          "id": "r1c1",
+          "slotId": "agricola-farm-tiles-r1-c1",
+          "row": 1,
+          "column": 1,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            55,
+            55,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r1c2",
+          "slotId": "agricola-farm-tiles-r1-c2",
+          "row": 1,
+          "column": 2,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            127,
+            55,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r1c3",
+          "slotId": "agricola-farm-tiles-r1-c3",
+          "row": 1,
+          "column": 3,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            199,
+            55,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r1c4",
+          "slotId": "agricola-farm-tiles-r1-c4",
+          "row": 1,
+          "column": 4,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            271,
+            55,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r1c5",
+          "slotId": "agricola-farm-tiles-r1-c5",
+          "row": 1,
+          "column": 5,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            343,
+            55,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r2c1",
+          "slotId": "agricola-farm-tiles-r2-c1",
+          "row": 2,
+          "column": 1,
+          "initialTile": "wood-room",
+          "initialOccupant": "family-member",
+          "box": [
+            55,
+            125,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r2c2",
+          "slotId": "agricola-farm-tiles-r2-c2",
+          "row": 2,
+          "column": 2,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            127,
+            125,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r2c3",
+          "slotId": "agricola-farm-tiles-r2-c3",
+          "row": 2,
+          "column": 3,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            199,
+            125,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r2c4",
+          "slotId": "agricola-farm-tiles-r2-c4",
+          "row": 2,
+          "column": 4,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            271,
+            125,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r2c5",
+          "slotId": "agricola-farm-tiles-r2-c5",
+          "row": 2,
+          "column": 5,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            343,
+            125,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r3c1",
+          "slotId": "agricola-farm-tiles-r3-c1",
+          "row": 3,
+          "column": 1,
+          "initialTile": "wood-room",
+          "initialOccupant": "family-member",
+          "box": [
+            55,
+            195,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r3c2",
+          "slotId": "agricola-farm-tiles-r3-c2",
+          "row": 3,
+          "column": 2,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            127,
+            195,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r3c3",
+          "slotId": "agricola-farm-tiles-r3-c3",
+          "row": 3,
+          "column": 3,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            199,
+            195,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r3c4",
+          "slotId": "agricola-farm-tiles-r3-c4",
+          "row": 3,
+          "column": 4,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            271,
+            195,
+            72,
+            70
+          ]
+        },
+        {
+          "id": "r3c5",
+          "slotId": "agricola-farm-tiles-r3-c5",
+          "row": 3,
+          "column": 5,
+          "initialTile": "empty-farmyard",
+          "initialOccupant": null,
+          "box": [
+            343,
+            195,
+            72,
+            70
+          ]
+        }
+      ],
+      "tileStates": [
+        "wood-room",
+        "clay-room",
+        "stone-room",
+        "field",
+        "empty-farmyard"
+      ],
+      "overlayStates": [
+        "family-member",
+        "fence-enclosure",
+        "pasture-id",
+        "stable",
+        "sheep",
+        "wild-boar",
+        "cattle",
+        "grain-crop",
+        "vegetable-crop"
+      ],
+      "fenceEdges": [
+        {
+          "id": "v-r1-c1",
+          "orientation": "vertical",
+          "x1": 55,
+          "y1": 55,
+          "x2": 55,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c1"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r1-c2",
+          "orientation": "vertical",
+          "x1": 127,
+          "y1": 55,
+          "x2": 127,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c1",
+            "r1c2"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r1-c3",
+          "orientation": "vertical",
+          "x1": 199,
+          "y1": 55,
+          "x2": 199,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c2",
+            "r1c3"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r1-c4",
+          "orientation": "vertical",
+          "x1": 271,
+          "y1": 55,
+          "x2": 271,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c3",
+            "r1c4"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r1-c5",
+          "orientation": "vertical",
+          "x1": 343,
+          "y1": 55,
+          "x2": 343,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c4",
+            "r1c5"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r1-c6",
+          "orientation": "vertical",
+          "x1": 415,
+          "y1": 55,
+          "x2": 415,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c5"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c1",
+          "orientation": "vertical",
+          "x1": 55,
+          "y1": 125,
+          "x2": 55,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c1"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c2",
+          "orientation": "vertical",
+          "x1": 127,
+          "y1": 125,
+          "x2": 127,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c1",
+            "r2c2"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c3",
+          "orientation": "vertical",
+          "x1": 199,
+          "y1": 125,
+          "x2": 199,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c2",
+            "r2c3"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c4",
+          "orientation": "vertical",
+          "x1": 271,
+          "y1": 125,
+          "x2": 271,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c3",
+            "r2c4"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c5",
+          "orientation": "vertical",
+          "x1": 343,
+          "y1": 125,
+          "x2": 343,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c4",
+            "r2c5"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r2-c6",
+          "orientation": "vertical",
+          "x1": 415,
+          "y1": 125,
+          "x2": 415,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c5"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c1",
+          "orientation": "vertical",
+          "x1": 55,
+          "y1": 195,
+          "x2": 55,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c1"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c2",
+          "orientation": "vertical",
+          "x1": 127,
+          "y1": 195,
+          "x2": 127,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c1",
+            "r3c2"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c3",
+          "orientation": "vertical",
+          "x1": 199,
+          "y1": 195,
+          "x2": 199,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c2",
+            "r3c3"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c4",
+          "orientation": "vertical",
+          "x1": 271,
+          "y1": 195,
+          "x2": 271,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c3",
+            "r3c4"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c5",
+          "orientation": "vertical",
+          "x1": 343,
+          "y1": 195,
+          "x2": 343,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c4",
+            "r3c5"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "v-r3-c6",
+          "orientation": "vertical",
+          "x1": 415,
+          "y1": 195,
+          "x2": 415,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c5"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r1-c1",
+          "orientation": "horizontal",
+          "x1": 55,
+          "y1": 55,
+          "x2": 127,
+          "y2": 55,
+          "adjacentCells": [
+            "r1c1"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r1-c2",
+          "orientation": "horizontal",
+          "x1": 127,
+          "y1": 55,
+          "x2": 199,
+          "y2": 55,
+          "adjacentCells": [
+            "r1c2"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r1-c3",
+          "orientation": "horizontal",
+          "x1": 199,
+          "y1": 55,
+          "x2": 271,
+          "y2": 55,
+          "adjacentCells": [
+            "r1c3"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r1-c4",
+          "orientation": "horizontal",
+          "x1": 271,
+          "y1": 55,
+          "x2": 343,
+          "y2": 55,
+          "adjacentCells": [
+            "r1c4"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r1-c5",
+          "orientation": "horizontal",
+          "x1": 343,
+          "y1": 55,
+          "x2": 415,
+          "y2": 55,
+          "adjacentCells": [
+            "r1c5"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r2-c1",
+          "orientation": "horizontal",
+          "x1": 55,
+          "y1": 125,
+          "x2": 127,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c1",
+            "r2c1"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r2-c2",
+          "orientation": "horizontal",
+          "x1": 127,
+          "y1": 125,
+          "x2": 199,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c2",
+            "r2c2"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r2-c3",
+          "orientation": "horizontal",
+          "x1": 199,
+          "y1": 125,
+          "x2": 271,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c3",
+            "r2c3"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r2-c4",
+          "orientation": "horizontal",
+          "x1": 271,
+          "y1": 125,
+          "x2": 343,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c4",
+            "r2c4"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r2-c5",
+          "orientation": "horizontal",
+          "x1": 343,
+          "y1": 125,
+          "x2": 415,
+          "y2": 125,
+          "adjacentCells": [
+            "r1c5",
+            "r2c5"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r3-c1",
+          "orientation": "horizontal",
+          "x1": 55,
+          "y1": 195,
+          "x2": 127,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c1",
+            "r3c1"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r3-c2",
+          "orientation": "horizontal",
+          "x1": 127,
+          "y1": 195,
+          "x2": 199,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c2",
+            "r3c2"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r3-c3",
+          "orientation": "horizontal",
+          "x1": 199,
+          "y1": 195,
+          "x2": 271,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c3",
+            "r3c3"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r3-c4",
+          "orientation": "horizontal",
+          "x1": 271,
+          "y1": 195,
+          "x2": 343,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c4",
+            "r3c4"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r3-c5",
+          "orientation": "horizontal",
+          "x1": 343,
+          "y1": 195,
+          "x2": 415,
+          "y2": 195,
+          "adjacentCells": [
+            "r2c5",
+            "r3c5"
+          ],
+          "perimeter": false,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r4-c1",
+          "orientation": "horizontal",
+          "x1": 55,
+          "y1": 265,
+          "x2": 127,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c1"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r4-c2",
+          "orientation": "horizontal",
+          "x1": 127,
+          "y1": 265,
+          "x2": 199,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c2"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r4-c3",
+          "orientation": "horizontal",
+          "x1": 199,
+          "y1": 265,
+          "x2": 271,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c3"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r4-c4",
+          "orientation": "horizontal",
+          "x1": 271,
+          "y1": 265,
+          "x2": 343,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c4"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        },
+        {
+          "id": "h-r4-c5",
+          "orientation": "horizontal",
+          "x1": 343,
+          "y1": 265,
+          "x2": 415,
+          "y2": 265,
+          "adjacentCells": [
+            "r3c5"
+          ],
+          "perimeter": true,
+          "initialState": "unbuilt"
+        }
+      ],
+      "fenceCountPerPlayer": 15,
+      "stableCountPerPlayer": 4,
+      "familyMemberCountPerPlayer": 5,
+      "initialSetup": {
+        "woodRooms": [
+          "r2c1",
+          "r3c1"
+        ],
+        "occupiedByFamilyMembers": 2,
+        "remainingFamilyMembersInSupply": 3,
+        "fencesBuilt": 0,
+        "stablesBuilt": 0
+      },
+      "pastureSemantics": {
+        "mustBeFullyEnclosed": true,
+        "pastureIsAConnectedSetOfFarmCells": true,
+        "animalsPerPastureCell": 2,
+        "stableDoublesCapacityForItsCell": true,
+        "outsidePastureAnimalCapacityPerFarmCell": 1,
+        "roomPetCapacity": 1,
+        "fenceEdgesAreIndependentOfFarmTileContents": true
+      }
+    },
+    "actions": {
+      "areaId": "base-actions",
+      "commonSpaces": [
+        {
+          "id": "forest",
+          "label": "Forest",
+          "slotId": "agricola-base-actions-r1-c1",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "clay-pit",
+          "label": "Clay Pit",
+          "slotId": "agricola-base-actions-r1-c2",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "reed-bank",
+          "label": "Reed Bank",
+          "slotId": "agricola-base-actions-r1-c3",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "fishing",
+          "label": "Fishing",
+          "slotId": "agricola-base-actions-r1-c4",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "day-laborer",
+          "label": "Day Laborer",
+          "slotId": "agricola-base-actions-r1-c5",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "grain-seeds",
+          "label": "Grain Seeds",
+          "slotId": "agricola-base-actions-r2-c1",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "farmland",
+          "label": "Farmland",
+          "slotId": "agricola-base-actions-r2-c2",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "meeting-place",
+          "label": "Meeting Place",
+          "slotId": "agricola-base-actions-r2-c3",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "lessons",
+          "label": "Lessons",
+          "slotId": "agricola-base-actions-r2-c4",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        },
+        {
+          "id": "farm-expansion",
+          "label": "Farm Expansion",
+          "slotId": "agricola-base-actions-r2-c5",
+          "workerCapacity": 1,
+          "resourceOverlay": "accumulating-or-empty"
+        }
+      ],
+      "roundCardPositions": [
+        {
+          "round": 1,
+          "stage": 1,
+          "slotId": "agricola-stage-1-r1-c1"
+        },
+        {
+          "round": 2,
+          "stage": 1,
+          "slotId": "agricola-stage-1-r1-c2"
+        },
+        {
+          "round": 3,
+          "stage": 1,
+          "slotId": "agricola-stage-1-r1-c3"
+        },
+        {
+          "round": 4,
+          "stage": 1,
+          "slotId": "agricola-stage-1-r1-c4"
+        },
+        {
+          "round": 5,
+          "stage": 2,
+          "slotId": "agricola-stage-2-r1-c1"
+        },
+        {
+          "round": 6,
+          "stage": 2,
+          "slotId": "agricola-stage-2-r1-c2"
+        },
+        {
+          "round": 7,
+          "stage": 2,
+          "slotId": "agricola-stage-2-r1-c3"
+        },
+        {
+          "round": 8,
+          "stage": 3,
+          "slotId": "agricola-stage-3-r1-c1"
+        },
+        {
+          "round": 9,
+          "stage": 3,
+          "slotId": "agricola-stage-3-r1-c2"
+        },
+        {
+          "round": 10,
+          "stage": 4,
+          "slotId": "agricola-stage-4-r1-c1"
+        },
+        {
+          "round": 11,
+          "stage": 4,
+          "slotId": "agricola-stage-4-r1-c2"
+        },
+        {
+          "round": 12,
+          "stage": 5,
+          "slotId": "agricola-stage-5-r1-c1"
+        },
+        {
+          "round": 13,
+          "stage": 5,
+          "slotId": "agricola-stage-5-r1-c2"
+        },
+        {
+          "round": 14,
+          "stage": 6,
+          "slotId": "agricola-stage-6-r1-c1"
+        }
+      ],
+      "stages": [
+        {
+          "stage": 1,
+          "rounds": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "stage": 2,
+          "rounds": [
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "stage": 3,
+          "rounds": [
+            8,
+            9
+          ]
+        },
+        {
+          "stage": 4,
+          "rounds": [
+            10,
+            11
+          ]
+        },
+        {
+          "stage": 5,
+          "rounds": [
+            12,
+            13
+          ]
+        },
+        {
+          "stage": 6,
+          "rounds": [
+            14
+          ]
+        }
+      ],
+      "harvestAfterRounds": [
+        4,
+        7,
+        9,
+        11,
+        13,
+        14
+      ],
+      "twoPlayerVariant": {
+        "optional": true,
+        "areaId": "two-player-action-tile",
+        "spaces": [
+          {
+            "id": "copse",
+            "label": "Copse",
+            "slotId": "agricola-two-player-action-tile-r1-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "resource-market",
+            "label": "Resource Market",
+            "slotId": "agricola-two-player-action-tile-r1-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "animal-market",
+            "label": "Animal Market",
+            "slotId": "agricola-two-player-action-tile-r2-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "modest-wish",
+            "label": "Modest Wish for Children",
+            "slotId": "agricola-two-player-action-tile-r2-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          }
+        ],
+        "tileUse": "A player selects one of four spaces; the supplemental tile is blocked for the rest of that round."
+      },
+      "threeFourSupplementalTile": {
+        "optional": true,
+        "areaId": "three-four-action-tile",
+        "spaces": [
+          {
+            "id": "animal-market",
+            "label": "Animal Market",
+            "slotId": "agricola-three-four-action-tile-r1-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "modest-wish",
+            "label": "Modest Wish for Children",
+            "slotId": "agricola-three-four-action-tile-r1-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          }
+        ],
+        "tileUse": "Only one person may use this tile each round."
+      },
+      "threePlayerExtension": {
+        "areaId": "three-player-extension",
+        "spaces": [
+          {
+            "id": "grove",
+            "label": "Grove",
+            "slotId": "agricola-three-player-extension-r1-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "hollow",
+            "label": "Hollow",
+            "slotId": "agricola-three-player-extension-r1-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "resource-market",
+            "label": "Resource Market",
+            "slotId": "agricola-three-player-extension-r1-c3",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "lessons",
+            "label": "Lessons",
+            "slotId": "agricola-three-player-extension-r1-c4",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          }
+        ]
+      },
+      "fourPlayerExtension": {
+        "areaId": "four-player-extension",
+        "spaces": [
+          {
+            "id": "copse",
+            "label": "Copse",
+            "slotId": "agricola-four-player-extension-r1-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "grove",
+            "label": "Grove",
+            "slotId": "agricola-four-player-extension-r1-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "hollow",
+            "label": "Hollow",
+            "slotId": "agricola-four-player-extension-r1-c3",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "resource-market",
+            "label": "Resource Market",
+            "slotId": "agricola-four-player-extension-r2-c1",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "lessons",
+            "label": "Lessons",
+            "slotId": "agricola-four-player-extension-r2-c2",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          },
+          {
+            "id": "traveling-players",
+            "label": "Traveling Players",
+            "slotId": "agricola-four-player-extension-r2-c3",
+            "workerCapacity": 1,
+            "resourceOverlay": "where-action-accumulates"
+          }
+        ]
+      },
+      "actionState": {
+        "workerPlacement": "one family member per action space per round",
+        "resourceAccumulation": "store a collection of independently countable resource tokens on marked accumulation spaces",
+        "roundCard": "round card identity/face state is independent from worker/resource overlay",
+        "harvest": "preserve each harvest checkpoint and any in-progress phase marker"
+      }
+    },
+    "majorImprovements": {
+      "areaId": "major-improvements",
+      "publicSupply": true,
+      "cards": [
+        {
+          "id": "fireplace-2",
+          "label": "Fireplace (cost 2)",
+          "slotId": "agricola-major-improvements-r1-c1",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "fireplace-3",
+          "label": "Fireplace (cost 3)",
+          "slotId": "agricola-major-improvements-r1-c2",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "cooking-hearth-4",
+          "label": "Cooking Hearth (cost 4)",
+          "slotId": "agricola-major-improvements-r1-c3",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "cooking-hearth-5",
+          "label": "Cooking Hearth (cost 5)",
+          "slotId": "agricola-major-improvements-r1-c4",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "clay-oven",
+          "label": "Clay Oven",
+          "slotId": "agricola-major-improvements-r1-c5",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "stone-oven",
+          "label": "Stone Oven",
+          "slotId": "agricola-major-improvements-r2-c1",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "joinery",
+          "label": "Joinery",
+          "slotId": "agricola-major-improvements-r2-c2",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "pottery",
+          "label": "Pottery",
+          "slotId": "agricola-major-improvements-r2-c3",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "basketmaker-workshop",
+          "label": "Basketmaker's Workshop",
+          "slotId": "agricola-major-improvements-r2-c4",
+          "state": "public-or-built-by-player"
+        },
+        {
+          "id": "well",
+          "label": "Well",
+          "slotId": "agricola-major-improvements-r2-c5",
+          "state": "public-or-built-by-player"
+        }
+      ],
+      "total": 10,
+      "cardIdentityMustBePreserved": true
+    },
+    "playerTableau": {
+      "stockAreaId": "personal-stock",
+      "handAreaId": "owner-hand",
+      "initialHand": {
+        "occupations": 7,
+        "minorImprovements": 7
+      },
+      "playedCards": {
+        "occupations": "face-up, owner tableau",
+        "minorImprovements": "face-up, owner tableau",
+        "majorImprovements": "face-up, owner tableau"
+      },
+      "fields": "A player's hand remains owner-private; played cards and stock belong to that player.",
+      "handVisibility": "owner-private"
+    },
+    "generalSupply": {
+      "areaId": "general-supply",
+      "quantities": {
+        "wood": 30,
+        "clay": 24,
+        "reed": 14,
+        "stone": 16,
+        "grain": 24,
+        "vegetables": 16,
+        "sheep": 18,
+        "wildBoar": 15,
+        "cattle": 13,
+        "foodTokens1": 36,
+        "foodTokens5": 8
+      },
+      "quantityMeaning": "Official Revised base-game component quantities; tokens in the supply can be depleted and returned during play."
+    },
+    "playerCounts": {
+      "1": {
+        "hideAreas": [
+          "two-player-action-tile",
+          "three-four-action-tile",
+          "three-player-extension",
+          "four-player-extension"
+        ]
+      },
+      "2": {
+        "hideAreas": [
+          "three-four-action-tile",
+          "three-player-extension",
+          "four-player-extension"
+        ]
+      },
+      "3": {
+        "hideAreas": [
+          "two-player-action-tile",
+          "four-player-extension"
+        ]
+      },
+      "4": {
+        "hideAreas": [
+          "two-player-action-tile",
+          "three-player-extension"
+        ]
+      }
+    },
+    "visualModel": {
+      "farmCells": "15 square cells with individually addressable edges",
+      "fenceEdges": "38 distinct dashed placement guides; all start unbuilt",
+      "actionSpaces": "colored neutral card-like slots; action identity is bound by stable slotId in this JSON",
+      "cardZones": "round cards and public major-improvement supply have fixed positions; identities/face state are data",
+      "supplyPictograms": "category indicators only; they do not encode remaining quantity",
+      "majorImprovements": "Ten separate card slots, each with an original neutral facility/tool pictogram; exact card identity is bound by stable slotId in this model."
+    },
+    "limits": [
+      "This is a complete static board asset and declarative table-state schema; it does not include application integration or a game-rules engine.",
+      "This package is a whole-board asset and semantic layout only; no app integration or game-rules engine is included.",
+      "The two-player supplemental action tile and 3-/4-player supplemental tile are optional setup variants documented in the official appendix.",
+      "Occupation/minor-improvement decks and hands are variable; the asset reserves semantic hand/played-card zones rather than fixed card identities.",
+      "No extension deck, five-/six-player expansion, or optional Side Job tile is included."
+    ]
+  },
+  "assetCompleteness": "whole-table-static-layout-with-editable-farm-edge-topology-and-player-count-action-modules",
+  "boardArt": [
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c1",
+      "x1": 55,
+      "y1": 55,
+      "x2": 55,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c2",
+      "x1": 127,
+      "y1": 55,
+      "x2": 127,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c3",
+      "x1": 199,
+      "y1": 55,
+      "x2": 199,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c4",
+      "x1": 271,
+      "y1": 55,
+      "x2": 271,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c5",
+      "x1": 343,
+      "y1": 55,
+      "x2": 343,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r1-c6",
+      "x1": 415,
+      "y1": 55,
+      "x2": 415,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c1",
+      "x1": 55,
+      "y1": 125,
+      "x2": 55,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c2",
+      "x1": 127,
+      "y1": 125,
+      "x2": 127,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c3",
+      "x1": 199,
+      "y1": 125,
+      "x2": 199,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c4",
+      "x1": 271,
+      "y1": 125,
+      "x2": 271,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c5",
+      "x1": 343,
+      "y1": 125,
+      "x2": 343,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r2-c6",
+      "x1": 415,
+      "y1": 125,
+      "x2": 415,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c1",
+      "x1": 55,
+      "y1": 195,
+      "x2": 55,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c2",
+      "x1": 127,
+      "y1": 195,
+      "x2": 127,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c3",
+      "x1": 199,
+      "y1": 195,
+      "x2": 199,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c4",
+      "x1": 271,
+      "y1": 195,
+      "x2": 271,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c5",
+      "x1": 343,
+      "y1": 195,
+      "x2": 343,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-v-r3-c6",
+      "x1": 415,
+      "y1": 195,
+      "x2": 415,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r1-c1",
+      "x1": 55,
+      "y1": 55,
+      "x2": 127,
+      "y2": 55,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r1-c2",
+      "x1": 127,
+      "y1": 55,
+      "x2": 199,
+      "y2": 55,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r1-c3",
+      "x1": 199,
+      "y1": 55,
+      "x2": 271,
+      "y2": 55,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r1-c4",
+      "x1": 271,
+      "y1": 55,
+      "x2": 343,
+      "y2": 55,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r1-c5",
+      "x1": 343,
+      "y1": 55,
+      "x2": 415,
+      "y2": 55,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r2-c1",
+      "x1": 55,
+      "y1": 125,
+      "x2": 127,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r2-c2",
+      "x1": 127,
+      "y1": 125,
+      "x2": 199,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r2-c3",
+      "x1": 199,
+      "y1": 125,
+      "x2": 271,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r2-c4",
+      "x1": 271,
+      "y1": 125,
+      "x2": 343,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r2-c5",
+      "x1": 343,
+      "y1": 125,
+      "x2": 415,
+      "y2": 125,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r3-c1",
+      "x1": 55,
+      "y1": 195,
+      "x2": 127,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r3-c2",
+      "x1": 127,
+      "y1": 195,
+      "x2": 199,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r3-c3",
+      "x1": 199,
+      "y1": 195,
+      "x2": 271,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r3-c4",
+      "x1": 271,
+      "y1": 195,
+      "x2": 343,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r3-c5",
+      "x1": 343,
+      "y1": 195,
+      "x2": 415,
+      "y2": 195,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r4-c1",
+      "x1": 55,
+      "y1": 265,
+      "x2": 127,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r4-c2",
+      "x1": 127,
+      "y1": 265,
+      "x2": 199,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r4-c3",
+      "x1": 199,
+      "y1": 265,
+      "x2": 271,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r4-c4",
+      "x1": 271,
+      "y1": 265,
+      "x2": 343,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "line",
+      "id": "farm-fence-h-r4-c5",
+      "x1": 343,
+      "y1": 265,
+      "x2": 415,
+      "y2": 265,
+      "stroke": "#74846e",
+      "strokeWidth": 2.5,
+      "strokeOpacity": 0.72,
+      "strokeDasharray": "5 5"
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-wood",
+      "cx": 510,
+      "cy": 706,
+      "r": 25,
+      "fill": "#a77c50",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-clay",
+      "cx": 610,
+      "cy": 706,
+      "r": 25,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-reed",
+      "cx": 710,
+      "cy": 706,
+      "r": 25,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-stone",
+      "cx": 810,
+      "cy": 706,
+      "r": 25,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-food",
+      "cx": 910,
+      "cy": 706,
+      "r": 25,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-grain",
+      "cx": 560,
+      "cy": 780,
+      "r": 25,
+      "fill": "#e5b82e",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-vegetable",
+      "cx": 660,
+      "cy": 780,
+      "r": 25,
+      "fill": "#f69b46",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-sheep",
+      "cx": 760,
+      "cy": 780,
+      "r": 25,
+      "fill": "#e9e2d4",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-boar",
+      "cx": 860,
+      "cy": 780,
+      "r": 25,
+      "fill": "#b77a55",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "supply-icon-cattle",
+      "cx": 940,
+      "cy": 780,
+      "r": 25,
+      "fill": "#5e7187",
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "polygon",
+      "id": "farm-start-room-roof-r2",
+      "points": [
+        [
+          76,
+          154
+        ],
+        [
+          91,
+          141
+        ],
+        [
+          106,
+          154
+        ]
+      ],
+      "fill": "#8b512e",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "farm-start-room-door-r2",
+      "x": 85,
+      "y": 153,
+      "w": 12,
+      "h": 22,
+      "fill": "#f4e3cf",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 2
+    },
+    {
+      "type": "polygon",
+      "id": "farm-start-room-roof-r3",
+      "points": [
+        [
+          76,
+          224
+        ],
+        [
+          91,
+          211
+        ],
+        [
+          106,
+          224
+        ]
+      ],
+      "fill": "#8b512e",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "farm-start-room-door-r3",
+      "x": 85,
+      "y": 223,
+      "w": 12,
+      "h": 22,
+      "fill": "#f4e3cf",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 2
+    },
+    {
+      "type": "polygon",
+      "id": "action-icon-01-tree",
+      "points": [
+        [
+          67.2,
+          362
+        ],
+        [
+          77.2,
+          345
+        ],
+        [
+          87.2,
+          362
+        ]
+      ],
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "action-icon-01-trunk",
+      "x1": 77.2,
+      "y1": 362,
+      "x2": 77.2,
+      "y2": 376,
+      "stroke": "#8b5e3c",
+      "strokeWidth": 4
+    },
+    {
+      "type": "polygon",
+      "id": "action-icon-02-clay",
+      "points": [
+        [
+          140.6,
+          374
+        ],
+        [
+          145.6,
+          357
+        ],
+        [
+          156.6,
+          349
+        ],
+        [
+          167.6,
+          360
+        ],
+        [
+          164.6,
+          374
+        ]
+      ],
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "action-icon-03-reed-0",
+      "x1": 223.0,
+      "y1": 377,
+      "x2": 221.0,
+      "y2": 350,
+      "stroke": "#46aa6a",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "action-icon-03-reed-1",
+      "x1": 230.0,
+      "y1": 377,
+      "x2": 230.0,
+      "y2": 350,
+      "stroke": "#46aa6a",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "action-icon-03-reed-2",
+      "x1": 237.0,
+      "y1": 377,
+      "x2": 239.0,
+      "y2": 350,
+      "stroke": "#46aa6a",
+      "strokeWidth": 3
+    },
+    {
+      "type": "polyline",
+      "id": "action-icon-04-wave-0",
+      "points": [
+        [
+          292.4,
+          358
+        ],
+        [
+          299.4,
+          355
+        ],
+        [
+          306.4,
+          358
+        ],
+        [
+          313.4,
+          355
+        ],
+        [
+          320.4,
+          358
+        ]
+      ],
+      "stroke": "#3388dd",
+      "strokeWidth": 2
+    },
+    {
+      "type": "polyline",
+      "id": "action-icon-04-wave-1",
+      "points": [
+        [
+          292.4,
+          365
+        ],
+        [
+          299.4,
+          362
+        ],
+        [
+          306.4,
+          365
+        ],
+        [
+          313.4,
+          362
+        ],
+        [
+          320.4,
+          365
+        ]
+      ],
+      "stroke": "#3388dd",
+      "strokeWidth": 2
+    },
+    {
+      "type": "polyline",
+      "id": "action-icon-04-wave-2",
+      "points": [
+        [
+          292.4,
+          372
+        ],
+        [
+          299.4,
+          369
+        ],
+        [
+          306.4,
+          372
+        ],
+        [
+          313.4,
+          369
+        ],
+        [
+          320.4,
+          372
+        ]
+      ],
+      "stroke": "#3388dd",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-05-head",
+      "cx": 382.8,
+      "cy": 355,
+      "r": 5,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "action-icon-05-body",
+      "x": 375.8,
+      "y": 361,
+      "w": 14,
+      "h": 18,
+      "fill": "#3388dd",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "type": "line",
+      "id": "action-icon-06-stem",
+      "x1": 77.2,
+      "y1": 443,
+      "x2": 77.2,
+      "y2": 414,
+      "stroke": "#7d963d",
+      "strokeWidth": 3
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-06-seed-0",
+      "cx": 71.2,
+      "cy": 421,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-06-seed-1",
+      "cx": 83.2,
+      "cy": 416,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-06-seed-2",
+      "cx": 71.2,
+      "cy": 429,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-06-seed-3",
+      "cx": 83.2,
+      "cy": 433,
+      "r": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "rect",
+      "id": "action-icon-07-field",
+      "x": 139.6,
+      "y": 417,
+      "w": 28,
+      "h": 22,
+      "fill": "#c8a661",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 1
+    },
+    {
+      "type": "line",
+      "id": "action-icon-07-furrow--6",
+      "x1": 147.6,
+      "y1": 419,
+      "x2": 147.6,
+      "y2": 437,
+      "stroke": "#7c6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "action-icon-07-furrow-0",
+      "x1": 153.6,
+      "y1": 419,
+      "x2": 153.6,
+      "y2": 437,
+      "stroke": "#7c6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "action-icon-07-furrow-6",
+      "x1": 159.6,
+      "y1": 419,
+      "x2": 159.6,
+      "y2": 437,
+      "stroke": "#7c6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-08-person-a",
+      "cx": 223.0,
+      "cy": 424,
+      "r": 5,
+      "fill": "#3388dd",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "action-icon-08-person-b",
+      "cx": 237.0,
+      "cy": 424,
+      "r": 5,
+      "fill": "#e65b55",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "action-icon-08-table",
+      "x1": 217.0,
+      "y1": 437,
+      "x2": 243.0,
+      "y2": 437,
+      "stroke": "#8b5e3c",
+      "strokeWidth": 3
+    },
+    {
+      "type": "rect",
+      "id": "action-icon-09-scroll",
+      "x": 296.4,
+      "y": 414,
+      "w": 20,
+      "h": 28,
+      "fill": "#fff7df",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "type": "line",
+      "id": "action-icon-09-textline-0",
+      "x1": 300.4,
+      "y1": 422,
+      "x2": 312.4,
+      "y2": 422,
+      "stroke": "#7b6334",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "line",
+      "id": "action-icon-09-textline-1",
+      "x1": 300.4,
+      "y1": 428,
+      "x2": 312.4,
+      "y2": 428,
+      "stroke": "#7b6334",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "line",
+      "id": "action-icon-09-textline-2",
+      "x1": 300.4,
+      "y1": 434,
+      "x2": 312.4,
+      "y2": 434,
+      "stroke": "#7b6334",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "polygon",
+      "id": "action-icon-10-roof",
+      "points": [
+        [
+          368.8,
+          426
+        ],
+        [
+          382.8,
+          413
+        ],
+        [
+          396.8,
+          426
+        ]
+      ],
+      "fill": "#b97742",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "action-icon-10-house",
+      "x": 372.8,
+      "y": 426,
+      "w": 20,
+      "h": 17,
+      "fill": "#f3e7d4",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 1
+    },
+    {
+      "type": "circle",
+      "id": "two-player-action-tile-action-marker-1",
+      "cx": 134.5,
+      "cy": 500,
+      "r": 8,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "two-player-action-tile-action-marker-2",
+      "cx": 333.5,
+      "cy": 500,
+      "r": 8,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "two-player-action-tile-action-marker-3",
+      "cx": 134.5,
+      "cy": 533,
+      "r": 8,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "two-player-action-tile-action-marker-4",
+      "cx": 333.5,
+      "cy": 533,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-four-action-tile-action-marker-1",
+      "cx": 134.5,
+      "cy": 603,
+      "r": 8,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-four-action-tile-action-marker-2",
+      "cx": 333.5,
+      "cy": 603,
+      "r": 8,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-player-extension-action-marker-1",
+      "cx": 86.75,
+      "cy": 685.5,
+      "r": 8,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-player-extension-action-marker-2",
+      "cx": 182.25,
+      "cy": 685.5,
+      "r": 8,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-player-extension-action-marker-3",
+      "cx": 277.75,
+      "cy": 685.5,
+      "r": 8,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "three-player-extension-action-marker-4",
+      "cx": 373.25,
+      "cy": 685.5,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-1",
+      "cx": 102.66,
+      "cy": 761,
+      "r": 8,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-2",
+      "cx": 230,
+      "cy": 761,
+      "r": 8,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-3",
+      "cx": 357.33,
+      "cy": 761,
+      "r": 8,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-4",
+      "cx": 102.66,
+      "cy": 805,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-5",
+      "cx": 230,
+      "cy": 805,
+      "r": 8,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "four-player-extension-action-marker-6",
+      "cx": 357.33,
+      "cy": 805,
+      "r": 8,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-1-round-1",
+      "cx": 473.0,
+      "cy": 65,
+      "r": 5.5,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-1-round-2",
+      "cx": 599.5,
+      "cy": 65,
+      "r": 5.5,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-1-round-3",
+      "cx": 726.0,
+      "cy": 65,
+      "r": 5.5,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-1-round-4",
+      "cx": 852.5,
+      "cy": 65,
+      "r": 5.5,
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-2-round-5",
+      "cx": 473.0,
+      "cy": 143,
+      "r": 5.5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-2-round-6",
+      "cx": 641.6666666666666,
+      "cy": 143,
+      "r": 5.5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-2-round-7",
+      "cx": 810.3333333333333,
+      "cy": 143,
+      "r": 5.5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-3-round-8",
+      "cx": 473.0,
+      "cy": 221,
+      "r": 5.5,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-3-round-9",
+      "cx": 726.0,
+      "cy": 221,
+      "r": 5.5,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-4-round-10",
+      "cx": 473.0,
+      "cy": 299,
+      "r": 5.5,
+      "fill": "#e58b42",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-4-round-11",
+      "cx": 726.0,
+      "cy": 299,
+      "r": 5.5,
+      "fill": "#e58b42",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-5-round-12",
+      "cx": 473.0,
+      "cy": 377,
+      "r": 5.5,
+      "fill": "#a879d7",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-5-round-13",
+      "cx": 726.0,
+      "cy": 377,
+      "r": 5.5,
+      "fill": "#a879d7",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "round-card-stage-6-round-14",
+      "cx": 473.0,
+      "cy": 455,
+      "r": 5.5,
+      "fill": "#e65b55",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "polyline",
+      "id": "supply-wood-grain",
+      "points": [
+        [
+          498,
+          706
+        ],
+        [
+          522,
+          706
+        ]
+      ],
+      "stroke": "#6e472b",
+      "strokeWidth": 4
+    },
+    {
+      "type": "polygon",
+      "id": "supply-clay-mark",
+      "points": [
+        [
+          603,
+          706
+        ],
+        [
+          610,
+          696
+        ],
+        [
+          618,
+          706
+        ],
+        [
+          610,
+          716
+        ]
+      ],
+      "fill": "#f3d3c3",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "supply-reed-stem-a",
+      "x1": 710,
+      "y1": 718,
+      "x2": 710,
+      "y2": 694,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "supply-reed-stem-b",
+      "x1": 704,
+      "y1": 718,
+      "x2": 704,
+      "y2": 699,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "supply-reed-stem-c",
+      "x1": 716,
+      "y1": 718,
+      "x2": 716,
+      "y2": 699,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    {
+      "type": "polygon",
+      "id": "supply-stone-mark",
+      "points": [
+        [
+          798,
+          710
+        ],
+        [
+          804,
+          698
+        ],
+        [
+          816,
+          698
+        ],
+        [
+          823,
+          710
+        ],
+        [
+          817,
+          718
+        ],
+        [
+          802,
+          718
+        ]
+      ],
+      "fill": "#edf1f5",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "polyline",
+      "id": "supply-food-mark",
+      "points": [
+        [
+          899,
+          710
+        ],
+        [
+          903,
+          699
+        ],
+        [
+          915,
+          699
+        ],
+        [
+          921,
+          710
+        ]
+      ],
+      "stroke": "#fff8db",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "supply-grain-stem",
+      "x1": 560,
+      "y1": 795,
+      "x2": 560,
+      "y2": 766,
+      "stroke": "#7d963d",
+      "strokeWidth": 2
+    },
+    {
+      "type": "polygon",
+      "id": "supply-vegetable-leaf",
+      "points": [
+        [
+          660,
+          778
+        ],
+        [
+          650,
+          768
+        ],
+        [
+          659,
+          768
+        ],
+        [
+          666,
+          777
+        ]
+      ],
+      "fill": "#46aa6a",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-sheep-wool-0",
+      "cx": 753,
+      "cy": 778,
+      "r": 6,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-sheep-wool-1",
+      "cx": 760,
+      "cy": 778,
+      "r": 6,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-sheep-wool-2",
+      "cx": 767,
+      "cy": 778,
+      "r": 6,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-boar-body",
+      "cx": 858,
+      "cy": 780,
+      "r": 10,
+      "fill": "#8b5e3c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-boar-head",
+      "cx": 869,
+      "cy": 776,
+      "r": 5,
+      "fill": "#d6b998",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "circle",
+      "id": "supply-cattle-body",
+      "cx": 938,
+      "cy": 780,
+      "r": 11,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "supply-cattle-horn-a",
+      "x1": 930,
+      "y1": 771,
+      "x2": 925,
+      "y2": 765,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "supply-cattle-horn-b",
+      "x1": 946,
+      "y1": 771,
+      "x2": 951,
+      "y2": 765,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "stock-tableau-divider",
+      "x1": 250,
+      "y1": 852,
+      "x2": 250,
+      "y2": 960,
+      "stroke": "#9cacb8",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "stock-lower-divider",
+      "x1": 40,
+      "y1": 908,
+      "x2": 420,
+      "y2": 908,
+      "stroke": "#d0d9df",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-fireplace-2-flame-outer",
+      "points": [
+        [
+          500.6,
+          555.75
+        ],
+        [
+          502.6,
+          545.75
+        ],
+        [
+          508.6,
+          535.75
+        ],
+        [
+          510.6,
+          544.75
+        ],
+        [
+          515.6,
+          532.75
+        ],
+        [
+          520.6,
+          546.75
+        ],
+        [
+          519.6,
+          555.75
+        ]
+      ],
+      "fill": "#e65b55",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-fireplace-2-flame-inner",
+      "points": [
+        [
+          506.6,
+          554.75
+        ],
+        [
+          508.6,
+          547.75
+        ],
+        [
+          512.6,
+          542.75
+        ],
+        [
+          515.6,
+          549.75
+        ],
+        [
+          514.6,
+          554.75
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-fireplace-3-flame-outer",
+      "points": [
+        [
+          602.8,
+          555.75
+        ],
+        [
+          604.8,
+          545.75
+        ],
+        [
+          610.8,
+          535.75
+        ],
+        [
+          612.8,
+          544.75
+        ],
+        [
+          617.8,
+          532.75
+        ],
+        [
+          622.8,
+          546.75
+        ],
+        [
+          621.8,
+          555.75
+        ]
+      ],
+      "fill": "#e65b55",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-fireplace-3-flame-inner",
+      "points": [
+        [
+          608.8,
+          554.75
+        ],
+        [
+          610.8,
+          547.75
+        ],
+        [
+          614.8,
+          542.75
+        ],
+        [
+          617.8,
+          549.75
+        ],
+        [
+          616.8,
+          554.75
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-4-rim",
+      "x1": 705.0,
+      "y1": 543.75,
+      "x2": 725.0,
+      "y2": 543.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 3
+    },
+    {
+      "type": "polyline",
+      "id": "major-icon-cooking-hearth-4-pot",
+      "points": [
+        [
+          707.0,
+          544.75
+        ],
+        [
+          709.0,
+          555.75
+        ],
+        [
+          721.0,
+          555.75
+        ],
+        [
+          723.0,
+          544.75
+        ]
+      ],
+      "stroke": "#7b6334",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-4-leg-a",
+      "x1": 709.0,
+      "y1": 558.75,
+      "x2": 707.0,
+      "y2": 561.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-4-leg-b",
+      "x1": 721.0,
+      "y1": 558.75,
+      "x2": 723.0,
+      "y2": 561.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-5-rim",
+      "x1": 807.2,
+      "y1": 543.75,
+      "x2": 827.2,
+      "y2": 543.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 3
+    },
+    {
+      "type": "polyline",
+      "id": "major-icon-cooking-hearth-5-pot",
+      "points": [
+        [
+          809.2,
+          544.75
+        ],
+        [
+          811.2,
+          555.75
+        ],
+        [
+          823.2,
+          555.75
+        ],
+        [
+          825.2,
+          544.75
+        ]
+      ],
+      "stroke": "#7b6334",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-5-leg-a",
+      "x1": 811.2,
+      "y1": 558.75,
+      "x2": 809.2,
+      "y2": 561.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "line",
+      "id": "major-icon-cooking-hearth-5-leg-b",
+      "x1": 823.2,
+      "y1": 558.75,
+      "x2": 825.2,
+      "y2": 561.75,
+      "stroke": "#7b6334",
+      "strokeWidth": 2
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-clay-oven-roof",
+      "points": [
+        [
+          907.4,
+          546.75
+        ],
+        [
+          919.4,
+          535.75
+        ],
+        [
+          931.4,
+          546.75
+        ]
+      ],
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "rect",
+      "id": "major-icon-clay-oven-body",
+      "x": 910.4,
+      "y": 546.75,
+      "w": 18,
+      "h": 14,
+      "rx": 2,
+      "fill": "#b96b54",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "major-icon-clay-oven-mouth",
+      "cx": 919.4,
+      "cy": 554.75,
+      "r": 4,
+      "fill": "#fff3d3",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "polygon",
+      "id": "major-icon-stone-oven-roof",
+      "points": [
+        [
+          498.6,
+          611.25
+        ],
+        [
+          510.6,
+          600.25
+        ],
+        [
+          522.6,
+          611.25
+        ]
+      ],
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "rect",
+      "id": "major-icon-stone-oven-body",
+      "x": 501.6,
+      "y": 611.25,
+      "w": 18,
+      "h": 14,
+      "rx": 2,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "circle",
+      "id": "major-icon-stone-oven-mouth",
+      "cx": 510.6,
+      "cy": 619.25,
+      "r": 4,
+      "fill": "#fff3d3",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "major-icon-joinery-handle",
+      "x1": 604.8,
+      "y1": 622.25,
+      "x2": 620.8,
+      "y2": 604.25,
+      "stroke": "#8b5e3c",
+      "strokeWidth": 4
+    },
+    {
+      "type": "rect",
+      "id": "major-icon-joinery-head",
+      "x": 600.8,
+      "y": 600.25,
+      "w": 12,
+      "h": 6,
+      "rx": 1,
+      "fill": "#bdc7d4",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "type": "polyline",
+      "id": "major-icon-pottery-vase",
+      "points": [
+        [
+          710.0,
+          601.25
+        ],
+        [
+          720.0,
+          601.25
+        ],
+        [
+          718.0,
+          607.25
+        ],
+        [
+          724.0,
+          614.25
+        ],
+        [
+          722.0,
+          624.25
+        ],
+        [
+          708.0,
+          624.25
+        ],
+        [
+          706.0,
+          614.25
+        ],
+        [
+          712.0,
+          607.25
+        ],
+        [
+          710.0,
+          601.25
+        ]
+      ],
+      "stroke": "#b96b54",
+      "strokeWidth": 3
+    },
+    {
+      "type": "line",
+      "id": "major-icon-pottery-lip",
+      "x1": 709.0,
+      "y1": 601.25,
+      "x2": 721.0,
+      "y2": 601.25,
+      "stroke": "#b96b54",
+      "strokeWidth": 2
+    },
+    {
+      "type": "rect",
+      "id": "major-icon-basketmaker-workshop-body",
+      "x": 807.2,
+      "y": 610.25,
+      "w": 20,
+      "h": 14,
+      "rx": 2,
+      "fill": "#c89b55",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "type": "polyline",
+      "id": "major-icon-basketmaker-workshop-handle",
+      "points": [
+        [
+          810.2,
+          610.25
+        ],
+        [
+          811.2,
+          603.25
+        ],
+        [
+          823.2,
+          603.25
+        ],
+        [
+          824.2,
+          610.25
+        ]
+      ],
+      "stroke": "#8b5e3c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "major-icon-well-rim",
+      "cx": 919.4,
+      "cy": 614.25,
+      "r": 10,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "type": "circle",
+      "id": "major-icon-well-water",
+      "cx": 919.4,
+      "cy": 614.25,
+      "r": 5,
+      "fill": "#ffffff",
+      "stroke": "#3388dd",
+      "strokeWidth": 1
+    },
+    {
+      "type": "line",
+      "id": "major-icon-well-beam",
+      "x1": 908.4,
+      "y1": 602.25,
+      "x2": 930.4,
+      "y2": 602.25,
+      "stroke": "#8b5e3c",
+      "strokeWidth": 2
+    }
+  ]
+}

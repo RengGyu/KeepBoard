@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/istanbul.json",
-    "sha256": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
+    "sha256": "eb2a8fe4fc56465e68cd736854ba741c2e9d08173a276cda62ce13ecc268f102",
     "runtime_pack_id": "istanbul",
-    "runtime_pack_version": "1.0.0-essentials-2.65997c3c37ca",
+    "runtime_pack_version": "1.0.0-essentials-2.eb2a8fe4fc56",
     "runtime_match": true
   },
   "basis": {
@@ -34,13 +34,15 @@
       "inherited::istanbul.art-confirmation.istanbul-rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "시장 타일 배열·상인/조수 쌓임, 수레 트랙",
   "critical_resume_distinction": "상인 아래 조수와 놓고 간 조수, 확장/업그레이드·보유 카드 구분",
   "partitions": {
     "common_public": [
-      "city"
+      "city",
+      "bonus-discard"
     ],
     "player_public": [
       "wheelbarrow",
@@ -279,7 +281,7 @@
         "cards"
       ],
       "anchor_contract": "현재 공개 요구와 미공개 덱/버림을 분리 보관.",
-      "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "요구·보너스 묶음의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면 보너스 카드 버림은 bonus-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "do_not_infer",
@@ -305,6 +307,58 @@
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
         "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "bonus-discard",
+      "name": "보너스 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+      "description": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "istanbul.art-confirmation.istanbul-rules"
+      ],
+      "confidence": "verified",
+      "partition": "common_public",
+      "source_field_ids": [
+        "bonus-discard.scene"
+      ],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "bonus-discard.scene"
+      ],
+      "current_manual_target_fields": [
+        "bonus-discard.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_access": "public evidence",
+      "capture_instruction": "보너스 카드 버림: 사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다. 읽을 수 없는 값은 미상으로 남기세요.",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry",
+        "source_anchor": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다."
       },
       "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
     }
@@ -590,6 +644,11 @@
         "visibility": "public"
       },
       {
+        "key": "bonus-discard.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -608,6 +667,14 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "wheelbarrow.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "supply.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "decks.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -757,7 +824,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "city.scene"
+          "city.scene",
+          "bonus-discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -863,6 +931,12 @@
         "name": "개인 보너스 카드",
         "needs": "비공개 카드와 사용 대기 선택.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "bonus-discard",
+        "name": "보너스 카드 버림",
+        "needs": "사용하거나 버린 보너스 카드는 대상인 숙소(Caravansary)의 앞면 버림 더미에 쌓인다. 미공개 뽑기 더미와 섞지 않는다.",
+        "access": "public evidence"
       }
     ],
     "do_not_collect": [
@@ -878,7 +952,7 @@
   "current_board_mapping": {
     "gameId": "istanbul",
     "editionId": "base",
-    "sourceSHA": "65997c3c37ca71c4cf62c4f98da66a5639d708eb3708f01e4d56fe84ecacc9a0",
+    "sourceSHA": "eb2a8fe4fc56465e68cd736854ba741c2e9d08173a276cda62ce13ecc268f102",
     "status": "new",
     "areas": [
       {
@@ -979,6 +1053,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "bonus-discard",
+        "label": "보너스 카드 버림",
+        "fieldKeys": [
+          "bonus-discard.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "sourceRefs": [
+          "istanbul.art-confirmation.istanbul-rules"
+        ],
+        "sourceConfidence": "verified",
+        "template": "card-lanes",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

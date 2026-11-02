@@ -1,0 +1,100 @@
+{
+  "stage": "/var/folders/z1/tvwxg8zj4q74myx__52b1_440000gn/T/kb-native-board-structured-ph2b3wkn",
+  "files": {
+    "shared/lightweightRecognition.ts": "30b3db87bd744e3fa18d69b50bf5e1e7ce066535edf7cc7c34a073b6b934d72b",
+    "server/ai/catanSceneReading.ts": "d89caf23705771a6c5113cef83f0ab669f0beb8b82bf3c8d881aa8cbb9b885bf",
+    "server/ai/geminiGameReader.ts": "ffd33b3d4ebc8a9e85c708b1bfa307546c25e04bf94e4f47d6654cb3559eae72",
+    "server/hostedObservation.ts": "fa2a958df5cc98bfca1b15e64d1d5e1952ecc175518859aeaa696d5b8aeb2c30",
+    "server/index.ts": "b8443eb78b553f443654590fdd316783b86f223c6bc17f3db4ea9a6365c6c942",
+    "server/cloudRuntime.ts": "4f49532036602dd2d5c619a5509635ea10fa70142d54371bc95fb9afa71e0eac",
+    "src/SceneWorkspace.tsx": "7735bdba8747640e528189840670c6477335bf24f19fbccb81bf4880ec251033",
+    "src/scene-editor.css": "c59a79511db311a116da2eab98ee3d8fadc10545a7a1321c0e84f9fc0f649f69"
+  },
+  "reuse": [
+    "server/ai/prompt.ts observationPrompt",
+    "server/ai/scenePrompt.ts sceneObservationInstructions",
+    "server/ai/index.ts normalizeObservations",
+    "src/SceneEditor.tsx BoardView"
+  ],
+  "model": "gemini-3.8-flash",
+  "nativeBoardRoute": "public Catan board only",
+  "modelCallsPerReading": 1,
+  "automaticApply": true,
+  "tests": {
+    "focused": 71,
+    "typecheck": "passed",
+    "build": "passed",
+    "nativeConnectionAfterStructuredOutput": 8
+  },
+  "deployment": {
+    "id": "dpl_8iE2xExHSSzYUS8ExjZK7xVKpmzf",
+    "url": "https://keepboard-c6s9fvhfq-renggyus-projects.vercel.app",
+    "state": "promoted-ready",
+    "productionUrl": "https://keepboard-kappa.vercel.app"
+  },
+  "liveTests": [
+    {
+      "jobId": "8d9b8e27-e2d6-40a8-b0fe-aa0ed7c02e00",
+      "state": "interrupted",
+      "cause": "legacy scene optional face rejected by initial literal receipt adapter; corrected and regression-tested"
+    },
+    {
+      "jobId": "9d7ab162-0432-435e-adaa-db6a30451e75",
+      "state": "completed",
+      "objects": 42,
+      "placed": 42,
+      "terrain": 19,
+      "numberTokens": 17,
+      "providerMs": 38685,
+      "totalMs": 53934
+    },
+    {
+      "jobId": "d61e403c-aa9a-421c-bcae-6a76e3c07cba",
+      "sessionId": "4629e3bb-583d-4a07-8f38-f595c5bcf02f",
+      "state": "interrupted",
+      "purpose": "connect latest user record shown in screenshot",
+      "cause": "free JSON response malformed; reused existing scene schema as provider structured-output schema"
+    },
+    {
+      "jobId": "97fb470e-a585-4f88-ac87-53b4e0c9ccfc",
+      "sessionId": "4629e3bb-583d-4a07-8f38-f595c5bcf02f",
+      "state": "completed",
+      "schemaEnforced": true,
+      "totalMs": 56650,
+      "providerMs": 42297,
+      "objects": 41,
+      "placed": 41,
+      "kinds": {
+        "terrain": 19,
+        "number-token": 17,
+        "robber": 1,
+        "settlement": 4
+      },
+      "unknownNumbers": 0,
+      "notesUnchanged": true,
+      "playersUnchanged": true,
+      "photoIdsUnchanged": true
+    }
+  ],
+  "limitations": [
+    "Recognition still misses visible roads and city/building pieces in the tested photo; illustrated placement is not a claim of full recognition accuracy.",
+    "Latest successful real-photo run: provider 42.3s, total 56.7s; no speed improvement claimed.",
+    "Previous original photos and saved snapshots remain; notes and players unchanged."
+  ],
+  "productionVerification": {
+    "sessionId": "4629e3bb-583d-4a07-8f38-f595c5bcf02f",
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "pageScrollWidth": 390,
+    "illustratedBoardVisible": true,
+    "photoAnnotationsCollapsed": true,
+    "tileClickOpensNumberEditor": true,
+    "selectedNumber": 3,
+    "valuesEditedInProductionQA": false,
+    "savedSnapshotsUnchanged": true,
+    "sourceFilesMatchStage": true,
+    "screenshot": "production-illustrated-board-mobile.png"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "status": "VERIFIED",
+  "task": "Bounded local release regression repair",
+  "red": {
+    "command": "node --import tsx --test tests/lightweight-recognition-scope.test.ts tests/lightweight-recognition-api.test.ts tests/lightweight-recognition-compact-api.test.ts",
+    "passed": 1,
+    "failed": 5,
+    "frameRegression": {
+      "test": "local owner job requires the same owner photo and PIN; receipts stay private; frames rejected outside Catan public board",
+      "expectedStatus": 409,
+      "actualStatus": 202,
+      "location": "tests/lightweight-recognition-scope.test.ts:20"
+    },
+    "otherFailures": [
+      "local API candidate expected but automatic accepted projection exists",
+      "compact API candidate expected but automatic accepted projection exists",
+      "empty compact job candidateCount expected 0 but receipt projection gives 1",
+      "all-deferred atlas candidateCount expected 0 but receipt projection gives 1"
+    ]
+  },
+  "green": {
+    "command": "node --import tsx --test tests/lightweight-recognition-scope.test.ts tests/lightweight-recognition-api.test.ts tests/lightweight-recognition-compact-api.test.ts tests/scan-recognition-integration.test.ts tests/scan-parallel-workflow.test.ts",
+    "passed": 18,
+    "failed": 0
+  },
+  "productChange": "Validate and pin the selected frame source using the existing local/hosted preparation before omitting frame from other scan photos; reuse pinned source to avoid repeating frame/atlas validation.",
+  "frameAcceptance": [
+    "Malformed {}, null, false, 0 and unselected source rejected before image reads",
+    "Incorrect SHA rejected while preparing its source before other photos",
+    "Valid frame on second selected photo applies only to second unit; first frame undefined and geometryFrameId null",
+    "Owner/private scope frame rejection restored to HTTP409 without reader dispatch"
+  ],
+  "preservedInvariants": [
+    "manual components remain without automatic unrelated raw-object addition",
+    "quantity null survives receipt, manual edit, save and reopen; observed zero manual road stays zero on empty output",
+    "original nativeWire literal result persists in job, accepted receipt, disk and import/export",
+    "empty/all-deferred results create no fabricated objects while retaining receipt projection",
+    "reader task/profile/mode/hash/owner/PIN/capture epoch gates retain assertions",
+    "two-unit concurrency, crop and source order regressions pass"
+  ],
+  "files": {
+    "server/scanObservation.ts": "bfbbc233354a58a1be68db9379b2f5f30c71171d10a476b53c17110fd1d64365",
+    "tests/lightweight-recognition-scope.test.ts": "2d9913b0036ad9e2ab6bb73f453d7e07d3027c35da2d2b2c1d617efc2997f1f3",
+    "tests/lightweight-recognition-api.test.ts": "6afae68d087e409891a5cd6394127386a0fb018e9ae06c8f187ffd8151baf77c",
+    "tests/lightweight-recognition-compact-api.test.ts": "dd0cf9a656f3fb1ac8dd9386221bbb65c7df7c7a9c0582f0273af05f8fb7dbbb"
+  },
+  "limitations": [
+    "Synthetic local fixtures only; no actual model or paid calls",
+    "No build/deploy; supervisor owns final release checks",
+    "No files outside assigned product/test scope changed for this follow-up"
+  ]
+}

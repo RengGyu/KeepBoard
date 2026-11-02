@@ -1,6 +1,7 @@
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import index from '../game-photo-definitions/index.json';
+import retiredIndex from '../docs/gamepack-revision-20261026/history/before-runtime-revision/game-photo-definitions/index.json';
 import type {GamePack} from '../shared/types';
 import type {PhotoDefinition} from '../shared/lightweightRecognition';
 export function canonicalJSON(value:unknown):string {
@@ -10,8 +11,8 @@ export function canonicalJSON(value:unknown):string {
 }
 export function definitionHash(definition:PhotoDefinition){const {definitionSHA,...body}=definition;return createHash('sha256').update(canonicalJSON(body)).digest('hex');}
 export function photoDefinition(pack:GamePack,expectedSHA?:string):PhotoDefinition {
- const d=(index.games as PhotoDefinition[]).find(d=>d.gameId===pack.runtime?.source.gameId),source=pack.runtime?.source;
- if(!d||d.definitionSHA!==definitionHash(d)||expectedSHA!==undefined&&expectedSHA!==d.definitionSHA||d.packId!==pack.id||d.packVersion!==pack.version||d.editionId!==source?.editionId||d.sourceSHA!==source?.sha256)throw new Error('현재 게임 판본·촬영 정의가 달라졌습니다. 기존 기록은 보존됩니다.');
+ const source=pack.runtime?.source,d=[...(index.games as PhotoDefinition[]),...(retiredIndex.games as PhotoDefinition[])].find(d=>d.gameId===source?.gameId&&d.packId===pack.id&&d.packVersion===pack.version&&d.editionId===source?.editionId&&d.sourceSHA===source?.sha256);
+ if(!d||d.definitionSHA!==definitionHash(d)||expectedSHA!==undefined&&expectedSHA!==d.definitionSHA)throw new Error('현재 게임 판본·촬영 정의가 달라졌습니다. 기존 기록은 보존됩니다.');
  return structuredClone(d);
 }
 export function photoDefinitionsMetadata(){

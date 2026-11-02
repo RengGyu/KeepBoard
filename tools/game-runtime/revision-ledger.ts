@@ -27,6 +27,7 @@ export function buildLedger(root='.'){
   if(digest===frozen.sourceSHA256)continue;
   const spec=JSON.parse(bytes.toString()),receipts=evidence.games[id];
   if(!receipts)throw Error(`Revised source without receipts: ${id}`);
+  if(receipts.reviewedSHA256!==digest)throw Error(`Reviewed source digest mismatch: ${id}`);
   const areas=frozen.boardAreaIds?diff(frozen.boardAreaIds,spec.layout.areas.map((a:Row)=>a.id)):null;
   games[id]={preimageSHA256:frozen.sourceSHA256,finalSHA256:digest,editionId:spec.edition.id,
    stateFields:diff(frozen.stateFieldIds,spec.state_fields.map((f:Row)=>f.id)),

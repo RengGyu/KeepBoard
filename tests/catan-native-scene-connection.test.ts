@@ -1,0 +1,62 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {catalogPacks} from '../gamepacks/catalog';
+import {photoDefinition} from '../server/photoDefinitions';
+import {compileObservationTask} from '../shared/lightweightRecognition';
+import {CATAN_TOPOLOGY,normalizeScene} from '../shared/scene';
+import {catanScenePrompt,catanSceneResponseSchema,decodeCatanSceneReading} from '../server/ai/catanSceneReading';
+import type {Session,Evidence} from '../shared/types';
+const pack=catalogPacks.find(p=>p.id==='catan-base')!,definition=photoDefinition(pack);
+const evidence=[{id:'photo',kind:'photo',scope:'public',captureEpoch:'epoch',url:'/uploads/synthetic.png',label:'synthetic'}] as Evidence[];
+const session={assertions:[],players:[{id:'p',name:'하나',color:'red'}],turnInstanceId:'turn'} as unknown as Session;
+const request=compileObservationTask({pack,definition,areaId:'board',taskId:'synthetic-scene',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'photo',inputId:'photo',sha256:'a'.repeat(64),width:1000,height:800,transformId:null}]});
+const reader={kind:'gemini-game-observation-v1',model:'gemini-3.8-flash',thinkingLevel:'LOW',mediaResolution:'MEDIA_RESOLUTION_HIGH',maxOutputTokens:32768} as const;
+const payload=(components:unknown[])=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify({assertions:[{field:'components.observed',value:{version:2,coverage:'partial',components},evidenceIds:['photo']}],warnings:[]})}]}}]});
+const part=(id:string,kind:string,location:unknown,extra:Record<string,unknown>={})=>({id,kind,quantity:1,face:'front',location,evidenceId:'photo',region:{x:.1,y:.1,width:.1,height:.1},...extra});
+test('existing native Catan prompt supplies the illustrated board schema instead of forbidding slots',()=>{
+ const prompt=catanScenePrompt(session,pack,evidence);assert.match(prompt,/COMPONENT SCENE OUTPUT/);assert.match(prompt,/r\{row\}c\{column\}/);assert.match(prompt,/roads.*edges|Roads use edges/);assert.match(prompt,/existing illustrated Catan board editor/);
+});
+test('native scene locations reach existing diagram data directly; unknown number and visible colors survive',()=>{
+ const raw=payload([part('land','terrain',{type:'hex',id:'r1c1'},{variant:'forest'}),part('number','number-token',{type:'hex',id:'r1c1'},{number:null}),part('road','road',{type:'edge',id:CATAN_TOPOLOGY.edges[0].id},{observedColor:'red'}),part('house','settlement',{type:'vertex',id:CATAN_TOPOLOGY.vertices[0].id},{observedColor:'blue'})]);
+ const before=JSON.stringify(raw);const result=decodeCatanSceneReading(raw,{request,definition,pack,session,evidence,reader,sourceImageSHA:'a'.repeat(64)});
+ assert.equal(JSON.stringify(raw),before);assert.equal(result.assertions.length,1);const scene=normalizeScene(result.assertions[0].value);assert.equal(scene.components.length,4);assert(scene.components.every(c=>c.location.type!=='unplaced'));assert.equal(scene.components.find(c=>c.id==='number')!.number,null);assert.equal(scene.components.find(c=>c.id==='road')!.observedColor,'red');
+ const receipt=result.observationReceipts![0];assert.equal(receipt.hostedWire!.id,'gemini-catan-scene-wire-v1');assert.equal(receipt.result.observations.length,4);assert.equal(Object.keys(receipt.componentRefs).length,4);assert.equal(receipt.result.observations[1].properties.number.state,'unknown');assert.deepEqual(result.assertions[0].observationReceipts,[receipt]);
+});
+test('unreadable location stays unplaced and private scope cannot use public-board bridge',()=>{
+ const raw=payload([part('number','number-token',{type:'unplaced',id:null},{number:8})]);const input={request,definition,pack,session,evidence,reader,sourceImageSHA:'a'.repeat(64)};
+ assert.equal(normalizeScene(decodeCatanSceneReading(raw,input).assertions[0].value).components[0].location.type,'unplaced');assert.throws(()=>decodeCatanSceneReading(raw,{...input,request:{...request,scope:{...request.scope,partition:'owner_private',ownerId:'p'}}}));
+});
+
+test('the existing Gemini key/profile sends one native diagram request, with no fallback or second model call',async()=>{
+ const {GeminiGameReader}=await import('../server/ai/geminiGameReader');const {createHash}=await import('node:crypto');
+ const bytes=Buffer.from('synthetic-photo'),pinned={...request,images:[{...request.images[0],sha256:createHash('sha256').update(bytes).digest('hex')}]};
+ const previousFetch=globalThis.fetch,previousKey=process.env.GEMINI_API_KEY,previousFile=process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE;delete process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE;process.env.GEMINI_API_KEY='AQ.synthetic-token_1234567890';let calls=0;
+ globalThis.fetch=async(url,init)=>{calls++;assert.match(String(url),/gemini-3.8-flash:generateContent/);const body=JSON.parse(String(init!.body));assert.equal(body.generationConfig.thinkingConfig.thinkingLevel,'LOW');assert.equal(body.generationConfig.mediaResolution,'MEDIA_RESOLUTION_HIGH');assert.match(body.contents[0].parts[0].text,/COMPONENT SCENE OUTPUT/);return Response.json(payload([part('n','number-token',{type:'hex',id:'r2c1'},{number:8})]));};
+ try{const read=await new GeminiGameReader().readCatanScene(pinned,definition,session,pack,evidence,bytes,'image/png');assert.equal(calls,1);assert.deepEqual(normalizeScene(read.result.assertions[0].value).components[0].location,{type:'hex',id:'r2c1'});}finally{globalThis.fetch=previousFetch;if(previousKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=previousKey;if(previousFile===undefined)delete process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE;else process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE=previousFile;}
+});
+
+test('native scene passes pinned task commit and reopens as the accepted illustrated layout',async()=>{
+ const {commitAnalysisTask,digest,scopeVersion}=await import('../server/analysisTask');
+ const state={...session,id:'synthetic-session',captureEpoch:'epoch',notes:{},evidence,activity:[],assertions:[],players:session.players,gamePack:pack} as unknown as Session;
+ let saved=structuredClone(state);
+ const store={getSession:async()=>structuredClone(saved),saveSession:async(s:Session)=>{saved=structuredClone(s);}};
+ const pins={configurationStamp:async()=> 'pin'};
+ const plan={request,definition,reader,transforms:[],sourceImageSHA:'a'.repeat(64)};
+ const task={prepared:{session:state,pack,evidence,purpose:'capture',sameStaticState:false,hostedObservation:plan},epoch:'epoch',version:scopeVersion(state,pack),source:digest(evidence),pin:'pin'};
+ const result=decodeCatanSceneReading(payload([part('land','terrain',{type:'hex',id:'r1c1'},{variant:'forest'}),part('n','number-token',{type:'hex',id:'r1c1'},{number:8})]),{request,definition,pack,session:state,evidence,reader,sourceImageSHA:'a'.repeat(64)});
+ const job={id:'synthetic-job',sessionId:state.id,reader,definitionSHA:request.definitionSHA,inputSHA:'a'.repeat(64)};
+ assert.equal((await commitAnalysisTask(store as never,pins as never,task as never,job as never,[result])).state,'completed');
+ const applied=saved.assertions.find(a=>a.field==='board.layout'&&a.status==='accepted')!;assert(applied);assert.equal(normalizeScene(applied.value).components[1].number,8);assert.equal(normalizeScene(applied.value).components[1].location.id,'r1c1');assert.equal(applied.observationReceipts!.length,1);assert(!saved.assertions.some(a=>a.status==='candidate'));
+});
+
+test('a native custom value cannot discard other placed pieces when making a literal receipt',()=>{
+ const raw=payload([part('land','terrain',{type:'hex',id:'r1c1'},{variant:'unfamiliar-terrain'}),part('n','number-token',{type:'hex',id:'r1c1'},{number:8})]);const result=decodeCatanSceneReading(raw,{request,definition,pack,session,evidence,reader,sourceImageSHA:'a'.repeat(64)});assert.equal(normalizeScene(result.assertions[0].value).components.length,2);assert.equal(result.observationReceipts![0].result.observations[0].properties.variant.state,'unknown');assert.equal(normalizeScene(result.assertions[0].value).components[1].number,8);
+});
+
+test('legacy native scenes may omit face without losing their placed terrain or printed number',()=>{
+ const raw=payload([part('land','terrain',{type:'hex',id:'r1c1'},{variant:'forest',face:null}),part('n','number-token',{type:'hex',id:'r1c1'},{number:8,face:null})]);const result=decodeCatanSceneReading(raw,{request,definition,pack,session,evidence,reader,sourceImageSHA:'a'.repeat(64)});const scene=normalizeScene(result.assertions[0].value);assert.equal(scene.components[0].variant,'forest');assert.equal(scene.components[1].number,8);assert.equal(scene.components[1].location.id,'r1c1');assert.equal(result.observationReceipts![0].result.observations[1].face,'unknown');assert.equal(result.observationReceipts![0].result.observations[1].properties.number,undefined);
+});
+
+test('existing native scene schema is supplied as structured JSON output instead of free-form JSON mode',()=>{
+ const schema=catanSceneResponseSchema(evidence),scene=schema.properties.assertions.items.properties.value;assert.equal(scene.type,'object');assert.equal(scene.properties.components.items.properties.location.properties.type.type,'string');assert.deepEqual(scene.properties.components.items.properties.face.type,['string','null']);assert(scene.properties.components.items.properties.face.enum.includes(null));assert.deepEqual(schema.properties.assertions.items.properties.evidenceIds.items.enum,['photo']);assert(!JSON.stringify(schema).includes('nullable'));
+ assert.deepEqual(scene.properties.components.items.required,['id','kind','variant','ownerId','quantity','location','region','evidenceId']);assert.deepEqual(scene.required,['version','coverage','components']);
+});

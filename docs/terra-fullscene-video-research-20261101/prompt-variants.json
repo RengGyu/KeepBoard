@@ -1,0 +1,69 @@
+{
+  "version": "whole-low-proposals-v1",
+  "status": "PROPOSED_NOT_RUN",
+  "checkedAt": "2026-11-01",
+  "fixed": {
+    "model": "gpt-6.1-terra",
+    "reasoningEffort": "low",
+    "imageDetail": "high",
+    "maxOutputTokens": 32768,
+    "sameSchema": true,
+    "kindNullIntroduced": false,
+    "expectedCountsOrAnswerCoordinates": false
+  },
+  "variants": [
+    {
+      "id": "P0",
+      "action": "Use current exact built request without text changes.",
+      "nativeCatan": true,
+      "genericTyped": true
+    },
+    {
+      "id": "P1",
+      "action": "Append exactly two newlines plus instruction to P0; schema and bytes of image unchanged.",
+      "instruction": "Within the same allowed kinds and photographed area, inspect the entire image spatially, including its edges. Record each distinguishable physical instance separately, even when an attribute is unreadable. Distinguish printed surfaces from pieces lying on them. Do not collapse separable neighbors of the same kind into a group. Use a group only for an actually inseparable visible aggregate, with quantity null when its count is not visible. Keep any readily visible literal attributes. Do not infer missing inventory, hidden faces, ownership, or game history. Check for omitted visible instances before returning; do not output the inspection process. Preserve the existing JSON schema and coordinate convention.",
+      "instructionSHA256": "c5a46437267950714699c2d7ce91896cde70e8d6eed42c7f775ccfe393c52ef6",
+      "nativeCatan": true,
+      "genericTyped": true
+    },
+    {
+      "id": "P2",
+      "action": "Generic typed only: replace exactly one TERRA_FILL_SENTENCE in P1 by replacement; fail preflight if zero/multiple matches. Keep identical schema.",
+      "removeExact": "For every returned object, include exactly one attribute row for each listed property of its kind; when a property is not visible use valueJson null with its reason, and when two listed properties describe the same visible fact, fill both.",
+      "replacement": "For each returned object, report attribute rows for the listed properties whose literal values are visible. Keep the existing mapping when two listed properties describe the same observed fact. Do not fabricate unreadable values. Omit attribute rows whose values are unknown rather than listing null rows for every property; omission means unconfirmed, never absence or zero. Preserve all other required object fields and the same JSON schema. Continue to return objects even when their attributes array is empty.",
+      "replacementSHA256": "496445d0d39a3e2ef095bb8d8876d7ecdaebe839a12677f8ae9c6abc4a4ebfb7",
+      "nativeCatan": false,
+      "genericTyped": true,
+      "decoderOmittedFieldMeaning": "unknown / not-present-unconfirmed (or wrong-face), not unreadable claimed by model",
+      "causalScope": "Report-policy intervention, not a schema-only or prompt-length-only experiment."
+    }
+  ],
+  "examples": {
+    "status": "SCHEMATIC_NOT_FIXTURE",
+    "knownKindEmptyAttributes": {
+      "items": [
+        {
+          "kind": "<allowed-component-id>",
+          "box_1000": null,
+          "face": "unknown",
+          "quantity": null,
+          "physicalUnit": "single",
+          "attributes": []
+        }
+      ]
+    },
+    "untypedProposalLaterOnly": {
+      "proposalId": "<stable-observation-ref>",
+      "componentId": null,
+      "physicalUnit": "unknown",
+      "bbox": null,
+      "literalAttributes": {},
+      "automaticEditablePiece": false
+    }
+  },
+  "limits": [
+    "Current enum requires a known kind. This first comparison does not test nullable-kind proposals.",
+    "Catan retains native scene schema; no claim that generic sparse attributes improve its native route.",
+    "Do not add canonical counts, GT boxes, hidden state, or output examples from evaluated photographs."
+  ]
+}

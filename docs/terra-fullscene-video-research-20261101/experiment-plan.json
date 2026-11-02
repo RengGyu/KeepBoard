@@ -1,0 +1,305 @@
+{
+  "version": "fullscene-video-experiment-v1",
+  "status": "PROPOSAL_ONLY_NOT_AUTHORIZED_OR_EXECUTED",
+  "newCallsThisResearch": 0,
+  "purpose": "Disentangle enumeration instruction, unknown-row reporting burden, digital ROI and independently captured optical information.",
+  "cases": [
+    {
+      "id": "new-catan-01",
+      "game": "catan",
+      "route": "native-scene",
+      "state": "UNACQUIRED",
+      "calls": [
+        {
+          "id": "N01",
+          "variant": "P0",
+          "input": "O"
+        },
+        {
+          "id": "N02",
+          "variant": "P1",
+          "input": "O"
+        }
+      ]
+    },
+    {
+      "id": "new-carcassonne-01",
+      "game": "carcassonne",
+      "route": "generic-typed",
+      "state": "UNACQUIRED",
+      "calls": [
+        {
+          "id": "N03",
+          "variant": "P0",
+          "input": "O"
+        },
+        {
+          "id": "N04",
+          "variant": "P1",
+          "input": "O"
+        },
+        {
+          "id": "N05",
+          "variant": "P2",
+          "input": "O"
+        },
+        {
+          "id": "N06",
+          "variant": "P2",
+          "input": "R"
+        },
+        {
+          "id": "N07",
+          "variant": "P2",
+          "input": "V"
+        }
+      ]
+    },
+    {
+      "id": "new-sagrada-01",
+      "game": "sagrada",
+      "route": "generic-typed",
+      "state": "UNACQUIRED",
+      "calls": [
+        {
+          "id": "N08",
+          "variant": "P0",
+          "input": "O"
+        },
+        {
+          "id": "N09",
+          "variant": "P1",
+          "input": "O"
+        },
+        {
+          "id": "N10",
+          "variant": "P2",
+          "input": "O"
+        },
+        {
+          "id": "N11",
+          "variant": "P2",
+          "input": "R"
+        },
+        {
+          "id": "N12",
+          "variant": "P2",
+          "input": "V"
+        }
+      ]
+    }
+  ],
+  "inputDefinitions": {
+    "O": "One new original overview of a static physical state, not a prior evaluation image.",
+    "R": "Lossless semantic-area crop of O, fixed before object labels/model outputs; sourceSHA and transform pinned. Not independent holdout.",
+    "V": "A real separately captured closer/angled view of the same unchanged state and semantic area; not warp/zoom of O.",
+    "video": "Short real phone sweep from the same state with timestamps; independently annotate whether pieces/hands move. Preserve time order for state segmentation."
+  },
+  "dataPrerequisites": [
+    "Capture permission and local evaluation use rights recorded. No commercial media copied into product assets.",
+    "Actual model-evaluation exposure history recorded; existing developer images cannot be relabeled as new.",
+    "Human annotator labels all visible allowed physical units and independently readable values before model output, with object layer, box/polygon, occlusion, group/individual alternative and uncertainty.",
+    "Second human resolves material ambiguity where available; otherwise disputed label remains unscorable. Model-assisted labels are not human-certified.",
+    "No inventory-based counting or inferred hidden card/owner. Source owner/epoch explicitly supplied from capture session.",
+    "Freeze images, source transformations, reference, per-route prompt/schema, response budget, sequence and scoring code hashes.",
+    "If new static-scene inputs or manual labels are unavailable, stop paid planning at frozen-empty status; do not use Risk/Chess as fabricated fullboard GT."
+  ],
+  "requestLimits": {
+    "maximumCalls": 12,
+    "peakConcurrent": 2,
+    "automaticRetries": 0,
+    "outputTokensPerCall": 32768,
+    "inputPlanningCeilingPerCall": 32768,
+    "inputCeilingKind": "PRE_REQUEST_ESTIMATE_REQUIRES_VALIDATION_NOT_API_HARD_CAP",
+    "overallPlanningReserveUSD": 4,
+    "reserveIsBillingGuarantee": false,
+    "claim": "one durable claim per exact bodyHash and inputHash",
+    "firstTransportFailure": "stop dispatch, preserve receipt; no automatic recovery",
+    "429": "record failure and stop further dispatch, no reissue",
+    "truncationOrMalformed": "count as failed/partial evidence, no retry"
+  },
+  "priceAssumptions": {
+    "verifiedDate": "2026-11-01",
+    "source": "https://developers.openai.com/api/docs/pricing",
+    "standardShortContextInputUSDperM": 1,
+    "standardOutputUSDperM": 5,
+    "cacheWrite12hUSDperM": 2.5,
+    "assumedNoCache12CallsCeilingUSD": 2.359296,
+    "assumedWorstListedShortCacheWrite12CallsUSD": 2.94912,
+    "conditions": [
+      "Current standard service tier, below long-context boundary; no extra services.",
+      "Both formulas assume the stated input ceiling; image token estimate must be defensible for Terra before sending.",
+      "If model-specific input bound cannot be established, mark cost upper bound UNKNOWN and return a smaller concrete plan; do not treat reserve as permission.",
+      "Record actual cache/input/output/reasoning usage once returned; do not double-count reasoning already included in output.",
+      "Provider invoice, taxes, credits and transport-failure charges remain UNKNOWN."
+    ]
+  },
+  "pairedInvariants": [
+    {
+      "comparison": "P0 vs P1/O",
+      "onlyDifference": "appended enumeration instruction",
+      "scope": "all three scenes, current native/generic route separately"
+    },
+    {
+      "comparison": "P1 vs P2/O",
+      "onlyDifference": "explicit unknown attribute reporting sentence",
+      "scope": "two generic scenes; same schema, not nullable-kind intervention"
+    },
+    {
+      "comparison": "P2/O vs P2/R vs P2/V",
+      "onlyDifference": "image bytes and pinned image/transform provenance",
+      "scope": "two generic scenes; prompt/schema identical; actual tokens may differ"
+    }
+  ],
+  "multiviewComparisons": {
+    "single": "P2/O",
+    "registeredCrop": "P2/O + P2/R, reuse O response",
+    "independentView": "P2/O + P2/V, reuse O response",
+    "fairness": "The two-view alternatives both use two calls and same cap. Single vs two calls is a cost-benefit comparison, not equal spend. Common-region and newly visible region reported separately.",
+    "correspondence": "Report raw oracle union and current real editable fusion separately. Human GT matches cannot be counted as product registration.",
+    "catan": "No crop/multiview inference in this first package; native canonical placement adds a different contract."
+  },
+  "offlineSelectorPlan": {
+    "inputs": "same captured timestamped video for old/new selector; manual full-visible/readability references frozen first",
+    "conditions": [
+      "current selector",
+      "best-frame replacement candidate",
+      "uniform-time selection as offline comparator only"
+    ],
+    "commonBound": "same maximum selected frames=6; also report actual selected count and upload bytes",
+    "metrics": [
+      "distinct physically visible reference units covered",
+      "readable-value coverage",
+      "blur/glare/hand/local-occlusion failures",
+      "redundant views",
+      "state-mixing errors",
+      "selection CPU, decode/encode time, peak memory, thermal/device context"
+    ],
+    "doNotInfer": [
+      "zero selected is not proof every frame unreadable",
+      "same hash is not unchanged state proof",
+      "frame coverage is not semantic completeness"
+    ]
+  },
+  "scoring": {
+    "wholeObject": [
+      "all-visible individual recall",
+      "precision of all returned physical units",
+      "group surface utility and optional visible quantity separately",
+      "unsupported/uncertain GT excluded with denominator shown"
+    ],
+    "values": [
+      "correct",
+      "wrong",
+      "unknown",
+      "missing object",
+      "unjudged visible output"
+    ],
+    "geometry": [
+      "physical bbox correspondence",
+      "canonical slot placement where defined",
+      "unplaced objects retained"
+    ],
+    "fusion": [
+      "actual editable units/values",
+      "duplicates",
+      "wrong links",
+      "known-value overwrites",
+      "unresolved preserved but not counted as recovered"
+    ],
+    "user": [
+      "capture-to-first-useful-overlay",
+      "capture-to-final-editable",
+      "time/actions to human-correct and physically reconstruct",
+      "manual incomplete/unknown states retained"
+    ],
+    "cost": [
+      "per-request input/output/reasoning/cache usage",
+      "calculated USD vs actual invoice UNKNOWN",
+      "batch wall vs per-call latency",
+      "upload/CPU/merge/save separately"
+    ]
+  },
+  "acceptanceRules": [
+    "No fabricated percentage cutoff. Compare added correct restoration information against new false positives/wrong values/correction effort and cost.",
+    "If P1/P2 improves only row count, schema validity or selected-region metric, do not adopt as whole-scene gain.",
+    "If V reveals no additional scorable information over O/R, do not make cross-view registration a required implementation.",
+    "Regression: raw preservation, null vs 0, scope/owner/epoch, manual edits, reverse completion, redelivery, adjacent identical pieces and board/piece layers.",
+    "No claim of 120-game accuracy; single trials remain weak evidence. Results used to tune become development evidence."
+  ],
+  "executionChecklist": [
+    "Human refs and media available",
+    "Approved bounded runner only, no product default mutation",
+    "Exact before-request hash/deepEqual checks pass",
+    "All claims exclusive before HTTP",
+    "Stop on limit/failure boundary",
+    "Independent scorer retains original reference and reports ambiguity",
+    "Return results including failures, not just favorable cases"
+  ],
+  "timingProtocol": {
+    "primaryPurpose": "Prompt/reporting and information-source discrimination, not a service speed certification.",
+    "schedule": [
+      {
+        "case": "new-catan-01",
+        "steps": [
+          [
+            "N01"
+          ],
+          [
+            "N02"
+          ]
+        ]
+      },
+      {
+        "case": "new-carcassonne-01",
+        "steps": [
+          [
+            "N03"
+          ],
+          [
+            "N04"
+          ],
+          [
+            "N05",
+            "N07"
+          ],
+          [
+            "N06"
+          ]
+        ]
+      },
+      {
+        "case": "new-sagrada-01",
+        "steps": [
+          [
+            "N09"
+          ],
+          [
+            "N08"
+          ],
+          [
+            "N10",
+            "N12"
+          ],
+          [
+            "N11"
+          ]
+        ]
+      }
+    ],
+    "pairedWallMeasured": "P2 whole + independent view only: N05/N07 and N10/N12 concurrently, peak2; start/end/claim times recorded.",
+    "registeredCropWall": "P2 whole reused with later crop; max(per-call times) is an ESTIMATE only, not measured parallel wall.",
+    "promptTimingCaveat": "Single trial, fixed different order and different concurrency context for P2; observed latency differences cannot isolate the instruction effect. Cache and queue effects recorded.",
+    "clientMilestones": [
+      "capture-start",
+      "each-image-captured",
+      "selection-frozen",
+      "upload/registration-complete",
+      "first-complete-receipt-preview",
+      "all-required-units-terminal",
+      "fusion/commit-complete",
+      "human-correction-and-physical-restore-complete"
+    ],
+    "measurementBoundary": "Record only milestones actually observed in a connected isolated product path. Standalone provider times, offline merge times and reused results cannot be summed and labeled measured capture-to-final. If no connected path is available in this round, end-to-end and human restore times remain UNKNOWN; no extra paid requests allowed to fill the gap."
+  }
+}

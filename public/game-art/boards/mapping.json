@@ -1294,7 +1294,7 @@
     {
       "gameId": "azul",
       "editionId": "base",
-      "sourceSHA": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
+      "sourceSHA": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
       "status": "reuse",
       "areas": [
         {
@@ -1380,7 +1380,7 @@
         },
         {
           "areaId": "bag",
-          "label": "주머니·버림",
+          "label": "주머니",
           "fieldKeys": [
             "bag.scene"
           ],
@@ -1393,8 +1393,31 @@
           "template": "free-table",
           "status": "not-needed",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "azul.primary"
+          ],
           "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "box-lid",
+          "label": "상자 뚜껑의 버린 타일",
+          "fieldKeys": [
+            "box-lid.scene"
+          ],
+          "componentIds": [
+            "tiles"
+          ],
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "free-table",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "azul.primary"
+          ],
+          "sourceConfidence": "reported",
           "artComponentId": null
         }
       ],
@@ -5141,7 +5164,7 @@
     {
       "gameId": "hanabi",
       "editionId": "base",
-      "sourceSHA": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+      "sourceSHA": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
       "status": "new",
       "areas": [
         {
@@ -5159,7 +5182,9 @@
           "template": "track-mat",
           "status": "not-needed",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "hanabi.primary"
+          ],
           "sourceConfidence": "recommendation",
           "artComponentId": null
         },
@@ -10602,7 +10627,7 @@
     {
       "gameId": "ticket-to-ride",
       "editionId": "base",
-      "sourceSHA": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
+      "sourceSHA": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17",
       "status": "reuse",
       "areas": [
         {
@@ -10666,7 +10691,7 @@
         },
         {
           "areaId": "decks",
-          "label": "뽑기·버림",
+          "label": "뽑기 더미",
           "fieldKeys": [
             "decks.scene"
           ],
@@ -10680,8 +10705,53 @@
           "template": "card-lanes",
           "status": "not-needed",
           "geometryStatus": "manual-surface",
-          "sourceRefs": [],
+          "sourceRefs": [
+            "ticket-to-ride.rules.2025"
+          ],
           "sourceConfidence": "recommendation",
+          "artComponentId": null
+        },
+        {
+          "areaId": "train-discard",
+          "label": "공개 열차 카드 버림",
+          "fieldKeys": [
+            "train-discard.scene"
+          ],
+          "componentIds": [
+            "cards"
+          ],
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "card-lanes",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "ticket-to-ride.rules.2025"
+          ],
+          "sourceConfidence": "reported",
+          "artComponentId": null
+        },
+        {
+          "areaId": "train-stock",
+          "label": "플레이어별 남은 열차 말",
+          "fieldKeys": [
+            "train-stock.scene",
+            "remaining-trains"
+          ],
+          "componentIds": [
+            "trains"
+          ],
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "template": "personal-tray",
+          "status": "new",
+          "geometryStatus": "manual-surface",
+          "sourceRefs": [
+            "ticket-to-ride.rules.2025"
+          ],
+          "sourceConfidence": "reported",
           "artComponentId": null
         }
       ],

@@ -1,0 +1,458 @@
+{
+  "schemaVersion": "pack-appendix-study-v1",
+  "status": "FROZEN_BEFORE_OUTPUT_INSPECTION",
+  "frozenAt": "2026-10-29T08:58:33.144458+00:00",
+  "selectionPreflightSHA256": "0be78b7911598a2839e940a7d96a65df2638dbb135d9dcd384ba10e337e16d8d",
+  "selectionFreezeSHA256": "53881bc46d58995e6f17e43b510e0913001a8a9995e9f173a97e768d770eae36",
+  "runtimeVerification": {
+    "model": "gpt-6-astra",
+    "effectiveThinkingOptionId": "ultra",
+    "source": "Paseo list_agents structured metadata, 2026-10-29T08:44Z",
+    "outputsOrTimelineRead": false
+  },
+  "inspectionBoundary": {
+    "baselineOutputsInspected": false,
+    "referenceLabelsInspected": false,
+    "testPhotosInspected": false,
+    "providerCallsByResearcher": 0
+  },
+  "appendOperation": {
+    "target": "body.contents[0].parts[0].text",
+    "expression": "baselineText + \"\\n\\n\" + entry.promptAppendix",
+    "separator": "\n\n",
+    "exactlyOnce": true,
+    "sha256Encoding": "UTF-8 bytes of promptAppendix; no added newline",
+    "allOtherRequestFieldsUnchanged": true,
+    "requestBodyDeltaOnly": [
+      "contents[0].parts[0].text"
+    ],
+    "runnerMustPinActualBaselineBody": true
+  },
+  "studyDesign": {
+    "baselineGames": 20,
+    "pairedAugmentationGames": 4,
+    "augmentationCalls": 4,
+    "runsPerConditionPerGame": 1,
+    "retries": 0,
+    "scope": "Selected existing non-Catan photograph and selected capture area per game; same provider/model/image/settings/schema, only appendix added.",
+    "sampling": "Purposive four-game selection before results; no population accuracy inference.",
+    "conditionsNotIsolated": [
+      "extra tokens vs reference semantics",
+      "run-to-run/model service variation",
+      "order/cache effects"
+    ],
+    "resultsStatus": "AWAITING_SUPERVISOR_EXECUTION_AND_INDEPENDENT_REFERENCES",
+    "metricPolicy": [
+      "고정 사전 GT 중 사진에서 판독 가능한 항목만 분모. 미주석 예측은 자동 FP 처리하지 않고 별도 검토/미판정.",
+      "동일 실물에 대한 one-to-one 대응을 A/B 공통 정책으로 적용. 객체 존재, 종류, 값, bbox, 저장 보존을 분리.",
+      "unknown GT는 분모 제외; known GT에서 누락/unknown은 end-to-end 값 회수 실패로 세고, 읽은 값 중 정확도도 별도 보고.",
+      "원문 raw와 정규화 결과를 별도 대조. 계약 때문에 보류된 값과 시각 오독 구별.",
+      "각 %에 분자/분모와 표본/범위 표시; 4쌍 평균만으로 120게임 개선 주장 금지.",
+      "실제 elapsed/input/output/thought/total tokens·usage 기반 비용; 새 실측 전 효과/단가 확정 금지."
+    ]
+  },
+  "augmentations": [
+    {
+      "gameId": "cascadia",
+      "areaId": "ecosystem",
+      "photoSHA256": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+      "reason": "인쇄 야생동물 아이콘과 실제 놓인 토큰, 지형 타일을 구분하는 자료",
+      "editionId": "base",
+      "packVersion": "1.0.0-essentials-2.324b9eee26c5",
+      "sourceSHA": "324b9eee26c5fc154927a48d1ee217d5095d4d6106c87cb33258484cf096a357",
+      "definitionSHA": "6e9aa1d7c6e5042a46be26c53cac24edecee6df3daa768cf595c33f8db024f79",
+      "partition": "player_public",
+      "allowedComponentIds": [
+        "habitat",
+        "wildlife"
+      ],
+      "promptAppendix": "Game-reference appendix; not a description of this photograph. The selected area, allowed kinds/properties, output format and unknown policy above are unchanged.\nCascadia base-game habitat tiles depict mountains, forests, prairies, wetlands and rivers; a hex can show one habitat or a split between habitats. These visible terrain illustrations belong in habitat.habitats. Small animal symbols printed on a habitat indicate permitted wildlife and belong in habitat.wildlifeIcons; a printed symbol is not a separate wildlife piece and does not prove occupancy. Actual wildlife pieces are separate round tokens depicting bear, elk, salmon, hawk or fox; their visible animal belongs in wildlife.animal. A token may obscure habitat artwork or icons: obscured information remains unknown, even if game rules restrict what could legally occupy that tile. The depicted animal, permitted icon and terrain are different observations. The rules permit a tile to remain without a wildlife token; do not infer a missing token from an icon. These vocabularies do not specify which types or how many pieces occur in the photograph.",
+      "sha256": "2d22b3f5c8c152cc834fe1f0b4af691275b54030efbd484968c414fa00307a8b",
+      "utf8Bytes": 1117,
+      "wordCount": 166,
+      "sourceRefs": [
+        "cascadia-rules"
+      ],
+      "referenceFactsEvidenceLevel": "VERIFIED",
+      "photoEditionMatch": "UNKNOWN_NOT_INSPECTED",
+      "effectEvidenceLevel": "HYPOTHESIS_NOT_MEASURED",
+      "targetedProperties": {
+        "habitat": [
+          "habitats",
+          "wildlifeIcons"
+        ],
+        "wildlife": [
+          "animal",
+          "observedColor"
+        ]
+      },
+      "sourceId": "cascadia-rules",
+      "expectedMechanism": "명명된 지형·동물 어휘와 인쇄 기호/실물 토큰의 구분이 종류·속성 혼동을 줄이는지 시험.",
+      "codeCanDerive": [
+        "관측된 동물명·지형명의 명시적 동의어 정규화는 별도 표시값을 보존하며 가능.",
+        "완전히 관측/확인된 타일-토큰 관계에서는 허용 아이콘과의 일치 여부만 계산 가능; 불일치를 오독 정답으로 자동 교정하지 않음."
+      ],
+      "mustBeObserved": [
+        "실제 토큰 존재·동물·원위치, 지형과 인쇄 아이콘; 가려진 타일 아래 속성은 모름."
+      ],
+      "limitations": [
+        "starter habitat의 연결된 물리 조각과 hex region 단위는 평가 주석에서 구별; 이번 부록은 새 단위 분할/그림 배치를 지시하지 않음.",
+        "targetTile·rotation은 수동 속성이므로 출력에 추가하지 않음."
+      ]
+    },
+    {
+      "gameId": "kingdomino",
+      "areaId": "kingdom",
+      "photoSHA256": "93ca427021922281a6c001ede9176206ffbf17ae296e2c27955e8fdc37ce28fd",
+      "reason": "한 도미노의 두 지형 칸과 왕관 인쇄값을 실물 단위와 구분하는 자료",
+      "editionId": "base",
+      "packVersion": "1.0.0-essentials-2.57b0a63c70f2",
+      "sourceSHA": "57b0a63c70f23fa479b908e80da5109c5a89d8e5619d1d5656c05ea5049510d9",
+      "definitionSHA": "e004a6b786f213d4f8abcd1a0da2915cf8fc25581d11301ca40e47f6709e1fc9",
+      "partition": "player_public",
+      "allowedComponentIds": [
+        "dominoes",
+        "markers"
+      ],
+      "promptAppendix": "Game-reference appendix; not a description of this photograph. The selected area, allowed kinds/properties, output format and unknown policy above are unchanged.\nIn base Kingdomino, a landscape domino is one physical rectangular tile containing two square terrain halves. The halves may show different terrain and crown symbols; they are not two separate domino objects. firstTerrain/firstCrowns and secondTerrain/secondCrowns describe the corresponding halves of that same tile. Preserve each terrain-and-crowns pairing without inferring an unobserved half. Crowns are printed scoring symbols, not movable pieces or physical quantity. A clearly visible half with no crown can have zero crowns; an obscured half is unknown. The landscape is on the front and the identifying number is on the reverse: front artwork does not establish tileNumber. The starting castle and wooden king selection pawns are markers, not landscape dominoes. A kingdom may be incomplete; do not fill spaces or infer the selected pawn's owner, turn or choice. Artwork and terrain wording can differ between editions; use visibly supported descriptions.",
+      "sha256": "44262037fe951eec9d19be45adbd8ab15e0d3b0868d327333843b1895d2fb45c",
+      "utf8Bytes": 1126,
+      "wordCount": 163,
+      "sourceRefs": [
+        "kingdomino-rules"
+      ],
+      "referenceFactsEvidenceLevel": "VERIFIED",
+      "photoEditionMatch": "UNKNOWN_NOT_INSPECTED",
+      "effectEvidenceLevel": "HYPOTHESIS_NOT_MEASURED",
+      "targetedProperties": {
+        "dominoes": [
+          "firstTerrain",
+          "firstCrowns",
+          "secondTerrain",
+          "secondCrowns",
+          "tileNumber"
+        ],
+        "markers": [
+          "markerType",
+          "observedColor"
+        ]
+      },
+      "sourceId": "kingdomino-rules",
+      "expectedMechanism": "실물 도미노 1개와 두 반쪽 속성의 연결을 명시하여 칸 수/물체 수 혼동 및 왕관-수량 혼동을 줄이는지 시험.",
+      "codeCanDerive": [
+        "확인된 도미노와 방향으로 두 반쪽의 결합을 저장할 수 있음.",
+        "각 반쪽의 왕관 수가 모두 관측되면 합계 계산 가능; 사진에서 안 보이는 왕관/번호를 법칙으로 채우지 않음."
+      ],
+      "mustBeObserved": [
+        "도미노 외곽/이음선, 각 반쪽 지형·왕관, 보이는 면, 성/왕 말; 다른 면 번호는 직접 보아야 함."
+      ],
+      "limitations": [
+        "현재 tileNumber.faceOnly=true이나 공식 번호는 뒷면. 뒤집힌 번호 판독은 현재 decoder가 wrong-face로 보류할 수 있음. 이 실험에서 계약은 변경하지 않고 모델 오류와 별도 집계.",
+        "첫째/둘째 반쪽의 절대 방향 규약 없음. 정답 비교 시 지형-왕관 쌍을 함께 뒤집는 대칭 비교를 별도 제공; 값만 유리하게 섞지 않음."
+      ]
+    },
+    {
+      "gameId": "dominion",
+      "areaId": "supply",
+      "photoSHA256": "f7228db87b131d2036af758973ea20e0da01cdcb7f99bca313fc281543c2078f",
+      "reason": "카드 종류·인쇄 비용/승점·공급 더미와 실제 잔여 수량을 구분하는 자료",
+      "editionId": "base",
+      "packVersion": "1.0.0-essentials-2.030db7ee88c7",
+      "sourceSHA": "030db7ee88c766c30402ddb66764ef40565805623f70d6ae8d0bfa89b81ee422",
+      "definitionSHA": "02f31a0e1fb14eea69b56a77ee323e2c7547cb9e2a979cce1163d99dc197ee50",
+      "partition": "common_public",
+      "allowedComponentIds": [
+        "cards",
+        "zones"
+      ],
+      "promptAppendix": "Game-reference appendix; not a description of this photograph. The selected area, allowed kinds/properties, output format and unknown policy above are unchanged.\nFor Dominion base second edition, a card's title appears near the top and its functional type is printed near the bottom. Printed types include Action, Treasure, Victory and Curse; a card can have a compound type such as Action - Attack or Action - Reaction. These visible labels can inform cards.printedName and cards.cardType, preserving the readable language. \"Kingdom card\" is a selection category, not a substitute for the printed functional type. Treasure faces show coin values; a card's lower-left cost and its other printed numerals are not the number of physical cards. The Supply contains face-up stacks: one visible top card can identify that visible face, but does not reveal how many cards remain underneath. Count only physically distinguishable cards, otherwise retain an unknown group quantity under the existing policy. Do not substitute starting pile sizes, a remembered card list, or playmat text for observed cards; do not add unlisted cost or score properties.",
+      "sha256": "400ce6e89f938a05c7ae8d5d2eda4f93c75c7aa34e550c27fe2c45c964635d07",
+      "utf8Bytes": 1144,
+      "wordCount": 175,
+      "sourceRefs": [
+        "dominion-rules"
+      ],
+      "referenceFactsEvidenceLevel": "VERIFIED",
+      "photoEditionMatch": "UNKNOWN_NOT_INSPECTED",
+      "effectEvidenceLevel": "HYPOTHESIS_NOT_MEASURED",
+      "targetedProperties": {
+        "cards": [
+          "printedName",
+          "cardType",
+          "face"
+        ]
+      },
+      "sourceId": "dominion-rules",
+      "expectedMechanism": "카드에 쓰인 기능 유형·제목과 공급/개인이라는 영역 역할, 인쇄값과 물리 수량을 구분하는지 시험.",
+      "codeCanDerive": [
+        "허용된 관측 문자열의 단순 정규화 및 공개 영역 분리 가능.",
+        "진짜 잔여 카드 수나 현재 손패는 전체 재고·시작 수량으로 역산하지 않음."
+      ],
+      "mustBeObserved": [
+        "앞면 이름/기능 유형/실물 카드 경계; 더미 아래 수량과 정체는 보이지 않으면 모름."
+      ],
+      "limitations": [
+        "현재 카드 비용/승점 속성이 없음. 부록은 이를 추가하지 않으므로 해당 값의 자동 저장 개선 시험이 아님.",
+        "cardType 라벨은 왕국·기본·개인 역할을 혼용하나 text 계약은 기능 유형도 표현 가능. 원문 값과 정규화 값을 별도 평가.",
+        "스택은 그룹 관측 허용; 보이지 않는 전체 수량에 대한 정확도 분모를 만들지 않음."
+      ]
+    },
+    {
+      "gameId": "tiny-towns",
+      "areaId": "town",
+      "photoSHA256": "9ff0bf69d7710e35b96ab829fa6631a1fbaa7c194daa0fa47b8a4a4fc7c3e97c",
+      "reason": "자원 큐브와 건물의 형태/색 의미 및 건설 카드 인쇄 패턴을 구분하는 자료",
+      "editionId": "base",
+      "packVersion": "1.0.0-essentials-2.c9280a43c494",
+      "sourceSHA": "c9280a43c494455f7cef34501f26891aa25b09263f616e58292de88b7b2339ce",
+      "definitionSHA": "ee883be2807d35407e520f17eef6118c4309715fab17762c68b6825246f1a6e5",
+      "partition": "player_public",
+      "allowedComponentIds": [
+        "resources",
+        "buildings"
+      ],
+      "promptAppendix": "Game-reference appendix; not a description of this photograph. The selected area, allowed kinds/properties, output format and unknown policy above are unchanged.\nTiny Towns base-game resources are small wooden cubes, distinct from shaped building pieces. In the official standard components, resource cubes are brown wood, yellow wheat, red brick, blue/turquoise glass and grey stone. Use this reference only where a physical cube and its colour are discernible; lighting, substitutions or another edition can make resourceType unknown while observedColor remains visible. Buildings have shaped silhouettes rather than ordinary resource-cube geometry; the set also includes round well pieces and purple monument pieces. Building colour alone does not identify the selected card's exact name or ability: different building cards can use the same piece type. A card's printed coloured-square construction pattern is a recipe, not cubes currently on the town board. The town board has a square grid; a printed square is not a resource. Do not reconstruct consumed resources, hidden monument identity, occupied cells or ownership from a legal construction pattern. No expected piece count or completed layout follows from these references.",
+      "sha256": "337b50fbf07f8afe78283a6f64265e0de8d4bfb9cad0bd3f598f6f9d74e2b99f",
+      "utf8Bytes": 1235,
+      "wordCount": 179,
+      "sourceRefs": [
+        "tiny-towns-rules"
+      ],
+      "referenceFactsEvidenceLevel": "VERIFIED",
+      "photoEditionMatch": "UNKNOWN_NOT_INSPECTED",
+      "effectEvidenceLevel": "HYPOTHESIS_NOT_MEASURED",
+      "targetedProperties": {
+        "resources": [
+          "observedColor",
+          "resourceType"
+        ],
+        "buildings": [
+          "observedColor",
+          "buildingType"
+        ]
+      },
+      "sourceId": "tiny-towns-rules",
+      "expectedMechanism": "공식 재료 색 대응과 큐브/건물 형상을 알려 자원·건물 구분과 재료명 판독을 보조하는지 시험.",
+      "codeCanDerive": [
+        "판본·표준 부품과 관측 색이 확인되면 표의 색→재료명 대응 가능; 원색 관측을 별도 보존.",
+        "확인된 칸/선택 건물 카드가 모두 있으면 인접·패턴 관계를 계산 가능하지만 사진을 대신해 점유를 채우지 않음."
+      ],
+      "mustBeObserved": [
+        "물리 큐브/건물 존재와 색·형상; 선택 건물 카드가 없으면 구체 카드명/효과는 미확인."
+      ],
+      "limitations": [
+        "색만으로 소유자·기념물 정체를 추정하지 않음.",
+        "사진의 실제 판본/조명은 사전 열람하지 않아 확인 안 됨.",
+        "cell·owner는 수동 속성이고 이번 부록에서 추가하지 않음."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "cascadia-rules",
+      "url": "https://www.alderac.com/wp-content/uploads/2025/04/Cascadia_BaseGame_Rulebook_Optimized.pdf",
+      "publisher": "AEG / Flatout Games",
+      "editionScope": "Cascadia base game; Landmarks excluded",
+      "locator": "printed pp.3,7: Components; Place the Tile and Token into Your Environment",
+      "access": "official PDF opened; existing publisher-copy pp.3,7 visually inspected",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "habitat and wildlife vocabularies",
+        "printed allowed icons vs separate round tokens",
+        "unoccupied habitat allowed; legal placement cannot reveal covered artwork"
+      ],
+      "limits": "Test photograph edition not inspected or authenticated."
+    },
+    {
+      "id": "kingdomino-rules",
+      "url": "https://blueorangegames.eu/wp-content/uploads/2023/04/Kingdomino-Rules-EN.pdf",
+      "publisher": "Blue Orange",
+      "editionScope": "Kingdomino base English rules; not Origins/Queendomino",
+      "locator": "printed pp.2–4: Contents, Game Rules, End of the Game, variants",
+      "access": "official PDF opened and text read",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "two terrain squares per physical domino",
+        "landscape front / numbered reverse",
+        "crowns per territory; castle and kings separate",
+        "incomplete kingdom and variant size limitations"
+      ],
+      "limits": "Artwork/terrain naming can vary; no fixed expected board occupancy supplied."
+    },
+    {
+      "id": "dominion-rules",
+      "url": "https://www.riograndegames.com/wp-content/uploads/2016/09/Dominion2nd.pdf",
+      "publisher": "Rio Grande Games",
+      "editionScope": "Dominion second edition; document contains 2021 printing marks",
+      "locator": "printed pp.3–5,7: Supply, card anatomy, Buy phase, discard definition",
+      "access": "official 16-page PDF opened and relevant text read",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "face-up supply piles",
+        "card name/type labels including compound types",
+        "coin value and lower-left cost differ from physical count",
+        "top-visible face does not reveal covered card count"
+      ],
+      "limits": "URL directory year is not proof of printing date; no card roster, starting counts or hidden identities supplied."
+    },
+    {
+      "id": "tiny-towns-rules",
+      "url": "https://www.alderac.com/wp-content/uploads/2024/05/Tiny_Towns_Rulebook_WEB.pdf",
+      "publisher": "AEG",
+      "editionScope": "Tiny Towns base English rules; expansions excluded",
+      "locator": "printed pp.2–3: Setup, resource illustrations, Building Card Anatomy, Monuments",
+      "access": "web parser size limit; public publisher PDF downloaded normally and pp.2–3 visually inspected via PDFKit",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "resource cube colour/material legend",
+        "building silhouettes including round wells and purple monuments",
+        "building-card alternatives by shared symbol",
+        "printed recipe differs from physical resources"
+      ],
+      "limits": "Standard component colours, not a universal owner/identity inference; substitute pieces and lighting remain uncertain."
+    },
+    {
+      "id": "description-classification",
+      "url": "https://arxiv.org/abs/2210.07183",
+      "title": "Visual Classification via Description from Large Language Models",
+      "authors": "Sachit Menon; Carl Vondrick",
+      "year": 2022,
+      "access": "primary author abstract opened",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "visual descriptors as an alternative to class-name-only recognition"
+      ],
+      "limits": "CLIP-based classification experiments, not evidence of Gemini multi-object counting/placement or of this appendix."
+    },
+    {
+      "id": "glip",
+      "url": "https://arxiv.org/abs/2112.03857",
+      "implementation": "https://github.com/microsoft/GLIP",
+      "title": "Grounded Language-Image Pre-training",
+      "year": 2021,
+      "access": "primary author abstract and official implementation read",
+      "checkedAt": "2026-10-29",
+      "evidenceLevel": "VERIFIED",
+      "supports": [
+        "phrase/region grounding is an additional approach to language-conditioned object detection"
+      ],
+      "limits": "Different trained model and task; adding these descriptions to current reader does not reproduce GLIP or its benchmark performance."
+    }
+  ],
+  "inputInventory": [
+    {
+      "path": "server/ai/geminiGameReader.ts",
+      "sha256": "82850b9bc1d0b6d8099da2b8f49d1cfb4b66fa46db320287dec7a9ce2e91a311",
+      "bytes": 15428
+    },
+    {
+      "path": "game-photo-definitions/index.json",
+      "sha256": "eb1ced17ede58ab3dbeb0a30e4fb8fb29eb62a5125c3b7e07b0d8093d13a8b8a",
+      "bytes": 735887
+    },
+    {
+      "path": "game-photo-definitions/contract.json",
+      "sha256": "00be673c319254b83941f88f09a8e33d4d1f29c0d8b5970d4080f72eb2c0c799",
+      "bytes": 295452
+    },
+    {
+      "path": "docs/twenty-games-pack-study-20261029/selection-preflight.json",
+      "sha256": "0be78b7911598a2839e940a7d96a65df2638dbb135d9dcd384ba10e337e16d8d",
+      "bytes": 20714
+    },
+    {
+      "path": "docs/twenty-games-pack-study-20261029/astra/selection-freeze.json",
+      "sha256": "53881bc46d58995e6f17e43b510e0913001a8a9995e9f173a97e768d770eae36",
+      "bytes": 1722
+    },
+    {
+      "path": "docs/research/game-specs-120/games/cascadia.json",
+      "sha256": "324b9eee26c5fc154927a48d1ee217d5095d4d6106c87cb33258484cf096a357",
+      "bytes": 23431
+    },
+    {
+      "path": "docs/research/game-specs-120/games/kingdomino.json",
+      "sha256": "57b0a63c70f23fa479b908e80da5109c5a89d8e5619d1d5656c05ea5049510d9",
+      "bytes": 20301
+    },
+    {
+      "path": "docs/research/game-specs-120/games/dominion.json",
+      "sha256": "030db7ee88c766c30402ddb66764ef40565805623f70d6ae8d0bfa89b81ee422",
+      "bytes": 26603
+    },
+    {
+      "path": "docs/research/game-specs-120/games/tiny-towns.json",
+      "sha256": "c9280a43c494455f7cef34501f26891aa25b09263f616e58292de88b7b2339ce",
+      "bytes": 23237
+    },
+    {
+      "path": "shared/readouts/contracts/cascadia.ts",
+      "sha256": "5c426c508fc3d473c2563e3d7e461eb903f7b9f56788823ddc2a504cc0539b4f",
+      "bytes": 1420
+    },
+    {
+      "path": "shared/readouts/contracts/kingdomino.ts",
+      "sha256": "70602f42d27ec7435d2abcea9a7e854ae5b77dcb0a3ce602464b648650c368f2",
+      "bytes": 1097
+    },
+    {
+      "path": "shared/readouts/contracts/dominion.ts",
+      "sha256": "e04e2bbb47a26487b47e63924aa3e47b79027b5deffc3a62245dae6f5cf6eb31",
+      "bytes": 808
+    },
+    {
+      "path": "shared/readouts/contracts/tiny-towns.ts",
+      "sha256": "51f1e26d5c98dcc03248bf698c07f8b03a4fd9b680872716946151851337d5de",
+      "bytes": 1346
+    },
+    {
+      "path": "docs/art-confirmation/sources/cascadia-rules.pdf",
+      "sha256": "a7f142115aadfcb2b7d145dd04c694b6672f620358a477f4030f528c48c91627",
+      "bytes": 2123987
+    },
+    {
+      "path": "docs/art-confirmation/sources/pages/cascadia-rules-p3.png",
+      "sha256": "ef40084e7ad00d0d365101dae60a01136830b8050796ec00847d03bf2c76623d",
+      "bytes": 2230859
+    },
+    {
+      "path": "docs/art-confirmation/sources/pages/cascadia-rules-p7.png",
+      "sha256": "6320f2498eabde7038da1970c80fdb3c9bd1c4e3b7da27ec5248538fccaf35e0",
+      "bytes": 2057031
+    },
+    {
+      "path": "docs/twenty-games-pack-study-20261029/astra/tiny-towns-official-rules.pdf",
+      "sha256": "48e8cc0791880df6b58e8d5f53a85bab6f1f764f162a7a9026ff8a722e2ea791",
+      "bytes": 29937628
+    },
+    {
+      "path": "docs/twenty-games-pack-study-20261029/astra/tiny-towns-rules-p2.png",
+      "sha256": "342ca396283f2ecb744ffc3a6aa9c6979ddd48d1d5fb9008f5a98d29ca9679b9",
+      "bytes": 3837641
+    },
+    {
+      "path": "docs/twenty-games-pack-study-20261029/astra/tiny-towns-rules-p3.png",
+      "sha256": "fa20e7a8c9c1dcaa253878ffcb38b037daef747eae8d3b6c90d6056a594c81db",
+      "bytes": 3912827
+    }
+  ],
+  "knownContractLimitations": [
+    {
+      "gameId": "kingdomino",
+      "property": "tileNumber",
+      "finding": "front-only metadata conflicts with base-game reverse-side number placement",
+      "code": "game-photo-definitions/index.json: kingdomino.dominoes.properties[tileNumber].faceOnly; server/ai/geminiGameReader.ts: decodeGeminiGameObservation",
+      "actionInThisStudy": "No product change. Mark nonrepresentable reverse-number values separately; never force front-side guesses."
+    },
+    {
+      "gameId": "dominion",
+      "finding": "No cost/VP property in selected cards contract",
+      "actionInThisStudy": "No invented property; assess card title/type/physical quantity only."
+    }
+  ]
+}

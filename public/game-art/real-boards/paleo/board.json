@@ -1,0 +1,2805 @@
+{
+  "gameId": "paleo",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "base-camp-decks",
+      "label": "base-camp-decks",
+      "field": "camp.scene",
+      "scope": "public",
+      "accepts": [
+        "boards",
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-people-deck",
+          "x": 40,
+          "y": 44,
+          "w": 76,
+          "h": 98,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-dream-deck",
+          "x": 127,
+          "y": 44,
+          "w": 76,
+          "h": 98,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-idea-deck",
+          "x": 214,
+          "y": 44,
+          "w": 76,
+          "h": 98,
+          "capacity": 1
+        }
+      ],
+      "note": "Three different decks2people/3dreams/4ideas;capacity1pile,notonecard.",
+      "bounds": [
+        35,
+        37,
+        262,
+        113
+      ]
+    },
+    {
+      "id": "wilderness-discards",
+      "label": "wilderness-discards",
+      "field": "discards.scene",
+      "scope": "public",
+      "accepts": [
+        "cards",
+        "people"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-discard-facedown",
+          "x": 343,
+          "y": 44,
+          "w": 114,
+          "h": 105,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-discard-faceup",
+          "x": 492,
+          "y": 44,
+          "w": 114,
+          "h": 105,
+          "capacity": 1
+        }
+      ],
+      "bounds": [
+        337,
+        38,
+        275,
+        117
+      ]
+    },
+    {
+      "id": "waiting-cards",
+      "label": "waiting-cards",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-waiting-1",
+          "x": 344,
+          "y": 178,
+          "w": 58,
+          "h": 52,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-waiting-2",
+          "x": 411,
+          "y": 178,
+          "w": 58,
+          "h": 52,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-waiting-3",
+          "x": 478,
+          "y": 178,
+          "w": 58,
+          "h": 52,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-waiting-4",
+          "x": 545,
+          "y": 178,
+          "w": 58,
+          "h": 52,
+          "capacity": 1
+        }
+      ],
+      "bounds": [
+        337,
+        170,
+        276,
+        67
+      ],
+      "capacityPolicy": "fourprintedwaitingpositions;extraactualcardscontinuebelow,notrejected or inventedfixedtotal4"
+    },
+    {
+      "id": "secret-deck",
+      "label": "secret-deck",
+      "field": "camp.scene",
+      "scope": "public",
+      "accepts": [
+        "boards",
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-secret-card-pile",
+          "x": 668,
+          "y": 50,
+          "w": 56,
+          "h": 103,
+          "capacity": 1
+        }
+      ],
+      "bounds": [
+        664,
+        46,
+        64,
+        111
+      ]
+    },
+    {
+      "id": "night-skulls",
+      "label": "night-skulls",
+      "field": "camp.scene",
+      "scope": "public",
+      "accepts": [
+        "boards",
+        "progress"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-skull-1",
+          "x": 742,
+          "y": 166,
+          "w": 30,
+          "h": 30,
+          "capacity": 1,
+          "shape": "circle"
+        },
+        {
+          "id": "paleo-skull-2",
+          "x": 782,
+          "y": 166,
+          "w": 30,
+          "h": 30,
+          "capacity": 1,
+          "shape": "circle"
+        },
+        {
+          "id": "paleo-skull-3",
+          "x": 822,
+          "y": 166,
+          "w": 30,
+          "h": 30,
+          "capacity": 1,
+          "shape": "circle"
+        },
+        {
+          "id": "paleo-skull-4",
+          "x": 862,
+          "y": 166,
+          "w": 30,
+          "h": 30,
+          "capacity": 1,
+          "shape": "circle"
+        },
+        {
+          "id": "paleo-skull-5",
+          "x": 902,
+          "y": 166,
+          "w": 30,
+          "h": 30,
+          "capacity": 1,
+          "shape": "circle"
+        }
+      ],
+      "bounds": [
+        735,
+        159,
+        200,
+        45
+      ]
+    },
+    {
+      "id": "mission-cards",
+      "label": "mission-cards",
+      "field": "camp.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        666,
+        220,
+        291,
+        59
+      ],
+      "placement": "allactualselectedmodulemissions andremainingnightactions;noinvented2cardcapacity"
+    },
+    {
+      "id": "workbench-ideas",
+      "label": "workbench-ideas",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "paleo-workbench-idea-1",
+          "x": 43,
+          "y": 286,
+          "w": 70,
+          "h": 90,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-workbench-idea-2",
+          "x": 128,
+          "y": 286,
+          "w": 70,
+          "h": 90,
+          "capacity": 1
+        },
+        {
+          "id": "paleo-workbench-idea-3",
+          "x": 213,
+          "y": 286,
+          "w": 70,
+          "h": 90,
+          "capacity": 1
+        }
+      ],
+      "note": "3physicalidea-cardgrooves;whenfull,oneactualidearemovedtocemeterybeforenewone. Token stocks separatelylinkedbeloweachidea.",
+      "bounds": [
+        37,
+        280,
+        255,
+        104
+      ]
+    },
+    {
+      "id": "cemetery",
+      "label": "cemetery",
+      "field": "discards.scene",
+      "scope": "public",
+      "accepts": [
+        "cards",
+        "people"
+      ],
+      "ordered": true,
+      "slots": [],
+      "bounds": [
+        651,
+        324,
+        160,
+        121
+      ],
+      "placement": "allremovedpeople/cards;distinctfrombothrecyclablediscardpiles"
+    },
+    {
+      "id": "group-1-people",
+      "label": "group-1-people",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        487,
+        272,
+        102
+      ],
+      "placement": "variableindividualpeoplecardswithper-cardwoundoverlays;nofixedpersoncapacity",
+      "stateKey": "groups.group-1.people"
+    },
+    {
+      "id": "group-1-tools",
+      "label": "group-1-tools",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        606,
+        272,
+        40
+      ],
+      "placement": "actualindividualtooltiles;toolgiverdeathdoesnotremovetool",
+      "stateKey": "groups.group-1.toolTokens"
+    },
+    {
+      "id": "group-1-persistent",
+      "label": "group-1-persistent",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        659,
+        272,
+        35
+      ],
+      "placement": "night/additional/alternativeactioncards;tool-resourceattachments maybecard-bound",
+      "stateKey": "groups.group-1.persistentCards"
+    },
+    {
+      "id": "group-2-people",
+      "label": "group-2-people",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        487,
+        272,
+        102
+      ],
+      "placement": "variableindividualpeoplecardswithper-cardwoundoverlays;nofixedpersoncapacity",
+      "stateKey": "groups.group-2.people"
+    },
+    {
+      "id": "group-2-tools",
+      "label": "group-2-tools",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        606,
+        272,
+        40
+      ],
+      "placement": "actualindividualtooltiles;toolgiverdeathdoesnotremovetool",
+      "stateKey": "groups.group-2.toolTokens"
+    },
+    {
+      "id": "group-2-persistent",
+      "label": "group-2-persistent",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        659,
+        272,
+        35
+      ],
+      "placement": "night/additional/alternativeactioncards;tool-resourceattachments maybecard-bound",
+      "stateKey": "groups.group-2.persistentCards"
+    },
+    {
+      "id": "group-3-people",
+      "label": "group-3-people",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        742,
+        272,
+        102
+      ],
+      "placement": "variableindividualpeoplecardswithper-cardwoundoverlays;nofixedpersoncapacity",
+      "stateKey": "groups.group-3.people"
+    },
+    {
+      "id": "group-3-tools",
+      "label": "group-3-tools",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        861,
+        272,
+        40
+      ],
+      "placement": "actualindividualtooltiles;toolgiverdeathdoesnotremovetool",
+      "stateKey": "groups.group-3.toolTokens"
+    },
+    {
+      "id": "group-3-persistent",
+      "label": "group-3-persistent",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        37,
+        914,
+        272,
+        35
+      ],
+      "placement": "night/additional/alternativeactioncards;tool-resourceattachments maybecard-bound",
+      "stateKey": "groups.group-3.persistentCards"
+    },
+    {
+      "id": "group-4-people",
+      "label": "group-4-people",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        742,
+        272,
+        102
+      ],
+      "placement": "variableindividualpeoplecardswithper-cardwoundoverlays;nofixedpersoncapacity",
+      "stateKey": "groups.group-4.people"
+    },
+    {
+      "id": "group-4-tools",
+      "label": "group-4-tools",
+      "field": "groups.scene",
+      "scope": "public",
+      "accepts": [
+        "people"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        861,
+        272,
+        40
+      ],
+      "placement": "actualindividualtooltiles;toolgiverdeathdoesnotremovetool",
+      "stateKey": "groups.group-4.toolTokens"
+    },
+    {
+      "id": "group-4-persistent",
+      "label": "group-4-persistent",
+      "field": "active.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        527,
+        914,
+        272,
+        35
+      ],
+      "placement": "night/additional/alternativeactioncards;tool-resourceattachments maybecard-bound",
+      "stateKey": "groups.group-4.persistentCards"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {},
+  "notes": [
+    "BasePaleo;noANewBeginning/expansionmodules. Officialsolovariantoptional,normal2–4peoplemaycontrolfewerthan4groups.",
+    "Wholeassets only;existingdedicatedboardsartunchanged,mainfileiscompleteoriginaltable-scenegeometry.",
+    "Fixedslotsareactual3BaseCampdecks/2discardpiles/4waiting/3ideagrooves/5skulls. Variablepeople/mission/overflow/toolcountsnotinvented.",
+    "Cavepaintingown5connectedmammothregionsrepresentpieceidentity/progress,butarenotexactcommercialcutstencils;actualpieceplacement/rotationfreelyrecorded.",
+    "Individualcardhealth/abilities/tooltypes/modulefactsremainasrecorded;nounverifiedfixedhealthorD6pipsimposed.",
+    "Unknownstateandsecretfrontsnotfilledfromrulesexamplesorstartingillustrations."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://cdn.svc.asmodee.net/production-zman/uploads/2024/10/paleo_rulebook_en_web_v4a.pdf",
+      "sourceType": "official-ZMan-base-rulebook",
+      "pdfSHA256": "5a3a0bb1981228560dc54703ede7e9fede0550fd43604ee9ececbbdb05729ebc",
+      "location": "pp2–12;actualassembly/setup/image pp2/3/7/11",
+      "access": "downloaded12pages,alltextread,actualdiagramsdirectlyviewed",
+      "verifiedFacts": "3boards,3decks,3ideagrooves,workbench/cemetery,reserves;4groupswithjointcontrollers;allcardchoice/discard/wound/help/night/attachmentstates.",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://cdn.svc.asmodee.net/production-zman/uploads/2024/10/paleo_summary_sheet_web4a.pdf",
+      "sourceType": "official-base-supplement",
+      "pdfSHA256": "26a662c98ddfd245f4fdcb45bbbc15db19265f38863ac375f192fe28b1c34d0a",
+      "location": "pp1–3setup/variants,pp4–6symbolclarifications",
+      "access": "downloaded6pages,textread;page1actualboard/waitingdiagramdirectlyviewed",
+      "verifiedFacts": "4printedwaitingpositionsplusoverflow;7levels/select2modules(or3withJ);secrets/missions/ideasbelongindistinctzones;optionalvariantsandmoduleexceptionrecorded.",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "full-table-schematic",
+  "assetScope": "Paleo base all3sharedboards/workbench/cemetery/supplies and1–4independentlycontrolledvariablegroups;wholeassetpackage only.",
+  "tableModel": {
+    "modelId": "paleo-base-whole-table-v1",
+    "assetFiles": {
+      "boardSvg": "board.svg",
+      "boardJson": "board.json",
+      "preview": "board.png"
+    },
+    "printedStructures": [
+      "BaseCamp",
+      "Wilderness",
+      "Night",
+      "Workbench",
+      "Cemetery"
+    ],
+    "groups": {
+      "max": 4,
+      "defaultPeoplePerGroupAtSetup": 2,
+      "maxPeople": null,
+      "controllerIds": "explicitmany-to-manyplayerIDs;4peopleplayingmaycontrol3groups,notautomatic4groups",
+      "workmats": "Ownlogicalarrangement,notclaimedprintedpersonalboards"
+    },
+    "groupCountLayouts": {
+      "1": {
+        "hideAreaIds": [
+          "group-2-people",
+          "group-2-tools",
+          "group-2-persistent",
+          "group-3-people",
+          "group-3-tools",
+          "group-3-persistent",
+          "group-4-people",
+          "group-4-tools",
+          "group-4-persistent"
+        ],
+        "hideArtIds": [
+          "group-2-workmat",
+          "group-2-people-row",
+          "group-2-tools",
+          "group-2-persistent-cards",
+          "group-2-deck",
+          "group-2-chosen",
+          "group-2-lookback-0",
+          "group-2-lookback-1",
+          "group-2-lookback-2",
+          "group-2-assist",
+          "group-3-workmat",
+          "group-3-people-row",
+          "group-3-tools",
+          "group-3-persistent-cards",
+          "group-3-deck",
+          "group-3-chosen",
+          "group-3-lookback-0",
+          "group-3-lookback-1",
+          "group-3-lookback-2",
+          "group-3-assist",
+          "group-4-workmat",
+          "group-4-people-row",
+          "group-4-tools",
+          "group-4-persistent-cards",
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback-0",
+          "group-4-lookback-1",
+          "group-4-lookback-2",
+          "group-4-assist"
+        ],
+        "hideZoneIds": [
+          "group-2-deck",
+          "group-2-chosen",
+          "group-2-lookback",
+          "group-2-assist",
+          "group-3-deck",
+          "group-3-chosen",
+          "group-3-lookback",
+          "group-3-assist",
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback",
+          "group-4-assist"
+        ]
+      },
+      "2": {
+        "hideAreaIds": [
+          "group-3-people",
+          "group-3-tools",
+          "group-3-persistent",
+          "group-4-people",
+          "group-4-tools",
+          "group-4-persistent"
+        ],
+        "hideArtIds": [
+          "group-3-workmat",
+          "group-3-people-row",
+          "group-3-tools",
+          "group-3-persistent-cards",
+          "group-3-deck",
+          "group-3-chosen",
+          "group-3-lookback-0",
+          "group-3-lookback-1",
+          "group-3-lookback-2",
+          "group-3-assist",
+          "group-4-workmat",
+          "group-4-people-row",
+          "group-4-tools",
+          "group-4-persistent-cards",
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback-0",
+          "group-4-lookback-1",
+          "group-4-lookback-2",
+          "group-4-assist"
+        ],
+        "hideZoneIds": [
+          "group-3-deck",
+          "group-3-chosen",
+          "group-3-lookback",
+          "group-3-assist",
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback",
+          "group-4-assist"
+        ]
+      },
+      "3": {
+        "hideAreaIds": [
+          "group-4-people",
+          "group-4-tools",
+          "group-4-persistent"
+        ],
+        "hideArtIds": [
+          "group-4-workmat",
+          "group-4-people-row",
+          "group-4-tools",
+          "group-4-persistent-cards",
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback-0",
+          "group-4-lookback-1",
+          "group-4-lookback-2",
+          "group-4-assist"
+        ],
+        "hideZoneIds": [
+          "group-4-deck",
+          "group-4-chosen",
+          "group-4-lookback",
+          "group-4-assist"
+        ]
+      },
+      "4": {
+        "hideAreaIds": [],
+        "hideArtIds": [],
+        "hideZoneIds": []
+      }
+    },
+    "baseCampDecks": [
+      {
+        "id": "people-deck",
+        "set": 2,
+        "physicalCards": 20
+      },
+      {
+        "id": "dream-deck",
+        "set": 3,
+        "physicalCards": 16
+      },
+      {
+        "id": "idea-deck",
+        "set": 4,
+        "physicalCards": 8
+      }
+    ],
+    "workbench": {
+      "ideaGrooveIds": [
+        "paleo-workbench-idea-1",
+        "paleo-workbench-idea-2",
+        "paleo-workbench-idea-3"
+      ],
+      "initialBuiltInRecipes": [
+        {
+          "kind": "torch",
+          "bounds": [
+            45,
+            402,
+            68,
+            35
+          ],
+          "initialPhysicalCount": 5,
+          "remaining": null,
+          "recipe": {
+            "requirements": null,
+            "costs": null
+          },
+          "printedBuiltIn": true
+        },
+        {
+          "kind": "stone-axe",
+          "bounds": [
+            129,
+            402,
+            68,
+            35
+          ],
+          "initialPhysicalCount": 5,
+          "remaining": null,
+          "recipe": {
+            "requirements": null,
+            "costs": null
+          },
+          "printedBuiltIn": true
+        },
+        {
+          "kind": "spear",
+          "bounds": [
+            213,
+            402,
+            68,
+            35
+          ],
+          "initialPhysicalCount": 5,
+          "remaining": null,
+          "recipe": {
+            "requirements": null,
+            "costs": null
+          },
+          "printedBuiltIn": true
+        }
+      ],
+      "addedIdea": {
+        "cardId": null,
+        "slotId": null,
+        "matchingToolStockIds": []
+      },
+      "slotsFull": "removeoneactualideatocemetery,notdiscardintoWilderness"
+    },
+    "waiting": {
+      "printedSlots": [
+        "paleo-waiting-1",
+        "paleo-waiting-2",
+        "paleo-waiting-3",
+        "paleo-waiting-4"
+      ],
+      "overflow": "additionalcardsbelowprintedspaces,unboundedbyprinted4"
+    },
+    "night": {
+      "selectedSecretDeckZoneId": "secret-deck",
+      "missionZoneId": "mission-cards",
+      "caveRegionZoneId": "cave-painting",
+      "victoryPieceRegions": [
+        {
+          "id": "cave-part-1",
+          "svgId": "cave-part-1",
+          "polygon": [
+            [
+              741,
+              53
+            ],
+            [
+              787,
+              44
+            ],
+            [
+              787,
+              87
+            ],
+            [
+              741,
+              87
+            ]
+          ],
+          "physicalTokenId": null,
+          "rotation": null,
+          "offset": null
+        },
+        {
+          "id": "cave-part-2",
+          "svgId": "cave-part-2",
+          "polygon": [
+            [
+              787,
+              44
+            ],
+            [
+              834,
+              52
+            ],
+            [
+              846,
+              76
+            ],
+            [
+              833,
+              96
+            ],
+            [
+              787,
+              87
+            ]
+          ],
+          "physicalTokenId": null,
+          "rotation": null,
+          "offset": null
+        },
+        {
+          "id": "cave-part-3",
+          "svgId": "cave-part-3",
+          "polygon": [
+            [
+              741,
+              87
+            ],
+            [
+              787,
+              87
+            ],
+            [
+              787,
+              108
+            ],
+            [
+              776,
+              108
+            ],
+            [
+              776,
+              129
+            ],
+            [
+              758,
+              129
+            ],
+            [
+              758,
+              108
+            ],
+            [
+              741,
+              108
+            ]
+          ],
+          "physicalTokenId": null,
+          "rotation": null,
+          "offset": null
+        },
+        {
+          "id": "cave-part-4",
+          "svgId": "cave-part-4",
+          "polygon": [
+            [
+              787,
+              87
+            ],
+            [
+              833,
+              96
+            ],
+            [
+              846,
+              76
+            ],
+            [
+              862,
+              80
+            ],
+            [
+              874,
+              99
+            ],
+            [
+              861,
+              111
+            ],
+            [
+              848,
+              109
+            ],
+            [
+              848,
+              133
+            ],
+            [
+              829,
+              133
+            ],
+            [
+              829,
+              111
+            ],
+            [
+              787,
+              108
+            ]
+          ],
+          "physicalTokenId": null,
+          "rotation": null,
+          "offset": null
+        },
+        {
+          "id": "cave-part-5",
+          "svgId": "cave-part-5",
+          "polygon": [
+            [
+              862,
+              80
+            ],
+            [
+              885,
+              81
+            ],
+            [
+              900,
+              97
+            ],
+            [
+              900,
+              128
+            ],
+            [
+              886,
+              139
+            ],
+            [
+              875,
+              129
+            ],
+            [
+              882,
+              121
+            ],
+            [
+              887,
+              128
+            ],
+            [
+              891,
+              124
+            ],
+            [
+              891,
+              100
+            ],
+            [
+              874,
+              99
+            ]
+          ],
+          "physicalTokenId": null,
+          "rotation": null,
+          "offset": null
+        }
+      ],
+      "caveRegionMeaning": "5ownneutralconnectedillustrationareas;notcommercialdie-cutstencils;actualtokenplacementcanbeadjustedwithoutalteringrecordedidentity",
+      "skullSlotIds": [
+        "paleo-skull-1",
+        "paleo-skull-2",
+        "paleo-skull-3",
+        "paleo-skull-4",
+        "paleo-skull-5"
+      ],
+      "victoryTarget": 5,
+      "lossSkulls": 5,
+      "tieWithinSameAction": "fifthskullandfifthvictoryonsameaction→win(base);moduleJhasexplicitexception"
+    },
+    "moduleConfiguration": {
+      "moduleIds": [],
+      "suggestedLevels": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "E",
+          "F"
+        ],
+        [
+          "C",
+          "G"
+        ],
+        [
+          "A",
+          "H"
+        ],
+        [
+          "B",
+          "I"
+        ],
+        [
+          "D",
+          "E",
+          "J"
+        ]
+      ],
+      "selectedSecretBackNumbers": [],
+      "selectedMissionIds": [],
+      "startingIdeaIds": [],
+      "initialWaitingIds": [],
+      "additionalDeckZones": [],
+      "specialTrackedStates": {},
+      "noAutomaticAllModules": true,
+      "noHiddenFrontsEmbedded": true
+    },
+    "inventory": {
+      "physicalResources": {
+        "food": 20,
+        "wood": 12,
+        "stone": 8
+      },
+      "resourcesComponentLimited": true,
+      "toolTokens": 48,
+      "woundTokens": 40,
+      "skullTokens": 5,
+      "victoryTokens": 5,
+      "customDice": 2,
+      "cards": 222,
+      "cardSets": {
+        "base": 32,
+        "people": 20,
+        "dreams": 16,
+        "ideas": 8,
+        "secrets": 22,
+        "modulesAtoJ": 124
+      },
+      "blanks": "customblankcardsnotautomaticallymixed"
+    },
+    "stateShape": {
+      "edition": "Paleo-base",
+      "playerIds": [],
+      "groupIds": [],
+      "groups": [
+        {
+          "id": "group-id",
+          "controllerIds": [],
+          "peopleCardIds": [],
+          "toolTokenIds": [],
+          "persistentCardIds": [],
+          "deckBottomToTop": "fronts-hidden-or-unknown",
+          "knownCardBackOrder": [],
+          "topCardSelection": {
+            "cardIds": [],
+            "backsOnly": true,
+            "chosenId": null,
+            "returnedOrder": [],
+            "returnCommitted": null
+          },
+          "chosenCard": {
+            "id": null,
+            "revealed": null,
+            "selectedOption": null
+          },
+          "activity": {
+            "asleep": null,
+            "helpingGroupId": null,
+            "helpCommittedBeforeDice": null
+          },
+          "receivedRewardsThisAction": []
+        }
+      ],
+      "people": [
+        {
+          "cardId": "physical-person-card-id",
+          "groupId": null,
+          "controllerIds": [],
+          "abilities": null,
+          "healthCapacity": null,
+          "woundsByHeartIndex": [],
+          "woundOverlayPositions": [],
+          "skullSpaceOccupied": null,
+          "oneTimeStartingToolGranted": null,
+          "alive": null,
+          "cardX": null,
+          "cardY": null,
+          "cardRotation": null,
+          "layer": null
+        }
+      ],
+      "cards": [
+        {
+          "id": "physical-card-id",
+          "setOrModule": null,
+          "printedIdentity": null,
+          "backType": null,
+          "face": "front|back|unknown",
+          "zoneId": null,
+          "groupId": null,
+          "order": null,
+          "x": null,
+          "y": null,
+          "rotation": null,
+          "layer": null,
+          "waitingSlotId": null,
+          "linkedAlternateActionIds": [],
+          "attachedResourceIds": [],
+          "attachedToolIds": [],
+          "nightActionPending": null,
+          "additionalActionUsesThisCard": null,
+          "revealedOnce": null
+        }
+      ],
+      "tools": [
+        {
+          "id": "physical-tool-token-id",
+          "kind": null,
+          "groupId": null,
+          "zoneId": null,
+          "linkedIdeaId": null,
+          "attachedToCardId": null,
+          "ability": null,
+          "quantity": null,
+          "spent": null
+        }
+      ],
+      "shared": {
+        "storage": {
+          "food": null,
+          "wood": null,
+          "stone": null
+        },
+        "resourceReserve": null,
+        "woundSupply": null,
+        "toolSupplies": null,
+        "people-deck": null,
+        "dream-deck": null,
+        "idea-deck": null,
+        "selectedSecretCards": [],
+        "discardFacedownBottomToTop": "unrevealed-fronts",
+        "discardFaceupBottomToTop": [],
+        "cemeteryBottomToTop": [],
+        "removedSubgroups": {},
+        "waitingSlots": [],
+        "waitingOverflow": [],
+        "missionCards": [],
+        "cavePainting": [],
+        "skullTokenIds": [],
+        "unplacedProgress": [],
+        "moduleState": {}
+      },
+      "day": null,
+      "phase": "setup|choose|reveal|resolve|night-feed|night-missions|night-extra-actions|reshuffle-deal|ended|unknown",
+      "checkpoint": {
+        "selectedGroupIds": [],
+        "revealedGroupIds": [],
+        "actionOrder": [],
+        "resolvedGroupIds": [],
+        "currentActionSourceId": null,
+        "helpersCommittedIds": [],
+        "dice": [
+          {
+            "id": null,
+            "ability": null,
+            "quantity": null
+          }
+        ],
+        "costCardDiscardIds": [],
+        "redBackWoundsPending": null,
+        "woundRecipientCardId": null,
+        "woundTransfersCommitted": [],
+        "deadPersonCleanupCommitted": [],
+        "emptyGroupReplacementGrantedIds": [],
+        "resourceTransfersCommitted": [],
+        "toolTransfersCommitted": [],
+        "newCardTransfersCommitted": [],
+        "secretResolutionStack": [],
+        "fedPersonIds": [],
+        "unfedPersonSkullsCommittedIds": [],
+        "missionResolvedIds": [],
+        "nightActionResolvedIds": [],
+        "shuffleCompleted": null,
+        "newDeckDealCommittedGroupIds": []
+      },
+      "optionalVariants": {
+        "solo": null,
+        "largeTribe": null,
+        "supplies": null,
+        "teamwork": null,
+        "backpack": null,
+        "fog": null,
+        "weakness": null
+      },
+      "ending": {
+        "result": null,
+        "sourceActionId": null,
+        "selectedModuleException": null
+      }
+    },
+    "identityInvariants": [
+      "PeoplecardsandgroupcontrollerIDsareseparate;groupmayhave2controllersandanyactualnumberofpeople.",
+      "Top3lookatbacks/chosencard/returned2aresamephysicaldeckIDs,noduplicatecards;actualorderpreserved.",
+      "FaceupdiscardonRIGHTmayinspect;facedownonLEFTcannotinspect;bothrecycleatnewday,removedcemeterydoesnot.",
+      "Toolgivenwhenpersonjoinsisonetimeandstaysifgiverdies;tooluse/paymentreturnsactualtoken,notpermanentstat.",
+      "Woundsfromasingleinstanceassignedtooneperson;skullspacekills,excessignored;cleanupandnewpersononlyifgroupempty. Unfedpeoplecauseskullsbutdonotdie.",
+      "Resourcepoolissharedbutgroupstoolsarenotuniversallyfree;helpbeforecustomdiceroll,notafterresult.",
+      "Card-boundtool/resourcecommitmentcannotbespentfromcommonstorage/groupagain;retainattachmentphysicalidentity.",
+      "Basecave5/skull5checkisnotappliedblindlytomoduleJexception;recordselectedmodulestatewithoutspoilingorinferringsecretfronts.",
+      "Onlyselectedmodulecardsactive;setaside,unrevealednumberedsecrets andwaitingoverflowdistinctfromallactivecards.",
+      "Allcost/reward/feeding/mission/cleanup/dealcommitsrecordedtoavoidrepeatingpartialactions;unknown/nullnot0."
+    ],
+    "notAutomated": [
+      "complete222printedcardfronts/moduleactionsdatabase",
+      "automaticday/night/abilities/costs/wounds/endingrules",
+      "appintegration"
+    ],
+    "artMeaning": "Originalflatwholescene;realboardzonecountsandsemanticrelationshipsfromofficialPDF. Fiveownmammothregionsarenotcommercialcutgeometry."
+  },
+  "assetCompleteness": {
+    "completeStructures": [
+      "all3sharedboards/3BaseCampdecks/commonstorage",
+      "2Wildernessdiscardpiles/4waitingpositions+overflow",
+      "Nightsecrets/variablemissions/5skulls/5partpainting",
+      "3ideagrooves/3builtinrecipes/workbenchstocks/cemetery/reserves/2dice",
+      "all4grouppeople/tools/cards/ordereddeck/top3choice/chosen/assist/sleep",
+      "physicalpersonwound/tool/resource/cardattachments andpartialday/nightcheckpoints"
+    ],
+    "notAutomated": [
+      "complete222printedcardfronts/moduleactionsdatabase",
+      "automaticday/night/abilities/costs/wounds/endingrules",
+      "appintegration"
+    ],
+    "notFacsimile": [
+      "commercialillustrations",
+      "physicalcavepuzzledie-cutstencil"
+    ]
+  },
+  "tableZones": [
+    {
+      "id": "people-deck",
+      "kind": "ordered-future-people-deck",
+      "bounds": [
+        40,
+        44,
+        76,
+        98
+      ],
+      "stateKey": "shared.people-deck",
+      "visibility": "unrevealed-fronts"
+    },
+    {
+      "id": "dream-deck",
+      "kind": "ordered-future-dream-deck",
+      "bounds": [
+        127,
+        44,
+        76,
+        98
+      ],
+      "stateKey": "shared.dream-deck",
+      "visibility": "unrevealed-fronts"
+    },
+    {
+      "id": "idea-deck",
+      "kind": "ordered-future-idea-deck",
+      "bounds": [
+        214,
+        44,
+        76,
+        98
+      ],
+      "stateKey": "shared.idea-deck",
+      "visibility": "unrevealed-fronts"
+    },
+    {
+      "id": "common-storage",
+      "kind": "shared-food-wood-stone",
+      "bounds": [
+        40,
+        166,
+        247,
+        63
+      ],
+      "stateKey": "shared.storage",
+      "visibility": "public"
+    },
+    {
+      "id": "discard-facedown",
+      "kind": "cost-discard-pile",
+      "bounds": [
+        343,
+        44,
+        114,
+        105
+      ],
+      "stateKey": "shared.discardFacedownBottomToTop",
+      "visibility": "hidden-fronts-no-inspection",
+      "notes": [
+        "Topcards paid fromgroupdeck,notrevealed. Noinspectionallowed."
+      ]
+    },
+    {
+      "id": "discard-faceup",
+      "kind": "resolved-or-ignored-card-pile",
+      "bounds": [
+        492,
+        44,
+        114,
+        105
+      ],
+      "stateKey": "shared.discardFaceupBottomToTop",
+      "visibility": "public",
+      "notes": [
+        "Mayinspectpublicfronts. Thispileandfacedownpilebothreshuffleatnewday;cemeterydoesnot."
+      ]
+    },
+    {
+      "id": "waiting-overflow",
+      "kind": "additional-waiting-cards",
+      "bounds": [
+        327,
+        252,
+        300,
+        43
+      ],
+      "stateKey": "shared.waitingOverflow",
+      "visibility": "public",
+      "notes": [
+        "Realoverflowbelow4printedspaces. Notafifthprintedspace."
+      ]
+    },
+    {
+      "id": "secret-deck",
+      "kind": "selected-numbered-secrets",
+      "bounds": [
+        668,
+        50,
+        56,
+        103
+      ],
+      "stateKey": "shared.selectedSecretCards",
+      "visibility": "unrevealed-fronts-visible-back-numbers",
+      "notes": [
+        "Module-selectedonly,notentire22cardsautomaticallyactive;eachphysicalsecretrevealedatmostonceunlessexplicitstateeffect."
+      ]
+    },
+    {
+      "id": "cave-painting",
+      "kind": "five-piece-victory-puzzle",
+      "bounds": [
+        736,
+        39,
+        171,
+        105
+      ],
+      "stateKey": "shared.cavePainting",
+      "visibility": "public",
+      "notes": [
+        "Five connected ownneutralmammothregions express5physicalvictorypieces. ThisisNOTassertedcommercialpuzzlecutgeometry;actualpieceIDs/rotation/offsetmayberecordedfreewithinpaintingregion."
+      ]
+    },
+    {
+      "id": "victory-skull-reserve",
+      "kind": "unplaced-progress-tokens",
+      "bounds": [
+        918,
+        39,
+        40,
+        110
+      ],
+      "stateKey": "shared.unplacedProgress",
+      "visibility": "public"
+    },
+    {
+      "id": "available-tool-supplies",
+      "kind": "allremainingtoolkinds",
+      "bounds": [
+        328,
+        323,
+        300,
+        52
+      ],
+      "stateKey": "shared.toolSupplies",
+      "visibility": "public"
+    },
+    {
+      "id": "wound-reserve",
+      "kind": "woundsupply",
+      "bounds": [
+        328,
+        398,
+        100,
+        45
+      ],
+      "stateKey": "shared.woundSupply",
+      "visibility": "public"
+    },
+    {
+      "id": "resource-reserve",
+      "kind": "resources-not-incommonstorage",
+      "bounds": [
+        445,
+        398,
+        183,
+        45
+      ],
+      "stateKey": "shared.resourceReserve",
+      "visibility": "public"
+    },
+    {
+      "id": "cemetery",
+      "kind": "removed-cards",
+      "bounds": [
+        651,
+        324,
+        160,
+        121
+      ],
+      "stateKey": "shared.cemeteryBottomToTop",
+      "visibility": "public"
+    },
+    {
+      "id": "module-specified-removed-group",
+      "kind": "removed-cardssortedbyactualmoduleinstruction",
+      "bounds": [
+        827,
+        324,
+        145,
+        60
+      ],
+      "stateKey": "shared.removedSubgroups",
+      "visibility": "public"
+    },
+    {
+      "id": "dice",
+      "kind": "two-custom-ability-dice",
+      "bounds": [
+        840,
+        401,
+        110,
+        40
+      ],
+      "stateKey": "checkpoint.dice",
+      "visibility": "public"
+    },
+    {
+      "id": "group-1-deck",
+      "kind": "ordered-day-exploration-deck",
+      "bounds": [
+        331,
+        487,
+        66,
+        92
+      ],
+      "stateKey": "groups.group-1.deckBottomToTop",
+      "visibility": "backs-visible-fronts-unrevealed",
+      "groupId": "group-1"
+    },
+    {
+      "id": "group-1-chosen",
+      "kind": "chosen-card-before-simultaneousreveal",
+      "bounds": [
+        411,
+        487,
+        62,
+        92
+      ],
+      "stateKey": "groups.group-1.chosenCard",
+      "visibility": "face-down-untilreveal",
+      "groupId": "group-1"
+    },
+    {
+      "id": "group-1-lookback",
+      "kind": "temporary-top3back-only-selection",
+      "bounds": [
+        329,
+        605,
+        141,
+        54
+      ],
+      "stateKey": "groups.group-1.topCardSelection",
+      "visibility": "backs-only",
+      "groupId": "group-1",
+      "notes": [
+        "Temporaryvisualizationofsamephysicaldeckcards,notduplicatecopies;remaining2returninchosenorder. Fogvariantuses2."
+      ]
+    },
+    {
+      "id": "group-1-assist",
+      "kind": "assist-target-and-sleep-status",
+      "bounds": [
+        329,
+        672,
+        141,
+        23
+      ],
+      "stateKey": "groups.group-1.activity",
+      "visibility": "public",
+      "groupId": "group-1"
+    },
+    {
+      "id": "group-2-deck",
+      "kind": "ordered-day-exploration-deck",
+      "bounds": [
+        821,
+        487,
+        66,
+        92
+      ],
+      "stateKey": "groups.group-2.deckBottomToTop",
+      "visibility": "backs-visible-fronts-unrevealed",
+      "groupId": "group-2"
+    },
+    {
+      "id": "group-2-chosen",
+      "kind": "chosen-card-before-simultaneousreveal",
+      "bounds": [
+        901,
+        487,
+        62,
+        92
+      ],
+      "stateKey": "groups.group-2.chosenCard",
+      "visibility": "face-down-untilreveal",
+      "groupId": "group-2"
+    },
+    {
+      "id": "group-2-lookback",
+      "kind": "temporary-top3back-only-selection",
+      "bounds": [
+        819,
+        605,
+        141,
+        54
+      ],
+      "stateKey": "groups.group-2.topCardSelection",
+      "visibility": "backs-only",
+      "groupId": "group-2",
+      "notes": [
+        "Temporaryvisualizationofsamephysicaldeckcards,notduplicatecopies;remaining2returninchosenorder. Fogvariantuses2."
+      ]
+    },
+    {
+      "id": "group-2-assist",
+      "kind": "assist-target-and-sleep-status",
+      "bounds": [
+        819,
+        672,
+        141,
+        23
+      ],
+      "stateKey": "groups.group-2.activity",
+      "visibility": "public",
+      "groupId": "group-2"
+    },
+    {
+      "id": "group-3-deck",
+      "kind": "ordered-day-exploration-deck",
+      "bounds": [
+        331,
+        742,
+        66,
+        92
+      ],
+      "stateKey": "groups.group-3.deckBottomToTop",
+      "visibility": "backs-visible-fronts-unrevealed",
+      "groupId": "group-3"
+    },
+    {
+      "id": "group-3-chosen",
+      "kind": "chosen-card-before-simultaneousreveal",
+      "bounds": [
+        411,
+        742,
+        62,
+        92
+      ],
+      "stateKey": "groups.group-3.chosenCard",
+      "visibility": "face-down-untilreveal",
+      "groupId": "group-3"
+    },
+    {
+      "id": "group-3-lookback",
+      "kind": "temporary-top3back-only-selection",
+      "bounds": [
+        329,
+        860,
+        141,
+        54
+      ],
+      "stateKey": "groups.group-3.topCardSelection",
+      "visibility": "backs-only",
+      "groupId": "group-3",
+      "notes": [
+        "Temporaryvisualizationofsamephysicaldeckcards,notduplicatecopies;remaining2returninchosenorder. Fogvariantuses2."
+      ]
+    },
+    {
+      "id": "group-3-assist",
+      "kind": "assist-target-and-sleep-status",
+      "bounds": [
+        329,
+        927,
+        141,
+        23
+      ],
+      "stateKey": "groups.group-3.activity",
+      "visibility": "public",
+      "groupId": "group-3"
+    },
+    {
+      "id": "group-4-deck",
+      "kind": "ordered-day-exploration-deck",
+      "bounds": [
+        821,
+        742,
+        66,
+        92
+      ],
+      "stateKey": "groups.group-4.deckBottomToTop",
+      "visibility": "backs-visible-fronts-unrevealed",
+      "groupId": "group-4"
+    },
+    {
+      "id": "group-4-chosen",
+      "kind": "chosen-card-before-simultaneousreveal",
+      "bounds": [
+        901,
+        742,
+        62,
+        92
+      ],
+      "stateKey": "groups.group-4.chosenCard",
+      "visibility": "face-down-untilreveal",
+      "groupId": "group-4"
+    },
+    {
+      "id": "group-4-lookback",
+      "kind": "temporary-top3back-only-selection",
+      "bounds": [
+        819,
+        860,
+        141,
+        54
+      ],
+      "stateKey": "groups.group-4.topCardSelection",
+      "visibility": "backs-only",
+      "groupId": "group-4",
+      "notes": [
+        "Temporaryvisualizationofsamephysicaldeckcards,notduplicatecopies;remaining2returninchosenorder. Fogvariantuses2."
+      ]
+    },
+    {
+      "id": "group-4-assist",
+      "kind": "assist-target-and-sleep-status",
+      "bounds": [
+        819,
+        927,
+        141,
+        23
+      ],
+      "stateKey": "groups.group-4.activity",
+      "visibility": "public",
+      "groupId": "group-4"
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "base-camp-frame",
+      "type": "rect",
+      "x": 25,
+      "y": 25,
+      "w": 280,
+      "h": 220,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 19
+    },
+    {
+      "id": "people-deck-identity",
+      "type": "rect",
+      "x": 48,
+      "y": 55,
+      "w": 60,
+      "h": 50,
+      "fill": "#c5e2b6",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "dream-deck-identity",
+      "type": "rect",
+      "x": 135,
+      "y": 55,
+      "w": 60,
+      "h": 50,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "idea-deck-identity",
+      "type": "rect",
+      "x": 222,
+      "y": 55,
+      "w": 60,
+      "h": 50,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "common-storage",
+      "type": "rect",
+      "x": 40,
+      "y": 166,
+      "w": 247,
+      "h": 63,
+      "fill": "#f5ebca",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 9
+    },
+    {
+      "id": "stored-resource-0",
+      "type": "rect",
+      "x": 49,
+      "y": 178,
+      "w": 66,
+      "h": 39,
+      "fill": "#ee6055",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "stored-resource-1",
+      "type": "rect",
+      "x": 127,
+      "y": 178,
+      "w": 66,
+      "h": 39,
+      "fill": "#b89069",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "stored-resource-2",
+      "type": "rect",
+      "x": 205,
+      "y": 178,
+      "w": 66,
+      "h": 39,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "wilderness-frame",
+      "type": "rect",
+      "x": 326,
+      "y": 25,
+      "w": 300,
+      "h": 220,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 18
+    },
+    {
+      "id": "night-frame",
+      "type": "rect",
+      "x": 651,
+      "y": 25,
+      "w": 324,
+      "h": 270,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 20
+    },
+    {
+      "id": "cave-part-1",
+      "type": "polygon",
+      "points": [
+        [
+          741,
+          53
+        ],
+        [
+          787,
+          44
+        ],
+        [
+          787,
+          87
+        ],
+        [
+          741,
+          87
+        ]
+      ],
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "cave-part-2",
+      "type": "polygon",
+      "points": [
+        [
+          787,
+          44
+        ],
+        [
+          834,
+          52
+        ],
+        [
+          846,
+          76
+        ],
+        [
+          833,
+          96
+        ],
+        [
+          787,
+          87
+        ]
+      ],
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "cave-part-3",
+      "type": "polygon",
+      "points": [
+        [
+          741,
+          87
+        ],
+        [
+          787,
+          87
+        ],
+        [
+          787,
+          108
+        ],
+        [
+          776,
+          108
+        ],
+        [
+          776,
+          129
+        ],
+        [
+          758,
+          129
+        ],
+        [
+          758,
+          108
+        ],
+        [
+          741,
+          108
+        ]
+      ],
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "cave-part-4",
+      "type": "polygon",
+      "points": [
+        [
+          787,
+          87
+        ],
+        [
+          833,
+          96
+        ],
+        [
+          846,
+          76
+        ],
+        [
+          862,
+          80
+        ],
+        [
+          874,
+          99
+        ],
+        [
+          861,
+          111
+        ],
+        [
+          848,
+          109
+        ],
+        [
+          848,
+          133
+        ],
+        [
+          829,
+          133
+        ],
+        [
+          829,
+          111
+        ],
+        [
+          787,
+          108
+        ]
+      ],
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "cave-part-5",
+      "type": "polygon",
+      "points": [
+        [
+          862,
+          80
+        ],
+        [
+          885,
+          81
+        ],
+        [
+          900,
+          97
+        ],
+        [
+          900,
+          128
+        ],
+        [
+          886,
+          139
+        ],
+        [
+          875,
+          129
+        ],
+        [
+          882,
+          121
+        ],
+        [
+          887,
+          128
+        ],
+        [
+          891,
+          124
+        ],
+        [
+          891,
+          100
+        ],
+        [
+          874,
+          99
+        ]
+      ],
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "mission-cards",
+      "type": "rect",
+      "x": 666,
+      "y": 220,
+      "w": 291,
+      "h": 59,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "workbench-frame",
+      "type": "rect",
+      "x": 25,
+      "y": 272,
+      "w": 280,
+      "h": 178,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 8
+    },
+    {
+      "id": "base-craft-torch",
+      "type": "rect",
+      "x": 45,
+      "y": 402,
+      "w": 68,
+      "h": 35,
+      "fill": "#d6b998",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "base-craft-torch-tool",
+      "type": "circle",
+      "cx": 79,
+      "cy": 419,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "base-craft-stone-axe",
+      "type": "rect",
+      "x": 129,
+      "y": 402,
+      "w": 68,
+      "h": 35,
+      "fill": "#d6b998",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "base-craft-stone-axe-tool",
+      "type": "circle",
+      "cx": 163,
+      "cy": 419,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "base-craft-spear",
+      "type": "rect",
+      "x": 213,
+      "y": 402,
+      "w": 68,
+      "h": 35,
+      "fill": "#d6b998",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "base-craft-spear-tool",
+      "type": "circle",
+      "cx": 247,
+      "cy": 419,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-0",
+      "type": "circle",
+      "cx": 344,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-1",
+      "type": "circle",
+      "cx": 376,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-2",
+      "type": "circle",
+      "cx": 408,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-3",
+      "type": "circle",
+      "cx": 440,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-4",
+      "type": "circle",
+      "cx": 472,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-5",
+      "type": "circle",
+      "cx": 504,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-6",
+      "type": "circle",
+      "cx": 536,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-7",
+      "type": "circle",
+      "cx": 568,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "other-tool-stack-8",
+      "type": "circle",
+      "cx": 600,
+      "cy": 349,
+      "r": 10,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "wound-reserve",
+      "type": "rect",
+      "x": 328,
+      "y": 398,
+      "w": 100,
+      "h": 45,
+      "fill": "#fac8c4",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "resource-reserve",
+      "type": "rect",
+      "x": 445,
+      "y": 398,
+      "w": 183,
+      "h": 45,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "cemetery",
+      "type": "rect",
+      "x": 651,
+      "y": 324,
+      "w": 160,
+      "h": 121,
+      "fill": "#dce5ed",
+      "stroke": "#16305c",
+      "strokeWidth": 2.5,
+      "rx": 12
+    },
+    {
+      "id": "module-specified-removed-group",
+      "type": "rect",
+      "x": 827,
+      "y": 324,
+      "w": 145,
+      "h": 60,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "die-0",
+      "type": "rect",
+      "x": 840,
+      "y": 401,
+      "w": 44,
+      "h": 40,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 9
+    },
+    {
+      "id": "die-0-ability-placeholder",
+      "type": "circle",
+      "cx": 862,
+      "cy": 421,
+      "r": 8,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "die-1",
+      "type": "rect",
+      "x": 906,
+      "y": 401,
+      "w": 44,
+      "h": 40,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 9
+    },
+    {
+      "id": "die-1-ability-placeholder",
+      "type": "circle",
+      "cx": 928,
+      "cy": 421,
+      "r": 8,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5
+    },
+    {
+      "id": "group-1-workmat",
+      "type": "rect",
+      "x": 25,
+      "y": 475,
+      "w": 460,
+      "h": 233,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 14
+    },
+    {
+      "id": "group-1-people-row",
+      "type": "rect",
+      "x": 37,
+      "y": 487,
+      "w": 272,
+      "h": 102,
+      "fill": "#e1efd8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "group-1-tools",
+      "type": "rect",
+      "x": 37,
+      "y": 606,
+      "w": 272,
+      "h": 40,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "group-1-persistent-cards",
+      "type": "rect",
+      "x": 37,
+      "y": 659,
+      "w": 272,
+      "h": 35,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "group-1-deck",
+      "type": "rect",
+      "x": 331,
+      "y": 487,
+      "w": 66,
+      "h": 92,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-1-chosen",
+      "type": "rect",
+      "x": 411,
+      "y": 487,
+      "w": 62,
+      "h": 92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-1-lookback-0",
+      "type": "rect",
+      "x": 329,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-1-lookback-1",
+      "type": "rect",
+      "x": 378,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-1-lookback-2",
+      "type": "rect",
+      "x": 427,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-1-assist",
+      "type": "rect",
+      "x": 329,
+      "y": 672,
+      "w": 141,
+      "h": 23,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-2-workmat",
+      "type": "rect",
+      "x": 515,
+      "y": 475,
+      "w": 460,
+      "h": 233,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 14
+    },
+    {
+      "id": "group-2-people-row",
+      "type": "rect",
+      "x": 527,
+      "y": 487,
+      "w": 272,
+      "h": 102,
+      "fill": "#e1efd8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "group-2-tools",
+      "type": "rect",
+      "x": 527,
+      "y": 606,
+      "w": 272,
+      "h": 40,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "group-2-persistent-cards",
+      "type": "rect",
+      "x": 527,
+      "y": 659,
+      "w": 272,
+      "h": 35,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "group-2-deck",
+      "type": "rect",
+      "x": 821,
+      "y": 487,
+      "w": 66,
+      "h": 92,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-2-chosen",
+      "type": "rect",
+      "x": 901,
+      "y": 487,
+      "w": 62,
+      "h": 92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-2-lookback-0",
+      "type": "rect",
+      "x": 819,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-2-lookback-1",
+      "type": "rect",
+      "x": 868,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-2-lookback-2",
+      "type": "rect",
+      "x": 917,
+      "y": 605,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-2-assist",
+      "type": "rect",
+      "x": 819,
+      "y": 672,
+      "w": 141,
+      "h": 23,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-3-workmat",
+      "type": "rect",
+      "x": 25,
+      "y": 730,
+      "w": 460,
+      "h": 233,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 14
+    },
+    {
+      "id": "group-3-people-row",
+      "type": "rect",
+      "x": 37,
+      "y": 742,
+      "w": 272,
+      "h": 102,
+      "fill": "#e1efd8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "group-3-tools",
+      "type": "rect",
+      "x": 37,
+      "y": 861,
+      "w": 272,
+      "h": 40,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "group-3-persistent-cards",
+      "type": "rect",
+      "x": 37,
+      "y": 914,
+      "w": 272,
+      "h": 35,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "group-3-deck",
+      "type": "rect",
+      "x": 331,
+      "y": 742,
+      "w": 66,
+      "h": 92,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-3-chosen",
+      "type": "rect",
+      "x": 411,
+      "y": 742,
+      "w": 62,
+      "h": 92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-3-lookback-0",
+      "type": "rect",
+      "x": 329,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-3-lookback-1",
+      "type": "rect",
+      "x": 378,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-3-lookback-2",
+      "type": "rect",
+      "x": 427,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-3-assist",
+      "type": "rect",
+      "x": 329,
+      "y": 927,
+      "w": 141,
+      "h": 23,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-4-workmat",
+      "type": "rect",
+      "x": 515,
+      "y": 730,
+      "w": 460,
+      "h": 233,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 14
+    },
+    {
+      "id": "group-4-people-row",
+      "type": "rect",
+      "x": 527,
+      "y": 742,
+      "w": 272,
+      "h": 102,
+      "fill": "#e1efd8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 8
+    },
+    {
+      "id": "group-4-tools",
+      "type": "rect",
+      "x": 527,
+      "y": 861,
+      "w": 272,
+      "h": 40,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "group-4-persistent-cards",
+      "type": "rect",
+      "x": 527,
+      "y": 914,
+      "w": 272,
+      "h": 35,
+      "fill": "#e7eff5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 6
+    },
+    {
+      "id": "group-4-deck",
+      "type": "rect",
+      "x": 821,
+      "y": 742,
+      "w": 66,
+      "h": 92,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-4-chosen",
+      "type": "rect",
+      "x": 901,
+      "y": 742,
+      "w": 62,
+      "h": 92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "group-4-lookback-0",
+      "type": "rect",
+      "x": 819,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-4-lookback-1",
+      "type": "rect",
+      "x": 868,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-4-lookback-2",
+      "type": "rect",
+      "x": 917,
+      "y": 860,
+      "w": 43,
+      "h": 54,
+      "fill": "#dceaf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "group-4-assist",
+      "type": "rect",
+      "x": 819,
+      "y": 927,
+      "w": 141,
+      "h": 23,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    }
+  ]
+}

@@ -3,7 +3,7 @@ import {Check,LockKeyhole} from 'lucide-react';
 import type {Assertion,SessionView} from '../shared/types';
 import type {GenericPiece} from '../shared/genericRecord';
 import {runtimeBinding} from '../shared/gameEssentials';
-import {componentRecord,componentTargetKey,unlinkedComponentPieces,type ComponentLinkOptions,type ComponentLinkTarget} from '../shared/componentLinking';
+import {componentRecord,componentTargetKey,latestComponentAssertion,unlinkedComponentPieces,type ComponentLinkOptions,type ComponentLinkTarget} from '../shared/componentLinking';
 import {api} from './api';
 import {fire,type Mutate} from './Fields';
 import {GenericPieceArt} from './GenericPieceArt';
@@ -12,7 +12,7 @@ import {SplendorFields,isSplendor,splendorView} from './SplendorEditor';
 import {Modal} from './ui';
 import {GameDetailFields} from './readouts/GameDetailFields';
 import {observationGaps} from '../shared/observationGaps';
-import {GapNote,gapReasons} from './GapNote';
+import {GapNote,gapReasons,unreadGaps} from './GapNote';
 import {readoutDefinition} from '../shared/readouts/registry';
 
 /** Pick pieces from a candidate (add) or an applied record (move), choose where they belong, optionally correct read values, then apply explicitly. */
@@ -21,10 +21,9 @@ export function ComponentLinkDialog({view,source,initialIds=[],initialTarget,bus
  const pieces=useMemo(()=>move?componentRecord(source)?.pieces??[]:unlinkedComponentPieces(session,source),[source,session.assertions]);
  const [ids,setIds]=useState<string[]>(initialIds.filter(id=>pieces.some(p=>p.id===id)));
  const [options,setOptions]=useState<ComponentLinkOptions|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState('');
- // Pieces the reader could not fully read open first in the correction form; reasons come from the candidate's own receipt.
+ // Reasons come from the candidate's receipt; correction stays optional until selected.
  const gaps=useMemo(()=>move?new Map<string,import('../shared/observationGaps').ObservationGap[]>():observationGaps(source),[source]);
- const firstGap=initialIds.find(id=>gaps.has(id))??null;
- const [targetKey,setTargetKey]=useState(initialTarget?componentTargetKey(initialTarget.field,initialTarget.ownerId):''),[clear,setClear]=useState(false),[corrections,setCorrections]=useState<Record<string,GenericPiece>>({}),[editing,setEditing]=useState<string|null>(firstGap);
+ const [targetKey,setTargetKey]=useState(initialTarget?componentTargetKey(initialTarget.field,initialTarget.ownerId):''),[clear,setClear]=useState(false),[corrections,setCorrections]=useState<Record<string,GenericPiece>>({}),[editing,setEditing]=useState<string|null>(null);
  const selected=pieces.filter(p=>ids.includes(p.id));
  // Leaving the selection drops its open correction form; a target or selection change asks for placement consent again.
  useEffect(()=>{if(editing&&!ids.includes(editing))setEditing(null);setClear(false);},[ids.join(',')]);
@@ -33,7 +32,9 @@ export function ComponentLinkDialog({view,source,initialIds=[],initialTarget,bus
   api.componentLinkOptions(session.id,source.id,ids).then(o=>{if(!alive)return;setOptions(o);if(!o.targets.some(t=>componentTargetKey(t.field,t.ownerId)===targetKey))setTargetKey('');},e=>{if(alive){setOptions(null);setError(e instanceof Error?e.message:'연결할 곳을 불러오지 못했어요.');}}).finally(()=>{if(alive)setLoading(false);});
   return()=>{alive=false;};},[ids.join(','),source.id]);
  const target=options?.targets.find(t=>componentTargetKey(t.field,t.ownerId)===targetKey);
+ const targetRecord=target&&componentRecord(latestComponentAssertion(session,target.field,target.ownerId));
  const targets=(options?.targets??[]).filter(t=>!(move&&t.field===source.field&&t.ownerId===source.ownerId));
+ const hasUnread=(p:GenericPiece)=>unreadGaps(corrections[p.id]??p,gaps.get(p.id)??[]).length>0;
  const misplaced=!!target&&selected.some(p=>p.placement&&!runtimeBinding(pack,target.field)?.areaIds.includes(p.placement.areaId));
  const name=(p:GenericPiece)=>p.label||pack.runtime?.components.find(c=>c.id===p.componentId)?.name||'미확인';
  const toggle=(id:string)=>setIds(list=>list.includes(id)?list.filter(x=>x!==id):[...list,id]);
@@ -52,9 +53,9 @@ export function ComponentLinkDialog({view,source,initialIds=[],initialTarget,bus
   {ids.length>0&&<section><h3>어디에 {move?'옮길까요':'둘까요'}</h3>
    {loading?<p className="small muted" role="status">연결할 곳을 찾는 중…</p>:targets.length?groups.map(g=><div key={g} className="cl-group"><span className="cl-group-name">{g}</span><div className="cl-targets">{targets.filter(t=>(t.ownerName??'공용')===g).map(t=>{const key=componentTargetKey(t.field,t.ownerId);return <button type="button" key={key} aria-pressed={targetKey===key} disabled={busy} onClick={()=>{setTargetKey(key);setError('');}}>{t.visibility==='owner'&&<LockKeyhole size={14} aria-label="개인"/>}{t.label}</button>;})}</div></div>):!error&&<p className="small muted">선택한 실물을 둘 수 있는 곳이 없어요. 선택을 바꿔 보세요.</p>}
   </section>}
-  {selected.length>0&&<details className="cl-correct" open={!!editing}><summary>{selected.some(p=>gaps.has(p.id))?`읽은 값 고치기 (확인 필요 ${selected.filter(p=>gaps.has(p.id)).length}개)`:'읽은 값 고치기 (선택)'}</summary>
-   <div className="cl-correct-list">{selected.map(p=><button type="button" key={p.id} aria-pressed={editing===p.id} onClick={()=>setEditing(editing===p.id?null:p.id)}>{name(corrections[p.id]??p)}{corrections[p.id]?' (고침)':gaps.has(p.id)?' (확인 필요)':''}</button>)}</div>
-   {editing&&selected.some(x=>x.id===editing)&&(()=>{const p=corrections[editing]??selected.find(x=>x.id===editing)!;const patch=(c:Partial<GenericPiece>)=>setCorrections(m=>({...m,[editing]:{...p,...c}}));const pieceGaps=gaps.get(editing)??[];return <div className="cl-correct-form">{pieceGaps.length>0&&<GapNote pack={pack} piece={p} gaps={pieceGaps}/>}{splendor&&<SplendorFields piece={p} disabled={busy} onPatch={patch}/>}{!splendor&&readoutDefinition(pack)&&<GameDetailFields pack={pack} piece={p} record={{version:'game-component-record-v1',pieces:selected.map(x=>corrections[x.id]??x)}} players={session.players} disabled={busy} onPatch={patch} gaps={gapReasons(pieceGaps)}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={p.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label></div>;})()}
+  {selected.length>0&&<details className="cl-correct" open={!!editing}><summary>읽은 값 고치기 (선택){selected.some(hasUnread)?` · 읽지 못한 값 ? ${selected.filter(hasUnread).length}개`:''}</summary>
+   <div className="cl-correct-list">{selected.map(p=><button type="button" key={p.id} aria-pressed={editing===p.id} onClick={()=>setEditing(editing===p.id?null:p.id)}>{name(corrections[p.id]??p)}{hasUnread(p)?' (?)':corrections[p.id]?' (고침)':''}</button>)}</div>
+   {editing&&selected.some(x=>x.id===editing)&&(()=>{const p=corrections[editing]??selected.find(x=>x.id===editing)!;const patch=(c:Partial<GenericPiece>)=>setCorrections(m=>({...m,[editing]:{...p,...c}}));const pieceGaps=gaps.get(editing)??[];return <div className="cl-correct-form">{pieceGaps.length>0&&<GapNote pack={pack} piece={p} gaps={pieceGaps}/>}{splendor&&<SplendorFields piece={p} disabled={busy} onPatch={patch}/>}{!splendor&&readoutDefinition(pack)&&<GameDetailFields pack={pack} piece={p} record={{version:'game-component-record-v1',pieces:[...(targetRecord?.pieces??[]),...selected.map(x=>corrections[x.id]??x)]}} players={session.players} disabled={busy} onPatch={patch} gaps={gapReasons(pieceGaps)}/>}<label>수량<input type="number" min="0" step="1" placeholder="모름" value={p.quantity??''} disabled={busy} onChange={e=>patch({quantity:e.target.value===''?null:Number(e.target.value)})}/></label></div>;})()}
   </details>}
   {misplaced&&<label className="cl-consent"><input type="checkbox" checked={clear} disabled={busy} onChange={e=>setClear(e.target.checked)}/>판 위치가 이 영역과 맞지 않아요. 미배치로 옮기기(원래 위치는 연결 기록에 남아요)</label>}
   {error&&<p className="inline-error" role="alert">{error}</p>}

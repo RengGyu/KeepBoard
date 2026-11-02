@@ -1,0 +1,141 @@
+{
+  "method": "Post-call sensitivity analysis only. Frozen pre-call references remain unchanged. Clear audited additions/corrections applied; uncertain values excluded; possible additional clipped follower not certified and not added. Incomplete independent verification remains disclosed in reference-audit.json.",
+  "operations": [
+    {
+      "caseId": "sagrada",
+      "objectId": "dice-10",
+      "propertyId": "dieValue",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Top face zoomed: four corner pips in diamond orientation plus a centre pip.",
+      "action": "set",
+      "value": 5
+    },
+    {
+      "caseId": "sagrada",
+      "objectId": "dice-13",
+      "propertyId": "dieValue",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Top face shows four pips in a diamond with no centre pip; perspective and blur make a hidden fifth pip unlikely but not impossible.",
+      "action": "uncertain"
+    },
+    {
+      "caseId": "sagrada",
+      "action": "add",
+      "object": {
+        "componentId": "dice",
+        "boxPx": [
+          125,
+          235,
+          195,
+          300
+        ],
+        "physicalUnit": "single",
+        "quantity": 1,
+        "attributes": {
+          "observedColor": "red",
+          "dieColor": "red",
+          "dieValue": 2
+        },
+        "id": "audit-added-1",
+        "unknownAttributes": {}
+      },
+      "source": "blind Claude post-call visual audit",
+      "reason": "Red die on the window between green dice-10, dark green dice-02 and red dice-09 has no reference box. Its top face shows two pips. Visible dice total 20 (13 on window, 7 loose), not 19."
+    },
+    {
+      "caseId": "carcassonne",
+      "objectId": "tiles-05",
+      "propertyId": "city",
+      "source": "blind Claude post-call visual audit",
+      "reason": "City wall arc with houses lies below the tiles-02/tiles-05 seam (about x 200-360, y 265-335), i.e. a city cap on the top edge of tiles-05.",
+      "action": "set",
+      "value": true
+    },
+    {
+      "caseId": "carcassonne",
+      "objectId": "tiles-15",
+      "propertyId": "road",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Road continues from tiles-10 across the seam and ends at the city gate inside tiles-15 (about x 575-610, y 700-760).",
+      "action": "set",
+      "value": true
+    },
+    {
+      "caseId": "carcassonne",
+      "objectId": "tiles-06",
+      "propertyId": "monastery",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Central building with red spire under standing yellow follower-21 resembles a cloister; road continues above and below it, so cloister vs roadside building cannot be decided from this view.",
+      "action": "uncertain"
+    },
+    {
+      "caseId": "carcassonne",
+      "objectId": "followers-23",
+      "propertyId": "posture",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Follower is fully inside the frame; posture is unclear (could be lying) rather than out-of-frame.",
+      "action": "uncertain"
+    },
+    {
+      "caseId": "rummikub",
+      "objectId": "numbers-30",
+      "propertyId": "number",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Black upright '6' fully visible on the tile at bottom centre-right (about x 690-740, y 785-825).",
+      "action": "set",
+      "value": 6
+    },
+    {
+      "caseId": "rummikub",
+      "objectId": "numbers-28",
+      "propertyId": "number",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Red digit reads as '6' in the same upright orientation as numbers-30/31; slight blur and 6/9 orientation risk.",
+      "action": "uncertain"
+    },
+    {
+      "caseId": "rummikub",
+      "objectId": "numbers-33",
+      "propertyId": "componentId",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Under the hand the visible mark is a round red/orange face-like symbol rather than a digit; joker vs numbered tile cannot be confirmed in one look.",
+      "action": "kind-uncertain"
+    },
+    {
+      "caseId": "ticket-to-ride",
+      "objectId": "map-21",
+      "propertyId": "cityLabel",
+      "source": "blind Claude post-call visual audit",
+      "reason": "Printed city name 'SANTA FE' is visible at the right edge (about x 3800-4032, y 1400-2000 in original px). Other route values are multi-valued rather than out-of-frame; 'ambiguous' would be a more accurate reason for routeColor/routeLength.",
+      "action": "set",
+      "value": "Santa Fe"
+    },
+    {
+      "caseId": "new-codenames",
+      "objectId": "word-r5c5",
+      "propertyId": "printedName",
+      "action": "set",
+      "value": "DAY",
+      "source": "root post-call, not blind",
+      "reason": "Native original bottom-right card visibly spells DAY; GUM was a reference transcription error."
+    },
+    {
+      "caseId": "new-codenames",
+      "objectId": "word-r5c5",
+      "propertyId": "word",
+      "action": "set",
+      "value": "DAY",
+      "source": "root post-call, not blind",
+      "reason": "Native original bottom-right card visibly spells DAY; GUM was a reference transcription error."
+    },
+    {
+      "caseId": "new-patchwork",
+      "objectId": "yellow-time-marker",
+      "propertyId": "observedColor",
+      "action": "uncertain",
+      "value": null,
+      "source": "root post-call, not blind",
+      "reason": "Cylinder appears orange/yellow under warm light. Do not use yellow-versus-orange as a reliable wrong-color label."
+    }
+  ]
+}

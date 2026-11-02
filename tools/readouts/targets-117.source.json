@@ -9331,9 +9331,9 @@
     "title": "아줄",
     "editionId": "base",
     "edition": "원작 기본판",
-    "packVersion": "1.0.0-essentials-2.26f3d7a3f3a5",
-    "sourceSHA": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
-    "sourceSHAActual": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
+    "packVersion": "1.0.0-essentials-2.e1ca1494e4dc",
+    "sourceSHA": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
+    "sourceSHAActual": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
     "sourceURLs": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
@@ -9412,11 +9412,26 @@
         ],
         "editor": "physical-only",
         "key": "bag.scene",
-        "label": "주머니·버림",
+        "label": "주머니",
         "lifetime": "session",
         "scope": "shared-secret",
         "sourceId": "bag.scene",
         "visibility": "hidden"
+      },
+      {
+        "areaIds": [
+          "box-lid"
+        ],
+        "componentIds": [
+          "tiles"
+        ],
+        "editor": "component-catalog",
+        "key": "box-lid.scene",
+        "label": "상자 뚜껑 버림",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "box-lid.scene",
+        "visibility": "public"
       },
       {
         "areaIds": [],
@@ -9576,9 +9591,9 @@
         "title": "Azul — 공식 자료",
         "url": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
         "kind": "official-rules",
-        "access": "search-index",
-        "checked_at": "2026-10-21",
-        "note": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인."
+        "access": "opened",
+        "checked_at": "2026-10-26",
+        "note": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인. 이번 검토: PDF pp.2–5에서 제거 타일은 상자 뚜껑에 놓고, 공장 재충전 중 주머니가 비었을 때만 다시 섞음을 확인."
       },
       {
         "id": "essentials.storage-guidance",
@@ -9690,7 +9705,7 @@
       },
       {
         "id": "bag.scene",
-        "label": "주머니·버림",
+        "label": "주머니",
         "scope": "shared-secret",
         "visibility": "hidden",
         "type": "component-scene",
@@ -9700,7 +9715,7 @@
           "manual",
           "physical"
         ],
-        "description": "미공개 타일과 버린 타일을 섞기 전 상태 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "미공개 타일 주머니만 별도 물리 묶음으로 보존한다. 상자 뚜껑의 버린 타일은 포함하지 않는다.",
         "component_ids": [
           "tiles"
         ],
@@ -9708,8 +9723,35 @@
           "bag"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "azul.primary"
+        ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "box-lid.scene",
+        "label": "상자 뚜껑 버림",
+        "scope": "public",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "상자 뚜껑에 있는 버린 타일의 관측 수량·색·묶음 위치. 주머니 내용과 합치지 않는다.",
+        "component_ids": [
+          "tiles"
+        ],
+        "area_ids": [
+          "box-lid"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "azul.primary"
+        ],
+        "confidence": "reported"
       },
       {
         "id": "score",
@@ -9901,7 +9943,7 @@
         },
         {
           "id": "bag",
-          "name": "주머니·버림",
+          "name": "주머니",
           "scope": "shared-secret",
           "visibility": "hidden",
           "topology": "zone",
@@ -9913,10 +9955,33 @@
           "component_ids": [
             "tiles"
           ],
-          "anchor_contract": "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-          "description": "주머니·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "anchor_contract": "다음 공장 준비에 쓰는 미공개 타일 주머니. 상자 뚜껑의 버린 타일과 별도.",
+          "description": "주머니의 미공개 타일은 뒤집거나 펼쳐 정체를 기록하지 않고 실물로 보존한다.",
+          "source_refs": [
+            "azul.primary"
+          ],
           "confidence": "recommendation"
+        },
+        {
+          "id": "box-lid",
+          "name": "상자 뚜껑의 버린 타일",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "tiles"
+          ],
+          "anchor_contract": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
+          "description": "상자 뚜껑에 따로 모인 공개 타일의 실제 보이는 배치를 기록한다. 가려진 색·수량은 미확인으로 둔다.",
+          "source_refs": [
+            "azul.primary"
+          ],
+          "confidence": "reported"
         }
       ],
       "relations": [
@@ -9938,14 +10003,13 @@
     "preservation": [
       {
         "conditions": [
-          "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "미공개 타일 주머니를 상자 뚜껑의 버린 타일과 별도 묶음으로 보관한다.",
+          "주머니 내용은 펼쳐 확인하지 않고 위치·봉인 상태만 기록한다."
         ],
         "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
         "externalOnly": true,
         "id": "spec.bag.preserve",
-        "label": "주머니·버림 보존(선택)",
+        "label": "주머니 보존(선택)",
         "method": "sealed-bundle",
         "orderSensitive": false,
         "restoreAfter": [],
@@ -9988,7 +10052,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/azul/mapping.json",
-    "artSourceSHA": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3"
+    "artSourceSHA": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38"
   },
   {
     "gameId": "barrage",
@@ -36386,9 +36450,9 @@
     "title": "하나비",
     "editionId": "base",
     "edition": "기본판",
-    "packVersion": "1.0.0-essentials-2.b9f638a79062",
-    "sourceSHA": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
-    "sourceSHAActual": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+    "packVersion": "1.0.0-essentials-2.0b8fb054dd44",
+    "sourceSHA": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
+    "sourceSHAActual": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
     "sourceURLs": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf",
@@ -36611,8 +36675,8 @@
         "url": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf",
         "kind": "official-rules",
         "access": "opened",
-        "checked_at": "2026-10-21",
-        "note": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분."
+        "checked_at": "2026-10-26",
+        "note": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분. 이번 검토: PDF p.2(인쇄 pp.3–4)의 손패 재배열 허용과 힌트 전달 대상 카드 규칙을 재확인."
       },
       {
         "id": "essentials.storage-guidance",
@@ -36637,7 +36701,7 @@
           "manual",
           "physical"
         ],
-        "description": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "현재 손패 카드 인스턴스별 순서·방향·받은 힌트와의 연결을 실물로 보존한다. 앞면은 소유자에게 보이지 않게 유지한다.",
         "component_ids": [
           "cards"
         ],
@@ -36645,7 +36709,9 @@
           "hand"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "hanabi.primary"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -36861,9 +36927,11 @@
           "component_ids": [
             "cards"
           ],
-          "anchor_contract": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+          "anchor_contract": "현재 각 손패 카드 인스턴스의 소유자 기준 순서·방향과 받은 힌트의 연결을 유지한다. 카드 앞면은 손패 소유자에게 보이지 않게 둔다.",
           "description": "자기에게 숨겨진 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "source_refs": [
+            "hanabi.primary"
+          ],
           "confidence": "recommendation"
         },
         {
@@ -36952,16 +37020,17 @@
     "preservation": [
       {
         "conditions": [
-          "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "각 플레이어 손패의 현재 카드 순서와 앞뒷면 방향을 유지해 묶고, 카드 앞면이 소유자에게 보이지 않게 한다.",
+          "이미 받은 색/숫자 힌트는 현재 해당 카드 인스턴스와 함께 식별한다. 손패를 재배열했다면 이전 슬롯 순서가 아닌 재배열 후 현재 순서를 기록한다.",
+          "묶음 ID·실제 소유자·보관 위치를 기록한다. 정체를 확인하려 소유자의 카드를 뒤집지 않는다.",
+          "순서를 섞지 않고 앞뒤 방향을 유지하세요."
         ],
         "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
         "externalOnly": true,
         "id": "spec.hand.preserve",
         "label": "자기에게 숨겨진 손패 보존(선택)",
         "method": "sealed-bundle",
-        "orderSensitive": false,
+        "orderSensitive": true,
         "restoreAfter": [],
         "scope": "player",
         "sourceVisibility": "own-hidden"
@@ -37028,7 +37097,7 @@
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/hanabi/mapping.json",
-    "artSourceSHA": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad"
+    "artSourceSHA": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb"
   },
   {
     "gameId": "hansa-teutonica",
@@ -74804,12 +74873,12 @@
     "title": "티켓 투 라이드",
     "editionId": "base",
     "edition": "북미 기본판",
-    "packVersion": "1.0.0-essentials-2.9b65a4586519",
-    "sourceSHA": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
-    "sourceSHAActual": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
+    "packVersion": "1.0.0-essentials-2.1c8ca9d2e289",
+    "sourceSHA": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17",
+    "sourceSHAActual": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17",
     "scope": "generic-assisted-no-dedicated-readout",
     "target117": true,
-    "sourceURLs": "https://www.daysofwonder.com/game/ticket-to-ride/",
+    "sourceURLs": "https://www.daysofwonder.com/game/ticket-to-ride/ | https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2025/07/7201N_TICKET2RIDEV2_RULES_EN_20250425_WEB.pdf",
     "bindings": [
       {
         "areaIds": [
@@ -74868,11 +74937,41 @@
         ],
         "editor": "physical-only",
         "key": "decks.scene",
-        "label": "뽑기·버림",
+        "label": "뽑기 더미",
         "lifetime": "session",
         "scope": "shared-secret",
         "sourceId": "decks.scene",
         "visibility": "hidden"
+      },
+      {
+        "areaIds": [
+          "train-discard"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "editor": "component-catalog",
+        "key": "train-discard.scene",
+        "label": "공개 열차 카드 버림",
+        "lifetime": "session",
+        "scope": "public",
+        "sourceId": "train-discard.scene",
+        "visibility": "public"
+      },
+      {
+        "areaIds": [
+          "train-stock"
+        ],
+        "componentIds": [
+          "trains"
+        ],
+        "editor": "component-catalog",
+        "key": "train-stock.scene",
+        "label": "플레이어별 남은 열차 말",
+        "lifetime": "session",
+        "scope": "player",
+        "sourceId": "train-stock.scene",
+        "visibility": "public"
       },
       {
         "areaIds": [],
@@ -74886,8 +74985,12 @@
         "visibility": "public"
       },
       {
-        "areaIds": [],
-        "componentIds": [],
+        "areaIds": [
+          "train-stock"
+        ],
+        "componentIds": [
+          "trains"
+        ],
         "editor": "scalar",
         "key": "remaining-trains",
         "label": "남은 열차",
@@ -75063,6 +75166,15 @@
         "access": "opened",
         "checked_at": "2026-10-22",
         "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+      },
+      {
+        "id": "ticket-to-ride.rules.2025",
+        "title": "Ticket to Ride North America Rules, English ©2025",
+        "url": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2025/07/7201N_TICKET2RIDEV2_RULES_EN_20250425_WEB.pdf",
+        "kind": "official-rules",
+        "access": "opened",
+        "checked_at": "2026-10-26",
+        "note": "PDF pp.2–4: 플레이어별45열차, 공개 열차 카드 진열, 사용한 열차 카드 공개 버림 후 덱 소진 시 재섞기, 비공개 목적지 티켓, 남은 열차0–2개 종료 촉발."
       }
     ],
     "stateFields": [
@@ -75139,7 +75251,7 @@
       },
       {
         "id": "decks.scene",
-        "label": "뽑기·버림",
+        "label": "뽑기 더미",
         "scope": "shared-secret",
         "visibility": "hidden",
         "type": "component-scene",
@@ -75149,7 +75261,7 @@
           "manual",
           "physical"
         ],
-        "description": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+        "description": "열차 카드·목적지 티켓 뽑기 더미의 미공개 순서와 방향. 공개 사용 카드 버림은 포함하지 않는다.",
         "component_ids": [
           "cards",
           "tickets"
@@ -75158,8 +75270,60 @@
           "decks"
         ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "train-discard.scene",
+        "label": "공개 열차 카드 버림",
+        "scope": "public",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "앞면으로 공개된 사용 열차 카드 버림의 현재 장면. 뽑기 더미나 비공개 티켓은 포함하지 않는다.",
+        "component_ids": [
+          "cards"
+        ],
+        "area_ids": [
+          "train-discard"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
+        "confidence": "reported"
+      },
+      {
+        "id": "train-stock.scene",
+        "label": "플레이어별 남은 열차 말",
+        "scope": "player",
+        "visibility": "public",
+        "type": "component-scene",
+        "lifetime": "session",
+        "acquisition": [
+          "photo",
+          "manual",
+          "physical"
+        ],
+        "description": "플레이어별 실제 남은 열차 말의 공개 위치·관측 수량. 사진 밖 말은 추측하지 않는다.",
+        "component_ids": [
+          "trains"
+        ],
+        "area_ids": [
+          "train-stock"
+        ],
+        "rule_ids": [],
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
+        "confidence": "reported"
       },
       {
         "id": "score",
@@ -75189,10 +75353,16 @@
           "manual"
         ],
         "description": "실제로 남은 말 수; 사진 밖 말은 null.",
-        "component_ids": [],
-        "area_ids": [],
+        "component_ids": [
+          "trains"
+        ],
+        "area_ids": [
+          "train-stock"
+        ],
         "rule_ids": [],
-        "source_refs": [],
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -75329,7 +75499,7 @@
         },
         {
           "id": "decks",
-          "name": "뽑기·버림",
+          "name": "뽑기 더미",
           "scope": "shared-secret",
           "visibility": "hidden",
           "topology": "stack",
@@ -75342,10 +75512,54 @@
             "cards",
             "tickets"
           ],
-          "anchor_contract": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
-          "description": "뽑기·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-          "source_refs": [],
+          "anchor_contract": "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
+          "description": "뽑기 더미의 미공개 순서와 방향만 실물 보존한다. 공개 버림은 별도 구역이다.",
+          "source_refs": [
+            "ticket-to-ride.rules.2025"
+          ],
           "confidence": "recommendation"
+        },
+        {
+          "id": "train-discard",
+          "name": "공개 열차 카드 버림",
+          "scope": "public",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "cards"
+          ],
+          "anchor_contract": "사용한 열차 카드를 앞면으로 모은 버림. 뽑기 더미·진열과 따로 두며 재섞기 전 경계를 유지한다.",
+          "description": "현재 공개 버림의 보이는 카드 정체·수량을 기록하고 가려진 카드는 미확인으로 둔다.",
+          "source_refs": [
+            "ticket-to-ride.rules.2025"
+          ],
+          "confidence": "reported"
+        },
+        {
+          "id": "train-stock",
+          "name": "플레이어별 남은 열차 말",
+          "scope": "player",
+          "visibility": "public",
+          "topology": "zone",
+          "dynamic": true,
+          "fixed_slot_count": null,
+          "slot_kinds": [
+            "zone"
+          ],
+          "component_ids": [
+            "trains"
+          ],
+          "anchor_contract": "각 플레이어에게 실제로 남은 열차 말 묶음. 색만으로 소유자를 추정하지 않고 명시적으로 연결한다.",
+          "description": "지도 위에 놓인 열차와 분리된, 플레이어별 공개 남은 열차 말의 위치·관측 수량.",
+          "source_refs": [
+            "ticket-to-ride.rules.2025"
+          ],
+          "confidence": "reported"
         }
       ],
       "relations": [],
@@ -75373,7 +75587,7 @@
       },
       {
         "conditions": [
-          "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+          "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
           "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
           "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다.",
           "순서를 섞지 않고 앞뒤 방향을 유지하세요."
@@ -75381,7 +75595,7 @@
         "description": "실물 순서와 앞뒤를 유지해 보관하세요. 내용을 펼쳐 입력할 필요는 없어요.",
         "externalOnly": true,
         "id": "spec.decks.preserve",
-        "label": "뽑기·버림 보존(선택)",
+        "label": "뽑기 더미 보존(선택)",
         "method": "ordered-bundle",
         "orderSensitive": true,
         "restoreAfter": [],
@@ -75404,10 +75618,25 @@
         "restoreAfter": [],
         "scope": "public",
         "sourceVisibility": "public"
+      },
+      {
+        "conditions": [
+          "지도 위에 놓인 열차와 각 플레이어에게 남은 열차 말을 별도 묶음으로 기록한다.",
+          "실제 소유자·보관 위치·관측 수량을 확인하고, 사진 밖의 말 수는 추측하지 않는다."
+        ],
+        "description": "실물과 원본을 따로 보관하세요. 비밀 내용은 입력하지 마세요.",
+        "externalOnly": false,
+        "id": "spec.train-stock.preserve",
+        "label": "플레이어별 남은 열차 말 보존(선택)",
+        "method": "manual-note",
+        "orderSensitive": false,
+        "restoreAfter": [],
+        "scope": "player",
+        "sourceVisibility": "public"
       }
     ],
     "artMappingPath": "snapshot/public/game-art/games/ticket-to-ride/mapping.json",
-    "artSourceSHA": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c"
+    "artSourceSHA": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17"
   },
   {
     "gameId": "tiny-towns",

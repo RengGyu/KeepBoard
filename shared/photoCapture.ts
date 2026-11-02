@@ -1,11 +1,15 @@
 import profiles from './capture-profiles.json';
+import retiredProfiles from '../docs/gamepack-revision-20261026/history/before-runtime-revision/shared/capture-profiles.json';
 import type {Evidence,FieldDefinition,GamePack,Value} from './types';
 export interface CaptureTarget {version:1;gameId:string;sourceSHA:string;areaId:string}
 export interface CaptureArea {id:string;name:string;partition:string;instruction:string;fields:string[];components:string[]}
 export interface CaptureProfile {version:1;gameId:string;packId:string;editionId:string;sourceSHA:string;focus:string;areas:CaptureArea[];visible:Record<string,string[]>}
 export function captureProfile(pack:GamePack):CaptureProfile|undefined {
- const source=pack.runtime?.source,p=source&&(profiles as Record<string,CaptureProfile>)[source.gameId];
- return p&&p.packId===pack.id&&p.editionId===source!.editionId&&p.sourceSHA===source!.sha256?p:undefined;
+ const source=pack.runtime?.source;
+ if(!source)return undefined;
+ const matches=(p:CaptureProfile|undefined)=>p?.packId===pack.id&&p.editionId===source.editionId&&p.sourceSHA===source.sha256;
+ const current=(profiles as Record<string,CaptureProfile>)[source.gameId],retired=(retiredProfiles as Record<string,CaptureProfile>)[source.gameId];
+ return matches(current)?current:matches(retired)?retired:undefined;
 }
 export function captureAreas(pack:GamePack,ownerId?:string){return captureProfile(pack)?.areas.filter(a=>ownerId?a.partition==='owner_private':a.partition==='common_public'||a.partition==='player_public')??[];}
 /** Only a new upload is validated here. Old pinned records/photos are never migrated. */

@@ -1,6 +1,16 @@
 export interface GeometryPoint {x:number;y:number}
 export interface ConfirmedPhotoFrame {frameId:string;sourceEvidenceId:string;sourceSHA:string;definitionSHA:string;coordinateSpace:'normalized-photo/catan-topology';correspondences:{photoPointNormalized:GeometryPoint;canonicalPoint:GeometryPoint;canonicalTopologyId:string}[];orientation:number;confirmedByUser:true}
-export interface PhotoTransform {transformId:string;sourceSHA:string;inputSHA:string;sourceDimensions:{width:number;height:number};inputDimensions:{width:number;height:number};forwardMatrix:number[];inverseMatrix:number[];panels:{panelRef:string;sourcePolygon:GeometryPoint[];inputRectangle:{x:number;y:number;width:number;height:number};candidateSlotId:string}[]}
+export interface PhotoTransform {kind?:'crop';transformId:string;sourceSHA:string;inputSHA:string;sourceDimensions:{width:number;height:number};inputDimensions:{width:number;height:number};forwardMatrix:number[];inverseMatrix:number[];panels:{panelRef:string;sourcePolygon:GeometryPoint[];inputRectangle:{x:number;y:number;width:number;height:number};candidateSlotId:string}[]}
+/** Exact normalized source rectangle; crop bytes are stored evidence, never a guessed view transform. */
+export function cropPhotoTransform(input:{transformId:string;sourceSHA:string;inputSHA:string;sourceDimensions:{width:number;height:number};inputDimensions:{width:number;height:number};region:{x:number;y:number;width:number;height:number}}):PhotoTransform {
+ const {x,y,width:w,height:h}=input.region;
+ if(![x,y,w,h].every(Number.isFinite)||x<0||y<0||w<=0||h<=0||x+w>1.00000001||y+h>1.00000001||![input.sourceSHA,input.inputSHA].every(v=>/^[a-f0-9]{64}$/.test(v)))throw Error('원본 crop 좌표를 확인하세요.');
+ return {kind:'crop',transformId:input.transformId,sourceSHA:input.sourceSHA,inputSHA:input.inputSHA,sourceDimensions:input.sourceDimensions,inputDimensions:input.inputDimensions,forwardMatrix:[1/w,0,-x/w,0,1/h,-y/h,0,0,1],inverseMatrix:[w,0,x,0,h,y,0,0,1],panels:[]};
+}
+export function validCropTransform(t:PhotoTransform){
+ if(t.kind!=='crop'||t.panels.length||t.forwardMatrix.length!==9||t.inverseMatrix.length!==9||![...t.forwardMatrix,...t.inverseMatrix].every(Number.isFinite))return false;
+ try{const p=projectPhotoPoint(t.inverseMatrix,{x:0,y:0}),q=projectPhotoPoint(t.inverseMatrix,{x:1,y:1});const expected=cropPhotoTransform({...t,region:{x:p.x,y:p.y,width:q.x-p.x,height:q.y-p.y}});return expected.forwardMatrix.every((v,i)=>Math.abs(v-t.forwardMatrix[i])<1e-7)&&expected.inverseMatrix.every((v,i)=>Math.abs(v-t.inverseMatrix[i])<1e-7);}catch{return false;}
+}
 export interface PhotoFrameContext {evidenceId:string;sourceSHA:string;definitionSHA:string}
 export interface FrameHomography {forwardMatrix:number[];inverseMatrix:number[]}
 import {CATAN_TOPOLOGY} from './scene';

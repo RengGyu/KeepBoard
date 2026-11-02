@@ -26,6 +26,9 @@ GROUPS={
 '06-maps-tracks':'''age-of-innovation arcs ark-nova clank-catacombs dominant-species dune-imperium-uprising eclipse-second-dawn expeditions five-tribes gaia-project heat king-of-tokyo lost-ruins-arnak monopoly quacks root scythe seti small-world space-base spirit-island star-wars-outer-rim star-wars-rebellion tapestry terra-mystica terraforming-mars through-the-ages ticket-to-ride twilight-imperium-4 twilight-struggle voidfall war-of-the-ring-2'''.split()
 }
 TYPES={'t':'text','i':'integer','s':'integer','b':'boolean','m':'marks','p':'player'}
+# These describe the physical outline or the side currently visible, not hidden front printing.
+# connectorShape, printed names/numbers/symbols and face colour intentionally remain front-only.
+FRONT_INDEPENDENT_FIELDS={'shape','flipped','shownSide','selectedFace','selectedSide','tileSide','sectorSide','mortgageFace','revealedFace','sideLabel'}
 # Bounds below are source-explicit, not guesses from a generic component silhouette.
 ENUM_OVERRIDES={
  ('seti','probes','role'):[('probe','탐사선'),('orbiter','궤도선'),('lander','착륙선')],
@@ -86,7 +89,7 @@ def build_game(g,profiles):
         for original in extras:
             f=dict(original);f['sourceText']=source
             if f['acquisition']=='manual':f['sourceText']+=' · 앱의 직접 확인 입력. 사진/규칙으로 과거·의도·소유·미관측 관계를 자동 결정하지 않는다.'
-            if c['kind'] in ['card','tile'] and f['acquisition']=='visible' and f['id'] not in ['backCue','face']:f['faceOnly']=True
+            if c['kind'] in ['card','tile'] and f['acquisition']=='visible' and f['id'] not in {'backCue','face'} | FRONT_INDEPENDENT_FIELDS:f['faceOnly']=True
             key=(gid,c['id'],f['id'])
             if key in ENUM_OVERRIDES:
                 f['type']='enum';f.pop('min',None);f['options']=[{'value':v,'label':l} for v,l in ENUM_OVERRIDES[key]]

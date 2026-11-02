@@ -17,10 +17,10 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/a-feast-for-odin.json",
-    "sha256": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+    "sha256": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
     "runtime_pack_id": "a-feast-for-odin",
-    "runtime_pack_version": "1.0.0-essentials-2.539007f66356",
-    "runtime_match": false
+    "runtime_pack_version": "1.0.0-essentials-2.20d00a567a99",
+    "runtime_match": true
   },
   "basis": {
     "contract": "RECOMMENDATION",
@@ -39,7 +39,7 @@
     ],
     "whole_game_rules_verified": false,
     "real_photo_accuracy_verified": false,
-    "source_revision_pending_runtime_regeneration": true
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "개인 본판·섬 격자, 상품 모양, 행동 일꾼",
   "critical_resume_distinction": "조각 회전/반사·덮은 보너스와 미설치 상품 구별; 잔치 처리 이력 수동",
@@ -226,7 +226,7 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "아직 내지 않은 직업과 공개한 직업 구별.",
+      "anchor_contract": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
       "description": "직업 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
       "source_refs": [],
       "confidence": "recommendation",
@@ -254,7 +254,7 @@
         "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
       },
       "display_resume": {
-        "source_anchor": "아직 내지 않은 직업과 공개한 직업 구별.",
+        "source_anchor": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
         "source_relations": [],
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
@@ -283,9 +283,13 @@
       ],
       "confidence": "recommendation",
       "partition": "player_public",
-      "capture_allowed_current": false,
-      "current_ai_destination_fields": [],
-      "current_manual_target_fields": [],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "played-occupations.scene"
+      ],
       "source_field_ids": [
         "played-occupations.scene"
       ],
@@ -294,7 +298,7 @@
       ],
       "owner_binding": "explicit user/roster binding only; no seat/color inference",
       "capture_instruction": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
-      "capture_access": "public evidence; explicit owner binding for player areas",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
       "evidence_contract": {
         "original_id_required": true,
         "original_region": "normalized crop in this source only; not game coordinates",
@@ -648,6 +652,14 @@
     ],
     "excluded_bindings": [
       {
+        "key": "puzzle.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "assets.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "round",
         "reason": "원명세가 사진 관측을 허용하지 않음"
       },
@@ -678,6 +690,10 @@
       {
         "key": "note",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "played-occupations.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -768,7 +784,8 @@
         "visibility": "public",
         "field_ids": [
           "puzzle.scene",
-          "assets.scene"
+          "assets.scene",
+          "played-occupations.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -871,8 +888,14 @@
       {
         "area_id": "hand",
         "name": "직업 손패",
-        "needs": "아직 내지 않은 직업과 공개한 직업 구별.",
+        "needs": "아직 사용하지 않은 비공개 직업 카드만; 사용한 직업은 별도 개인 공개 영역.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "played-occupations",
+        "name": "사용한 직업 카드",
+        "needs": "사용한 직업 카드를 개인별로 펼친 상태·인스턴스로 보존하고 손패와 혼합하지 않는다.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
       }
     ],
     "do_not_collect": [],
@@ -882,7 +905,7 @@
   "current_board_mapping": {
     "gameId": "a-feast-for-odin",
     "editionId": "base",
-    "sourceSHA": "539007f6635685ede0f9069e0220a03bb4db687af2442a5b7ecd5ddec97c08b7",
+    "sourceSHA": "20d00a567a99f175928f53f2a35545923044309e075dcf4a0ca1aea969710feb",
     "status": "reuse",
     "areas": [
       {
@@ -961,6 +984,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "played-occupations",
+        "label": "사용한 직업 카드",
+        "fieldKeys": [
+          "played-occupations.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "a-feast-for-odin.primary"
+        ],
+        "sourceConfidence": "recommendation",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

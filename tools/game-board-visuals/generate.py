@@ -9,7 +9,7 @@ def emit(path,text):
 pending={}
 for item in json.loads((ROOT/'docs/game-board-visuals/fidelity-pending.json').read_text())['items']:
  pending.setdefault(item['gameId'],[]).append({k:v for k,v in item.items() if k!='gameId'})
-rows=[];originals={str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'public/game-art').rglob('*') if p.is_file() and 'boards' not in p.relative_to(ROOT/'public/game-art').parts}
+rows=[];originals={str(p.relative_to(ROOT)):sha(p) for p in sorted((ROOT/'public/game-art').rglob('*')) if p.is_file() and p.suffix.lower()!='.zip' and 'boards' not in p.relative_to(ROOT/'public/game-art').parts and 'real-boards' not in p.relative_to(ROOT/'public/game-art').parts}
 for p in sorted((ROOT/'docs/research/game-specs-120/games').glob('*.json')):
  s=json.loads(p.read_text());g=s['game_id']
  if g=='rummikub':continue

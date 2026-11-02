@@ -1,0 +1,66 @@
+{
+  "reviewer": "Claude Sonnet 5.5 (medium), read-only",
+  "sourceSHA": "993bc4461baff9708b92c5a209ee8a7ac957f9cf (HEAD; reviewed working tree + /private/tmp/kb-gemini-production-parity.diff)",
+  "execution": "Source inference only. No tests, builds or model calls were run by this reviewer.",
+  "verifiedBySource": [
+    "server/ai/geminiGameReader.ts:24,95 keep LOW thinking, MEDIA_RESOLUTION_HIGH, maxOutputTokens 32768; no other provider or model fallback in the Gemini path.",
+    "server/index.ts:393 and 401 and server/cloudRuntime.ts:21 both call prepareHostedObservation -> GeminiGameReader.read -> assembleObservations, then commitAnalysisTask. Cloud pins the plan in the task and re-checks reader identity and source image SHA in analyzeHostedObservation.",
+    "Cloud rerun: claimBatch rejects repeated batches, so a failed Gemini batch is not silently re-billed. The cost is that the job ends as interrupted.",
+    "Timings: provider ms flows from reader.read -> finishBatch -> finishCloudJob. The local path is consistent.",
+    "/analyze rejects body.reader, so there is no automatic switch to a paid model."
+  ],
+  "findings": [
+    {
+      "priority": "P3",
+      "type": "behavior regression risk, source-inferred",
+      "where": "src/SessionWorkspace.tsx:66, 238, 166",
+      "issue": "readerMode now defaults to 'gemini'. localEnabled also requires supportedLocalArea (a photo definition exists and the area has observable properties). For a game or area without one (e.g. generic packs, or rummikub if its definition has no observable area), the default is not readable: readStoredPhotos throws and the batch is created with aiEnabled=false. The old default, the existing AI, is no longer used automatically.",
+      "repro": "Open a session whose pack has no observable area and press read with the default selection. The result is the 'check the selected reader/area' error.",
+      "minimalFix": "If the product intends Gemini only, no change; show a clear unsupported message. Otherwise, when !supportedLocalArea, show the existing-AI option or tell the user to pick it. Do not auto-switch (the no-auto-fallback rule)."
+    },
+    {
+      "priority": "P4",
+      "type": "retention growth, source-inferred",
+      "where": "server/cloudJobs.ts:9 (retainedHistory)",
+      "issue": "Jobs with observationReceipts are kept in the per-session job index forever (previously pruned after 24h). The index is a single JSON object read and rewritten on every list/start/update, so it grows with every successful read and each write costs more.",
+      "minimalFix": "Accept it if receipts are the intended record. Otherwise cap with a count (e.g. latest N receipts jobs) or store receipts elsewhere."
+    },
+    {
+      "priority": "P4",
+      "type": "timing accuracy, source-inferred",
+      "where": "server/cloudRuntime.ts finishCloudJob",
+      "issue": "totalMs = finish time - job.createdAt, so it includes queue wait. The local path measures from execution start, so the two are not comparable. providerMs sums over batches. The hosted path always has one batch, so it is fine.",
+      "minimalFix": "Label as end-to-end or store the claim start time."
+    }
+  ],
+  "noFindings": [
+    "No path found that selects a provider/model other than the requested one.",
+    "Original photo, regions and existing records are not modified by the delta; the delta only changes retention, timings, default selection, CSS shade names and text."
+  ],
+  "limits": "Not reviewed: tests (mid-review notice: 3 UI tests changed to select the existing AI explicitly; I did not read them), the non-delta large diff, real Gemini responses, key configuration. observedColorCSS shade names (shared/playerColors.ts) were read only in the diff; 'darkgray' maps to #a9a9a9 as in CSS.",
+  "followup_terrain_grouping": {
+    "executed": "Read job.json observationReceipts (no key). Source inference for the cause; no model call.",
+    "fact": "The receipt has one terrain row: item-33, variant desert, quantity 1, bbox ~16%x9% of the image. So Gemini did not group terrain: it returned only the desert hex and no row for the other 18 terrain hexes.",
+    "cause_judgement": "General contract gap, not photo-specific. buildGeminiGameBody sends each component as {id,name,physicalType} only (componentLabels = {name:c.name, physicalType:c.kind}, shared/lightweightRecognition.ts:44). For terrain that is name '지형', physicalType 'terrain'. The prompt also says tiles are distinct from 'the printed board and its illustrations', and tells the model to return objects 'distinct from the printed board'. Nothing tells the model that in this game the board itself is made of these tiles, so the model can treat 18 board-surface hexes as the printed board and report only the one it recognised as a piece. Prompt wording and the pack's component data disagree on what is a movable/countable object.",
+    "recommendation_min_scope": [
+      "1. Add an optional short physical-form text per component to the game pack (pack.runtime.components[*], e.g. 'form': 'hexagonal tile; the board is assembled from these'), and pass it through componentLabels as one extra string field. Pack data, no photo-specific code, one prompt line unchanged. Packs that do not set it behave exactly as now.",
+      "2. Set it for catan terrain only for now (and other packs only if their pack text already says the board is made of tiles). Do NOT add a generic rule that printed illustrations or board art become objects; keep the existing 'printed board and its illustrations are not objects' sentence.",
+      "3. Optionally add one sentence to the prompt: 'A component whose description says the board is assembled from it is a physical object, one row per piece.' Only fires when a description is present.",
+      "4. Verify with the same job photo and compare terrain row count; expect up to 19 rows. Treat a one-time result as evidence only; check at least one more catan photo before deciding."
+    ],
+    "not_recommended": [
+      "Do not change quantity semantics (grouped rows with quantity N) to cover this: quantity is for inseparable groups, and terrain hexes are separable.",
+      "Do not hard-code catan or 19 hexes in the prompt or in decode; the assembler already rejects invented inventory.",
+      "No UI change needed."
+    ],
+    "confidence": "Cause is probable, not proven: only one run. The alternative, plain model omission at LOW thinking, cannot be excluded without a second run with the description added."
+  },
+  "followup_terrainGuide_review": {
+    "sourceSHA": "993bc4461baff9708b92c5a209ee8a7ac957f9cf + uncommitted working tree",
+    "executed": "Source reading only (geminiGameReader.ts:17-19, test name at tests/gemini-game-observation.test.ts:38). I did not run the tests.",
+    "verdict": "No defect found. The guide is gated on nativeBridge==='catan' && areaId==='board' && allowedComponents has 'terrain', so other games and the catan hand area get an empty string and an unchanged prompt. No coordinate, count, colour or photo-specific value. It forbids inferring hidden terrain or an expected count, which keeps the assembler's no-invented-inventory rule.",
+    "note_P4": "The generic sentence two lines below still says movable pieces/tiles are 'distinct from the printed board and its illustrations'. For Catan, the guide now says printed regions count as terrain, so the prompt is slightly self-contradictory. The specific guide should win, but if the live rerun still omits hexes, reword the generic sentence to 'printed board art that is not a listed kind', rather than adding more catan text.",
+    "residual_risk": "Effect on the live model is unproven until a rerun: expect terrain rows near the number of visible hexes. One run is evidence only; also check that number-token rows and desert variant are unchanged and that no terrain row appears from the harbor or sea frame.",
+    "scope": "Minimal as asked; no UI change."
+  }
+}

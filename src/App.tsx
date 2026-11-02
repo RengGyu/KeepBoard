@@ -1,20 +1,33 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowRight, BookOpen, Check, Clock3, Hexagon, LayoutGrid, MoreHorizontal, Plus, RefreshCw, Search, Trash2, Undo2, X } from 'lucide-react';
+import { Archive, BookOpen, Check, Hexagon, House, LogIn, MoreHorizontal, Plus, RefreshCw, Search, Trash2, Undo2, X } from 'lucide-react';
 import type {GameCatalogEntry} from '../shared/gameEssentials';
 import type { AIStatus, Session, SessionView } from '../shared/types';
 import { api } from './api';
-import { LibraryDialog } from './Dialogs';
+import { LibraryDialog, LibraryPanel } from './Dialogs';
 import { fire, type Mutate } from './Fields';
 import SessionWorkspace from './SessionWorkspace';
-import { Busy, Empty, PlayerPiece, formatDate } from './ui';
+import { Busy, Empty, formatDate } from './ui';
 import {redactSession,redactView} from '../shared/privacy';
-import { BRAND_IMAGES } from './brandImages';
 import {GameCover} from './GameCover';
-import {BoardEvent, LoaderMark} from './BoardFeedback';
+import {BoardEvent} from './BoardFeedback';
 
 import {RoomEntry} from './RoomEntry';
-import {rememberRoom,selectRoomScope,roomIsStale} from './roomAccess';
+import {withTransition} from './viewTransition';
+import {attachPullToRefresh, attachSwipeToDelete} from './gestures';
+import {rememberRoom,selectRoomScope} from './roomAccess';
 type Dialog = 'create' | 'join' | 'library' | null;
+type Tab = 'home' | 'archive' | 'games';
+type Filter = 'all' | 'saved' | 'trash';
+const TABS: { id: Tab; label: string; Icon: typeof House }[] = [{ id: 'home', label: '홈', Icon: House }, { id: 'archive', label: '보관함', Icon: Archive }, { id: 'games', label: '게임', Icon: BookOpen }];
+const readFilter = (): Filter => { const value = new URLSearchParams(location.search).get('filter'); return value === 'saved' || value === 'trash' ? value : 'all'; };
+const readTab = (): Tab => { const tab = new URLSearchParams(location.search).get('tab'); return tab === 'archive' || tab === 'games' ? tab : 'home'; };
+
+function SessionCard({ session, pack, busy, manage, onOpen, onRestore, onDelete }: { session: Session; pack?: GameCatalogEntry; busy: boolean; manage: boolean; onOpen: () => void; onRestore: () => void; onDelete: () => void }) {
+  const evidence = session.evidence.find(item => item.scope === 'public' && !item.ownerId);
+  const saved = session.snapshots.length > 0;
+  const swipeable = !session.deletedAt && !session.room;
+  return <article className="session-card" data-session={session.id} data-swipe={swipeable ? '' : undefined}>{swipeable && <span className="swipe-action" aria-hidden="true"><Trash2 size={20}/>삭제</span>}<button type="button" className="session-open" disabled={busy || !!session.deletedAt} onClick={onOpen}><div className="session-card-image">{evidence?.url ? <img src={evidence.url} alt="" loading="lazy" width={320} height={240}/> : <div className="session-card-cover" aria-hidden="true"><GameCover gameId={session.gamePackId}/></div>}{saved && <span className="session-status is-saved"><Check size={13} aria-hidden="true"/>저장됨</span>}</div><div className="session-card-body"><h3>{session.name}</h3><p className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}<time dateTime={session.updatedAt}>{formatDate(session.updatedAt)}</time></p></div></button>{session.deletedAt ? <button type="button" className="button secondary small-button restore-board" disabled={busy} onClick={onRestore}><Undo2 size={15}/>복원</button> : manage && !session.room ? <button type="button" className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={onDelete}><Trash2 size={16}/></button> : null}</article>;
+}
 
 export default function App() {
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -31,8 +44,15 @@ export default function App() {
   const [toast, setToast] = useState('');
   const [reopenFeedback, setReopenFeedback] = useState(0);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState<'all' | 'saved' | 'trash'>('all');
+  const [filter, setFilterState] = useState<Filter>(readFilter);
+  const liveFilter = useRef(filter); liveFilter.current = filter;
   const [deleteUndo, setDeleteUndo] = useState<string[]>([]);
+  const [tab, setTabState] = useState<Tab>(readTab);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [manage, setManage] = useState(false);
+  const liveTab = useRef(tab); liveTab.current = tab;
+  const pullIndicator = useRef<HTMLDivElement>(null);
+  const mainArea = useRef<HTMLElement>(null);
   const leaveWorkspace = useRef<(() => Promise<void>) | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pending = useRef(0);
@@ -45,6 +65,8 @@ export default function App() {
     url.searchParams.delete('step');url.hash='';
     if (sessionId) url.searchParams.set('session', sessionId); else url.searchParams.delete('session');
     if (sessionId && playerId) url.searchParams.set('player', playerId); else url.searchParams.delete('player');
+    if (!sessionId && liveTab.current !== 'home') url.searchParams.set('tab', liveTab.current); else url.searchParams.delete('tab');
+    if (!sessionId && liveTab.current === 'archive' && liveFilter.current !== 'all') url.searchParams.set('filter', liveFilter.current); else url.searchParams.delete('filter');
     history.replaceState({}, '', url);
   };
   const setOwnerId = async (id?: string) => {
@@ -65,7 +87,7 @@ export default function App() {
   };
   const open = async (id: string) => {
     setBusy(true); setError('');
-    try { await api.lockPrivate(view?.session.id);const next = await api.session(id);const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;setOwnerIdState(selected);selectRoomScope(next,selected);setConflict(false);receive(next); if (next.session.snapshots.length) setReopenFeedback(current => current + 1); updateUrl(id, selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); }
+    try { await api.lockPrivate(view?.session.id);const next = await api.session(id);const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;withTransition('forward', () => { setOwnerIdState(selected);selectRoomScope(next,selected);setConflict(false);receive(next); if (next.session.snapshots.length) setReopenFeedback(current => current + 1); updateUrl(id, selected); window.scrollTo({ top: 0 }); }, { from: () => document.querySelector(`[data-session="${id}"] h3`), to: () => document.querySelector('.cw-title h1') }); }
     catch (reason) { setError(reason instanceof Error ? reason.message : '기록을 열지 못했습니다.'); } finally { setBusy(false); }
   };
   const created = async (next: SessionView) => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;selectRoomScope(next,selected);receive(next);setConflict(false);setInitialInvite('');setDialog(null);setOwnerIdState(selected);updateUrl(next.session.id,selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); };
@@ -75,7 +97,14 @@ export default function App() {
     catch (reason) { if(!options?.localError)setError(reason instanceof Error ? reason.message : '변경 내용을 저장하지 못했습니다.'); throw reason; }
     finally { pending.current -= 1; setBusy(pending.current > 0); }
   };
-  const back = () => fire((async () => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); setView(null); setOwnerIdState(undefined); updateUrl(); setSessions(await api.sessions(true)); })());
+  const back = () => fire((async () => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const leaving = liveView.current?.session.id; withTransition('back', () => { setView(null); setOwnerIdState(undefined); updateUrl(); }, { from: () => document.querySelector('.cw-title h1'), to: () => leaving ? document.querySelector(`[data-session="${leaving}"] h3`) : null }); setSessions(await api.sessions(true)); })());
+  const setFilter = (next: Filter) => { liveFilter.current = next; setFilterState(next); if (!view) updateUrl(); };
+  const goTab = (next: Tab, nextFilter?: Filter) => {
+    const change = () => { if (nextFilter) { liveFilter.current = nextFilter; setFilterState(nextFilter); } liveTab.current = next; setTabState(next); };
+    if (view) { change(); back(); return; }
+    if (next === liveTab.current && !nextFilter) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    withTransition('tab', () => { change(); updateUrl(); window.scrollTo({ top: 0 }); });
+  };
 
   async function hideBoards(id?: string) {
     setBusy(true); setError(''); setToast('');
@@ -109,50 +138,56 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (view || typeof document === 'undefined' || !pullIndicator.current) return;
+    return attachPullToRefresh(pullIndicator.current, () => Promise.all([api.sessions(true).then(setSessions), refreshPacks()]), () => !liveView.current);
+  }, [view]);
+  useEffect(() => {
+    if (typeof document === 'undefined' || !mainArea.current) return;
+    return attachSwipeToDelete(mainArea.current, id => void hideBoards(id));
+  }, []);
+
+  useEffect(() => {
     if (view && ownerId && !view.session.players.some(player => player.id === ownerId)) {
       setOwnerIdState(undefined);
       updateUrl(view.session.id);
     }
   }, [view?.session.id, ownerId]);
 
-  useEffect(() => {
-    if (!view?.session.id) return;
-    let cancelled = false;
-    let inFlight = false;
-    const timer = setInterval(async () => {
-      if (inFlight || pending.current || dialog || document.hidden || document.querySelector('[role="dialog"]')) return;
-      const active = document.activeElement;
-      if (active && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) return;
-      inFlight = true;
-      try {
-        const next = await api.session(view.session.id);
-        if (!cancelled && !pending.current && liveView.current?.session.id === next.session.id && (liveView.current.session.updatedAt !== next.session.updatedAt||JSON.stringify(liveView.current.privacy)!==JSON.stringify(next.privacy))) {if(roomIsStale(liveView.current,next,ownerId))setConflict(true);else receive(next);}
-      } catch { /* Keep local work visible; a subsequent mutation reports server errors. */ }
-      finally { inFlight = false; }
-    }, 4500);
-    return () => { cancelled = true; clearInterval(timer); };
-  }, [view?.session.id, dialog,ownerId]);
-
   const liveSessions = sessions.filter(session => !session.deletedAt);
   const visibleSessions = sessions.filter(session => (filter === 'trash' ? !!session.deletedAt : !session.deletedAt) && (!search || `${session.name} ${packs.find(pack => pack.id === session.gamePackId)?.title || ''}`.toLowerCase().includes(search.toLowerCase())) && (filter !== 'saved' || session.snapshots.length > 0));
   const savedCount = liveSessions.filter(session => session.snapshots.length).length;
   const openExample = () => fire(mutate(() => api.create({ example: true }), '카탄 예시를 열었어요').then(() => { const next = liveView.current; if (next) updateUrl(next.session.id); }));
-  return <div className="app-shell">
+  const recentSessions = liveSessions.slice(0, 5);
+  const card = (session: Session) => <SessionCard key={session.id} session={session} pack={packs.find(item => item.id === session.gamePackId)} busy={busy} manage={manage} onOpen={() => void open(session.id)} onRestore={() => void restoreBoards([session.id])} onDelete={() => void hideBoards(session.id)}/>;
+  const onHome = !view && tab === 'home';
+  return <div className={`app-shell${view ? ' is-session' : ' has-tabbar'}${onHome ? ' is-home' : ''}`}>
+    <a className="skip-link" href="#main">본문으로 건너뛰기</a>
     <header className="app-bar">
-      <button className="brand" onClick={back} aria-label="KeepBoard 내 보드로"><span className="brand-icon" aria-hidden="true"><Hexagon size={26} strokeWidth={2.4}/><span/></span>KeepBoard</button>
-      <nav className="app-nav" aria-label="메인 메뉴"><button className={!view ? 'active' : ''} aria-current={!view ? 'page' : undefined} onClick={back}><LayoutGrid size={18}/><span>내 보드</span></button><button onClick={() => setDialog('library')}><BookOpen size={18}/><span>게임</span></button></nav>
-      <button className="button primary small-button app-new" aria-label="새 보드" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/><span>새 보드</span></button>
+      <button type="button" className="brand" onClick={() => goTab('home')} aria-label="KeepBoard 홈으로" translate="no"><span className="brand-icon" aria-hidden="true"><Hexagon size={26} strokeWidth={2.4}/><span/></span>KeepBoard</button>
+      <nav className="app-nav" aria-label="메인 메뉴">{TABS.map(({ id, label, Icon }) => <button type="button" key={id} className={!view && tab === id ? 'active' : ''} aria-current={!view && tab === id ? 'page' : undefined} onClick={() => goTab(id)}><Icon size={18}/><span>{label}</span></button>)}</nav>
+      <button type="button" className="button primary small-button app-new" aria-label="새 보드" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/><span>새 보드</span></button>
     </header>
-    <main className={`main-content ${view ? 'in-session' : ''}`}>
+    <main id="main" ref={mainArea} tabIndex={-1} className={`main-content ${view ? 'in-session' : ''}`}>
       {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
-      {loading ? <div className="loading-screen" role="status"><LoaderMark size={32}/><p>보드를 불러오고 있어요</p></div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : <div className="home">
-        <button className="button secondary" onClick={()=>setDialog('join')}>초대 코드로 방 참가</button><header className={`home-head has-photo${liveSessions.length?' has-boards':''}`}><div className="home-head-photo" aria-hidden="true"><img src={BRAND_IMAGES.homeHero} srcSet={`${BRAND_IMAGES.homeHeroSmall} 900w, ${BRAND_IMAGES.homeHero} 1600w`} sizes="(max-width: 760px) 100vw, 1360px" alt="" width={1600} height={1066} fetchPriority="high" decoding="async"/></div><div className="home-head-copy"><span className="eyebrow">KeepBoard · 보드게임 기록</span><h1>내 보드</h1><p>사진을 남기고, 게임에 맞게 기록해 이어가요.</p><div className="home-stats"><span className="stat-chip stat-all">전체 판<b>{liveSessions.length}</b></span><span className="stat-chip stat-saved">저장한 판<b>{savedCount}</b></span><span className="stat-chip stat-games">게임<b>{packs.length}</b></span></div><button className="button home-example" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button></div></header>
-        <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제한 보드</button></div><div className="board-tools"><label className="search-box"><Search size={17}/><input aria-label="보드 검색" placeholder="보드 검색" value={search} onChange={event => setSearch(event.target.value)}/>{search && <button className="icon-button" aria-label="검색 지우기" onClick={() => setSearch('')}><X size={15}/></button>}</label><button className="icon-button" aria-label="보드 목록 새로고침" disabled={busy} onClick={() => fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason))))}><RefreshCw size={18}/></button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button disabled={busy || !liveSessions.length} onClick={() => void hideBoards()}><Trash2 size={15}/>전체 삭제</button></details></div></div>
-        {visibleSessions.length ? <div className="session-list">{visibleSessions.map(session => {
-          const pack = packs.find(item => item.id === session.gamePackId);
-          const evidence = session.evidence.find(item => item.scope === 'public' && !item.ownerId);
-          return <article className="session-card" key={session.id}><button className="session-open" disabled={busy || !!session.deletedAt} onClick={() => void open(session.id)}><div className="session-card-image">{evidence?.url ? <img src={evidence.url} alt={`${session.name} 보드 미리보기`} loading="lazy"/> : <GameCover gameId={session.gamePackId} label={`${pack?.title ?? '게임'} · 대표 표지 그림`}/>}<span className={`session-status ${session.snapshots.length ? 'is-saved' : 'is-recording'}`}>{session.snapshots.length ? <Check size={13}/> : <Clock3 size={13}/>}{session.snapshots.length ? '저장됨' : '기록 중'}</span></div><div className="session-card-body"><h3>{session.name}</h3><p className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}<span className="dot-divider" aria-hidden="true">·</span>{formatDate(session.updatedAt)}</p><div className="session-card-footer"><div className="player-colors" aria-label={`${session.players.length}명: ${session.players.map(player => player.name).join(', ')}`}>{session.players.map(player => <PlayerPiece key={player.id} color={player.color} game={session.gamePackId} size={26}/>)}</div>{!session.deletedAt && <span className="session-go">이어하기<ArrowRight size={16}/></span>}</div></div></button>{session.deletedAt ? <button className="button secondary small-button restore-board" disabled={busy} onClick={() => void restoreBoards([session.id])}><Undo2 size={15}/>복원</button> : session.room ? null : <button className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={() => void hideBoards(session.id)}><Trash2 size={16}/></button>}</article>;
-        })}</div> : <Empty title={search ? '검색 결과가 없어요' : filter === 'trash' ? '삭제한 보드가 없어요' : filter === 'saved' ? '아직 저장한 판이 없어요' : '첫 번째 판을 기록해 보세요'} action={filter === 'trash' ? undefined : <div className="button-row empty-actions"><button className="button primary" disabled={!packs.length || busy} onClick={() => setDialog('create')}><Plus size={17}/>새 보드</button><button className="button secondary" disabled={!packs.length || busy} onClick={openExample}>카탄 예시 열기</button></div>}>{search ? '다른 이름이나 게임으로 찾아보세요.' : filter === 'trash' ? '삭제한 보드는 여기에서 복원할 수 있어요.' : '게임 사진과 상태를 함께 남기면 저장한 판을 이어볼 수 있어요.'}</Empty>}
+      {loading ? <div className="skeleton" role="status" aria-label="보드를 불러오고 있어요"><span className="sk sk-title"/><div className="sk-row"><span className="sk sk-button"/><span className="sk sk-button"/></div><span className="sk sk-heading"/>{[0, 1, 2].map(index => <div className="sk-card" key={index}><span className="sk sk-thumb"/><div><span className="sk sk-line"/><span className="sk sk-line short"/></div></div>)}</div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : tab === 'home' ? <div className="home home-tab">
+        <h1 className="page-title">보드게임 기록</h1>
+        <div className="home-actions">
+          <button type="button" className="button primary" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/>새 보드</button>
+          <button type="button" className="button secondary" onClick={()=>setDialog('join')}><LogIn size={18}/>초대 코드로 참가</button>
+        </div>
+        <section className="home-recent" aria-labelledby="recent-title">
+          <h2 id="recent-title">최근 보드</h2>
+          {recentSessions.length ? <div className="session-list">{recentSessions.map(card)}</div> : <Empty scene="quiet" title="첫 번째 판을 기록해 보세요" action={<button type="button" className="button secondary" disabled={busy || !packs.length} onClick={openExample}>카탄 예시 열기</button>}>게임 사진과 상태를 함께 남기면 이어볼 수 있어요.</Empty>}
+        </section>
+      </div> : tab === 'archive' ? <div className="home archive-tab">
+        <h1 className="page-title">보관함</h1>
+        <div className="board-filters"><div className="filter-tabs" role="tablist" aria-label="보드 보기"><button type="button" role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>전체</button><button type="button" role="tab" aria-selected={filter === 'saved'} className={filter === 'saved' ? 'active' : ''} onClick={() => setFilter('saved')}>저장한 판<span>{savedCount}</span></button><button type="button" role="tab" aria-selected={filter === 'trash'} className={filter === 'trash' ? 'active' : ''} onClick={() => setFilter('trash')}>삭제함</button></div><div className="board-tools"><button type="button" className="icon-button" aria-label="보드 검색" aria-expanded={searchOpen || !!search} onClick={() => { setSearchOpen(!(searchOpen || !!search)); if (searchOpen || search) setSearch(''); else requestAnimationFrame(() => document.querySelector<HTMLInputElement>('input[name=board-search]')?.focus()); }}>{searchOpen || search ? <X size={18}/> : <Search size={18}/>}</button><details className="board-menu"><summary aria-label="보드 메뉴"><MoreHorizontal size={20}/></summary><button type="button" disabled={busy} onClick={event => { (event.currentTarget.closest('details') as HTMLDetailsElement | null)?.removeAttribute('open'); fire(api.sessions(true).then(setSessions).catch(reason => setError(String(reason)))); }}><RefreshCw size={15}/>새로고침</button><button type="button" disabled={busy || !liveSessions.length} onClick={event => { (event.currentTarget.closest('details') as HTMLDetailsElement | null)?.removeAttribute('open'); setManage(!manage); }}><Trash2 size={15}/>{manage ? '삭제 끝내기' : '골라서 삭제'}</button><button type="button" disabled={busy || !liveSessions.length} onClick={event => { (event.currentTarget.closest('details') as HTMLDetailsElement | null)?.removeAttribute('open'); void hideBoards(); }}><Trash2 size={15}/>전체 삭제</button></details></div></div>
+        {(searchOpen || !!search) && <label className="search-box"><Search size={17}/><input type="search" name="board-search" autoComplete="off" enterKeyHint="search" aria-label="보드 검색" placeholder="보드 이름이나 게임…" value={search} onChange={event => setSearch(event.target.value)}/></label>}
+        {manage && filter !== 'trash' && <div className="manage-bar" role="status"><span>지울 보드의 휴지통을 누르세요.</span><button type="button" className="text-link" onClick={() => setManage(false)}>완료</button></div>}
+        {visibleSessions.length ? <div className="session-list">{visibleSessions.map(card)}</div> : <Empty title={search ? '검색 결과가 없어요' : filter === 'trash' ? '삭제한 보드가 없어요' : filter === 'saved' ? '아직 저장한 판이 없어요' : '첫 번째 판을 기록해 보세요'} action={filter === 'trash' || search ? undefined : <div className="button-row empty-actions"><button type="button" className="button primary" disabled={!packs.length || busy} onClick={() => setDialog('create')}><Plus size={17}/>새 보드</button><button type="button" className="button secondary" disabled={!packs.length || busy} onClick={openExample}>카탄 예시 열기</button></div>}>{search ? '다른 이름이나 게임으로 찾아보세요.' : filter === 'trash' ? '삭제한 보드는 여기서 복원할 수 있어요.' : '게임 사진과 상태를 함께 남기면 이어볼 수 있어요.'}</Empty>}
+      </div> : <div className="home games-tab">
+        <h1 className="page-title">게임</h1>
+        <LibraryPanel packs={packs}/>
       </div>}
       {error && <div className="error-banner" role="alert"><div><strong>요청을 완료하지 못했어요</strong><p>{error}</p></div><button className="icon-button" aria-label="오류 닫기" onClick={() => setError('')}><X size={18}/></button></div>}
     </main>
@@ -162,5 +197,7 @@ export default function App() {
     {toast && !deleteUndo.length && <div className="toast" role="status"><Check size={17}/>{toast}</div>}
     {reopenFeedback > 0 && <BoardEvent key={reopenFeedback} kind="reopen"/>}
     {busy && !view && <div className="mutation-indicator" role="status"><Busy/></div>}
+    {!view && <div className="ptr" ref={pullIndicator} aria-hidden="true"><Hexagon size={22} strokeWidth={2.6}/></div>}
+    {!view && <nav className="tab-bar" aria-label="하단 메뉴">{TABS.map(({ id, label, Icon }) => <button type="button" key={id} className={tab === id ? 'active' : ''} aria-current={tab === id ? 'page' : undefined} onClick={() => goTab(id)}><Icon size={22} aria-hidden="true"/><span>{label}</span></button>)}</nav>}
   </div>;
 }

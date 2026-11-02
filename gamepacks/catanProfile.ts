@@ -7,6 +7,9 @@ const ownTurn=eq('currentPlayer','$owner');
 /** Only applied to the bundled new pack; imported/pinned historical packs are never rewritten. */
 export function catanInformationProfile(pack:GamePack):GamePack {
   pack.version='2.0.0';pack.edition='Base Game (2025 6th edition; 2020 profile selectable)';
+  // Official base rulebook p.10, Number Tokens / Resource Production: duplicates matter.
+  pack.sources.push({id:'rules-number-inventory',title:'CATAN Game Rules & Almanac (2020)',url:'https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf',section:'p.10: Number Tokens; Resource Production'});
+  pack.catanNumberInventory={values:[2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12],sourceId:'rules-number-inventory'};
   pack.sources.push({id:'rules-sixth',title:'CATAN — The Game, 6th edition (2025)',url:'https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf',section:'pp. 6–12: action, trade, development, setup'},{id:'rules-faq',title:'CATAN official Basegame FAQ',url:'https://www.catan.com/faq/basegame',section:'Resource Cards / Development Cards / Trade / Victory Conditions'});
   pack.placement?.slots.push({kind:'harbor',locationTypes:['edge','unplaced']});
   for(const f of pack.fields){f.visibility=f.scope==='public'?'public':'owner';f.lifetime=f.group==='turn'?'turn':'session';f.ui={level:['currentPlayer','turn.phase','turn.pendingEffect','turn.pendingEffectDetails','player.discard.remainingCount'].includes(f.key)?'primary':'detail',order:50};}

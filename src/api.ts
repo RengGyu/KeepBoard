@@ -11,8 +11,12 @@ import {clearPrivateAccess,privateGeneration,privatePhotos,privateToken,setPriva
 import {rememberRoom,roomBody} from './roomAccess';
 
 const revisions=new Map<string,string>();
-let storageMode:Promise<{directPrivateUpload:boolean}>|undefined;
-const cloudStorage=()=>storageMode??=fetch('/api/storage-mode',{cache:'no-store'}).then(r=>r.ok?r.json():{directPrivateUpload:false});
+type StorageMode={directPrivateUpload:boolean;provider:'none'|'blob'|'supabase'};
+let storageMode:Promise<StorageMode>|undefined;
+const cloudStorage=()=>storageMode??=fetch('/api/storage-mode',{cache:'no-store'}).then(r=>r.ok?r.json():{directPrivateUpload:false,provider:'none'});
+export interface ScanUploadTicket {clientPhotoId:string;evidenceId:string;ticket?:string;pathname?:string;signedUrl?:string}
+export interface ScanUploadReady {uploadReady:true;clientPhotoId:string;evidenceId:string}
+async function signedPrivateUpload(url:string,file:Blob){const response=await fetch(url,{method:'PUT',headers:{'Content-Type':file.type,'x-upsert':'false'},body:file});if(!response.ok)throw Error('비공개 파일 업로드에 실패했습니다. 다시 선택해 주세요.');}
 async function request<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
   const sessionId=path.match(/^\/(?:sessions|rooms)\/([^/]+)/)?.[1];
   if(sessionId&&body!==undefined)body=roomBody(sessionId,body,path.endsWith('/commit')||path.endsWith('/analyze'));
@@ -35,6 +39,16 @@ async function request<T>(path: string, method = 'GET', body?: unknown): Promise
 }
 
 export const api = {
+  scanUploadTickets:(id:string,runId:string,expectedCaptureEpoch:string,items:Record<string,unknown>[])=>request<{items:ScanUploadTicket[]}>(`/sessions/${id}/upload-batch`,'POST',{runId,expectedCaptureEpoch,items}),
+  stageScanPhoto:async(id:string,runId:string,clientPhotoId:string,body:{dataUrl:string;[key:string]:unknown},prepared?:ScanUploadTicket):Promise<ScanUploadReady>=>{
+    const storage=await cloudStorage(),file=await(await fetch(body.dataUrl)).blob(),{dataUrl,...meta}=body;
+    const manifest=prepared?{items:[prepared]}:await request<{items:ScanUploadTicket[]}>(`/sessions/${id}/upload-batch`,'POST',{runId,expectedCaptureEpoch:body.expectedCaptureEpoch,items:[{clientPhotoId,...meta,contentType:file.type}]});
+    const item=manifest.items.find(i=>i.clientPhotoId===clientPhotoId);if(!item)throw Error('사진 전송 식별자가 없습니다.');
+    if(storage.directPrivateUpload){if(storage.provider==='supabase'){if(!item.signedUrl)throw Error('사진 전송 주소가 없습니다.');await signedPrivateUpload(item.signedUrl,file);}else{if(!item.pathname)throw Error('사진 전송 위치가 없습니다.');const token=privateToken();await upload(item.pathname,file,{access:'private',handleUploadUrl:`/api/sessions/${id}/blob-token`,clientPayload:item.ticket,contentType:file.type,headers:token?{'X-KeepBoard-Private-Token':token}:{}});}}
+    else await request(`/sessions/${id}/upload-batch/${runId}/files/${clientPhotoId}`,'POST',{dataUrl});
+    return {uploadReady:true,clientPhotoId,evidenceId:item.evidenceId};
+  },
+  registerScanPhotos:(id:string,runId:string,clientPhotoIds:string[],expectedCaptureEpoch:string)=>request<SessionView&{createdEvidenceIds:string[];excludedClientPhotoIds:string[]}>(`/sessions/${id}/evidence-batch`,'POST',{runId,clientPhotoIds,expectedCaptureEpoch}),
   recognitionReaders:()=>request<LocalReaderCapabilities>('/recognition/readers'),
   roomDevice:()=>request<{ok:boolean}>('/rooms/device','POST',{}),
   createRoom:(body:{gamePackId:string;gamePackVersion?:string;name?:string;capacity:number;me:{name?:string;color:string};clientRequestId:string})=>request<SessionView>('/rooms','POST',body),
@@ -56,17 +70,20 @@ export const api = {
   create: (body: { recordingMode?: 'simple'; name?: string; example?: boolean; gamePackId?: string; gamePackVersion?:string; players?: Player[] }) => request<SessionView>('/sessions', 'POST', { ...body, recordingMode: 'simple' }),
   session: (id: string) => request<SessionView>(`/sessions/${id}`),
   update: (id: string, body: { name?: string; stage?: Stage; players?: Player[]; notes?: Record<string, string>; assertions?: unknown[]; answers?: ObservationReviewAnswer[] }) => request<SessionView>(`/sessions/${id}`, 'PATCH', body),
-  evidence: async (id: string, body: { dataUrl: string; label?: string; scope?: 'public' | 'player'; ownerId?: string; width?: number; height?: number; captureTarget?: import('../shared/photoCapture').CaptureTarget; sourceEvidenceId?: string; expectedCaptureEpoch?: string }) => {
-    if(!(await cloudStorage()).directPrivateUpload)return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',body);
+  evidence: async (id: string, body: { dataUrl: string; label?: string; scope?: 'public' | 'player'; ownerId?: string; width?: number; height?: number; captureTarget?: import('../shared/photoCapture').CaptureTarget; sourceEvidenceId?: string; sourceRegion?:{x:number;y:number;width:number;height:number}; expectedCaptureEpoch?: string }) => {
+    const storage=await cloudStorage();if(!storage.directPrivateUpload)return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',body);
     const file=await (await fetch(body.dataUrl)).blob(),{dataUrl,...meta}=body;
-    const ticket=await request<{ticket:string;pathname:string}>(`/sessions/${id}/upload-ticket`,'POST',{...meta,contentType:file.type});
-    const token=privateToken();await upload(ticket.pathname,file,{access:'private',handleUploadUrl:`/api/sessions/${id}/blob-token`,clientPayload:ticket.ticket,contentType:file.type,headers:token?{'X-KeepBoard-Private-Token':token}:{}});
+    if(storage.provider==='supabase'&&file.size>50_000_000)throw Error('Supabase 사진 한도 50MB를 넘었습니다.');
+    const ticket=await request<{ticket:string;pathname?:string;signedUrl?:string}>(`/sessions/${id}/upload-ticket`,'POST',{...meta,contentType:file.type});
+    if(storage.provider==='supabase'){if(!ticket.signedUrl)throw Error('비공개 업로드 주소가 없습니다.');await signedPrivateUpload(ticket.signedUrl,file);}
+    else{if(!ticket.pathname)throw Error('비공개 업로드 위치가 없습니다.');const token=privateToken();await upload(ticket.pathname,file,{access:'private',handleUploadUrl:`/api/sessions/${id}/blob-token`,clientPayload:ticket.ticket,contentType:file.type,headers:token?{'X-KeepBoard-Private-Token':token}:{}});}
     return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',{...meta,uploadTicket:ticket.ticket});
   },
   removeEvidence: (id: string, evidenceId: string) => request<SessionView>(`/sessions/${id}/evidence/${evidenceId}`, 'DELETE'),
   startAnalysisJob:(id:string,body:{requestId:string;evidenceIds:string[];expectedCaptureEpoch:string;scope:'public'|'owner';ownerId?:string;purpose?:'capture'|'restore';instruction?:string;captureTarget?:import('../shared/photoCapture').CaptureTarget;sameStaticState?:boolean;reader?:PhotoReaderSelection})=>request<{job:AnalysisJob}>(`/sessions/${id}/analysis-jobs`,'POST',body),
   componentLinkOptions:(id:string,assertionId:string,pieceIds:string[])=>request<ComponentLinkOptions>(`/sessions/${id}/component-links/${encodeURIComponent(assertionId)}?pieceIds=${pieceIds.map(encodeURIComponent).join(',')}`),
   linkComponents:(id:string,body:ComponentLinkRequest)=>request<SessionView>(`/sessions/${id}/component-links`,'POST',body),
+  scanProgress:(id:string,jobId:string,ownerId?:string,seen:number[]=[])=>request<import('../shared/analysisJobs').ScanProgress>(`/sessions/${id}/analysis-jobs/${jobId}/progress?seen=${seen.join(',')}${ownerId?'&ownerId='+encodeURIComponent(ownerId):''}`),
   analysisJobs:(id:string,ownerId?:string)=>request<{jobs:AnalysisJob[]}>(`/sessions/${id}/analysis-jobs${ownerId?'?ownerId='+encodeURIComponent(ownerId):''}`),
   analyze: (id: string, body: { purpose?: 'capture' | 'restore'; instruction?: string; sameStaticState?:boolean; evidenceIds?: string[]; expectedCaptureEpoch?: string }) => request<SessionView>(`/sessions/${id}/analyze`, 'POST', body),
   accept: (id: string, assertionId: string) => request<SessionView>(`/sessions/${id}/assertions/${assertionId}/accept`, 'POST', {}),
@@ -74,9 +91,12 @@ export const api = {
   commit: (id: string, allowIncomplete: boolean) => request<SessionView>(`/sessions/${id}/commit`, 'POST', { allowIncomplete, recordingMode: 'simple' }),
   resume: (id:string,scope:'public'|'owner'='public',ownerId?:string)=>request<SessionView>(`/sessions/${id}/resume`,'POST',{scope,ownerId}),
   nextTurn: (id: string, playerId?: string) => request<SessionView>(`/sessions/${id}/next-turn`, 'POST', { playerId }),
-  importSession: async(body:unknown)=>{if(!(await cloudStorage()).directPrivateUpload)return request<SessionView>('/sessions/import','POST',body);
-    const file=new Blob([JSON.stringify(body)],{type:'application/json'}),ticket=await request<{ticket:string;pathname:string}>('/import-upload-ticket','POST',{});
-    await upload(ticket.pathname,file,{access:'private',handleUploadUrl:'/api/import-blob-token',clientPayload:ticket.ticket,contentType:file.type});return request<SessionView>('/sessions/import','POST',{uploadTicket:ticket.ticket});},
+  importSession: async(body:unknown)=>{const storage=await cloudStorage();if(!storage.directPrivateUpload)return request<SessionView>('/sessions/import','POST',body);
+    const file=new Blob([JSON.stringify(body)],{type:'application/json'});if(storage.provider==='supabase'&&file.size>50_000_000)throw Error('Supabase 가져오기 한도 50MB를 넘었습니다. 원본 파일은 그대로 유지됩니다.');
+    const ticket=await request<{ticket:string;pathname?:string;signedUrl?:string}>('/import-upload-ticket','POST',{});
+    if(storage.provider==='supabase'){if(!ticket.signedUrl)throw Error('비공개 업로드 주소가 없습니다.');await signedPrivateUpload(ticket.signedUrl,file);}
+    else{if(!ticket.pathname)throw Error('비공개 업로드 위치가 없습니다.');await upload(ticket.pathname,file,{access:'private',handleUploadUrl:'/api/import-blob-token',clientPayload:ticket.ticket,contentType:file.type});}
+    return request<SessionView>('/sessions/import','POST',{uploadTicket:ticket.ticket});},
   importPack: (body: unknown) => request<GamePack>('/packs', 'POST', body),
   generatePack: (body: { title: string; edition: string; sourceText: string }) => request<GamePack>('/packs/generate', 'POST', body),
 };

@@ -1,0 +1,10 @@
+먼저 /Users/jeonggyuju/.codex/policies/WORKER_RUNTIME_RULES.md를 읽으세요.
+TASK: 현재 KeepBoard의 전체+부분 사진 병렬 판독 결과를 그림에 연결하는 결합 오류를 분석하고 최소 수정 설계를 작성.
+OUTCOME: docs/scan-merge-design-20261029/README.md와 implementation-plan.md에 원인·연결 규칙·수용 검사·남은 불확실성을 기록.
+CAPABILITY / MODEL / EFFORT: C3 / gpt-6-astra / ultra (사용자 지정).
+AUTHORITY: 제품 A0 읽기 전용, 지정 설계 문서만 A1 편집.
+CONTEXT: /Users/jeonggyuju/Project_folder/KeepBoard. docs/whole-detail-parallel-20261029/{README.md,result.json,number-check.json,visual-reference.json}, server/scanObservation.ts, shared/scanObservation.ts, 관련 tests를 직접 대조. 회귀 근거: crop-only 도로가 최종 그림에서 빠지고 충돌 그룹에서 anchor 숫자·건물도 빠진 실서비스 실행. 보고를 그대로 결론으로 쓰지 말고 코드와 저장 응답에서 확인.
+ALLOWED SCOPE: 지정 문서 작성, 현 코드·기존 시험 응답·원사진 읽기, 필요한 무과금 국소 검증. 여러 게임에 적용할 일반 규칙을 설계하되 현 자료로 검증 가능한 최소 변경에 집중. 같은 원본 crop과 다른 시점 사진을 구분. 병렬 완료 순서와 무관하게 결정적 연결. 관측 보존/그림 배치/물체 동일성/속성 충돌을 구분하고 부분 충돌이 정상 anchor 관측을 제거하지 않도록 하는 방안 검토. crop-only 실물의 중복 방지와 배치 조건, 불확실한 경우 표시·보존 방식을 명시.
+FORBIDDEN: 제품·팩·프롬프트·모델·schema 수정, 새 API/유료 호출, 배포, 새 에이전트, 학습, 개수·좌표 하드코딩, 숨은 값/owner 추정, 사용자에게 필수 정정 요구. 기존 dirty 변경 되돌리지 않음. .keepboard/와 API 키 열람·출력 금지. 다른 작업자가 있을 수 있으므로 지정 문서 외 편집 금지.
+ACCEPTANCE: 근거 파일/함수로 원인 확인; 최소 수정 경계와 선택 이유; 저장된 실응답 오프라인 재생으로 검증할 기대 결과; 완료순서 역전·동일원본 중복·부분충돌·crop-only·다른상태/owner/epoch·수동값·null/0·저장재열기 검사 제안. 전체 상태가 다른 사용자 사진들을 같은 정지판으로 합치지 않음. 실제 확인/추론/미검증 명확 분리. 짧은 사용자 설명 포함.
+ESCALATE IF: 자료 부족 또는 계약 변경이 필수이면 정확한 근거와 최소 추가 요구만 보고. 429이면 반복 재시도/새 세션 생성 없이 중단 사유 보고.

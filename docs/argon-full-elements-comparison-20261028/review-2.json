@@ -1,0 +1,702 @@
+{
+  "version": "argon-full-elements-visual-review-v1",
+  "scope": "담당 10게임의 동결된 부분 실물 조사와 두 모델 출력의 직접 사진 대조",
+  "inputSelectionSHA": "54f6c42322bff2d72e46c354bf0032d4f47f08daf4e88aefb599349d30f826d5",
+  "inputCensusSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+  "inputCoverageSHA": "965f80c43a6c9af13d8597f54cb5309945b517dee425a2d64c553fe625cc193f",
+  "fullPhotoAccuracy": null,
+  "status": "complete-with-partial-ground-truth",
+  "reviewedPairCount": 10,
+  "pendingPairCount": 0,
+  "games": [
+    {
+      "gameId": "bohnanza",
+      "status": "reviewed-pair",
+      "inputSHA": "97150ad98e5c2eb7d9b601c76a6d6748d25f828c714e59b60d02cefde8d09622",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "97150ad98e5c2eb7d9b601c76a6d6748d25f828c714e59b60d02cefde8d09622",
+      "modelSHA": {
+        "gemini-3.8-flash": "cf8edee43db7572dfdb86935672fee0be7a8aa33f3580ba9bf8de1b8b9dcef97",
+        "gemini-4-argon": "2680d7b1a26b78a12e105900e805768a6883a4f0c226ab4899eee986c65ee761"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "fields",
+          "visibleMinimum": 3,
+          "flash": "3개 넓은 필드 영역 관측. printedName/sideLabel/beanType/overlapCount 모두 불명으로 남김.",
+          "argon": "3개 필드 영역 관측. 중앙 콩종류를 읽었으나 카드 집합과 겹쳐 속성 단위 일부 오류·불확실.",
+          "judgment": "both-kind-detected; argon-more-detail-with-errors",
+          "requiredVisibleProperties": [
+            "printedName",
+            "sideLabel",
+            "beanType",
+            "overlapCount"
+          ]
+        },
+        {
+          "componentId": "cards",
+          "visibleMinimum": 16,
+          "flash": "0개. 육안으로 분리되는 카드 종류의 명백한 누락.",
+          "argon": "앞면·뒷면 카드 영역 다수 관측. 중앙의 16/14/12 및 Saubohne/Brechbohne/Sojabohne 일부는 사진과 부합. 같은 영역을 묶음과 개별 카드로 중복 표시하여 총장수·위치 일대일 대응 불명.",
+          "judgment": "argon-kind-coverage-better; object-identity-uncertain",
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "beanType",
+            "goldBack"
+          ]
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "improved",
+      "reason": "Argon은 세 필드 매트와 다수의 앞면·뒷면 카드를 구분하고 가까운 중앙 카드의 인쇄 숫자 16/14/12와 콩 종류를 일부 읽었다. Flash는 세 필드 매트만 반환해 눈에 보이는 카드 종류를 전부 빠뜨렸다. Argon도 동일 카드를 묶음과 개별 상자로 중복 기술하며 field.overlapCount 및 printedName에 필드 번호·카드 인쇄숫자를 섞어 개별 장수·속성의 정확성은 미확정이다.",
+      "limitations": [
+        "사전 조사는 최소 가시 수량만 고정했고 가림/잘림으로 전체 분모가 없다.",
+        "카드 전수에 대한 객체별 사전 상자가 없어 matched/missing의 숫자 총계는 계산하지 않았다.",
+        "사진 속 손패의 실제 소유와 순서는 평가하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "cards",
+          "model": "Flash",
+          "evidence": "필드 앞면·뒷면 카드 종류 자체를 반환하지 않음"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "cards",
+          "model": "Argon",
+          "evidence": "묶음 카드와 개별 카드가 같은 실물 영역을 중복 덮어 개별 장수 불명"
+        }
+      ]
+    },
+    {
+      "gameId": "brass-birmingham",
+      "status": "reviewed-pair",
+      "inputSHA": "82365f7f6c27e718f755eef0125b04344132d87c77e95b5a8dbca97293a5571a",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "82365f7f6c27e718f755eef0125b04344132d87c77e95b5a8dbca97293a5571a",
+      "modelSHA": {
+        "gemini-3.8-flash": "36682fefc685e497545d76e086234e9bf317e4f1c3ee05a1fd4523b254ce85ae",
+        "gemini-4-argon": "430d13364ec7df065979f2810a135cae4cfd4ec6ccdc91dcb436f6d38f5dfb41"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "industries",
+          "visibleMinimum": 20,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "industryType",
+            "level",
+            "flippedFace"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 놓인 산업 타일의 일부를 개별 표시. Argon은 상단 3개를 포함해 더 많은 실제 타일을 찾고 level 일부를 제공하지만, 보이는 타일을 전부 flipped로 단정하고 타입 표기가 crate/manufacturer 등으로 엇갈림. 실제 뒤집힌 면은 이 사진만으로 전부 확정할 수 없음."
+        },
+        {
+          "componentId": "links",
+          "visibleMinimum": 20,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "linkType"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 16개 rail 표시. 사전 직접 관찰의 보수적 최소 20개보다 적어 공통 누락이 남음; printedName은 둘 다 미상."
+        },
+        {
+          "componentId": "resources",
+          "visibleMinimum": 0,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "resourceType"
+          ],
+          "photoAndOutputsReview": "선택한 network 영역에 없는 공급/트랙 큐브를 양쪽 모두 resources로 섞음. Argon 쪽이 더 많아진 것은 선택범위 외 개체 포함이며 정확도 이득으로 세지 않음."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "mixed",
+      "reason": "Argon의 산업 타일 위치·level 정보는 늘었으나 resources의 범위 혼입, flippedFace 일괄 단정과 두 모델 공통 링크 누락이 있어 혼합.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "links",
+          "model": "both",
+          "evidence": "동결 실물 최소 20개에 비해 두 출력 모두 일부 링크를 놓침"
+        },
+        {
+          "type": "scope-error",
+          "componentId": "resources",
+          "model": "both",
+          "evidence": "네트워크 밖 공급/트랙 큐브를 선택 영역의 자원으로 혼입"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "industries",
+          "model": "Argon",
+          "evidence": "flippedFace를 전부 flipped로 고정한 근거가 사진에서 불충분"
+        }
+      ]
+    },
+    {
+      "gameId": "calico",
+      "status": "reviewed-pair",
+      "inputSHA": "9ef7522d60700101defc2bd4772698f23010262f86c12acad69a2ef403d6b710",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "9ef7522d60700101defc2bd4772698f23010262f86c12acad69a2ef403d6b710",
+      "modelSHA": {
+        "gemini-3.8-flash": "783ea31cefc832805f4737cf3ff6b7e76c489795318a6ad0950e894d6b4c94e8",
+        "gemini-4-argon": "4b1547d01c60657a24f44320e876eb46e10eb23b3b3fe88f22a1b7db860131b7"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "patches",
+          "visibleMinimum": 25,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "patchColor",
+            "pattern"
+          ],
+          "photoAndOutputsReview": "Flash는 4개만 분리했고 목표 육각형을 패치로도 넣음. Argon은 보이는 많은 천 패치를 개별 위치로 나누고 색/무늬를 일부 구분하나 겹침과 가장자리로 전수 값 판정 불가."
+        },
+        {
+          "componentId": "boards",
+          "visibleMinimum": 1,
+          "requiredVisibleProperties": [
+            "printedName",
+            "sideLabel",
+            "borderLabel",
+            "objective"
+          ],
+          "photoAndOutputsReview": "실물 개인 보드는 한 장. Flash는 1장, Argon은 보드 내부의 세 목표 육각형까지 boards로 추가해 종류/단위가 틀림. Argon의 목표 인쇄문자 일부는 사진과 대응."
+        },
+        {
+          "componentId": "scoring",
+          "visibleMinimum": 3,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "itemType",
+            "printedCondition"
+          ],
+          "photoAndOutputsReview": "둘 다 단추·고양이 표식을 10개 위치에 대응; Argon의 설명이 구체적이나 물방울/꽃 등의 세부 도형 표현은 관찰자 검증 범위 밖."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "mixed",
+      "reason": "Argon의 천 패치 분리는 크게 나아졌지만 목표 육각형을 별도 보드로 중복 분류한다. 색·무늬 세부값 전수확인 불가.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "patches",
+          "model": "Flash",
+          "evidence": "육각 천 패치 대부분을 개별 개체로 분리하지 못함"
+        },
+        {
+          "type": "kind-error",
+          "componentId": "boards",
+          "model": "Argon",
+          "evidence": "보드 안 목표 육각형 3개를 별도 boards로 취급"
+        }
+      ]
+    },
+    {
+      "gameId": "carcassonne",
+      "status": "reviewed-pair",
+      "inputSHA": "4dba02af3eb3ceccb8f095692b6c1c1a4cd96306bd6719f5f74b785498b2795c",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "4dba02af3eb3ceccb8f095692b6c1c1a4cd96306bd6719f5f74b785498b2795c",
+      "modelSHA": {
+        "gemini-3.8-flash": "19be6e089ac3ea8d5a917d0f6661795949a1eb66ca82bce24cf025b160d0cb6c",
+        "gemini-4-argon": "a13a39146d133d52cb8465d40ca32716adc437b3e3b960abbf90e844e50753c0"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "tiles",
+          "visibleMinimum": 35,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "city",
+            "road",
+            "monastery",
+            "shields"
+          ],
+          "photoAndOutputsReview": "Flash는 옆의 뒷면 더미 3개만 tiles로 기록하고 중앙 놓인 앞면 지도 타일을 빠뜨림. Argon은 지도 안의 개별 앞면 타일을 다수 구획하고 city/road/monastery/shields를 제시. 경계가 겹친 타일과 문장 세부값은 전수정답 없음."
+        },
+        {
+          "componentId": "followers",
+          "visibleMinimum": 12,
+          "requiredVisibleProperties": [
+            "posture",
+            "observedColor"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 중앙 지도와 주변의 여러 노랑/빨강/초록/검정 목재 기물 24영역을 비슷하게 포착. posture는 서 있는/누운 상태가 사진만으로 일부 애매하며 소유자 미평가."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "improved",
+      "reason": "중앙 실제 지도 타일의 큰 누락을 Argon이 해소했다. follower 성능은 유사하고 개별 타일 속성 전체 정확도는 미측정.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "tiles",
+          "model": "Flash",
+          "evidence": "중앙 지도 앞면 타일을 거의 전부 빠뜨리고 뒷면 더미 3개만 기록"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "tiles",
+          "model": "Argon",
+          "evidence": "개별 타일 경계·시내/길/수도원/방패 속성 전수정답 없음"
+        }
+      ]
+    },
+    {
+      "gameId": "cascadia",
+      "status": "reviewed-pair",
+      "inputSHA": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "f8e40e04e04634cf3671c6f55bf9ab8fb0c5943fccc968ff3d0818b55c8d9be9",
+      "modelSHA": {
+        "gemini-3.8-flash": "c4b9cb4a95f78c269305a19183f8b756deb641e4e8e992730a4f1d779404fd6a",
+        "gemini-4-argon": "9278a2a9ba7e563be824e5a66df216531556be7eb6de97fe8b9aef1b2590fec0"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "habitat",
+          "visibleMinimum": 25,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "habitats",
+            "wildlifeIcons"
+          ],
+          "photoAndOutputsReview": "Flash는 중앙 생태계 전체를 하나의 큰 상자로 묶고 몇 개만 별도 표시해 개별 육각 타일 배치 복원이 어렵다. Argon은 중앙 각 육각형을 분리하고 지형 조합을 반환. 일부 타일은 가림·겹침으로 속성 불명."
+        },
+        {
+          "componentId": "wildlife",
+          "visibleMinimum": 12,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "animal"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 중앙 곰/여우/엘크/매/연어 원형 토큰 다수를 실제 위치와 대응. Argon은 주변 공급 토큰까지 추가하고 관측색에 wood 같은 재질 설명을 섞음; 동물 및 색의 세부 오독은 전수 판정하지 않음."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "improved",
+      "reason": "개별 서식지 타일 배치의 핵심 누락이 Argon에서 줄었다. 야생동물은 두 모델 모두 상당 부분 보이며 공급 토큰 포함 범위는 구분 필요.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "habitat",
+          "model": "Flash",
+          "evidence": "중앙 서식지 육각 타일을 하나의 넓은 상자로 합쳐 개별 위치가 소실"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "wildlife",
+          "model": "both",
+          "evidence": "주변 공급 토큰 포함 범위와 색 세부 표현은 전체 개체별 정답 없음"
+        }
+      ]
+    },
+    {
+      "gameId": "castles-burgundy",
+      "status": "reviewed-pair",
+      "inputSHA": "78e3275d72f14dcfb9502138e47e94908613c7663c40e0f9e157f9874c8cbca3",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "78e3275d72f14dcfb9502138e47e94908613c7663c40e0f9e157f9874c8cbca3",
+      "modelSHA": {
+        "gemini-3.8-flash": "bc618d3276b2792fc19bd2bcf400ef04f4c03cc3b84510224d9b5e29de649a11",
+        "gemini-4-argon": "c8f93b1fba639cce717b73006c37ce51ecee472f3e71d1eb4b507bf06a88a663"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "hexes",
+          "visibleMinimum": 10,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "hexType",
+            "tileColor"
+          ],
+          "photoAndOutputsReview": "Flash는 플레이어 판의 눈에 보이는 육각 타일을 전부 빠뜨림. Argon은 작은 타일 몇 개를 찾았으나 사전 최소 10보다 적고 판 전체 영역을 hexes로 2개 더 출력한다."
+        },
+        {
+          "componentId": "goods",
+          "visibleMinimum": 0,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "goodsType"
+          ],
+          "photoAndOutputsReview": "사전 사진에서는 goods를 다른 작은 원형/육각 물체와 확실히 구분하지 못했다. Argon 5개는 실제 goods 정답으로 확정하지 않음."
+        },
+        {
+          "componentId": "dice",
+          "visibleMinimum": 1,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "dieValue"
+          ],
+          "photoAndOutputsReview": "둘 다 주사위 3영역 포착. 흰 주사위를 Flash 3, Argon 4로 상충 판독; 원본의 축소·눈 가림 때문에 어느 값이 맞는지 이 검토에서 미확정."
+        },
+        {
+          "componentId": "money",
+          "visibleMinimum": 0,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "itemType",
+            "trackValue"
+          ],
+          "photoAndOutputsReview": "Argon이 초록 worker/점수 마커를 money로 분류한 부분은 종류 불일치. Flash는 money를 반환하지 않음."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "mixed",
+      "reason": "Argon은 일부 타일을 새로 찾았지만 판을 타일로 중복하고 worker를 money로 잘못 분류한다. 사진 해상도 때문에 주사위 숫자와 goods는 판정 보류.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "hexes",
+          "model": "Flash",
+          "evidence": "보이는 개인판 육각 타일을 반환하지 않음"
+        },
+        {
+          "type": "kind-error",
+          "componentId": "money",
+          "model": "Argon",
+          "evidence": "초록 worker/점수 마커를 money 항목으로 분류"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "dice",
+          "model": "both",
+          "evidence": "동일 흰 주사위 값을 3 대 4로 다르게 읽었으나 원본에서 확정 불가"
+        }
+      ]
+    },
+    {
+      "gameId": "charterstone",
+      "status": "reviewed-pair",
+      "inputSHA": "54b229920b2d2e0323f89dbbc8a5ab1e21ff1000ec526d12c2f984fa41a993a6",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "54b229920b2d2e0323f89dbbc8a5ab1e21ff1000ec526d12c2f984fa41a993a6",
+      "modelSHA": {
+        "gemini-3.8-flash": "6fceb6b86dba16a2bef561627b7b0106ded26d97a0ea2132397d2974b3ce3168",
+        "gemini-4-argon": "08fb8264bdd43ccb9c34f54883013b81d741232de0eec62615bb6f5d213e4225"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "board",
+          "visibleMinimum": 1,
+          "requiredVisibleProperties": [
+            "printedName",
+            "sideLabel",
+            "charterLabel",
+            "buildingLabel"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 중앙 마을 보드 한 장 포착. Argon은 The Commons 등 실제 인쇄 글자 일부를 읽었으나 charterLabel에 별도 문자를 섞고 건물 이름의 개별 위치는 제공하지 않음."
+        },
+        {
+          "componentId": "workers",
+          "visibleMinimum": 25,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "workerType"
+          ],
+          "photoAndOutputsReview": "Flash는 노란 기물 1개만 개별 반환. Argon은 보드 위와 바깥의 보라/초록/노랑/파랑 기물 여러 개를 별도 표시한다. 사전 최소 25개를 전부 복원한 것은 아니며 일부 인쇄된 건물 그림과 기물의 경계는 주의."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "improved",
+      "reason": "보이는 색 기물의 개별 포착은 Argon이 낫지만 수량·보드 배치 전수와 건물 라벨 대응은 여전히 부족.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "workers",
+          "model": "Flash",
+          "evidence": "보드 위 다색 실물 기물 중 1개만 반환"
+        },
+        {
+          "type": "missing",
+          "componentId": "workers",
+          "model": "Argon",
+          "evidence": "여러 기물을 추가했으나 동결 최소 가시 25개 전부에는 미달"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "board",
+          "model": "Argon",
+          "evidence": "board 전체의 인쇄문자를 읽었으나 개별 건물 위치와 연결하지 못함"
+        }
+      ]
+    },
+    {
+      "gameId": "coup",
+      "status": "reviewed-pair",
+      "inputSHA": "00dadd81a10eb50fd4820a9373f3af2a400805df9b08da7202582b2eb25732f3",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "00dadd81a10eb50fd4820a9373f3af2a400805df9b08da7202582b2eb25732f3",
+      "modelSHA": {
+        "gemini-3.8-flash": "64dc6c5a3da92750034368cb1379c7f7c3e5912edd3e49eac01cae85c54b3192",
+        "gemini-4-argon": "18cad7d443d8917eaa8a93275013de5f49c7df0b8afc526e7ff23532ca43307b"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "roles",
+          "visibleMinimum": 8,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "visibleRole"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 테이블의 Duke 앞면과 다른 앞면/뒷면 역할 카드를 포착. Argon은 뒷면 2영역을 추가해 사전 최소 8에 가까워졌으나 앞면의 숨긴 이름은 둘 다 미상."
+        },
+        {
+          "componentId": "coins",
+          "visibleMinimum": 20,
+          "requiredVisibleProperties": [
+            "observedColor",
+            "nominalValue"
+          ],
+          "photoAndOutputsReview": "사진에는 중앙과 왼쪽의 많은 은색 코인 더미가 있다. Flash 3영역, Argon 8영역 및 일부 1값을 표시하지만 더미의 실제 장수 20개 이상을 개별 복원하지 못함. 그룹 수량과 보이는 더미를 동일시하지 않음."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "improved",
+      "reason": "Argon은 카드 뒷면과 코인 위치를 더 많이 포착했다. 코인 개별 수량·역할 이름의 완전 판독은 둘 다 실패/미확정.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "roles",
+          "model": "Flash",
+          "evidence": "보이는 카드 뒷면 일부를 누락"
+        },
+        {
+          "type": "missing",
+          "componentId": "coins",
+          "model": "both",
+          "evidence": "중앙과 왼쪽 은색 코인 더미를 개별 장수로 복원하지 못함"
+        }
+      ]
+    },
+    {
+      "gameId": "crew-deep-sea",
+      "status": "reviewed-pair",
+      "inputSHA": "0b0f4921ca5f102c098ec695d04240313e80d80120f1d14b7c60926e0a26a8a2",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "0b0f4921ca5f102c098ec695d04240313e80d80120f1d14b7c60926e0a26a8a2",
+      "modelSHA": {
+        "gemini-3.8-flash": "50d945ed79c67a48e4d4ab1cee499a788968511241e09bdd0cd4d3ee9ad22f91",
+        "gemini-4-argon": "bd96bd1b553da143c9b796d30ac5c94c5977c1d5714020727a1722873dc43c7f"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "cards",
+          "visibleMinimum": 7,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "suit",
+            "number",
+            "cardType"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 왼쪽 뒷면/가림 카드 4영역과 아래쪽 앞면 파랑5·파랑7·초록6의 세 영역을 동일 위치에 표시. Argon은 앞면 번호를 printedName에도 적고 영문 cardType을 썼다. Argon의 네 번째 뒷면 영역 quantity 2는 실제 겹침/장수 확인 불가."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "same",
+      "reason": "가시 카드 종류·앞면 숫자·색의 대응은 유사하다. 뒷면 겹침 수량과 프레임 밖 면은 평가하지 않음.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "uncertain",
+          "componentId": "cards",
+          "model": "Argon",
+          "evidence": "뒷면 겹침 1영역을 quantity=2로 적었으나 육안 확정 불가"
+        }
+      ]
+    },
+    {
+      "gameId": "everdell",
+      "status": "reviewed-pair",
+      "inputSHA": "0ac6201d236749946778970f3c23b69c30ba03e6f2e02a2d80ffd8b4a8eca0dc",
+      "inputVerified": true,
+      "censusFileSHA": "12816803bde3411660da162b1a82c78ff5576f0e2c65e2398df7c2062dacaad1",
+      "censusSourceSHA": "0ac6201d236749946778970f3c23b69c30ba03e6f2e02a2d80ffd8b4a8eca0dc",
+      "modelSHA": {
+        "gemini-3.8-flash": "f57c0eb991830c8ebc84d6689c792e971e3ef1599f43a026595cf33b0eab9c0c",
+        "gemini-4-argon": "fe06da8cc21c490c4cd0142be487c04b89a209c2e9cb21b7ef385a3c5559ade3"
+      },
+      "photoDirectlyViewedForComparison": true,
+      "kindReviews": [
+        {
+          "componentId": "cards",
+          "visibleMinimum": 10,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "cardType"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 앞면 카드들의 위치와 Bard/Cemetery/Undertaker/Postal Pigeon/Barge Toad 같은 인쇄 이름 일부를 읽음. Argon은 Monastery 및 cardType을 더했으나 가장자리/더미 장수는 미확정."
+        },
+        {
+          "componentId": "workers",
+          "visibleMinimum": 20,
+          "requiredVisibleProperties": [
+            "observedColor"
+          ],
+          "photoAndOutputsReview": "양쪽 모두 나무 위·개인판 아래쪽에 보이는 기물 14영역을 찾음. 위쪽 파랑/청록 관측색이 두 모델 간 다르고 실제 사진은 작은 청록 기물이라 세부색 판정은 불확실. 최소 20개 개별복원은 공통 미달."
+        },
+        {
+          "componentId": "events",
+          "visibleMinimum": 0,
+          "requiredVisibleProperties": [
+            "face",
+            "printedName",
+            "eventType"
+          ],
+          "photoAndOutputsReview": "사전 선택 프레임의 이벤트 카드 실물은 0으로 표기. 두 모델 모두 개인판의 forest location/인쇄 칸을 events로 잘못 귀속; Argon은 기본 이벤트 인쇄 칸도 추가. 실제 독립 카드와 판 인쇄 영역을 구분해야 함."
+        }
+      ],
+      "matched": null,
+      "missing": null,
+      "kindErrors": null,
+      "valueErrors": null,
+      "uncertain": null,
+      "unsupportedExtras": null,
+      "fullAccuracy": null,
+      "comparison": "mixed",
+      "reason": "Argon은 카드 제목·종류를 더 읽었지만 events 종류 혼입이 더 커졌고 workers 누락은 공통이다.",
+      "limitations": [
+        "사전 census는 부분 가시 최소치/넓은 영역만 고정했으며 객체별 완전한 정답·속성값 목록이 없다.",
+        "출력 상자 수나 quantity 합계를 정답률 또는 전체 사진 정확도로 환산하지 않았다."
+      ],
+      "findings": [
+        {
+          "type": "missing",
+          "componentId": "workers",
+          "model": "both",
+          "evidence": "사전 최소 가시 기물 20개 대비 개별 위치 반환이 모자람"
+        },
+        {
+          "type": "kind-error",
+          "componentId": "events",
+          "model": "both",
+          "evidence": "보드 인쇄 칸/forest location을 독립 이벤트 물체로 분류"
+        },
+        {
+          "type": "uncertain",
+          "componentId": "workers",
+          "model": "both",
+          "evidence": "작은 청록 기물 관측색이 blue/teal로 갈려 사진만으로 세부색 판정 보류"
+        }
+      ]
+    }
+  ]
+}

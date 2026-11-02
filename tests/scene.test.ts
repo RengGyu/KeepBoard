@@ -5,6 +5,19 @@ import {
   resolveSlotId, sceneJSONSchema, slotPoint, snapToSlot, type ComponentScene,
 } from '../shared/scene.ts';
 
+test('explicit unknown quantity survives board normalization and JSON round-trip; legacy missing quantity keeps its default', () => {
+  const road = {kind: 'road', location: {type: 'edge', id: 'r1c1.E'}};
+  const scene = normalizeScene({version: 2, coverage: 'partial', components: [
+    {...road, id: 'unknown', quantity: null},
+    {...road, id: 'unknown-with-legacy-count', quantity: null, count: 7},
+    {...road, id: 'zero', quantity: 0, count: 7},
+    {...road, id: 'legacy-count', count: 2},
+    {...road, id: 'legacy-missing'},
+  ]});
+  assert.deepEqual(scene.components.map(c => c.quantity), [null, null, 0, 2, 1]);
+  assert.deepEqual(normalizeScene(JSON.parse(JSON.stringify(scene))), scene);
+});
+
 test('Catan topology has 19 hexes, 54 deduplicated vertices and 72 edges', () => {
   const { hexes, vertices, edges } = CATAN_TOPOLOGY;
   assert.equal(hexes.length, 19);

@@ -6,6 +6,7 @@ import { RESOURCES, DEVELOPMENTS, catanNextProcedure, countSummary, countValue, 
 import { planActions } from './actions.ts';
 import { compareStateValues } from './compare.ts';
 import { normalizeScene } from '../shared/scene.ts';
+import {deriveCatanNumberAssertion} from '../shared/catanNumberInference';
 import { hasCompleteBoard } from '../shared/sceneBridge.ts';
 import { isSceneField } from '../shared/sceneFields.ts';
 import { allRummikubTiles, isRummikubField, normalizeRummikubDetailed, rummikubSourceEvidence, validateRummikubColorEdits } from '../shared/rummikub.ts';
@@ -130,7 +131,7 @@ export function answerField(session: Session, pack: GamePack, fieldKey: string, 
   if (isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && [1,2].includes(Number(value.version))) value = normalizeScene(value) as unknown as Value;
   const review=observationAnswerContext(session,pack,fieldKey,value,ownerId,observationReview);
   const previous = session.assertions.find(item => item.field === fieldKey && item.ownerId === ownerId && item.basis !== 'rule');
-  const observationReceipts=[...(value===null?[]:receiptsForValue(session,value,ownerId)),...(review.reviewed?.observationReceipts??[])].filter((r,i,all)=>all.findIndex(x=>x.request.taskId===r.request.taskId)===i);
+  const observationReceipts=[...(value===null?[]:receiptsForValue(session,value,ownerId)),...(review.reviewed?.observationReceipts??[]),...(previous?.observationReceipts??[])].filter((r,i,all)=>all.findIndex(x=>x.request.taskId===r.request.taskId)===i);
   session.assertions = session.assertions.filter(item => !review.consumed.has(item.id)&&(fieldId(item.field,item.ownerId)!==fieldId(fieldKey,ownerId)||item.status==='candidate'&&!!item.observationReceipts?.length));
   // A correction changes the value, while its photographed target stays linked.
   const sceneEvidence = isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && Array.isArray(value.components) ? value.components.flatMap(raw => { const c = objectValue(raw); return typeof c.evidenceId === 'string' && session.evidence.some(e => e.id === c.evidenceId && (ownerId ? e.ownerId === ownerId || e.scope === 'public' : e.scope === 'public')) ? [c.evidenceId] : []; }) : [];
@@ -151,6 +152,8 @@ export function recompute(session: Session, pack: GamePack): SessionView {
         next.push({ id: `rule:${rule.id}:${ownerId ?? 'public'}`, field: rule.field, value: rule.value, ownerId, basis: 'rule', status: 'accepted', evidenceIds: conditionEvidence(rule.when, facts, ownerId), reason: rule.reason, turnInstanceId: session.turnInstanceId, updatedAt: session.updatedAt });
       }
     }
+    const numberInference=deriveCatanNumberAssertion(session,pack,base);
+    if(numberInference)next.push(numberInference);
     const stable = sameValue(derived, next);
     derived = next;
     if (stable) break;

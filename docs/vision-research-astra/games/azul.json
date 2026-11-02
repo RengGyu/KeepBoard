@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/azul.json",
-    "sha256": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
+    "sha256": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
     "runtime_pack_id": "azul",
-    "runtime_pack_version": "1.0.0-essentials-2.26f3d7a3f3a5",
+    "runtime_pack_version": "1.0.0-essentials-2.e1ca1494e4dc",
     "runtime_match": true
   },
   "basis": {
@@ -32,13 +32,15 @@
       "azul::essentials.storage-guidance"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
-  "capture_focus": "공장별 무리, 개인 패턴줄·벽·바닥 전체",
-  "critical_resume_distinction": "패턴줄의 누적과 벽의 설치를 구별; 색만 같다고 묶음 합치지 않기",
+  "capture_focus": "공장별 무리, 개인 패턴줄·벽·바닥 전체와 상자 뚜껑의 버린 타일 묶음",
+  "critical_resume_distinction": "패턴줄의 누적과 벽의 설치를 구별; 색만 같다고 묶음 합치지 않기 주머니와 상자 뚜껑의 버린 타일은 따로 보관하며, 주머니가 빈 뒤 공장 재충전 시에만 섞는다.",
   "partitions": {
     "common_public": [
-      "offer"
+      "offer",
+      "box-lid"
     ],
     "player_public": [
       "pattern",
@@ -283,7 +285,7 @@
     },
     {
       "id": "bag",
-      "name": "주머니·버림",
+      "name": "주머니",
       "scope": "shared-secret",
       "visibility": "hidden",
       "topology": "zone",
@@ -295,9 +297,11 @@
       "component_ids": [
         "tiles"
       ],
-      "anchor_contract": "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-      "description": "주머니·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "anchor_contract": "다음 공장 준비에 쓰는 미공개 타일 주머니. 상자 뚜껑의 버린 타일과 별도.",
+      "description": "주머니의 미공개 타일은 뒤집거나 펼쳐 정체를 기록하지 않고 실물로 보존한다.",
+      "source_refs": [
+        "azul.primary"
+      ],
       "confidence": "recommendation",
       "partition": "do_not_infer",
       "capture_allowed_current": false,
@@ -317,13 +321,65 @@
         "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
       },
       "display_resume": {
-        "source_anchor": "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
+        "source_anchor": "다음 공장 준비에 쓰는 미공개 타일 주머니. 상자 뚜껑의 버린 타일과 별도.",
         "source_relations": [],
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
         "render_basis": "manual record surface; original photo retains unrepresented geometry"
       },
       "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "box-lid",
+      "name": "상자 뚜껑의 버린 타일",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "tiles"
+      ],
+      "anchor_contract": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
+      "description": "상자 뚜껑에 따로 모인 공개 타일의 실제 보이는 배치를 기록한다. 가려진 색·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "azul.primary"
+      ],
+      "confidence": "reported",
+      "partition": "common_public",
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "box-lid.scene"
+      ],
+      "current_manual_target_fields": [
+        "box-lid.scene"
+      ],
+      "source_field_ids": [
+        "box-lid.scene"
+      ],
+      "allowed_component_ids": [
+        "tiles"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_instruction": "상자 뚜껑의 버린 타일 전체 경계를 먼저 기록. 제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다. 가려진 수량·정체는 null.",
+      "capture_access": "public evidence",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_anchor": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "OFFICIAL_RULES_SCOPED_CHECK; see post-review rules-evidence.json"
     }
   ],
   "components": [
@@ -584,6 +640,11 @@
         "visibility": "public"
       },
       {
+        "key": "box-lid.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -597,6 +658,18 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "pattern.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "wall.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "floor.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "bag.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -688,7 +761,7 @@
     "preserve_procedures": [
       {
         "id": "bag.preserve",
-        "label": "주머니·버림 보존(선택)",
+        "label": "주머니 보존(선택)",
         "scope": "shared-secret",
         "visibility": "hidden",
         "field_ids": [
@@ -697,12 +770,12 @@
         "method": "sealed-bundle",
         "order_sensitive": false,
         "steps": [
-          "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "미공개 타일 주머니를 상자 뚜껑의 버린 타일과 별도 묶음으로 보관한다.",
+          "주머니 내용은 펼쳐 확인하지 않고 위치·봉인 상태만 기록한다."
         ],
         "after": [],
         "source_refs": [
+          "azul.primary",
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
@@ -713,7 +786,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "offer.scene"
+          "offer.scene",
+          "box-lid.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -795,7 +869,7 @@
       "directly_reviewed_sha256": []
     },
     "same_state_multiview": "UNKNOWN",
-    "first_capture": "공장별 무리, 개인 패턴줄·벽·바닥 전체",
+    "first_capture": "공장별 무리, 개인 패턴줄·벽·바닥 전체와 상자 뚜껑의 버린 타일 묶음",
     "closeups": [
       {
         "area_id": "offer",
@@ -820,12 +894,18 @@
         "name": "바닥 줄",
         "needs": "왼쪽부터 순서와 선 표식의 점유 위치.",
         "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "box-lid",
+        "name": "상자 뚜껑의 버린 타일",
+        "needs": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
+        "access": "public evidence"
       }
     ],
     "do_not_collect": [
       {
         "area_id": "bag",
-        "name": "주머니·버림",
+        "name": "주머니",
         "reason": "hidden"
       }
     ],
@@ -835,7 +915,7 @@
   "current_board_mapping": {
     "gameId": "azul",
     "editionId": "base",
-    "sourceSHA": "26f3d7a3f3a5397ce5e71fdfe82c774395348c5dd51f5a2665fea5066397b1b3",
+    "sourceSHA": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
     "status": "reuse",
     "areas": [
       {
@@ -921,7 +1001,7 @@
       },
       {
         "areaId": "bag",
-        "label": "주머니·버림",
+        "label": "주머니",
         "fieldKeys": [
           "bag.scene"
         ],
@@ -934,8 +1014,31 @@
         "template": "free-table",
         "status": "not-needed",
         "geometryStatus": "manual-surface",
-        "sourceRefs": [],
+        "sourceRefs": [
+          "azul.primary"
+        ],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "box-lid",
+        "label": "상자 뚜껑의 버린 타일",
+        "fieldKeys": [
+          "box-lid.scene"
+        ],
+        "componentIds": [
+          "tiles"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "sourceRefs": [
+          "azul.primary"
+        ],
+        "sourceConfidence": "reported",
         "artComponentId": null
       }
     ],

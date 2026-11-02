@@ -178,7 +178,7 @@
       },
       {
         "id": "bag",
-        "name": "주머니·버림",
+        "name": "주머니",
         "scope": "shared-secret",
         "visibility": "hidden",
         "topology": "zone",
@@ -190,10 +190,33 @@
         "component_ids": [
           "tiles"
         ],
-        "anchor_contract": "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-        "description": "주머니·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-        "source_refs": [],
+        "anchor_contract": "다음 공장 준비에 쓰는 미공개 타일 주머니. 상자 뚜껑의 버린 타일과 별도.",
+        "description": "주머니의 미공개 타일은 뒤집거나 펼쳐 정체를 기록하지 않고 실물로 보존한다.",
+        "source_refs": [
+          "azul.primary"
+        ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "box-lid",
+        "name": "상자 뚜껑의 버린 타일",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "tiles"
+        ],
+        "anchor_contract": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
+        "description": "상자 뚜껑에 따로 모인 공개 타일의 실제 보이는 배치를 기록한다. 가려진 색·수량은 미확인으로 둔다.",
+        "source_refs": [
+          "azul.primary"
+        ],
+        "confidence": "reported"
       }
     ],
     "relations": [
@@ -312,7 +335,7 @@
     },
     {
       "id": "bag.scene",
-      "label": "주머니·버림",
+      "label": "주머니",
       "scope": "shared-secret",
       "visibility": "hidden",
       "type": "component-scene",
@@ -322,7 +345,7 @@
         "manual",
         "physical"
       ],
-      "description": "미공개 타일과 버린 타일을 섞기 전 상태 구별. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "description": "미공개 타일 주머니만 별도 물리 묶음으로 보존한다. 상자 뚜껑의 버린 타일은 포함하지 않는다.",
       "component_ids": [
         "tiles"
       ],
@@ -330,8 +353,35 @@
         "bag"
       ],
       "rule_ids": [],
-      "source_refs": [],
+      "source_refs": [
+        "azul.primary"
+      ],
       "confidence": "recommendation"
+    },
+    {
+      "id": "box-lid.scene",
+      "label": "상자 뚜껑 버림",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "상자 뚜껑에 있는 버린 타일의 관측 수량·색·묶음 위치. 주머니 내용과 합치지 않는다.",
+      "component_ids": [
+        "tiles"
+      ],
+      "area_ids": [
+        "box-lid"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "azul.primary"
+      ],
+      "confidence": "reported"
     },
     {
       "id": "score",
@@ -491,7 +541,7 @@
     "preserve_procedures": [
       {
         "id": "bag.preserve",
-        "label": "주머니·버림 보존(선택)",
+        "label": "주머니 보존(선택)",
         "scope": "shared-secret",
         "visibility": "hidden",
         "field_ids": [
@@ -500,12 +550,12 @@
         "method": "sealed-bundle",
         "order_sensitive": false,
         "steps": [
-          "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "미공개 타일 주머니를 상자 뚜껑의 버린 타일과 별도 묶음으로 보관한다.",
+          "주머니 내용은 펼쳐 확인하지 않고 위치·봉인 상태만 기록한다."
         ],
         "after": [],
         "source_refs": [
+          "azul.primary",
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
@@ -516,7 +566,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "offer.scene"
+          "offer.scene",
+          "box-lid.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -571,7 +622,8 @@
       "offer.scene",
       "pattern.scene",
       "wall.scene",
-      "floor.scene"
+      "floor.scene",
+      "box-lid.scene"
     ],
     "must_ask_field_ids": [],
     "never_infer": [
@@ -723,7 +775,34 @@
           "count",
           "note"
         ],
-        "anchor_strategy": "미공개 타일과 버린 타일을 섞기 전 상태 구별.",
+        "anchor_strategy": "다음 공장 준비에 쓰는 미공개 타일 주머니. 상자 뚜껑의 버린 타일과 별도.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "box-lid.edit",
+        "scope": "public",
+        "component_ids": [
+          "tiles"
+        ],
+        "field_ids": [
+          "box-lid.scene"
+        ],
+        "area_ids": [
+          "box-lid"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "제거된 타일의 상자 뚜껑 묶음. 주머니가 비어 공장 재충전할 때까지 주머니와 섞지 않는다.",
         "notes": [
           "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
           "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
@@ -759,9 +838,9 @@
       "title": "Azul — 공식 자료",
       "url": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-Azul-Rules-Next-Move-web.pdf",
       "kind": "official-rules",
-      "access": "search-index",
-      "checked_at": "2026-10-21",
-      "note": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인."
+      "access": "opened",
+      "checked_at": "2026-10-26",
+      "note": "공식 기본판 PDF 검색 본문: 공장/중앙, 5개 패턴 줄, 벽, 바닥, 점수판; 공장 수는 인원에 따라 5/7/9. 색 벽/회색 변형판 구분. 벽으로 옮기기와 미완성 줄 유지 확인. 이번 검토: PDF pp.2–5에서 제거 타일은 상자 뚜껑에 놓고, 공장 재충전 중 주머니가 비었을 때만 다시 섞음을 확인."
     },
     {
       "id": "essentials.storage-guidance",

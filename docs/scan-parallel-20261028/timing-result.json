@@ -1,0 +1,5566 @@
+{
+  "status": "COMPLETED_DIRECT_API_COMPARISON",
+  "date": "2026-10-29",
+  "model": "gemini-3.8-flash",
+  "input": {
+    "source": {
+      "path": "/private/tmp/kb-scan-parallel-live-20261029/source.jpg",
+      "sha256": "08942c1046b3e366e67e07e2b3ed3ef98a0fd116321af09504bfea1979c27bc8",
+      "width": 1024,
+      "height": 1024
+    },
+    "model": "gemini-3.8-flash",
+    "promptSHA": "e7d55381608a6540badd5e91a3ba6e9b383c30b71491f66e34183f9e47b2e2ff",
+    "requests": [
+      {
+        "id": "upper-left",
+        "path": "/private/tmp/kb-scan-parallel-live-20261029/upper-left.request.json",
+        "sha256": "012f9926c9a4d51abc08aa9e31d7ee41ea9f75093d4d326de7fad6ff87bae7c6",
+        "imageSHA": "1b8b64ac9d8cf4c4b812ff7ad6995e502895ddb3266fcf6001b28267833d5565",
+        "sourceBoxPx": [
+          0,
+          0,
+          600,
+          600
+        ]
+      },
+      {
+        "id": "upper-right",
+        "path": "/private/tmp/kb-scan-parallel-live-20261029/upper-right.request.json",
+        "sha256": "8f2efef0d5c54d45d03aac399a46451717d7a45c6b6d227cbbe06dab8af803d5",
+        "imageSHA": "326cfb600cc0fac1c86b8fcc55c48509de35dc23a92c67db20ae1cf1b4d94fc0",
+        "sourceBoxPx": [
+          424,
+          0,
+          1024,
+          600
+        ]
+      },
+      {
+        "id": "lower-left",
+        "path": "/private/tmp/kb-scan-parallel-live-20261029/lower-left.request.json",
+        "sha256": "63c500dd6359038787959745a07abeb059e451c6f0722e7ec35877130db193ab",
+        "imageSHA": "27dfa148d332aab3f51bcfa9b541a213166195746d98b53a5062a9ff367df428",
+        "sourceBoxPx": [
+          0,
+          424,
+          600,
+          1024
+        ]
+      },
+      {
+        "id": "lower-right",
+        "path": "/private/tmp/kb-scan-parallel-live-20261029/lower-right.request.json",
+        "sha256": "a7c6a77a11cf3cb553106bdde9cf760bf28a59113be52429281a43d7d87ac59b",
+        "imageSHA": "1293bdf091b4dbc319a9a01da6c1fd361f1ffa13bbac94831baff8b07b9deef0",
+        "sourceBoxPx": [
+          424,
+          424,
+          1024,
+          1024
+        ]
+      }
+    ],
+    "note": "New corpus photo; old original temporary input missing. Exact request bytes shared between conditions."
+  },
+  "sourceProvenance": {
+    "pageUrl": "https://boardgamegeek.com/image/9862197",
+    "corpusManifest": "docs/game-photo-corpus/manifest.json",
+    "note": "Original old temporary photo unavailable; different frozen corpus photo used identically in both conditions. No annotations in model input."
+  },
+  "sequential": {
+    "condition": "sequential",
+    "concurrency": 1,
+    "peakConcurrency": 1,
+    "wallMs": 101206,
+    "sourceSHA": "08942c1046b3e366e67e07e2b3ed3ef98a0fd116321af09504bfea1979c27bc8",
+    "calls": 4,
+    "retries": 0,
+    "requestOrder": [
+      "upper-left",
+      "upper-right",
+      "lower-left",
+      "lower-right"
+    ],
+    "completedOrder": [
+      "upper-left",
+      "upper-right",
+      "lower-left",
+      "lower-right"
+    ],
+    "usage": {
+      "input": 5192,
+      "output": 15333,
+      "reportedThoughts": 0,
+      "total": 20525
+    },
+    "rows": [
+      {
+        "index": 0,
+        "id": "upper-left",
+        "requestSHA": "012f9926c9a4d51abc08aa9e31d7ee41ea9f75093d4d326de7fad6ff87bae7c6",
+        "http": 200,
+        "ms": 32142,
+        "rawSHA": "ef6fd567f4db6d3f025016fc46efc8449689dc149b4e75fd2c4d0092b13cbecd",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 5044,
+          "totalTokenCount": 6342,
+          "promptTokensDetails": [
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            },
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 56,
+        "counts": {
+          "terrain": 11,
+          "number-token": 10,
+          "robber": 1,
+          "settlement": 5,
+          "road": 21,
+          "city": 4,
+          "harbor": 4
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "hill",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                247,
+                368,
+                412,
+                638
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                235,
+                634,
+                407,
+                893
+              ]
+            },
+            {
+              "terrainType": "mountain",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                400,
+                222,
+                592,
+                502
+              ]
+            },
+            {
+              "terrainType": "hill",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                386,
+                521,
+                584,
+                786
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                372,
+                796,
+                558,
+                999
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                579,
+                36,
+                804,
+                342
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                555,
+                363,
+                796,
+                659
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                542,
+                679,
+                706,
+                966
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                763,
+                178,
+                999,
+                509
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                737,
+                532,
+                988,
+                853
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                709,
+                856,
+                928,
+                999
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                290,
+                421,
+                349,
+                509
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 12,
+              "box_1000": [
+                278,
+                725,
+                333,
+                809
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                448,
+                321,
+                516,
+                417
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 5,
+              "box_1000": [
+                448,
+                592,
+                513,
+                686
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                418,
+                881,
+                480,
+                970
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 8,
+              "box_1000": [
+                658,
+                131,
+                737,
+                237
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 4,
+              "box_1000": [
+                623,
+                452,
+                699,
+                554
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                604,
+                785,
+                678,
+                885
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                869,
+                238,
+                960,
+                353
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                814,
+                652,
+                901,
+                761
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "black",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "robber",
+              "number": null,
+              "box_1000": [
+                535,
+                715,
+                650,
+                788
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                194,
+                452,
+                264,
+                532
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                184,
+                714,
+                252,
+                789
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                174,
+                959,
+                240,
+                1000
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                232,
+                534,
+                273,
+                608
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                228,
+                638,
+                276,
+                725
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                217,
+                796,
+                260,
+                871
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                267,
+                886,
+                321,
+                927
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                313,
+                866,
+                381,
+                952
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                394,
+                238,
+                453,
+                319
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                373,
+                372,
+                423,
+                452
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                399,
+                454,
+                473,
+                545
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                376,
+                544,
+                426,
+                626
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                458,
+                756,
+                547,
+                843
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                542,
+                663,
+                594,
+                725
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                547,
+                294,
+                642,
+                388
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                534,
+                412,
+                597,
+                497
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                669,
+                319,
+                744,
+                370
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                779,
+                110,
+                877,
+                224
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                764,
+                214,
+                831,
+                317
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                650,
+                633,
+                741,
+                732
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                736,
+                545,
+                807,
+                634
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                715,
+                734,
+                769,
+                833
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                714,
+                856,
+                783,
+                939
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                576,
+                946,
+                646,
+                990
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                519,
+                966,
+                574,
+                1000
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                911,
+                903,
+                977,
+                998
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                923,
+                755,
+                998,
+                848
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                964,
+                613,
+                999,
+                703
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                959,
+                520,
+                999,
+                595
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                973,
+                408,
+                999,
+                503
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                203,
+                393,
+                230,
+                442
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                178,
+                841,
+                199,
+                875
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                508,
+                109,
+                532,
+                137
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                906,
+                27,
+                946,
+                56
+              ]
+            }
+          ],
+          "notes": []
+        }
+      },
+      {
+        "index": 1,
+        "id": "upper-right",
+        "requestSHA": "8f2efef0d5c54d45d03aac399a46451717d7a45c6b6d227cbbe06dab8af803d5",
+        "http": 200,
+        "ms": 33396,
+        "rawSHA": "590a73e1e803b8fe6c2a59615491f79a08fd51f5ec870b54b2c1e7b58c2b4d5b",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 5158,
+          "totalTokenCount": 6456,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            },
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 57,
+        "counts": {
+          "terrain": 11,
+          "number-token": 9,
+          "robber": 1,
+          "settlement": 3,
+          "city": 9,
+          "road": 20,
+          "harbor": 4
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                223,
+                194,
+                394,
+                451
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                366,
+                88,
+                555,
+                368
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                342,
+                382,
+                539,
+                650
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                492,
+                551,
+                715,
+                878
+              ]
+            },
+            {
+              "terrainType": "mountains",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                525,
+                275,
+                725,
+                563
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                530,
+                0,
+                773,
+                270
+              ]
+            },
+            {
+              "terrainType": "desert",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                680,
+                461,
+                955,
+                792
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                706,
+                149,
+                981,
+                469
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                239,
+                0,
+                417,
+                187
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                743,
+                0,
+                995,
+                155
+              ]
+            },
+            {
+              "terrainType": "hills",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                941,
+                411,
+                1000,
+                694
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                272,
+                290,
+                330,
+                376
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 12,
+              "box_1000": [
+                277,
+                18,
+                333,
+                103
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                419,
+                172,
+                479,
+                265
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 4,
+              "box_1000": [
+                400,
+                447,
+                458,
+                538
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 8,
+              "box_1000": [
+                561,
+                664,
+                633,
+                764
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                591,
+                379,
+                664,
+                477
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                607,
+                81,
+                678,
+                177
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                793,
+                281,
+                881,
+                391
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "number-token",
+              "number": 8,
+              "box_1000": [
+                813,
+                0,
+                900,
+                54
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "black",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "robber",
+              "number": null,
+              "box_1000": [
+                534,
+                7,
+                652,
+                85
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                179,
+                0,
+                250,
+                83
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                313,
+                157,
+                381,
+                245
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                173,
+                250,
+                241,
+                324
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                287,
+                420,
+                360,
+                497
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                457,
+                342,
+                534,
+                435
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                608,
+                280,
+                693,
+                375
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                846,
+                435,
+                944,
+                531
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                458,
+                48,
+                547,
+                137
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                429,
+                622,
+                501,
+                711
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                611,
+                541,
+                698,
+                642
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                591,
+                836,
+                680,
+                928
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                820,
+                750,
+                917,
+                873
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                200,
+                339,
+                247,
+                421
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                239,
+                418,
+                297,
+                471
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                347,
+                365,
+                400,
+                444
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                394,
+                332,
+                460,
+                385
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                516,
+                258,
+                571,
+                345
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                574,
+                237,
+                645,
+                281
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                689,
+                353,
+                750,
+                456
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                764,
+                431,
+                848,
+                483
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                712,
+                148,
+                783,
+                235
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                710,
+                27,
+                771,
+                127
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                378,
+                600,
+                442,
+                656
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                477,
+                706,
+                532,
+                800
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                525,
+                804,
+                597,
+                878
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                652,
+                762,
+                712,
+                849
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                659,
+                650,
+                718,
+                750
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                735,
+                745,
+                816,
+                812
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                883,
+                689,
+                956,
+                784
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                934,
+                349,
+                1000,
+                446
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                910,
+                194,
+                977,
+                301
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                926,
+                46,
+                1000,
+                142
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                179,
+                133,
+                203,
+                171
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": "ore",
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                277,
+                529,
+                319,
+                586
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                569,
+                930,
+                613,
+                974
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                974,
+                831,
+                999,
+                874
+              ]
+            }
+          ],
+          "notes": [
+            "Clipped objects near the image edges were reported as visible envelope.",
+            "Roads, settlements, and cities clearly distinguished by color and physical shape."
+          ]
+        }
+      },
+      {
+        "index": 2,
+        "id": "lower-left",
+        "requestSHA": "63c500dd6359038787959745a07abeb059e451c6f0722e7ec35877130db193ab",
+        "http": 200,
+        "ms": 17923,
+        "rawSHA": "84e4b8164abb57deeb75b0f169af3779568223d70404c4fed0db679849bd122c",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 2511,
+          "totalTokenCount": 3809,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            },
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 28,
+        "counts": {
+          "terrain": 7,
+          "number-token": 4,
+          "city": 2,
+          "road": 12,
+          "settlement": 1,
+          "harbor": 2
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                40,
+                156,
+                335,
+                523
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                35,
+                526,
+                305,
+                856
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                363,
+                91,
+                575
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                840,
+                240,
+                1000
+              ]
+            },
+            {
+              "terrainType": "mountains",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                223,
+                715,
+                597,
+                1000
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                287,
+                330,
+                642,
+                725
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                13,
+                106,
+                339
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                160,
+                237,
+                252,
+                353
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 9,
+              "box_1000": [
+                106,
+                652,
+                194,
+                760
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 9,
+              "box_1000": [
+                343,
+                455,
+                450,
+                576
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 2,
+              "box_1000": [
+                328,
+                844,
+                434,
+                963
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                75,
+                114,
+                169,
+                225
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                56,
+                219,
+                122,
+                317
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                30,
+                546,
+                102,
+                634
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                5,
+                735,
+                65,
+                831
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                7,
+                856,
+                77,
+                940
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                323,
+                255,
+                415,
+                378
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                414,
+                313,
+                516,
+                386
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                267,
+                395,
+                345,
+                501
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                252,
+                520,
+                335,
+                614
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                258,
+                608,
+                370,
+                718
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                218,
+                755,
+                298,
+                847
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                205,
+                903,
+                269,
+                999
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                390,
+                686,
+                497,
+                740
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                507,
+                755,
+                574,
+                873
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                556,
+                350,
+                626,
+                471
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                676,
+                294,
+                731,
+                363
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": "brick",
+              "uncertainty": "clipped",
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                187,
+                0,
+                245,
+                55
+              ]
+            }
+          ],
+          "notes": []
+        }
+      },
+      {
+        "index": 3,
+        "id": "lower-right",
+        "requestSHA": "a7c6a77a11cf3cb553106bdde9cf760bf28a59113be52429281a43d7d87ac59b",
+        "http": 200,
+        "ms": 17740,
+        "rawSHA": "1c3a3951cde0a9bf022983ee8772e57ce887bc9557bb847536fba9e4759d57db",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 2620,
+          "totalTokenCount": 3918,
+          "promptTokensDetails": [
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            },
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 29,
+        "counts": {
+          "terrain": 5,
+          "number-token": 4,
+          "road": 15,
+          "city": 3,
+          "harbor": 2
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "mountains",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                223,
+                0,
+                597,
+                396
+              ]
+            },
+            {
+              "terrainType": "hills",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                201,
+                351,
+                529,
+                757
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                3,
+                140,
+                290,
+                467
+              ]
+            },
+            {
+              "terrainType": "desert",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                447,
+                256,
+                814
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                30,
+                0,
+                314,
+                163
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 2,
+              "box_1000": [
+                330,
+                137,
+                434,
+                258
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 5,
+              "box_1000": [
+                318,
+                513,
+                423,
+                634
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                88,
+                281,
+                175,
+                390
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "number-token",
+              "number": 9,
+              "box_1000": [
+                106,
+                0,
+                194,
+                55
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                507,
+                47,
+                574,
+                169
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                393,
+                0,
+                497,
+                36
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                217,
+                47,
+                301,
+                142
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                203,
+                194,
+                271,
+                300
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                227,
+                349,
+                305,
+                446
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                326,
+                350,
+                427,
+                410
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                468,
+                424,
+                526,
+                547
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                435,
+                646,
+                519,
+                747
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                287,
+                687,
+                388,
+                768
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                176,
+                688,
+                252,
+                786
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                27,
+                746,
+                110,
+                811
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                56,
+                429,
+                142,
+                484
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                0,
+                354,
+                43,
+                455
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                6,
+                147,
+                77,
+                234
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                4,
+                27,
+                66,
+                127
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                138,
+                436,
+                238,
+                532
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                471,
+                544,
+                588,
+                678
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                112,
+                751,
+                214,
+                874
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                604,
+                372,
+                665,
+                439
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": "wool",
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                268,
+                831,
+                344,
+                930
+              ]
+            }
+          ],
+          "notes": [
+            "3D Catan edition piece set.",
+            "Roads/cities in orange, red, and blue clearly identified."
+          ]
+        }
+      }
+    ],
+    "notStarted": [],
+    "scope": "Direct photo API timing, not deployed app end-to-end or production merge validation"
+  },
+  "parallel": {
+    "condition": "parallel",
+    "concurrency": 2,
+    "peakConcurrency": 2,
+    "wallMs": 50910,
+    "sourceSHA": "08942c1046b3e366e67e07e2b3ed3ef98a0fd116321af09504bfea1979c27bc8",
+    "calls": 4,
+    "retries": 0,
+    "requestOrder": [
+      "upper-left",
+      "upper-right",
+      "lower-left",
+      "lower-right"
+    ],
+    "completedOrder": [
+      "upper-right",
+      "upper-left",
+      "lower-left",
+      "lower-right"
+    ],
+    "usage": {
+      "input": 5192,
+      "output": 15197,
+      "reportedThoughts": 0,
+      "total": 20389
+    },
+    "rows": [
+      {
+        "index": 0,
+        "id": "upper-left",
+        "requestSHA": "012f9926c9a4d51abc08aa9e31d7ee41ea9f75093d4d326de7fad6ff87bae7c6",
+        "http": 200,
+        "ms": 33098,
+        "rawSHA": "d526d5d465d968886805abac86551d48a577c0d8d212b7eb1d7a53933a8e92ae",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 4904,
+          "totalTokenCount": 6202,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            },
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 54,
+        "counts": {
+          "terrain": 11,
+          "number-token": 10,
+          "robber": 1,
+          "settlement": 7,
+          "road": 19,
+          "city": 2,
+          "harbor": 4
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "hill",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                253,
+                372,
+                412,
+                634
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                239,
+                637,
+                412,
+                888
+              ]
+            },
+            {
+              "terrainType": "mountain",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                403,
+                226,
+                591,
+                501
+              ]
+            },
+            {
+              "terrainType": "hill",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                386,
+                513,
+                584,
+                786
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                372,
+                796,
+                558,
+                1000
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                579,
+                31,
+                804,
+                344
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                556,
+                362,
+                798,
+                655
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                538,
+                679,
+                706,
+                972
+              ]
+            },
+            {
+              "terrainType": "field",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                712,
+                856,
+                929,
+                1000
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                764,
+                185,
+                999,
+                512
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                737,
+                532,
+                988,
+                856
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                291,
+                420,
+                348,
+                508
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 12,
+              "box_1000": [
+                278,
+                725,
+                333,
+                809
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                448,
+                321,
+                514,
+                417
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 5,
+              "box_1000": [
+                447,
+                592,
+                513,
+                686
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                418,
+                878,
+                480,
+                970
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 8,
+              "box_1000": [
+                658,
+                131,
+                737,
+                237
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 4,
+              "box_1000": [
+                623,
+                452,
+                698,
+                553
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                604,
+                786,
+                678,
+                883
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                867,
+                237,
+                959,
+                353
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                812,
+                652,
+                899,
+                761
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "black",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "robber",
+              "number": null,
+              "box_1000": [
+                534,
+                715,
+                650,
+                788
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                194,
+                453,
+                264,
+                532
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                234,
+                531,
+                281,
+                608
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                232,
+                638,
+                281,
+                725
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                182,
+                706,
+                252,
+                789
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                267,
+                888,
+                323,
+                926
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                310,
+                862,
+                381,
+                951
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                174,
+                958,
+                240,
+                1000
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                394,
+                239,
+                453,
+                321
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                373,
+                372,
+                424,
+                455
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                398,
+                452,
+                473,
+                545
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                376,
+                544,
+                426,
+                626
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                458,
+                757,
+                546,
+                843
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                539,
+                663,
+                595,
+                725
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                549,
+                296,
+                642,
+                391
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                533,
+                417,
+                595,
+                497
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                670,
+                318,
+                743,
+                370
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                780,
+                114,
+                874,
+                223
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                763,
+                217,
+                829,
+                317
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                652,
+                632,
+                742,
+                734
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                736,
+                546,
+                807,
+                635
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                713,
+                735,
+                769,
+                831
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                714,
+                856,
+                782,
+                939
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                576,
+                946,
+                646,
+                989
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                972,
+                411,
+                1000,
+                502
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                959,
+                520,
+                1000,
+                592
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                964,
+                614,
+                1000,
+                696
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                923,
+                755,
+                999,
+                848
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                912,
+                902,
+                977,
+                997
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                203,
+                396,
+                230,
+                439
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                178,
+                850,
+                199,
+                881
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                507,
+                108,
+                532,
+                134
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                906,
+                29,
+                946,
+                56
+              ]
+            }
+          ],
+          "notes": [
+            "A few additional blue pieces are visible off-board at the top center, which were ignored as off-board."
+          ]
+        }
+      },
+      {
+        "index": 1,
+        "id": "upper-right",
+        "requestSHA": "8f2efef0d5c54d45d03aac399a46451717d7a45c6b6d227cbbe06dab8af803d5",
+        "http": 200,
+        "ms": 32391,
+        "rawSHA": "e34a5843b3282e8d25b3f8a29bee43cc82e45ef65826bd25dde93d949bc52dd4",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 5109,
+          "totalTokenCount": 6407,
+          "promptTokensDetails": [
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            },
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 57,
+        "counts": {
+          "terrain": 12,
+          "number-token": 9,
+          "robber": 1,
+          "city": 12,
+          "road": 20,
+          "harbor": 3
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                223,
+                199,
+                396,
+                439
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                272,
+                290,
+                329,
+                376
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                239,
+                0,
+                412,
+                191
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 12,
+              "box_1000": [
+                277,
+                18,
+                332,
+                103
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                372,
+                87,
+                549,
+                362
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                418,
+                172,
+                479,
+                264
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                347,
+                392,
+                538,
+                641
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 4,
+              "box_1000": [
+                400,
+                449,
+                458,
+                538
+              ]
+            },
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                496,
+                555,
+                715,
+                843
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 8,
+              "box_1000": [
+                561,
+                666,
+                632,
+                764
+              ]
+            },
+            {
+              "terrainType": "mountains",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                527,
+                269,
+                720,
+                553
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                591,
+                378,
+                664,
+                476
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                542,
+                19,
+                755,
+                271
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 11,
+              "box_1000": [
+                607,
+                78,
+                678,
+                178
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                709,
+                150,
+                974,
+                461
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                793,
+                281,
+                879,
+                390
+              ]
+            },
+            {
+              "terrainType": "desert",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                680,
+                464,
+                936,
+                792
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                748,
+                0,
+                994,
+                153
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                813,
+                0,
+                899,
+                54
+              ]
+            },
+            {
+              "terrainType": "hills",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                399,
+                0,
+                563,
+                81
+              ]
+            },
+            {
+              "terrainType": "hills",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                939,
+                417,
+                1000,
+                696
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "black",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "robber",
+              "number": null,
+              "box_1000": [
+                535,
+                7,
+                653,
+                83
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                172,
+                252,
+                241,
+                323
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                201,
+                340,
+                246,
+                420
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                239,
+                420,
+                297,
+                467
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                288,
+                420,
+                357,
+                495
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                347,
+                368,
+                400,
+                442
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                396,
+                335,
+                458,
+                383
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                458,
+                343,
+                535,
+                435
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                516,
+                260,
+                572,
+                345
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                574,
+                237,
+                646,
+                282
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                608,
+                281,
+                694,
+                376
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                689,
+                353,
+                747,
+                455
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                763,
+                431,
+                846,
+                484
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                846,
+                436,
+                945,
+                532
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                712,
+                148,
+                783,
+                234
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                710,
+                27,
+                770,
+                126
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                455,
+                49,
+                547,
+                137
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                379,
+                599,
+                442,
+                653
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                429,
+                621,
+                501,
+                710
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                478,
+                707,
+                532,
+                798
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                526,
+                804,
+                595,
+                878
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                594,
+                836,
+                680,
+                929
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                653,
+                763,
+                712,
+                847
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                660,
+                651,
+                718,
+                750
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                611,
+                542,
+                699,
+                642
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                735,
+                746,
+                818,
+                813
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                820,
+                751,
+                917,
+                870
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                883,
+                690,
+                957,
+                783
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                934,
+                347,
+                999,
+                444
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                910,
+                195,
+                976,
+                298
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                926,
+                48,
+                999,
+                142
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                180,
+                0,
+                252,
+                82
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                308,
+                158,
+                381,
+                245
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                177,
+                137,
+                203,
+                169
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                277,
+                532,
+                317,
+                584
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                569,
+                933,
+                611,
+                971
+              ]
+            }
+          ],
+          "notes": []
+        }
+      },
+      {
+        "index": 2,
+        "id": "lower-left",
+        "requestSHA": "63c500dd6359038787959745a07abeb059e451c6f0722e7ec35877130db193ab",
+        "http": 200,
+        "ms": 17474,
+        "rawSHA": "f187b54caa21161efc8b55f742df13f72ef2aa1ef20eb57a127fd4cb4597fc8a",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 2597,
+          "totalTokenCount": 3895,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            },
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 29,
+        "counts": {
+          "terrain": 7,
+          "number-token": 4,
+          "city": 3,
+          "road": 12,
+          "settlement": 1,
+          "harbor": 2
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "pasture",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                40,
+                160,
+                335,
+                532
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                35,
+                521,
+                305,
+                866
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                287,
+                319,
+                629,
+                715
+              ]
+            },
+            {
+              "terrainType": "mountain",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                239,
+                723,
+                584,
+                999
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                843,
+                276,
+                1000
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                350,
+                93,
+                620
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                18,
+                97,
+                354
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 3,
+              "box_1000": [
+                159,
+                236,
+                252,
+                353
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 6,
+              "box_1000": [
+                106,
+                652,
+                194,
+                762
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 9,
+              "box_1000": [
+                342,
+                455,
+                451,
+                577
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 2,
+              "box_1000": [
+                328,
+                844,
+                434,
+                963
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                70,
+                114,
+                169,
+                226
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "white",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                56,
+                222,
+                123,
+                319
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                28,
+                545,
+                102,
+                637
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "settlement",
+              "number": null,
+              "box_1000": [
+                0,
+                631,
+                37,
+                729
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                5,
+                735,
+                66,
+                835
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                6,
+                856,
+                77,
+                940
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                203,
+                902,
+                269,
+                1000
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                217,
+                755,
+                299,
+                850
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                257,
+                608,
+                371,
+                720
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                252,
+                521,
+                336,
+                613
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                263,
+                394,
+                342,
+                502
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                323,
+                255,
+                415,
+                379
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                413,
+                312,
+                516,
+                388
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                555,
+                349,
+                626,
+                473
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                390,
+                685,
+                497,
+                742
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                505,
+                755,
+                574,
+                874
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": null,
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                673,
+                287,
+                730,
+                368
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": "brick",
+              "uncertainty": "clipped",
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                187,
+                0,
+                246,
+                56
+              ]
+            }
+          ],
+          "notes": []
+        }
+      },
+      {
+        "index": 3,
+        "id": "lower-right",
+        "requestSHA": "a7c6a77a11cf3cb553106bdde9cf760bf28a59113be52429281a43d7d87ac59b",
+        "http": 200,
+        "ms": 17808,
+        "rawSHA": "12246c800051dcf9e6beb157fd1324f24fec627e5c8dadc7b6edac249a4d22bd",
+        "model": "gemini-3.8-flash",
+        "finish": "STOP",
+        "usage": {
+          "promptTokenCount": 1298,
+          "candidatesTokenCount": 2587,
+          "totalTokenCount": 3885,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 209
+            },
+            {
+              "modality": "IMAGE",
+              "tokenCount": 1089
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "items": 29,
+        "counts": {
+          "terrain": 5,
+          "number-token": 4,
+          "road": 15,
+          "city": 3,
+          "harbor": 2
+        },
+        "state": "completed",
+        "parsed": {
+          "items": [
+            {
+              "terrainType": "mountains",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                232,
+                2,
+                592,
+                381
+              ]
+            },
+            {
+              "terrainType": "hills",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                206,
+                360,
+                529,
+                755
+              ]
+            },
+            {
+              "terrainType": "fields",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                5,
+                145,
+                274,
+                461
+              ]
+            },
+            {
+              "terrainType": "desert",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                0,
+                463,
+                248,
+                786
+              ]
+            },
+            {
+              "terrainType": "forest",
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "terrain",
+              "number": null,
+              "box_1000": [
+                38,
+                0,
+                319,
+                151
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 2,
+              "box_1000": [
+                327,
+                137,
+                432,
+                258
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 5,
+              "box_1000": [
+                318,
+                513,
+                423,
+                634
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "number-token",
+              "number": 10,
+              "box_1000": [
+                88,
+                281,
+                175,
+                390
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": null,
+              "resource": null,
+              "uncertainty": "clipped",
+              "kind": "number-token",
+              "number": null,
+              "box_1000": [
+                105,
+                0,
+                193,
+                54
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                204,
+                196,
+                269,
+                299
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                218,
+                46,
+                299,
+                142
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                392,
+                0,
+                497,
+                34
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "blue",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                507,
+                48,
+                573,
+                169
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                226,
+                350,
+                303,
+                446
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                326,
+                352,
+                427,
+                409
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                465,
+                427,
+                526,
+                547
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                435,
+                649,
+                520,
+                749
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                287,
+                687,
+                386,
+                768
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                471,
+                545,
+                588,
+                679
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                113,
+                751,
+                212,
+                874
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                176,
+                689,
+                250,
+                786
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "orange",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                30,
+                746,
+                110,
+                814
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "city",
+              "number": null,
+              "box_1000": [
+                138,
+                436,
+                237,
+                532
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                56,
+                432,
+                141,
+                484
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                0,
+                355,
+                41,
+                456
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                6,
+                149,
+                77,
+                235
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": "red",
+              "ratio": null,
+              "resource": null,
+              "uncertainty": null,
+              "kind": "road",
+              "number": null,
+              "box_1000": [
+                5,
+                27,
+                65,
+                127
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "3:1",
+              "resource": "?",
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                604,
+                372,
+                663,
+                440
+              ]
+            },
+            {
+              "terrainType": null,
+              "color": null,
+              "ratio": "2:1",
+              "resource": "wool",
+              "uncertainty": null,
+              "kind": "harbor",
+              "number": null,
+              "box_1000": [
+                268,
+                831,
+                344,
+                930
+              ]
+            }
+          ],
+          "notes": []
+        }
+      }
+    ],
+    "notStarted": [],
+    "scope": "Direct photo API timing, not deployed app end-to-end or production merge validation"
+  },
+  "wallReductionPercent": 49.7,
+  "speedup": 1.988,
+  "under30Seconds": false,
+  "accuracy": null,
+  "limitations": [
+    "One run per condition; sequential condition executed first. No stability or full-state accuracy claim.",
+    "Standalone photo API; excludes upload, selector, projection, storage and deployed end-to-end latency.",
+    "Crops overlap; raw row counts include repeated physical objects and are not quantities or accuracy.",
+    "Exact request/source SHA checked; model output itself varies. No product decoder or UI in paid timing experiment.",
+    "Actual billing amount not measured; unreported thought tokens are not evidence of zero internal reasoning."
+  ]
+}

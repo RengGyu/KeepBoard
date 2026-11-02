@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/arkham-horror-3.json",
-    "sha256": "dd7aedf379ffbf86cfb339c60c97957b6d82359638f1e241eb8e8351980e66a9",
+    "sha256": "85148b4a0c2a74b1da7dde8ccd453271c0e74a2ccd45defdc4e093e9ef8b7e54",
     "runtime_pack_id": "arkham-horror-3",
-    "runtime_pack_version": "1.0.0-essentials-2.dd7aedf379ff",
+    "runtime_pack_version": "1.0.0-essentials-2.85148b4a0c2a",
     "runtime_match": true
   },
   "basis": {
@@ -37,7 +37,8 @@
       "inherited::arkham-horror-3.essentials.rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "모듈 동네·거리·몬스터와 코덱스/시나리오",
   "critical_resume_distinction": "파멸/단서/방호와 공포/피해, 비공개 조건 면·신화컵 분리",
@@ -177,7 +178,7 @@
         "pieces"
       ],
       "anchor_contract": "체력/정신력·돈·단서·집중/상태와 공개 장비.",
-      "description": "조사자 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "조사자 자산의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 상태(condition) 카드는 앞면만 공개이며, 효과가 지시하기 전에는 소유자도 뒷면을 보지 않는다(415.7).",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "player_public",
@@ -228,7 +229,7 @@
         "cards"
       ],
       "anchor_contract": "현재 규칙상 아직 읽지 않거나 소유자만 읽는 카드만 분리.",
-      "description": "비공개 면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "비공개 면의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 상태 카드 뒷면은 소유자도 모르는 숨김 정보이므로 이 영역에 기록하지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "owner_private",
@@ -587,11 +588,6 @@
         "visibility": "public"
       },
       {
-        "key": "event-discard.scene",
-        "scope": "public",
-        "visibility": "public"
-      },
-      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -610,6 +606,10 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "player.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "cup.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -652,6 +652,10 @@
       },
       {
         "key": "event-deck.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
+        "key": "event-discard.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
@@ -698,13 +702,6 @@
       "scope": "public",
       "visibility": "public",
       "description": "원본 상태·하우스룰·정정 사유를 선택적으로 기록한다."
-    },
-    {
-      "id": "event-deck.scene",
-      "label": "미공개 이벤트 덱·임시 묶음",
-      "scope": "shared-secret",
-      "visibility": "hidden",
-      "description": "신화컵 토큰과 구별한 이벤트 덱의 위/아래 및 덱 홀더 방향. 공개 event-discard.scene과 분리하고 섞는 중 임시 묶음의 이미 섞었는지/아래로 넣었는지는 pending에 기록한다. 모르는 내부 정체는 펼치지 않는다."
     }
   ],
   "never_infer": [
@@ -919,7 +916,7 @@
   "current_board_mapping": {
     "gameId": "arkham-horror-3",
     "editionId": "base",
-    "sourceSHA": "dd7aedf379ffbf86cfb339c60c97957b6d82359638f1e241eb8e8351980e66a9",
+    "sourceSHA": "85148b4a0c2a74b1da7dde8ccd453271c0e74a2ccd45defdc4e093e9ef8b7e54",
     "status": "new",
     "areas": [
       {

@@ -49,21 +49,21 @@ const entries=(counts:SplendorGemCounts)=>GEM_ORDER.filter(gem=>gem in counts&&c
 const numberText=(value:number|null)=>value===null?'?':String(value);
 
 function countsText(counts:SplendorGemCounts|null){
- if(counts===null)return '확인 필요';
+ if(counts===null)return '?';
  const shown=entries(counts);
- return shown.length?shown.map(([gem,n])=>`${GEM_NAMES[gem]} ${n===null?'개수 확인 필요':n}`).join(' '):'없음';
+ return shown.length?shown.map(([gem,n])=>`${GEM_NAMES[gem]} ${n===null?'?':n}`).join(' '):'없음';
 }
 
 /** Short spoken/screen-reader description built only from the structured props. */
 export function describeSplendor(p:SplendorReadoutProps){
  const parts=[KIND_NAMES[p.kind]+(p.level?` ${p.level}레벨`:'')];
- if(p.kind==='development'||p.kind==='noble')parts.push(p.points===null?'점수 확인 필요':`${p.points}점`);
- if(p.kind==='development')parts.push(p.bonus?`보너스 ${GEM_NAMES[p.bonus]}`:'보너스 확인 필요',`비용 ${countsText(p.cost)}`);
+ if(p.kind==='development'||p.kind==='noble')parts.push(p.points===null?'점수 ?':`${p.points}점`);
+ if(p.kind==='development')parts.push(p.bonus?`보너스 ${GEM_NAMES[p.bonus]}`:'보너스 ?',`비용 ${countsText(p.cost)}`);
  if(p.kind==='noble')parts.push(`필요 보너스 ${countsText(p.requirements)}`);
- if(p.kind==='token')parts.push(p.color?GEM_NAMES[p.color]:'색 확인 필요',p.quantity===null?'수량 확인 필요':`${p.quantity}개`);
+ if(p.kind==='token')parts.push(p.color?GEM_NAMES[p.color]:'색 ?',p.quantity===null?'수량 ?':`${p.quantity}개`);
  if((p.kind==='development'||p.kind==='deck')&&p.quantity!==null&&p.quantity!==1)parts.push(`${p.quantity}장`);
- if(p.kind==='unknown')parts.push('종류 확인 필요');
- if(p.source==='legacy-label')parts.push('글에서 읽은 값 · 확인 필요');
+ if(p.kind==='unknown')parts.push('종류 ?');
+ if(p.source==='legacy-label')parts.push('글에서 읽은 값');
  return parts.join(', ');
 }
 
@@ -94,11 +94,11 @@ export function SplendorReadout(props:SplendorReadoutProps){
  else if(kind==='noble')body=<><div className="sr-top"><Points points={points}/></div>{size!=='mini'&&<span className="sr-need-label">필요 보너스</span>}<Counts counts={requirements} variant="need" label="필요" size={size}/></>;
  else if(kind==='token')body=<><span className="sr-coin"><Gem color={color} size={size==='detail'?44:size==='mini'?22:34}/></span><span className="sr-qty">{quantity===null?<><Check/>개</>:<><b>{quantity}</b>개</>}</span></>;
  else if(kind==='deck')body=<><span className="sr-back"><Dots level={level}/></span>{level?<span className="sr-caption">{level}레벨 더미</span>:<span className="sr-caption"><Check/>레벨</span>}</>;
- else body=<><span className="sr-back is-unknown">?</span><span className="sr-caption">{level?`${level}레벨 · `:''}종류 확인 필요</span></>;
+ else body=<><span className="sr-back is-unknown">?</span><span className="sr-caption">{level?`${level}레벨 · `:''}종류 ?</span></>;
  return <div className={`splendor-readout is-${kind} is-${size}`} style={{'--sr-tint':`var(--sr-${tint})`} as CSSProperties} role="img" aria-label={describeSplendor(props)}>
   {body}
   {many&&<span className="sr-many">×{quantity}</span>}
   {source==='legacy-label'&&size!=='mini'&&<span className="sr-flag is-legacy">글에서 읽음</span>}
-  {(needsCheck(props)||source==='legacy-label'&&size==='mini')&&kind!=='unknown'&&(size==='mini'?<span className="sr-flag-dot" aria-hidden="true"/>:<span className="sr-flag">확인 필요</span>)}
+ {needsCheck(props)&&kind!=='unknown'&&(size==='mini'?<span className="sr-flag-dot" aria-hidden="true"/>:<span className="sr-flag">?</span>)}
  </div>;
 }

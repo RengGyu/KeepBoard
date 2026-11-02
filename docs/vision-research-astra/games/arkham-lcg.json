@@ -17,10 +17,10 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/arkham-lcg.json",
-    "sha256": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+    "sha256": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
     "runtime_pack_id": "arkham-lcg",
-    "runtime_pack_version": "1.0.0-essentials-2.df44ab4683ab",
-    "runtime_match": false
+    "runtime_pack_version": "1.0.0-essentials-2.742919169974",
+    "runtime_match": true
   },
   "basis": {
     "contract": "RECOMMENDATION",
@@ -48,7 +48,7 @@
     ],
     "whole_game_rules_verified": false,
     "real_photo_accuracy_verified": false,
-    "source_revision_pending_runtime_regeneration": true
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "장소 연결 아이콘과 조사자 자산·교전 근접",
   "critical_resume_distinction": "위치 인접과 교전/부착, 소진·피해·공포·사용량 분리; 2026 AHC100 판본 고정",
@@ -140,7 +140,9 @@
       ],
       "anchor_contract": "자산 카드, 부착 카드, 소진 방향, 피해/공포/사용량을 인스턴스에 연결.",
       "description": "조사자 플레이 영역의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "arkham-lcg.current-rulebook"
+      ],
       "confidence": "recommendation",
       "partition": "player_public",
       "capture_allowed_current": true,
@@ -292,9 +294,13 @@
       ],
       "confidence": "recommendation",
       "partition": "player_public",
-      "capture_allowed_current": false,
-      "current_ai_destination_fields": [],
-      "current_manual_target_fields": [],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "discard.scene"
+      ],
       "source_field_ids": [
         "discard.scene"
       ],
@@ -303,7 +309,7 @@
       ],
       "owner_binding": "explicit user/roster binding only; no seat/color inference",
       "capture_instruction": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
-      "capture_access": "public evidence; explicit owner binding for player areas",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
       "evidence_contract": {
         "original_id_required": true,
         "original_region": "normalized crop in this source only; not game coordinates",
@@ -670,6 +676,10 @@
     ],
     "excluded_bindings": [
       {
+        "key": "play.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
+      {
         "key": "hidden.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       },
@@ -740,6 +750,10 @@
       {
         "key": "record-note.scenario-progress",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "discard.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -907,7 +921,8 @@
         "scope": "player",
         "visibility": "public",
         "field_ids": [
-          "play.scene"
+          "play.scene",
+          "discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -959,7 +974,8 @@
     "게임 전체 카드 수집은 하지 않는다. 캠페인/조우 세트 의존성과 덱 목록을 참조 ID로 연결하고 새 코어/구 코어 대체표는 별도 검증.",
     "2026 AHC100 공식 규칙 PDF는 확보했고 선임 조사자/혼돈 주머니/막·의제·파멸의 인용 절을 확인했다. 그 밖의 시나리오별 배치·공개성·카드별 타이밍의 완전 대조와 최신 Grimoire 대조는 미완료.",
     "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
-    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
+    "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다.",
+    "새 공개 play/discard 필드는 앞으로 기록할 카드 영역이다. 이전 pinned pack의 hidden.scene에 섞인 버림 카드를 자동 공개·이동하지 않는다."
   ],
   "schema_gaps": [
     {
@@ -1011,6 +1027,12 @@
         "name": "개인 손패",
         "needs": "미공개 카드와 선택 중 카드를 분리.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "discard",
+        "name": "각 조사자의 공개 버림더미",
+        "needs": "각 조사자의 공개 버림더미를 개인별로, 위아래 순서와 카드 앞면을 보존한다. 비공개 뽑기덱과 혼합하지 않는다.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
       }
     ],
     "do_not_collect": [
@@ -1026,7 +1048,7 @@
   "current_board_mapping": {
     "gameId": "arkham-lcg",
     "editionId": "base",
-    "sourceSHA": "df44ab4683abe6d8fe86b418b60ec6ec17a29c88bec4ac652a3007904d25835e",
+    "sourceSHA": "742919169974b82d6da6d941e48c555c8229608b69b87e17a754e93b05b8bda2",
     "status": "source-pending",
     "areas": [
       {
@@ -1058,7 +1080,8 @@
         ],
         "componentIds": [
           "investigators",
-          "tokens"
+          "tokens",
+          "decks"
         ],
         "scope": "player",
         "visibility": "public",
@@ -1066,7 +1089,9 @@
         "template": "personal-tray",
         "status": "new",
         "geometryStatus": "manual-surface",
-        "sourceRefs": [],
+        "sourceRefs": [
+          "arkham-lcg.current-rulebook"
+        ],
         "sourceConfidence": "recommendation",
         "artComponentId": null
       },
@@ -1107,6 +1132,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "discard",
+        "label": "각 조사자의 공개 버림더미",
+        "fieldKeys": [
+          "discard.scene"
+        ],
+        "componentIds": [
+          "decks"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "arkham-lcg.current-reference"
+        ],
+        "sourceConfidence": "recommendation",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

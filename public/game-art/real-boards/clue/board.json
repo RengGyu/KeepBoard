@@ -1,0 +1,5880 @@
+{
+  "gameId": "clue",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "mansion",
+      "label": "실제 저택",
+      "field": "mansion.scene",
+      "scope": "public",
+      "accepts": [
+        "board",
+        "figures"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        40,
+        40,
+        630,
+        630
+      ],
+      "placement": "actualfloorgrid/door/roomposition;nomoveengine",
+      "stateKey": "shared.mansion",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-1-hand",
+      "label": "개인 1 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        42,
+        709,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-1.handIds",
+      "ownerSide": "seat-1",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-1-notes",
+      "label": "개인 1 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        189,
+        709,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-1.knowledge",
+      "ownerSide": "seat-1",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-2-hand",
+      "label": "개인 2 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        358,
+        709,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-2.handIds",
+      "ownerSide": "seat-2",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-2-notes",
+      "label": "개인 2 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        505,
+        709,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-2.knowledge",
+      "ownerSide": "seat-2",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-3-hand",
+      "label": "개인 3 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        674,
+        709,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-3.handIds",
+      "ownerSide": "seat-3",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-3-notes",
+      "label": "개인 3 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        821,
+        709,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-3.knowledge",
+      "ownerSide": "seat-3",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-4-hand",
+      "label": "개인 4 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        42,
+        850,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-4.handIds",
+      "ownerSide": "seat-4",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-4-notes",
+      "label": "개인 4 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        189,
+        850,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-4.knowledge",
+      "ownerSide": "seat-4",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-5-hand",
+      "label": "개인 5 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        358,
+        850,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-5.handIds",
+      "ownerSide": "seat-5",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-5-notes",
+      "label": "개인 5 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        505,
+        850,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-5.knowledge",
+      "ownerSide": "seat-5",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-6-hand",
+      "label": "개인 6 증거 카드",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        674,
+        850,
+        140,
+        108
+      ],
+      "placement": "variablehandinstances;nodealcountinvented",
+      "stateKey": "players.seat-6.handIds",
+      "ownerSide": "seat-6",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    },
+    {
+      "id": "seat-6-notes",
+      "label": "개인 6 추리표",
+      "field": "private-notes.scene",
+      "scope": "player",
+      "accepts": [
+        "notes"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        821,
+        850,
+        137,
+        108
+      ],
+      "placement": "21evidencerows/knowncolumn+upTo5opponentcolumns;useexpandednotes",
+      "stateKey": "players.seat-6.knowledge",
+      "ownerSide": "seat-6",
+      "visibility": "owner-private",
+      "slotStrokeWidth": 0.8
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "seat-3-hand",
+        "seat-3-notes",
+        "seat-4-hand",
+        "seat-4-notes",
+        "seat-5-hand",
+        "seat-5-notes",
+        "seat-6-hand",
+        "seat-6-notes"
+      ],
+      "hideBoardArtIds": [
+        "seat-3-station",
+        "seat-3-hand-guide-0",
+        "seat-3-hand-guide-1",
+        "seat-3-hand-guide-2",
+        "seat-3-note-r-0",
+        "seat-3-note-r-1",
+        "seat-3-note-r-2",
+        "seat-3-note-r-3",
+        "seat-3-note-r-4",
+        "seat-3-note-r-5",
+        "seat-3-note-r-6",
+        "seat-3-note-r-7",
+        "seat-3-note-r-8",
+        "seat-3-note-r-9",
+        "seat-3-note-r-10",
+        "seat-3-note-r-11",
+        "seat-3-note-r-12",
+        "seat-3-note-r-13",
+        "seat-3-note-r-14",
+        "seat-3-note-r-15",
+        "seat-3-note-r-16",
+        "seat-3-note-r-17",
+        "seat-3-note-r-18",
+        "seat-3-note-r-19",
+        "seat-3-note-r-20",
+        "seat-3-note-r-21",
+        "seat-3-note-c-0",
+        "seat-3-note-c-1",
+        "seat-3-note-c-2",
+        "seat-3-note-c-3",
+        "seat-3-note-c-4",
+        "seat-3-note-c-5",
+        "seat-3-note-c-6",
+        "seat-4-station",
+        "seat-4-hand-guide-0",
+        "seat-4-hand-guide-1",
+        "seat-4-hand-guide-2",
+        "seat-4-note-r-0",
+        "seat-4-note-r-1",
+        "seat-4-note-r-2",
+        "seat-4-note-r-3",
+        "seat-4-note-r-4",
+        "seat-4-note-r-5",
+        "seat-4-note-r-6",
+        "seat-4-note-r-7",
+        "seat-4-note-r-8",
+        "seat-4-note-r-9",
+        "seat-4-note-r-10",
+        "seat-4-note-r-11",
+        "seat-4-note-r-12",
+        "seat-4-note-r-13",
+        "seat-4-note-r-14",
+        "seat-4-note-r-15",
+        "seat-4-note-r-16",
+        "seat-4-note-r-17",
+        "seat-4-note-r-18",
+        "seat-4-note-r-19",
+        "seat-4-note-r-20",
+        "seat-4-note-r-21",
+        "seat-4-note-c-0",
+        "seat-4-note-c-1",
+        "seat-4-note-c-2",
+        "seat-4-note-c-3",
+        "seat-4-note-c-4",
+        "seat-4-note-c-5",
+        "seat-4-note-c-6",
+        "seat-5-station",
+        "seat-5-hand-guide-0",
+        "seat-5-hand-guide-1",
+        "seat-5-hand-guide-2",
+        "seat-5-note-r-0",
+        "seat-5-note-r-1",
+        "seat-5-note-r-2",
+        "seat-5-note-r-3",
+        "seat-5-note-r-4",
+        "seat-5-note-r-5",
+        "seat-5-note-r-6",
+        "seat-5-note-r-7",
+        "seat-5-note-r-8",
+        "seat-5-note-r-9",
+        "seat-5-note-r-10",
+        "seat-5-note-r-11",
+        "seat-5-note-r-12",
+        "seat-5-note-r-13",
+        "seat-5-note-r-14",
+        "seat-5-note-r-15",
+        "seat-5-note-r-16",
+        "seat-5-note-r-17",
+        "seat-5-note-r-18",
+        "seat-5-note-r-19",
+        "seat-5-note-r-20",
+        "seat-5-note-r-21",
+        "seat-5-note-c-0",
+        "seat-5-note-c-1",
+        "seat-5-note-c-2",
+        "seat-5-note-c-3",
+        "seat-5-note-c-4",
+        "seat-5-note-c-5",
+        "seat-5-note-c-6",
+        "seat-6-station",
+        "seat-6-hand-guide-0",
+        "seat-6-hand-guide-1",
+        "seat-6-hand-guide-2",
+        "seat-6-note-r-0",
+        "seat-6-note-r-1",
+        "seat-6-note-r-2",
+        "seat-6-note-r-3",
+        "seat-6-note-r-4",
+        "seat-6-note-r-5",
+        "seat-6-note-r-6",
+        "seat-6-note-r-7",
+        "seat-6-note-r-8",
+        "seat-6-note-r-9",
+        "seat-6-note-r-10",
+        "seat-6-note-r-11",
+        "seat-6-note-r-12",
+        "seat-6-note-r-13",
+        "seat-6-note-r-14",
+        "seat-6-note-r-15",
+        "seat-6-note-r-16",
+        "seat-6-note-r-17",
+        "seat-6-note-r-18",
+        "seat-6-note-r-19",
+        "seat-6-note-r-20",
+        "seat-6-note-r-21",
+        "seat-6-note-c-0",
+        "seat-6-note-c-1",
+        "seat-6-note-c-2",
+        "seat-6-note-c-3",
+        "seat-6-note-c-4",
+        "seat-6-note-c-5",
+        "seat-6-note-c-6"
+      ],
+      "figureCountAlways6": true
+    },
+    "3": {
+      "hideAreas": [
+        "seat-4-hand",
+        "seat-4-notes",
+        "seat-5-hand",
+        "seat-5-notes",
+        "seat-6-hand",
+        "seat-6-notes"
+      ],
+      "hideBoardArtIds": [
+        "seat-4-station",
+        "seat-4-hand-guide-0",
+        "seat-4-hand-guide-1",
+        "seat-4-hand-guide-2",
+        "seat-4-note-r-0",
+        "seat-4-note-r-1",
+        "seat-4-note-r-2",
+        "seat-4-note-r-3",
+        "seat-4-note-r-4",
+        "seat-4-note-r-5",
+        "seat-4-note-r-6",
+        "seat-4-note-r-7",
+        "seat-4-note-r-8",
+        "seat-4-note-r-9",
+        "seat-4-note-r-10",
+        "seat-4-note-r-11",
+        "seat-4-note-r-12",
+        "seat-4-note-r-13",
+        "seat-4-note-r-14",
+        "seat-4-note-r-15",
+        "seat-4-note-r-16",
+        "seat-4-note-r-17",
+        "seat-4-note-r-18",
+        "seat-4-note-r-19",
+        "seat-4-note-r-20",
+        "seat-4-note-r-21",
+        "seat-4-note-c-0",
+        "seat-4-note-c-1",
+        "seat-4-note-c-2",
+        "seat-4-note-c-3",
+        "seat-4-note-c-4",
+        "seat-4-note-c-5",
+        "seat-4-note-c-6",
+        "seat-5-station",
+        "seat-5-hand-guide-0",
+        "seat-5-hand-guide-1",
+        "seat-5-hand-guide-2",
+        "seat-5-note-r-0",
+        "seat-5-note-r-1",
+        "seat-5-note-r-2",
+        "seat-5-note-r-3",
+        "seat-5-note-r-4",
+        "seat-5-note-r-5",
+        "seat-5-note-r-6",
+        "seat-5-note-r-7",
+        "seat-5-note-r-8",
+        "seat-5-note-r-9",
+        "seat-5-note-r-10",
+        "seat-5-note-r-11",
+        "seat-5-note-r-12",
+        "seat-5-note-r-13",
+        "seat-5-note-r-14",
+        "seat-5-note-r-15",
+        "seat-5-note-r-16",
+        "seat-5-note-r-17",
+        "seat-5-note-r-18",
+        "seat-5-note-r-19",
+        "seat-5-note-r-20",
+        "seat-5-note-r-21",
+        "seat-5-note-c-0",
+        "seat-5-note-c-1",
+        "seat-5-note-c-2",
+        "seat-5-note-c-3",
+        "seat-5-note-c-4",
+        "seat-5-note-c-5",
+        "seat-5-note-c-6",
+        "seat-6-station",
+        "seat-6-hand-guide-0",
+        "seat-6-hand-guide-1",
+        "seat-6-hand-guide-2",
+        "seat-6-note-r-0",
+        "seat-6-note-r-1",
+        "seat-6-note-r-2",
+        "seat-6-note-r-3",
+        "seat-6-note-r-4",
+        "seat-6-note-r-5",
+        "seat-6-note-r-6",
+        "seat-6-note-r-7",
+        "seat-6-note-r-8",
+        "seat-6-note-r-9",
+        "seat-6-note-r-10",
+        "seat-6-note-r-11",
+        "seat-6-note-r-12",
+        "seat-6-note-r-13",
+        "seat-6-note-r-14",
+        "seat-6-note-r-15",
+        "seat-6-note-r-16",
+        "seat-6-note-r-17",
+        "seat-6-note-r-18",
+        "seat-6-note-r-19",
+        "seat-6-note-r-20",
+        "seat-6-note-r-21",
+        "seat-6-note-c-0",
+        "seat-6-note-c-1",
+        "seat-6-note-c-2",
+        "seat-6-note-c-3",
+        "seat-6-note-c-4",
+        "seat-6-note-c-5",
+        "seat-6-note-c-6"
+      ],
+      "figureCountAlways6": true
+    },
+    "4": {
+      "hideAreas": [
+        "seat-5-hand",
+        "seat-5-notes",
+        "seat-6-hand",
+        "seat-6-notes"
+      ],
+      "hideBoardArtIds": [
+        "seat-5-station",
+        "seat-5-hand-guide-0",
+        "seat-5-hand-guide-1",
+        "seat-5-hand-guide-2",
+        "seat-5-note-r-0",
+        "seat-5-note-r-1",
+        "seat-5-note-r-2",
+        "seat-5-note-r-3",
+        "seat-5-note-r-4",
+        "seat-5-note-r-5",
+        "seat-5-note-r-6",
+        "seat-5-note-r-7",
+        "seat-5-note-r-8",
+        "seat-5-note-r-9",
+        "seat-5-note-r-10",
+        "seat-5-note-r-11",
+        "seat-5-note-r-12",
+        "seat-5-note-r-13",
+        "seat-5-note-r-14",
+        "seat-5-note-r-15",
+        "seat-5-note-r-16",
+        "seat-5-note-r-17",
+        "seat-5-note-r-18",
+        "seat-5-note-r-19",
+        "seat-5-note-r-20",
+        "seat-5-note-r-21",
+        "seat-5-note-c-0",
+        "seat-5-note-c-1",
+        "seat-5-note-c-2",
+        "seat-5-note-c-3",
+        "seat-5-note-c-4",
+        "seat-5-note-c-5",
+        "seat-5-note-c-6",
+        "seat-6-station",
+        "seat-6-hand-guide-0",
+        "seat-6-hand-guide-1",
+        "seat-6-hand-guide-2",
+        "seat-6-note-r-0",
+        "seat-6-note-r-1",
+        "seat-6-note-r-2",
+        "seat-6-note-r-3",
+        "seat-6-note-r-4",
+        "seat-6-note-r-5",
+        "seat-6-note-r-6",
+        "seat-6-note-r-7",
+        "seat-6-note-r-8",
+        "seat-6-note-r-9",
+        "seat-6-note-r-10",
+        "seat-6-note-r-11",
+        "seat-6-note-r-12",
+        "seat-6-note-r-13",
+        "seat-6-note-r-14",
+        "seat-6-note-r-15",
+        "seat-6-note-r-16",
+        "seat-6-note-r-17",
+        "seat-6-note-r-18",
+        "seat-6-note-r-19",
+        "seat-6-note-r-20",
+        "seat-6-note-r-21",
+        "seat-6-note-c-0",
+        "seat-6-note-c-1",
+        "seat-6-note-c-2",
+        "seat-6-note-c-3",
+        "seat-6-note-c-4",
+        "seat-6-note-c-5",
+        "seat-6-note-c-6"
+      ],
+      "figureCountAlways6": true
+    },
+    "5": {
+      "hideAreas": [
+        "seat-6-hand",
+        "seat-6-notes"
+      ],
+      "hideBoardArtIds": [
+        "seat-6-station",
+        "seat-6-hand-guide-0",
+        "seat-6-hand-guide-1",
+        "seat-6-hand-guide-2",
+        "seat-6-note-r-0",
+        "seat-6-note-r-1",
+        "seat-6-note-r-2",
+        "seat-6-note-r-3",
+        "seat-6-note-r-4",
+        "seat-6-note-r-5",
+        "seat-6-note-r-6",
+        "seat-6-note-r-7",
+        "seat-6-note-r-8",
+        "seat-6-note-r-9",
+        "seat-6-note-r-10",
+        "seat-6-note-r-11",
+        "seat-6-note-r-12",
+        "seat-6-note-r-13",
+        "seat-6-note-r-14",
+        "seat-6-note-r-15",
+        "seat-6-note-r-16",
+        "seat-6-note-r-17",
+        "seat-6-note-r-18",
+        "seat-6-note-r-19",
+        "seat-6-note-r-20",
+        "seat-6-note-r-21",
+        "seat-6-note-c-0",
+        "seat-6-note-c-1",
+        "seat-6-note-c-2",
+        "seat-6-note-c-3",
+        "seat-6-note-c-4",
+        "seat-6-note-c-5",
+        "seat-6-note-c-6"
+      ],
+      "figureCountAlways6": true
+    },
+    "6": {
+      "hideAreas": [],
+      "hideBoardArtIds": [],
+      "figureCountAlways6": true
+    }
+  },
+  "notes": [
+    "Official2023HasbroF6420ClassicRefreshonly;notoldclassicCluedo17doormap.",
+    "Unoccludedphotorecovered9roomlabels/14actualdoors/6starts/wholecorridorgrid. HallandLibraryeachONEdoorinthisprinting;doNOTcopyclassic17doorcounts.",
+    "All6ownerhands/private21rownotesandpublicdecks/customdice/hiddenenvelope/statecheckpointsincluded. Noarbitraryhandcount/answerseed.",
+    "Gridisclippedtotheactualfloorfootprint,notinventedwholeboardoccupancy. Line/regionstatecanrecordactualxywithoutlegalityengine.",
+    "AllfourprintedcornerdestinationlabelsreadfromofficialHasbro5000pxpresskit:Kitchen/StudyandConservatory/Lounge. One/twodotportpairsrepresentphysicalconnectionwithoutcopyingart.",
+    "Assets-only,noapp/provider/productpackchanges."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://instructions.hasbro.com/en-us/instruction/f6420-clue-board-game",
+      "location": "official F6420 product/instructions page, product facts and contents",
+      "verifiedFacts": "F6420 is for 2–6 players and includes six character tokens, six weapon tokens, 50 cards (6 suspect, 6 weapon, 9 room, 29 Clue), one solve envelope, notepad and two dice. The product description says Clue cards can open a new secret passage.",
+      "access": "opened",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://instructions.hasbro.com/api/download/F6420_en-us_f6420-clue-board-game.pdf",
+      "location": "Hasbro F6420 rulebook pp.2–4 and 6; setup diagram and two-player variant",
+      "verifiedFacts": "Official setup diagram shows the nine-room mansion and central envelope; all six suspect figures start at printed colored spaces and six weapons begin in different rooms. The two-player/team setup places four face-down remaining evidence cards in four different rooms, then deals the remaining cards. The rule text also describes a room-connected secret passage.",
+      "access": "downloaded-pdf-and-direct-page-view",
+      "checkedAt": "2026-10-30",
+      "pdfSHA256": "c66199be2095ee44a7b1b3c43a7c0dd3dde893f8278cedb9fb822281ff7dba2a",
+      "pdfBytes": 7056081,
+      "privateSource": "/private/tmp/kb-realboards94/clue/manual.pdf"
+    },
+    {
+      "url": "https://cdn.ozone.bg/media/catalog/product/cache/1/image/a4e40ebdc3e371adff845072e1c73f37/n/a/d7b62ef0aae11649284eaddd11e60aaf/nastolna-igra-cluedo-classic-refresh---semeyna-33.jpg",
+      "sourceType": "identifiedF6420retailer-component-photo",
+      "sha256": "277c7f84326fb1d9176ccbc156b90e08367721c1406e2f49678f5003c638e114",
+      "access": "actualunoccludedwholeimage/canonicalrectification/north/southdoorcropsdirectlyviewed",
+      "verifiedFacts": "nineprintedroomlabels/14doorsincludingHall1Library1/6startspaces/actualwhitefloorgrid",
+      "checkedAt": "2026-10-31",
+      "uncertain": "cornerpassagedestinationtextunreadable;notasserted"
+    },
+    {
+      "url": "https://drive.google.com/uc?export=download&id=1BgP2bCieI-a_8kuDoGqdYMPDxszkuqxr",
+      "sourceType": "officialHasbro2023presskit",
+      "sha256": "1a2b828c68e71629876f78d44e65feb3cc683eafacecd708332ed48afbb6e5dc",
+      "access": "5000x5000wholephoto+allfourpassagecropsdirectlyviewed",
+      "verifiedFacts": "fourprintedsecretpassageendpoints",
+      "checkedAt": "2026-10-31"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "whole-table-assets-confirmed-F6420-passages",
+  "assetScope": "F6420wholeactualmansiongrid/14doors/6starts/commonandall6ownerstates;all4printedpassageendpointsconfirmed",
+  "tableModel": {
+    "schema": "real-board-table-model-v1",
+    "edition": {
+      "game": "Clue Classic Mystery Game",
+      "publisher": "Hasbro",
+      "productCode": "F6420",
+      "language": "English",
+      "editionScope": "F6420 Classic Refresh shown in the cited Hasbro instructions; not asserted for other printings",
+      "evidenceRefs": [
+        0,
+        1
+      ]
+    },
+    "players": {
+      "minimum": 2,
+      "maximum": 6,
+      "all6OwnerStationsDrawn": true
+    },
+    "coordinateSystem": {
+      "space": "board.svgviewBox0..1000",
+      "sourceToBoard": {
+        "scale": 0.46,
+        "translate": [
+          30,
+          30
+        ]
+      },
+      "expandedSourceToSvg": {
+        "scale": 0.7,
+        "translate": [
+          10,
+          10
+        ]
+      },
+      "sourcePixelBasis": [
+        1400,
+        1400
+      ],
+      "actualPrintedFloorGrid": "clippedlinesnotwholemapfakegrid",
+      "notEncoded": [
+        "automatedmovementlegality",
+        "furnitureart",
+        "hiddenanswers"
+      ]
+    },
+    "mansionLayout": {
+      "areaId": "mansion",
+      "mapBounds": [
+        40,
+        40,
+        630,
+        630
+      ],
+      "roomRegions": [
+        {
+          "id": "room-kitchen",
+          "roomId": "kitchen",
+          "label": "부엌",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-ballroom",
+          "roomId": "ballroom",
+          "label": "무도회장",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-conservatory",
+          "roomId": "conservatory",
+          "label": "온실",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-dining-room",
+          "roomId": "dining-room",
+          "label": "식당",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-billiard-room",
+          "roomId": "billiard-room",
+          "label": "당구실",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-library",
+          "roomId": "library",
+          "label": "도서실",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-lounge",
+          "roomId": "lounge",
+          "label": "라운지",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-hall",
+          "roomId": "hall",
+          "label": "홀",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        },
+        {
+          "id": "room-study",
+          "roomId": "study",
+          "label": "서재",
+          "labelConfidence": "printedlabeldirectlyreadsameF6420unoccludedphoto"
+        }
+      ],
+      "corridorRegions": [
+        "corridor-run-0",
+        "corridor-run-1",
+        "corridor-run-2",
+        "corridor-run-3",
+        "corridor-run-4",
+        "corridor-run-5",
+        "corridor-run-6",
+        "corridor-run-7",
+        "corridor-run-8",
+        "corridor-run-9",
+        "corridor-run-10",
+        "corridor-run-11",
+        "corridor-run-12",
+        "corridor-run-13",
+        "corridor-run-14",
+        "corridor-run-15",
+        "corridor-run-16"
+      ],
+      "solutionEnvelopeRegion": "central-staircase",
+      "printedSecretPassages": [
+        {
+          "id": "printed-kitchen-to-study",
+          "fromRoomId": "kitchen",
+          "toRoomId": "study",
+          "bidirectional": true,
+          "source": "Hasbroofficial2023presskit/CLUE_topdown.jpg",
+          "printedText": "Secret Passage to STUDY",
+          "sourceCropPx": [
+            420,
+            2320,
+            670,
+            2610
+          ]
+        },
+        {
+          "id": "printed-study-to-kitchen",
+          "fromRoomId": "study",
+          "toRoomId": "kitchen",
+          "bidirectional": true,
+          "source": "Hasbroofficial2023presskit/CLUE_topdown.jpg",
+          "printedText": "Secret Passage to KITCHEN",
+          "sourceCropPx": [
+            4320,
+            2290,
+            4590,
+            2540
+          ]
+        },
+        {
+          "id": "printed-conservatory-to-lounge",
+          "fromRoomId": "conservatory",
+          "toRoomId": "lounge",
+          "bidirectional": true,
+          "source": "Hasbroofficial2023presskit/CLUE_topdown.jpg",
+          "printedText": "Secret Passage to LOUNGE",
+          "sourceCropPx": [
+            2500,
+            580,
+            2790,
+            840
+          ]
+        },
+        {
+          "id": "printed-lounge-to-conservatory",
+          "fromRoomId": "lounge",
+          "toRoomId": "conservatory",
+          "bidirectional": true,
+          "source": "Hasbroofficial2023presskit/CLUE_topdown.jpg",
+          "printedText": "Secret Passage to CONSERVATORY",
+          "sourceCropPx": [
+            2050,
+            4000,
+            2330,
+            4270
+          ]
+        }
+      ],
+      "dynamicSecretPassageRecord": {
+        "source": "Clue-card effect may open an additional passage",
+        "fields": [
+          "connectionId",
+          "fromRoomId",
+          "toRoomId",
+          "sourceClueCardId",
+          "activeState"
+        ],
+        "endpointDomain": "two distinct roomIds from roomRegions",
+        "visibility": "common_public",
+        "lifecycle": "preserve the observed active state; do not infer expiry or a destination from an unseen card"
+      },
+      "roomCount": 9,
+      "corridorZoneCount": 17,
+      "weaponPlacement": "Each of the six weapons begins in a different room; weapon positions are recorded as mansion locations, not in a separate weapon tray.",
+      "suspectPlacement": "All six suspect figures begin at their printed colored start spaces, including colors not assigned to a player.",
+      "corridorGeometry": "structure-source.jsonfloorRuns+clippedgridSegments",
+      "doorways": [
+        {
+          "id": "kitchen-door-1",
+          "roomId": "kitchen",
+          "segment": [
+            [
+              368,
+              318
+            ],
+            [
+              368,
+              364
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "ballroom-door-1",
+          "roomId": "ballroom",
+          "segment": [
+            [
+              490,
+              317
+            ],
+            [
+              490,
+              366
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "ballroom-door-2",
+          "roomId": "ballroom",
+          "segment": [
+            [
+              905,
+              316
+            ],
+            [
+              905,
+              365
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "ballroom-door-3",
+          "roomId": "ballroom",
+          "segment": [
+            [
+              592,
+              420
+            ],
+            [
+              641,
+              420
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "ballroom-door-4",
+          "roomId": "ballroom",
+          "segment": [
+            [
+              754,
+              420
+            ],
+            [
+              803,
+              420
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "conservatory-door-1",
+          "roomId": "conservatory",
+          "segment": [
+            [
+              1022,
+              316
+            ],
+            [
+              1073,
+              316
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "dining-room-door-1",
+          "roomId": "dining-room",
+          "segment": [
+            [
+              480,
+              644
+            ],
+            [
+              480,
+              696
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "dining-room-door-2",
+          "roomId": "dining-room",
+          "segment": [
+            [
+              375,
+              850
+            ],
+            [
+              426,
+              850
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "billiard-room-door-1",
+          "roomId": "billiard-room",
+          "segment": [
+            [
+              1022,
+              482
+            ],
+            [
+              1022,
+              534
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "billiard-room-door-2",
+          "roomId": "billiard-room",
+          "segment": [
+            [
+              1184,
+              696
+            ],
+            [
+              1236,
+              696
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "library-door-1",
+          "roomId": "library",
+          "segment": [
+            [
+              968,
+              857
+            ],
+            [
+              968,
+              909
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "lounge-door-1",
+          "roomId": "lounge",
+          "segment": [
+            [
+              373,
+              1026
+            ],
+            [
+              423,
+              1026
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "hall-door-1",
+          "roomId": "hall",
+          "segment": [
+            [
+              647,
+              971
+            ],
+            [
+              699,
+              971
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        },
+        {
+          "id": "study-door-1",
+          "roomId": "study",
+          "segment": [
+            [
+              970,
+              1138
+            ],
+            [
+              1022,
+              1138
+            ]
+          ],
+          "connectsTo": "corridor-floor",
+          "kind": "doorway",
+          "doorwayOccupancyCanBlock": true
+        }
+      ],
+      "doorCount": 14,
+      "unverifiedReferencePassagePairs": [],
+      "passagePorts": {
+        "kitchen": [
+          115,
+          150
+        ],
+        "conservatory": [
+          1260,
+          283
+        ],
+        "lounge": [
+          100,
+          1070
+        ],
+        "study": [
+          1280,
+          1170
+        ]
+      },
+      "passagePairSymbols": {
+        "oneDot": [
+          "kitchen",
+          "study"
+        ],
+        "twoDots": [
+          "conservatory",
+          "lounge"
+        ]
+      }
+    },
+    "physicalInventory": [
+      {
+        "kind": "suspect-figure",
+        "count": 6,
+        "location": "mansion",
+        "state": "one position per named figure; setup starts at its printed colored start space"
+      },
+      {
+        "kind": "weapon-miniature",
+        "count": 6,
+        "location": "mansion-room",
+        "state": "one position per weapon; setup uses six distinct rooms"
+      },
+      {
+        "kind": "suspect-card",
+        "count": 6,
+        "location": "solution-selection-and-player-hands"
+      },
+      {
+        "kind": "weapon-card",
+        "count": 6,
+        "location": "solution-selection-and-player-hands"
+      },
+      {
+        "kind": "room-card",
+        "count": 9,
+        "location": "solution-selection-and-player-hands"
+      },
+      {
+        "kind": "clue-card",
+        "count": 29,
+        "location": "separate clue draw pile and subsequent rule-directed state"
+      },
+      {
+        "kind": "solution-envelope",
+        "count": 1,
+        "location": "center of mansion board",
+        "contents": "exactly one suspect card, one weapon card, and one room card; contents remain hidden"
+      },
+      {
+        "kind": "detective-notepad",
+        "count": "one per player",
+        "location": "owner-private"
+      },
+      {
+        "kind": "die",
+        "count": 2,
+        "location": "shared public table; current roll is a turn checkpoint"
+      }
+    ],
+    "tableZones": [
+      {
+        "id": "deck-suspect",
+        "kind": "suspect-cards",
+        "bounds": [
+          710,
+          42,
+          108,
+          96
+        ],
+        "visibility": "hidden-fronts",
+        "stateKey": "shared.suspectDeck",
+        "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+      },
+      {
+        "id": "deck-weapon",
+        "kind": "weapon-cards",
+        "bounds": [
+          840,
+          42,
+          108,
+          96
+        ],
+        "visibility": "hidden-fronts",
+        "stateKey": "shared.weaponDeck",
+        "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+      },
+      {
+        "id": "deck-room",
+        "kind": "room-cards",
+        "bounds": [
+          710,
+          174,
+          108,
+          96
+        ],
+        "visibility": "hidden-fronts",
+        "stateKey": "shared.roomDeck",
+        "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+      },
+      {
+        "id": "deck-clue",
+        "kind": "clue-cards",
+        "bounds": [
+          840,
+          174,
+          108,
+          96
+        ],
+        "visibility": "hidden-fronts",
+        "stateKey": "shared.clueDeck",
+        "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+      },
+      {
+        "id": "resolved-clue",
+        "kind": "revealedClueResolvingOnly",
+        "bounds": [
+          710,
+          317,
+          235,
+          54
+        ],
+        "stateKey": "checkpoint.clueCardId",
+        "visibility": "public",
+        "returnAfterResolution": "bottomofCluedeck;notpermanentdiscardpile"
+      },
+      {
+        "id": "solution-envelope",
+        "kind": "threeCardSolution",
+        "bounds": [
+          710,
+          392,
+          235,
+          105
+        ],
+        "stateKey": "shared.solutionEnvelope",
+        "visibility": "hidden-solution",
+        "actualBoardPose": "mansion-center;referenceenlargementrightnotsecondphysicalenvelope"
+      },
+      {
+        "id": "die-1",
+        "kind": "dieWithMagnifyingGlassOnOne",
+        "bounds": [
+          726,
+          530,
+          65,
+          65
+        ],
+        "stateKey": "shared.dice.0",
+        "faces": [
+          "magnifying-glass",
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "iconMovementValue": 1,
+        "visibility": "public"
+      },
+      {
+        "id": "die-2",
+        "kind": "dieWithMagnifyingGlassOnOne",
+        "bounds": [
+          839,
+          530,
+          65,
+          65
+        ],
+        "stateKey": "shared.dice.1",
+        "faces": [
+          "magnifying-glass",
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "iconMovementValue": 1,
+        "visibility": "public"
+      },
+      {
+        "id": "suggestion-in-progress",
+        "kind": "temporarySuggestionCardReferencesNotExtraCards",
+        "bounds": [
+          710,
+          622,
+          235,
+          49
+        ],
+        "stateKey": "checkpoint.suggestion"
+      }
+    ],
+    "stateGroups": [
+      {
+        "id": "public-mansion-state",
+        "visibility": "common_public",
+        "entries": [
+          "each suspect figure position",
+          "each weapon-miniature room position",
+          "active player/turn checkpoint",
+          "current visible dice result when present"
+        ]
+      },
+      {
+        "id": "private-player-evidence",
+        "visibility": "owner_private",
+        "entries": [
+          "that player’s dealt evidence cards",
+          "that player’s detective-notepad marks",
+          "that player’s private knowledge of any inspected two-player room card"
+        ]
+      },
+      {
+        "id": "hidden-solution",
+        "visibility": "hidden_solution",
+        "entries": [
+          "one suspect card",
+          "one weapon card",
+          "one room card"
+        ],
+        "publicDisclosure": "never include contents in public table state"
+      },
+      {
+        "id": "clue-deck-state",
+        "visibility": "common_public",
+        "entries": [
+          "remaining Clue-card count when observed",
+          "visible Clue-card state when directly observed",
+          "pending public Clue-card effect resolution",
+          "room endpoints and active state of any newly opened passage"
+        ],
+        "unknowns": "Do not infer deck order, card identities, passage expiry, or a passage endpoint from a face-down card. Resolved Clue cards return to the bottom of the deck."
+      }
+    ],
+    "setupVariants": [
+      {
+        "id": "two-player-or-team",
+        "playerCount": 2,
+        "sequenceAfter": "select the three hidden solution cards",
+        "roomEvidenceCards": {
+          "count": 4,
+          "face": "down",
+          "roomIdsMustBeDistinct": true,
+          "eligibleRoomIds": [
+            "kitchen",
+            "ballroom",
+            "conservatory",
+            "dining-room",
+            "billiard-room",
+            "library",
+            "lounge",
+            "hall",
+            "study"
+          ],
+          "placementOptions": [
+            "random four rooms",
+            "all four corner rooms for a speedier setup"
+          ],
+          "cardIdentities": "hidden while face down; a player privately inspects and marks the card after entering its room"
+        },
+        "remainingEvidenceCards": 14,
+        "deal": "the remaining 14 cards are dealt in the usual setup; with two individual players this yields seven each",
+        "perOwnerKnowledge": "store inspected card knowledge only in that owner’s private state"
+      }
+    ],
+    "setupSequence": [
+      "Place all six suspect figures at their printed colored start spaces, even if fewer than six people play.",
+      "Put the six weapon miniatures into six different rooms.",
+      "Shuffle suspect, weapon, and room cards by category; put one card of each category into the solution envelope at the mansion center.",
+      "Deal the remaining 18 evidence cards to player-private hands; keep the 29 Clue cards as a separate face-down pile.",
+      "Give each player a private detective notepad; use both dice for the visible roll/turn checkpoint."
+    ],
+    "assetLimitations": [
+      "Coordinatesareoriginalsymbolictracing;gridlinesfollowobservedfloor,notlegalityengine.",
+      "Notapplicationconsumer."
+    ],
+    "assetFiles": {
+      "board": "board.svg",
+      "detail": "mansion-detail.svg",
+      "mansionGeometry": "structure-source.json",
+      "privateNotes": "detective-notes.json"
+    },
+    "stateShape": {
+      "playerCount": null,
+      "playerOrder": [],
+      "currentPlayerId": null,
+      "roundOrTurn": null,
+      "figures": [
+        {
+          "id": null,
+          "suspectId": null,
+          "ownerId": null,
+          "location": {
+            "roomId": null,
+            "doorwayId": null,
+            "sourceXY": null,
+            "boardXY": null,
+            "rotation": null,
+            "layer": null
+          },
+          "unusedPlayerFigureStillOnBoard": null
+        }
+      ],
+      "weapons": [
+        {
+          "id": null,
+          "weaponId": null,
+          "roomId": null,
+          "boardXY": null,
+          "rotation": null,
+          "layer": null
+        }
+      ],
+      "players": [
+        {
+          "id": null,
+          "seatId": null,
+          "suspectId": null,
+          "handIds": "ownerprovidedIDsorhidden",
+          "accusationUsed": null,
+          "eliminatedFromTurns": null,
+          "mustStillRespondToSuggestions": true,
+          "privateMarks": {},
+          "privatelyInspectedRoomCardIds": [],
+          "shownCardHistory": []
+        }
+      ],
+      "shared": {
+        "solutionEnvelope": "hiddenthree-cardbundleorownerprovidedsecureIDs",
+        "clueDeckTopToBottom": "unknownorprovidedorder",
+        "dice": [
+          null,
+          null
+        ],
+        "twoPlayerRoomEvidence": [
+          {
+            "cardId": null,
+            "roomId": null,
+            "face": "down",
+            "knownToPlayerIds": []
+          }
+        ],
+        "activePassages": [
+          {
+            "id": null,
+            "fromRoomId": null,
+            "toRoomId": null,
+            "sourceClueCardId": null,
+            "active": null
+          }
+        ]
+      },
+      "checkpoint": {
+        "rollCommitted": null,
+        "clueCardRequired": null,
+        "clueCardId": null,
+        "clueResolved": null,
+        "cardReturnedToBottom": null,
+        "movementPathSourceXY": [],
+        "movementFinished": null,
+        "suggestion": {
+          "suspectId": null,
+          "weaponId": null,
+          "roomId": null
+        },
+        "suspectMoved": null,
+        "weaponMoved": null,
+        "responseQueue": [],
+        "privatelyShownCard": {
+          "viewerId": null,
+          "showerId": null,
+          "cardId": null
+        },
+        "accusation": null,
+        "envelopePrivatelyChecked": null,
+        "turnPassed": null
+      }
+    },
+    "identityInvariants": [
+      "6figuresremaininthegameevenfewerplayers;unownedfigurenotdeleted.",
+      "Suggestionactuallymovesnamedsuspect+weaponandtheystayafterturn.",
+      "Roomoccupancyunlimited;corridortokenanddoorwaycanblock.",
+      "Bothcustomdicehaveglass=1;twoiconsstilldrawoneCluecard.",
+      "ResolvedCluecardreturnsbottom,notdiscard;shownevidencegoesbackownerhand.",
+      "Wrongaccusercannotturnbutstillshowscards;privateanswerchecknotpublicenvelopeleak.",
+      "4twoPlayerroomcardsremainhiddenandperownerknowledge;nohiddenidentityinSVG.",
+      "null/0/unknownkept;reloadneverreroll/reshuffle/redeal/revealorrepeatcost."
+    ]
+  },
+  "assetCompleteness": {
+    "wholeMansionGrid": true,
+    "actual14Doors": true,
+    "all6StartSpaces": true,
+    "all6OwnerStations": true,
+    "all4PrintedPassageEndpoints": true,
+    "remaining": []
+  },
+  "tableZones": [
+    {
+      "id": "deck-suspect",
+      "kind": "suspect-cards",
+      "bounds": [
+        710,
+        42,
+        108,
+        96
+      ],
+      "visibility": "hidden-fronts",
+      "stateKey": "shared.suspectDeck",
+      "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+    },
+    {
+      "id": "deck-weapon",
+      "kind": "weapon-cards",
+      "bounds": [
+        840,
+        42,
+        108,
+        96
+      ],
+      "visibility": "hidden-fronts",
+      "stateKey": "shared.weaponDeck",
+      "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+    },
+    {
+      "id": "deck-room",
+      "kind": "room-cards",
+      "bounds": [
+        710,
+        174,
+        108,
+        96
+      ],
+      "visibility": "hidden-fronts",
+      "stateKey": "shared.roomDeck",
+      "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+    },
+    {
+      "id": "deck-clue",
+      "kind": "clue-cards",
+      "bounds": [
+        840,
+        174,
+        108,
+        96
+      ],
+      "visibility": "hidden-fronts",
+      "stateKey": "shared.clueDeck",
+      "purpose": "first3setup-only;dealnotsimultaneouslyleftasundealtstock"
+    },
+    {
+      "id": "resolved-clue",
+      "kind": "revealedClueResolvingOnly",
+      "bounds": [
+        710,
+        317,
+        235,
+        54
+      ],
+      "stateKey": "checkpoint.clueCardId",
+      "visibility": "public",
+      "returnAfterResolution": "bottomofCluedeck;notpermanentdiscardpile"
+    },
+    {
+      "id": "solution-envelope",
+      "kind": "threeCardSolution",
+      "bounds": [
+        710,
+        392,
+        235,
+        105
+      ],
+      "stateKey": "shared.solutionEnvelope",
+      "visibility": "hidden-solution",
+      "actualBoardPose": "mansion-center;referenceenlargementrightnotsecondphysicalenvelope"
+    },
+    {
+      "id": "die-1",
+      "kind": "dieWithMagnifyingGlassOnOne",
+      "bounds": [
+        726,
+        530,
+        65,
+        65
+      ],
+      "stateKey": "shared.dice.0",
+      "faces": [
+        "magnifying-glass",
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "iconMovementValue": 1,
+      "visibility": "public"
+    },
+    {
+      "id": "die-2",
+      "kind": "dieWithMagnifyingGlassOnOne",
+      "bounds": [
+        839,
+        530,
+        65,
+        65
+      ],
+      "stateKey": "shared.dice.1",
+      "faces": [
+        "magnifying-glass",
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "iconMovementValue": 1,
+      "visibility": "public"
+    },
+    {
+      "id": "suggestion-in-progress",
+      "kind": "temporarySuggestionCardReferencesNotExtraCards",
+      "bounds": [
+        710,
+        622,
+        235,
+        49
+      ],
+      "stateKey": "checkpoint.suggestion"
+    }
+  ],
+  "auxiliaryAssets": [
+    {
+      "id": "mansion-detail",
+      "svg": "mansion-detail.svg",
+      "viewBox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "label": "F6420 실제 저택·복도 격자·문"
+    },
+    {
+      "id": "detective-notes",
+      "svg": "detective-notes.svg",
+      "viewBox": [
+        0,
+        0,
+        600,
+        600
+      ],
+      "label": "개인 추리표 21행·6열"
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "mansion-outer",
+      "type": "rect",
+      "x": 41.5,
+      "y": 41.5,
+      "w": 621.0,
+      "h": 621.0,
+      "fill": "#e2eaf1",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-0",
+      "type": "rect",
+      "x": 225.96,
+      "y": 83.36,
+      "w": 77.28,
+      "h": 27.6,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-1",
+      "type": "rect",
+      "x": 202.04000000000002,
+      "y": 110.96000000000001,
+      "w": 53.36,
+      "h": 115.92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-2",
+      "type": "rect",
+      "x": 399.38,
+      "y": 83.36,
+      "w": 72.68,
+      "h": 27.6,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-3",
+      "type": "rect",
+      "x": 447.22,
+      "y": 110.96000000000001,
+      "w": 49.68,
+      "h": 115.92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-4",
+      "type": "rect",
+      "x": 76.92,
+      "y": 202.04000000000002,
+      "w": 178.48000000000002,
+      "h": 24.84,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-5",
+      "type": "rect",
+      "x": 101.3,
+      "y": 226.88,
+      "w": 396.06,
+      "h": 24.84,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-6",
+      "type": "rect",
+      "x": 174.9,
+      "y": 251.72,
+      "w": 322.46000000000004,
+      "h": 26.68,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-7",
+      "type": "rect",
+      "x": 496.90000000000003,
+      "y": 175.36,
+      "w": 117.76,
+      "h": 51.52,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-8",
+      "type": "rect",
+      "x": 251.72,
+      "y": 278.4,
+      "w": 51.52,
+      "h": 168.36,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-9",
+      "type": "rect",
+      "x": 422.38,
+      "y": 278.4,
+      "w": 74.98,
+      "h": 121.9,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-10",
+      "type": "rect",
+      "x": 422.38,
+      "y": 400.3,
+      "w": 51.52,
+      "h": 70.84,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-11",
+      "type": "rect",
+      "x": 497.36,
+      "y": 350.62,
+      "w": 126.96000000000001,
+      "h": 23.92,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-12",
+      "type": "rect",
+      "x": 88.88,
+      "y": 421.92,
+      "w": 162.84,
+      "h": 80.04,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-13",
+      "type": "rect",
+      "x": 251.72,
+      "y": 446.76,
+      "w": 222.18,
+      "h": 29.900000000000002,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-14",
+      "type": "rect",
+      "x": 227.8,
+      "y": 476.66,
+      "w": 51.52,
+      "h": 148.58,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-15",
+      "type": "rect",
+      "x": 422.38,
+      "y": 471.14000000000004,
+      "w": 51.52,
+      "h": 154.1,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-run-16",
+      "type": "rect",
+      "x": 473.90000000000003,
+      "y": 494.14000000000004,
+      "w": 140.76000000000002,
+      "h": 51.52,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "rx": 3
+    },
+    {
+      "id": "corridor-grid-x-0-0",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 202.04000000000002,
+      "x2": 88.88,
+      "y2": 226.88,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-0-1",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 421.92,
+      "x2": 88.88,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-1-0",
+      "type": "line",
+      "x1": 113.26,
+      "y1": 202.04000000000002,
+      "x2": 113.26,
+      "y2": 251.72,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-1-1",
+      "type": "line",
+      "x1": 113.26,
+      "y1": 421.92,
+      "x2": 113.26,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-2-0",
+      "type": "line",
+      "x1": 137.18,
+      "y1": 202.04000000000002,
+      "x2": 137.18,
+      "y2": 251.72,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-2-1",
+      "type": "line",
+      "x1": 137.18,
+      "y1": 421.92,
+      "x2": 137.18,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-3-0",
+      "type": "line",
+      "x1": 161.1,
+      "y1": 202.04000000000002,
+      "x2": 161.1,
+      "y2": 251.72,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-3-1",
+      "type": "line",
+      "x1": 161.1,
+      "y1": 421.92,
+      "x2": 161.1,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-4-0",
+      "type": "line",
+      "x1": 184.56,
+      "y1": 202.04000000000002,
+      "x2": 184.56,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-4-1",
+      "type": "line",
+      "x1": 184.56,
+      "y1": 421.92,
+      "x2": 184.56,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-5-0",
+      "type": "line",
+      "x1": 208.48000000000002,
+      "y1": 110.96000000000001,
+      "x2": 208.48000000000002,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-5-1",
+      "type": "line",
+      "x1": 208.48000000000002,
+      "y1": 421.92,
+      "x2": 208.48000000000002,
+      "y2": 501.96000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-6-0",
+      "type": "line",
+      "x1": 232.4,
+      "y1": 83.36,
+      "x2": 232.4,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-6-1",
+      "type": "line",
+      "x1": 232.4,
+      "y1": 421.92,
+      "x2": 232.4,
+      "y2": 625.24,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-7-0",
+      "type": "line",
+      "x1": 256.32000000000005,
+      "y1": 83.36,
+      "x2": 256.32000000000005,
+      "y2": 110.96000000000001,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-7-1",
+      "type": "line",
+      "x1": 256.32000000000005,
+      "y1": 226.88,
+      "x2": 256.32000000000005,
+      "y2": 625.24,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-8-0",
+      "type": "line",
+      "x1": 280.24,
+      "y1": 83.36,
+      "x2": 280.24,
+      "y2": 110.96000000000001,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-8-1",
+      "type": "line",
+      "x1": 280.24,
+      "y1": 226.88,
+      "x2": 280.24,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-9-0",
+      "type": "line",
+      "x1": 304.16,
+      "y1": 226.88,
+      "x2": 304.16,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-9-1",
+      "type": "line",
+      "x1": 304.16,
+      "y1": 446.76,
+      "x2": 304.16,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-10-0",
+      "type": "line",
+      "x1": 328.08000000000004,
+      "y1": 226.88,
+      "x2": 328.08000000000004,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-10-1",
+      "type": "line",
+      "x1": 328.08000000000004,
+      "y1": 446.76,
+      "x2": 328.08000000000004,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-11-0",
+      "type": "line",
+      "x1": 352.0,
+      "y1": 226.88,
+      "x2": 352.0,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-11-1",
+      "type": "line",
+      "x1": 352.0,
+      "y1": 446.76,
+      "x2": 352.0,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-12-0",
+      "type": "line",
+      "x1": 375.92,
+      "y1": 226.88,
+      "x2": 375.92,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-12-1",
+      "type": "line",
+      "x1": 375.92,
+      "y1": 446.76,
+      "x2": 375.92,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-13-0",
+      "type": "line",
+      "x1": 399.84000000000003,
+      "y1": 83.36,
+      "x2": 399.84000000000003,
+      "y2": 110.96000000000001,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-13-1",
+      "type": "line",
+      "x1": 399.84000000000003,
+      "y1": 226.88,
+      "x2": 399.84000000000003,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-13-2",
+      "type": "line",
+      "x1": 399.84000000000003,
+      "y1": 446.76,
+      "x2": 399.84000000000003,
+      "y2": 476.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-14-0",
+      "type": "line",
+      "x1": 423.76,
+      "y1": 83.36,
+      "x2": 423.76,
+      "y2": 110.96000000000001,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-14-1",
+      "type": "line",
+      "x1": 423.76,
+      "y1": 226.88,
+      "x2": 423.76,
+      "y2": 625.24,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-15-0",
+      "type": "line",
+      "x1": 447.68,
+      "y1": 83.36,
+      "x2": 447.68,
+      "y2": 625.24,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-16-0",
+      "type": "line",
+      "x1": 471.6,
+      "y1": 83.36,
+      "x2": 471.6,
+      "y2": 625.24,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-17-0",
+      "type": "line",
+      "x1": 495.52000000000004,
+      "y1": 110.96000000000001,
+      "x2": 495.52000000000004,
+      "y2": 400.3,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-17-1",
+      "type": "line",
+      "x1": 495.52000000000004,
+      "y1": 494.14000000000004,
+      "x2": 495.52000000000004,
+      "y2": 545.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-18-0",
+      "type": "line",
+      "x1": 519.44,
+      "y1": 175.36,
+      "x2": 519.44,
+      "y2": 226.88,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-18-1",
+      "type": "line",
+      "x1": 519.44,
+      "y1": 350.62,
+      "x2": 519.44,
+      "y2": 374.54,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-18-2",
+      "type": "line",
+      "x1": 519.44,
+      "y1": 494.14000000000004,
+      "x2": 519.44,
+      "y2": 545.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-19-0",
+      "type": "line",
+      "x1": 543.36,
+      "y1": 175.36,
+      "x2": 543.36,
+      "y2": 226.88,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-19-1",
+      "type": "line",
+      "x1": 543.36,
+      "y1": 350.62,
+      "x2": 543.36,
+      "y2": 374.54,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-19-2",
+      "type": "line",
+      "x1": 543.36,
+      "y1": 494.14000000000004,
+      "x2": 543.36,
+      "y2": 545.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-20-0",
+      "type": "line",
+      "x1": 567.28,
+      "y1": 175.36,
+      "x2": 567.28,
+      "y2": 226.88,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-20-1",
+      "type": "line",
+      "x1": 567.28,
+      "y1": 350.62,
+      "x2": 567.28,
+      "y2": 374.54,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-20-2",
+      "type": "line",
+      "x1": 567.28,
+      "y1": 494.14000000000004,
+      "x2": 567.28,
+      "y2": 545.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-21-0",
+      "type": "line",
+      "x1": 591.2,
+      "y1": 175.36,
+      "x2": 591.2,
+      "y2": 226.88,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-21-1",
+      "type": "line",
+      "x1": 591.2,
+      "y1": 350.62,
+      "x2": 591.2,
+      "y2": 374.54,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-21-2",
+      "type": "line",
+      "x1": 591.2,
+      "y1": 494.14000000000004,
+      "x2": 591.2,
+      "y2": 545.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-x-22-0",
+      "type": "line",
+      "x1": 615.12,
+      "y1": 350.62,
+      "x2": 615.12,
+      "y2": 374.54,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-0-0",
+      "type": "line",
+      "x1": 225.96,
+      "y1": 83.82,
+      "x2": 303.24,
+      "y2": 83.82,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-0-1",
+      "type": "line",
+      "x1": 399.38,
+      "y1": 83.82,
+      "x2": 472.06,
+      "y2": 83.82,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-1-0",
+      "type": "line",
+      "x1": 225.96,
+      "y1": 108.66,
+      "x2": 303.24,
+      "y2": 108.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-1-1",
+      "type": "line",
+      "x1": 399.38,
+      "y1": 108.66,
+      "x2": 472.06,
+      "y2": 108.66,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-2-0",
+      "type": "line",
+      "x1": 202.04000000000002,
+      "y1": 133.5,
+      "x2": 255.4,
+      "y2": 133.5,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-2-1",
+      "type": "line",
+      "x1": 447.22,
+      "y1": 133.5,
+      "x2": 496.90000000000003,
+      "y2": 133.5,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-3-0",
+      "type": "line",
+      "x1": 202.04000000000002,
+      "y1": 157.42000000000002,
+      "x2": 255.4,
+      "y2": 157.42000000000002,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-3-1",
+      "type": "line",
+      "x1": 447.22,
+      "y1": 157.42000000000002,
+      "x2": 496.90000000000003,
+      "y2": 157.42000000000002,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-4-0",
+      "type": "line",
+      "x1": 202.04000000000002,
+      "y1": 181.8,
+      "x2": 255.4,
+      "y2": 181.8,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-4-1",
+      "type": "line",
+      "x1": 447.22,
+      "y1": 181.8,
+      "x2": 614.6600000000001,
+      "y2": 181.8,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-5-0",
+      "type": "line",
+      "x1": 76.92,
+      "y1": 206.18,
+      "x2": 255.4,
+      "y2": 206.18,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-5-1",
+      "type": "line",
+      "x1": 447.22,
+      "y1": 206.18,
+      "x2": 614.6600000000001,
+      "y2": 206.18,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-6-0",
+      "type": "line",
+      "x1": 101.3,
+      "y1": 230.10000000000002,
+      "x2": 497.36,
+      "y2": 230.10000000000002,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-7-0",
+      "type": "line",
+      "x1": 174.9,
+      "y1": 254.48000000000002,
+      "x2": 497.36,
+      "y2": 254.48000000000002,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-8-0",
+      "type": "line",
+      "x1": 174.9,
+      "y1": 278.4,
+      "x2": 497.36,
+      "y2": 278.4,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-9-0",
+      "type": "line",
+      "x1": 251.72,
+      "y1": 302.32,
+      "x2": 303.24,
+      "y2": 302.32,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-9-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 302.32,
+      "x2": 497.36,
+      "y2": 302.32,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-10-0",
+      "type": "line",
+      "x1": 251.72,
+      "y1": 326.7,
+      "x2": 303.24,
+      "y2": 326.7,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-10-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 326.7,
+      "x2": 497.36,
+      "y2": 326.7,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-11-0",
+      "type": "line",
+      "x1": 251.72,
+      "y1": 350.62,
+      "x2": 303.24,
+      "y2": 350.62,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-11-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 350.62,
+      "x2": 624.32,
+      "y2": 350.62,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-12-0",
+      "type": "line",
+      "x1": 251.72,
+      "y1": 375.0,
+      "x2": 303.24,
+      "y2": 375.0,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-12-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 375.0,
+      "x2": 497.36,
+      "y2": 375.0,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-13-0",
+      "type": "line",
+      "x1": 251.72,
+      "y1": 398.92,
+      "x2": 303.24,
+      "y2": 398.92,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-13-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 398.92,
+      "x2": 497.36,
+      "y2": 398.92,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-14-0",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 422.84000000000003,
+      "x2": 303.24,
+      "y2": 422.84000000000003,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-14-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 422.84000000000003,
+      "x2": 473.90000000000003,
+      "y2": 422.84000000000003,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-15-0",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 447.22,
+      "x2": 473.90000000000003,
+      "y2": 447.22,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-16-0",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 471.14000000000004,
+      "x2": 473.90000000000003,
+      "y2": 471.14000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-17-0",
+      "type": "line",
+      "x1": 88.88,
+      "y1": 495.52000000000004,
+      "x2": 279.32000000000005,
+      "y2": 495.52000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-17-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 495.52000000000004,
+      "x2": 614.6600000000001,
+      "y2": 495.52000000000004,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-18-0",
+      "type": "line",
+      "x1": 227.8,
+      "y1": 519.44,
+      "x2": 279.32000000000005,
+      "y2": 519.44,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-18-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 519.44,
+      "x2": 614.6600000000001,
+      "y2": 519.44,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-19-0",
+      "type": "line",
+      "x1": 227.8,
+      "y1": 543.36,
+      "x2": 279.32000000000005,
+      "y2": 543.36,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-19-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 543.36,
+      "x2": 614.6600000000001,
+      "y2": 543.36,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-20-0",
+      "type": "line",
+      "x1": 227.8,
+      "y1": 567.28,
+      "x2": 279.32000000000005,
+      "y2": 567.28,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-20-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 567.28,
+      "x2": 473.90000000000003,
+      "y2": 567.28,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-21-0",
+      "type": "line",
+      "x1": 227.8,
+      "y1": 591.2,
+      "x2": 279.32000000000005,
+      "y2": 591.2,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-21-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 591.2,
+      "x2": 473.90000000000003,
+      "y2": 591.2,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-22-0",
+      "type": "line",
+      "x1": 227.8,
+      "y1": 615.58,
+      "x2": 279.32000000000005,
+      "y2": 615.58,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "corridor-grid-y-22-1",
+      "type": "line",
+      "x1": 422.38,
+      "y1": 615.58,
+      "x2": 473.90000000000003,
+      "y2": 615.58,
+      "stroke": "#9aaaba",
+      "strokeWidth": 0.9
+    },
+    {
+      "id": "room-kitchen",
+      "type": "polygon",
+      "points": [
+        [
+          52.08,
+          49.32
+        ],
+        [
+          199.28,
+          49.32
+        ],
+        [
+          199.28,
+          199.28
+        ],
+        [
+          101.3,
+          199.28
+        ],
+        [
+          101.3,
+          174.9
+        ],
+        [
+          52.08,
+          174.9
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-ballroom",
+      "type": "polygon",
+      "points": [
+        [
+          303.24,
+          83.36
+        ],
+        [
+          398.0,
+          83.36
+        ],
+        [
+          398.0,
+          111.42
+        ],
+        [
+          446.3,
+          111.42
+        ],
+        [
+          446.3,
+          223.20000000000002
+        ],
+        [
+          255.4,
+          223.20000000000002
+        ],
+        [
+          255.4,
+          111.42
+        ],
+        [
+          303.24,
+          111.42
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-conservatory",
+      "type": "polygon",
+      "points": [
+        [
+          500.12,
+          48.400000000000006
+        ],
+        [
+          649.62,
+          48.400000000000006
+        ],
+        [
+          649.62,
+          175.36
+        ],
+        [
+          500.12,
+          175.36
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-dining-room",
+      "type": "polygon",
+      "points": [
+        [
+          52.08,
+          256.32000000000005
+        ],
+        [
+          174.9,
+          256.32000000000005
+        ],
+        [
+          174.9,
+          279.32000000000005
+        ],
+        [
+          250.8,
+          279.32000000000005
+        ],
+        [
+          250.8,
+          421.0
+        ],
+        [
+          52.08,
+          421.0
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-billiard-room",
+      "type": "polygon",
+      "points": [
+        [
+          500.12,
+          232.86
+        ],
+        [
+          649.62,
+          232.86
+        ],
+        [
+          649.62,
+          350.16
+        ],
+        [
+          500.12,
+          350.16
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-library",
+      "type": "polygon",
+      "points": [
+        [
+          500.12,
+          374.54
+        ],
+        [
+          624.78,
+          374.54
+        ],
+        [
+          624.78,
+          400.3
+        ],
+        [
+          649.62,
+          400.3
+        ],
+        [
+          649.62,
+          475.28000000000003
+        ],
+        [
+          624.78,
+          475.28000000000003
+        ],
+        [
+          624.78,
+          494.14000000000004
+        ],
+        [
+          500.12,
+          494.14000000000004
+        ],
+        [
+          500.12,
+          470.68
+        ],
+        [
+          475.28000000000003,
+          470.68
+        ],
+        [
+          475.28000000000003,
+          400.3
+        ],
+        [
+          500.12,
+          400.3
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-lounge",
+      "type": "polygon",
+      "points": [
+        [
+          52.08,
+          501.96000000000004
+        ],
+        [
+          224.58,
+          501.96000000000004
+        ],
+        [
+          224.58,
+          649.62
+        ],
+        [
+          52.08,
+          649.62
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-hall",
+      "type": "polygon",
+      "points": [
+        [
+          281.16,
+          476.66
+        ],
+        [
+          421.0,
+          476.66
+        ],
+        [
+          421.0,
+          649.62
+        ],
+        [
+          281.16,
+          649.62
+        ]
+      ],
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "room-study",
+      "type": "polygon",
+      "points": [
+        [
+          476.20000000000005,
+          553.48
+        ],
+        [
+          649.62,
+          553.48
+        ],
+        [
+          649.62,
+          649.62
+        ],
+        [
+          476.20000000000005,
+          649.62
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "central-staircase",
+      "type": "rect",
+      "x": 303.7,
+      "y": 279.32000000000005,
+      "w": 117.30000000000001,
+      "h": 168.36,
+      "fill": "#c5d3e1",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "stair-0",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 287.6,
+      "x2": 412.72,
+      "y2": 287.6,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-1",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 307.38,
+      "x2": 412.72,
+      "y2": 307.38,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-2",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 327.16,
+      "x2": 412.72,
+      "y2": 327.16,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-3",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 346.94,
+      "x2": 412.72,
+      "y2": 346.94,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-4",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 366.72,
+      "x2": 412.72,
+      "y2": 366.72,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-5",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 386.5,
+      "x2": 412.72,
+      "y2": 386.5,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "stair-6",
+      "type": "line",
+      "x1": 311.06,
+      "y1": 406.28000000000003,
+      "x2": 412.72,
+      "y2": 406.28000000000003,
+      "stroke": "#8b9cae",
+      "strokeWidth": 0.7
+    },
+    {
+      "id": "door-opening-kitchen-door-1",
+      "type": "line",
+      "x1": 199.28,
+      "y1": 176.28,
+      "x2": 199.28,
+      "y2": 197.44,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-kitchen-door-1",
+      "type": "line",
+      "x1": 199.28,
+      "y1": 176.28,
+      "x2": 203.28,
+      "y2": 186.86,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-ballroom-door-1",
+      "type": "line",
+      "x1": 255.4,
+      "y1": 175.82,
+      "x2": 255.4,
+      "y2": 198.36,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-ballroom-door-1",
+      "type": "line",
+      "x1": 255.4,
+      "y1": 175.82,
+      "x2": 259.4,
+      "y2": 187.09,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-ballroom-door-2",
+      "type": "line",
+      "x1": 446.3,
+      "y1": 175.36,
+      "x2": 446.3,
+      "y2": 197.9,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-ballroom-door-2",
+      "type": "line",
+      "x1": 446.3,
+      "y1": 175.36,
+      "x2": 450.3,
+      "y2": 186.63,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-ballroom-door-3",
+      "type": "line",
+      "x1": 302.32,
+      "y1": 223.20000000000002,
+      "x2": 324.86,
+      "y2": 223.20000000000002,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-ballroom-door-3",
+      "type": "line",
+      "x1": 302.32,
+      "y1": 223.20000000000002,
+      "x2": 313.59000000000003,
+      "y2": 219.20000000000002,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-ballroom-door-4",
+      "type": "line",
+      "x1": 376.84000000000003,
+      "y1": 223.20000000000002,
+      "x2": 399.38,
+      "y2": 223.20000000000002,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-ballroom-door-4",
+      "type": "line",
+      "x1": 376.84000000000003,
+      "y1": 223.20000000000002,
+      "x2": 388.11,
+      "y2": 219.20000000000002,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-conservatory-door-1",
+      "type": "line",
+      "x1": 500.12,
+      "y1": 175.36,
+      "x2": 523.58,
+      "y2": 175.36,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-conservatory-door-1",
+      "type": "line",
+      "x1": 500.12,
+      "y1": 175.36,
+      "x2": 511.85,
+      "y2": 171.36,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-dining-room-door-1",
+      "type": "line",
+      "x1": 250.8,
+      "y1": 326.24,
+      "x2": 250.8,
+      "y2": 350.16,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-dining-room-door-1",
+      "type": "line",
+      "x1": 250.8,
+      "y1": 326.24,
+      "x2": 254.8,
+      "y2": 338.20000000000005,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-dining-room-door-2",
+      "type": "line",
+      "x1": 202.5,
+      "y1": 421.0,
+      "x2": 225.96,
+      "y2": 421.0,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-dining-room-door-2",
+      "type": "line",
+      "x1": 202.5,
+      "y1": 421.0,
+      "x2": 214.23000000000002,
+      "y2": 417.0,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-billiard-room-door-1",
+      "type": "line",
+      "x1": 500.12,
+      "y1": 251.72,
+      "x2": 500.12,
+      "y2": 275.64,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-billiard-room-door-1",
+      "type": "line",
+      "x1": 500.12,
+      "y1": 251.72,
+      "x2": 504.12,
+      "y2": 263.68,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-billiard-room-door-2",
+      "type": "line",
+      "x1": 574.64,
+      "y1": 350.16,
+      "x2": 598.5600000000001,
+      "y2": 350.16,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-billiard-room-door-2",
+      "type": "line",
+      "x1": 574.64,
+      "y1": 350.16,
+      "x2": 586.6,
+      "y2": 346.16,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-library-door-1",
+      "type": "line",
+      "x1": 475.28000000000003,
+      "y1": 424.22,
+      "x2": 475.28000000000003,
+      "y2": 448.14000000000004,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-library-door-1",
+      "type": "line",
+      "x1": 475.28000000000003,
+      "y1": 424.22,
+      "x2": 479.28000000000003,
+      "y2": 436.18000000000006,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-lounge-door-1",
+      "type": "line",
+      "x1": 201.58,
+      "y1": 501.96000000000004,
+      "x2": 224.58,
+      "y2": 501.96000000000004,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-lounge-door-1",
+      "type": "line",
+      "x1": 201.58,
+      "y1": 501.96000000000004,
+      "x2": 213.08,
+      "y2": 497.96000000000004,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-hall-door-1",
+      "type": "line",
+      "x1": 327.62,
+      "y1": 476.66,
+      "x2": 351.54,
+      "y2": 476.66,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-hall-door-1",
+      "type": "line",
+      "x1": 327.62,
+      "y1": 476.66,
+      "x2": 339.58000000000004,
+      "y2": 472.66,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "door-opening-study-door-1",
+      "type": "line",
+      "x1": 476.20000000000005,
+      "y1": 553.48,
+      "x2": 500.12,
+      "y2": 553.48,
+      "stroke": "#ffffff",
+      "strokeWidth": 5
+    },
+    {
+      "id": "door-leaf-study-door-1",
+      "type": "line",
+      "x1": 476.20000000000005,
+      "y1": 553.48,
+      "x2": 488.16,
+      "y2": 549.48,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "start-white",
+      "type": "rect",
+      "x": 279.32000000000005,
+      "y": 53.0,
+      "w": 24.84,
+      "h": 30.360000000000003,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "start-green",
+      "type": "rect",
+      "x": 399.38,
+      "y": 53.0,
+      "w": 24.84,
+      "h": 30.360000000000003,
+      "fill": "#79b792",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "start-peacock",
+      "type": "rect",
+      "x": 614.6600000000001,
+      "y": 202.04000000000002,
+      "w": 34.04,
+      "h": 24.84,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "start-plum",
+      "type": "rect",
+      "x": 614.6600000000001,
+      "y": 494.14000000000004,
+      "w": 34.04,
+      "h": 26.68,
+      "fill": "#b9a0d1",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "start-scarlett",
+      "type": "rect",
+      "x": 227.8,
+      "y": 625.24,
+      "w": 28.52,
+      "h": 24.380000000000003,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "start-mustard",
+      "type": "rect",
+      "x": 53.0,
+      "y": 446.3,
+      "w": 35.88,
+      "h": 24.380000000000003,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "passage-port-kitchen",
+      "type": "circle",
+      "cx": 82.9,
+      "cy": 99.0,
+      "r": 5.98,
+      "fill": "#b9a0d1",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-kitchen-0",
+      "type": "circle",
+      "cx": 82.9,
+      "cy": 99.0,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-port-conservatory",
+      "type": "circle",
+      "cx": 609.6,
+      "cy": 160.18,
+      "r": 5.98,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-conservatory-0",
+      "type": "circle",
+      "cx": 607.53,
+      "cy": 160.18,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-conservatory-1",
+      "type": "circle",
+      "cx": 611.6700000000001,
+      "cy": 160.18,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-port-lounge",
+      "type": "circle",
+      "cx": 76.0,
+      "cy": 522.2,
+      "r": 5.98,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-lounge-0",
+      "type": "circle",
+      "cx": 73.93,
+      "cy": 522.2,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-lounge-1",
+      "type": "circle",
+      "cx": 78.07,
+      "cy": 522.2,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-port-study",
+      "type": "circle",
+      "cx": 618.8000000000001,
+      "cy": 568.2,
+      "r": 5.98,
+      "fill": "#b9a0d1",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "passage-pair-study-0",
+      "type": "circle",
+      "cx": 618.8000000000001,
+      "cy": 568.2,
+      "r": 1.288,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "deck-suspect",
+      "type": "rect",
+      "x": 710,
+      "y": 42,
+      "w": 108,
+      "h": 96,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "deck-weapon",
+      "type": "rect",
+      "x": 840,
+      "y": 42,
+      "w": 108,
+      "h": 96,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "deck-room",
+      "type": "rect",
+      "x": 710,
+      "y": 174,
+      "w": 108,
+      "h": 96,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "deck-clue",
+      "type": "rect",
+      "x": 840,
+      "y": 174,
+      "w": 108,
+      "h": 96,
+      "fill": "#dfe9f4",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "resolved-clue",
+      "type": "rect",
+      "x": 710,
+      "y": 317,
+      "w": 235,
+      "h": 54,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "solution-envelope",
+      "type": "rect",
+      "x": 710,
+      "y": 392,
+      "w": 235,
+      "h": 105,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "envelope-left",
+      "type": "line",
+      "x1": 710,
+      "y1": 392,
+      "x2": 827.5,
+      "y2": 449,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "envelope-right",
+      "type": "line",
+      "x1": 945,
+      "y1": 392,
+      "x2": 827.5,
+      "y2": 449,
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "die-1",
+      "type": "rect",
+      "x": 726,
+      "y": 530,
+      "w": 65,
+      "h": 65,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "die-lens-1",
+      "type": "circle",
+      "cx": 753,
+      "cy": 557,
+      "r": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "die-handle-1",
+      "type": "line",
+      "x1": 762,
+      "y1": 566,
+      "x2": 774,
+      "y2": 578,
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "die-2",
+      "type": "rect",
+      "x": 839,
+      "y": 530,
+      "w": 65,
+      "h": 65,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "die-lens-2",
+      "type": "circle",
+      "cx": 866,
+      "cy": 557,
+      "r": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "die-handle-2",
+      "type": "line",
+      "x1": 875,
+      "y1": 566,
+      "x2": 887,
+      "y2": 578,
+      "stroke": "#16305c",
+      "strokeWidth": 3
+    },
+    {
+      "id": "suggestion-in-progress",
+      "type": "rect",
+      "x": 710,
+      "y": 622,
+      "w": 235,
+      "h": 49,
+      "fill": "#e1e7ef",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-station",
+      "type": "rect",
+      "x": 35,
+      "y": 700,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hand-guide-0",
+      "type": "rect",
+      "x": 55,
+      "y": 732,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hand-guide-1",
+      "type": "rect",
+      "x": 77,
+      "y": 737,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hand-guide-2",
+      "type": "rect",
+      "x": 99,
+      "y": 742,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-note-r-0",
+      "type": "line",
+      "x1": 194,
+      "y1": 714.0,
+      "x2": 320,
+      "y2": 714.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-1",
+      "type": "line",
+      "x1": 194,
+      "y1": 718.5,
+      "x2": 320,
+      "y2": 718.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-2",
+      "type": "line",
+      "x1": 194,
+      "y1": 723.0,
+      "x2": 320,
+      "y2": 723.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-3",
+      "type": "line",
+      "x1": 194,
+      "y1": 727.5,
+      "x2": 320,
+      "y2": 727.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-4",
+      "type": "line",
+      "x1": 194,
+      "y1": 732.0,
+      "x2": 320,
+      "y2": 732.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-5",
+      "type": "line",
+      "x1": 194,
+      "y1": 736.5,
+      "x2": 320,
+      "y2": 736.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-6",
+      "type": "line",
+      "x1": 194,
+      "y1": 741.0,
+      "x2": 320,
+      "y2": 741.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-7",
+      "type": "line",
+      "x1": 194,
+      "y1": 745.5,
+      "x2": 320,
+      "y2": 745.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-8",
+      "type": "line",
+      "x1": 194,
+      "y1": 750.0,
+      "x2": 320,
+      "y2": 750.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-9",
+      "type": "line",
+      "x1": 194,
+      "y1": 754.5,
+      "x2": 320,
+      "y2": 754.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-10",
+      "type": "line",
+      "x1": 194,
+      "y1": 759.0,
+      "x2": 320,
+      "y2": 759.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-11",
+      "type": "line",
+      "x1": 194,
+      "y1": 763.5,
+      "x2": 320,
+      "y2": 763.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-12",
+      "type": "line",
+      "x1": 194,
+      "y1": 768.0,
+      "x2": 320,
+      "y2": 768.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-13",
+      "type": "line",
+      "x1": 194,
+      "y1": 772.5,
+      "x2": 320,
+      "y2": 772.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-14",
+      "type": "line",
+      "x1": 194,
+      "y1": 777.0,
+      "x2": 320,
+      "y2": 777.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-15",
+      "type": "line",
+      "x1": 194,
+      "y1": 781.5,
+      "x2": 320,
+      "y2": 781.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-16",
+      "type": "line",
+      "x1": 194,
+      "y1": 786.0,
+      "x2": 320,
+      "y2": 786.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-17",
+      "type": "line",
+      "x1": 194,
+      "y1": 790.5,
+      "x2": 320,
+      "y2": 790.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-18",
+      "type": "line",
+      "x1": 194,
+      "y1": 795.0,
+      "x2": 320,
+      "y2": 795.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-19",
+      "type": "line",
+      "x1": 194,
+      "y1": 799.5,
+      "x2": 320,
+      "y2": 799.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-20",
+      "type": "line",
+      "x1": 194,
+      "y1": 804.0,
+      "x2": 320,
+      "y2": 804.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-r-21",
+      "type": "line",
+      "x1": 194,
+      "y1": 808.5,
+      "x2": 320,
+      "y2": 808.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-0",
+      "type": "line",
+      "x1": 194,
+      "y1": 714,
+      "x2": 194,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-1",
+      "type": "line",
+      "x1": 215,
+      "y1": 714,
+      "x2": 215,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-2",
+      "type": "line",
+      "x1": 236,
+      "y1": 714,
+      "x2": 236,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-3",
+      "type": "line",
+      "x1": 257,
+      "y1": 714,
+      "x2": 257,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-4",
+      "type": "line",
+      "x1": 278,
+      "y1": 714,
+      "x2": 278,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-5",
+      "type": "line",
+      "x1": 299,
+      "y1": 714,
+      "x2": 299,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-1-note-c-6",
+      "type": "line",
+      "x1": 320,
+      "y1": 714,
+      "x2": 320,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-station",
+      "type": "rect",
+      "x": 351,
+      "y": 700,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hand-guide-0",
+      "type": "rect",
+      "x": 371,
+      "y": 732,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hand-guide-1",
+      "type": "rect",
+      "x": 393,
+      "y": 737,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hand-guide-2",
+      "type": "rect",
+      "x": 415,
+      "y": 742,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-note-r-0",
+      "type": "line",
+      "x1": 510,
+      "y1": 714.0,
+      "x2": 636,
+      "y2": 714.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-1",
+      "type": "line",
+      "x1": 510,
+      "y1": 718.5,
+      "x2": 636,
+      "y2": 718.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-2",
+      "type": "line",
+      "x1": 510,
+      "y1": 723.0,
+      "x2": 636,
+      "y2": 723.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-3",
+      "type": "line",
+      "x1": 510,
+      "y1": 727.5,
+      "x2": 636,
+      "y2": 727.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-4",
+      "type": "line",
+      "x1": 510,
+      "y1": 732.0,
+      "x2": 636,
+      "y2": 732.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-5",
+      "type": "line",
+      "x1": 510,
+      "y1": 736.5,
+      "x2": 636,
+      "y2": 736.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-6",
+      "type": "line",
+      "x1": 510,
+      "y1": 741.0,
+      "x2": 636,
+      "y2": 741.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-7",
+      "type": "line",
+      "x1": 510,
+      "y1": 745.5,
+      "x2": 636,
+      "y2": 745.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-8",
+      "type": "line",
+      "x1": 510,
+      "y1": 750.0,
+      "x2": 636,
+      "y2": 750.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-9",
+      "type": "line",
+      "x1": 510,
+      "y1": 754.5,
+      "x2": 636,
+      "y2": 754.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-10",
+      "type": "line",
+      "x1": 510,
+      "y1": 759.0,
+      "x2": 636,
+      "y2": 759.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-11",
+      "type": "line",
+      "x1": 510,
+      "y1": 763.5,
+      "x2": 636,
+      "y2": 763.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-12",
+      "type": "line",
+      "x1": 510,
+      "y1": 768.0,
+      "x2": 636,
+      "y2": 768.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-13",
+      "type": "line",
+      "x1": 510,
+      "y1": 772.5,
+      "x2": 636,
+      "y2": 772.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-14",
+      "type": "line",
+      "x1": 510,
+      "y1": 777.0,
+      "x2": 636,
+      "y2": 777.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-15",
+      "type": "line",
+      "x1": 510,
+      "y1": 781.5,
+      "x2": 636,
+      "y2": 781.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-16",
+      "type": "line",
+      "x1": 510,
+      "y1": 786.0,
+      "x2": 636,
+      "y2": 786.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-17",
+      "type": "line",
+      "x1": 510,
+      "y1": 790.5,
+      "x2": 636,
+      "y2": 790.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-18",
+      "type": "line",
+      "x1": 510,
+      "y1": 795.0,
+      "x2": 636,
+      "y2": 795.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-19",
+      "type": "line",
+      "x1": 510,
+      "y1": 799.5,
+      "x2": 636,
+      "y2": 799.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-20",
+      "type": "line",
+      "x1": 510,
+      "y1": 804.0,
+      "x2": 636,
+      "y2": 804.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-r-21",
+      "type": "line",
+      "x1": 510,
+      "y1": 808.5,
+      "x2": 636,
+      "y2": 808.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-0",
+      "type": "line",
+      "x1": 510,
+      "y1": 714,
+      "x2": 510,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-1",
+      "type": "line",
+      "x1": 531,
+      "y1": 714,
+      "x2": 531,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-2",
+      "type": "line",
+      "x1": 552,
+      "y1": 714,
+      "x2": 552,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-3",
+      "type": "line",
+      "x1": 573,
+      "y1": 714,
+      "x2": 573,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-4",
+      "type": "line",
+      "x1": 594,
+      "y1": 714,
+      "x2": 594,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-5",
+      "type": "line",
+      "x1": 615,
+      "y1": 714,
+      "x2": 615,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-2-note-c-6",
+      "type": "line",
+      "x1": 636,
+      "y1": 714,
+      "x2": 636,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-station",
+      "type": "rect",
+      "x": 667,
+      "y": 700,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hand-guide-0",
+      "type": "rect",
+      "x": 687,
+      "y": 732,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hand-guide-1",
+      "type": "rect",
+      "x": 709,
+      "y": 737,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hand-guide-2",
+      "type": "rect",
+      "x": 731,
+      "y": 742,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-note-r-0",
+      "type": "line",
+      "x1": 826,
+      "y1": 714.0,
+      "x2": 952,
+      "y2": 714.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-1",
+      "type": "line",
+      "x1": 826,
+      "y1": 718.5,
+      "x2": 952,
+      "y2": 718.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-2",
+      "type": "line",
+      "x1": 826,
+      "y1": 723.0,
+      "x2": 952,
+      "y2": 723.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-3",
+      "type": "line",
+      "x1": 826,
+      "y1": 727.5,
+      "x2": 952,
+      "y2": 727.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-4",
+      "type": "line",
+      "x1": 826,
+      "y1": 732.0,
+      "x2": 952,
+      "y2": 732.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-5",
+      "type": "line",
+      "x1": 826,
+      "y1": 736.5,
+      "x2": 952,
+      "y2": 736.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-6",
+      "type": "line",
+      "x1": 826,
+      "y1": 741.0,
+      "x2": 952,
+      "y2": 741.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-7",
+      "type": "line",
+      "x1": 826,
+      "y1": 745.5,
+      "x2": 952,
+      "y2": 745.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-8",
+      "type": "line",
+      "x1": 826,
+      "y1": 750.0,
+      "x2": 952,
+      "y2": 750.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-9",
+      "type": "line",
+      "x1": 826,
+      "y1": 754.5,
+      "x2": 952,
+      "y2": 754.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-10",
+      "type": "line",
+      "x1": 826,
+      "y1": 759.0,
+      "x2": 952,
+      "y2": 759.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-11",
+      "type": "line",
+      "x1": 826,
+      "y1": 763.5,
+      "x2": 952,
+      "y2": 763.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-12",
+      "type": "line",
+      "x1": 826,
+      "y1": 768.0,
+      "x2": 952,
+      "y2": 768.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-13",
+      "type": "line",
+      "x1": 826,
+      "y1": 772.5,
+      "x2": 952,
+      "y2": 772.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-14",
+      "type": "line",
+      "x1": 826,
+      "y1": 777.0,
+      "x2": 952,
+      "y2": 777.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-15",
+      "type": "line",
+      "x1": 826,
+      "y1": 781.5,
+      "x2": 952,
+      "y2": 781.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-16",
+      "type": "line",
+      "x1": 826,
+      "y1": 786.0,
+      "x2": 952,
+      "y2": 786.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-17",
+      "type": "line",
+      "x1": 826,
+      "y1": 790.5,
+      "x2": 952,
+      "y2": 790.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-18",
+      "type": "line",
+      "x1": 826,
+      "y1": 795.0,
+      "x2": 952,
+      "y2": 795.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-19",
+      "type": "line",
+      "x1": 826,
+      "y1": 799.5,
+      "x2": 952,
+      "y2": 799.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-20",
+      "type": "line",
+      "x1": 826,
+      "y1": 804.0,
+      "x2": 952,
+      "y2": 804.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-r-21",
+      "type": "line",
+      "x1": 826,
+      "y1": 808.5,
+      "x2": 952,
+      "y2": 808.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-0",
+      "type": "line",
+      "x1": 826,
+      "y1": 714,
+      "x2": 826,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-1",
+      "type": "line",
+      "x1": 847,
+      "y1": 714,
+      "x2": 847,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-2",
+      "type": "line",
+      "x1": 868,
+      "y1": 714,
+      "x2": 868,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-3",
+      "type": "line",
+      "x1": 889,
+      "y1": 714,
+      "x2": 889,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-4",
+      "type": "line",
+      "x1": 910,
+      "y1": 714,
+      "x2": 910,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-5",
+      "type": "line",
+      "x1": 931,
+      "y1": 714,
+      "x2": 931,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-3-note-c-6",
+      "type": "line",
+      "x1": 952,
+      "y1": 714,
+      "x2": 952,
+      "y2": 808,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-station",
+      "type": "rect",
+      "x": 35,
+      "y": 841,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hand-guide-0",
+      "type": "rect",
+      "x": 55,
+      "y": 873,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hand-guide-1",
+      "type": "rect",
+      "x": 77,
+      "y": 878,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hand-guide-2",
+      "type": "rect",
+      "x": 99,
+      "y": 883,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-note-r-0",
+      "type": "line",
+      "x1": 194,
+      "y1": 855.0,
+      "x2": 320,
+      "y2": 855.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-1",
+      "type": "line",
+      "x1": 194,
+      "y1": 859.5,
+      "x2": 320,
+      "y2": 859.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-2",
+      "type": "line",
+      "x1": 194,
+      "y1": 864.0,
+      "x2": 320,
+      "y2": 864.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-3",
+      "type": "line",
+      "x1": 194,
+      "y1": 868.5,
+      "x2": 320,
+      "y2": 868.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-4",
+      "type": "line",
+      "x1": 194,
+      "y1": 873.0,
+      "x2": 320,
+      "y2": 873.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-5",
+      "type": "line",
+      "x1": 194,
+      "y1": 877.5,
+      "x2": 320,
+      "y2": 877.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-6",
+      "type": "line",
+      "x1": 194,
+      "y1": 882.0,
+      "x2": 320,
+      "y2": 882.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-7",
+      "type": "line",
+      "x1": 194,
+      "y1": 886.5,
+      "x2": 320,
+      "y2": 886.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-8",
+      "type": "line",
+      "x1": 194,
+      "y1": 891.0,
+      "x2": 320,
+      "y2": 891.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-9",
+      "type": "line",
+      "x1": 194,
+      "y1": 895.5,
+      "x2": 320,
+      "y2": 895.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-10",
+      "type": "line",
+      "x1": 194,
+      "y1": 900.0,
+      "x2": 320,
+      "y2": 900.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-11",
+      "type": "line",
+      "x1": 194,
+      "y1": 904.5,
+      "x2": 320,
+      "y2": 904.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-12",
+      "type": "line",
+      "x1": 194,
+      "y1": 909.0,
+      "x2": 320,
+      "y2": 909.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-13",
+      "type": "line",
+      "x1": 194,
+      "y1": 913.5,
+      "x2": 320,
+      "y2": 913.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-14",
+      "type": "line",
+      "x1": 194,
+      "y1": 918.0,
+      "x2": 320,
+      "y2": 918.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-15",
+      "type": "line",
+      "x1": 194,
+      "y1": 922.5,
+      "x2": 320,
+      "y2": 922.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-16",
+      "type": "line",
+      "x1": 194,
+      "y1": 927.0,
+      "x2": 320,
+      "y2": 927.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-17",
+      "type": "line",
+      "x1": 194,
+      "y1": 931.5,
+      "x2": 320,
+      "y2": 931.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-18",
+      "type": "line",
+      "x1": 194,
+      "y1": 936.0,
+      "x2": 320,
+      "y2": 936.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-19",
+      "type": "line",
+      "x1": 194,
+      "y1": 940.5,
+      "x2": 320,
+      "y2": 940.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-20",
+      "type": "line",
+      "x1": 194,
+      "y1": 945.0,
+      "x2": 320,
+      "y2": 945.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-r-21",
+      "type": "line",
+      "x1": 194,
+      "y1": 949.5,
+      "x2": 320,
+      "y2": 949.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-0",
+      "type": "line",
+      "x1": 194,
+      "y1": 855,
+      "x2": 194,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-1",
+      "type": "line",
+      "x1": 215,
+      "y1": 855,
+      "x2": 215,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-2",
+      "type": "line",
+      "x1": 236,
+      "y1": 855,
+      "x2": 236,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-3",
+      "type": "line",
+      "x1": 257,
+      "y1": 855,
+      "x2": 257,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-4",
+      "type": "line",
+      "x1": 278,
+      "y1": 855,
+      "x2": 278,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-5",
+      "type": "line",
+      "x1": 299,
+      "y1": 855,
+      "x2": 299,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-4-note-c-6",
+      "type": "line",
+      "x1": 320,
+      "y1": 855,
+      "x2": 320,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-station",
+      "type": "rect",
+      "x": 351,
+      "y": 841,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-5-hand-guide-0",
+      "type": "rect",
+      "x": 371,
+      "y": 873,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-5-hand-guide-1",
+      "type": "rect",
+      "x": 393,
+      "y": 878,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-5-hand-guide-2",
+      "type": "rect",
+      "x": 415,
+      "y": 883,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-5-note-r-0",
+      "type": "line",
+      "x1": 510,
+      "y1": 855.0,
+      "x2": 636,
+      "y2": 855.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-1",
+      "type": "line",
+      "x1": 510,
+      "y1": 859.5,
+      "x2": 636,
+      "y2": 859.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-2",
+      "type": "line",
+      "x1": 510,
+      "y1": 864.0,
+      "x2": 636,
+      "y2": 864.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-3",
+      "type": "line",
+      "x1": 510,
+      "y1": 868.5,
+      "x2": 636,
+      "y2": 868.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-4",
+      "type": "line",
+      "x1": 510,
+      "y1": 873.0,
+      "x2": 636,
+      "y2": 873.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-5",
+      "type": "line",
+      "x1": 510,
+      "y1": 877.5,
+      "x2": 636,
+      "y2": 877.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-6",
+      "type": "line",
+      "x1": 510,
+      "y1": 882.0,
+      "x2": 636,
+      "y2": 882.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-7",
+      "type": "line",
+      "x1": 510,
+      "y1": 886.5,
+      "x2": 636,
+      "y2": 886.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-8",
+      "type": "line",
+      "x1": 510,
+      "y1": 891.0,
+      "x2": 636,
+      "y2": 891.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-9",
+      "type": "line",
+      "x1": 510,
+      "y1": 895.5,
+      "x2": 636,
+      "y2": 895.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-10",
+      "type": "line",
+      "x1": 510,
+      "y1": 900.0,
+      "x2": 636,
+      "y2": 900.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-11",
+      "type": "line",
+      "x1": 510,
+      "y1": 904.5,
+      "x2": 636,
+      "y2": 904.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-12",
+      "type": "line",
+      "x1": 510,
+      "y1": 909.0,
+      "x2": 636,
+      "y2": 909.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-13",
+      "type": "line",
+      "x1": 510,
+      "y1": 913.5,
+      "x2": 636,
+      "y2": 913.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-14",
+      "type": "line",
+      "x1": 510,
+      "y1": 918.0,
+      "x2": 636,
+      "y2": 918.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-15",
+      "type": "line",
+      "x1": 510,
+      "y1": 922.5,
+      "x2": 636,
+      "y2": 922.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-16",
+      "type": "line",
+      "x1": 510,
+      "y1": 927.0,
+      "x2": 636,
+      "y2": 927.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-17",
+      "type": "line",
+      "x1": 510,
+      "y1": 931.5,
+      "x2": 636,
+      "y2": 931.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-18",
+      "type": "line",
+      "x1": 510,
+      "y1": 936.0,
+      "x2": 636,
+      "y2": 936.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-19",
+      "type": "line",
+      "x1": 510,
+      "y1": 940.5,
+      "x2": 636,
+      "y2": 940.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-20",
+      "type": "line",
+      "x1": 510,
+      "y1": 945.0,
+      "x2": 636,
+      "y2": 945.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-r-21",
+      "type": "line",
+      "x1": 510,
+      "y1": 949.5,
+      "x2": 636,
+      "y2": 949.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-0",
+      "type": "line",
+      "x1": 510,
+      "y1": 855,
+      "x2": 510,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-1",
+      "type": "line",
+      "x1": 531,
+      "y1": 855,
+      "x2": 531,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-2",
+      "type": "line",
+      "x1": 552,
+      "y1": 855,
+      "x2": 552,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-3",
+      "type": "line",
+      "x1": 573,
+      "y1": 855,
+      "x2": 573,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-4",
+      "type": "line",
+      "x1": 594,
+      "y1": 855,
+      "x2": 594,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-5",
+      "type": "line",
+      "x1": 615,
+      "y1": 855,
+      "x2": 615,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-5-note-c-6",
+      "type": "line",
+      "x1": 636,
+      "y1": 855,
+      "x2": 636,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-station",
+      "type": "rect",
+      "x": 667,
+      "y": 841,
+      "w": 298,
+      "h": 125,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 3
+    },
+    {
+      "id": "seat-6-hand-guide-0",
+      "type": "rect",
+      "x": 687,
+      "y": 873,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-6-hand-guide-1",
+      "type": "rect",
+      "x": 709,
+      "y": 878,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-6-hand-guide-2",
+      "type": "rect",
+      "x": 731,
+      "y": 883,
+      "w": 67,
+      "h": 62,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-6-note-r-0",
+      "type": "line",
+      "x1": 826,
+      "y1": 855.0,
+      "x2": 952,
+      "y2": 855.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-1",
+      "type": "line",
+      "x1": 826,
+      "y1": 859.5,
+      "x2": 952,
+      "y2": 859.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-2",
+      "type": "line",
+      "x1": 826,
+      "y1": 864.0,
+      "x2": 952,
+      "y2": 864.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-3",
+      "type": "line",
+      "x1": 826,
+      "y1": 868.5,
+      "x2": 952,
+      "y2": 868.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-4",
+      "type": "line",
+      "x1": 826,
+      "y1": 873.0,
+      "x2": 952,
+      "y2": 873.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-5",
+      "type": "line",
+      "x1": 826,
+      "y1": 877.5,
+      "x2": 952,
+      "y2": 877.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-6",
+      "type": "line",
+      "x1": 826,
+      "y1": 882.0,
+      "x2": 952,
+      "y2": 882.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-7",
+      "type": "line",
+      "x1": 826,
+      "y1": 886.5,
+      "x2": 952,
+      "y2": 886.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-8",
+      "type": "line",
+      "x1": 826,
+      "y1": 891.0,
+      "x2": 952,
+      "y2": 891.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-9",
+      "type": "line",
+      "x1": 826,
+      "y1": 895.5,
+      "x2": 952,
+      "y2": 895.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-10",
+      "type": "line",
+      "x1": 826,
+      "y1": 900.0,
+      "x2": 952,
+      "y2": 900.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-11",
+      "type": "line",
+      "x1": 826,
+      "y1": 904.5,
+      "x2": 952,
+      "y2": 904.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-12",
+      "type": "line",
+      "x1": 826,
+      "y1": 909.0,
+      "x2": 952,
+      "y2": 909.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-13",
+      "type": "line",
+      "x1": 826,
+      "y1": 913.5,
+      "x2": 952,
+      "y2": 913.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-14",
+      "type": "line",
+      "x1": 826,
+      "y1": 918.0,
+      "x2": 952,
+      "y2": 918.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-15",
+      "type": "line",
+      "x1": 826,
+      "y1": 922.5,
+      "x2": 952,
+      "y2": 922.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-16",
+      "type": "line",
+      "x1": 826,
+      "y1": 927.0,
+      "x2": 952,
+      "y2": 927.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-17",
+      "type": "line",
+      "x1": 826,
+      "y1": 931.5,
+      "x2": 952,
+      "y2": 931.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-18",
+      "type": "line",
+      "x1": 826,
+      "y1": 936.0,
+      "x2": 952,
+      "y2": 936.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-19",
+      "type": "line",
+      "x1": 826,
+      "y1": 940.5,
+      "x2": 952,
+      "y2": 940.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-20",
+      "type": "line",
+      "x1": 826,
+      "y1": 945.0,
+      "x2": 952,
+      "y2": 945.0,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-r-21",
+      "type": "line",
+      "x1": 826,
+      "y1": 949.5,
+      "x2": 952,
+      "y2": 949.5,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-0",
+      "type": "line",
+      "x1": 826,
+      "y1": 855,
+      "x2": 826,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-1",
+      "type": "line",
+      "x1": 847,
+      "y1": 855,
+      "x2": 847,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-2",
+      "type": "line",
+      "x1": 868,
+      "y1": 855,
+      "x2": 868,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-3",
+      "type": "line",
+      "x1": 889,
+      "y1": 855,
+      "x2": 889,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-4",
+      "type": "line",
+      "x1": 910,
+      "y1": 855,
+      "x2": 910,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-5",
+      "type": "line",
+      "x1": 931,
+      "y1": 855,
+      "x2": 931,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    },
+    {
+      "id": "seat-6-note-c-6",
+      "type": "line",
+      "x1": 952,
+      "y1": 855,
+      "x2": 952,
+      "y2": 949,
+      "stroke": "#16305c",
+      "strokeWidth": 0.25
+    }
+  ]
+}

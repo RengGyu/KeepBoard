@@ -175,7 +175,7 @@
       },
       {
         "id": "decks",
-        "name": "뽑기·버림",
+        "name": "뽑기 더미",
         "scope": "shared-secret",
         "visibility": "hidden",
         "topology": "stack",
@@ -188,10 +188,54 @@
           "cards",
           "tickets"
         ],
-        "anchor_contract": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
-        "description": "뽑기·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-        "source_refs": [],
+        "anchor_contract": "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
+        "description": "뽑기 더미의 미공개 순서와 방향만 실물 보존한다. 공개 버림은 별도 구역이다.",
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
         "confidence": "recommendation"
+      },
+      {
+        "id": "train-discard",
+        "name": "공개 열차 카드 버림",
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "cards"
+        ],
+        "anchor_contract": "사용한 열차 카드를 앞면으로 모은 버림. 뽑기 더미·진열과 따로 두며 재섞기 전 경계를 유지한다.",
+        "description": "현재 공개 버림의 보이는 카드 정체·수량을 기록하고 가려진 카드는 미확인으로 둔다.",
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
+        "confidence": "reported"
+      },
+      {
+        "id": "train-stock",
+        "name": "플레이어별 남은 열차 말",
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "dynamic": true,
+        "fixed_slot_count": null,
+        "slot_kinds": [
+          "zone"
+        ],
+        "component_ids": [
+          "trains"
+        ],
+        "anchor_contract": "각 플레이어에게 실제로 남은 열차 말 묶음. 색만으로 소유자를 추정하지 않고 명시적으로 연결한다.",
+        "description": "지도 위에 놓인 열차와 분리된, 플레이어별 공개 남은 열차 말의 위치·관측 수량.",
+        "source_refs": [
+          "ticket-to-ride.rules.2025"
+        ],
+        "confidence": "reported"
       }
     ],
     "relations": [],
@@ -274,7 +318,7 @@
     },
     {
       "id": "decks.scene",
-      "label": "뽑기·버림",
+      "label": "뽑기 더미",
       "scope": "shared-secret",
       "visibility": "hidden",
       "type": "component-scene",
@@ -284,7 +328,7 @@
         "manual",
         "physical"
       ],
-      "description": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "description": "열차 카드·목적지 티켓 뽑기 더미의 미공개 순서와 방향. 공개 사용 카드 버림은 포함하지 않는다.",
       "component_ids": [
         "cards",
         "tickets"
@@ -293,8 +337,60 @@
         "decks"
       ],
       "rule_ids": [],
-      "source_refs": [],
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
       "confidence": "recommendation"
+    },
+    {
+      "id": "train-discard.scene",
+      "label": "공개 열차 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "앞면으로 공개된 사용 열차 카드 버림의 현재 장면. 뽑기 더미나 비공개 티켓은 포함하지 않는다.",
+      "component_ids": [
+        "cards"
+      ],
+      "area_ids": [
+        "train-discard"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
+      "confidence": "reported"
+    },
+    {
+      "id": "train-stock.scene",
+      "label": "플레이어별 남은 열차 말",
+      "scope": "player",
+      "visibility": "public",
+      "type": "component-scene",
+      "lifetime": "session",
+      "acquisition": [
+        "photo",
+        "manual",
+        "physical"
+      ],
+      "description": "플레이어별 실제 남은 열차 말의 공개 위치·관측 수량. 사진 밖 말은 추측하지 않는다.",
+      "component_ids": [
+        "trains"
+      ],
+      "area_ids": [
+        "train-stock"
+      ],
+      "rule_ids": [],
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
+      "confidence": "reported"
     },
     {
       "id": "score",
@@ -324,10 +420,16 @@
         "manual"
       ],
       "description": "실제로 남은 말 수; 사진 밖 말은 null.",
-      "component_ids": [],
-      "area_ids": [],
+      "component_ids": [
+        "trains"
+      ],
+      "area_ids": [
+        "train-stock"
+      ],
       "rule_ids": [],
-      "source_refs": [],
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
       "confidence": "recommendation"
     },
     {
@@ -475,7 +577,7 @@
       },
       {
         "id": "decks.preserve",
-        "label": "뽑기·버림 보존(선택)",
+        "label": "뽑기 더미 보존(선택)",
         "scope": "shared-secret",
         "visibility": "hidden",
         "field_ids": [
@@ -484,7 +586,7 @@
         "method": "ordered-bundle",
         "order_sensitive": true,
         "steps": [
-          "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+          "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
           "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
           "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
         ],
@@ -501,7 +603,8 @@
         "visibility": "public",
         "field_ids": [
           "map-area.scene",
-          "market.scene"
+          "market.scene",
+          "train-discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -513,6 +616,27 @@
         ],
         "after": [],
         "source_refs": [
+          "essentials.storage-guidance"
+        ],
+        "confidence": "recommendation"
+      },
+      {
+        "id": "train-stock.preserve",
+        "label": "플레이어별 남은 열차 말 보존(선택)",
+        "scope": "player",
+        "visibility": "public",
+        "field_ids": [
+          "train-stock.scene"
+        ],
+        "method": "manual-note",
+        "order_sensitive": false,
+        "steps": [
+          "지도 위에 놓인 열차와 각 플레이어에게 남은 열차 말을 별도 묶음으로 기록한다.",
+          "실제 소유자·보관 위치·관측 수량을 확인하고, 사진 밖의 말 수는 추측하지 않는다."
+        ],
+        "after": [],
+        "source_refs": [
+          "ticket-to-ride.rules.2025",
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
@@ -530,7 +654,9 @@
   "recognition_correction": {
     "photographable_field_ids": [
       "map-area.scene",
-      "market.scene"
+      "market.scene",
+      "train-discard.scene",
+      "train-stock.scene"
     ],
     "must_ask_field_ids": [],
     "never_infer": [
@@ -650,7 +776,64 @@
           "count",
           "note"
         ],
-        "anchor_strategy": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
+        "anchor_strategy": "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "train-discard.edit",
+        "scope": "public",
+        "component_ids": [
+          "cards"
+        ],
+        "field_ids": [
+          "train-discard.scene"
+        ],
+        "area_ids": [
+          "train-discard"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note"
+        ],
+        "anchor_strategy": "사용한 열차 카드를 앞면으로 모은 버림. 뽑기 더미·진열과 따로 두며 재섞기 전 경계를 유지한다.",
+        "notes": [
+          "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
+          "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
+        ]
+      },
+      {
+        "id": "train-stock.edit",
+        "scope": "player",
+        "component_ids": [
+          "trains"
+        ],
+        "field_ids": [
+          "train-stock.scene"
+        ],
+        "area_ids": [
+          "train-stock"
+        ],
+        "operations": [
+          "add",
+          "remove",
+          "move",
+          "swap",
+          "identity",
+          "count",
+          "note",
+          "orientation",
+          "attachment",
+          "owner"
+        ],
+        "anchor_strategy": "각 플레이어에게 실제로 남은 열차 말 묶음. 색만으로 소유자를 추정하지 않고 명시적으로 연결한다.",
         "notes": [
           "이동·교환·삭제는 저장 기록 정정이며 실제 턴 수행으로 간주하지 않는다.",
           "한 번의 다중 정정은 하나의 Undo 단위. 원본과 기존 숨은 값은 보존한다."
@@ -698,12 +881,21 @@
       "access": "opened",
       "checked_at": "2026-10-22",
       "note": "docs/game-essentials/README.md 및 decisions.json. 기존 장면을 실물로 보존하기 위한 묶음ID·소유/역할·위아래·봉인·보관위치·미확인값 유지 제안. 게임 기작/공개성의 근거로 사용하지 않는다."
+    },
+    {
+      "id": "ticket-to-ride.rules.2025",
+      "title": "Ticket to Ride North America Rules, English ©2025",
+      "url": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2025/07/7201N_TICKET2RIDEV2_RULES_EN_20250425_WEB.pdf",
+      "kind": "official-rules",
+      "access": "opened",
+      "checked_at": "2026-10-26",
+      "note": "PDF pp.2–4: 플레이어별45열차, 공개 열차 카드 진열, 사용한 열차 카드 공개 버림 후 덱 소진 시 재섞기, 비공개 목적지 티켓, 남은 열차0–2개 종료 촉발."
     }
   ],
   "confidence": "reported",
   "gaps": [
     "유럽·다른 독립 지도판은 별도 지도 프로필; 지도 확장은 기본 게임과 요구 부품을 별도 연결.",
-    "복선의 인원별 사용 제한, 기관차 선택 예외, 종료 순서는 원문 규칙서 미대조.",
+    "복선의 인원별 사용 제한과 기관차 선택 예외의 상세 자동 판정은 범위 밖이다. ©2025 북미판의 설정·차례·공개성·종료 흐름만 대조했다.",
     "전체 카드 효과·판본별 정확한 수량·완전한 규칙 판정은 이 연구명세의 완성 범위가 아니다.",
     "실사진 인식, 정정 UI, 제품 팩 변환 및 저장 재열기 실험은 이 산출물에서 수행하지 않았다."
   ]

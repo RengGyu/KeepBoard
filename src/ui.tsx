@@ -6,10 +6,13 @@ import { ComponentArt } from './ComponentArt';
 import { CarcassonneArt } from './CarcassonneArt';
 import { EmptyBoardArt, LoaderMark, type EmptyScene } from './BoardFeedback';
 import { BRAND_IMAGES } from './brandImages';
+import { attachSheetDrag } from './gestures';
 
 export function Modal({ title, children, onClose, wide = false }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
+  const grip = useRef<HTMLDivElement>(null);
+  const header = useRef<HTMLElement>(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   useEffect(() => {
@@ -30,9 +33,15 @@ export function Modal({ title, children, onClose, wide = false }: { title: strin
     document.addEventListener('keydown', handler);
     return () => { document.body.style.overflow = overflow; document.removeEventListener('keydown', handler); prior?.focus(); };
   }, []);
+  // On a phone the dialog is a bottom sheet: drag its handle or header down to close it.
+  useEffect(() => {
+    if (!panel.current || !grip.current || !header.current) return;
+    return attachSheetDrag(panel.current, [grip.current, header.current], () => closeRef.current());
+  }, []);
   const dialog = <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
     <div className={`modal ${wide ? 'modal-wide' : ''}`} ref={panel} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby={titleId}>
-      <header className="modal-header"><h2 id={titleId}>{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><X size={21}/></button></header>
+      <div className="sheet-handle" ref={grip} aria-hidden="true"/>
+      <header className="modal-header" ref={header}><h2 id={titleId}>{title}</h2><button className="icon-button" aria-label="닫기" onClick={onClose}><X size={21}/></button></header>
       {children}
     </div>
   </div>;

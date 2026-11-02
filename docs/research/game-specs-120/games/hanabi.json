@@ -71,9 +71,11 @@
         "component_ids": [
           "cards"
         ],
-        "anchor_contract": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+        "anchor_contract": "현재 각 손패 카드 인스턴스의 소유자 기준 순서·방향과 받은 힌트의 연결을 유지한다. 카드 앞면은 손패 소유자에게 보이지 않게 둔다.",
         "description": "자기에게 숨겨진 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-        "source_refs": [],
+        "source_refs": [
+          "hanabi.primary"
+        ],
         "confidence": "recommendation"
       },
       {
@@ -172,7 +174,7 @@
         "manual",
         "physical"
       ],
-      "description": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다. 각 실물 인스턴스의 종류/소유자/앞뒷면/회전/부착 대상/수량/사진 영역을 독립 보존한다.",
+      "description": "현재 손패 카드 인스턴스별 순서·방향·받은 힌트와의 연결을 실물로 보존한다. 앞면은 소유자에게 보이지 않게 유지한다.",
       "component_ids": [
         "cards"
       ],
@@ -180,7 +182,9 @@
         "hand"
       ],
       "rule_ids": [],
-      "source_refs": [],
+      "source_refs": [
+        "hanabi.primary"
+      ],
       "confidence": "recommendation"
     },
     {
@@ -454,14 +458,15 @@
           "hand.scene"
         ],
         "method": "sealed-bundle",
-        "order_sensitive": false,
+        "order_sensitive": true,
         "steps": [
-          "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
-          "내용을 모르면 펼쳐 확인하지 않고 물리 묶음/소유자와 메모만 남긴다.",
-          "묶음 ID·실제 소유자/허용 역할·봉인 여부·보관 위치를 남긴다. 순서가 있는 묶음은 위/아래 방향과 내부 경계를 유지한다. 내용·수량을 모르면 모름으로 보존하고 펼치지 않는다."
+          "각 플레이어 손패의 현재 카드 순서와 앞뒷면 방향을 유지해 묶고, 카드 앞면이 소유자에게 보이지 않게 한다.",
+          "이미 받은 색/숫자 힌트는 현재 해당 카드 인스턴스와 함께 식별한다. 손패를 재배열했다면 이전 슬롯 순서가 아닌 재배열 후 현재 순서를 기록한다.",
+          "묶음 ID·실제 소유자·보관 위치를 기록한다. 정체를 확인하려 소유자의 카드를 뒤집지 않는다."
         ],
         "after": [],
         "source_refs": [
+          "hanabi.primary",
           "essentials.storage-guidance"
         ],
         "confidence": "recommendation"
@@ -701,8 +706,8 @@
       "url": "https://abacusspiele.de/wp-content/uploads/2021/01/Hanabi_Regel.pdf",
       "kind": "official-rules",
       "access": "opened",
-      "checked_at": "2026-10-21",
-      "note": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분."
+      "checked_at": "2026-10-26",
+      "note": "공식 독일어 규칙2면 전체 텍스트에서 자기 손패 미열람/타인 열람, 색·숫자 힌트, 단서·실수 표식,1~5 불꽃 줄·덱 소진 후 마지막 턴 확인. 이 문서의 힌트0개 허용 등 판본 차이는 그대로 구분. 이번 검토: PDF p.2(인쇄 pp.3–4)의 손패 재배열 허용과 힌트 전달 대상 카드 규칙을 재확인."
     },
     {
       "id": "essentials.storage-guidance",

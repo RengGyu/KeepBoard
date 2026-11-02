@@ -1,0 +1,1483 @@
+{
+  "gameId": "race-for-the-galaxy",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "tableau-player-1",
+      "label": "1번 자리 · 공개 문명 tableau",
+      "field": "tableau.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "세계/발전 카드는 자유 배치한다. 상품으로 사용된 카드는 해당 세계에 face-down으로 부착된 카드로 기록하고 카드·부착 관계를 보존한다.",
+      "bounds": [
+        30,
+        30,
+        286,
+        190
+      ],
+      "placement": "free-card-tableau-with-face-down-goods-attached-to-worlds",
+      "stateKey": "players.player-1.tableau",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-1",
+      "label": "1번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "자원/결제용 카드와 획득 예정 카드도 카드면·용도를 유지해 저장한다. 표준 라운드 종료 시 손패 상한은 10장.",
+      "bounds": [
+        324,
+        30,
+        136,
+        120
+      ],
+      "placement": "private-free-card-hand",
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "actions-player-1",
+      "label": "1번 자리 · 비공개 선택 행동",
+      "field": "actions.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "race-for-the-galaxy-player-1-action-1",
+          "x": 34,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-2",
+          "x": 81,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-3",
+          "x": 128,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-4",
+          "x": 175,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-5",
+          "x": 222,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-6",
+          "x": 269,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-7",
+          "x": 316,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-8",
+          "x": 363,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-1-action-9",
+          "x": 410,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "표준 게임은 7개 기본 행동 카드 중 선택한다. 2인 숙련자 규칙은 9개 카드 중 2개를 선택한다. 남은 두 칸은 2인 숙련자 변형에만 사용한다.",
+      "bounds": [
+        30,
+        236,
+        438,
+        78
+      ],
+      "placement": "secret-action-selection-before-simultaneous-reveal",
+      "stateKey": "players.player-1.selectedActions",
+      "ownerSide": "player-1",
+      "visibility": "owner-until-reveal"
+    },
+    {
+      "id": "vp-player-1",
+      "label": "1번 자리 · 획득 승점 더미",
+      "field": "vp.scene",
+      "scope": "public",
+      "accepts": [
+        "points"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "승점 칩 더미는 플레이어별로 분리한다. 기호 도식은 칩 수나 액면 구성을 고정하지 않는다.",
+      "bounds": [
+        324,
+        160,
+        136,
+        60
+      ],
+      "placement": "variable-vp-chip-pile",
+      "stateKey": "players.player-1.victoryPoints",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "tableau-player-2",
+      "label": "2번 자리 · 공개 문명 tableau",
+      "field": "tableau.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "세계/발전 카드는 자유 배치한다. 상품으로 사용된 카드는 해당 세계에 face-down으로 부착된 카드로 기록하고 카드·부착 관계를 보존한다.",
+      "bounds": [
+        536,
+        30,
+        286,
+        190
+      ],
+      "placement": "free-card-tableau-with-face-down-goods-attached-to-worlds",
+      "stateKey": "players.player-2.tableau",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-2",
+      "label": "2번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "자원/결제용 카드와 획득 예정 카드도 카드면·용도를 유지해 저장한다. 표준 라운드 종료 시 손패 상한은 10장.",
+      "bounds": [
+        830,
+        30,
+        136,
+        120
+      ],
+      "placement": "private-free-card-hand",
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "actions-player-2",
+      "label": "2번 자리 · 비공개 선택 행동",
+      "field": "actions.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "race-for-the-galaxy-player-2-action-1",
+          "x": 540,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-2",
+          "x": 587,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-3",
+          "x": 634,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-4",
+          "x": 681,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-5",
+          "x": 728,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-6",
+          "x": 775,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-7",
+          "x": 822,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-8",
+          "x": 869,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-2-action-9",
+          "x": 916,
+          "y": 245,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "표준 게임은 7개 기본 행동 카드 중 선택한다. 2인 숙련자 규칙은 9개 카드 중 2개를 선택한다. 남은 두 칸은 2인 숙련자 변형에만 사용한다.",
+      "bounds": [
+        536,
+        236,
+        438,
+        78
+      ],
+      "placement": "secret-action-selection-before-simultaneous-reveal",
+      "stateKey": "players.player-2.selectedActions",
+      "ownerSide": "player-2",
+      "visibility": "owner-until-reveal"
+    },
+    {
+      "id": "vp-player-2",
+      "label": "2번 자리 · 획득 승점 더미",
+      "field": "vp.scene",
+      "scope": "public",
+      "accepts": [
+        "points"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "승점 칩 더미는 플레이어별로 분리한다. 기호 도식은 칩 수나 액면 구성을 고정하지 않는다.",
+      "bounds": [
+        830,
+        160,
+        136,
+        60
+      ],
+      "placement": "variable-vp-chip-pile",
+      "stateKey": "players.player-2.victoryPoints",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "tableau-player-3",
+      "label": "3번 자리 · 공개 문명 tableau",
+      "field": "tableau.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "세계/발전 카드는 자유 배치한다. 상품으로 사용된 카드는 해당 세계에 face-down으로 부착된 카드로 기록하고 카드·부착 관계를 보존한다.",
+      "bounds": [
+        30,
+        666,
+        286,
+        190
+      ],
+      "placement": "free-card-tableau-with-face-down-goods-attached-to-worlds",
+      "stateKey": "players.player-3.tableau",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-3",
+      "label": "3번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "자원/결제용 카드와 획득 예정 카드도 카드면·용도를 유지해 저장한다. 표준 라운드 종료 시 손패 상한은 10장.",
+      "bounds": [
+        324,
+        666,
+        136,
+        120
+      ],
+      "placement": "private-free-card-hand",
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "actions-player-3",
+      "label": "3번 자리 · 비공개 선택 행동",
+      "field": "actions.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "race-for-the-galaxy-player-3-action-1",
+          "x": 34,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-2",
+          "x": 81,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-3",
+          "x": 128,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-4",
+          "x": 175,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-5",
+          "x": 222,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-6",
+          "x": 269,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-7",
+          "x": 316,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-8",
+          "x": 363,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-3-action-9",
+          "x": 410,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "표준 게임은 7개 기본 행동 카드 중 선택한다. 2인 숙련자 규칙은 9개 카드 중 2개를 선택한다. 남은 두 칸은 2인 숙련자 변형에만 사용한다.",
+      "bounds": [
+        30,
+        872,
+        438,
+        78
+      ],
+      "placement": "secret-action-selection-before-simultaneous-reveal",
+      "stateKey": "players.player-3.selectedActions",
+      "ownerSide": "player-3",
+      "visibility": "owner-until-reveal"
+    },
+    {
+      "id": "vp-player-3",
+      "label": "3번 자리 · 획득 승점 더미",
+      "field": "vp.scene",
+      "scope": "public",
+      "accepts": [
+        "points"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "승점 칩 더미는 플레이어별로 분리한다. 기호 도식은 칩 수나 액면 구성을 고정하지 않는다.",
+      "bounds": [
+        324,
+        796,
+        136,
+        60
+      ],
+      "placement": "variable-vp-chip-pile",
+      "stateKey": "players.player-3.victoryPoints",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "tableau-player-4",
+      "label": "4번 자리 · 공개 문명 tableau",
+      "field": "tableau.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "세계/발전 카드는 자유 배치한다. 상품으로 사용된 카드는 해당 세계에 face-down으로 부착된 카드로 기록하고 카드·부착 관계를 보존한다.",
+      "bounds": [
+        536,
+        666,
+        286,
+        190
+      ],
+      "placement": "free-card-tableau-with-face-down-goods-attached-to-worlds",
+      "stateKey": "players.player-4.tableau",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-4",
+      "label": "4번 자리 · 비공개 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "자원/결제용 카드와 획득 예정 카드도 카드면·용도를 유지해 저장한다. 표준 라운드 종료 시 손패 상한은 10장.",
+      "bounds": [
+        830,
+        666,
+        136,
+        120
+      ],
+      "placement": "private-free-card-hand",
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "actions-player-4",
+      "label": "4번 자리 · 비공개 선택 행동",
+      "field": "actions.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [
+        {
+          "id": "race-for-the-galaxy-player-4-action-1",
+          "x": 540,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-2",
+          "x": 587,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-3",
+          "x": 634,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-4",
+          "x": 681,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-5",
+          "x": 728,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-6",
+          "x": 775,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-7",
+          "x": 822,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-8",
+          "x": 869,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        },
+        {
+          "id": "race-for-the-galaxy-player-4-action-9",
+          "x": 916,
+          "y": 881,
+          "w": 42,
+          "h": 60,
+          "capacity": 1,
+          "shape": "rect"
+        }
+      ],
+      "note": "표준 게임은 7개 기본 행동 카드 중 선택한다. 2인 숙련자 규칙은 9개 카드 중 2개를 선택한다. 남은 두 칸은 2인 숙련자 변형에만 사용한다.",
+      "bounds": [
+        536,
+        872,
+        438,
+        78
+      ],
+      "placement": "secret-action-selection-before-simultaneous-reveal",
+      "stateKey": "players.player-4.selectedActions",
+      "ownerSide": "player-4",
+      "visibility": "owner-until-reveal"
+    },
+    {
+      "id": "vp-player-4",
+      "label": "4번 자리 · 획득 승점 더미",
+      "field": "vp.scene",
+      "scope": "public",
+      "accepts": [
+        "points"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "승점 칩 더미는 플레이어별로 분리한다. 기호 도식은 칩 수나 액면 구성을 고정하지 않는다.",
+      "bounds": [
+        830,
+        796,
+        136,
+        60
+      ],
+      "placement": "variable-vp-chip-pile",
+      "stateKey": "players.player-4.victoryPoints",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "tableau-player-3",
+        "hand-player-3",
+        "actions-player-3",
+        "vp-player-3",
+        "tableau-player-4",
+        "hand-player-4",
+        "actions-player-4",
+        "vp-player-4"
+      ],
+      "hideNumericTracks": []
+    },
+    "3": {
+      "hideAreas": [
+        "tableau-player-4",
+        "hand-player-4",
+        "actions-player-4",
+        "vp-player-4"
+      ],
+      "hideNumericTracks": []
+    },
+    "4": {
+      "hideAreas": [],
+      "hideNumericTracks": []
+    }
+  },
+  "notes": [
+    "Second Edition base game only. Expansions, goals, prestige, Orb module, and fifth/sixth player pieces are excluded.",
+    "There is no fixed public card market; the public card zones are tableau, shared deck/discard, action reveal and VP piles.",
+    "The five center circles only convey phase order; their visual color is not a player choice or phase-result encoding.",
+    "The two extra action card positions are for the experienced two-player variant only."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://www.riograndegames.com/games/race-for-the-galaxy/",
+      "location": "Rio Grande Games official Second Edition product page",
+      "verifiedFacts": "Second Edition base game supports 2–4 players and explicitly distinguishes the Second Edition from expansions.",
+      "access": "opened",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-product-page"
+    },
+    {
+      "url": "https://www.riograndegames.com/wp-content/uploads/2013/02/RFTG_2e_rules.pdf",
+      "location": "Rio Grande Games official Second Edition rules, pp.1–8",
+      "verifiedFacts": "Seven standard action cards; two-player experienced variant uses all nine and chooses two. Five phases resolve in order when selected; players choose secretly/simultaneously; cards can be tableau, payment, or face-down goods attached to worlds; end of round hand limit 10.",
+      "access": "official-primary-source-directly-reviewed-through-publisher-indexed-text",
+      "checkedAt": "2026-10-30",
+      "sourceType": "official-rulebook"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "full-table-schematic",
+  "assetScope": "Full original table schematic and state contract for Race for the Galaxy Second Edition base game: up to four public card tableaus, private hands, simultaneous action-card selection, shared draw/discard zones, phase order aid, and player/shared VP piles. App integration remains separate.",
+  "tableModel": {
+    "schema": "race-for-the-galaxy-table-v1",
+    "edition": "Second Edition base game; Rio Grande Games official rules",
+    "applicationIntegration": "asset-only; no app, save-store, or editor integration is performed by this package",
+    "playerRange": {
+      "min": 2,
+      "max": 4
+    },
+    "componentInventory": {
+      "playerCount": {
+        "min": 2,
+        "max": 4
+      },
+      "actionCardsPerPlayer": {
+        "standard": 7,
+        "advancedTwoPlayer": 9
+      },
+      "phaseTypes": [
+        "explore",
+        "develop",
+        "settle",
+        "consume",
+        "produce"
+      ],
+      "victoryPointChips": "shared finite supply; exact denominations/count are not asserted here",
+      "gameCards": "shared deck; includes selected start worlds in the base setup"
+    },
+    "coordinates": {
+      "viewBox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "origin": "top-left",
+      "units": "SVG viewBox units",
+      "areaBounds": "[x,y,width,height]"
+    },
+    "fieldBindings": [
+      {
+        "key": "tableau.scene",
+        "scope": "player",
+        "areaIds": [
+          "tableau-player-1",
+          "tableau-player-2",
+          "tableau-player-3",
+          "tableau-player-4"
+        ],
+        "meaning": "Public worlds and developments placed in a player tableau; preserve order/relative position, card identity/type, face, and attached face-down goods."
+      },
+      {
+        "key": "hand.scene",
+        "scope": "player",
+        "areaIds": [
+          "hand-player-1",
+          "hand-player-2",
+          "hand-player-3",
+          "hand-player-4"
+        ],
+        "meaning": "Owner-private cards in exact hand order; do not reveal in other player views."
+      },
+      {
+        "key": "actions.scene",
+        "scope": "player",
+        "areaIds": [
+          "actions-player-1",
+          "actions-player-2",
+          "actions-player-3",
+          "actions-player-4"
+        ],
+        "meaning": "Selected action card(s), initially hidden until all players reveal simultaneously; record which optional two-player action set is active."
+      },
+      {
+        "key": "vp.scene",
+        "scope": "public",
+        "areaIds": [
+          "vp-player-1",
+          "vp-player-2",
+          "vp-player-3",
+          "vp-player-4"
+        ],
+        "meaning": "Public VP chips owned by each player; separate from the shared unclaimed chip bank."
+      }
+    ],
+    "stateShape": {
+      "playerCount": 2,
+      "variant": "standard|advanced-two-player|unknown",
+      "clockwiseOrder": [
+        "player-id"
+      ],
+      "round": 1,
+      "phaseResolutionIndex": 0,
+      "players": [
+        {
+          "playerId": "id",
+          "tableau": [
+            {
+              "cardId": "id",
+              "cardType": "world|development|unknown",
+              "face": "up|down|unknown",
+              "goods": [
+                {
+                  "cardId": "id",
+                  "face": "down",
+                  "attachedTo": "world-card-id"
+                }
+              ]
+            }
+          ],
+          "handCardIds": [
+            "private-card-id"
+          ],
+          "selectedActionCardIds": [],
+          "selectedActionsRevealed": false,
+          "victoryPointChipCount": null
+        }
+      ],
+      "roundState": {
+        "selectedPhaseIds": [],
+        "resolvedPhaseIds": [],
+        "currentPhase": "explore|develop|settle|consume|produce|unknown",
+        "actionSelectionComplete": false
+      },
+      "shared": {
+        "deckCount": null,
+        "deckOrder": "hidden-or-unknown",
+        "discardCardIds": [],
+        "vpSupplyCount": null
+      },
+      "unknownPolicy": "Unknown card identities, face state, payment cards, or hidden deck order remain null/unknown; never infer a card power from a generic drawn shape."
+    },
+    "roundCheckpoint": [
+      "At the start of each round, players simultaneously choose one action card secretly; reveal together after all have chosen.",
+      "In the experienced two-player variant each player uses all nine action cards and chooses two; some selected phases may therefore resolve twice according to that variant’s rule.",
+      "Resolve only selected phases, in order: I Explore, II Develop, III Settle, IV Consume, V Produce. The phase action applies to all players and the chooser receives that phase bonus.",
+      "Cards have three uses: tableau card, one unit of payment/wealth, or a face-down good attached to a world. Preserve card identity, face, use and attachment.",
+      "After chosen phases resolve, discard down to ten cards in hand and reclaim the action card(s) used that round."
+    ],
+    "visualZones": [
+      {
+        "areaId": "tableau-player-1",
+        "role": "public world/development tableau with face-down goods attached to worlds",
+        "boardArtIds": [
+          "player-1-tableau-frame"
+        ]
+      },
+      {
+        "areaId": "tableau-player-2",
+        "role": "public world/development tableau with face-down goods attached to worlds",
+        "boardArtIds": [
+          "player-2-tableau-frame"
+        ]
+      },
+      {
+        "areaId": "tableau-player-3",
+        "role": "public world/development tableau with face-down goods attached to worlds",
+        "boardArtIds": [
+          "player-3-tableau-frame"
+        ]
+      },
+      {
+        "areaId": "tableau-player-4",
+        "role": "public world/development tableau with face-down goods attached to worlds",
+        "boardArtIds": [
+          "player-4-tableau-frame"
+        ]
+      },
+      {
+        "areaId": "hand-player-1",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-1-hand-frame"
+        ]
+      },
+      {
+        "areaId": "hand-player-2",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-2-hand-frame"
+        ]
+      },
+      {
+        "areaId": "hand-player-3",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-3-hand-frame"
+        ]
+      },
+      {
+        "areaId": "hand-player-4",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-4-hand-frame"
+        ]
+      },
+      {
+        "areaId": "actions-player-1",
+        "role": "secret action selection before simultaneous reveal; 7 standard or 9 advanced two-player cards",
+        "boardArtIds": [
+          "player-1-actions-frame"
+        ]
+      },
+      {
+        "areaId": "actions-player-2",
+        "role": "secret action selection before simultaneous reveal; 7 standard or 9 advanced two-player cards",
+        "boardArtIds": [
+          "player-2-actions-frame"
+        ]
+      },
+      {
+        "areaId": "actions-player-3",
+        "role": "secret action selection before simultaneous reveal; 7 standard or 9 advanced two-player cards",
+        "boardArtIds": [
+          "player-3-actions-frame"
+        ]
+      },
+      {
+        "areaId": "actions-player-4",
+        "role": "secret action selection before simultaneous reveal; 7 standard or 9 advanced two-player cards",
+        "boardArtIds": [
+          "player-4-actions-frame"
+        ]
+      },
+      {
+        "areaId": "vp-player-1",
+        "role": "public earned VP pile",
+        "boardArtIds": [
+          "player-1-vp-frame"
+        ]
+      },
+      {
+        "areaId": "vp-player-2",
+        "role": "public earned VP pile",
+        "boardArtIds": [
+          "player-2-vp-frame"
+        ]
+      },
+      {
+        "areaId": "vp-player-3",
+        "role": "public earned VP pile",
+        "boardArtIds": [
+          "player-3-vp-frame"
+        ]
+      },
+      {
+        "areaId": "vp-player-4",
+        "role": "public earned VP pile",
+        "boardArtIds": [
+          "player-4-vp-frame"
+        ]
+      },
+      {
+        "role": "Shared draw/discard and phase aid; central icons do not indicate a selected result",
+        "boardArtIds": [
+          "shared-center-frame",
+          "game-deck-stack-back",
+          "game-deck-stack-top",
+          "discard-pile-back",
+          "discard-pile-top"
+        ]
+      },
+      {
+        "role": "VP bank; abstract icons do not claim the number or denomination of physical chips",
+        "boardArtIds": [
+          "shared-vp-bank-frame"
+        ]
+      }
+    ],
+    "unknownPolicy": "Preserve missing/hidden deck and hand facts as unknown; keep selected action secrecy until reveal and do not infer action choice or card powers from schematic positions.",
+    "ruleAutomation": "No automated phase selection/resolution, card power, payment, military, scoring, or game-end evaluator is included; this asset captures state boundaries for save/resume."
+  },
+  "assetCompleteness": {
+    "completeStructures": [
+      "2–4 player table positions",
+      "each player public world/development tableau",
+      "face-down good-card attachment relation",
+      "each player private hand",
+      "7 standard action-card positions plus 2 optional advanced two-player action cards",
+      "shared draw/discard piles",
+      "five phase order markers",
+      "player VP piles and shared VP bank"
+    ],
+    "excluded": [
+      "expansions, expansion goals, prestige, orb game, fifth/sixth player material"
+    ],
+    "notAutomated": [
+      "phase resolution and action bonuses",
+      "card powers and military comparisons",
+      "hand/payment legality",
+      "end condition and final scoring"
+    ]
+  },
+  "boardArt": [
+    {
+      "id": "player-1-tableau-frame",
+      "type": "rect",
+      "x": 30,
+      "y": 30,
+      "w": 286,
+      "h": 190,
+      "rx": 14,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-hand-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 30,
+      "w": 136,
+      "h": 120,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-vp-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 160,
+      "w": 136,
+      "h": 60,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-actions-frame",
+      "type": "rect",
+      "x": 30,
+      "y": 236,
+      "w": 438,
+      "h": 78,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-seat-marker",
+      "type": "circle",
+      "cx": 47,
+      "cy": 51,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-tableau-frame",
+      "type": "rect",
+      "x": 536,
+      "y": 30,
+      "w": 286,
+      "h": 190,
+      "rx": 14,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-hand-frame",
+      "type": "rect",
+      "x": 830,
+      "y": 30,
+      "w": 136,
+      "h": 120,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-vp-frame",
+      "type": "rect",
+      "x": 830,
+      "y": 160,
+      "w": 136,
+      "h": 60,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-actions-frame",
+      "type": "rect",
+      "x": 536,
+      "y": 236,
+      "w": 438,
+      "h": 78,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-seat-marker",
+      "type": "circle",
+      "cx": 553,
+      "cy": 51,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-tableau-frame",
+      "type": "rect",
+      "x": 30,
+      "y": 666,
+      "w": 286,
+      "h": 190,
+      "rx": 14,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-hand-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 666,
+      "w": 136,
+      "h": 120,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-vp-frame",
+      "type": "rect",
+      "x": 324,
+      "y": 796,
+      "w": 136,
+      "h": 60,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-actions-frame",
+      "type": "rect",
+      "x": 30,
+      "y": 872,
+      "w": 438,
+      "h": 78,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-seat-marker",
+      "type": "circle",
+      "cx": 47,
+      "cy": 687,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-tableau-frame",
+      "type": "rect",
+      "x": 536,
+      "y": 666,
+      "w": 286,
+      "h": 190,
+      "rx": 14,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-hand-frame",
+      "type": "rect",
+      "x": 830,
+      "y": 666,
+      "w": 136,
+      "h": 120,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-vp-frame",
+      "type": "rect",
+      "x": 830,
+      "y": 796,
+      "w": 136,
+      "h": 60,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-actions-frame",
+      "type": "rect",
+      "x": 536,
+      "y": 872,
+      "w": 438,
+      "h": 78,
+      "rx": 12,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-seat-marker",
+      "type": "circle",
+      "cx": 553,
+      "cy": 687,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-center-frame",
+      "type": "rect",
+      "x": 300,
+      "y": 340,
+      "w": 400,
+      "h": 300,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "game-deck-stack-back",
+      "type": "rect",
+      "x": 322,
+      "y": 362,
+      "w": 58,
+      "h": 84,
+      "rx": 6,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "game-deck-stack-top",
+      "type": "rect",
+      "x": 328,
+      "y": 356,
+      "w": 58,
+      "h": 84,
+      "rx": 6,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "discard-pile-back",
+      "type": "rect",
+      "x": 402,
+      "y": 362,
+      "w": 58,
+      "h": 84,
+      "rx": 6,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "discard-pile-top",
+      "type": "rect",
+      "x": 408,
+      "y": 356,
+      "w": 58,
+      "h": 84,
+      "rx": 6,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "phase-marker-1",
+      "type": "circle",
+      "cx": 497,
+      "cy": 397,
+      "r": 15,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "phase-marker-2",
+      "type": "circle",
+      "cx": 535,
+      "cy": 397,
+      "r": 15,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "phase-marker-3",
+      "type": "circle",
+      "cx": 573,
+      "cy": 397,
+      "r": 15,
+      "fill": "#e8bb35",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "phase-marker-4",
+      "type": "circle",
+      "cx": 611,
+      "cy": 397,
+      "r": 15,
+      "fill": "#b8dfb0",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "phase-marker-5",
+      "type": "circle",
+      "cx": 649,
+      "cy": 397,
+      "r": 15,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "shared-vp-bank-frame",
+      "type": "rect",
+      "x": 322,
+      "y": 475,
+      "w": 356,
+      "h": 130,
+      "rx": 14,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "vp-bank-icon-1",
+      "type": "circle",
+      "cx": 350,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "vp-bank-icon-2",
+      "type": "circle",
+      "cx": 403,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "vp-bank-icon-3",
+      "type": "circle",
+      "cx": 456,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "vp-bank-icon-4",
+      "type": "circle",
+      "cx": 509,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "vp-bank-icon-5",
+      "type": "circle",
+      "cx": 562,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "vp-bank-icon-6",
+      "type": "circle",
+      "cx": 615,
+      "cy": 520,
+      "r": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "world-with-good-example",
+      "type": "rect",
+      "x": 367,
+      "y": 548,
+      "w": 36,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "attached-good-example",
+      "type": "rect",
+      "x": 384,
+      "y": 565,
+      "w": 30,
+      "h": 40,
+      "rx": 4,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "strokeDasharray": "4 3"
+    }
+  ]
+}

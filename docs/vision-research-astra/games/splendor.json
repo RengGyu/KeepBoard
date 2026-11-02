@@ -17,10 +17,10 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/splendor.json",
-    "sha256": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+    "sha256": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450",
     "runtime_pack_id": "splendor",
-    "runtime_pack_version": "1.0.0-essentials-2.c3ee02f2da3a",
-    "runtime_match": false
+    "runtime_pack_version": "1.0.0-essentials-2.334af0a2f55b",
+    "runtime_match": true
   },
   "basis": {
     "contract": "RECOMMENDATION",
@@ -39,7 +39,7 @@
     ],
     "whole_game_rules_verified": false,
     "real_photo_accuracy_verified": false,
-    "source_revision_pending_runtime_regeneration": true
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "카드 비용 하단·보너스 상단·점수까지 한 카드 전체",
   "critical_resume_distinction": "개발 비용/영구 보너스/귀족 요구/실물 토큰 수를 다른 값으로 유지",
@@ -329,9 +329,13 @@
       ],
       "confidence": "recommendation",
       "partition": "common_public",
-      "capture_allowed_current": false,
-      "current_ai_destination_fields": [],
-      "current_manual_target_fields": [],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "chip-supply.scene"
+      ],
+      "current_manual_target_fields": [
+        "chip-supply.scene"
+      ],
       "source_field_ids": [
         "chip-supply.scene"
       ],
@@ -340,7 +344,7 @@
       ],
       "owner_binding": "explicit user/roster binding only; no seat/color inference",
       "capture_instruction": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다. 새 판본·팩 생성 전에는 현재 앱 대상 필드가 아니다.",
-      "capture_access": "public evidence; explicit owner binding for player areas",
+      "capture_access": "public evidence",
       "evidence_contract": {
         "original_id_required": true,
         "original_region": "normalized crop in this source only; not game coordinates",
@@ -441,6 +445,11 @@
         "visibility": "public"
       },
       {
+        "key": "chip-supply.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -459,6 +468,10 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "player.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "decks.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -601,7 +614,8 @@
         "visibility": "public",
         "field_ids": [
           "market.scene",
-          "noble-area.scene"
+          "noble-area.scene",
+          "chip-supply.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -710,6 +724,12 @@
         "name": "예약 카드",
         "needs": "예약 카드 정체는 소유자 범위. 공개로 예약한 이력은 별도 확정하지 않는다.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "chip-supply",
+        "name": "공용 보석·금 공급",
+        "needs": "중앙의 색별 보석·금 토큰 공급을 플레이어 보유 토큰과 분리한다. 사진에 보이는 실물 수량만 기록하고 규칙상 총량으로 보충하지 않는다.",
+        "access": "public evidence"
       }
     ],
     "do_not_collect": [
@@ -725,7 +745,7 @@
   "current_board_mapping": {
     "gameId": "splendor",
     "editionId": "base",
-    "sourceSHA": "c3ee02f2da3a6e956e54c550442734e1f0f3eb885da8206aaa49b66ec0149d46",
+    "sourceSHA": "334af0a2f55b91766036650075a0884cab522defa18b581b600acf2795982450",
     "status": "new",
     "areas": [
       {
@@ -823,6 +843,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "chip-supply",
+        "label": "공용 보석·금 공급",
+        "fieldKeys": [
+          "chip-supply.scene"
+        ],
+        "componentIds": [
+          "chips"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "splendor.rules-current"
+        ],
+        "sourceConfidence": "recommendation",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

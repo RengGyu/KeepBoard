@@ -22,6 +22,8 @@ export interface GamePack {
   id: string; version: string; title: string; edition: string; description: string;
   sources: { id: string; title: string; url: string; section: string }[];
   placement?: { topology: string; slots: { kind: string; locationTypes: ('hex' | 'edge' | 'vertex' | 'area' | 'unplaced')[] }[] };
+  // Complete base-set inventory, not an expected count for a partial photograph.
+  catanNumberInventory?: { values: number[]; sourceId: string };
   fields: FieldDefinition[]; requirements: Requirement[]; derivedRules: DerivedRule[];
   preservationTemplates: PreservationTemplate[]; supportGaps: string[];
 }
@@ -30,7 +32,7 @@ export interface Evidence {
   id: string; url: string; capturedAt: string; captureEpoch: string;
   label: string; scope: Scope; ownerId?: string;
   kind: 'photo' | 'note' | 'example'; width?: number; height?: number;
-  sourceEvidenceId?: string; captureTarget?: CaptureTarget;
+  sourceEvidenceId?: string; sourceRegion?: {x:number;y:number;width:number;height:number}; captureTarget?: CaptureTarget;
 }
 export interface Assertion {
   id: string; field: string; value: Value; ownerId?: string;
@@ -86,6 +88,6 @@ export interface SessionView {
   progress: { resolved: number; total: number }; differences: RestoreDifference[];
   actions?: PlannedAction[];
 }
-export interface AnalysisResult { assertions: Assertion[]; summary: string; mode: 'live' | 'example' | 'manual'; warnings: string[]; observationReceipts?: import('./lightweightRecognition').ObservationReceipt[] }
+export interface AnalysisResult { assertions: Assertion[]; summary: string; mode: 'live' | 'example' | 'manual'; warnings: string[]; observationReceipts?: import('./lightweightRecognition').ObservationReceipt[]; scanBundle?:import('./scanObservation').ScanBundleReceipt }
 export interface AISettings { provider: 'gemini' | 'openai' | 'gateway'; model: string; apiKey?: string; baseUrl?: string }
 export interface AIStatus { configured: boolean; provider: AISettings['provider']; model: string; baseUrl?: string; alias?: string; upstreamProvider?: string; reasoningEffort?: string }

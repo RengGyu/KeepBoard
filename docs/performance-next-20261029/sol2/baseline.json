@@ -1,0 +1,21 @@
+{
+  "fixture": "synthetic, one public photo, one red player",
+  "promptChars": 14893,
+  "schemaChars": 4253,
+  "files": {
+    "server/ai/catanSceneReading.ts": "d89caf23705771a6c5113cef83f0ab669f0beb8b82bf3c8d881aa8cbb9b885bf",
+    "server/ai/geminiGameReader.ts": "82850b9bc1d0b6d8099da2b8f49d1cfb4b66fa46db320287dec7a9ce2e91a311",
+    "tests/catan-native-scene-connection.test.ts": "003bdf47675d756857a1e0da26d7134376bc77f942b13f94fcb73c05c45428fa"
+  },
+  "nativeBaseline": {
+    "command": "node --import tsx --test tests/catan-native-scene-connection.test.ts",
+    "passed": 8,
+    "failed": 0
+  },
+  "relatedBaseline": {
+    "command": "node --import tsx --test tests/gemini-game-observation.test.ts tests/gemini-game-api.test.ts tests/gemini-partial-results.test.ts tests/scan-parallel-workflow.test.ts tests/scan-recognition-integration.test.ts",
+    "passed": 26,
+    "failed": 1,
+    "failure": "gemini-game-api fixture overrides read() but current native route calls readCatanScene(); supervisor owns repair"
+  }
+}

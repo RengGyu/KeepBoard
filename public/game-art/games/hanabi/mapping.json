@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/hanabi.json",
-  "source_sha256": "b9f638a79062e8b5530e9692f44b66b8d8acf5f1e2e00d565cca7228c73a5fad",
+  "source_sha256": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -129,9 +129,11 @@
       "component_ids": [
         "cards"
       ],
-      "anchor_contract": "소유자 기준 손패 슬롯 순서·방향. 카드 정체는 소유자를 제외한 참가자만 본다.",
+      "anchor_contract": "현재 각 손패 카드 인스턴스의 소유자 기준 순서·방향과 받은 힌트의 연결을 유지한다. 카드 앞면은 손패 소유자에게 보이지 않게 둔다.",
       "description": "자기에게 숨겨진 손패의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "source_refs": [
+        "hanabi.primary"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-track",

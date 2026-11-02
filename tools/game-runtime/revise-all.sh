@@ -5,7 +5,7 @@
 # review the printed contract diff, then update APPROVED_CONTRACT.sha256 and rerun.
 set -e
 cd "$(dirname "$0")/../.."
-npx tsx tools/game-runtime/revision-ledger.ts --write
+npx tsx tools/game-runtime/revision-ledger.ts --check
 npx tsx tools/game-runtime/generate.ts
 npx tsx tools/game-runtime/revise-inputs.ts inputs
 python3 tools/readouts/generate.py --report-dir "${READOUT_REPORT_DIR:-${TMPDIR:-/tmp}/keepboard-readout-report}"

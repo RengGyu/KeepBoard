@@ -1,0 +1,155 @@
+{
+  "caseId": "new-kingdomino",
+  "gameId": "kingdomino",
+  "imageSHA": "fd240d70062115c0b94e66cad1dc9afa53e34f5fda1fd1f99d35e45b9da4cb69",
+  "width": 1600,
+  "height": 1200,
+  "definitionSHA": "e004a6b786f213d4f8abcd1a0da2915cf8fc25581d11301ca40e47f6709e1fc9",
+  "packId": "kingdomino",
+  "areaId": "kingdom",
+  "partition": "player_public",
+  "annotationSource": "independent AI visual annotation, not human-certified",
+  "annotatedAt": "2026-11-01T16:15:38.292568+00:00",
+  "directOriginalViewed": true,
+  "modelOutputsViewed": false,
+  "exhaustiveVisibleInventory": false,
+  "assessedRegion": {
+    "description": "Entire foreground kingdom photographed; all unequivocal separated physical units plus unresolved touching-tile region, not a sparse chosen object sample.",
+    "coordinateBasis": "full source photo pixels; approximate tight axis-aligned envelopes; no crop or image enhancement",
+    "offAreaExcluded": [
+      "Clipped other-player tiles/meeple along top photo edge are outside selected foreground kingdom.",
+      "Illustrated animals, crowns, boats and windmill are print, not separate playing pieces."
+    ]
+  },
+  "objects": [
+    {
+      "id": "top-mine-field-domino",
+      "componentId": "dominoes",
+      "boxPx": [
+        682,
+        139,
+        900,
+        391
+      ],
+      "physicalUnit": "single",
+      "quantity": 1,
+      "attributes": {
+        "face": "front",
+        "firstTerrain": "dark mine",
+        "firstCrowns": 3,
+        "secondTerrain": "yellow field",
+        "secondCrowns": 0
+      },
+      "unknownAttributes": {
+        "printedName": "not-present-unconfirmed",
+        "tileNumber": "wrong-face"
+      },
+      "notes": "Whole vertical domino has an isolated visible outer boundary; first half is image-top, second image-bottom. Back number is not visible."
+    },
+    {
+      "id": "left-water-domino",
+      "componentId": "dominoes",
+      "boxPx": [
+        94,
+        554,
+        465,
+        1058
+      ],
+      "physicalUnit": "single",
+      "quantity": 1,
+      "attributes": {
+        "face": "front",
+        "firstTerrain": "water",
+        "firstCrowns": 0,
+        "secondTerrain": "water",
+        "secondCrowns": 0
+      },
+      "unknownAttributes": {
+        "printedName": "not-present-unconfirmed",
+        "tileNumber": "wrong-face"
+      },
+      "notes": "Single tall left physical rectangle with clear outer edges; upper/lower halves both blue water with no visible crowns."
+    },
+    {
+      "id": "touching-kingdom-dominoes",
+      "componentId": "dominoes",
+      "boxPx": [
+        439,
+        244,
+        1588,
+        1055
+      ],
+      "physicalUnit": "group",
+      "quantity": null,
+      "attributes": {
+        "face": "front"
+      },
+      "unknownAttributes": {
+        "printedName": "not-present-unconfirmed",
+        "firstTerrain": "ambiguous",
+        "firstCrowns": "ambiguous",
+        "secondTerrain": "ambiguous",
+        "secondCrowns": "ambiguous",
+        "tileNumber": "wrong-face"
+      },
+      "notes": "All remaining touching land dominoes are represented non-additively. Printed half-cell seams cannot reliably be assigned to whole physical two-cell tiles under castle/oblique view; do not infer pairings from inventory or adjacent equal terrains."
+    },
+    {
+      "id": "blue-castle",
+      "componentId": "markers",
+      "boxPx": [
+        939,
+        401,
+        1236,
+        726
+      ],
+      "physicalUnit": "single",
+      "quantity": 1,
+      "attributes": {
+        "observedColor": "blue",
+        "markerType": "castle"
+      },
+      "unknownAttributes": {},
+      "notes": "One assembled castle, not each interlocking cardboard wall. Owner unknown."
+    }
+  ],
+  "uncertainRegions": [
+    {
+      "id": "touching-domino-seams",
+      "representedBy": "touching-kingdom-dominoes",
+      "reason": "Complete terrain artwork visible but physical domino memberships uncertain; no count template or rules-based reconstruction."
+    },
+    {
+      "id": "castle-base",
+      "boxPx": [
+        939,
+        537,
+        1240,
+        755
+      ],
+      "reason": "Partly covered start-square surface is visible; no unambiguous separate supported marker-versus-domino classification. Kept outside individual count."
+    }
+  ],
+  "goalNotes": {
+    "photoSufficientForVisibleLayout": false,
+    "unobservableState": [
+      "owner identity",
+      "current player / turn / phase",
+      "hidden faces or unseen contents",
+      "history and unresolved effects"
+    ],
+    "restorationRisks": [
+      "Physical domino pairing is uncertain; cannot score exhaustive individual domino recovery.",
+      "Two terrain/crown half annotations are only for the isolated dominoes; not all visible printed terrain squares.",
+      "Castle occludes boundaries and reverse-side tile numbers are unseen."
+    ]
+  },
+  "coverage": {
+    "referenceRows": 4,
+    "singleRows": 3,
+    "groupRows": 1,
+    "observedAttributes": 13,
+    "unknownAttributes": 10,
+    "fullPhotoAccuracyDenominator": null
+  }
+}

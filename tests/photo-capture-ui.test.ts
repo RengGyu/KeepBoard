@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import React from 'react';import {register} from 'node:module';import packs from '../gamepacks/generated/game-essentials.json';import {effectiveRecognitionPack} from '../shared/recognition';
 register('../docs/board-story/feedback/skip-css.mjs',import.meta.url);globalThis.window={addEventListener(){},removeEventListener(){}} as unknown as Window&typeof globalThis;
-const {default:SessionWorkspace}=await import('../src/SessionWorkspace');const {PhotoCaptureGuide,captureGuideText}=await import('../src/PhotoCaptureGuide');const {CameraDialog}=await import('../src/Capture');const {api}=await import('../src/api');
+const {default:SessionWorkspace}=await import('../src/SessionWorkspace');const {PhotoCaptureGuide,captureGuideText}=await import('../src/PhotoCaptureGuide');const {CameraDialog}=await import('../src/Capture');const {LightweightReaderControls}=await import('../src/LightweightReaderControls');const {api}=await import('../src/api');
 // Controlled actual component events/effects; not a DOM renderer or a browser-click claim.
 function mount(component:(props:any)=>any,initial:any){
  const internals=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,slots:any[]=[];let props=initial,cursor=0,pending:(()=>void)[]=[],tree:any;
@@ -18,12 +18,25 @@ const find=(tree:any,predicate:(node:any)=>boolean)=>{const node=nodes(tree).fin
 
 
 function view(){const pack=effectiveRecognitionPack(structuredClone((packs as any[]).find(p=>p.id==='splendor')));return {pack,session:{id:'synthetic-photo-ui',name:'합성',players:[{id:'p1',name:'시험',color:'red'}],stage:'capture',captureEpoch:'epoch',turnInstanceId:'turn',assertions:[],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[]};}
+test('camera starts with manual photos and automatic capture requires an explicit choice',()=>{
+ const previous=globalThis.document;globalThis.document={addEventListener(){},removeEventListener(){}} as unknown as Document;
+ const ui=mount(CameraDialog,{onClose(){},async onCapture(){throw new Error('No capture expected');}});
+ try{
+  assert.equal(find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.checked,false);
+  assert.equal(find(ui.tree,n=>n.type==='button'&&Array.isArray(n.props.children)&&n.props.children.includes('사진 찍기')).props.className,'button primary');
+  find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.onChange({target:{checked:true}});ui.render();
+  assert.equal(find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.checked,true);
+  find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.onChange({target:{checked:false}});ui.render();
+  assert.equal(find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.checked,false);
+ }finally{ui.dispose();globalThis.document=previous;}
+});
 test('actual workspace capture events bind selected part, postpone multi-photo analysis until explicit same-state answer, and show camera guidance',async()=>{
  const oldJobs=api.analysisJobs,oldEvidence=api.evidence,oldStart=api.startAnalysisJob;api.analysisJobs=async()=>({jobs:[]});let count=0,starts:any[]=[],uploads:any[]=[];
  api.evidence=async(_id,body)=>{uploads.push(body);const id='synthetic-'+(++count);return {createdEvidenceId:id,session:{evidence:[{id,...body,captureEpoch:'epoch',kind:'photo'}]}} as any;};api.startAnalysisJob=async(_id,body)=>{starts.push(body);return {job:{id:'synthetic-job',sessionId:'synthetic-photo-ui',evidenceIds:body.evidenceIds,captureEpoch:'epoch',state:'queued'}} as any;};
  const ui=mount(SessionWorkspace,{view:view(),busy:false,status:{configured:true},mutate:async(task:()=>Promise<any>)=>task(),onBack(){},setOwnerId:async()=>{},onToast(){}});
  try{
-  find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('player');ui.render();find(ui.tree,n=>n.type==='button'&&n.props['aria-label']==='판 스캔').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();
+  find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('existing');ui.render();
+  find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('player');ui.render();find(ui.tree,n=>n.type==='button'&&n.props['aria-label']==='판 찍기').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();
   const camera=find(ui.tree,n=>n.type===CameraDialog);assert.match(camera.props.guidance,/구매 카드/);await camera.props.onCapture({dataUrl:'synthetic',label:'one'});await camera.props.onCapture({dataUrl:'synthetic',label:'two'});await camera.props.onClose();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,0);assert(uploads.every(b=>b.captureTarget.areaId==='player'));
   find(ui.tree,n=>n.type==='button'&&n.props.children==='네, 함께 읽기').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,1);assert.equal(starts[0].sameStaticState,true);assert.equal(starts[0].captureTarget.areaId,'player');assert.deepEqual(starts[0].evidenceIds,['synthetic-1','synthetic-2']);
  }finally{ui.dispose();api.analysisJobs=oldJobs;api.evidence=oldEvidence;api.startAnalysisJob=oldStart;}

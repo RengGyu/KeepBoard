@@ -1,0 +1,502 @@
+/* Hallmark · shape: app screen · genre: playful · theme: brand · redesign: full
+ * paper: the lobby sky (--bg) · accent: lobby blue (--accent) with the sun yellow for new boards · display: Jua · body: Pretendard
+ * nav: top HUD bar on wide screens, a three-tab bar (홈, 보관함, 게임) on phones · signature: kept, the save-slot board cards · states: loading, empty, error, full
+ * axes: sky/Jua/blue · posture: phone first, one job per tab · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V3 · weakest: V, the brand look is kept on purpose; the change is the split into home, archive and games tabs so each phone screen does one job */
+/* Hallmark · waive 3 · div.session-list holds board photos with a status badge, no icons · the equal cards are the user's saved games, a photo gallery, not feature tiles */
+/* Hallmark · waive 39b · button.session-open wraps the whole board card · each card is one tap target that opens the board, so its height is the card */
+/* Hallmark · dropped home search field, setDialog('library'), onClick={back}, onClick={() => void hideBoards(session.id)}, onClick={() => void open(session.id)}, onClick={() => void restoreBoards([session.id])}, {filter === 'trash' ? undefined : <div classNam · moved, not removed: search and the full list live on the 보관함 tab, the games dialog trigger became the 게임 tab, the brand calls goTab('home'), card handlers pass through SessionCard props */
+/* Hallmark · notes · board search, filters, refresh and the full board list moved from home to the 보관함 tab; home keeps the three most recent boards · the games dialog trigger became the 게임 tab (LibraryPanel); LibraryDialog still exists · card handlers now pass through SessionCard props · brand click goes to the 홈 tab */
+/* Hallmark · reworded "내 보드" to "보관함" (archive tab head) and the eyebrow "KeepBoard · 보드게임 기록" became the home head "보드게임 기록" · 54 names the eyebrow */
+/* Hallmark · answered · F4: 초대 코드로 방 참가 is the outlined secondary, not a second filled button · 28a: the lazy image is a board card below the fold; the home photo is the LCP and has fetchpriority=high */
+/* Hallmark · answered · scaffold tokens.css and base.css not imported: the project's own token block (styles.css, lobby-theme.css, ui-polish.css) is the system, and a second reset would re-space screens this change does not touch */
+
+/* Shell: the home list used to be one long page. Phones now get three tabs at the thumb; wide
+   screens keep the top HUD bar with the same three destinations. Loaded after ui-polish.css. */
+:root{
+  /* One scale for the whole app (polish pass): 9 type steps, 4 corners plus pill and circle,
+     2 elevations, 3 durations. Older token names point here so every screen shares them. */
+  --text-2xs:11px;--text-xs:12px;--text-sm:14px;--text-md:15px;--text-base:16px;--text-lg:18px;--text-xl:22px;--text-2xl:28px;
+  --r-xs:6px;--r-sm:12px;--r-md:16px;--r-lg:24px;
+  --radius-s:var(--r-sm);--radius:var(--r-sm);--radius-l:var(--r-md);--control-r:var(--r-sm);--chip-r:var(--r-sm);--card-r:var(--r-md);--panel-r:var(--r-lg);
+  --elev-1:0 1px 2px #16305c12,0 4px 14px #2271dd14;
+  --elev-2:0 14px 36px #16305c2e;
+  --shadow-1:var(--elev-1);--shadow-2:var(--elev-2);--shadow-3:var(--elev-2);--panel-shadow:var(--elev-1);--readout-shadow:var(--elev-1);
+  --dur-1:.12s;--dur-2:.2s;--dur-3:.32s;
+  --on-accent:#f5faff;
+}
+:root{
+  --tabbar-h:64px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --tabbar-shadow:#16305c1f;
+  --link-ink:var(--accent-ink);
+  /* White on the old #2b7bea measured 4.10:1; this blue clears 4.5:1 and keeps the hue. */
+  --primary:#2271dd;--accent:#2271dd;
+}
+html,body{overflow-x:clip}
+:where(button,.button):disabled{opacity:.55;cursor:not-allowed}
+
+/* Text link: the quiet third action (example board, see all). */
+.text-link{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 4px;border:0;background:none;color:var(--link-ink);font-size:var(--text-md);font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;border-radius:var(--chip-r)}
+.text-link:not(:disabled):hover{color:var(--ink)}
+.text-link:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+
+
+
+/* Board cards: one track that may shrink, so a long name never pushes the card off screen. */
+.session-list{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.session-card h3{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;min-width:0;line-height:1.35}
+.session-card-meta{gap:2px 8px}
+.session-card-meta time{color:var(--muted)}
+.session-go{color:var(--accent-ink)}
+
+/* Games tab: the list that used to live only in a dialog. */
+.games-tab .library-panel{display:grid;gap:12px;padding:20px;background:var(--surface);border-radius:var(--panel-r);box-shadow:var(--panel-shadow);min-width:0}
+.library-panel .pack-list>div{padding:16px 4px;border-bottom:1px solid var(--line)}
+.library-panel .pack-list>div:last-child{border-bottom:0}
+.library-panel .pack-list h3{font-size:var(--text-base)}
+.library-panel .pack-list p{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:4px;font-size:var(--text-sm)}
+.pack-support{display:inline-flex;align-items:center;min-height:24px;padding:0 8px;border-radius:var(--chip-r);background:var(--surface-2);color:var(--ink-2);font-weight:600}
+.pack-support.is-native{background:var(--accent-soft);color:var(--accent-ink)}
+.pack-support.is-assisted{background:var(--teal-soft);color:var(--ok)}
+.pack-empty{padding:20px 2px}
+
+/* Home already leads with 새 보드, so the bar's copy of it steps aside there. */
+.is-home .app-new{display:none}
+
+/* Bottom tab bar: phones only; the session screen has its own save bar there. */
+.tab-bar{display:none}
+
+@media(max-width:760px){
+  .app-nav{display:none}
+  .app-bar{justify-content:space-between}
+
+  .tab-bar{position:fixed;z-index:60;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;min-height:calc(var(--tabbar-h) + var(--safe-bottom));padding:8px 8px calc(8px + var(--safe-bottom));background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px var(--tabbar-shadow)}
+  .tab-bar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border:0;border-radius:var(--control-r);background:none;color:var(--muted);font-size:var(--text-sm);font-weight:600;transition:color var(--dur-1)}
+  .tab-bar button svg{box-sizing:content-box;padding:4px 16px;border-radius:999px;transition:background-color var(--dur-1)}
+  .tab-bar button:active svg{background:var(--surface-3)}
+  .tab-bar button.active{color:var(--accent-ink)}
+  .tab-bar button.active svg{background:var(--accent-soft)}
+  .tab-bar button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+
+  .has-tabbar .main-content{padding-bottom:calc(var(--tabbar-h) + var(--safe-bottom) + 32px)}
+  .has-tabbar .toast,.has-tabbar .delete-undo,.has-tabbar .error-banner{bottom:calc(var(--tabbar-h) + var(--safe-bottom) + 12px)}
+
+  .home{padding-top:16px}
+
+  .session-list{grid-template-columns:minmax(0,1fr)}
+  .session-card h3{font-size:var(--text-base)}
+  .games-tab .library-panel{padding:16px}
+}
+
+/* Fixes found on the phone pass. */
+.home{overflow-x:visible}
+.search-box input{min-height:44px;padding:8px 0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;font-size:var(--text-base)}
+.search-box input::-webkit-search-cancel-button{display:none}
+.art-library-tabs{gap:4px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.art-library-tabs button{min-height:44px;padding:0 12px;font-size:var(--text-md);font-weight:600;color:var(--muted);margin-bottom:-1px}
+.art-library-tabs button.active{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.art-library-tabs button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+
+/* Disclosures: most summaries were set to display:flex, which drops the native marker, so nothing
+   said "tap to open". Every text summary gets one chevron that turns when open; the icon-only menu
+   summaries (board menu, board more-menu) keep their own icon. */
+:where(details:not(.board-menu):not(.cw-more))>summary{position:relative;padding-right:32px;list-style:none}
+:where(details:not(.board-menu):not(.cw-more))>summary::-webkit-details-marker{display:none}
+:where(details:not(.board-menu):not(.cw-more))>summary::after{content:'';position:absolute;top:50%;right:10px;width:8px;height:8px;margin-top:-4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform var(--dur-1);pointer-events:none}
+:where(details[open]:not(.board-menu):not(.cw-more))>summary::after{transform:translateY(4px) rotate(-135deg)}
+summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* Owner tabs on a phone scroll sideways; the fade says there is more to the right. */
+:root{--mask-solid:#000;--mask-clear:#0000}
+@media(max-width:760px){
+  .owner-tabs{scroll-snap-type:x proximity;scroll-padding-inline:8px;-webkit-mask-image:linear-gradient(90deg,var(--mask-solid) calc(100% - 32px),var(--mask-clear));mask-image:linear-gradient(90deg,var(--mask-solid) calc(100% - 32px),var(--mask-clear));padding-right:24px}
+  .owner-tabs>button{scroll-snap-align:start}
+  /* The board screen needs the height: the HUD bar scrolls away instead of staying pinned. */
+  .is-session .app-bar{position:relative;top:0}
+}
+
+/* Board toolbar on a phone: text buttons share the row, the icon-only undo keeps a square. */
+@media(max-width:760px){
+  .se-actions{grid-auto-columns:auto;grid-template-columns:none;display:flex;flex-wrap:nowrap}
+  .se-actions>.button{flex:1 1 auto;min-width:0;padding-inline:8px;white-space:nowrap}
+  .se-actions>.button[aria-label]{flex:0 0 48px;padding-inline:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+}
+
+/* Phone platform layer (mobile-native pass). */
+html{-webkit-text-size-adjust:100%}
+/* viewport-fit=cover lets the page paint under the notch; pad the floating bar and sheets back out. */
+.app-shell{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.app-bar{top:calc(12px + env(safe-area-inset-top,0px))}
+/* Controls are not content: no text selection or callout on long-press. Body text stays selectable. */
+button,[role=tab],summary,.tab-bar{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* Board heights use the small viewport so the URL bar never pushes the save bar off screen. */
+.se-board,.se-photo-frame>img{max-height:74svh}
+.simple-editor .se-board{max-height:68svh}
+/* Touch has no hover: a tapped button must not stay lifted or recoloured. */
+@media not ((hover:hover) and (pointer:fine)){
+  .button:not(:disabled):hover{transform:none}
+  .app-new.primary:not(:disabled):hover{background:var(--sun)}
+  .session-card:has(.session-open:not(:disabled)):hover{transform:none}
+  .text-link:not(:disabled):hover{color:var(--link-ink)}
+}
+.session-card:has(.session-open:not(:disabled):active){transform:scale(.98)}
+/* iOS zooms into inputs under 16px and never zooms back. */
+@media(pointer:coarse){
+  .field-control textarea,.se-json textarea,.scene-workspace>.section-heading select{font-size:var(--text-base)}
+}
+@media(max-width:760px){
+  .app-shell{padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .app-bar{top:calc(8px + env(safe-area-inset-top,0px))}
+  .modal,.modal-wide{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .is-session .app-bar{top:0}
+}
+
+/* Web Interface Guidelines pass. */
+/* Skip link: first stop for keyboard users, hidden until focused. */
+.skip-link{position:fixed;z-index:300;top:calc(8px + env(safe-area-inset-top,0px));left:12px;padding:12px 16px;border-radius:var(--control-r);background:var(--ink);color:var(--surface);font-weight:700;text-decoration:none;transform:translateY(-160%)}
+.skip-link:focus-visible{transform:none;outline:3px solid var(--sun);outline-offset:2px}
+main:focus{outline:none}
+/* Keep focused fields clear of the sticky bar on top and the tab bar below. */
+html{scroll-padding-top:calc(88px + env(safe-area-inset-top,0px))}
+@media(max-width:760px){html:has(.tab-bar){scroll-padding-bottom:calc(var(--tabbar-h) + var(--safe-bottom) + 16px)}}
+/* 120 games: let the browser skip layout for rows that are off screen. */
+.library-panel .pack-list>div{content-visibility:auto;contain-intrinsic-size:auto 76px}
+
+/* Create sheet: details content lives in ::details-content in current Chrome, so a flex gap on the
+   details element itself never reached the fields. Space the fields, and tie the mode hint to its radios. */
+.room-options[open]::details-content{display:flex;flex-direction:column;gap:16px}
+.room-options>p.small{margin-top:-8px;line-height:1.5}
+.room-modes{gap:8px}
+.room-modes label{padding:8px 12px}
+
+/* Scan panel: status lines need air between the read button and the settings fold. */
+.lightweight-reader.is-compact{gap:8px}
+.lightweight-reader.is-compact>p.small{line-height:1.5;color:var(--ink-2)}
+
+/* Press motion (emil-design-eng pass): the old overshoot curve on a 250ms transform made every
+   tap wobble. Presses now answer in 160ms with a strong ease-out; the springy brand stays in the
+   jelly shading, not in a bounce. */
+:root{--ease-out:cubic-bezier(.23,1,.32,1)}
+.button{transition:transform var(--dur-2) var(--ease-out),background-color var(--dur-1),box-shadow var(--dur-1),color var(--dur-1),border-color var(--dur-1)}
+.button:not(:disabled):active{transform:scale(.97)}
+.session-card{transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2)}
+@media(hover:hover) and (pointer:fine){
+  .session-card:has(.session-open:not(:disabled)):hover{transform:translateY(-3px)}
+}
+.session-card:has(.session-open:not(:disabled):active){transform:scale(.98);transition-duration:var(--dur-1)}
+
+/* Player holdings on a phone: one column, so the cards inside the 플레이어 보기 card become divided rows. */
+@media(max-width:760px){
+  .catan-players{gap:0}
+  .catan-players article{border:0;border-radius:var(--chip-r);box-shadow:none;background:none;padding:16px 8px;border-bottom:1px solid var(--line)}
+  .catan-players article:last-child{border-bottom:0}
+  .catan-players article.active{background:var(--surface-2)}
+}
+
+/* The card's heading names the board, so its picture is decorative to screen readers. */
+.session-card-cover{display:contents}
+
+/* Lean pass: one job per line. Tab titles are already in the tab bar, so on a phone the page
+   title is for screen readers only; wide screens still show it. */
+.page-title{font-family:var(--display);font-weight:400;font-size:var(--text-2xl);line-height:1.2;letter-spacing:0;color:var(--ink);margin:0 0 16px;overflow-wrap:break-word;min-width:0;text-wrap:balance}
+.home-tab{display:grid;gap:24px}
+.home-tab .page-title{margin:0}
+.home-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:480px}
+.home-actions .button{min-height:52px;padding-inline:12px}
+.home-recent>h2{font-family:var(--display);font-weight:400;font-size:var(--text-xl);line-height:1.3;letter-spacing:0;margin:0 0 12px}
+.home-recent .empty{background:var(--surface);border-radius:var(--panel-r);box-shadow:var(--readout-shadow)}
+.archive-tab .search-box{width:100%;max-width:480px;margin:0 0 12px}
+.manage-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:4px 4px 4px 16px;border-radius:var(--control-r);background:var(--sun-soft);color:var(--ink);font-size:var(--text-md)}
+.session-card-body{padding-right:16px}
+.session-card:has(.session-delete) .session-card-body{padding-right:56px}
+@media(max-width:760px){
+  .page-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0}
+  .home-tab{gap:20px}
+  .board-filters{flex-direction:row;flex-wrap:nowrap;align-items:center;gap:4px;margin-bottom:12px}
+  .filter-tabs{flex:1 1 auto;min-width:0;flex-wrap:nowrap}
+  .filter-tabs button{padding-inline:8px;font-size:var(--text-sm)}
+  .board-tools{flex:none}
+  .session-open{min-height:88px}
+  .session-card-image{width:80px;flex-basis:80px}
+  .session-card-body{justify-content:center;gap:4px;padding:12px 16px 12px 12px}
+  .session-card:has(.session-delete) .session-card-body{padding-right:56px}
+  /* Board screen: the back arrow already leads home, and the save bar already shows the save time. */
+  .is-session .app-bar{display:none}
+  .app-shell.is-session{padding-top:env(safe-area-inset-top,0px)}
+  .cw-saved{display:none}
+}
+/* Undo with nothing to undo is noise: it appears once there is a step to take back. */
+.se-actions>.button[aria-label="되돌리기"]:disabled{display:none}
+
+/* Polish: user-written names read in the body face; Jua stays for the app's own titles. */
+.session-card h3,.cw-title h1{font-family:var(--font-body);font-weight:700;letter-spacing:-.01em}
+/* Board cards: photo and corners carry the depth, one quiet elevation instead of a white ring and glow. */
+.session-card{border:0;border-radius:var(--r-md);box-shadow:var(--elev-1)}
+.session-card:has(.session-open:not(:disabled)):hover{box-shadow:var(--elev-2)}
+.session-card-image{border-radius:var(--r-md) var(--r-md) 0 0}
+@media(max-width:760px){.session-card-image{border-radius:var(--r-md) 0 0 var(--r-md)}}
+
+/* Games list: each game leads with its own art from public/game-art, so 120 rows scan by picture. */
+.library-panel .pack-row{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:12px}
+.pack-thumb{display:grid;place-items:center;width:48px;height:48px;border-radius:var(--r-sm);background:var(--surface-2);overflow:hidden}
+.pack-thumb img{width:40px;height:40px;object-fit:contain}
+.pack-thumb b{font-family:var(--display);font-weight:400;font-size:var(--text-xl);color:var(--accent-ink)}
+
+/* Screen motion (View Transitions): tabs cross-fade, opening a board pushes in from the right and
+   leaving pops back, and the board's title travels between its card and the board header. The bars
+   stay put. Browsers without the API, and reduced motion, just switch. */
+.app-bar{view-transition-name:app-bar}
+.tab-bar{view-transition-name:tab-bar}
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--dur-2);animation-timing-function:var(--ease-out)}
+html[data-motion=forward]::view-transition-old(root){animation-name:vt-out-left}
+html[data-motion=forward]::view-transition-new(root){animation-name:vt-in-right}
+html[data-motion=back]::view-transition-old(root){animation-name:vt-out-right}
+html[data-motion=back]::view-transition-new(root){animation-name:vt-in-left}
+::view-transition-group(board-title){animation-duration:var(--dur-3);animation-timing-function:var(--ease-out)}
+@keyframes vt-in-right{from{transform:translateX(18%);opacity:0}}
+@keyframes vt-out-left{to{transform:translateX(-8%);opacity:0}}
+@keyframes vt-in-left{from{transform:translateX(-8%);opacity:0}}
+@keyframes vt-out-right{to{transform:translateX(18%);opacity:0}}
+
+/* Skeleton: the shape of the home screen while boards load, instead of a spinner and a sentence. */
+.skeleton{display:grid;gap:16px;padding-top:16px}
+.sk{display:block;border-radius:var(--r-sm);background:var(--surface-3)}
+.sk-title{width:40%;height:28px}
+.sk-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:480px}
+.sk-button{height:52px;border-radius:999px}
+.sk-heading{width:28%;height:20px;margin-top:8px}
+.sk-card{display:grid;grid-template-columns:80px minmax(0,1fr);align-items:center;gap:12px;padding:0 16px 0 0;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--elev-1);overflow:hidden}
+.sk-thumb{height:88px;border-radius:0}
+.sk-card>div{display:grid;gap:8px}
+.sk-line{height:16px;width:80%}
+.sk-line.short{width:50%;height:12px}
+@media(prefers-reduced-motion:no-preference){.sk{animation:sk-pulse 1.2s ease-in-out infinite alternate}}
+@keyframes sk-pulse{to{opacity:.55}}
+@media(min-width:761px){.skeleton .sk-title{display:block}}
+
+/* Save button: a check and "저장됨" sit on the label for a beat after each save. */
+.quick-save-button{position:relative;overflow:hidden}
+.quick-save-label{display:inline-flex;align-items:center;gap:8px}
+.quick-save-done{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--ok);color:var(--on-accent);border-radius:inherit;animation:save-done 1.6s var(--ease-out) both}
+@keyframes save-done{0%{opacity:0;transform:scale(.92)}12%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.quick-save-done{animation:save-done-still 1.6s both}@keyframes save-done-still{0%,80%{opacity:1}100%{opacity:0}}}
+
+/* "그대로 꺼냈어요" on a phone: shown above the save bar, clear of the board title. */
+@media(max-width:760px){.board-event{top:auto;bottom:calc(88px + var(--safe-bottom));right:0;left:0;margin:0 auto}}
+
+/* Gestures (src/gestures.ts). */
+/* Pull to refresh: the brand hexagon drops in under the bar, turns with the pull and spins while loading. */
+.ptr{position:fixed;z-index:70;top:calc(12px + env(safe-area-inset-top,0px));left:50%;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--surface);color:var(--accent);box-shadow:var(--elev-2);transform:translate3d(-50%,-160%,0);pointer-events:none}
+.ptr svg{transform:rotate(var(--pull,0deg))}
+.ptr.is-refreshing svg{animation:ptr-spin .8s linear infinite}
+@keyframes ptr-spin{to{transform:rotate(360deg)}}
+@media(pointer:coarse){html:has(.app-shell.has-tabbar){overscroll-behavior-y:none}}
+@media(prefers-reduced-motion:reduce){.ptr.is-refreshing svg{animation:none}}
+
+/* Swipe to delete: the card slides over a red action that was waiting underneath. */
+.swipe-action{display:none}
+@media(pointer:coarse){
+  .session-card[data-swipe]{overflow:hidden;touch-action:pan-y}
+  .session-card[data-swipe] .session-open{position:relative;z-index:1;background:var(--surface)}
+  .swipe-action{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding-right:24px;background:var(--danger);color:var(--on-accent);font-weight:700;border-radius:inherit}
+  .session-card[data-swipe]:not(.is-swiping) .swipe-action{visibility:hidden}
+  .session-card.is-swiping{transform:none!important}
+}
+
+/* Bottom sheet handle: the visible grip for drag-to-close on phones. */
+.sheet-handle{display:none}
+@media(max-width:760px){
+  .sheet-handle{display:block;width:40px;height:5px;margin:8px auto 0;border-radius:999px;background:var(--line-2);touch-action:none}
+  .modal-header{touch-action:none}
+}
+
+/* "새 보드" is the sun-yellow jelly everywhere (bar and home); blue stays for in-board primaries. */
+:root{--sun-press:#d79f00;--sun-hover:#ffd75c}
+.home-actions .button.primary{background:var(--sun);color:var(--ink);box-shadow:var(--jelly),0 3px 0 var(--sun-press)}
+@media(hover:hover) and (pointer:fine){.home-actions .button.primary:not(:disabled):hover{background:var(--sun-hover)}}
+
+/* Board-first board screen (phones). The board is what the screen is for, so it comes straight
+   after the title and owner tabs, edge to edge, with nothing of equal weight beside it. Its tools
+   become one compact strip under the board (as chess apps keep move controls below the board);
+   turn and stage already live in 차례·메모, so the duplicate status line goes. BGA's own mobile guidance:
+   board at full width, panels below it. */
+@media(max-width:760px){
+  .correction-heading{padding-block:4px}
+  .cw-scope-row{padding-bottom:0;border-bottom:0}
+  .cw-scope-row .board-state{display:none}
+  .owner-tabs{min-height:40px}
+  .owner-tabs>button{min-height:40px;font-size:var(--text-sm)}
+
+  /* The board panel loses its card: no padding, no frame, the stage runs to both screen edges. */
+  .correction-workspace .scene-workspace{margin:8px -16px 0;padding:0;background:none;border:0;border-radius:0;box-shadow:none}
+  .correction-workspace .scene-editor{gap:0}
+  .correction-workspace .se-layout{order:1}
+  .correction-workspace .se-stage{border-radius:0}
+  .correction-workspace .se-board,.correction-workspace .se-photo-frame{border-radius:0;max-height:none}
+  .correction-workspace .se-photo-frame>img{max-height:70svh}
+
+  /* Tools: one 40px strip under the board, scrolling sideways if a fifth button appears. */
+  .correction-workspace .se-toolbar{order:2;display:flex;align-items:center;gap:8px;margin:0;padding:8px 16px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--line)}
+  .correction-workspace .se-toolbar::-webkit-scrollbar{display:none}
+  .correction-workspace .se-segment{flex:none;width:auto;min-height:40px;padding:2px}
+  .correction-workspace .se-segment>button{min-height:36px;padding:0 12px;font-size:var(--text-sm)}
+  .correction-workspace .se-actions{flex:none;display:flex;gap:8px;margin:0}
+  .correction-workspace .se-actions>.button{flex:none;min-height:40px;padding:0 12px;font-size:var(--text-sm);border-width:1px}
+  .correction-workspace .se-actions>.button[aria-label]{flex:none;width:40px;padding:0}
+  .correction-workspace .se-hint,.correction-workspace .se-banner{order:2;margin:0;padding:8px 16px}
+  .correction-workspace .se-details{order:3}
+
+}
+
+/* Under the board (phones): one row of chips, not stacked full-width rows. Each chip opens its
+   panel as a single card below, one at a time; the panels' own summaries are hidden here because
+   the chips are their controls. Parts list is a "부품" button in the board's tool strip. */
+.board-dock{display:none}
+.se-list-toggle{display:none}
+@media(max-width:760px){
+  .board-dock{display:flex;gap:8px;margin:0 -16px;padding:12px 16px 4px;overflow-x:auto;scrollbar-width:none}
+  .board-dock::-webkit-scrollbar{display:none}
+  .board-dock:empty{display:none}
+  .dock-chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);color:var(--ink-2);font-size:var(--text-sm);font-weight:600;white-space:nowrap;transition:background-color var(--dur-1),color var(--dur-1),border-color var(--dur-1),transform var(--dur-1) var(--ease-out)}
+  .dock-chip:active{transform:scale(.97)}
+  .dock-chip[aria-expanded=true]{background:var(--ink);border-color:var(--ink);color:var(--on-accent)}
+  .dock-chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .se-list-toggle{display:inline-flex}
+  .se-list-toggle[aria-expanded=true]{background:var(--ink);border-color:var(--ink);color:var(--on-accent)}
+
+  .correction-workspace .cw-grid,.correction-workspace .cw-side{gap:0}
+  .cw-mobile-photo-tools>summary,.correction-workspace .cw-context>summary,.correction-workspace .cw-side>.catan-overview>details>summary,.correction-workspace .se-details>summary{display:none}
+  .cw-mobile-photo-tools:not([open]),.correction-workspace .cw-context:not([open]),.correction-workspace .cw-side>.catan-overview:not(:has(>details[open])),.correction-workspace .se-details:not([open]){display:none}
+  /* An open panel is one quiet card. */
+  .cw-mobile-photo-tools[open],.correction-workspace .cw-context[open],.correction-workspace .cw-side>.catan-overview.simple-assets{margin:12px 0 0!important;padding:16px!important;border:0!important;border-radius:var(--r-lg)!important;background:var(--surface)!important;box-shadow:var(--elev-1)!important}
+  .correction-workspace .se-details[open]{margin:12px 16px 0;padding:4px 16px 16px;border:0;border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--elev-1)}
+  .correction-workspace .cw-context>.quick-context{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+  .cw-mobile-photo-tools>:not(summary),.correction-workspace .cw-side>.catan-overview>details>:not(summary){margin-block:0}
+  .correction-workspace .se-toolbar{border-bottom:0}
+}
+@media(max-width:760px){
+  /* Tool strip: one line on the page background; the view toggle shows its icons (labels stay for screen readers). */
+  .correction-workspace .se-toolbar{flex-wrap:nowrap;background:none;padding:12px 16px 0}
+  .correction-workspace .se-segment>button{font-size:0;gap:0;width:44px;padding:0;justify-content:center}
+  .correction-workspace .se-segment>button svg{width:18px;height:18px}
+  /* Player rows inside the open card: plain dividers, no rounded inner frames. */
+  .correction-workspace .catan-players article{border-radius:0;padding:16px 0}
+  .correction-workspace .catan-players article.active{background:none}
+}
+@media(max-width:760px){
+  /* Board tools as one floating capsule (borderless buttons inside), so they read as the board's
+     controls and the outlined chips below read as panels. */
+  .correction-workspace .se-toolbar{margin:12px 16px 0;padding:4px;gap:4px;border-radius:999px;background:var(--surface);box-shadow:var(--elev-1)}
+  .correction-workspace .se-segment{border-radius:999px}
+  .correction-workspace .se-actions{gap:2px}
+  .correction-workspace .se-actions>.button.secondary{border:0;background:none;box-shadow:none;color:var(--ink-2)}
+  .correction-workspace .se-actions>.button.secondary:active{background:var(--surface-2)}
+  .correction-workspace .se-actions>.button[aria-pressed=true],.correction-workspace .se-actions>.se-list-toggle[aria-expanded=true]{background:var(--ink);color:var(--on-accent)}
+}
+
+/* One-tap corrections (Catan): choices are pictures from the game art, not dropdowns. A tap applies. */
+:root{--token-paper:#fbf3dc;--token-edge:#d9c79c;--font-tile:Georgia,serif}
+.se-pick{margin:0 0 12px;padding:0;border:0;min-width:0}
+.se-pick>legend{margin-bottom:8px;font-size:var(--text-sm);font-weight:600;color:var(--muted)}
+.se-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.se-pick-grid>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:76px;padding:8px 4px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);color:var(--ink-2);font-size:var(--text-xs);font-weight:600;transition:transform var(--dur-1) var(--ease-out),border-color var(--dur-1),background-color var(--dur-1)}
+.se-pick-grid>button:active,.se-pick-numbers>button:active,.rt-quick-tile:active,.rt-quick-numbers>button:active{transform:scale(.95)}
+.se-pick-grid>button[aria-pressed=true]{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.se-pick-grid.is-kinds{grid-template-columns:repeat(3,minmax(0,1fr))}
+.se-pick-numbers{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.se-pick-numbers.is-wide{grid-template-columns:repeat(3,minmax(0,1fr))}
+.se-pick-numbers>button{aspect-ratio:1;max-width:56px;width:100%;justify-self:center;border:2px solid var(--token-edge);border-radius:50%;background:var(--token-paper);color:var(--ink);font-size:var(--text-lg);font-weight:800;font-variant-numeric:tabular-nums;transition:transform var(--dur-1) var(--ease-out)}
+.se-pick-numbers.is-wide>button{aspect-ratio:auto;max-width:none;min-height:44px;border-radius:999px;font-size:var(--text-base)}
+.se-pick-numbers>button.is-hot{color:var(--danger)}
+.se-pick-numbers>button[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.se-pick-unknown{border-style:dashed!important;background:none!important;color:var(--muted)!important}
+.se-pick button:focus-visible,.rt-quick button:focus-visible,.rt-board-tile:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.se-observed{margin:0 0 12px}
+
+/* On a phone the selected piece's choices rise as a sheet over the save bar; the board stays above it. */
+@media(max-width:760px){
+  .correction-workspace .se-inspector:has(.se-form){position:fixed!important;top:auto!important;left:0;right:0;bottom:0;z-index:205;display:block;max-height:52svh;overflow:auto;overscroll-behavior:contain;margin:0;padding:8px 16px calc(16px + var(--safe-bottom))!important;border-radius:var(--r-lg) var(--r-lg) 0 0!important;background:var(--surface);box-shadow:var(--elev-2)!important}
+  .correction-workspace .se-inspector:has(.se-form)::before{content:'';display:block;width:40px;height:5px;margin:0 auto 8px;border-radius:999px;background:var(--line-2)}
+}
+
+/* One-tap corrections (Rummikub): every tile on the table is a button; the fix sheet shows the
+   choices as tiles, so the right one is recognised, not read. */
+.rt-meld.is-tappable{cursor:default}
+.rt-meld.is-tappable>.rt-board-tile{padding:0;border:0;background:none;border-radius:var(--r-xs);cursor:pointer;transition:transform var(--dur-1) var(--ease-out)}
+.rt-meld.is-tappable>.rt-board-tile:active{transform:scale(.92)}
+.rt-meld-edit{align-self:center;display:grid;place-items:center;width:28px;height:28px;margin-left:4px;padding:0;border:1px solid var(--line-2);border-radius:50%;background:var(--surface);color:var(--muted);font-weight:700;line-height:1}
+.rt-quick{display:grid;gap:16px}
+.rt-quick-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rt-quick-tile{display:block;height:88px;padding:4px;border:2px solid transparent;border-radius:var(--r-sm);background:var(--surface-2);transition:transform var(--dur-1) var(--ease-out),border-color var(--dur-1)}
+.rt-quick-tile[aria-pressed=true],.rt-quick-joker[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}
+.rt-quick-numbers{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.rt-quick-numbers>button{min-height:48px;padding:0;border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--token-paper);color:var(--ink);font-family:var(--font-tile);font-size:var(--text-xl);font-weight:700;font-variant-numeric:tabular-nums;transition:transform var(--dur-1) var(--ease-out)}
+.rt-quick-numbers>button[aria-pressed=true]{border:2px solid var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.rt-quick-joker{padding:2px!important;background:var(--surface-2)!important;border:2px solid transparent!important}
+.rt-quick-more{display:flex;justify-content:space-between;gap:8px}
+@media(prefers-reduced-motion:reduce){.se-pick-grid>button,.se-pick-numbers>button,.rt-quick-tile,.rt-quick-numbers>button,.rt-meld.is-tappable>.rt-board-tile{transition:none}}
+.rt-meld-edit{flex:none;min-height:0;height:28px;min-width:0;align-self:center}
+/* .rt-workspace button sets a 44px min-height; the meld's edit dot stays a circle and keeps a 44px hit area. */
+.rt-workspace .rt-meld-edit{position:relative;width:32px;height:32px;min-height:0}
+.rt-workspace .rt-meld-edit::after{content:'';position:absolute;inset:-6px}
+
+/* Tap controls for every game's correction sheet (src/QuickPick.tsx). */
+.qp{margin:0 0 12px;padding:0;border:0;min-width:0}
+.qp>legend{margin-bottom:8px;font-size:var(--text-sm);font-weight:600;color:var(--muted)}
+.qp>div{display:flex;flex-wrap:wrap;gap:8px}
+.qp button{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:44px;padding:0 16px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);color:var(--ink-2);font-size:var(--text-sm);font-weight:600;transition:transform var(--dur-1) var(--ease-out),background-color var(--dur-1),border-color var(--dur-1)}
+.qp button:active{transform:scale(.95)}
+.qp button[aria-pressed=true]{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.qp button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.qp .qp-unknown{min-width:44px;padding:0;border-style:dashed;background:none;color:var(--muted)}
+.qp-art>div{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr))}
+.qp-art button{flex-direction:column;min-height:84px;padding:8px 4px;border-radius:var(--r-sm);font-size:var(--text-xs);line-height:1.25;text-align:center}
+.qp-art button>span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.qp-art .qp-unknown{min-height:84px;border-radius:var(--r-sm)}
+.qp-stepper>div{align-items:center;flex-wrap:nowrap}
+.qp-stepper button{width:48px;padding:0}
+.qp-stepper output{min-width:48px;text-align:center;font-size:var(--text-xl);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+.gdr-pick{margin:0}
+.gdr-pick.is-gap .qp>legend{color:var(--sun-ink)}
+@media(prefers-reduced-motion:reduce){.qp button{transition:none}}
+
+/* Board-first for the 118 generic games (phones): the game record (its board) leads, scan and memo follow. */
+@media(max-width:760px){
+  .board-record-session .cw-main{display:flex;flex-direction:column}
+  .board-record-session .cw-main>.game-essentials{order:-1}
+  .board-record-session .game-essentials>header>p{display:none}
+  .board-record-session .board-dock{order:0;padding-top:8px}
+}
+/* Real board (public/game-art/real-boards): the drawn board with a tap target over every slot. */
+.gb-real{position:relative;width:100%;border-radius:var(--r-md);overflow:hidden;background:var(--surface-2)}
+.gb-real>img{position:absolute;inset:0;width:100%;height:100%}
+.gb-slot{position:absolute;display:grid;place-items:center;padding:0;border:0;border-radius:var(--r-xs);background:transparent;min-height:0}
+.gb-slot.hex{clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);border-radius:0}
+.gb-slot.ready{outline:2px dashed var(--accent);outline-offset:-2px;background:var(--accent-soft)}
+.gb-slot:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.gb-slot-art{display:grid;place-items:center;width:100%;height:100%}
+.gb-slot-art>*{width:100%!important;height:100%!important}
+.gb-slot>b{position:absolute;top:-6px;right:-6px;display:grid;place-items:center;min-width:20px;height:20px;padding:0 4px;border-radius:999px;background:var(--ink);color:var(--on-accent);font-size:var(--text-2xs)}
+/* Rummikub (phones): the table runs edge to edge like the Catan board. */
+@media(max-width:760px){
+  .rummikub-session .rt-workspace{margin:8px -16px 0;padding:0 0 8px;border:0;border-radius:0;background:none;box-shadow:none}
+  .rummikub-session .rt-workspace>header,.rummikub-session .rt-workspace>.rt-notes,.rummikub-session .rt-workspace>p{padding-inline:16px}
+  .rummikub-session .rt-board>.rt-table{border-radius:0;border-inline:0}
+}
+@media(max-width:760px){.board-record-session .generic-components>h4{display:none}}
+.gb-real .gb-slot{min-height:0!important;min-width:0!important}
+/* Audit fixes: names up to 19 characters get three lines in a wider art button; long shape lists fold. */
+.qp-art>div{grid-template-columns:repeat(auto-fill,minmax(88px,1fr))}
+.qp-art button>span{-webkit-line-clamp:3}
+.qp .qp-more{min-width:44px;border-style:dashed;color:var(--accent-ink);font-weight:700}
+.qp-art .qp-more{min-height:84px;border-radius:var(--r-sm)}
+.real-piece{display:block;color:var(--ink-2)}
+.gb-real .gb-slot{overflow:hidden}
+.gb-slot-art{padding:2px;box-sizing:border-box}
+/* Scenario-map games: the drawn table sits behind free placement (no fixed slots to snap to). */
+.gb-surface.is-drawn{background-size:contain;background-position:center;background-repeat:no-repeat;background-color:var(--surface-2);height:auto;min-height:0}

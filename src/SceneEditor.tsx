@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { Image as ImageIcon, Map as MapIcon, Plus, Trash2, Undo2, X } from 'lucide-react';
+import { Image as ImageIcon, Map as MapIcon, Plus, Trash2, Undo2, X, List as ListIcon } from 'lucide-react';
 import type { Assertion, Evidence, Player } from '../shared/types';
 import {
   coastalEdge, harborPoint, CATAN_NUMBERS, CATAN_TOPOLOGY, HEX_CORNERS, SCENE_KINDS, SCENE_KIND_LABELS,
-  SCENE_VARIANTS, boardSlotTypes, createComponent, isBoardSlotType,
+  SCENE_VARIANTS, boardSlotTypes, createComponent, isBoardSlotType, resolveSlotId,
   normalizeRegion, normalizeScene, normalizeSceneDetailed, slotPoint, snapToSlot,
   type ComponentScene, type Point, type SceneComponent, type SceneKind, type SceneLocation, type SceneRegion,
 } from '../shared/scene';
@@ -28,6 +28,7 @@ export interface SceneEditorProps {
   onDirtyChange?: (dirty: boolean) => void;
   onEvidence?: (evidenceId: string, region?: Assertion['region']) => void;
   game?: string;
+  onReadDetail?: (pieceId:string)=>void;
 }
 
 const U = 100; // topology unit → SVG user units
@@ -71,10 +72,12 @@ function artProps(c: Pick<SceneComponent, 'kind' | 'variant' | 'ownerId' | 'numb
 
 interface DragState { id: string; pointerId: number; startX: number; startY: number; active: boolean; point: Point | null; snap: SceneLocation | null; offBoard: boolean }
 interface History { stack: ComponentScene[]; key: string | null; at: number }
-export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvidence, onReadyToSave, forceSave = false, ownerId, catalogOnly = false, onDirtyChange, game }: SceneEditorProps) {
+export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvidence, onReadyToSave, forceSave = false, ownerId, catalogOnly = false, onDirtyChange, game, onReadDetail }: SceneEditorProps) {
   const incoming = useMemo(() => normalizeSceneDetailed(value), [value]);
   const incomingKey = serialize(incoming.scene);
   const [base, setBase] = useState(incoming);
+  const listRef = useRef<HTMLDetailsElement>(null);
+  const [listOpen, setListOpen] = useState(false);
   const [history, setHistory] = useState<History>({ stack: [incoming.scene], key: null, at: 0 });
   const scene = history.stack[history.stack.length - 1];
   const dirty = serialize(scene) !== serialize(base.scene);
@@ -152,6 +155,22 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
     if (result.status === 'noop') return;
     commit(result.scene); setSelectedId(result.selectedId); setMoveMode(false);
     setMessage({ tone: 'ok', text: result.status === 'swapped' ? '두 부품의 자리를 바꿨어요.' : result.status === 'split' ? '묶음에서 한 개를 옮겼어요.' : '바꿨어요.' });
+  }
+  // One-tap type fix: a misread road that is really a city (or the reverse) changes kind and lands on the
+  // nearest free slot of the new type next to where it was, instead of dropping off the board.
+  function changeKindInPlace(id: string, kind: SceneKind) {
+    const before = sceneRef.current.components.find(c => c.id === id);
+    const result = changeSceneComponentKind(sceneRef.current, id, kind);
+    const after = result.scene.components.find(c => c.id === id);
+    if (result.status === 'updated' && before && after && after.location.id === null && (before.location.type === 'edge' || before.location.type === 'vertex') && before.location.id && isBoardSlotType(after.location.type)) {
+      const from = resolveSlotId(before.location.type, before.location.id);
+      const neighbours = !from ? [] : before.location.type === 'edge' ? CATAN_TOPOLOGY.byId.edge.get(from)?.vertexIds ?? [] : CATAN_TOPOLOGY.byId.vertex.get(from)?.edgeIds ?? [];
+      for (const slot of neighbours) {
+        const placed = moveSceneComponent(result.scene, id, { type: after.location.type, id: slot }, { intent: 'correct' });
+        if (placed.status === 'moved') { applyEdit({ ...placed, message: result.message }); return; }
+      }
+    }
+    applyEdit(result);
   }
   function placeComponent(id: string, location: SceneLocation) { if (catalogOnly) return; applyEdit(moveSceneComponent(sceneRef.current, id, location, { intent: 'correct' })); }
   function finishAdd(location: SceneLocation | null = null) {
@@ -243,6 +262,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
       <div className="se-actions">
         <button className="button secondary small-button" aria-pressed={multiple} onClick={() => { closeAdd(); setMultiple(!multiple); setSelection([]); setInlineNumberIds([]); setSelectedId(null); setMoveMode(false); }}>{multiple ? '선택 마침' : '여러 개 선택'}</button>
         <button className="button secondary small-button" onClick={beginAdd}><Plus size={15}/>추가</button>
+        {!(catalogOnly && view === 'board') && <button className="button secondary small-button se-list-toggle" aria-expanded={listOpen} onClick={() => { const list = listRef.current; if (list) list.open = !list.open; }}><ListIcon size={15}/>부품</button>}
         <button className="button secondary small-button" onClick={undo} disabled={history.stack.length < 2 || saving} aria-label="되돌리기"><Undo2 size={15}/></button>
         {(dirty || forceSave) && <button className="button primary small-button" onClick={() => void save().catch(() => {})} disabled={busy || saving}>반영</button>}
       </div>
@@ -259,7 +279,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
         {adding && draft && !catalogOnly && boardSlotTypes(draft.kind).length > 0 && <div className="se-move-banner">추가할 자리를 누르세요.</div>}
         {view === 'board' && catalog && (!targetKind || catalogOnly) ? <div className="se-catalog">{groups.length ? groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>) : <p>사진을 추가하거나 필요한 부품만 놓아 주세요.</p>}</div> : view === 'board' ? <BoardView game={game} svgRef={svgRef} scene={previewScene} players={players} selectedId={adding ? draft?.id ?? null : selectedId} selectedIds={adding && draft ? [draft.id] : selectedIds} selectedHex={null} targetKind={targetKind} drag={drag} dragComponent={dragComponent} onBeginDrag={beginDrag} onSelect={id => selectComponent(id)} onTarget={location => { if (Date.now() - lastDragEnd.current < 250) return; if (adding) finishAdd(location); else if (selected) placeComponent(selected.id, location); }} onHex={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }} onBackground={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }}/>
           : photo && <PhotoView photo={photo} photos={photos} scene={scene} selected={selected} drawing={false} onPhoto={setPhotoId} onSelect={id => selectComponent(id)} onRegion={() => {}}/>}
-        <p className="se-hint">{multiple ? '부품을 누르면 선택하거나 해제해요.' : view === 'photo' ? catalogOnly ? '사진의 표시를 눌러 같은 카드를 고쳐요.' : '표시된 부품을 누르면 그림과 같은 부품을 고칠 수 있어요.' : catalogOnly ? '카드를 눌러 종류와 수량을 고쳐요.' : '부품을 눌러 고치거나, 끌어서 자리를 바꿔요.'}</p>
+        {multiple && <p className="se-hint">부품을 누르면 선택하거나 해제해요.</p>}
       </div>
       <aside ref={panelRef} className="se-inspector" aria-label={adding ? '부품 추가' : '선택한 부품'}>
         {adding ? <div className="se-form"><header className="se-form-head"><h4>{draft ? `${pieceName(draft.kind)} 추가` : '무엇을 추가할까요?'}</h4><button className="icon-button" aria-label="추가 취소" onClick={closeAdd}><X size={18}/></button></header>
@@ -269,6 +289,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
             {!catalogOnly && boardSlotTypes(draft.kind).length > 0 && <><button className="button text small-button" onClick={() => finishAdd()}>보드 밖에 추가</button></>}
           </>}
         </div> : selected && !multiple && <div className="se-form"><header className="se-form-head"><GameComponentArt game={game} {...artProps(inspected!, players)} size={48}/><div><h4>{componentTitle(inspected!)}</h4><span className="small muted">{friendlyLocation(selected.location)}</span></div><button className="icon-button" aria-label="선택 해제" onClick={() => { setSelectedId(null); setMoveMode(false); }}><X size={18}/></button></header>
+          {!catalogOnly && PIECE_FAMILY.includes(selected.kind) && <fieldset className="se-pick"><legend>종류</legend><div className="se-pick-grid is-kinds">{PIECE_FAMILY.map(kind => <button type="button" key={kind} aria-pressed={selected.kind === kind} aria-label={pieceName(kind)} onClick={() => changeKindInPlace(selected.id, kind)}><GameComponentArt game={game} {...artProps({ ...inspected!, kind }, players)} size={40}/><span>{pieceName(kind)}</span></button>)}</div></fieldset>}
           {activeGroup && activeGroup.ids.length > 1 && <div className="se-group-members" aria-label="묶음의 개별 부품">{activeGroup.ids.map((id, index) => { const member = scene.components.find(c => c.id === id)!; return <button key={id} className={id === selectedId ? 'selected' : ''} aria-pressed={id === selectedId} onClick={() => { setSelectedId(id); setMoveMode(false); }}>{index + 1}<span>{friendlyLocation(member.location)}</span></button>; })}</div>}
           <PieceFields game={game} catalogOnly={catalogOnly} component={inspected!} players={players} onPatch={patch => {
             patchComponent(selected.id, patch);
@@ -276,17 +297,19 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
               const next = { ...scene, components: scene.components.map(c => c.id === selected.id ? { ...c, ...patch } : c) };
               setActiveGroupKey(groupSceneComponents(next).find(g => g.component.kind === 'number-token' && g.ids.includes(selected.id))?.key ?? null);
             }
-          }}/>{!inlineNumberSelected && <details><summary>다른 종류로 바꾸기 +</summary><select aria-label="부품 종류 바꾸기" value={selected.kind} onChange={event => applyEdit(changeSceneComponentKind(scene, selected.id, event.target.value as SceneKind))}>{SCENE_KINDS.filter(kind => !catalogOnly || kind === selected.kind || ['resource-card', 'development-card', 'deck', 'token', 'container', 'unknown'].includes(kind)).map(kind => <option key={kind} value={kind}>{pieceName(kind)}</option>)}</select></details>}
-          {!catalogOnly && (selected.kind === 'settlement' || selected.kind === 'city') && <button className="button text small-button" onClick={() => applyEdit(changeSceneComponentKind(scene, selected.id, selected.kind === 'city' ? 'settlement' : 'city'))}>{selected.kind === 'city' ? '마을로 바꾸기' : '도시로 바꾸기'}</button>}
+          }}/>{!inlineNumberSelected && <details><summary>다른 종류로 바꾸기</summary><select aria-label="부품 종류 바꾸기" value={selected.kind} onChange={event => applyEdit(changeSceneComponentKind(scene, selected.id, event.target.value as SceneKind))}>{SCENE_KINDS.filter(kind => !catalogOnly || kind === selected.kind || ['resource-card', 'development-card', 'deck', 'token', 'container', 'unknown'].includes(kind)).map(kind => <option key={kind} value={kind}>{pieceName(kind)}</option>)}</select></details>}
           <div className="button-row">{!catalogOnly && !inlineNumberSelected && boardSlotTypes(selected.kind).length > 0 && <button className="button secondary small-button" onClick={() => { setMoveMode(!moveMode); setView('board'); requestAnimationFrame(() => svgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })); }}>자리 옮기기</button>}{!catalogOnly && !inlineNumberSelected && slotPoint(selected.location) && <button className="button text small-button" onClick={() => placeComponent(selected.id, { type: 'unplaced', id: null })}>보드에서 빼기</button>}<button className="button secondary small-button se-danger" onClick={() => { if (inlineNumberSelected) patchComponent(selected.id, { number: null }); else commit(editSceneSelection(scene, [selected.id], 'delete')); setSelectedId(null); setMoveMode(false); }}><Trash2 size={14}/>{inlineNumberSelected ? '숫자 지우기' : '삭제'}</button></div>
+          {onReadDetail&&!dirty&&<button className="button text small-button" disabled={busy} onClick={()=>onReadDetail(selected.id)}>이 실물 근접 사진으로 보충</button>}
           {selected.evidenceId && onEvidence && <button className="button text small-button" onClick={() => onEvidence(selected.evidenceId!, selected.region ?? undefined)}>원본 보기</button>}
         </div>}
       </aside>
     </div>
-    {!(catalogOnly && view === 'board') && <details className="se-details" open={multiple || undefined}><summary>부품 목록 더 보기 +</summary><div className="se-list" data-scene-drop="off-board"><div className="se-simple-list">{groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>)}</div></div></details>}
+    {!(catalogOnly && view === 'board') && <details className="se-details" ref={listRef} onToggle={event => setListOpen(event.currentTarget.open)} open={multiple || undefined}><summary className="disclosure">부품 목록 더 보기</summary><div className="se-list" data-scene-drop="off-board"><div className="se-simple-list">{groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>)}</div></div></details>}
   </div>;
 }
 
+/** The player pieces a photo most often confuses; each is one tap from the others. */
+const PIECE_FAMILY: SceneKind[] = ['road', 'settlement', 'city'];
 function pieceName(kind: SceneKind) { return kind === 'settlement' ? '마을' : SCENE_KIND_LABELS[kind]; }
 function GroupButton({ group, players, selected, onClick, game }: { game?: string; group: SceneGroup; players: Player[]; selected: boolean; onClick: () => void }) {
   const owner = players.find(p => p.id === group.component.ownerId);
@@ -313,18 +336,19 @@ function PieceFields({ component: c, players, onPatch, adding = false, catalogOn
   const variants = SCENE_VARIANTS[c.kind];
   const cards = ['resource-card','development-card','deck'].includes(c.kind);
   return <div className="se-piece-fields">
-    {variants && <label>종류<select value={c.variant ?? ''} onChange={event => { const variant = event.target.value || null; onPatch({ variant, ...(c.kind === 'harbor' ? { ratio: variant === 'generic' ? 3 : variant ? 2 : null } : {}) }); }}><option value="">모름</option>{variants.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}{c.variant && !variants.some(o => o.value === c.variant) && <option value={c.variant}>{c.variant}</option>}</select></label>}
-    {canEditOwner(c.kind) && (c.observedColor || !c.ownerId && ['road', 'settlement', 'city'].includes(c.kind)) && <label>사진색 {c.observedColor ? `· ${c.observedColor}` : '· 미확인'}<input type="color" aria-label="사진에서 본 부품 색" value={observedColorCSS(c.observedColor) ?? '#cfcabb'} onInput={event => onPatch({ observedColor: event.currentTarget.value })} onChange={event => onPatch({ observedColor: event.target.value })}/>{c.observedColor && <small className="muted">같은 사진색은 소유색을 함께 연결해요.</small>}</label>}
+    {variants && <fieldset className="se-pick"><legend>종류</legend><div className="se-pick-grid">{variants.map(o => <button type="button" key={o.value} aria-pressed={c.variant === o.value} aria-label={o.label} onClick={() => onPatch({ variant: o.value, ...(c.kind === 'harbor' ? { ratio: o.value === 'generic' ? 3 : 2 } : {}) })}><GameComponentArt game={game} {...artProps({ ...c, variant: o.value }, players)} size={40}/><span>{o.label.replace(/ 항구$/, '').replace(/\(.*\)/, '')}</span></button>)}<button type="button" className="se-pick-unknown" aria-pressed={!c.variant} aria-label="종류 모름" onClick={() => onPatch({ variant: null, ...(c.kind === 'harbor' ? { ratio: null } : {}) })}>?</button></div>{c.variant && !variants.some(o => o.value === c.variant) && <small className="muted">기록된 값: {c.variant}</small>}</fieldset>}
+    {canEditOwner(c.kind) && (c.observedColor || !c.ownerId && ['road', 'settlement', 'city'].includes(c.kind)) && <details className="se-observed"><summary>사진색 직접 지정</summary><label>사진색 {c.observedColor ? `· ${c.observedColor}` : '· 미확인'}<input type="color" aria-label="사진에서 본 부품 색" value={observedColorCSS(c.observedColor) ?? '#cfcabb'} onInput={event => onPatch({ observedColor: event.currentTarget.value })} onChange={event => onPatch({ observedColor: event.target.value })}/>{c.observedColor && <small className="muted">같은 사진색은 소유색을 함께 연결해요.</small>}</label></details>}
     {canEditOwner(c.kind) && <OwnerColors game={game} players={players} value={c.ownerId} onChange={ownerId => onPatch({ ownerId })}/>}
-    {(c.kind === 'number-token' || (c.kind === 'terrain' && c.number !== undefined)) && <label>숫자<select value={c.number ?? ''} onChange={event => onPatch({ number: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option>{CATAN_NUMBERS.map(n => <option key={n} value={n}>{n}</option>)}</select></label>}
-    {c.kind === 'harbor' && <label>교환 비율<select value={c.ratio ?? ''} onChange={event => onPatch({ ratio: event.target.value ? Number(event.target.value) : null })}><option value="">모름</option><option value={3}>3:1</option><option value={2}>2:1</option></select></label>}
+    {(c.kind === 'number-token' || (c.kind === 'terrain' && c.number !== undefined)) && <fieldset className="se-pick"><legend>숫자</legend><div className="se-pick-numbers">{CATAN_NUMBERS.map(n => <button type="button" key={n} className={n === 6 || n === 8 ? 'is-hot' : ''} aria-pressed={c.number === n} onClick={() => onPatch({ number: n })}>{n}</button>)}<button type="button" className="se-pick-unknown" aria-pressed={c.number == null} aria-label="숫자 모름" onClick={() => onPatch({ number: null })}>?</button></div></fieldset>}
+    {c.kind === 'harbor' && <fieldset className="se-pick"><legend>교환 비율</legend><div className="se-pick-numbers is-wide">{[3, 2].map(r => <button type="button" key={r} aria-pressed={c.ratio === r} onClick={() => onPatch({ ratio: r })}>{r}:1</button>)}<button type="button" className="se-pick-unknown" aria-pressed={c.ratio == null} aria-label="교환 비율 모름" onClick={() => onPatch({ ratio: null })}>?</button></div></fieldset>}
     {(!adding || !boardSlotTypes(c.kind).length) && (catalogOnly || !slotPoint(c.location) || c.quantity !== 1) && <label>수량<input type="number" min={0} step={1} inputMode="numeric" placeholder="모름" value={c.quantity ?? ''} onChange={event => { const value = event.target.value === '' ? null : Number(event.target.value); if (value === null || Number.isInteger(value) && value >= 0) onPatch({ quantity: value }); }}/></label>}
     {cards && <label>보이는 면<select value={c.face ?? ''} onChange={event => onPatch({ face: event.target.value as SceneComponent['face'] || null })}><option value="">모름</option><option value="front">앞면</option><option value="back">뒷면</option></select></label>}
   </div>;
 }
 // ---------- Board ----------
 function BoardView({ game, svgRef, scene, players, selectedId, selectedIds, selectedHex, targetKind, drag, dragComponent, onBeginDrag, onSelect, onTarget, onHex, onBackground }: {
-  game?: string; svgRef: React.RefObject<SVGSVGElement | null>; scene: ComponentScene; players: Player[]; selectedId: string | null; selectedIds: string[]; selectedHex: string | null; targetKind: SceneKind | null;
+  game?: string;
+  onReadDetail?: (pieceId:string)=>void; svgRef: React.RefObject<SVGSVGElement | null>; scene: ComponentScene; players: Player[]; selectedId: string | null; selectedIds: string[]; selectedHex: string | null; targetKind: SceneKind | null;
   drag: DragState | null; dragComponent: SceneComponent | null;
   onBeginDrag: (event: ReactPointerEvent, id: string) => void; onSelect: (id: string) => void; onTarget: (location: SceneLocation) => void; onHex: (hexId: string) => void; onBackground: () => void;
 }) {

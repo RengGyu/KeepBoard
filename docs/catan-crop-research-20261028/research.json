@@ -1,0 +1,299 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-10-28",
+  "title": "보드게임 사진의 크롭·타일링·병렬 판독 연구",
+  "scope": "문헌/공식 구현 조사만; 제품 수정·모델 호출·신규 실험 없음",
+  "recommendation": {
+    "level": "RECOMMENDATION",
+    "text": "현재 모델을 유지한 동일 관측 과제에서 원본과 겹침 크롭의 효과부터 비교한다. 제품 적용 후보는 제한된 병렬 크롭+원본 좌표 환산+보수적 중복 처리+전체 원본 보존. 문헌만으로 기본 경로 전환을 확정하지 않는다.",
+    "why": "작은 물체의 유효 스케일을 확보하는 근거는 있으나 문맥 손실, 잘림, 중복, 토큰 증가를 해결해야 한다."
+  },
+  "existing_experiment": {
+    "level": "REPORTED_BY_TASK_CARD",
+    "independently_verified": false,
+    "images": 1,
+    "manual_rois": 4,
+    "sequential_seconds": 21.67,
+    "parallel_seconds": 8.87,
+    "whole_full_task_seconds": 45.67,
+    "confounds": [
+      "관측 클래스 축소",
+      "canonical placement 제거",
+      "수동 ROI 선택",
+      "단일 원본과 실행 변동"
+    ],
+    "conclusion": "같은 크롭 작업의 동시 실행 가능성을 시사하나 원본 full-task 대비 크롭만의 품질/속도 인과는 미분리."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "category": "object_detection_paper",
+      "title": "Slicing Aided Hyper Inference and Fine-tuning for Small Object Detection (SAHI)",
+      "url": "https://arxiv.org/html/2202.06934v4",
+      "version": "arXiv v4, 2022-07-12",
+      "locators": [
+        "§3 / Fig.2",
+        "§4 / Table 1"
+      ],
+      "verified": "겹침 패치별 검출, 원본 좌표 환산, NMS 및 선택적 전체 이미지 검출을 결합한다.",
+      "reported_measurement": "VisDrone19 test-dev TOOD AP50: 전체29.4, SAHI31.9, SAHI+전체+겹침34.7. 작은 물체 AP50 18.1→23.8이나 크롭만 적용한 큰 물체 AP50은50.0→45.2.",
+      "transfer_limit": "드론의 알려진 객체 검출이다. 게임 종류·숫자·소유·관계를 읽는 VLM 성능이나 API 지연을 입증하지 않는다.",
+      "application": "작은 말/토큰과 큰 보드·카드를 다른 스케일에서 놓칠 수 있다는 근거.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": "REPORTED_BY_AUTHORS_NOT_REPRODUCED"
+    },
+    {
+      "id": "S2",
+      "category": "object_detection_implementation",
+      "title": "SAHI 공식 How Sliced Inference Works / API 예제",
+      "url": "https://obss.github.io/sahi/guides/sliced-inference/",
+      "version": "2026-10-28 열람; 배포 버전 미고정",
+      "locators": [
+        "Slice, Detect, Merge",
+        "Tuning Tips"
+      ],
+      "verified": "slice_height/width, overlap 비율, perform_standard_pred, 원본 좌표 병합 및 NMS/NMM·IoU/IoS를 제공한다.",
+      "reported_measurement": null,
+      "transfer_limit": "코드 경로 존재를 확인했으며 실행하지 않았다. 기본 overlap/병합 임계값이 게임판에 최적이라는 근거는 없다.",
+      "application": "기존 검출기와 결합할 수 있는 실제 구현 사례. SAHI 자체가 게임 검출기를 제공하지는 않는다.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": null
+    },
+    {
+      "id": "S3",
+      "category": "vlm_architecture_paper",
+      "title": "LLaVA-UHD: an LMM Perceiving Any Aspect Ratio and High-Resolution Images",
+      "url": "https://arxiv.org/html/2403.11703v1",
+      "version": "arXiv v1, 2024-03-18",
+      "locators": [
+        "§3.1–3.3",
+        "Table 1–2"
+      ],
+      "verified": "가변 종횡비 슬라이스와 전체 축소본, 슬라이스별 압축 및 행·열 순서를 나타내는 spatial schema를 함께 사용한다.",
+      "reported_measurement": "Table 1 TextVQA 61.3→67.7; 표의 계산량15.5→14.6 TFLOPs. Table 2 압축기를 MLP로 바꾸면113.65 TFLOPs.",
+      "transfer_limit": "학습된 인코딩/압축/연결 구조의 결과이며 외부 API 독립4요청의 속도나 단순 크롭 효과가 아니다. TFLOPs는 벽시계 지연이 아니다.",
+      "application": "세부 크롭만 보존하지 말고 전체 구조·공간적 순서도 남길 근거.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": "REPORTED_BY_AUTHORS_NOT_REPRODUCED"
+    },
+    {
+      "id": "S4",
+      "category": "vlm_implementation",
+      "title": "OpenGVLab InternVL2_5-8B 공식 모델 카드",
+      "url": "https://huggingface.co/OpenGVLab/InternVL2_5-8B/blob/506da3518f69836465aaea9ae698534849fb6917/README.md",
+      "version": "commit 506da3518f69836465aaea9ae698534849fb6917",
+      "locators": [
+        "Model Architecture",
+        "dynamic_preprocess",
+        "load_image"
+      ],
+      "verified": "종횡비에 맞는 격자를 골라448×448 타일을 만들고 load_image에서 전체 thumbnail을 추가한다. 예제 max_num=12는 로컬 타일 상한이며 별도 thumbnail이 더해질 수 있다.",
+      "reported_measurement": null,
+      "transfer_limit": "학습된 모델에 여러 타일을 함께 입력하는 경로다. 타일마다 독립 텍스트 응답을 생성하는 API 병렬 처리와 다르다. GPU 실행을 재현하지 않았다.",
+      "application": "실제 공개 구현의 tile+overview 사례. 새 모델 도입 권고가 아니라 방식의 참고.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": null
+    },
+    {
+      "id": "S5",
+      "category": "document_ocr_free_vlm_paper",
+      "title": "UReader: Universal OCR-free Visually-situated Language Understanding with Multimodal Large Language Model",
+      "url": "https://aclanthology.org/2023.findings-emnlp.187.pdf",
+      "version": "Findings of EMNLP 2023",
+      "locators": [
+        "§3.1–3.2 / pp.2843–2844",
+        "§5.4 Table 2–3 / pp.2847–2848",
+        "§5.5 / Appendix C.1"
+      ],
+      "verified": "224px 로컬 크롭과 전체 축소본을 비전 인코더에 병렬 입력하고2D crop-position encoding을 사용한다. OCR 전용 엔진이 아닌 문서·장면 텍스트용 VLM이다.",
+      "reported_measurement": "Table 2: global 없는 r8→있는 r10의 DocVQA64.1→65.4, ChartQA60.7→59.3(후자는 저하). Table 3 고정3×3→shape-adaptive의 BLEU4 9.7→11.7.",
+      "transfer_limit": "학습된 문서/VQA 체계의 결과다. 문서 BLEU/VQA 점수는 게임 전체 상태 정확도가 아니며 저자도 읽기 환각을 보고한다.",
+      "application": "전체 문맥·crop 위치의 이점과 과제별 예외를 함께 고려할 근거.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": "REPORTED_BY_AUTHORS_NOT_REPRODUCED"
+    },
+    {
+      "id": "S6",
+      "category": "document_ocr_free_implementation",
+      "title": "UReader 저자 공개 코드",
+      "url": "https://github.com/LukeForeverYoung/UReader",
+      "version": "2026-10-28 main 열람; 실행 미검증",
+      "locators": [
+        "README Training, Inference and Evaluation",
+        "pipeline/interface.py 및 pipeline/evaluation.py 안내"
+      ],
+      "verified": "학습자료·체크포인트와 모델/processor 인터페이스, 분산 추론·평가 실행 경로를 공개한다.",
+      "reported_measurement": null,
+      "transfer_limit": "README가 지시하는 구현 경로를 확인한 수준이다. 온라인 서비스의4요청 병렬 성능이나 현재 환경 설치 가능성을 시험하지 않았다.",
+      "application": "논문 아이디어만이 아닌 저자 구현 사례. 모델 내부 인코딩 병렬화와 독립 요청 동시성의 구분.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": null
+    },
+    {
+      "id": "S7",
+      "category": "dynamic_resolution_vlm_paper",
+      "title": "Qwen2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution",
+      "url": "https://arxiv.org/html/2409.12191v1",
+      "version": "arXiv v1, 2024-09-18",
+      "locators": [
+        "§2.1 Naive Dynamic Resolution",
+        "§3.3.1 Table 7 / Fig.4"
+      ],
+      "verified": "해상도에 따라 시각 토큰 수를 바꾸며 위치를 인코딩한다. 고정4분할이나 독립API 호출 구조가 아니다.",
+      "reported_measurement": "Table 7 OCRBench: 고정576토큰828, 고정3136토큰786, 동적 평균1924토큰866. 과도한 작은 이미지 확대가 성능을 낮출 수 있다고 보고한다.",
+      "transfer_limit": "Qwen2-VL의 학습·평가 결과이며 현재 Flash 내부 전처리나 게임 인식의 증거가 아니다.",
+      "application": "크롭/확대를 많이 할수록 좋아진다는 단조 가정을 피하고 실제 입력 크기·토큰을 기록할 근거.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": "REPORTED_BY_AUTHORS_NOT_REPRODUCED"
+    },
+    {
+      "id": "S8",
+      "category": "hosted_api_operations",
+      "title": "Google Gemini API 공식 Rate limits",
+      "url": "https://ai.google.dev/gemini-api/docs/rate-limits",
+      "version": "2026-10-28 열람",
+      "locators": [
+        "How rate limits work"
+      ],
+      "verified": "RPM/입력TPM/RPD 등 한도가 있고 프로젝트 단위로 적용된다. 병렬 요청도 이를 소비한다.",
+      "reported_measurement": null,
+      "transfer_limit": "현재 계정 한도·Flash 모델 내부 병렬 처리·실제 지연은 조회하지 않았다.",
+      "application": "동시 요청 수를 제한하고 총usage/실패를 합산해야 한다. 병렬 실행 자체로 과금 토큰이 줄어들지 않는다.",
+      "accessed": "2026-10-28",
+      "source_reading": "VERIFIED",
+      "measurement_basis": null
+    }
+  ],
+  "synthesis": [
+    {
+      "id": "M1",
+      "level": "INFERRED",
+      "claim": "원본에서 잘라 작은 물체가 인코더 입력에서 차지하는 픽셀 비중을 키울 수 있다. 이미 다운샘플·흐림으로 없어진 획을 복원하는 방법은 아니다.",
+      "source_refs": [
+        "S1",
+        "S3",
+        "S7"
+      ]
+    },
+    {
+      "id": "M2",
+      "level": "VERIFIED",
+      "claim": "검출기 slicing, 모델 내부 multi-tile encoding, 외부API 요청 병렬화는 서로 다른 실행 구조다.",
+      "source_refs": [
+        "S1",
+        "S4",
+        "S5",
+        "S8"
+      ]
+    },
+    {
+      "id": "M3",
+      "level": "INFERRED",
+      "claim": "외부4요청은 각자의 문맥/생성 과정을 가지므로 학습된 공동 tile encoder의 공간 이해를 자동 재현하지 않는다.",
+      "source_refs": [
+        "S3",
+        "S4",
+        "S5"
+      ]
+    },
+    {
+      "id": "M4",
+      "level": "INFERRED",
+      "claim": "같은 요청 묶음의 병렬화는 임계경로를 줄일 수 있으나 입력·출력 토큰을 자동 절약하지 않는다. 반복 프롬프트·겹침·overview는 오히려 작업량을 늘릴 수 있다.",
+      "source_refs": [
+        "S2",
+        "S8"
+      ]
+    }
+  ],
+  "practical_contract": {
+    "scale": "원본 SHA/EXIF 정렬 후 크기·crop 사각형·리사이즈/패딩을 기록. 모델에 실제 들어가는 해상도/토큰 정책 고정. 20% overlap 등은 시작값일 뿐 최적값 주장이 아니다.",
+    "overlap": "타일 경계의 물체가 다른 타일에서는 완전히 보일 정도의 halo를 둔다. 큰 카드/보드가 항상 들어간다는 보장은 없으므로 전체 원본도 유지한다.",
+    "source_mapping": "무패딩 정규화 crop box(u,v,w,h), 원본 crop(x0,y0,wc,hc)면 원본 pixel box=(x0+u*wc,y0+v*hc,w*wc,h*hc). 회전/패딩/투시변환이 있으면 기록된 역변환 적용. 좌표 단위는 모델 계약으로 고정.",
+    "dedup": "원본 좌표에서 동일 물리종류·레이어/강한 위치 중첩/속성 일관성을 비교. 같은 숫자·색만으로 합치지 않는다. 지형 위 숫자와 카드 위 말은 겹쳐도 다른 물체다. 충돌값은 원출처와 함께 미해결로 남긴다.",
+    "global_context": "원본은 검토/복원의 기준으로 유지. 크롭 ID와 상대 위치를 기록하되 그것만으로 소유·인접 관계가 읽혔다고 하지 않는다. 모델에 전체 thumbnail을 같이 보내거나 별도 전역 판독을 하는 안은 추가 비용/품질의 별도 변수다.",
+    "assembly": "사진 좌표와 게임 슬롯을 분리한다. 재고/기대 개수로 누락을 생성하지 않는다. 실패한 크롭을 빈판/0으로 바꾸지 않고 미확인·기존 기록을 보존한다.",
+    "parallel": "비동기 동시 실행은 제한된 concurrency로 한다. 같은4요청을 순차/병렬 비교할 때 bytes/prompt/schema/effort/limits는 동일하게 고정한다. API Batch 할인과 실시간 병렬화를 혼동하지 않는다."
+  },
+  "latency_cost_model": {
+    "level": "INFERRED_ANALYTICAL",
+    "serial": "preprocess + sum(request_elapsed_i) + merge",
+    "parallel_ideal": "preprocess + max(request_elapsed_i) + merge (모든 요청을 동시에 수용할 때만)",
+    "real_world": "큐·업로드 경합·rate limit·동시성 제한·가장 느린 요청 때문에 이상식보다 길 수 있음",
+    "total_work": "모든 요청의 input/output/reasoning/cache usage와 실패/재호출 비용 합산",
+    "token_note": "동시성만 바뀌면 입력 묶음은 같음; 출력은 모델 변동 가능. 전체원본과크롭의 총토큰 차이는 측정 필요."
+  },
+  "next_comparison": {
+    "status": "PROPOSED_NOT_AUTHORIZED_OR_EXECUTED",
+    "question": "같은 literal 관측 과제에서 크롭 전략이 유용한가, 동일 크롭 요청의 병렬화가 실제 벽시계 시간을 줄이는가?",
+    "photos": {
+      "count": 2,
+      "selection": "기존 원본1 + 다른 실제 Catan 상태/구도의 원본1. crop 계획과 GT는 추론 전 고정; 같은사진을 재크롭한 것을 독립 표본으로 세지 않음.",
+      "ground_truth": "원본에서 물체별 실제 box·종류·읽을 수 있는 인쇄값. 흐림/가림은 unknown, 경계 물체를 별도 표시. 토큰 대신 tilecenter를 GT로 쓰지 않음."
+    },
+    "task": "지형·숫자토큰·도로·마을·도시·도둑의 literal 종류/인쇄값/색/사진bbox. 모든 군 동일; canonical placement/소유/턴/규칙 추정 제외. 카드·항구·손패·전체 복원 성능은 이 비교 범위 밖.",
+    "arms": [
+      {
+        "id": "W",
+        "calls_per_photo": 1,
+        "input": "원본1장",
+        "schedule": "single"
+      },
+      {
+        "id": "CS",
+        "calls_per_photo": 4,
+        "input": "사전 고정2×2 ROI, 각 기본 사분면을 원본 가로/세로의5%씩 안쪽 경계 방향으로 확장(이웃 실제겹침10% 원본폭/높이); 원본에서 동일 방식으로 생성",
+        "schedule": "concurrency1"
+      },
+      {
+        "id": "CP",
+        "calls_per_photo": 4,
+        "input": "CS와 정확히 같은4개 crop bytes/prompt/schema/settings",
+        "schedule": "concurrency4; 허용 계정 한도 내에서만"
+      }
+    ],
+    "maximum_calls": 18,
+    "retries": 0,
+    "reasoning": "같은 endpoint/model/version의 LOW 하나만 우선; HIGH·새 모델 동시 비교 없음",
+    "control": "두 원본의 순서를 교차하고 호출 조건·요청SHA·실제 이미지 전처리·출력 한도·finish reason을 기록. 어느 군이든 잘리면 정상 품질 비교로 계산하지 않음.",
+    "budget": "현재 실행 권한 없음. 제안 집계는18회 실패 포함. 비용 상한은 실행 전 실제 endpoint 단가와 입력/출력 한도를 확인해 명시; 이번 조사에서 특정 금액 조작/실청구 조회 없음.",
+    "metrics": [
+      "물체 발견/누락/환각/중복 각각",
+      "읽을 수 있는 값의 exact match와 unknown",
+      "원본 물체bbox 대응 및 경계별 오차",
+      "원본에 정렬된 후보의 보존/수동 보완 필요 항목",
+      "전처리·개별 요청·전체 wall·병합 시간",
+      "입력/출력/추론 토큰·비용 총계",
+      "실제 측정한 ROI 지정·검토·정정·저장 시간(미측정은 UNKNOWN)"
+    ],
+    "interpretation": "W↔CS는 동일 과제의 크롭 전략(추가 토큰/문맥 변화 포함) 비교이며 픽셀 확대만의 인과는 아님. CS↔CP는 스케줄링 비교. 두사진·각1실행으로 p95/일반정확도/안정된속도배수를 주장하지 않음.",
+    "stop_rule": "사전 고정18회 이후 자동 확장 금지. 누락/중복/잘못된 값 또는 정정 부담이 커지면 빠른 wall만으로 채택하지 않음. 크롭 이점이 없으면 모델교체/무한타일 증가 대신 원본 유지. 경계/문맥 문제가 남으면 그 변수만 후속 비교로 제안."
+  },
+  "unknowns": [
+    "Flash 내부 타일/해상도 정책과 실제 적용 입력 budget",
+    "동일 과제의 원본 대크롭 정확도",
+    "적정 overlap/타일수/입력해상도",
+    "수동 ROI 선택의 시간·품질 기여",
+    "전역관계/완전 게임상태 복원",
+    "두사진 밖 게임/카드/토큰으로의 일반화",
+    "현재 계정 동시 요청 한도"
+  ],
+  "execution": {
+    "product_edits": 0,
+    "paid_model_calls": 0,
+    "new_agents": 0,
+    "new_experiments": 0,
+    "verification": "공개1차자료 읽기 및 산출물 JSON/링크 정합성 확인만"
+  },
+  "skill_use": {
+    "skill": "ecc:deep-research",
+    "adaptation": "질문/출처/사실·추론 분리만 적용. 전용 Exa/Firecrawl 도구 미노출로 제공 web 도구 사용; 사용자 지정5–8출처와 단독 연구 범위 유지."
+  }
+}

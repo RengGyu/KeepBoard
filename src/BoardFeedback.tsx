@@ -40,7 +40,7 @@ export function EmptyBoardArt({ scene = 'boards' }: { scene?: EmptyScene }) {
 
 /** Kept beside the instructions, outside the live camera frame. */
 export function CaptureHelp() {
-  return <figure className="board-capture-help has-photo"><img src={BRAND_IMAGES.captureGuide} alt="휴대폰을 판 위에 평행하게 들고 판 전체를 찍는 모습" width={900} height={900} loading="lazy" decoding="async"/><figcaption><strong>휴대폰을 판 위에서 평행하게</strong><span>판 전체부터, 영역마다 잠시 멈춰주세요.</span></figcaption></figure>;
+  return <figure className="board-capture-help has-photo"><img src={BRAND_IMAGES.captureGuide} alt="휴대폰을 판 위에 평행하게 들고 판 전체를 찍는 모습" width={900} height={900} loading="lazy" decoding="async"/><figcaption><strong>휴대폰을 판 위에서 평행하게</strong><span>흔들림과 빛 반사를 피하고 숫자·말이 선명하게 보이도록 찍어 주세요.</span></figcaption></figure>;
 }
 
 export function CurrentTurnMark() {

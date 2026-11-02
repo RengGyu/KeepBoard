@@ -52,14 +52,19 @@ test('explicit geometry action changes only the review copy; unknown terrain sta
  assert.equal(JSON.stringify(f.source),before);assert.equal(JSON.stringify(f.base),baseBefore);
  assert.equal(localCatanCandidates(f.view).length,1);f.view.session.assertions.push({id:'confirmed-board',field:'board.layout',status:'accepted',updatedAt:'2026-01-03',value:placed.scene});assert.equal(localCatanCandidates(f.view).length,0);
 });
-test('local Catan candidates are discoverable but absent from ordinary editor/top-save value; dirty board cannot be overwritten by review',async()=>{
+test('local Catan candidates appear on the board, and direct save uses the pinned native review boundary',async()=>{
  const f=candidateFixture();let save:any,writes=0;
+ const {api}=await import('../src/api.ts');const priorUpdate=api.update;let body:any;
+ api.update=(async(_id:any,payload:any)=>{body=payload;return f.view;}) as any;
  // Minimal useRef support for the actual workspace wrapper.
  const internals=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,previous=internals.H,slots:any[]=[];let i=0;
- internals.H={useState(v:any){const n=i++;if(!(n in slots))slots[n]=typeof v==='function'?v():v;return[slots[n],(x:any)=>slots[n]=typeof x==='function'?x(slots[n]):x];},useRef(v:any){const n=i++;return slots[n]??=( {current:v});}};
- let tree:any;try{tree=SceneWorkspace({view:f.view,busy:false,mutate:async()=>{writes++;},onEvidence(){},onReadyToSave:fn=>save=fn});}finally{internals.H=previous;}
- const editor=find(tree,n=>n.type===SceneEditor);assert.equal(editor.props.forceSave,false);assert.equal(editor.props.value.components.length,3);assert(!editor.props.value.components.some((c:any)=>c.id==='new-terrain'));assert(nodes(tree).some(n=>n.type==='button'&&n.props.children==='지형·숫자 후보 확인'));
- const review=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:true,mutate:async()=>{writes++;},onClose(){},onEvidence(){}});const reviewEditor=find(review.tree,n=>n.type===SceneEditor);assert.equal(reviewEditor.props.onReadyToSave,undefined);assert.equal(reviewEditor.props.busy,true);await assert.rejects(reviewEditor.props.onSave(f.base),/저장하지 않은/);assert.equal(writes,0);assert.equal(save,undefined);
+ internals.H={useState(v:any){const n=i++;if(!(n in slots))slots[n]=typeof v==='function'?v():v;return[slots[n],(x:any)=>slots[n]=typeof x==='function'?x(slots[n]):x];},useRef(v:any){const n=i++;return slots[n]??=( {current:v});},useEffect(){i++;}};
+ let tree:any;try{tree=SceneWorkspace({view:f.view,busy:false,mutate:async(task:any)=>{await task();writes++;},onEvidence(){},onReadyToSave:fn=>save=fn});}finally{internals.H=previous;}
+ const editor=find(tree,n=>n.type===SceneEditor);assert.equal(editor.props.forceSave,true);assert.equal(editor.props.value.components.length,4);assert(editor.props.value.components.some((c:any)=>c.id==='new-terrain'));assert(nodes(tree).some(n=>n.type==='button'&&n.props.children==='사진 후보 자세히 보기'));
+ const fieldSwitch=nodes(tree).find(n=>n.type==='select'&&n.props['aria-label']==='다른 부품 보기');if(fieldSwitch){fieldSwitch.props.onChange({target:{value:'board.layout'}});await new Promise(resolve=>setTimeout(resolve,0));assert.equal(writes,0,'viewing another field does not accept an untouched photo candidate');}
+ await editor.props.onSave(editor.props.value);assert.equal(writes,1);assert.equal(body.answers[0].field,'board.layout');assert.deepEqual(body.answers[0].observationReview,{version:'native-observation-review-v1',sourceAssertionId:'local',expectedBaselineAssertionId:'accepted'});
+ const review=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:true,mutate:async()=>{writes++;},onClose(){},onEvidence(){}});const reviewEditor=find(review.tree,n=>n.type===SceneEditor);assert.equal(reviewEditor.props.onReadyToSave,undefined);assert.equal(reviewEditor.props.busy,true);await assert.rejects(reviewEditor.props.onSave(f.base),/저장하지 않은/);assert.equal(writes,1);assert.equal(save,undefined);
+ api.update=priorUpdate;
 });
 test('a changed accepted board cannot be overwritten by an already open local-candidate review',async()=>{
  const f=candidateFixture();let writes=0;const ui=mount(LocalCatanReview,{view:f.view,source:f.source,busy:false,dirty:false,mutate:async()=>{writes++;},onClose(){},onEvidence(){}});
@@ -89,7 +94,7 @@ test('workspace keeps existing/local area selections separate and local reads on
  const original={jobs:api.analysisJobs,readers:api.recognitionReaders,start:api.startAnalysisJob};let request:any;api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'local-observation-v1',available:true,cloudSupported:false,identity:null}],definitions:{indexSHA:'a'.repeat(64),version:'game-photo-definitions-v1',count:120}});api.startAnalysisJob=async(_id,body)=>{request=body;return{job:{id:'mock-job',sessionId:f.view.session.id,state:'queued',evidenceIds:body.evidenceIds,captureEpoch:'current',createdAt:'',updatedAt:''}};};
  const props={view:f.view,busy:false,status:{configured:true},onBack(){},setOwnerId:async()=>{},onToast(){},mutate:async(task:any)=>{await task();}};const ui=mount(SessionWorkspace,props);
  try{
-  await new Promise(r=>setTimeout(r,0));ui.render();find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('board');ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('local');ui.render();await new Promise(r=>setTimeout(r,0));ui.render();
+  await new Promise(r=>setTimeout(r,0));ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('existing');ui.render();find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('board');ui.render();find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('local');ui.render();await new Promise(r=>setTimeout(r,0));ui.render();
   assert.equal(find(ui.tree,n=>n.type===PhotoCaptureGuide).props.areaId,'board');assert.equal(typeof find(ui.tree,n=>n.type===LightweightReaderControls).props.onFrame,'function');
   find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('not-the-board');ui.render();assert.equal(find(ui.tree,n=>n.type===LightweightReaderControls).props.onFrame,undefined);
   find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('existing');ui.render();assert.equal(find(ui.tree,n=>n.type===PhotoCaptureGuide).props.areaId,'board');
@@ -102,7 +107,7 @@ test('workspace keeps existing/local area selections separate and local reads on
 });
 test('Rummikub retains one reread action rather than a second controls button',async()=>{
  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx');const {RummikubWorkspace}=await import('../src/RummikubWorkspace.tsx');const {api}=await import('../src/api.ts');const f=candidateFixture();f.view.pack=catalogPacks.find(p=>p.id==='rummikub');Object.assign(f.view.session,{name:'합성',captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const old=api.analysisJobs,readers=api.recognitionReaders;api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({version:'local-reader-capabilities-v1',readers:[],definitions:{version:'game-photo-definitions-v1',count:120,indexSHA:''}});
- const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},onBack(){},setOwnerId:async()=>{},onToast(){},mutate:async()=>{}});try{const controls=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(controls.props.showReadButton,false);assert(!renderToStaticMarkup(React.createElement(controls.type,controls.props)).includes('사진 읽기</button>'));assert.equal(typeof find(ui.tree,n=>n.type===RummikubWorkspace).props.onReread,'function');}finally{ui.dispose();api.analysisJobs=old;api.recognitionReaders=readers;}
+ const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},onBack(){},setOwnerId:async()=>{},onToast(){},mutate:async()=>{}});try{find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('existing');ui.render();const controls=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(controls.props.showReadButton,false);assert(!renderToStaticMarkup(React.createElement(controls.type,controls.props)).includes('사진 읽기</button>'));assert.equal(typeof find(ui.tree,n=>n.type===RummikubWorkspace).props.onReread,'function');}finally{ui.dispose();api.analysisJobs=old;api.recognitionReaders=readers;}
 });
 
 test('unresolved local Catan item remains saveable in the explicit baseline-pinned draft; API failure keeps editor draft',async()=>{
@@ -125,8 +130,8 @@ test('local partial typed candidate uses explicit component linking with accepte
  const {GameEssentials}=await import('../src/GameEssentials.tsx'),{ComponentLinkDialog}=await import('../src/ComponentLinkDialog.tsx');const pack=catalogPacks.find(p=>p.id==='splendor')!;
  const piece=(id:string)=>({id,componentId:'development',variant:null,quantity:1,label:'合成',anchor:'',evidenceId:null,region:null}),record=(id:string)=>({version:'game-component-record-v1',pieces:[piece(id)]});
  const view:any={pack,session:{id:'typed-ui',players:[],evidence:[],snapshots:[],preservations:[],assertions:[{id:'old',field:'market.scene',status:'accepted',value:record('old-card'),evidenceIds:[]},{id:'new',field:'market.scene',status:'candidate',value:record('new-card'),evidenceIds:[],observationReceipts:[{version:'lightweight-observation-v1',reader:{kind:'local-observation-v1'}}]}]},questions:[]};let writes=0;
- const ui=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(ui.tree,n=>n.type==='button'&&n.props.children==='후보 확인·수정').props.onClick();ui.render();const link=find(ui.tree,n=>n.type===ComponentLinkDialog);assert.deepEqual(link.props.initialIds,['new-card']);assert.equal(link.props.initialTarget.field,'market.scene');assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{ui.dispose();}
- const baseline=view.session.assertions.shift(),first=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(first.tree,n=>n.type==='button'&&n.props.children==='후보 확인·수정').props.onClick();first.render();view.session.assertions.unshift(baseline);first.render();const review=find(first.tree,n=>typeof n.type==='function'&&n.type.name==='GenericComponents'&&n.props.review);await assert.rejects(review.props.onSave(review.props.value),/기존 기록/);assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{first.dispose();}
+ const ui=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(ui.tree,n=>n.type==='button'&&n.props.children==='후보 보기·적용').props.onClick();ui.render();const link=find(ui.tree,n=>n.type===ComponentLinkDialog);assert.deepEqual(link.props.initialIds,['new-card']);assert.equal(link.props.initialTarget.field,'market.scene');assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{ui.dispose();}
+ const baseline=view.session.assertions.shift(),first=mount(GameEssentials,{view,busy:false,mutate:async()=>{writes++;},onEvidence(){}});try{find(first.tree,n=>n.type==='button'&&n.props.children==='후보 보기·적용').props.onClick();first.render();view.session.assertions.unshift(baseline);first.render();const review=find(first.tree,n=>typeof n.type==='function'&&n.type.name==='GenericComponents'&&n.props.review);await assert.rejects(review.props.onSave(review.props.value),/기존 기록/);assert.equal(writes,0);assert.deepEqual(view.session.assertions[0].value,record('old-card'));}finally{first.dispose();}
 });
 
 test('malformed local source is visibly blocked without crashing review or exposing a replacement blank-state save',async()=>{
@@ -182,7 +187,7 @@ test('Gemini is offered only when the hosted reader reports available and sends 
  const off=renderToStaticMarkup(React.createElement(LightweightReaderControls,base));assert.doesNotMatch(off,/Gemini 판독/);
  const on=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,geminiAvailable:true}));assert.match(on,/<option value="gemini">Gemini 판독/);assert.match(on,/aria-label="사진 읽기 방식"/);assert.match(on,/<button[^>]*>사진 읽기<\/button>/);
  const blocked=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:false,geminiReason:'합성 Gemini 연결 없음'}));assert.match(blocked,/합성 Gemini 연결 없음/);assert.match(blocked,/<button[^>]*disabled[^>]*>사진 읽기/);
- const ready=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:true}));assert.doesNotMatch(ready,/<p role="status"/,'a ready reader shows no inline notice');assert.match(ready,/<details class="lw-more"><summary>읽기 설정<\/summary>[\s\S]*마지막 원본 한 장/);assert.doesNotMatch(ready,/판독할 항목/);
+ const ready=renderToStaticMarkup(React.createElement(LightweightReaderControls,{...base,mode:'gemini' as const,geminiAvailable:true}));assert.doesNotMatch(ready,/<p role="status"/,'a ready reader shows no inline notice');assert.match(ready,/<details class="lw-more"><summary>읽기 설정<\/summary>[\s\S]*선택한 현재 사진을 각각/);assert.doesNotMatch(ready,/판독할 항목/);
 });
 test('workspace sends the chosen provider: Gemini scoped selection, then local, then existing without a reader',async()=>{
  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{photoDefinitionFor,loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();
@@ -208,4 +213,98 @@ test('turn and memo disclosure keeps its draft mounted while collapsed and toggl
   details().props.onToggle({currentTarget:{open:true}});ui.render();assert.equal(details().props.open,true);assert.equal(quick().length,1);
   details().props.onToggle({currentTarget:{open:false}});ui.render();assert.equal(details().props.open,false);assert.equal(quick().length,1);
  }finally{ui.dispose();api.analysisJobs=old.jobs;api.recognitionReaders=old.status;}
+});
+
+// ---- Simple photo flow: results first, optional manual board, defaults without a provider chooser, one-tap board creation ----
+const textOf=(t:any):string=>typeof t==='string'||typeof t==='number'?String(t):Array.isArray(t)?t.map(textOf).join(''):t&&t.props?textOf(t.props.children):'';
+function acceptedResultFixture(placedAt?:{type:'hex';id:string},status:'accepted'|'candidate'='accepted'){
+ const f=candidateFixture(),r=f.source.observationReceipts[0];
+ const observation=(ref:string,bbox:any,props:any)=>({ref,imageIndex:0,panelRef:null,componentId:'terrain',bbox,face:'front',quantity:1,rotationDegrees:null,properties:props,referenceCandidates:[]});
+ const result={version:'lightweight-observation-v1',coverage:'partial',completion:'complete',observations:[observation('a',{x:.1,y:.1,width:.1,height:.1},{variant:{state:'observed',value:'forest'}}),observation('b',{x:.3,y:.3,width:.1,height:.1},{variant:{state:'unknown',value:null,reason:'unreadable'}}),observation('c',{x:.5,y:.5,width:.1,height:.1},{})]};
+ const piece=f.source.value.components[0];if(placedAt)piece.location=placedAt;
+ const source={...f.source,status,basis:status==='accepted'?'user':'observation',updatedAt:'2026-01-03',observationReceipts:[{...r,frame:null,geometryCandidates:[],result}]};
+ f.view.session.assertions=[source];Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});return f;
+}
+test('the illustrated Catan board leads even when no piece has a confirmed position; original photo stays optional',async()=>{
+ const {loadPhotoDefinitions}=await import('../src/photoDefinitions.ts'),{PhotoObservationOverlay}=await import('../src/PhotoObservationOverlay.tsx');await loadPhotoDefinitions();
+ const f=acceptedResultFixture(),ui=mount(SceneWorkspace,{view:f.view,busy:false,mutate:async()=>{},onEvidence(){},onReadyToSave(){}});
+ try{
+  const overlay=find(ui.tree,n=>n.type===PhotoObservationOverlay);assert.equal(overlay.props.open,false);assert.equal(overlay.props.compact,true);
+  assert.match(textOf(find(ui.tree,n=>n.props?.className==='scene-read-summary')),/사진에서 읽은 결과 3개.*위치 미정/);
+  const items=nodes(ui.tree),body=find(ui.tree,n=>n.props?.className?.includes?.('scene-primary-board'));
+  assert(items.indexOf(body)<items.indexOf(overlay),'the editable board appears before the source photo');
+  assert(nodes(body).some(n=>n.type===SceneEditor),'the editor is visible and mounted without a confirmation tap');
+  assert(!('hidden' in body.props));assert(!items.some(n=>n.props?.className?.includes?.('scene-manual-toggle')));
+ }finally{ui.dispose();}
+ const placed=acceptedResultFixture({type:'hex',id:'r1c1'}),ui2=mount(SceneWorkspace,{view:placed.view,busy:false,mutate:async()=>{},onEvidence(){},onReadyToSave(){}});
+ try{assert.equal(find(ui2.tree,n=>n.type===PhotoObservationOverlay).props.open,false);assert(nodes(find(ui2.tree,n=>n.props?.className?.includes?.('scene-primary-board'))).some(n=>n.type===SceneEditor));}finally{ui2.dispose();}
+});
+test('result overlay shows read values on the boxes, marks unreadable for review, folds the list, and never requires a correction',async()=>{
+ const {photoDefinitionFor,loadPhotoDefinitions}=await import('../src/photoDefinitions.ts'),{PhotoObservationOverlay}=await import('../src/PhotoObservationOverlay.tsx');await loadPhotoDefinitions();
+ const f=acceptedResultFixture(),r=f.view.session.assertions[0].observationReceipts![0],definition=photoDefinitionFor(f.view.pack)!;
+ const html=renderToStaticMarkup(React.createElement(PhotoObservationOverlay,{photos:f.view.session.evidence,request:r.request,result:r.result,geometry:[],definition,compact:true,open:true}));
+ assert.match(html,/<details class="lightweight-reader is-result" open="">/);assert.match(html,/lw-photo-review is-compact/);assert.match(html,/<span>확인 필요<\/span>/,'unreadable has the shared review label');
+ assert.match(html,/<details class="lw-list-fold"><summary>목록으로 보기 3개/);assert.match(html,/틀린 값이 있으면 아래 ‘직접 고치기’에서 고칠 수 있어요/);assert.doesNotMatch(html,/명시적으로 반영해 주세요/);
+});
+test('without a chosen provider the photo read stays on Terra (loading or unavailable): preserved photo, clear blocker, never a silent existing-AI start',async()=>{
+ const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();
+ const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob};
+ const terra=(available:boolean)=>async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'terra-game-observation-v1',available,cloudSupported:true,identity:null,...(available?{}:{reason:'Terra 연결 설정이 없어요.'})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}} as any);
+ for(const [label,readers,wantStart] of [['terra offered',terra(true),true],['terra unavailable',terra(false),false],['capabilities still loading',()=>new Promise<any>(()=>{}),false],['capabilities failed',async()=>{throw new Error('offline');},false]] as const){
+  const f=candidateFixture();Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const bodies:any[]=[];
+  api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=readers as any;api.startAnalysisJob=async(_id,body)=>{bodies.push(body);return{job:{id:'job',sessionId:f.view.session.id,state:'completed',evidenceIds:body.evidenceIds,captureEpoch:'epoch',createdAt:'',updatedAt:''}};};
+  const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true,provider:'gateway',model:'synthetic'},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}});
+  try{await new Promise(r=>setTimeout(r,0));ui.render();await new Promise(r=>setTimeout(r,0));ui.render();
+   const c=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(c.props.mode,'terra',label);c.props.onRead();await new Promise(r=>setTimeout(r,0));
+   assert.equal(bodies.length,wantStart?1:0,label);
+   if(wantStart){assert.equal(bodies[0].reader.kind,'terra-game-observation-v1',label);assert.deepEqual(Object.keys(bodies[0].reader).sort(),['areaId','definitionSHA','kind']);}
+  }finally{ui.dispose();}
+ }
+ api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;
+});
+test('new board: a game and one button are enough; mode, name, count and colours sit in one optional disclosure with unchanged defaults',async()=>{
+ const {RoomEntry}=await import('../src/RoomEntry.tsx'),{GamePicker}=await import('../src/GamePicker.tsx'),{api}=await import('../src/api.ts');
+ const packs=[{id:'carcassonne',version:'1.0.0',title:'카르카손',edition:'기본판'}] as any;const old={create:api.create,createRoom:api.createRoom,device:api.roomDevice};const calls:any[]=[];
+ api.create=(async(body:any)=>{calls.push(['create',body]);return {session:{}} as any;}) as any;api.createRoom=(async(body:any)=>{calls.push(['room',body]);return {session:{}} as any;}) as any;api.roomDevice=(async()=>{calls.push(['device']);return {ok:true};}) as any;
+ const created:any[]=[],ui=mount(RoomEntry,{packs,joining:false,onClose(){},onCreated:async(v:any)=>{created.push(v);}});
+ try{
+  const form=find(ui.tree,n=>n.type==='form');
+  const outside=(t:any):any[]=>!t||typeof t!=='object'?[]:Array.isArray(t)?t.flatMap(outside):t.type==='details'?[]:[t,...outside(t.props?.children)];
+  const main=outside(form.props.children);
+  assert(main.some(n=>n.type===GamePicker),'the game picker is in the main flow');assert(!main.some(n=>n.type==='input'),'no input is required up front');assert(!main.some(n=>n.props?.name==='record-mode'));
+  const options=find(ui.tree,n=>n.type==='details'&&n.props.className==='room-options');assert.match(textOf(options),/더 설정 · 선택/);assert.match(textOf(options),/기록 방식/);assert.match(textOf(options),/총 플레이어 수/);assert(nodes(options).some(n=>n.type==='input'&&n.props.type==='number'));
+  assert.match(textOf(find(ui.tree,n=>n.type==='button'&&n.props.className==='button primary full')),/기록 시작/);
+  form.props.onSubmit({preventDefault(){}});await new Promise(r=>setTimeout(r,0));
+  assert.equal(calls.length,1);assert.equal(calls[0][0],'create');assert.equal(calls[0][1].gamePackId,'carcassonne');assert.equal(calls[0][1].name,undefined);assert.equal(calls[0][1].players.length,4,'the previous default of four players is kept');assert(!calls.some(c=>c[0]==='device'||c[0]==='room'),'no room or device step for the default path');assert.equal(created.length,1);
+ }finally{ui.dispose();api.create=old.create;api.createRoom=old.createRoom;api.roomDevice=old.device;}
+});
+
+test('a fresh unaccepted Catan scene appears in the editable board without accepting or mutating it',async()=>{
+ const {loadPhotoDefinitions}=await import('../src/photoDefinitions.ts'),{PhotoObservationOverlay}=await import('../src/PhotoObservationOverlay.tsx');await loadPhotoDefinitions();
+ for(const accepted of [false,true]){
+  const f=acceptedResultFixture(undefined,'candidate');if(accepted)f.view.session.assertions.unshift({id:'old-board',field:'board.layout',status:'accepted',basis:'user',evidenceIds:[],updatedAt:'2026-01-01',value:{version:2,coverage:'partial',components:[]}} as any);
+  const before=JSON.stringify(f.view.session.assertions),writes:any[]=[],ui=mount(SceneWorkspace,{view:f.view,busy:false,mutate:async()=>{writes.push(1);},onEvidence(){},onReadyToSave(){}});
+  try{const overlay=find(ui.tree,n=>n.type===PhotoObservationOverlay);assert.equal(overlay.props.open,false,'accepted='+accepted);assert.match(textOf(find(ui.tree,n=>n.props?.className==='scene-read-summary')),/사진에서 읽은 결과 3개/);const editor=find(ui.tree,n=>n.type===SceneEditor);assert(editor.props.value.components.some((c:any)=>c.id===f.source.value.components[0].id));assert.equal(JSON.stringify(f.view.session.assertions),before);assert.equal(writes.length,0);}finally{ui.dispose();}
+ }
+});
+test('the board editor stays visible without a photo definition or read result',async()=>{
+ const f=acceptedResultFixture();const view={...f.view,pack:{...f.view.pack,id:'carcassonne'}} as any;
+ const ui=mount(SceneWorkspace,{view,busy:false,mutate:async()=>{},onEvidence(){},onReadyToSave(){}});
+ try{const body=find(ui.tree,n=>n.props?.className?.includes?.('scene-primary-board'));assert(nodes(body).some(n=>n.type===SceneEditor));assert(!('hidden' in body.props));}finally{ui.dispose();}
+});
+test('an earlier Catan scene without an observation receipt still opens in the illustrated board',()=>{
+ const f=acceptedResultFixture({type:'hex',id:'r1c1'});delete f.source.observationReceipts;
+ const ui=mount(SceneWorkspace,{view:f.view,busy:false,mutate:async()=>{},onEvidence(){},onReadyToSave(){}});
+ try{const editor=find(ui.tree,n=>n.type===SceneEditor);assert(editor.props.value.components.some((c:any)=>c.id===f.source.value.components[0].id));assert(!nodes(ui.tree).some(n=>n.props?.className?.includes?.('scene-manual-toggle')));}finally{ui.dispose();}
+});
+
+test('compact box text is the main value even when metadata comes first; unknown main shows review label; metadata-only shows the kind',async()=>{
+ const {photoDefinitionFor,loadPhotoDefinitions}=await import('../src/photoDefinitions.ts'),{PhotoObservationOverlay}=await import('../src/PhotoObservationOverlay.tsx');await loadPhotoDefinitions();
+ const f=acceptedResultFixture(),r=f.view.session.assertions[0].observationReceipts![0],definition=photoDefinitionFor(f.view.pack)!;
+ const meta=(c:string)=>({observedColor:{state:'observed',value:c},quantity:{state:'observed',value:1},face:{state:'observed',value:'front'}});
+ const ob=(ref:string,componentId:string,x:number,props:any)=>({ref,imageIndex:0,panelRef:null,componentId,bbox:{x,y:.2,width:.1,height:.1},face:'front',quantity:1,rotationDegrees:null,properties:props,referenceCandidates:[]});
+ const result={...r.result,observations:[ob('n','number-token',.1,{...meta('beige'),number:{state:'observed',value:8}}),ob('t','terrain',.3,{...meta('gray'),variant:{state:'observed',value:'forest'}}),ob('u','number-token',.5,{...meta('beige'),number:{state:'unknown',value:null,reason:'unreadable'}}),ob('m','road',.7,meta('red'))]};
+ const html=renderToStaticMarkup(React.createElement(PhotoObservationOverlay,{photos:f.view.session.evidence,request:r.request,result,geometry:[],definition,compact:true,open:true}));
+ const boxes=[...html.matchAll(/class="lw-source-box"[^>]*><span>([^<]*)<\/span>/g)].map(m=>m[1]);
+ assert.equal(boxes.length,4);assert.equal(boxes[0],'8');assert.notEqual(boxes[1],'gray');assert.notEqual(boxes[1],'?');assert.notEqual(boxes[1],'확인 필요');assert.equal(boxes[2],'확인 필요');assert(!['beige','red','front','1'].includes(boxes[3]));assert.match(html,/beige|베이지|색/,'raw metadata stays in the full text');
 });

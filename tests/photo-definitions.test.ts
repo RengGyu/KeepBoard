@@ -7,6 +7,22 @@ import {createHash} from 'node:crypto';
 import {generateDefinitions,canonicalJSON} from '../tools/lightweight-recognition/generate-photo-definitions.mts';
 const hash=(v:unknown)=>createHash('sha256').update(canonicalJSON(v)).digest('hex');
 const contract=JSON.parse(readFileSync('game-photo-definitions/contract.json','utf8'));
+test('explicit-null runtime revision records exact scene provenance without rebinding saved definition domains',()=>{
+ const generated=generateDefinitions(process.cwd()),input=generated.manifest.inputs.find((i:any)=>i.file==='shared/scene.ts')!;
+ assert.equal(input.sha256,createHash('sha256').update(readFileSync('shared/scene.ts')).digest('hex'));
+ assert.equal(input.approvedContractSHA256,contract.inputs.find((i:any)=>i.file==='shared/scene.ts').sha256);
+ assert.match(input.revisionReason,/null quantity/);
+ assert.equal(generated.manifest.indexSHA,createHash('sha256').update(readFileSync('game-photo-definitions/index.json')).digest('hex'));
+ const root=mkdtempSync(join(tmpdir(),'kb-definition-unapproved-scene-'));
+ try{
+  const copy='game-photo-definitions/contract.json';mkdirSync(dirname(join(root,copy)),{recursive:true});writeFileSync(join(root,copy),readFileSync(copy));
+  for(const item of contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json')){
+   const target=join(root,item.file);mkdirSync(dirname(target),{recursive:true});
+   if(item.file==='shared/scene.ts')writeFileSync(target,readFileSync(item.file,'utf8')+'\n// unapproved revision\n');else symlinkSync(resolve(item.file),target);
+  }
+  assert.throws(()=>generateDefinitions(root),/Pinned input changed: shared\/scene.ts/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
 test('exact pinned 120 definitions regenerate byte-for-byte, keeping source/edition and safe area scopes',()=>{
  const generated=generateDefinitions(process.cwd());
  assert.equal(generated.definitions.length,120);assert.equal(new Set(generated.definitions.map(d=>d.gameId)).size,120);

@@ -10,7 +10,7 @@ import { previewValue } from './presentation';
 export type Mutate = (task: () => Promise<SessionView>, message?: string, options?: {localError?:boolean}) => Promise<void>;
 export const fire = (promise: Promise<unknown>) => { void promise.catch(() => {}); };
 
-export function FieldEditor({ field, value, onSave, onPreserve, busy, compact = false, onReadyToSave }: { field: Pick<Question, 'id' | 'label' | 'description' | 'type' | 'options' | 'reason'> & { acquisition?: Question['acquisition']; preservationId?: string; key?: string; field?: string; ui?: FieldDefinition['ui'] }; value?: Value; onSave: (value: Value) => Promise<void>; onPreserve?: () => void; busy: boolean; compact?: boolean; onReadyToSave?:(save:(()=>Promise<void>)|null)=>void }) {
+export function FieldEditor({ field, value, onSave, onPreserve, busy, compact = false, onReadyToSave, players }: { field: Pick<Question, 'id' | 'label' | 'description' | 'type' | 'options' | 'reason'> & { acquisition?: Question['acquisition']; preservationId?: string; key?: string; field?: string; ui?: FieldDefinition['ui'] }; value?: Value; onSave: (value: Value) => Promise<void>; onPreserve?: () => void; busy: boolean; compact?: boolean; onReadyToSave?:(save:(()=>Promise<void>)|null)=>void; players?: readonly { id: string; name: string }[] }) {
   const [draft, setDraft] = useState(value === undefined || value === null ? '' : typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value));
   const edited = useRef(false);
   const latestDraft = useRef(draft);
@@ -35,6 +35,11 @@ export function FieldEditor({ field, value, onSave, onPreserve, busy, compact = 
   if (editor === 'resource-counts' || editor === 'development-counts' || key.includes('player.pieces.remaining')) return <CountsEditor field={field} value={value} onSave={onSave} onPreserve={onPreserve} busy={busy} kind={editor==='development-counts'?'development':key.includes('player.pieces.remaining')?'pieces':'resource'}/>;
   const inputId = `field-${field.id}`;
   if (field.acquisition === 'preserve' && onPreserve) return <div className="field-editor"><strong>{field.label}</strong><p className="field-description">{field.description}</p><p className="field-reason">{field.reason}</p><button className="button secondary small-button" disabled={busy} onClick={onPreserve}>실물 묶음 보관으로 해결</button></div>;
+  // Yes/no and short choice lists: one tap records the value (the "?" chip records unknown).
+  // "Whose turn" / "starting player" are free text in generated packs; the players are the choices (their name is what is stored).
+  const playerChoice = field.type === 'text' && !!players?.length && (key === 'turn' || key.endsWith('starting-player'));
+  const tapChoice = playerChoice || field.type === 'boolean' || (field.type === 'select' && (field.options?.length ?? 0) <= 10);
+  const pick = (text: string) => { edit(text); setError(''); const next: Value = text === '' ? null : field.type === 'boolean' ? text === 'true' : text; fire(onSave(next).then(() => { if (latestDraft.current === text) { edited.current = false; setSaved(true); } }).catch(reason => { setError(reason instanceof Error ? reason.message : '기록하지 못했습니다.'); })); };
   const control = { id: inputId, value: draft, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => { edit(event.target.value); } };
   return <form className={`field-editor ${compact ? 'compact' : ''}`} onSubmit={async event => {
     event.preventDefault(); fire(saveDraft());
@@ -43,13 +48,15 @@ export function FieldEditor({ field, value, onSave, onPreserve, busy, compact = 
     {field.description && <p className="field-description">{field.description}</p>}
     {!compact && field.reason && <p className="field-reason">확인 이유 · {field.reason}</p>}
     <div className={`field-control ${field.type === 'json' ? 'stacked-control' : ''}`}>
-      {field.type === 'boolean' ? <select {...control}><option value="">모름 · 아직 미확인</option><option value="true">예</option><option value="false">아니요</option></select>
+      {playerChoice ? <><TapChoices label={field.label} options={players!.map(p => ({ value: p.name, label: p.name }))} value={draft} busy={busy} onPick={pick}/><details className="field-other"><summary>직접 입력</summary><input {...control} type="text" placeholder="예: 진행자" onBlur={() => { if (edited.current) fire(saveDraft()); }}/></details></>
+        : field.type === 'boolean' ? <TapChoices label={field.label} options={[{ value: 'true', label: '예' }, { value: 'false', label: '아니요' }]} value={draft} busy={busy} onPick={pick}/>
+        : field.type === 'select' && (field.options?.length ?? 0) <= 10 ? <TapChoices label={field.label} options={field.options ?? []} value={draft} busy={busy} onPick={pick}/>
         : field.type === 'select' ? <select {...control}><option value="">모름 · 아직 미확인</option>{field.options?.map(option => <option value={option.value} key={option.value}>{option.label}</option>)}</select>
         : field.type === 'json' ? <textarea {...control} rows={3} placeholder='예: {"wood": 2}' spellCheck={false}/>
         : field.type === 'number' ? <div className="number-stepper"><button className="icon-button" type="button" aria-label={`${field.label} 1 줄이기`} disabled={busy} onClick={() => { edit(String((Number(draft) || 0) - 1)); }}><Minus size={14}/></button><input {...control} type="number" step="any" inputMode="decimal" placeholder="모름"/><button className="icon-button" type="button" aria-label={`${field.label} 1 늘리기`} disabled={busy} onClick={() => { edit(String((Number(draft) || 0) + 1)); }}><Plus size={14}/></button></div>
         : <input {...control} type="text" placeholder="확인한 내용을 입력하세요"/>}
-      <button className="button secondary small-button" disabled={busy}>{saved ? <Check size={15}/> : null}{saved ? draft.trim() ? '기록 완료' : '미확인으로 남김' : draft === '' ? '미확인 유지' : '기록'}</button>
-    </div>{!['boolean', 'select'].includes(field.type) && <button type="button" className="button text small-button unknown-value" disabled={busy || draft === ''} onClick={() => { edit(''); }}>아직 모름</button>}{field.preservationId && onPreserve && <button type="button" className="button text small-button" disabled={busy} onClick={onPreserve}>입력 대신 실물 묶음으로 보관</button>}{error && <p className="inline-error small" role="alert">{error}</p>}
+      {!tapChoice && <button className="button secondary small-button" disabled={busy}>{saved ? <Check size={15}/> : null}{saved ? draft.trim() ? '기록 완료' : '미확인으로 남김' : draft === '' ? '미확인 유지' : '기록'}</button>}{tapChoice && saved && <span className="recorded-label" role="status"><Check size={12}/>기록됨</span>}
+    </div>{!tapChoice && field.type !== 'select' && <button type="button" className="button text small-button unknown-value" disabled={busy || draft === ''} onClick={() => { edit(''); }}>아직 모름</button>}{field.preservationId && onPreserve && <button type="button" className="button text small-button" disabled={busy} onClick={onPreserve}>입력 대신 실물 묶음으로 보관</button>}{error && <p className="inline-error small" role="alert">{error}</p>}
   </form>;
 }
 
@@ -88,4 +95,8 @@ export function CountsEditor({ field, value, onSave, busy, kind = 'resource', on
   }
   useEffect(() => { onReadyToSave?.(edited.current || forceSave ? save : null); return () => onReadyToSave?.(null); });
   return <form className="field-editor counts-editor" onSubmit={event => { event.preventDefault(); fire(save()); }}><strong>{field.label}</strong><div className="counts-grid">{keys.map(key => <label key={key}><GameComponentArt game={game} kind={kind === 'pieces' ? key : kind === 'development' ? 'development-card' : 'resource-card'} variant={kind === 'pieces' ? undefined : key} size={44}/><span>{names[key]}</span><input aria-label={`${field.label} · ${names[key]}`} type="number" min={0} step={1} inputMode="numeric" placeholder="모름" value={draft[key] ?? ''} disabled={busy} onChange={event => { edited.current = true; setDraft(current => ({ ...current, [key]: event.target.value })); setMessage(''); }}/></label>)}</div><p className="small muted">모르면 비워두세요.</p><button className="button secondary small-button" disabled={busy}>반영</button>{message && <p role="status" className="small">{message}</p>}</form>;
+}
+
+function TapChoices({ label, options, value, busy, onPick }: { label: string; options: { value: string; label: string }[]; value: string; busy: boolean; onPick: (value: string) => void }) {
+  return <div className="qp qp-chips field-choices" role="group" aria-label={label}><div>{options.map(option => <button type="button" key={option.value} aria-pressed={value === option.value} disabled={busy} onClick={() => onPick(option.value)}>{option.label}</button>)}<button type="button" className="qp-unknown" aria-pressed={value === ''} aria-label={`${label} 모름`} disabled={busy} onClick={() => onPick('')}>?</button></div></div>;
 }

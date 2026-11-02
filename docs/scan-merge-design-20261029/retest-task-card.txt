@@ -1,0 +1,10 @@
+먼저 /Users/jeonggyuju/.codex/policies/WORKER_RUNTIME_RULES.md를 읽으세요.
+TASK: 사용자 요청의 재시험이 끝났으므로 새 실측 근거로 사진 관측 결합 및 병렬 실행의 최소 설계를 작성하세요. 앞선 취소 연구를 그대로 재개하지 말고 아래 자료부터 직접 대조하세요.
+OUTCOME: docs/scan-merge-design-20261029/README.md, implementation-plan.md. 확인 원인, 일반 연결 규칙, 최소 수정 파일, 오프라인 수용 검사, 속도 개선 우선순위를 짧게 제시.
+CAPABILITY / MODEL / EFFORT: C3 / gpt-6-astra / ultra (사용자 지정 기존 세션).
+AUTHORITY: 제품 A0, 지정 설계 문서만 A1.
+CONTEXT: cwd /Users/jeonggyuju/Project_folder/KeepBoard. docs/max-parallel-retest-20261029/{README.md,result.json,checks.json,source-check.json,run.mts}; 이전 docs/whole-detail-parallel-20261029/; 현재 server/scanObservation.ts, shared/scanObservation.ts, src/api.ts, server/cloudUploads.ts, workflows/analyze.ts 및 관련 tests. 새 원문/단위 응답/저장 장면은 /Users/jeonggyuju/Library/Application Support/KeepBoard/research/max-parallel-20261029/ (실험 자료만, 키 없음).
+ALLOWED SCOPE: 자료·소스 직접 읽고 지정 설계 문서 작성, 필요한 무과금 오프라인 재생. 같은 모델·같은 body5쌍에서 2동시73.5초/5동시49.2초, 실제 업로드45.5초이나 이것은 격리 실행기이며 운영 종단과 다름을 유지. 한 번씩이며 결과 표현·토큰·최장요청도 달라졌으므로 전부 병렬화 효과로 단정 금지. 원사진 입력 SHA, crop 좌표, owner/epoch, 수동값, 중복·충돌·모름 보존. 과적합 없는 최소 연결 규칙으로 anchor의 정상 관측이 부분 충돌 때문에 제거되는 현상, crop-only의 누락/중복, terrain.number와 독립 원판의 중복 없는 값 연결을 검토. 위치 불확실과 속성 불확실을 나누고 원문 및 읽힌 값은 보존하며 사용자에게 필수 정정 요구하지 않기. ticket/전송/원본등록 의존성과 Vercel 동시한도·유료 재시도0을 존중하는 병렬 설계도 검토.
+FORBIDDEN: 제품·모델·프롬프트·schema·팩 수정, 유료 API, 배포, 새 에이전트, 학습, 정답 개수/좌표 하드코딩, 숨은 값/소유 추정. .keepboard/·키·계정설정 열람/출력 금지. 다른 작업자의 변경 되돌리지 않기. 지정 문서 외 편집 금지.
+ACCEPTANCE: 실제 저장응답과 코드로 원인 확인, 정상anchor 보존/부분충돌/crop-only/숫자 표현/동일 원본 중복/다른 시점·영역/수동값/null0/완료순서 역전/저장 재열기 수용 검사. 국소 숫자원판 대응을 전체 숫자 정확도로 과장하지 않기. 완료순서나 병렬 수가 달라도 같은 입력 응답 집합이면 의미상 같은 결과인지 재생 검사 설계. 측정사실/추론/미검증 및 최우선 최소변경을 구분.
+ESCALATE IF: 기존 계약 변경이 필수이거나 근거 부족이면 정확히 보고. 429면 새세션/반복요청 없이 중단 사유 보고.

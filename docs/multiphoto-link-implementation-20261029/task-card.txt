@@ -1,0 +1,9 @@
+TASK: 승인된 여러 사진 연결 설계 P0 구현.
+OUTCOME: anchor 누락 시 crop-only 관측 보충, 중간 겹침/등록되지 않은 다른 시점/상자 없는 관측을 optional unresolvedGroups로 보존하고 그림 가까이에 표시·저장·재열기. 물리 수량 확정과 관측 묶음을 구별. 단일 제품 소유권.
+CAPABILITY / MODEL / EFFORT: C2 / 기존 구현솔 gpt-6.1-sol / high (사용자 지정, 감독 effective 확인).
+AUTHORITY: A1 제품·직접 테스트·본 문서 폴더만. 기존 dirty 내용 보존. 다른 작업자 없으나 타인 변경을 되돌리지 말 것.
+CONTEXT: docs/multiphoto-link-research-20261029/implementation-plan.md의 P0와 README.md 근거. docs/fastest-live-20261029/{README.md,result.json,harbor-cause.json}; 실제 frozen native와 final-view는 ~/Library/Application Support/KeepBoard/research/fastest-live-20261029/. source whole+4crop 입력은 같은 private폴더에 복사돼 있음. 최신 803/803+build:vercel0. 사용자 '수정하고 다시 테스트' 승인.
+ALLOWED SCOPE: shared/scanObservation.ts, server/scanObservation.ts, src/ScanObservationResults.tsx, src/SceneWorkspace.tsx, 직접 UI CSS 및 관련 테스트. 저장 소비자는 optional그룹 보존에 꼭 필요한 최소 변경만. 기존 raw receipts/provider wire는 불변. legacy 저장 optional누락 정상. 소스 pre/post 해시와 정확 delta 인계. 실제 응답 재생은 문서폴더만 사용.
+FORBIDDEN: P1/P2 자동 보드정합/새 특징매칭/판본자료 작성, 모델·prompt·schema·팩·병렬스케줄 변경, 사진별 정답상수, crop 실제개수 단정, 새 필수 확인/질문, 자동 paid재시도, 실제 API/배포/commit/새 agent, .keepboard/키 읽기·출력. 감독이 별도 live재시험 담당.
+ACCEPTANCE: 연구 P0 수용검사. 기존 실제 8항구 관측 중6후보+빠지던2관측을 미해결묶음1로 보존(물리7개라 확정 금지), 원문불변/120순열/단위재전달 멱등, anchor실패와baseline존재시 crop-only보존, 전이겹침·이웃 동일종류·scope/owner/epoch별 독립, 알려진수동값/null0 보존, UI는 개별관측 종류/값/원사진영역 표시하며 묶음 수를 실물 수량에 더하지 않음, 저장/재열기 및 과거optional필드누락. 모델호출0. 직접검사/typecheck 후 소스freeze 인계; 감독 전체/build/UI/live를 위한 준비완료 알려줄 것.
+ESCALATE IF: 일반 설계로 불가능한 정확 배치는 UNKNOWN으로 남기고 P0를 완료. 원응답과 proposal/ref가 혼용되면 먼저 소실 재현 근거를 보고. 불필요한 범위확대 금지.

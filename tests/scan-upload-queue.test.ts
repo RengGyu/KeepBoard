@@ -78,3 +78,9 @@ test('timing diagnostics contain bounded numeric stages, never arbitrary server 
  for(let i=0;i<40;i++)recordScanTiming({stage:'photo-upload',ms:i,photos:1,bytes:20});
  assert.equal(recentScanTimings().length,30);assert.equal(recentScanTimings().at(-1)?.ms,39);
 });
+
+test('parallel transport starts six PUTs without waiting and retains capture index order',async()=>{
+ const releases:(()=>void)[]=[],calls:number[]=[];let active=0,peak=0;
+ const queue=createScanUploadQueue<number,number>(async n=>{calls.push(n);peak=Math.max(peak,++active);await new Promise<void>(r=>releases[n]=r);active--;return n;},()=>{},100,6);
+ for(let i=0;i<6;i++)queue.enqueue(i,10);await tick();assert.equal(peak,6);releases.reverse().forEach(r=>r());await queue.drain();assert.deepEqual(queue.snapshot().entries.map(e=>e.result),[0,1,2,3,4,5]);assert.deepEqual(calls,[0,1,2,3,4,5]);
+});

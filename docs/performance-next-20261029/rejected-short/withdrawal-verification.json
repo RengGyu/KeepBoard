@@ -1,0 +1,54 @@
+{
+  "status": "WITHDRAWN; original production native default restored",
+  "realPhotoAcceptance": "FAILED",
+  "realPhotoEvidence": {
+    "label": "REPORTED by supervisor and astra/live-followup.md; no worker model calls",
+    "source": "../astra/live-followup.md",
+    "baselineObjects": 49,
+    "candidateObjects": 8,
+    "baselineProviderSeconds": 45.034,
+    "candidateProviderSeconds": 9.89,
+    "baselineTotalSeconds": 58.333,
+    "candidateTotalSeconds": 21.34,
+    "diagnosis": "Provider raw itself contains only 8 objects; literal and projection both 8; false full coverage. No evidence of downstream loss.",
+    "conclusion": "21.340 seconds is not a successful quality-preserving 30-second result"
+  },
+  "restoration": {
+    "rootRestored": true,
+    "expectedSHA256": "d89caf23705771a6c5113cef83f0ab669f0beb8b82bf3c8d881aa8cbb9b885bf",
+    "actualSHA256": "d89caf23705771a6c5113cef83f0ab669f0beb8b82bf3c8d881aa8cbb9b885bf",
+    "compactPromptActive": false,
+    "optionalFieldSchemaActive": false,
+    "absentSourceExpansionActive": false
+  },
+  "archive": {
+    "catanSceneReading.ts.snapshot": "9a2a5077b7b70d7674690ccff18cb2e08775d7c4e87b354c6ab2035acfc1ef6f",
+    "catan-native-wire.test.ts.snapshot": "4d8f8f01dc3c97ffd3a07993f91841e361314969425274aae4fcf57c1da7d0c2",
+    "catan-native-scene-connection.test.ts.snapshot": "b701fcacf6eb05ea169707c35c2279930e54a1147056d2bca93ab05db33db971"
+  },
+  "retainedTests": {
+    "command": "node --import tsx --test tests/catan-native-scene-connection.test.ts tests/catan-native-wire.test.ts",
+    "passed": 15,
+    "failed": 0,
+    "scope": [
+      "default full schema keys and schema immutability",
+      "full-wire source and original raw receipt",
+      "explicit null/invalid evidence source under existing normalization",
+      "full scene JSON roundtrip, readable attributes and attachments",
+      "small placed/unplaced objects and null/0 quantities",
+      "unsupported/missing/wrong-face visible properties",
+      "malformed envelopes/components and public scope",
+      "existing one-call model profile and pinned commit/reopen"
+    ]
+  },
+  "files": {
+    "server/ai/catanSceneReading.ts": "d89caf23705771a6c5113cef83f0ab669f0beb8b82bf3c8d881aa8cbb9b885bf",
+    "tests/catan-native-scene-connection.test.ts": "7efddaeea4325797d40035d134d15a1b2bd2123e652f5fd6214e66d5022b594e",
+    "tests/catan-native-wire.test.ts": "61c5528613e8cc40edd0e1d46fca05064cd2e2904ee40f936808391c7f1d14af"
+  },
+  "limitations": [
+    "Synthetic compatibility tests do not establish real-photo detection quality",
+    "No further model calls, build or deploy by worker",
+    "Frame validation and shared null quantity fixes remain untouched"
+  ]
+}

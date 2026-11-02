@@ -1,0 +1,2311 @@
+{
+  "gameId": "scout",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "hand-player-1",
+      "label": "1번 자리 · 순서/방향 고정 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패는 현재 순서와 위/아래 숫자 방향을 보존한다. 라운드 시작 전 전체 손패 뒤집기와 Scout 카드 한 장의 방향/삽입 위치를 구분한다.",
+      "bounds": [
+        34,
+        62,
+        280,
+        102
+      ],
+      "placement": "ordered-dual-ended-card-hand",
+      "stateKey": "players.player-1.hand",
+      "ownerSide": "player-1",
+      "visibility": "owner"
+    },
+    {
+      "id": "score-player-1",
+      "label": "1번 자리 · 획득 카드/Scout/점수/1회 칩",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면 획득 카드, Scout 칩, 누적 점수 칩, Scout & Show 사용면과 시작 플레이어 표식을 서로 구분한다.",
+      "bounds": [
+        34,
+        178,
+        280,
+        72
+      ],
+      "placement": "separate-captured-cards-scout-chips-score-chips-and-once-chip",
+      "stateKey": "players.player-1.publicAssets",
+      "ownerSide": "player-1",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-2",
+      "label": "2번 자리 · 순서/방향 고정 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패는 현재 순서와 위/아래 숫자 방향을 보존한다. 라운드 시작 전 전체 손패 뒤집기와 Scout 카드 한 장의 방향/삽입 위치를 구분한다.",
+      "bounds": [
+        686,
+        62,
+        280,
+        102
+      ],
+      "placement": "ordered-dual-ended-card-hand",
+      "stateKey": "players.player-2.hand",
+      "ownerSide": "player-2",
+      "visibility": "owner"
+    },
+    {
+      "id": "score-player-2",
+      "label": "2번 자리 · 획득 카드/Scout/점수/1회 칩",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면 획득 카드, Scout 칩, 누적 점수 칩, Scout & Show 사용면과 시작 플레이어 표식을 서로 구분한다.",
+      "bounds": [
+        686,
+        178,
+        280,
+        72
+      ],
+      "placement": "separate-captured-cards-scout-chips-score-chips-and-once-chip",
+      "stateKey": "players.player-2.publicAssets",
+      "ownerSide": "player-2",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-3",
+      "label": "3번 자리 · 순서/방향 고정 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패는 현재 순서와 위/아래 숫자 방향을 보존한다. 라운드 시작 전 전체 손패 뒤집기와 Scout 카드 한 장의 방향/삽입 위치를 구분한다.",
+      "bounds": [
+        686,
+        428,
+        280,
+        102
+      ],
+      "placement": "ordered-dual-ended-card-hand",
+      "stateKey": "players.player-3.hand",
+      "ownerSide": "player-3",
+      "visibility": "owner"
+    },
+    {
+      "id": "score-player-3",
+      "label": "3번 자리 · 획득 카드/Scout/점수/1회 칩",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면 획득 카드, Scout 칩, 누적 점수 칩, Scout & Show 사용면과 시작 플레이어 표식을 서로 구분한다.",
+      "bounds": [
+        686,
+        544,
+        280,
+        72
+      ],
+      "placement": "separate-captured-cards-scout-chips-score-chips-and-once-chip",
+      "stateKey": "players.player-3.publicAssets",
+      "ownerSide": "player-3",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-4",
+      "label": "4번 자리 · 순서/방향 고정 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패는 현재 순서와 위/아래 숫자 방향을 보존한다. 라운드 시작 전 전체 손패 뒤집기와 Scout 카드 한 장의 방향/삽입 위치를 구분한다.",
+      "bounds": [
+        360,
+        774,
+        280,
+        102
+      ],
+      "placement": "ordered-dual-ended-card-hand",
+      "stateKey": "players.player-4.hand",
+      "ownerSide": "player-4",
+      "visibility": "owner"
+    },
+    {
+      "id": "score-player-4",
+      "label": "4번 자리 · 획득 카드/Scout/점수/1회 칩",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면 획득 카드, Scout 칩, 누적 점수 칩, Scout & Show 사용면과 시작 플레이어 표식을 서로 구분한다.",
+      "bounds": [
+        360,
+        890,
+        280,
+        72
+      ],
+      "placement": "separate-captured-cards-scout-chips-score-chips-and-once-chip",
+      "stateKey": "players.player-4.publicAssets",
+      "ownerSide": "player-4",
+      "visibility": "public"
+    },
+    {
+      "id": "hand-player-5",
+      "label": "5번 자리 · 순서/방향 고정 손패",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "손패는 현재 순서와 위/아래 숫자 방향을 보존한다. 라운드 시작 전 전체 손패 뒤집기와 Scout 카드 한 장의 방향/삽입 위치를 구분한다.",
+      "bounds": [
+        34,
+        428,
+        280,
+        102
+      ],
+      "placement": "ordered-dual-ended-card-hand",
+      "stateKey": "players.player-5.hand",
+      "ownerSide": "player-5",
+      "visibility": "owner"
+    },
+    {
+      "id": "score-player-5",
+      "label": "5번 자리 · 획득 카드/Scout/점수/1회 칩",
+      "field": "score.scene",
+      "scope": "player",
+      "accepts": [
+        "cards",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "note": "뒷면 획득 카드, Scout 칩, 누적 점수 칩, Scout & Show 사용면과 시작 플레이어 표식을 서로 구분한다.",
+      "bounds": [
+        34,
+        544,
+        280,
+        72
+      ],
+      "placement": "separate-captured-cards-scout-chips-score-chips-and-once-chip",
+      "stateKey": "players.player-5.publicAssets",
+      "ownerSide": "player-5",
+      "visibility": "public"
+    },
+    {
+      "id": "active-show",
+      "label": "현재 Show · 순서 있는 Active Set",
+      "field": "show.scene",
+      "scope": "public",
+      "accepts": [
+        "cards"
+      ],
+      "ordered": true,
+      "slots": [],
+      "note": "Scout는 양 끝 중 한 장만 가져간다. 남은 카드의 순서와 기존 소유자를 보존한다. 4장 그림은 배치 예시이고 수량/용량 제한이 아니다.",
+      "bounds": [
+        345,
+        190,
+        310,
+        212
+      ],
+      "placement": "variable-length-ordered-active-set",
+      "stateKey": "activeSet.cards"
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "2": {
+      "hideAreas": [
+        "hand-player-3",
+        "score-player-3",
+        "hand-player-4",
+        "score-player-4",
+        "hand-player-5",
+        "score-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-3-station",
+        "player-3-seat-marker",
+        "player-3-hand-guide-1",
+        "player-3-dual-end-guide-1",
+        "player-3-hand-guide-2",
+        "player-3-dual-end-guide-2",
+        "player-3-hand-guide-3",
+        "player-3-dual-end-guide-3",
+        "player-3-hand-guide-4",
+        "player-3-dual-end-guide-4",
+        "player-3-hand-guide-5",
+        "player-3-dual-end-guide-5",
+        "player-3-captured-card-back",
+        "player-3-scout-chip-anchor",
+        "player-3-score-chip-anchor",
+        "player-3-scout-show-ready",
+        "player-3-starting-marker-anchor",
+        "player-4-station",
+        "player-4-seat-marker",
+        "player-4-hand-guide-1",
+        "player-4-dual-end-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-dual-end-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-dual-end-guide-3",
+        "player-4-hand-guide-4",
+        "player-4-dual-end-guide-4",
+        "player-4-hand-guide-5",
+        "player-4-dual-end-guide-5",
+        "player-4-captured-card-back",
+        "player-4-scout-chip-anchor",
+        "player-4-score-chip-anchor",
+        "player-4-scout-show-ready",
+        "player-4-starting-marker-anchor",
+        "player-5-station",
+        "player-5-seat-marker",
+        "player-5-hand-guide-1",
+        "player-5-dual-end-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-dual-end-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-dual-end-guide-3",
+        "player-5-hand-guide-4",
+        "player-5-dual-end-guide-4",
+        "player-5-hand-guide-5",
+        "player-5-dual-end-guide-5",
+        "player-5-captured-card-back",
+        "player-5-scout-chip-anchor",
+        "player-5-score-chip-anchor",
+        "player-5-scout-show-ready",
+        "player-5-starting-marker-anchor"
+      ],
+      "hiddenConditionalZones": [],
+      "scoutAndShowUsed": false
+    },
+    "3": {
+      "hideAreas": [
+        "hand-player-4",
+        "score-player-4",
+        "hand-player-5",
+        "score-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-4-station",
+        "player-4-seat-marker",
+        "player-4-hand-guide-1",
+        "player-4-dual-end-guide-1",
+        "player-4-hand-guide-2",
+        "player-4-dual-end-guide-2",
+        "player-4-hand-guide-3",
+        "player-4-dual-end-guide-3",
+        "player-4-hand-guide-4",
+        "player-4-dual-end-guide-4",
+        "player-4-hand-guide-5",
+        "player-4-dual-end-guide-5",
+        "player-4-captured-card-back",
+        "player-4-scout-chip-anchor",
+        "player-4-score-chip-anchor",
+        "player-4-scout-show-ready",
+        "player-4-starting-marker-anchor",
+        "player-5-station",
+        "player-5-seat-marker",
+        "player-5-hand-guide-1",
+        "player-5-dual-end-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-dual-end-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-dual-end-guide-3",
+        "player-5-hand-guide-4",
+        "player-5-dual-end-guide-4",
+        "player-5-hand-guide-5",
+        "player-5-dual-end-guide-5",
+        "player-5-captured-card-back",
+        "player-5-scout-chip-anchor",
+        "player-5-score-chip-anchor",
+        "player-5-scout-show-ready",
+        "player-5-starting-marker-anchor"
+      ],
+      "hiddenConditionalZones": [
+        "round-two-reserve"
+      ],
+      "scoutAndShowUsed": true
+    },
+    "4": {
+      "hideAreas": [
+        "hand-player-5",
+        "score-player-5"
+      ],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [
+        "player-5-station",
+        "player-5-seat-marker",
+        "player-5-hand-guide-1",
+        "player-5-dual-end-guide-1",
+        "player-5-hand-guide-2",
+        "player-5-dual-end-guide-2",
+        "player-5-hand-guide-3",
+        "player-5-dual-end-guide-3",
+        "player-5-hand-guide-4",
+        "player-5-dual-end-guide-4",
+        "player-5-hand-guide-5",
+        "player-5-dual-end-guide-5",
+        "player-5-captured-card-back",
+        "player-5-scout-chip-anchor",
+        "player-5-score-chip-anchor",
+        "player-5-scout-show-ready",
+        "player-5-starting-marker-anchor"
+      ],
+      "hiddenConditionalZones": [
+        "round-two-reserve"
+      ],
+      "scoutAndShowUsed": true
+    },
+    "5": {
+      "hideAreas": [],
+      "hideNumericTracks": [],
+      "hideBoardArtIds": [],
+      "hiddenConditionalZones": [
+        "round-two-reserve"
+      ],
+      "scoutAndShowUsed": true
+    }
+  },
+  "notes": [
+    "Full-table assets only; app integration belongs to the later consumer.",
+    "This boardless game has no fixed card capacity or physical score track; full player stations and variable ordered card layout semantics are supplied instead.",
+    "The 2-player variant is explicitly distinct. Cards excluded for player count and the conditional 22-card reserve must never be mistaken for an active draw deck.",
+    "The source PDF is Oink-authored but retailer-hosted; official Oink product/errata page independently confirms the edition and core card-hand structure."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://oinkgames.com/en/games/analog/scout/",
+      "location": "Official product page, description and English printing errata",
+      "verifiedFacts": "Oink edition supports 2–5 players; cards have two number orientations and hand order cannot be rearranged.",
+      "access": "directly-opened",
+      "sourceType": "official-product-page",
+      "checkedAt": "2026-10-30"
+    },
+    {
+      "url": "https://www.hras.cz/user/related_files/new_edition_scout_rules_eng.pdf",
+      "location": "Publisher-authored English instruction sheet v1.1, both full pages directly rendered and visually read",
+      "verifiedFacts": "Components, all-player setup, ordered/dual-ended hands, current Show ownership, captured cards, Scout and Scout & Show chips, score-chip piles, starting marker, and 2-player reserved second-round cards.",
+      "access": "downloaded-and-rendered-both-pages",
+      "sourceType": "publisher-authored-rulebook-retailer-mirror",
+      "pdfSHA256": "66b1d252bf60fe13737cf64e0dbdaf2102c311253e3005e5b49679306445166a",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "full-table-schematic",
+  "assetScope": "SCOUT international Oink edition, publisher English rules v1.1: full 2–5 player table and independent state contract. App integration is separate.",
+  "tableModel": {
+    "schema": "scout-full-table-v1",
+    "edition": "Oink international edition, English instruction sheet v1.1, ©2021, serial 2220820222",
+    "assetFiles": {
+      "boardSvg": "board.svg",
+      "boardJson": "board.json",
+      "boardPreview": "board.png",
+      "pieceSymbols": "pieces.svg",
+      "piecePreview": "pieces-preview.png"
+    },
+    "applicationIntegration": "asset-only; current app fields are optional mapping hints and are not an implementation prerequisite",
+    "coordinates": {
+      "viewBox": [
+        0,
+        0,
+        1000,
+        1000
+      ],
+      "origin": "top-left",
+      "areaBounds": "[x,y,width,height]",
+      "cardRotationDegrees": [
+        0,
+        180
+      ]
+    },
+    "componentInventory": {
+      "cards": 45,
+      "scoutChips": 23,
+      "scoreChips": 30,
+      "scoutAndShowChips": 5,
+      "startingPlayerMarkers": 1,
+      "scoutSupplyPolicy": "not a gameplay cap; rules allow replacement coins if the physical Scout chips run out"
+    },
+    "playerRange": {
+      "min": 2,
+      "max": 5
+    },
+    "setupByPlayerCount": {
+      "2": {
+        "removeCards": "only the 9/10 card",
+        "handCardsEach": 11,
+        "reserveCardsForRoundTwo": 22,
+        "scoutChipsEach": 3,
+        "scoutAndShow": false
+      },
+      "3": {
+        "removeCards": "all nine cards containing 10",
+        "handCardsEach": 12,
+        "reserveCardsForRoundTwo": 0,
+        "scoutAndShow": true
+      },
+      "4": {
+        "removeCards": "only the 9/10 card",
+        "handCardsEach": 11,
+        "reserveCardsForRoundTwo": 0,
+        "scoutAndShow": true
+      },
+      "5": {
+        "removeCards": "none",
+        "handCardsEach": 9,
+        "reserveCardsForRoundTwo": 0,
+        "scoutAndShow": true
+      }
+    },
+    "fieldBindings": {
+      "hand.scene": {
+        "scope": "player",
+        "visibility": "owner",
+        "state": "players[].hand",
+        "areas": [
+          "hand-player-1",
+          "hand-player-2",
+          "hand-player-3",
+          "hand-player-4",
+          "hand-player-5"
+        ]
+      },
+      "show.scene": {
+        "scope": "public",
+        "state": "activeSet",
+        "areas": [
+          "active-show"
+        ]
+      },
+      "score.scene": {
+        "scope": "player",
+        "visibility": "public",
+        "state": "players[].capturedCards/scoutChips/scoreChips/scoutAndShow",
+        "areas": [
+          "score-player-1",
+          "score-player-2",
+          "score-player-3",
+          "score-player-4",
+          "score-player-5"
+        ]
+      },
+      "round": {
+        "state": "roundNumber/roundScores"
+      },
+      "insert": {
+        "state": "pendingScout"
+      },
+      "once": {
+        "state": "players[].scoutAndShow"
+      },
+      "turn": {
+        "state": "currentPlayerId"
+      },
+      "pending": {
+        "state": "checkpoint"
+      }
+    },
+    "cardState": {
+      "instanceId": "unique card instance",
+      "printedEnds": [
+        null,
+        null
+      ],
+      "upperEnd": null,
+      "rotationDegrees": null,
+      "face": "front|back|unknown",
+      "meaning": "The two printed values stay with the same physical card. Capture identities/ends only when visible or owner-authorized."
+    },
+    "stateShape": {
+      "playerCount": null,
+      "seatOrder": [
+        "player-1",
+        "player-2",
+        "player-3",
+        "player-4",
+        "player-5"
+      ],
+      "roundNumber": null,
+      "startingPlayerId": null,
+      "currentPlayerId": null,
+      "players": [
+        {
+          "id": "player-id",
+          "hand": {
+            "orderedCardIds": [],
+            "wholeHandSetupOrientation": null,
+            "cards": []
+          },
+          "capturedCardIds": [],
+          "scoutChipCount": null,
+          "scoreChips": [
+            {
+              "value": null,
+              "face": null,
+              "signedValue": null
+            }
+          ],
+          "scoutAndShow": "ready|used|not-used-in-two-player|unknown",
+          "roundScore": null,
+          "totalScore": null
+        }
+      ],
+      "activeSet": {
+        "ownerId": null,
+        "orderedCardIds": [],
+        "cards": []
+      },
+      "shared": {
+        "scoutBankCount": null,
+        "scoreBank": [],
+        "usedScoutAndShowOwners": [],
+        "removedCardIds": [],
+        "roundTwoReserve": {
+          "cardIds": "hidden-or-unknown",
+          "count": null,
+          "visibility": "hidden; only applicable in two-player mode"
+        }
+      },
+      "pendingScout": {
+        "actorId": null,
+        "sourceEnd": "left|right|unknown",
+        "cardId": null,
+        "chosenUpperEnd": null,
+        "insertBeforeCardId": null,
+        "insertIndex": null,
+        "chipTransferComplete": null
+      },
+      "checkpoint": "choose-action|scout-selected|scout-insert-pending|show-pending|score-round|next-round|unknown"
+    },
+    "placementRules": {
+      "hand": {
+        "kind": "ordered-overlap-row",
+        "boundsFrom": "hand-player-N",
+        "cardAspectRatio": [
+          2,
+          3
+        ],
+        "algorithm": "For n cards, cardWidth=min(60,availableHeight*2/3); step=min(cardWidth, max(0,(availableWidth-cardWidth)/max(1,n-1))); place in stored order without re-sorting. Use scrolling/zoom when the visible top-end bands become too small.",
+        "orientation": "A setup whole-hand 180° flip is distinct from a Scouted card’s individually chosen orientation."
+      },
+      "activeSet": {
+        "kind": "ordered-card-row",
+        "boundsFrom": "active-show",
+        "capacity": null,
+        "algorithm": "Keep source order; scale equal-size card instances to fit the available row. Leftmost/rightmost card IDs are the Scout endpoints. Do not fabricate a four-card set from the guide illustration."
+      },
+      "capturedCards": {
+        "kind": "face-down-pile",
+        "visibility": "backs/count only unless otherwise authorized"
+      },
+      "tokens": {
+        "kind": "separate-type-piles",
+        "physicalCountNotFixedByIcon": true
+      }
+    },
+    "checkpointSemantics": [
+      "Standard 3–5 player turns are clockwise; Show replaces the Active Set and captures the previous set face-down.",
+      "Scout removes one endpoint card, permits either orientation and any hand insertion point, and retains the prior Active Set owner while any cards remain.",
+      "Scout & Show is a once-per-player-per-round token; preserve whether it has moved to the shared used pool.",
+      "The 2-player variant uses 3 Scout chips per player, no Scout & Show chip, and a hidden 22-card reserve for round two. Preserve its distinct turn/checkpoint state.",
+      "At a round boundary preserve captured-card counts, Scout chips, remaining hand count, round result, score-chip faces/signs and the next starting player; do not infer a score merely from a token icon."
+    ],
+    "visualZones": [
+      {
+        "areaId": "hand-player-1",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-1-station"
+        ]
+      },
+      {
+        "areaId": "hand-player-2",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-2-station"
+        ]
+      },
+      {
+        "areaId": "hand-player-3",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-3-station"
+        ]
+      },
+      {
+        "areaId": "hand-player-4",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-4-station"
+        ]
+      },
+      {
+        "areaId": "hand-player-5",
+        "role": "owner-private ordered hand",
+        "boardArtIds": [
+          "player-5-station"
+        ]
+      },
+      {
+        "areaId": "score-player-1",
+        "role": "captured cards, Scout chips, scores and once marker",
+        "boardArtIds": [
+          "player-1-captured-card-back",
+          "player-1-scout-chip-anchor",
+          "player-1-score-chip-anchor",
+          "player-1-scout-show-ready",
+          "player-1-starting-marker-anchor"
+        ]
+      },
+      {
+        "areaId": "score-player-2",
+        "role": "captured cards, Scout chips, scores and once marker",
+        "boardArtIds": [
+          "player-2-captured-card-back",
+          "player-2-scout-chip-anchor",
+          "player-2-score-chip-anchor",
+          "player-2-scout-show-ready",
+          "player-2-starting-marker-anchor"
+        ]
+      },
+      {
+        "areaId": "score-player-3",
+        "role": "captured cards, Scout chips, scores and once marker",
+        "boardArtIds": [
+          "player-3-captured-card-back",
+          "player-3-scout-chip-anchor",
+          "player-3-score-chip-anchor",
+          "player-3-scout-show-ready",
+          "player-3-starting-marker-anchor"
+        ]
+      },
+      {
+        "areaId": "score-player-4",
+        "role": "captured cards, Scout chips, scores and once marker",
+        "boardArtIds": [
+          "player-4-captured-card-back",
+          "player-4-scout-chip-anchor",
+          "player-4-score-chip-anchor",
+          "player-4-scout-show-ready",
+          "player-4-starting-marker-anchor"
+        ]
+      },
+      {
+        "areaId": "score-player-5",
+        "role": "captured cards, Scout chips, scores and once marker",
+        "boardArtIds": [
+          "player-5-captured-card-back",
+          "player-5-scout-chip-anchor",
+          "player-5-score-chip-anchor",
+          "player-5-scout-show-ready",
+          "player-5-starting-marker-anchor"
+        ]
+      },
+      {
+        "areaId": "active-show",
+        "role": "public current ordered set and owner",
+        "boardArtIds": [
+          "active-show-frame",
+          "scout-left-end-guide",
+          "scout-right-end-guide",
+          "active-set-owner-marker"
+        ]
+      },
+      {
+        "role": "shared Scout and score banks, used once chips, conditional hidden reserve",
+        "boardArtIds": [
+          "scout-chip-bank-frame",
+          "score-chip-bank-frame",
+          "used-scout-show-frame",
+          "round-two-reserve-frame"
+        ]
+      }
+    ],
+    "illustrationOnlyIds": [
+      "player-1-hand-guide-1",
+      "player-1-dual-end-guide-1",
+      "player-1-hand-guide-2",
+      "player-1-dual-end-guide-2",
+      "player-1-hand-guide-3",
+      "player-1-dual-end-guide-3",
+      "player-1-hand-guide-4",
+      "player-1-dual-end-guide-4",
+      "player-1-hand-guide-5",
+      "player-1-dual-end-guide-5",
+      "player-2-hand-guide-1",
+      "player-2-dual-end-guide-1",
+      "player-2-hand-guide-2",
+      "player-2-dual-end-guide-2",
+      "player-2-hand-guide-3",
+      "player-2-dual-end-guide-3",
+      "player-2-hand-guide-4",
+      "player-2-dual-end-guide-4",
+      "player-2-hand-guide-5",
+      "player-2-dual-end-guide-5",
+      "player-3-hand-guide-1",
+      "player-3-dual-end-guide-1",
+      "player-3-hand-guide-2",
+      "player-3-dual-end-guide-2",
+      "player-3-hand-guide-3",
+      "player-3-dual-end-guide-3",
+      "player-3-hand-guide-4",
+      "player-3-dual-end-guide-4",
+      "player-3-hand-guide-5",
+      "player-3-dual-end-guide-5",
+      "player-4-hand-guide-1",
+      "player-4-dual-end-guide-1",
+      "player-4-hand-guide-2",
+      "player-4-dual-end-guide-2",
+      "player-4-hand-guide-3",
+      "player-4-dual-end-guide-3",
+      "player-4-hand-guide-4",
+      "player-4-dual-end-guide-4",
+      "player-4-hand-guide-5",
+      "player-4-dual-end-guide-5",
+      "player-5-hand-guide-1",
+      "player-5-dual-end-guide-1",
+      "player-5-hand-guide-2",
+      "player-5-dual-end-guide-2",
+      "player-5-hand-guide-3",
+      "player-5-dual-end-guide-3",
+      "player-5-hand-guide-4",
+      "player-5-dual-end-guide-4",
+      "player-5-hand-guide-5",
+      "player-5-dual-end-guide-5",
+      "active-show-card-guide-1",
+      "active-show-top-guide-1",
+      "active-show-bottom-guide-1",
+      "active-show-card-guide-2",
+      "active-show-top-guide-2",
+      "active-show-bottom-guide-2",
+      "active-show-card-guide-3",
+      "active-show-top-guide-3",
+      "active-show-bottom-guide-3",
+      "active-show-card-guide-4",
+      "active-show-top-guide-4",
+      "active-show-bottom-guide-4"
+    ],
+    "unknownPolicy": "Keep unseen hand ends, face-down captured identities, reserve order and uncertain score-token values unknown. Never reorder or rotate stored cards to improve a combination.",
+    "ruleAutomation": "No set-comparison, legal-action selection, card movement, score calculation or automatic round advancement is implemented."
+  },
+  "assetCompleteness": {
+    "completeStructures": [
+      "all five owner-private ordered dual-number hands",
+      "public Active Set with stable owner and left/right ends",
+      "each player captured face-down cards, Scout chips and score chips",
+      "each player Scout & Show ready/used state",
+      "starting-player marker",
+      "shared Scout/score banks",
+      "used Scout & Show pool",
+      "conditional hidden round-two reserve for 2 players"
+    ],
+    "diagramOnly": [
+      "blank spread guides illustrate ordering and do not assert card counts",
+      "bank icons identify token types without fixing their current quantities"
+    ],
+    "notAutomated": [
+      "set strength/legality checks",
+      "card insertion and chip transfers",
+      "round end and score calculation"
+    ]
+  },
+  "boardArt": [
+    {
+      "id": "player-1-station",
+      "type": "rect",
+      "x": 24,
+      "y": 24,
+      "w": 300,
+      "h": 240,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "player-1-seat-marker",
+      "type": "circle",
+      "cx": 48,
+      "cy": 44,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-hand-guide-1",
+      "type": "rect",
+      "x": 50,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-1-dual-end-guide-1",
+      "type": "rect",
+      "x": 54,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-1-hand-guide-2",
+      "type": "rect",
+      "x": 95,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-1-dual-end-guide-2",
+      "type": "rect",
+      "x": 99,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-1-hand-guide-3",
+      "type": "rect",
+      "x": 140,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-1-dual-end-guide-3",
+      "type": "rect",
+      "x": 144,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-1-hand-guide-4",
+      "type": "rect",
+      "x": 185,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-1-dual-end-guide-4",
+      "type": "rect",
+      "x": 189,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-1-hand-guide-5",
+      "type": "rect",
+      "x": 230,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-1-dual-end-guide-5",
+      "type": "rect",
+      "x": 234,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-1-captured-card-back",
+      "type": "rect",
+      "x": 46,
+      "y": 190,
+      "w": 37,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-scout-chip-anchor",
+      "type": "rect",
+      "x": 102,
+      "y": 202,
+      "w": 43,
+      "h": 24,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-score-chip-anchor",
+      "type": "circle",
+      "cx": 177,
+      "cy": 215,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-scout-show-ready",
+      "type": "rect",
+      "x": 220,
+      "y": 194,
+      "w": 46,
+      "h": 40,
+      "rx": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-1-starting-marker-anchor",
+      "type": "polygon",
+      "points": [
+        [
+          292,
+          190
+        ],
+        [
+          306,
+          201
+        ],
+        [
+          301,
+          219
+        ],
+        [
+          283,
+          219
+        ],
+        [
+          278,
+          201
+        ]
+      ],
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-station",
+      "type": "rect",
+      "x": 676,
+      "y": 24,
+      "w": 300,
+      "h": 240,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "player-2-seat-marker",
+      "type": "circle",
+      "cx": 700,
+      "cy": 44,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-hand-guide-1",
+      "type": "rect",
+      "x": 702,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-2-dual-end-guide-1",
+      "type": "rect",
+      "x": 706,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-2-hand-guide-2",
+      "type": "rect",
+      "x": 747,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-2-dual-end-guide-2",
+      "type": "rect",
+      "x": 751,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-2-hand-guide-3",
+      "type": "rect",
+      "x": 792,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-2-dual-end-guide-3",
+      "type": "rect",
+      "x": 796,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-2-hand-guide-4",
+      "type": "rect",
+      "x": 837,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-2-dual-end-guide-4",
+      "type": "rect",
+      "x": 841,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-2-hand-guide-5",
+      "type": "rect",
+      "x": 882,
+      "y": 76,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-2-dual-end-guide-5",
+      "type": "rect",
+      "x": 886,
+      "y": 81,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-2-captured-card-back",
+      "type": "rect",
+      "x": 698,
+      "y": 190,
+      "w": 37,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-scout-chip-anchor",
+      "type": "rect",
+      "x": 754,
+      "y": 202,
+      "w": 43,
+      "h": 24,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-score-chip-anchor",
+      "type": "circle",
+      "cx": 829,
+      "cy": 215,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-scout-show-ready",
+      "type": "rect",
+      "x": 872,
+      "y": 194,
+      "w": 46,
+      "h": 40,
+      "rx": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-2-starting-marker-anchor",
+      "type": "polygon",
+      "points": [
+        [
+          944,
+          190
+        ],
+        [
+          958,
+          201
+        ],
+        [
+          953,
+          219
+        ],
+        [
+          935,
+          219
+        ],
+        [
+          930,
+          201
+        ]
+      ],
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-station",
+      "type": "rect",
+      "x": 676,
+      "y": 390,
+      "w": 300,
+      "h": 240,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "player-3-seat-marker",
+      "type": "circle",
+      "cx": 700,
+      "cy": 410,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-hand-guide-1",
+      "type": "rect",
+      "x": 702,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-3-dual-end-guide-1",
+      "type": "rect",
+      "x": 706,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-3-hand-guide-2",
+      "type": "rect",
+      "x": 747,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-3-dual-end-guide-2",
+      "type": "rect",
+      "x": 751,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-3-hand-guide-3",
+      "type": "rect",
+      "x": 792,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-3-dual-end-guide-3",
+      "type": "rect",
+      "x": 796,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-3-hand-guide-4",
+      "type": "rect",
+      "x": 837,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-3-dual-end-guide-4",
+      "type": "rect",
+      "x": 841,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-3-hand-guide-5",
+      "type": "rect",
+      "x": 882,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-3-dual-end-guide-5",
+      "type": "rect",
+      "x": 886,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-3-captured-card-back",
+      "type": "rect",
+      "x": 698,
+      "y": 556,
+      "w": 37,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-scout-chip-anchor",
+      "type": "rect",
+      "x": 754,
+      "y": 568,
+      "w": 43,
+      "h": 24,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-score-chip-anchor",
+      "type": "circle",
+      "cx": 829,
+      "cy": 581,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-scout-show-ready",
+      "type": "rect",
+      "x": 872,
+      "y": 560,
+      "w": 46,
+      "h": 40,
+      "rx": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-3-starting-marker-anchor",
+      "type": "polygon",
+      "points": [
+        [
+          944,
+          556
+        ],
+        [
+          958,
+          567
+        ],
+        [
+          953,
+          585
+        ],
+        [
+          935,
+          585
+        ],
+        [
+          930,
+          567
+        ]
+      ],
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-station",
+      "type": "rect",
+      "x": 350,
+      "y": 736,
+      "w": 300,
+      "h": 240,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "player-4-seat-marker",
+      "type": "circle",
+      "cx": 374,
+      "cy": 756,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-hand-guide-1",
+      "type": "rect",
+      "x": 376,
+      "y": 788,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-4-dual-end-guide-1",
+      "type": "rect",
+      "x": 380,
+      "y": 793,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-4-hand-guide-2",
+      "type": "rect",
+      "x": 421,
+      "y": 788,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-4-dual-end-guide-2",
+      "type": "rect",
+      "x": 425,
+      "y": 793,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-4-hand-guide-3",
+      "type": "rect",
+      "x": 466,
+      "y": 788,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-4-dual-end-guide-3",
+      "type": "rect",
+      "x": 470,
+      "y": 793,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-4-hand-guide-4",
+      "type": "rect",
+      "x": 511,
+      "y": 788,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-4-dual-end-guide-4",
+      "type": "rect",
+      "x": 515,
+      "y": 793,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-4-hand-guide-5",
+      "type": "rect",
+      "x": 556,
+      "y": 788,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-4-dual-end-guide-5",
+      "type": "rect",
+      "x": 560,
+      "y": 793,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-4-captured-card-back",
+      "type": "rect",
+      "x": 372,
+      "y": 902,
+      "w": 37,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-scout-chip-anchor",
+      "type": "rect",
+      "x": 428,
+      "y": 914,
+      "w": 43,
+      "h": 24,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-score-chip-anchor",
+      "type": "circle",
+      "cx": 503,
+      "cy": 927,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-scout-show-ready",
+      "type": "rect",
+      "x": 546,
+      "y": 906,
+      "w": 46,
+      "h": 40,
+      "rx": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-4-starting-marker-anchor",
+      "type": "polygon",
+      "points": [
+        [
+          618,
+          902
+        ],
+        [
+          632,
+          913
+        ],
+        [
+          627,
+          931
+        ],
+        [
+          609,
+          931
+        ],
+        [
+          604,
+          913
+        ]
+      ],
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-station",
+      "type": "rect",
+      "x": 24,
+      "y": 390,
+      "w": 300,
+      "h": 240,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "player-5-seat-marker",
+      "type": "circle",
+      "cx": 48,
+      "cy": 410,
+      "r": 8,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-hand-guide-1",
+      "type": "rect",
+      "x": 50,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-5-dual-end-guide-1",
+      "type": "rect",
+      "x": 54,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-5-hand-guide-2",
+      "type": "rect",
+      "x": 95,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-5-dual-end-guide-2",
+      "type": "rect",
+      "x": 99,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-5-hand-guide-3",
+      "type": "rect",
+      "x": 140,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-5-dual-end-guide-3",
+      "type": "rect",
+      "x": 144,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-5-hand-guide-4",
+      "type": "rect",
+      "x": 185,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-5-dual-end-guide-4",
+      "type": "rect",
+      "x": 189,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-5-hand-guide-5",
+      "type": "rect",
+      "x": 230,
+      "y": 442,
+      "w": 68,
+      "h": 72,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "strokeOpacity": ".42"
+    },
+    {
+      "id": "player-5-dual-end-guide-5",
+      "type": "rect",
+      "x": 234,
+      "y": 447,
+      "w": 60,
+      "h": 11,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0,
+      "fillOpacity": ".32"
+    },
+    {
+      "id": "player-5-captured-card-back",
+      "type": "rect",
+      "x": 46,
+      "y": 556,
+      "w": 37,
+      "h": 48,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-scout-chip-anchor",
+      "type": "rect",
+      "x": 102,
+      "y": 568,
+      "w": 43,
+      "h": 24,
+      "rx": 5,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-score-chip-anchor",
+      "type": "circle",
+      "cx": 177,
+      "cy": 581,
+      "r": 17,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-scout-show-ready",
+      "type": "rect",
+      "x": 220,
+      "y": 560,
+      "w": 46,
+      "h": 40,
+      "rx": 12,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "player-5-starting-marker-anchor",
+      "type": "polygon",
+      "points": [
+        [
+          292,
+          556
+        ],
+        [
+          306,
+          567
+        ],
+        [
+          301,
+          585
+        ],
+        [
+          283,
+          585
+        ],
+        [
+          278,
+          567
+        ]
+      ],
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-show-frame",
+      "type": "rect",
+      "x": 345,
+      "y": 190,
+      "w": 310,
+      "h": 212,
+      "rx": 22,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 4
+    },
+    {
+      "id": "active-show-card-guide-1",
+      "type": "rect",
+      "x": 365,
+      "y": 226,
+      "w": 62,
+      "h": 108,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-show-top-guide-1",
+      "type": "rect",
+      "x": 370,
+      "y": 232,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-bottom-guide-1",
+      "type": "rect",
+      "x": 370,
+      "y": 313,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-card-guide-2",
+      "type": "rect",
+      "x": 434,
+      "y": 226,
+      "w": 62,
+      "h": 108,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-show-top-guide-2",
+      "type": "rect",
+      "x": 439,
+      "y": 232,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-bottom-guide-2",
+      "type": "rect",
+      "x": 439,
+      "y": 313,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-card-guide-3",
+      "type": "rect",
+      "x": 503,
+      "y": 226,
+      "w": 62,
+      "h": 108,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-show-top-guide-3",
+      "type": "rect",
+      "x": 508,
+      "y": 232,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-bottom-guide-3",
+      "type": "rect",
+      "x": 508,
+      "y": 313,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-card-guide-4",
+      "type": "rect",
+      "x": 572,
+      "y": 226,
+      "w": 62,
+      "h": 108,
+      "rx": 7,
+      "fill": "#fffdf8",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-show-top-guide-4",
+      "type": "rect",
+      "x": 577,
+      "y": 232,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "active-show-bottom-guide-4",
+      "type": "rect",
+      "x": 577,
+      "y": 313,
+      "w": 52,
+      "h": 15,
+      "rx": 3,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 0
+    },
+    {
+      "id": "scout-left-end-guide",
+      "type": "polygon",
+      "points": [
+        [
+          351,
+          354
+        ],
+        [
+          369,
+          342
+        ],
+        [
+          369,
+          366
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "scout-right-end-guide",
+      "type": "polygon",
+      "points": [
+        [
+          649,
+          354
+        ],
+        [
+          631,
+          342
+        ],
+        [
+          631,
+          366
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "active-set-owner-marker",
+      "type": "circle",
+      "cx": 500,
+      "cy": 375,
+      "r": 13,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "scout-chip-bank-frame",
+      "type": "rect",
+      "x": 345,
+      "y": 432,
+      "w": 145,
+      "h": 100,
+      "rx": 14,
+      "fill": "#f1f8fd",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "score-chip-bank-frame",
+      "type": "rect",
+      "x": 510,
+      "y": 432,
+      "w": 145,
+      "h": 100,
+      "rx": 14,
+      "fill": "#f1f8fd",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "used-scout-show-frame",
+      "type": "rect",
+      "x": 345,
+      "y": 558,
+      "w": 145,
+      "h": 116,
+      "rx": 14,
+      "fill": "#f1f8fd",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "round-two-reserve-frame",
+      "type": "rect",
+      "x": 510,
+      "y": 558,
+      "w": 145,
+      "h": 116,
+      "rx": 14,
+      "fill": "#f1f8fd",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "scout-bank-icon",
+      "type": "rect",
+      "x": 387,
+      "y": 467,
+      "w": 61,
+      "h": 30,
+      "rx": 7,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "score-bank-icon",
+      "type": "circle",
+      "cx": 582,
+      "cy": 482,
+      "r": 23,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "used-scout-show-icon",
+      "type": "rect",
+      "x": 390,
+      "y": 592,
+      "w": 55,
+      "h": 43,
+      "rx": 12,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "reserve-card-stack-back",
+      "type": "rect",
+      "x": 548,
+      "y": 590,
+      "w": 59,
+      "h": 69,
+      "rx": 7,
+      "fill": "#dce6ef",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    },
+    {
+      "id": "reserve-card-stack-top",
+      "type": "rect",
+      "x": 554,
+      "y": 584,
+      "w": 59,
+      "h": 69,
+      "rx": 7,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 2
+    }
+  ]
+}

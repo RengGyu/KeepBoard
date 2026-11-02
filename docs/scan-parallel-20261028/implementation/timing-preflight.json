@@ -1,0 +1,112 @@
+{
+  "version": "scan-parallel-timing-preparation-v1",
+  "status": "PREPARED_NO_CALLS_DESIGN_PENDING",
+  "preparedAt": "2026-10-28T14:44:02.163Z",
+  "source": {
+    "path": "/private/tmp/kb-photo-flow-ui-data/uploads/430efca5-a94c-49f2-9b20-303e0e65e54d.jpeg",
+    "sha256": "29f02bc870a2ef7cd4ec8425d50f4f6d552288564306c04c42664ae7bb6a3dee",
+    "width": 1170,
+    "height": 1560
+  },
+  "sourcePlan": {
+    "path": "/private/tmp/kb-catan-full-crop-20261028/plan.json",
+    "sha256": "fc7d22843799559361b939903a4f16454c298dbb2c466351ccee0d34a9fa2d74"
+  },
+  "model": "gemini-3.8-flash",
+  "promptSHA": "e7d55381608a6540badd5e91a3ba6e9b383c30b71491f66e34183f9e47b2e2ff",
+  "generationConfigSHA": "77d7f134806d2ac9acd143e40fadfd628402adfbf190ad745030c2d8c036bcb2",
+  "requests": [
+    {
+      "id": "upper-left",
+      "path": "/private/tmp/kb-catan-full-crop-20261028/upper-left.request.json",
+      "sha256": "a845732c06797c07b453c1dbe3b5179ebaecaf3686802956fdc62e09376fafb0",
+      "bytes": 307347,
+      "imageSHA": "f4778adfea8ad515c90c36555310c6e12d6ea6ae5e330bcdce3f9d9f9f3a4bd7",
+      "width": 680,
+      "height": 600,
+      "sourceBoxPx": [
+        0,
+        300,
+        680,
+        900
+      ]
+    },
+    {
+      "id": "upper-right",
+      "path": "/private/tmp/kb-catan-full-crop-20261028/upper-right.request.json",
+      "sha256": "8a33465c9ec0a797f09d83d43bf4aa1e350332d6ae1bf83bfe316ffb443d29ce",
+      "bytes": 249923,
+      "imageSHA": "cb4a18ee68a50277ee7ff692c7e6adb84093866cbe081d24317850de5679446b",
+      "width": 540,
+      "height": 600,
+      "sourceBoxPx": [
+        500,
+        300,
+        1040,
+        900
+      ]
+    },
+    {
+      "id": "lower-left",
+      "path": "/private/tmp/kb-catan-full-crop-20261028/lower-left.request.json",
+      "sha256": "93a3f7f88811723a71f7d4b1d7ba9db2d4e2d995d23ddd3b03811276010b2afa",
+      "bytes": 200223,
+      "imageSHA": "b543de8ca89c3d2109bd3e1dfc415513a1f9236c9f6fae9960ffc208121c7a24",
+      "width": 680,
+      "height": 520,
+      "sourceBoxPx": [
+        0,
+        760,
+        680,
+        1280
+      ]
+    },
+    {
+      "id": "lower-right",
+      "path": "/private/tmp/kb-catan-full-crop-20261028/lower-right.request.json",
+      "sha256": "fba1b497261aa16cec529ddb7be578f5e0911817c0466ab033659cc7d98a190d",
+      "bytes": 175039,
+      "imageSHA": "503beb90f99de34814efb6f274dd4234e31f1b421e2be0d71d5466473d55f522",
+      "width": 540,
+      "height": 520,
+      "sourceBoxPx": [
+        500,
+        760,
+        1040,
+        1280
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "sequential",
+      "concurrency": 1,
+      "requestOrder": [
+        "upper-left",
+        "upper-right",
+        "lower-left",
+        "lower-right"
+      ]
+    },
+    {
+      "id": "parallel",
+      "concurrency": null,
+      "requestOrder": [
+        "upper-left",
+        "upper-right",
+        "lower-left",
+        "lower-right"
+      ],
+      "note": "Await supervisor/Astra design for exact bounded concurrency."
+    }
+  ],
+  "providerCalls": 0,
+  "retries": 0,
+  "futureMaximumCalls": 8,
+  "limits": [
+    "Preparation does not authorize API execution.",
+    "Future conditions must send the exact same saved request bytes; no re-encoding or prompt/schema edits.",
+    "Mock scheduling latency is not real provider latency.",
+    "No token or accuracy comparison was measured by preparation."
+  ]
+}

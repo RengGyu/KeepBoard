@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/star-wars-rebellion.json",
-    "sha256": "c0c416217ca12d0319081523ce0655b8a8d44674abe327437a436d2cd888c2b5",
+    "sha256": "168543dcfec5afb89a830437061b600c0671cd5ef9c2d83f92844206f4842b42",
     "runtime_pack_id": "star-wars-rebellion",
-    "runtime_pack_version": "1.0.0-essentials-2.c0c416217ca1",
+    "runtime_pack_version": "1.0.0-essentials-2.168543dcfec5",
     "runtime_match": true
   },
   "basis": {
@@ -34,13 +34,15 @@
       "inherited::star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "시스템·부대/지도자와 생산 대기줄",
   "critical_resume_distinction": "반란군 기지/미션 등 역할 비밀은 일반 owner 손패로 수집하지 않기",
   "partitions": {
     "common_public": [
-      "galaxy"
+      "galaxy",
+      "discards"
     ],
     "player_public": [
       "leaders-area"
@@ -249,6 +251,58 @@
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
         "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "discards",
+      "name": "버림 더미",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다.",
+      "description": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+      ],
+      "confidence": "verified",
+      "partition": "common_public",
+      "source_field_ids": [
+        "discards.scene"
+      ],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "discards.scene"
+      ],
+      "current_manual_target_fields": [
+        "discards.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_access": "public evidence",
+      "capture_instruction": "버림 더미: 버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다. 읽을 수 없는 값은 미상으로 남기세요.",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry",
+        "source_anchor": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다."
       },
       "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
     }
@@ -536,6 +590,11 @@
         "visibility": "public"
       },
       {
+        "key": "discards.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -549,6 +608,10 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "leaders-area.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "rebel-secret.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -704,7 +767,8 @@
         "scope": "public",
         "visibility": "public",
         "field_ids": [
-          "galaxy.scene"
+          "galaxy.scene",
+          "discards.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -802,6 +866,12 @@
         "name": "지도자 풀·공개 미션",
         "needs": "지도자 인스턴스와 미션 카드의 부착, 포로 링 상태.",
         "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "discards",
+        "name": "버림 더미",
+        "needs": "버림 더미의 카드는 누구나 언제든 볼 수 있다. 덱이 바닥나 다시 섞기 전까지 종류별로 나눠 둔다.",
+        "access": "public evidence"
       }
     ],
     "do_not_collect": [
@@ -822,7 +892,7 @@
   "current_board_mapping": {
     "gameId": "star-wars-rebellion",
     "editionId": "base",
-    "sourceSHA": "c0c416217ca12d0319081523ce0655b8a8d44674abe327437a436d2cd888c2b5",
+    "sourceSHA": "168543dcfec5afb89a830437061b600c0671cd5ef9c2d83f92844206f4842b42",
     "status": "source-pending",
     "areas": [
       {
@@ -902,6 +972,27 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "discards",
+        "label": "버림 더미",
+        "fieldKeys": [
+          "discards.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "sourceRefs": [
+          "star-wars-rebellion.art-confirmation.star-wars-rebellion-primary"
+        ],
+        "sourceConfidence": "verified",
+        "template": "card-lanes",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

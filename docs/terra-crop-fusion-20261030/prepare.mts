@@ -1,0 +1,23 @@
+import fs from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+import {effectiveRecognitionPack} from '../../shared/recognition';
+import {catalogPacks} from '../../gamepacks/catalog';import {photoDefinition} from '../../server/photoDefinitions';import {prepareScanObservation} from '../../server/scanObservation';import {buildTerraGameBody,TerraGameReader} from '../../server/ai/terraGameReader';
+import type {Evidence,Session} from '../../shared/types';
+const out='docs/terra-crop-fusion-20261030';try{await fs.access(out+'/preflight.json');throw Error('Preflight already frozen; do not replace this experiment');}catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e;}const plan=JSON.parse(await fs.readFile(out+'/roi-plan.json','utf8')),privateDir=await fs.mkdtemp('/private/tmp/kb-terra-crop-'),sha=(b:Buffer|string)=>createHash('sha256').update(b).digest('hex');await fs.chmod(privateDir,0o700);
+const write=async(name:string,value:unknown)=>fs.writeFile(path.join(privateDir,name),JSON.stringify(value,null,2)+'\n',{mode:0o600});const rows=[];
+for(const c of plan.cases){
+ const data=await fs.readFile(c.path);assert.equal(sha(data),c.sha256);const cropPath=path.join(privateDir,c.gameId+'.roi.png'),start=performance.now();
+ execFileSync('python3',['-c','from PIL import Image; import sys; im=Image.open(sys.argv[1]); im.crop(tuple(map(int,sys.argv[3:7]))).save(sys.argv[2],"PNG")',c.path,cropPath,...c.roiPx.map(String)]);await fs.chmod(cropPath,0o600);const preprocessingMs=performance.now()-start,crop=await fs.readFile(cropPath);
+ const pack=effectiveRecognitionPack(catalogPacks.find(p=>p.id===c.gameId)!),definition=photoDefinition(pack),[x,y,xmax,ymax]=c.roiPx,region={x:x/c.width,y:y/c.height,width:(xmax-x)/c.width,height:(ymax-y)/c.height};
+ const evidence=[{id:c.gameId+'-whole',kind:'photo',url:c.path,scope:'public',captureEpoch:'frozen-epoch',label:'whole'},{id:c.gameId+'-roi',kind:'photo',url:cropPath,scope:'public',captureEpoch:'frozen-epoch',label:'ROI',sourceEvidenceId:c.gameId+'-whole',sourceRegion:region}] as Evidence[];
+ const session={id:c.gameId+'-isolated',captureEpoch:'frozen-epoch',turnInstanceId:'turn',gamePack:pack,gamePackId:pack.id,gamePackVersion:pack.version,assertions:[],evidence,players:[],notes:{},activity:[],preservations:[],snapshots:[],stage:'capture'} as unknown as Session;
+ const reader=new TerraGameReader({key:async()=>{throw Error('prepare never authenticates');}}),readImage=async(e:Evidence)=>({data:e.id.endsWith('-whole')?data:crop,mimeType:e.id.endsWith('-whole')?'image/jpeg':'image/png'});
+ const scan=await prepareScanObservation({session,pack,evidence,selection:{kind:'terra-game-observation-v1',definitionSHA:definition.definitionSHA,areaId:c.areaId},taskId:c.gameId+'-crop-comparison',reader,cloud:false,readImage});await write(c.gameId+'.task.json',{session,pack,scan,evidence});
+ const referenceFile=c.gameId==='cascadia'?'docs/twenty-games-pack-study-20261029/references-sol1.json':'docs/twenty-games-pack-study-20261029/references-sol2.json';const referenceSHA=sha(await fs.readFile(referenceFile));
+ const promptSHAs=[];
+ for(const [i,variant]of ['whole','roi'].entries()){
+  const p=scan.units[i].hosted!,image=await readImage(evidence[i]),body=buildTerraGameBody(p.request,p.definition,image.data,image.mimeType);await write(c.gameId+'.'+variant+'.request.json',body);const content=body.input[0].content;promptSHAs.push(sha(content[0].text!));
+  rows.push({id:c.gameId+'-'+variant,gameId:c.gameId,variant,unitIndex:i,bodySHA:sha(JSON.stringify(body)),inputSHA:sha(image.data),sourceSHA:c.sha256,inputPath:variant==='whole'?c.path:cropPath,width:p.request.images[0].width,height:p.request.images[0].height,mimeType:image.mimeType,definitionSHA:definition.definitionSHA,areaId:c.areaId,partition:c.partition,referenceFile,referenceSHA,roiPx:c.roiPx,preprocessingMs,taskPath:path.join(privateDir,c.gameId+'.task.json'),requestPath:path.join(privateDir,c.gameId+'.'+variant+'.request.json')});
+ }
+ assert.equal(promptSHAs[0],promptSHAs[1]);
+}
+const manifest={version:'terra-crop-comparison-v1',frozenAt:new Date().toISOString(),privateDir,roiPlanSHA:sha(await fs.readFile(out+'/roi-plan.json')),calls:rows,maxCalls:4,peak:4,retries:0,model:'gpt-6.1-terra',adapter:'literal-named-fill-unit-original-v2',auth:'provided-upload in-process only',samePromptAndSchemaWithinGame:true,externalUpscale:false};await fs.writeFile(out+'/preflight.json',JSON.stringify(manifest,null,2)+'\n');console.log(JSON.stringify({cases:2,requests:4,privateDir,roiPlanSHA:manifest.roiPlanSHA,providerCalls:0}));

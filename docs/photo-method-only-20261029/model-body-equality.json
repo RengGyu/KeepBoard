@@ -1,0 +1,315 @@
+{
+  "status": "PASS_MOCK_OUTBOUND_EQUALITY",
+  "actualProviderCalls": 0,
+  "interceptedRequests": 2,
+  "requestBodyByteExact": true,
+  "requestBodySHA256": "ce725e575e8f41f73924a90cd85051ed215d30188b51631e3b290d747d24c6a0",
+  "imageSHA256": "28ce72a474b4cd06f0995427a53a1c8ab815e0c3e3fa656143f91836c8254dbc",
+  "promptSHA256": "a29cd46fadd9f145add52daf3c372623d3816cd500c5e22ca21a29b28f7c13aa",
+  "generationConfig": {
+    "candidateCount": 1,
+    "maxOutputTokens": 32768,
+    "thinkingConfig": {
+      "thinkingLevel": "LOW"
+    },
+    "mediaResolution": "MEDIA_RESOLUTION_HIGH",
+    "responseFormat": {
+      "text": {
+        "mimeType": "APPLICATION_JSON",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string"
+            },
+            "assertions": {
+              "type": "array",
+              "maxItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "board.layout",
+                      "components.observed"
+                    ]
+                  },
+                  "value": {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "type": "integer",
+                        "description": "Always 2. Readers also accept legacy version 1."
+                      },
+                      "coverageByLayer": {
+                        "type": "object",
+                        "properties": {
+                          "terrain": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial",
+                              "unknown"
+                            ]
+                          },
+                          "numbers": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial",
+                              "unknown"
+                            ]
+                          },
+                          "buildings": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial",
+                              "unknown"
+                            ]
+                          },
+                          "roads": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial",
+                              "unknown"
+                            ]
+                          },
+                          "harbors": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial",
+                              "unknown"
+                            ]
+                          }
+                        },
+                        "description": "Layer-specific observation completeness. full terrain never implies complete harbors or ownership."
+                      },
+                      "coverage": {
+                        "type": "string",
+                        "enum": [
+                          "full",
+                          "partial",
+                          "catalog"
+                        ],
+                        "description": "full: the whole 19-hex board is visible; partial: only part of the board or table; catalog: loose components counted without a board. Full does not mean the position is rule-legal."
+                      },
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Stable unique id, e.g. road-1."
+                            },
+                            "kind": {
+                              "type": "string",
+                              "enum": [
+                                "terrain",
+                                "number-token",
+                                "road",
+                                "settlement",
+                                "city",
+                                "robber",
+                                "resource-card",
+                                "development-card",
+                                "token",
+                                "deck",
+                                "container",
+                                "harbor",
+                                "unknown"
+                              ]
+                            },
+                            "ratio": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "description": "Harbor trade ratio 2 or 3; null if unreadable. Preserve observed mismatches for review."
+                            },
+                            "variant": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "harbor: generic|lumber|brick|wool|grain|ore|null (ratio separately); terrain: forest|pasture|fields|hills|mountains|desert; resource-card: lumber|wool|grain|brick|ore|hidden; development-card: knight|victory-point|road-building|year-of-plenty|monopoly|hidden; null if unreadable."
+                            },
+                            "ownerId": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Supplied player id only when visibly identified; null when uncertain. Never infer from an id/name color word."
+                            },
+                            "observedColor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Color actually visible on the piece, e.g. blue or #2468ad. Independent of player.color and ownerId; null if unreadable. Never use resource-card material/terrain color as player identity."
+                            },
+                            "quantity": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "description": "Physical count represented by this entry; null if not countable."
+                            },
+                            "location": {
+                              "type": "object",
+                              "description": "Logical slot. hex id r{row}c{column} (r1c1..r5c3, rows of 3,4,5,4,3). vertex/edge id {hexId}.{N|NE|SE|S|SW|NW} for corners, {hexId}.{NE|E|SE|SW|W|NW} for sides, any adjacent hex works. id null when the type is known but the slot is not readable.",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "hex",
+                                    "edge",
+                                    "vertex",
+                                    "area",
+                                    "unplaced"
+                                  ]
+                                },
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "id"
+                              ]
+                            },
+                            "region": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "description": "Normalized crop (0..1) of this component inside the photo named by evidenceId. null when the photo does not show it or no photo exists.",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                },
+                                "width": {
+                                  "type": "number"
+                                },
+                                "height": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "x",
+                                "y",
+                                "width",
+                                "height"
+                              ]
+                            },
+                            "evidenceId": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Photo id the region refers to."
+                            },
+                            "number": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "description": "Number token value 2-12 (not 7) for terrain/number-token."
+                            },
+                            "direction": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "description": "Optional rotation in degrees."
+                            },
+                            "face": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "enum": [
+                                "front",
+                                "back",
+                                null
+                              ],
+                              "description": "Visible side for cards/tiles/tokens; null if unreadable; omit if irrelevant."
+                            },
+                            "attachedToId": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "id of another component this one sits on or belongs to."
+                            },
+                            "note": {
+                              "type": "string",
+                              "description": "Short observation; omit when empty."
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "kind",
+                            "variant",
+                            "ownerId",
+                            "quantity",
+                            "location",
+                            "region",
+                            "evidenceId"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "version",
+                      "coverage",
+                      "components"
+                    ]
+                  },
+                  "evidenceIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "same-photo"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "field",
+                  "value",
+                  "evidenceIds"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "summary",
+            "assertions",
+            "warnings"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "meaning": "Real image bytes and frozen reader construct exactly identical provider bodies before/after; provider response is a synthetic empty JSON, no recognition claim."
+}

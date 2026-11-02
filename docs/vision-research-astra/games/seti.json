@@ -17,9 +17,9 @@
   },
   "pinned_source": {
     "path": "docs/research/game-specs-120/games/seti.json",
-    "sha256": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
+    "sha256": "9525edb48660b85ac5c602a013bb1701bc93ed810f60672ff0bbdbe76817cc75",
     "runtime_pack_id": "seti",
-    "runtime_pack_version": "1.0.0-essentials-2.65c3c718faf8",
+    "runtime_pack_version": "1.0.0-essentials-2.9525edb48660",
     "runtime_match": true
   },
   "basis": {
@@ -36,7 +36,8 @@
       "inherited::seti.essentials.rules"
     ],
     "whole_game_rules_verified": false,
-    "real_photo_accuracy_verified": false
+    "real_photo_accuracy_verified": false,
+    "source_revision_pending_runtime_regeneration": false
   },
   "capture_focus": "회전 태양계 층별 기준점과 탐사선·신호/컴퓨터",
   "critical_resume_distinction": "각 층 회전과 절대 화면위치 구별, 궤도선/착륙선과 미발견 종 분리",
@@ -44,10 +45,12 @@
     "common_public": [
       "solar-system",
       "signals",
-      "public"
+      "public",
+      "card-discard"
     ],
     "player_public": [
-      "computer"
+      "computer",
+      "missions"
     ],
     "owner_private": [
       "hand"
@@ -280,7 +283,7 @@
         "cards"
       ],
       "anchor_contract": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과.",
-      "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
+      "description": "개인 카드의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다. 앞면으로 낸 임무와 버림은 missions·card-discard에 따로 기록한다. 이전 기록은 옮기지 않는다.",
       "source_refs": [],
       "confidence": "recommendation",
       "partition": "owner_private",
@@ -356,6 +359,110 @@
         "opening_policy": "retain-saved-turn",
         "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
         "render_basis": "manual record surface; original photo retains unrepresented geometry"
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "missions",
+      "name": "진행·완료 임무와 수입 카드",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+      "description": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified",
+      "partition": "player_public",
+      "source_field_ids": [
+        "missions.scene"
+      ],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "__photo.public"
+      ],
+      "current_manual_target_fields": [
+        "missions.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_access": "public evidence, unassigned tray; explicit owner selection later",
+      "capture_instruction": "진행·완료 임무와 수입 카드: 낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다. 읽을 수 없는 값은 미상으로 남기세요.",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry",
+        "source_anchor": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다."
+      },
+      "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
+    },
+    {
+      "id": "card-discard",
+      "name": "공용 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "stack",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "stack"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+      "description": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 보이지 않는 정체·수량은 미확인으로 둔다.",
+      "source_refs": [
+        "seti.art-confirmation.seti-rules"
+      ],
+      "confidence": "verified",
+      "partition": "common_public",
+      "source_field_ids": [
+        "card-discard.scene"
+      ],
+      "capture_allowed_current": true,
+      "current_ai_destination_fields": [
+        "card-discard.scene"
+      ],
+      "current_manual_target_fields": [
+        "card-discard.scene"
+      ],
+      "allowed_component_ids": [
+        "cards"
+      ],
+      "owner_binding": "explicit user/roster binding only; no seat/color inference",
+      "capture_access": "public evidence",
+      "capture_instruction": "공용 카드 버림: 효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다. 읽을 수 없는 값은 미상으로 남기세요.",
+      "evidence_contract": {
+        "original_id_required": true,
+        "original_region": "normalized crop in this source only; not game coordinates",
+        "same_static_state_required": true,
+        "multi_view_same_object": "manual evidence link or joint read; never count similar copies as one"
+      },
+      "display_resume": {
+        "source_relations": [],
+        "opening_policy": "retain-saved-turn",
+        "restore": "saved accepted/manual values and source photo; absent/stale/failed analysis does not clear existing values",
+        "render_basis": "manual record surface; original photo retains unrepresented geometry",
+        "source_anchor": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다."
       },
       "official_rule_status": "REPORTED_PINNED_SPEC; independent checked evidence is scoped separately"
     }
@@ -697,6 +804,11 @@
         "visibility": "public"
       },
       {
+        "key": "card-discard.scene",
+        "scope": "public",
+        "visibility": "public"
+      },
+      {
         "key": "__photo.public",
         "scope": "public",
         "visibility": "public"
@@ -715,6 +827,10 @@
       }
     ],
     "excluded_bindings": [
+      {
+        "key": "computer.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
+      },
       {
         "key": "hidden.scene",
         "reason": "비밀·역할·실물 보관 또는 비구조 기록"
@@ -770,6 +886,10 @@
       {
         "key": "record-note.starting-player",
         "reason": "원명세가 사진 관측을 허용하지 않음"
+      },
+      {
+        "key": "missions.scene",
+        "reason": "비밀·역할·실물 보관 또는 비구조 기록"
       }
     ]
   },
@@ -838,7 +958,8 @@
     "미공개 외계종 정체·빠진 카드, 사진 전체 각도로 각 내부 원판의 회전 확정",
     "보관 묶음의 존재/봉인/사진에서 내부 정체·정확한 수량·지나간 차례/효과 사용을 추정하지 않는다. 공개 수량의 근거가 없으면 비공개 내용으로부터 공개값을 만들어 내지 않는다.",
     "소유자 신원/새로운 차례 이력은 crop·색·자리만으로 채우지 않는다.",
-    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다."
+    "미관측·가려진 실물은0/빈자리/완료로 바꾸지 않는다.",
+    "SETI 수입 카드 아래 끼운 카드의 가려진 정체는 공개 정보로 추정하지 않는다. 보이는 부분과 현재 물리적 부착·방향만 기록한다."
   ],
   "preservation": {
     "required_field_ids": [],
@@ -896,7 +1017,8 @@
         "field_ids": [
           "solar-system.scene",
           "signals.scene",
-          "public.scene"
+          "public.scene",
+          "card-discard.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -918,7 +1040,8 @@
         "scope": "player",
         "visibility": "public",
         "field_ids": [
-          "computer.scene"
+          "computer.scene",
+          "missions.scene"
         ],
         "method": "manual-note",
         "order_sensitive": false,
@@ -1012,6 +1135,18 @@
         "name": "개인 카드",
         "needs": "비공개 손패·선택한 미공개 카드와 진행 중 개인 효과.",
         "access": "owner evidence, this owner only; public holdings in same photo remain private tray"
+      },
+      {
+        "area_id": "missions",
+        "name": "진행·완료 임무와 수입 카드",
+        "needs": "낸 임무 카드는 앞면으로 자기 앞에 두고, 완료하면 뒷면으로 남긴다. 수입 카드 아래 끼운 카드도 개인 공개 상태다.",
+        "access": "public evidence, unassigned tray; explicit owner selection later"
+      },
+      {
+        "area_id": "card-discard",
+        "name": "공용 카드 버림",
+        "needs": "효과를 처리한 카드는 주 덱 옆 앞면 버림 더미에 쌓인다. 미공개 덱과 섞지 않는다.",
+        "access": "public evidence"
       }
     ],
     "do_not_collect": [
@@ -1027,7 +1162,7 @@
   "current_board_mapping": {
     "gameId": "seti",
     "editionId": "base",
-    "sourceSHA": "65c3c718faf891aa90ff3a7412511c9ade205102317fca82b37573b9594c7fdf",
+    "sourceSHA": "9525edb48660b85ac5c602a013bb1701bc93ed810f60672ff0bbdbe76817cc75",
     "status": "reuse",
     "areas": [
       {
@@ -1146,6 +1281,48 @@
         "geometryStatus": "manual-surface",
         "sourceRefs": [],
         "sourceConfidence": "recommendation",
+        "artComponentId": null
+      },
+      {
+        "areaId": "missions",
+        "label": "진행·완료 임무와 수입 카드",
+        "fieldKeys": [
+          "missions.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "player",
+        "visibility": "public",
+        "topology": "zone",
+        "sourceRefs": [
+          "seti.art-confirmation.seti-rules"
+        ],
+        "sourceConfidence": "verified",
+        "template": "free-table",
+        "status": "new",
+        "geometryStatus": "manual-surface",
+        "artComponentId": null
+      },
+      {
+        "areaId": "card-discard",
+        "label": "공용 카드 버림",
+        "fieldKeys": [
+          "card-discard.scene"
+        ],
+        "componentIds": [
+          "cards"
+        ],
+        "scope": "public",
+        "visibility": "public",
+        "topology": "stack",
+        "sourceRefs": [
+          "seti.art-confirmation.seti-rules"
+        ],
+        "sourceConfidence": "verified",
+        "template": "card-lanes",
+        "status": "new",
+        "geometryStatus": "manual-surface",
         "artComponentId": null
       }
     ],

@@ -298,7 +298,7 @@ function normalizeComponent(raw: Record<string, unknown>, index: number, evidenc
   const legacyHarbor = kind === 'token' && raw.variant === 'harbor';
   if (legacyHarbor) kind = 'harbor';
   const location = normalizeLocation(kind, raw.location ?? raw.anchor ?? raw.at ?? null, label, adjust);
-  const quantityRaw = raw.quantity ?? raw.count;
+  const quantityRaw = raw.quantity === undefined ? raw.count : raw.quantity;
   let quantity = quantityRaw === undefined ? (isBoardSlotType(location.type) ? 1 : null) : finite(quantityRaw);
   if (quantity !== null && (quantity < 0 || !Number.isInteger(quantity))) { adjust(`${label}: 수량 ${quantity}은 0 이상의 정수가 아니어서 모름으로 바꿨습니다.`); quantity = null; }
   let evidenceId = text(raw.evidenceId);

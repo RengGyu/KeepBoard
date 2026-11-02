@@ -15,7 +15,7 @@
     "confidence": "reported"
   },
   "source_spec": "docs/research/game-specs-120/games/ticket-to-ride.json",
-  "source_sha256": "9b65a4586519b0107ee3acb8a661c3b57feab9fc8f0a5cb8e89225a7a0ae188c",
+  "source_sha256": "1c8ca9d2e289558122fe8b4ee8134c208f4ee48eb375499ec23b7c342fcbec17",
   "art_scope": "representative-original-presets; never an exhaustive printed inventory",
   "components": [
     {
@@ -295,7 +295,7 @@
     },
     {
       "id": "decks",
-      "name": "뽑기·버림",
+      "name": "뽑기 더미",
       "scope": "shared-secret",
       "visibility": "hidden",
       "topology": "stack",
@@ -308,13 +308,67 @@
         "cards",
         "tickets"
       ],
-      "anchor_contract": "열차/목적지 더미를 각각 식별하고 순서를 노출하지 않는다.",
-      "description": "뽑기·버림의 관측 배치를 보관한다. 미확인 위치·방향·수량은 null이며 빈자리와 구별한다.",
-      "source_refs": [],
+      "anchor_contract": "열차 카드 뽑기 더미와 목적지 티켓 더미의 미공개 순서·방향을 별도 묶음으로 유지한다. 공개 열차 카드 버림은 제외.",
+      "description": "뽑기 더미의 미공개 순서와 방향만 실물 보존한다. 공개 버림은 별도 구역이다.",
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
       "confidence": "recommendation",
       "art_reference": {
         "asset_id": "common.area-stack",
         "use": "schematic zone only; source component geometry is independent",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "train-discard",
+      "name": "공개 열차 카드 버림",
+      "scope": "public",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "cards"
+      ],
+      "anchor_contract": "사용한 열차 카드를 앞면으로 모은 버림. 뽑기 더미·진열과 따로 두며 재섞기 전 경계를 유지한다.",
+      "description": "현재 공개 버림의 보이는 카드 정체·수량을 기록하고 가려진 카드는 미확인으로 둔다.",
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
+      "confidence": "reported",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
+        "canonical_layout": false
+      }
+    },
+    {
+      "id": "train-stock",
+      "name": "플레이어별 남은 열차 말",
+      "scope": "player",
+      "visibility": "public",
+      "topology": "zone",
+      "dynamic": true,
+      "fixed_slot_count": null,
+      "slot_kinds": [
+        "zone"
+      ],
+      "component_ids": [
+        "trains"
+      ],
+      "anchor_contract": "각 플레이어에게 실제로 남은 열차 말 묶음. 색만으로 소유자를 추정하지 않고 명시적으로 연결한다.",
+      "description": "지도 위에 놓인 열차와 분리된, 플레이어별 공개 남은 열차 말의 위치·관측 수량.",
+      "source_refs": [
+        "ticket-to-ride.rules.2025"
+      ],
+      "confidence": "reported",
+      "art_reference": {
+        "asset_id": "common.area-zone",
+        "use": "schematic zone only; not a printed game board",
         "canonical_layout": false
       }
     }

@@ -51,3 +51,15 @@ test('a populated Splendor record shows six readable cards and opens the rest on
  assert.equal((few.match(/class="splendor-readout is-development is-compact"/g)??[]).length,5);assert.doesNotMatch(few,/모두 보기/);
  assert.match(many,/카드로 보기 · 12개/,'the count stays visible when the list is partial');
 });
+
+test('mobile photo controls collapse once a reading exists, even before a snapshot is saved',()=>{
+ const p=pack('catan-base');
+ const empty=render(view(p));
+ assert.match(empty,/<details class="cw-mobile-photo-tools" open=""/);
+ const a:Assertion={id:'read-now',field:'turn.diceTotal',value:8,status:'accepted',basis:'observation',evidenceIds:['photo'],updatedAt:'now',turnInstanceId:'turn'};
+ const read=render(view(p,[a]));
+ const earlierApplied=render(view(p,[{...a,basis:'user',observationReceipts:[{}] as never}]));
+ assert.doesNotMatch(earlierApplied,/<details class="cw-mobile-photo-tools" open/,'previously applied readings also lead on phones');
+ assert.match(read,/<details class="cw-mobile-photo-tools"><summary>/);
+ assert.doesNotMatch(read,/<details class="cw-mobile-photo-tools" open/);
+});

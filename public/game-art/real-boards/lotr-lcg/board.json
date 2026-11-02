@@ -1,0 +1,4811 @@
+{
+  "gameId": "lotr-lcg",
+  "edition": "base",
+  "svg": "board.svg",
+  "viewBox": [
+    0,
+    0,
+    1000,
+    1000
+  ],
+  "areas": [
+    {
+      "id": "current-quest",
+      "label": "current-quest",
+      "field": "quest.scene",
+      "scope": "public",
+      "accepts": [
+        "encounter"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-current-quest",
+          "x": 42,
+          "y": 39,
+          "w": 177,
+          "h": 106,
+          "capacity": 1,
+          "role": "currenttopquestcard"
+        }
+      ],
+      "bounds": [
+        32,
+        29,
+        197,
+        128
+      ],
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "active-location",
+      "label": "active-location",
+      "field": "quest.scene",
+      "scope": "public",
+      "accepts": [
+        "encounter"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-active-location",
+          "x": 247,
+          "y": 37,
+          "w": 74,
+          "h": 106,
+          "capacity": 1,
+          "role": "active-location"
+        }
+      ],
+      "bounds": [
+        237,
+        29,
+        94,
+        128
+      ],
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "staging",
+      "label": "staging",
+      "field": "quest.scene",
+      "scope": "public",
+      "accepts": [
+        "encounter",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        550,
+        30,
+        416,
+        191
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "shared.stagingIds",
+      "ownerSide": null,
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "victory-display",
+      "label": "victory-display",
+      "field": "quest.scene",
+      "scope": "public",
+      "accepts": [
+        "encounter",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        34,
+        245,
+        234,
+        92
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "shared.victoryDisplayIds",
+      "ownerSide": null,
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-1-heroes",
+      "label": "seat-1-heroes",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-seat-1-hero-1",
+          "x": 37,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-1-hero-2",
+          "x": 107,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-1-hero-3",
+          "x": 177,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        }
+      ],
+      "bounds": [
+        31,
+        418,
+        212,
+        91
+      ],
+      "stateKey": "players.seat-1.heroIds",
+      "ownerSide": "seat-1",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-1-allies",
+      "label": "seat-1-allies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        36,
+        524,
+        202,
+        59
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-1.allyIds",
+      "ownerSide": "seat-1",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-1-engaged-enemies",
+      "label": "seat-1-engaged-enemies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "encounter",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        262,
+        505,
+        209,
+        78
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-1.engagedEnemyIds",
+      "ownerSide": "seat-1",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-1-hand",
+      "label": "seat-1-hand",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        36,
+        621,
+        262,
+        49
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-1.handIds",
+      "ownerSide": "seat-1",
+      "visibility": "owner",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-2-heroes",
+      "label": "seat-2-heroes",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-seat-2-hero-1",
+          "x": 527,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-2-hero-2",
+          "x": 597,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-2-hero-3",
+          "x": 667,
+          "y": 425,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        }
+      ],
+      "bounds": [
+        521,
+        418,
+        212,
+        91
+      ],
+      "stateKey": "players.seat-2.heroIds",
+      "ownerSide": "seat-2",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-2-allies",
+      "label": "seat-2-allies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        526,
+        524,
+        202,
+        59
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-2.allyIds",
+      "ownerSide": "seat-2",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-2-engaged-enemies",
+      "label": "seat-2-engaged-enemies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "encounter",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        752,
+        505,
+        209,
+        78
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-2.engagedEnemyIds",
+      "ownerSide": "seat-2",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-2-hand",
+      "label": "seat-2-hand",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        526,
+        621,
+        262,
+        49
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-2.handIds",
+      "ownerSide": "seat-2",
+      "visibility": "owner",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-3-heroes",
+      "label": "seat-3-heroes",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-seat-3-hero-1",
+          "x": 37,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-3-hero-2",
+          "x": 107,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-3-hero-3",
+          "x": 177,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        }
+      ],
+      "bounds": [
+        31,
+        710,
+        212,
+        91
+      ],
+      "stateKey": "players.seat-3.heroIds",
+      "ownerSide": "seat-3",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-3-allies",
+      "label": "seat-3-allies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        36,
+        816,
+        202,
+        59
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-3.allyIds",
+      "ownerSide": "seat-3",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-3-engaged-enemies",
+      "label": "seat-3-engaged-enemies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "encounter",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        262,
+        797,
+        209,
+        78
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-3.engagedEnemyIds",
+      "ownerSide": "seat-3",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-3-hand",
+      "label": "seat-3-hand",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        36,
+        913,
+        262,
+        49
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-3.handIds",
+      "ownerSide": "seat-3",
+      "visibility": "owner",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-4-heroes",
+      "label": "seat-4-heroes",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters"
+      ],
+      "ordered": false,
+      "slots": [
+        {
+          "id": "lotr-lcg-seat-4-hero-1",
+          "x": 527,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-4-hero-2",
+          "x": 597,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        },
+        {
+          "id": "lotr-lcg-seat-4-hero-3",
+          "x": 667,
+          "y": 717,
+          "w": 55,
+          "h": 77,
+          "capacity": 1,
+          "role": "originalheroguide",
+          "optional": true
+        }
+      ],
+      "bounds": [
+        521,
+        710,
+        212,
+        91
+      ],
+      "stateKey": "players.seat-4.heroIds",
+      "ownerSide": "seat-4",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-4-allies",
+      "label": "seat-4-allies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        526,
+        816,
+        202,
+        59
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-4.allyIds",
+      "ownerSide": "seat-4",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-4-engaged-enemies",
+      "label": "seat-4-engaged-enemies",
+      "field": "player.scene",
+      "scope": "player",
+      "accepts": [
+        "encounter",
+        "attachments",
+        "tokens"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        752,
+        797,
+        209,
+        78
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-4.engagedEnemyIds",
+      "ownerSide": "seat-4",
+      "visibility": "public",
+      "slotStrokeWidth": 1.5
+    },
+    {
+      "id": "seat-4-hand",
+      "label": "seat-4-hand",
+      "field": "hand.scene",
+      "scope": "player",
+      "accepts": [
+        "characters",
+        "attachments"
+      ],
+      "ordered": false,
+      "slots": [],
+      "bounds": [
+        526,
+        913,
+        262,
+        49
+      ],
+      "placement": "dynamic-card-layout;notfixedinventory",
+      "stateKey": "players.seat-4.handIds",
+      "ownerSide": "seat-4",
+      "visibility": "owner",
+      "slotStrokeWidth": 1.5
+    }
+  ],
+  "numericTracks": [],
+  "playerCount": {
+    "1": {
+      "hideAreas": [
+        "seat-2-heroes",
+        "seat-2-allies",
+        "seat-2-engaged-enemies",
+        "seat-2-hand",
+        "seat-3-heroes",
+        "seat-3-allies",
+        "seat-3-engaged-enemies",
+        "seat-3-hand",
+        "seat-4-heroes",
+        "seat-4-allies",
+        "seat-4-engaged-enemies",
+        "seat-4-hand"
+      ],
+      "hideBoardArtIds": [
+        "seat-2-station",
+        "seat-2-threat-dial",
+        "seat-2-dial-tens",
+        "seat-2-tens-0",
+        "seat-2-tens-1",
+        "seat-2-tens-2",
+        "seat-2-tens-3",
+        "seat-2-tens-4",
+        "seat-2-tens-5",
+        "seat-2-tens-6",
+        "seat-2-tens-7",
+        "seat-2-tens-8",
+        "seat-2-tens-9",
+        "seat-2-dial-ones",
+        "seat-2-ones-0",
+        "seat-2-ones-1",
+        "seat-2-ones-2",
+        "seat-2-ones-3",
+        "seat-2-ones-4",
+        "seat-2-ones-5",
+        "seat-2-ones-6",
+        "seat-2-ones-7",
+        "seat-2-ones-8",
+        "seat-2-ones-9",
+        "seat-2-first-player-guide",
+        "seat-2-hero1-resources",
+        "seat-2-hero1-damage",
+        "seat-2-hero2-resources",
+        "seat-2-hero2-damage",
+        "seat-2-hero3-resources",
+        "seat-2-hero3-damage",
+        "seat-2-allies-outline",
+        "seat-2-engaged-enemies-outline",
+        "seat-2-hand-outline",
+        "seat-2-deck",
+        "seat-2-discard",
+        "seat-2-attachments-guide",
+        "seat-3-station",
+        "seat-3-threat-dial",
+        "seat-3-dial-tens",
+        "seat-3-tens-0",
+        "seat-3-tens-1",
+        "seat-3-tens-2",
+        "seat-3-tens-3",
+        "seat-3-tens-4",
+        "seat-3-tens-5",
+        "seat-3-tens-6",
+        "seat-3-tens-7",
+        "seat-3-tens-8",
+        "seat-3-tens-9",
+        "seat-3-dial-ones",
+        "seat-3-ones-0",
+        "seat-3-ones-1",
+        "seat-3-ones-2",
+        "seat-3-ones-3",
+        "seat-3-ones-4",
+        "seat-3-ones-5",
+        "seat-3-ones-6",
+        "seat-3-ones-7",
+        "seat-3-ones-8",
+        "seat-3-ones-9",
+        "seat-3-first-player-guide",
+        "seat-3-hero1-resources",
+        "seat-3-hero1-damage",
+        "seat-3-hero2-resources",
+        "seat-3-hero2-damage",
+        "seat-3-hero3-resources",
+        "seat-3-hero3-damage",
+        "seat-3-allies-outline",
+        "seat-3-engaged-enemies-outline",
+        "seat-3-hand-outline",
+        "seat-3-deck",
+        "seat-3-discard",
+        "seat-3-attachments-guide",
+        "seat-4-station",
+        "seat-4-threat-dial",
+        "seat-4-dial-tens",
+        "seat-4-tens-0",
+        "seat-4-tens-1",
+        "seat-4-tens-2",
+        "seat-4-tens-3",
+        "seat-4-tens-4",
+        "seat-4-tens-5",
+        "seat-4-tens-6",
+        "seat-4-tens-7",
+        "seat-4-tens-8",
+        "seat-4-tens-9",
+        "seat-4-dial-ones",
+        "seat-4-ones-0",
+        "seat-4-ones-1",
+        "seat-4-ones-2",
+        "seat-4-ones-3",
+        "seat-4-ones-4",
+        "seat-4-ones-5",
+        "seat-4-ones-6",
+        "seat-4-ones-7",
+        "seat-4-ones-8",
+        "seat-4-ones-9",
+        "seat-4-first-player-guide",
+        "seat-4-hero1-resources",
+        "seat-4-hero1-damage",
+        "seat-4-hero2-resources",
+        "seat-4-hero2-damage",
+        "seat-4-hero3-resources",
+        "seat-4-hero3-damage",
+        "seat-4-allies-outline",
+        "seat-4-engaged-enemies-outline",
+        "seat-4-hand-outline",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ],
+      "hideTableZoneIds": [
+        "seat-2-threat-dial",
+        "seat-2-first-player-guide",
+        "seat-2-deck",
+        "seat-2-discard",
+        "seat-2-attachments-guide",
+        "seat-3-threat-dial",
+        "seat-3-first-player-guide",
+        "seat-3-deck",
+        "seat-3-discard",
+        "seat-3-attachments-guide",
+        "seat-4-threat-dial",
+        "seat-4-first-player-guide",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ]
+    },
+    "2": {
+      "hideAreas": [
+        "seat-3-heroes",
+        "seat-3-allies",
+        "seat-3-engaged-enemies",
+        "seat-3-hand",
+        "seat-4-heroes",
+        "seat-4-allies",
+        "seat-4-engaged-enemies",
+        "seat-4-hand"
+      ],
+      "hideBoardArtIds": [
+        "seat-3-station",
+        "seat-3-threat-dial",
+        "seat-3-dial-tens",
+        "seat-3-tens-0",
+        "seat-3-tens-1",
+        "seat-3-tens-2",
+        "seat-3-tens-3",
+        "seat-3-tens-4",
+        "seat-3-tens-5",
+        "seat-3-tens-6",
+        "seat-3-tens-7",
+        "seat-3-tens-8",
+        "seat-3-tens-9",
+        "seat-3-dial-ones",
+        "seat-3-ones-0",
+        "seat-3-ones-1",
+        "seat-3-ones-2",
+        "seat-3-ones-3",
+        "seat-3-ones-4",
+        "seat-3-ones-5",
+        "seat-3-ones-6",
+        "seat-3-ones-7",
+        "seat-3-ones-8",
+        "seat-3-ones-9",
+        "seat-3-first-player-guide",
+        "seat-3-hero1-resources",
+        "seat-3-hero1-damage",
+        "seat-3-hero2-resources",
+        "seat-3-hero2-damage",
+        "seat-3-hero3-resources",
+        "seat-3-hero3-damage",
+        "seat-3-allies-outline",
+        "seat-3-engaged-enemies-outline",
+        "seat-3-hand-outline",
+        "seat-3-deck",
+        "seat-3-discard",
+        "seat-3-attachments-guide",
+        "seat-4-station",
+        "seat-4-threat-dial",
+        "seat-4-dial-tens",
+        "seat-4-tens-0",
+        "seat-4-tens-1",
+        "seat-4-tens-2",
+        "seat-4-tens-3",
+        "seat-4-tens-4",
+        "seat-4-tens-5",
+        "seat-4-tens-6",
+        "seat-4-tens-7",
+        "seat-4-tens-8",
+        "seat-4-tens-9",
+        "seat-4-dial-ones",
+        "seat-4-ones-0",
+        "seat-4-ones-1",
+        "seat-4-ones-2",
+        "seat-4-ones-3",
+        "seat-4-ones-4",
+        "seat-4-ones-5",
+        "seat-4-ones-6",
+        "seat-4-ones-7",
+        "seat-4-ones-8",
+        "seat-4-ones-9",
+        "seat-4-first-player-guide",
+        "seat-4-hero1-resources",
+        "seat-4-hero1-damage",
+        "seat-4-hero2-resources",
+        "seat-4-hero2-damage",
+        "seat-4-hero3-resources",
+        "seat-4-hero3-damage",
+        "seat-4-allies-outline",
+        "seat-4-engaged-enemies-outline",
+        "seat-4-hand-outline",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ],
+      "hideTableZoneIds": [
+        "seat-3-threat-dial",
+        "seat-3-first-player-guide",
+        "seat-3-deck",
+        "seat-3-discard",
+        "seat-3-attachments-guide",
+        "seat-4-threat-dial",
+        "seat-4-first-player-guide",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ]
+    },
+    "3": {
+      "hideAreas": [
+        "seat-4-heroes",
+        "seat-4-allies",
+        "seat-4-engaged-enemies",
+        "seat-4-hand"
+      ],
+      "hideBoardArtIds": [
+        "seat-4-station",
+        "seat-4-threat-dial",
+        "seat-4-dial-tens",
+        "seat-4-tens-0",
+        "seat-4-tens-1",
+        "seat-4-tens-2",
+        "seat-4-tens-3",
+        "seat-4-tens-4",
+        "seat-4-tens-5",
+        "seat-4-tens-6",
+        "seat-4-tens-7",
+        "seat-4-tens-8",
+        "seat-4-tens-9",
+        "seat-4-dial-ones",
+        "seat-4-ones-0",
+        "seat-4-ones-1",
+        "seat-4-ones-2",
+        "seat-4-ones-3",
+        "seat-4-ones-4",
+        "seat-4-ones-5",
+        "seat-4-ones-6",
+        "seat-4-ones-7",
+        "seat-4-ones-8",
+        "seat-4-ones-9",
+        "seat-4-first-player-guide",
+        "seat-4-hero1-resources",
+        "seat-4-hero1-damage",
+        "seat-4-hero2-resources",
+        "seat-4-hero2-damage",
+        "seat-4-hero3-resources",
+        "seat-4-hero3-damage",
+        "seat-4-allies-outline",
+        "seat-4-engaged-enemies-outline",
+        "seat-4-hand-outline",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ],
+      "hideTableZoneIds": [
+        "seat-4-threat-dial",
+        "seat-4-first-player-guide",
+        "seat-4-deck",
+        "seat-4-discard",
+        "seat-4-attachments-guide"
+      ]
+    },
+    "4": {
+      "hideAreas": [],
+      "hideBoardArtIds": [],
+      "hideTableZoneIds": []
+    }
+  },
+  "notes": [
+    "FFGMEC101RevisedCore2022solo1–4/core3scenarios+optionalcampaign;notoriginal1–2coreinventory.",
+    "Noactualprintedfixedboard:originalwholetableorganizerfollowsofficialsuggestedareaandaddsall4playerstations.",
+    "Unlimitedallies/hand/enemiesarenotfakecapacity3;JSONlayoutallowsallphysicalIDswithoverflowwithoutloss.",
+    "Actualquest/enemy/portraitcardidentitiesandprintedtextaredata;neutraltemplatesnotlicensedillustrations.",
+    "OfficialoldCDN503;currentofficialproductCDNLTPdownloadconfirmed. CurrentRulesReferencelinkincorrectlyduplicatesLTP;donotclaimindependentRRdownload.",
+    "Assets only;noapp/provider/saveUIchanges."
+  ],
+  "status": "complete",
+  "structureEvidence": [
+    {
+      "url": "https://cdn.svc.asmodee.net/production-fantasyflightgames/uploads/2026/09/mec101_learn_to_play_eng_v11-compressed.pdf",
+      "sourceType": "officialFFGcurrentproductlink/RevisedCoreLTPv11",
+      "pdfSHA256": "2621b03e7fa71bca21b096b3c94be29b14be8de54af413a73f884ec662e21090",
+      "access": "36pagesdownloaded;pp3/7/9/17/24/28directlyviewed;textpp2–9/11–17/20/22/24–31/36read",
+      "location": "p3inventory,p6–7setup/wholetable,p9attachments,p11–17quest/travel/combat/refresh,p24objectives/guarded,p28–30campaign,p31scoring",
+      "verifiedFacts": "1–4players/all4physicaldials/up-to3heroes/7phases/specificenemyshadowlinks/activebuffersprogress/campaignrostersandpermanentboons",
+      "checkedAt": "2026-10-31"
+    },
+    {
+      "url": "https://www.fantasyflightgames.com/product/the-lord-of-the-rings-the-card-game/",
+      "sourceType": "officialpublisherproduct",
+      "access": "currentproductandsupportlinksopened;RevisedCore1–4and4spheresread;onlinerulesreferencecurrentlinkduplicatesLTPnotseparateRR",
+      "verifiedFacts": "RevisedCoreeditionandcurrentofficialLTPsource;not2011two-playerinventory",
+      "checkedAt": "2026-10-31"
+    }
+  ],
+  "omittedBindings": [],
+  "recordingMode": "whole-table-revised-core-assets",
+  "assetScope": "RevisedCore2022standard/easy1–4;all4players/quest/staging/activelocation/shadows/attachments/campaign",
+  "tableModel": {
+    "modelId": "lotr-revised-core-whole-table-v1",
+    "editionBoundary": "FFGMEC101RevisedCore2022;1–4;threecorescenarios/campaign/standard/easy;noSaga/expansionsinvented",
+    "assetFiles": {
+      "boardSvg": "board.svg",
+      "boardJson": "board.json",
+      "portraitCardSvg": "portrait-card.svg",
+      "questCardSvg": "quest-card.svg",
+      "campaignLogSvg": "campaign-log.svg"
+    },
+    "players": {
+      "min": 1,
+      "max": 4,
+      "all4StationsIncluded": true,
+      "heroMaxAtSetup": 3,
+      "handLimit": null,
+      "allyLimit": null,
+      "engagedEnemyLimit": null
+    },
+    "staging": {
+      "zoneId": "staging",
+      "bounds": [
+        550,
+        30,
+        416,
+        191
+      ],
+      "cardSize": [
+        65,
+        94
+      ],
+      "layout": "left-to-rightwrap",
+      "gap": 8,
+      "capacity": null,
+      "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+      "orientationByState": true,
+      "notPrintedSlots": true
+    },
+    "activeLocationSlotId": "lotr-lcg-active-location",
+    "quest": {
+      "currentSlotId": "lotr-lcg-current-quest",
+      "remainingZoneId": "quest-future-stack",
+      "completedZoneId": "completed-quests",
+      "initialFace": "1Asetupthen1B",
+      "ascendingStageOrder": true,
+      "branchedStageChosenCardIdPreserved": true,
+      "progressFirstActiveLocationThenQuest": true,
+      "activeLocationOverflowOnExploreCountsToQuest": true,
+      "stageCompletionExcessProgressNotCarry": true
+    },
+    "victoryDisplay": {
+      "zoneId": "victory-display",
+      "bounds": [
+        34,
+        245,
+        234,
+        92
+      ],
+      "cardSize": [
+        47,
+        68
+      ],
+      "layout": "left-to-rightwrap",
+      "gap": 8,
+      "capacity": null,
+      "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+      "orientationByState": true,
+      "notPrintedSlots": true
+    },
+    "resolution": {
+      "zoneId": "resolution",
+      "bounds": [
+        290,
+        245,
+        234,
+        92
+      ],
+      "cardSize": [
+        47,
+        68
+      ],
+      "layout": "left-to-rightwrap",
+      "gap": 8,
+      "capacity": null,
+      "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+      "orientationByState": true,
+      "notPrintedSlots": true
+    },
+    "setAside": {
+      "zoneId": "set-aside",
+      "bounds": [
+        548,
+        245,
+        197,
+        92
+      ],
+      "cardSize": [
+        47,
+        68
+      ],
+      "layout": "left-to-rightwrap",
+      "gap": 8,
+      "capacity": null,
+      "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+      "orientationByState": true,
+      "notPrintedSlots": true
+    },
+    "playerStations": [
+      {
+        "seatId": "seat-1",
+        "bounds": [
+          25,
+          405,
+          460,
+          280
+        ],
+        "heroSlotIds": [
+          "lotr-lcg-seat-1-hero-1",
+          "lotr-lcg-seat-1-hero-2",
+          "lotr-lcg-seat-1-hero-3"
+        ],
+        "startingHeroesMaximum": 3,
+        "heroesNotReplacedByAllies": true,
+        "allies": {
+          "zoneId": "seat-1-allies",
+          "bounds": [
+            36,
+            524,
+            202,
+            59
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "engagedEnemies": {
+          "zoneId": "seat-1-engaged-enemies",
+          "bounds": [
+            262,
+            505,
+            209,
+            78
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "hand": {
+          "zoneId": "seat-1-hand",
+          "bounds": [
+            36,
+            621,
+            262,
+            49
+          ],
+          "cardSize": [
+            30,
+            42
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "threatDial": {
+          "bounds": [
+            263,
+            428,
+            104,
+            56
+          ],
+          "digits": [
+            {
+              "digit": "tens",
+              "center": [
+                292,
+                456
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 292.0,
+                  "y": 442.0
+                },
+                {
+                  "value": 1,
+                  "x": 300.228994,
+                  "y": 444.673762
+                },
+                {
+                  "value": 2,
+                  "x": 305.314791,
+                  "y": 451.673762
+                },
+                {
+                  "value": 3,
+                  "x": 305.314791,
+                  "y": 460.326238
+                },
+                {
+                  "value": 4,
+                  "x": 300.228994,
+                  "y": 467.326238
+                },
+                {
+                  "value": 5,
+                  "x": 292.0,
+                  "y": 470.0
+                },
+                {
+                  "value": 6,
+                  "x": 283.771006,
+                  "y": 467.326238
+                },
+                {
+                  "value": 7,
+                  "x": 278.685209,
+                  "y": 460.326238
+                },
+                {
+                  "value": 8,
+                  "x": 278.685209,
+                  "y": 451.673762
+                },
+                {
+                  "value": 9,
+                  "x": 283.771006,
+                  "y": 444.673762
+                }
+              ],
+              "selectedValue": null
+            },
+            {
+              "digit": "ones",
+              "center": [
+                338,
+                456
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 338.0,
+                  "y": 442.0
+                },
+                {
+                  "value": 1,
+                  "x": 346.228994,
+                  "y": 444.673762
+                },
+                {
+                  "value": 2,
+                  "x": 351.314791,
+                  "y": 451.673762
+                },
+                {
+                  "value": 3,
+                  "x": 351.314791,
+                  "y": 460.326238
+                },
+                {
+                  "value": 4,
+                  "x": 346.228994,
+                  "y": 467.326238
+                },
+                {
+                  "value": 5,
+                  "x": 338.0,
+                  "y": 470.0
+                },
+                {
+                  "value": 6,
+                  "x": 329.771006,
+                  "y": 467.326238
+                },
+                {
+                  "value": 7,
+                  "x": 324.685209,
+                  "y": 460.326238
+                },
+                {
+                  "value": 8,
+                  "x": 324.685209,
+                  "y": 451.673762
+                },
+                {
+                  "value": 9,
+                  "x": 329.771006,
+                  "y": 444.673762
+                }
+              ],
+              "selectedValue": null
+            }
+          ],
+          "valueField": "threat",
+          "defaultEliminationThreshold": 50,
+          "notAutoApplied": true
+        },
+        "attachmentPlacement": {
+          "attachedUnderHost": true,
+          "relativeOffsetsEditable": true,
+          "hostMayBeCharacterEnemyLocationObjective": true,
+          "eachAttachmentHasOwnExhaustion": true
+        },
+        "enemyShadowPlacement": {
+          "physicalCardSameEncounterDeck": true,
+          "face": "concealeduntilresolved",
+          "hostEnemyIdRequired": true,
+          "orderPreserved": true,
+          "visualOffsetRelativeHost": [
+            10,
+            8
+          ],
+          "noGlobal1ShadowLimit": true
+        }
+      },
+      {
+        "seatId": "seat-2",
+        "bounds": [
+          515,
+          405,
+          460,
+          280
+        ],
+        "heroSlotIds": [
+          "lotr-lcg-seat-2-hero-1",
+          "lotr-lcg-seat-2-hero-2",
+          "lotr-lcg-seat-2-hero-3"
+        ],
+        "startingHeroesMaximum": 3,
+        "heroesNotReplacedByAllies": true,
+        "allies": {
+          "zoneId": "seat-2-allies",
+          "bounds": [
+            526,
+            524,
+            202,
+            59
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "engagedEnemies": {
+          "zoneId": "seat-2-engaged-enemies",
+          "bounds": [
+            752,
+            505,
+            209,
+            78
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "hand": {
+          "zoneId": "seat-2-hand",
+          "bounds": [
+            526,
+            621,
+            262,
+            49
+          ],
+          "cardSize": [
+            30,
+            42
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "threatDial": {
+          "bounds": [
+            753,
+            428,
+            104,
+            56
+          ],
+          "digits": [
+            {
+              "digit": "tens",
+              "center": [
+                782,
+                456
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 782.0,
+                  "y": 442.0
+                },
+                {
+                  "value": 1,
+                  "x": 790.228994,
+                  "y": 444.673762
+                },
+                {
+                  "value": 2,
+                  "x": 795.314791,
+                  "y": 451.673762
+                },
+                {
+                  "value": 3,
+                  "x": 795.314791,
+                  "y": 460.326238
+                },
+                {
+                  "value": 4,
+                  "x": 790.228994,
+                  "y": 467.326238
+                },
+                {
+                  "value": 5,
+                  "x": 782.0,
+                  "y": 470.0
+                },
+                {
+                  "value": 6,
+                  "x": 773.771006,
+                  "y": 467.326238
+                },
+                {
+                  "value": 7,
+                  "x": 768.685209,
+                  "y": 460.326238
+                },
+                {
+                  "value": 8,
+                  "x": 768.685209,
+                  "y": 451.673762
+                },
+                {
+                  "value": 9,
+                  "x": 773.771006,
+                  "y": 444.673762
+                }
+              ],
+              "selectedValue": null
+            },
+            {
+              "digit": "ones",
+              "center": [
+                828,
+                456
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 828.0,
+                  "y": 442.0
+                },
+                {
+                  "value": 1,
+                  "x": 836.228994,
+                  "y": 444.673762
+                },
+                {
+                  "value": 2,
+                  "x": 841.314791,
+                  "y": 451.673762
+                },
+                {
+                  "value": 3,
+                  "x": 841.314791,
+                  "y": 460.326238
+                },
+                {
+                  "value": 4,
+                  "x": 836.228994,
+                  "y": 467.326238
+                },
+                {
+                  "value": 5,
+                  "x": 828.0,
+                  "y": 470.0
+                },
+                {
+                  "value": 6,
+                  "x": 819.771006,
+                  "y": 467.326238
+                },
+                {
+                  "value": 7,
+                  "x": 814.685209,
+                  "y": 460.326238
+                },
+                {
+                  "value": 8,
+                  "x": 814.685209,
+                  "y": 451.673762
+                },
+                {
+                  "value": 9,
+                  "x": 819.771006,
+                  "y": 444.673762
+                }
+              ],
+              "selectedValue": null
+            }
+          ],
+          "valueField": "threat",
+          "defaultEliminationThreshold": 50,
+          "notAutoApplied": true
+        },
+        "attachmentPlacement": {
+          "attachedUnderHost": true,
+          "relativeOffsetsEditable": true,
+          "hostMayBeCharacterEnemyLocationObjective": true,
+          "eachAttachmentHasOwnExhaustion": true
+        },
+        "enemyShadowPlacement": {
+          "physicalCardSameEncounterDeck": true,
+          "face": "concealeduntilresolved",
+          "hostEnemyIdRequired": true,
+          "orderPreserved": true,
+          "visualOffsetRelativeHost": [
+            10,
+            8
+          ],
+          "noGlobal1ShadowLimit": true
+        }
+      },
+      {
+        "seatId": "seat-3",
+        "bounds": [
+          25,
+          697,
+          460,
+          280
+        ],
+        "heroSlotIds": [
+          "lotr-lcg-seat-3-hero-1",
+          "lotr-lcg-seat-3-hero-2",
+          "lotr-lcg-seat-3-hero-3"
+        ],
+        "startingHeroesMaximum": 3,
+        "heroesNotReplacedByAllies": true,
+        "allies": {
+          "zoneId": "seat-3-allies",
+          "bounds": [
+            36,
+            816,
+            202,
+            59
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "engagedEnemies": {
+          "zoneId": "seat-3-engaged-enemies",
+          "bounds": [
+            262,
+            797,
+            209,
+            78
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "hand": {
+          "zoneId": "seat-3-hand",
+          "bounds": [
+            36,
+            913,
+            262,
+            49
+          ],
+          "cardSize": [
+            30,
+            42
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "threatDial": {
+          "bounds": [
+            263,
+            720,
+            104,
+            56
+          ],
+          "digits": [
+            {
+              "digit": "tens",
+              "center": [
+                292,
+                748
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 292.0,
+                  "y": 734.0
+                },
+                {
+                  "value": 1,
+                  "x": 300.228994,
+                  "y": 736.673762
+                },
+                {
+                  "value": 2,
+                  "x": 305.314791,
+                  "y": 743.673762
+                },
+                {
+                  "value": 3,
+                  "x": 305.314791,
+                  "y": 752.326238
+                },
+                {
+                  "value": 4,
+                  "x": 300.228994,
+                  "y": 759.326238
+                },
+                {
+                  "value": 5,
+                  "x": 292.0,
+                  "y": 762.0
+                },
+                {
+                  "value": 6,
+                  "x": 283.771006,
+                  "y": 759.326238
+                },
+                {
+                  "value": 7,
+                  "x": 278.685209,
+                  "y": 752.326238
+                },
+                {
+                  "value": 8,
+                  "x": 278.685209,
+                  "y": 743.673762
+                },
+                {
+                  "value": 9,
+                  "x": 283.771006,
+                  "y": 736.673762
+                }
+              ],
+              "selectedValue": null
+            },
+            {
+              "digit": "ones",
+              "center": [
+                338,
+                748
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 338.0,
+                  "y": 734.0
+                },
+                {
+                  "value": 1,
+                  "x": 346.228994,
+                  "y": 736.673762
+                },
+                {
+                  "value": 2,
+                  "x": 351.314791,
+                  "y": 743.673762
+                },
+                {
+                  "value": 3,
+                  "x": 351.314791,
+                  "y": 752.326238
+                },
+                {
+                  "value": 4,
+                  "x": 346.228994,
+                  "y": 759.326238
+                },
+                {
+                  "value": 5,
+                  "x": 338.0,
+                  "y": 762.0
+                },
+                {
+                  "value": 6,
+                  "x": 329.771006,
+                  "y": 759.326238
+                },
+                {
+                  "value": 7,
+                  "x": 324.685209,
+                  "y": 752.326238
+                },
+                {
+                  "value": 8,
+                  "x": 324.685209,
+                  "y": 743.673762
+                },
+                {
+                  "value": 9,
+                  "x": 329.771006,
+                  "y": 736.673762
+                }
+              ],
+              "selectedValue": null
+            }
+          ],
+          "valueField": "threat",
+          "defaultEliminationThreshold": 50,
+          "notAutoApplied": true
+        },
+        "attachmentPlacement": {
+          "attachedUnderHost": true,
+          "relativeOffsetsEditable": true,
+          "hostMayBeCharacterEnemyLocationObjective": true,
+          "eachAttachmentHasOwnExhaustion": true
+        },
+        "enemyShadowPlacement": {
+          "physicalCardSameEncounterDeck": true,
+          "face": "concealeduntilresolved",
+          "hostEnemyIdRequired": true,
+          "orderPreserved": true,
+          "visualOffsetRelativeHost": [
+            10,
+            8
+          ],
+          "noGlobal1ShadowLimit": true
+        }
+      },
+      {
+        "seatId": "seat-4",
+        "bounds": [
+          515,
+          697,
+          460,
+          280
+        ],
+        "heroSlotIds": [
+          "lotr-lcg-seat-4-hero-1",
+          "lotr-lcg-seat-4-hero-2",
+          "lotr-lcg-seat-4-hero-3"
+        ],
+        "startingHeroesMaximum": 3,
+        "heroesNotReplacedByAllies": true,
+        "allies": {
+          "zoneId": "seat-4-allies",
+          "bounds": [
+            526,
+            816,
+            202,
+            59
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "engagedEnemies": {
+          "zoneId": "seat-4-engaged-enemies",
+          "bounds": [
+            752,
+            797,
+            209,
+            78
+          ],
+          "cardSize": [
+            35,
+            49
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "hand": {
+          "zoneId": "seat-4-hand",
+          "bounds": [
+            526,
+            913,
+            262,
+            49
+          ],
+          "cardSize": [
+            30,
+            42
+          ],
+          "layout": "left-to-rightwrap",
+          "gap": 8,
+          "capacity": null,
+          "overflow": "expandlogicalcanvas/pages;retainIDs/transforms/order;neverdiscard",
+          "orientationByState": true,
+          "notPrintedSlots": true
+        },
+        "threatDial": {
+          "bounds": [
+            753,
+            720,
+            104,
+            56
+          ],
+          "digits": [
+            {
+              "digit": "tens",
+              "center": [
+                782,
+                748
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 782.0,
+                  "y": 734.0
+                },
+                {
+                  "value": 1,
+                  "x": 790.228994,
+                  "y": 736.673762
+                },
+                {
+                  "value": 2,
+                  "x": 795.314791,
+                  "y": 743.673762
+                },
+                {
+                  "value": 3,
+                  "x": 795.314791,
+                  "y": 752.326238
+                },
+                {
+                  "value": 4,
+                  "x": 790.228994,
+                  "y": 759.326238
+                },
+                {
+                  "value": 5,
+                  "x": 782.0,
+                  "y": 762.0
+                },
+                {
+                  "value": 6,
+                  "x": 773.771006,
+                  "y": 759.326238
+                },
+                {
+                  "value": 7,
+                  "x": 768.685209,
+                  "y": 752.326238
+                },
+                {
+                  "value": 8,
+                  "x": 768.685209,
+                  "y": 743.673762
+                },
+                {
+                  "value": 9,
+                  "x": 773.771006,
+                  "y": 736.673762
+                }
+              ],
+              "selectedValue": null
+            },
+            {
+              "digit": "ones",
+              "center": [
+                828,
+                748
+              ],
+              "radius": 19,
+              "positions": [
+                {
+                  "value": 0,
+                  "x": 828.0,
+                  "y": 734.0
+                },
+                {
+                  "value": 1,
+                  "x": 836.228994,
+                  "y": 736.673762
+                },
+                {
+                  "value": 2,
+                  "x": 841.314791,
+                  "y": 743.673762
+                },
+                {
+                  "value": 3,
+                  "x": 841.314791,
+                  "y": 752.326238
+                },
+                {
+                  "value": 4,
+                  "x": 836.228994,
+                  "y": 759.326238
+                },
+                {
+                  "value": 5,
+                  "x": 828.0,
+                  "y": 762.0
+                },
+                {
+                  "value": 6,
+                  "x": 819.771006,
+                  "y": 759.326238
+                },
+                {
+                  "value": 7,
+                  "x": 814.685209,
+                  "y": 752.326238
+                },
+                {
+                  "value": 8,
+                  "x": 814.685209,
+                  "y": 743.673762
+                },
+                {
+                  "value": 9,
+                  "x": 819.771006,
+                  "y": 736.673762
+                }
+              ],
+              "selectedValue": null
+            }
+          ],
+          "valueField": "threat",
+          "defaultEliminationThreshold": 50,
+          "notAutoApplied": true
+        },
+        "attachmentPlacement": {
+          "attachedUnderHost": true,
+          "relativeOffsetsEditable": true,
+          "hostMayBeCharacterEnemyLocationObjective": true,
+          "eachAttachmentHasOwnExhaustion": true
+        },
+        "enemyShadowPlacement": {
+          "physicalCardSameEncounterDeck": true,
+          "face": "concealeduntilresolved",
+          "hostEnemyIdRequired": true,
+          "orderPreserved": true,
+          "visualOffsetRelativeHost": [
+            10,
+            8
+          ],
+          "noGlobal1ShadowLimit": true
+        }
+      }
+    ],
+    "phasePositions": [
+      {
+        "id": "resource",
+        "bounds": [
+          43,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "planning",
+        "bounds": [
+          174,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "quest",
+        "bounds": [
+          305,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "travel",
+        "bounds": [
+          436,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "encounter",
+        "bounds": [
+          567,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "combat",
+        "bounds": [
+          698,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      },
+      {
+        "id": "refresh",
+        "bounds": [
+          829,
+          361,
+          113,
+          20
+        ],
+        "notPhysicalComponent": true
+      }
+    ],
+    "physicalContents": {
+      "heroCards": 12,
+      "playerCards": 188,
+      "encounterCards": 84,
+      "questCards": 10,
+      "campaignCards": 3,
+      "boonBurdenCards": 16,
+      "damageTokens": 66,
+      "progressTokens": 66,
+      "resourceTokens": 57,
+      "threatDials": 4,
+      "firstPlayerTokens": 1,
+      "denominations": [
+        1,
+        3,
+        5
+      ]
+    },
+    "coreScenarios": [
+      {
+        "id": "passage-through-mirkwood",
+        "difficulty": 1,
+        "encounterSets": [
+          "PassageThroughMirkwood",
+          "SpidersOfMirkwood",
+          "DolGuldurOrcs"
+        ]
+      },
+      {
+        "id": "journey-down-anduin",
+        "difficulty": 4,
+        "encounterSets": [
+          "JourneyDownAnduin",
+          "SauronsReach",
+          "DolGuldurOrcs",
+          "Wilderlands"
+        ]
+      },
+      {
+        "id": "escape-from-dol-guldur",
+        "difficulty": 7,
+        "encounterSets": [
+          "EscapeFromDolGuldur",
+          "SpidersOfMirkwood",
+          "DolGuldurOrcs"
+        ]
+      }
+    ],
+    "cardLayout": {
+      "portraitViewBox": [
+        0,
+        0,
+        400,
+        560
+      ],
+      "landscapeQuestViewBox": [
+        0,
+        0,
+        560,
+        400
+      ],
+      "readyRotation": 0,
+      "exhaustedRotation": 90,
+      "questCommitmentSeparateFromExhaustion": true,
+      "portraitIdentityBounds": [
+        40,
+        40,
+        320,
+        48
+      ],
+      "attachmentOffset": [
+        10,
+        -12
+      ],
+      "attachmentUnderHost": true,
+      "tokenPoolsOnActualHost": true,
+      "noAutomaticCardIdentityOrEffectInference": true
+    },
+    "campaignLog": {
+      "svg": "campaign-log.svg",
+      "playerFields": [
+        {
+          "player": 1,
+          "nameBounds": [
+            35,
+            37,
+            170,
+            34
+          ],
+          "heroNameBounds": [
+            [
+              35,
+              85,
+              170,
+              22
+            ],
+            [
+              35,
+              114,
+              170,
+              22
+            ],
+            [
+              35,
+              143,
+              170,
+              22
+            ]
+          ]
+        },
+        {
+          "player": 2,
+          "nameBounds": [
+            220,
+            37,
+            170,
+            34
+          ],
+          "heroNameBounds": [
+            [
+              220,
+              85,
+              170,
+              22
+            ],
+            [
+              220,
+              114,
+              170,
+              22
+            ],
+            [
+              220,
+              143,
+              170,
+              22
+            ]
+          ]
+        },
+        {
+          "player": 3,
+          "nameBounds": [
+            405,
+            37,
+            170,
+            34
+          ],
+          "heroNameBounds": [
+            [
+              405,
+              85,
+              170,
+              22
+            ],
+            [
+              405,
+              114,
+              170,
+              22
+            ],
+            [
+              405,
+              143,
+              170,
+              22
+            ]
+          ]
+        },
+        {
+          "player": 4,
+          "nameBounds": [
+            590,
+            37,
+            170,
+            34
+          ],
+          "heroNameBounds": [
+            [
+              590,
+              85,
+              170,
+              22
+            ],
+            [
+              590,
+              114,
+              170,
+              22
+            ],
+            [
+              590,
+              143,
+              170,
+              22
+            ]
+          ]
+        }
+      ],
+      "fallenHeroes": [],
+      "perPlayerStartingThreatPenalty": null,
+      "scenarioHistory": [],
+      "campaignPoolBoons": [],
+      "campaignPoolBurdens": [],
+      "permanentAttachmentHeroMappings": [],
+      "expertEndDamageByHero": null,
+      "notes": null,
+      "scenarioCheckpointNeverAutoResets": true
+    },
+    "stateShape": {
+      "edition": "MEC101RevisedCore",
+      "mode": "standard|easy|campaign|expertcampaign|unknown",
+      "scenarioId": null,
+      "playerOrder": [],
+      "firstPlayerId": null,
+      "activePlayerId": null,
+      "round": null,
+      "completedRoundCount": null,
+      "phase": null,
+      "substep": null,
+      "players": [
+        {
+          "id": null,
+          "seatId": null,
+          "eliminated": null,
+          "threat": null,
+          "threatDigits": [
+            null,
+            null
+          ],
+          "startingThreat": null,
+          "heroIds": [],
+          "allyIds": [],
+          "engagedEnemyIds": [],
+          "handIds": "ownerprovidedIDsorconcealedbundle",
+          "deckTopToBottom": "hiddenorunknown",
+          "discardTopToBottom": [],
+          "mulliganTaken": null,
+          "oncePerRoundUsage": [],
+          "oncePerPhaseUsage": []
+        }
+      ],
+      "cards": [
+        {
+          "id": null,
+          "printedIdentity": null,
+          "setId": null,
+          "cardType": "hero|ally|event|attachment|enemy|location|treachery|objective|objective-ally|quest|campaign|boon|burden",
+          "sphere": null,
+          "ownerId": null,
+          "controllerId": null,
+          "zoneId": null,
+          "face": "front|back|A|B|unknown",
+          "order": null,
+          "x": null,
+          "y": null,
+          "rotation": null,
+          "layer": null,
+          "exhausted": null,
+          "committedToQuest": null,
+          "declaredAsAttacker": null,
+          "declaredAsDefender": null,
+          "attachedToId": null,
+          "attachmentRole": "ordinary|shadow|guarding|objective-claimed|permanent-campaign|unknown",
+          "shadowOrder": null,
+          "shadowRevealed": null,
+          "shadowEffectResolved": null,
+          "guardedByIds": [],
+          "resourceTokenIds": [],
+          "damageTokenIds": [],
+          "progressTokenIds": [],
+          "printedStats": null,
+          "currentModifiers": [],
+          "untilEndOfPhaseEffects": [],
+          "capturedPrisoner": null,
+          "removedFromGame": null,
+          "victoryValue": null
+        }
+      ],
+      "tokens": [
+        {
+          "id": null,
+          "kind": "resource|damage|progress|firstplayer",
+          "denomination": null,
+          "hostCardId": null,
+          "zoneId": null,
+          "ownerId": null
+        }
+      ],
+      "shared": {
+        "questDeckTopToBottom": [],
+        "currentQuestId": null,
+        "completedQuestIds": [],
+        "activeLocationId": null,
+        "stagingIds": [],
+        "encounterDeckTopToBottom": "hiddenorunknown",
+        "encounterDiscardTopToBottom": [],
+        "victoryDisplayIds": [],
+        "setAsideIds": [],
+        "removedFromGameIds": [],
+        "resolutionCardIds": [],
+        "tokenSupplyIds": []
+      },
+      "checkpoint": {
+        "actionWindowId": null,
+        "actorId": null,
+        "resourceGrantedHeroIds": [],
+        "drawnPlayerIds": [],
+        "plannedPlayerIds": [],
+        "questCommitmentConfirmedPlayerIds": [],
+        "stagingRevealsRemaining": null,
+        "currentlyRevealedId": null,
+        "whenRevealedResolved": null,
+        "surgeQueue": [],
+        "questWillpower": null,
+        "stagingThreat": null,
+        "progressAssignment": null,
+        "exploredLocationId": null,
+        "questStageTransitionPending": null,
+        "travelDestinationId": null,
+        "travelCostCommitted": null,
+        "optionalEngagementPlayerIds": [],
+        "engagementCheckPlayerId": null,
+        "checkedEnemyIds": [],
+        "shadowDealOrder": [],
+        "shadowDealtEnemyIds": [],
+        "combat": {
+          "enemyAttackQueue": [],
+          "selectedEnemyId": null,
+          "defenderIds": [],
+          "undefended": null,
+          "shadowResolutionOrder": [],
+          "shadowResolvedIds": [],
+          "assignedDamage": null,
+          "attackResolved": null,
+          "playerAttackQueue": [],
+          "selectedAttackerIds": [],
+          "rangedAllyControllerIds": [],
+          "sentinelDefenderControllerId": null,
+          "attackedEnemyIds": [],
+          "shadowDiscardCommitted": null
+        },
+        "refresh": {
+          "readiedCardIds": [],
+          "increasedThreatPlayerIds": [],
+          "firstPlayerPassed": null
+        },
+        "pendingResponseIds": [],
+        "resolvedResponseIds": [],
+        "pendingChoices": []
+      },
+      "campaign": {
+        "currentCardId": null,
+        "currentCardFace": null,
+        "playerHeroRoster": [],
+        "fallenHeroIdentities": [],
+        "threatPenaltyByPlayer": null,
+        "poolBoonIds": [],
+        "poolBurdenIds": [],
+        "permanentHeroMappings": [],
+        "scenarioResults": [],
+        "prisonerHeroId": null,
+        "mendorId": null,
+        "mendorCaptured": null,
+        "expertDamageByHero": null,
+        "notes": null
+      },
+      "score": {
+        "finalThreatByPlayer": null,
+        "destroyedHeroThreat": null,
+        "survivingHeroDamage": null,
+        "completedRoundsTimes10": null,
+        "victoryValue": null,
+        "totalLowerIsBetter": null,
+        "confirmed": null
+      }
+    },
+    "identityInvariants": [
+      "Heroresourcesstaywiththatphysicalhero/notoneplayerpool;damageonheroes/allies/enemiesprogressonquest/locationaredifferenttokens.",
+      "Orientationready/exhaustednotquestcommitment:readycommittedcharacterscanexist;stateflagsindependent.",
+      "Eachshadowisactualencountercardboundtoaspecificenemy/face/order;notnewgenericattachmentwithinventedfront. ShadoweffectsONLYnotordinarywhenrevealed.",
+      "Drawdeck,faceupdiscard,defeatedvictorydisplay,setaside/captured/removedandqueststacksremainseparate.",
+      "ActiveLocationbuffersquestprogress;cannotreplaceitwithstaginglocation;questbranchandA/Bfacespreserved.",
+      "Noally/hand/engagedenemyfixedcapacity;dynamiclayoutkeepsallIDsandcanexpand/paginate;3heroguidesareup-to3not3mandatorynewheroes.",
+      "Attachmentcontrollercanbedifferentfromhostowner;Ranged/Sentinelcrossplayerlinksnotcardownershiptransfer.",
+      "Campaignboon/burdensincludingpermanentheromappings/prisoner/Mendor/fallenheroes/threatpenalty/expertwoundspreservewithoutautomaticresets.",
+      "NULL/0/hiddenunknownseparate;reopenneverdeals/draws/exhausts/refreshes/refills/resolvespending."
+    ],
+    "notIncluded": [
+      "Commercialcardillustrations/completeindividualcardeffectdatabase",
+      "Expansion/Sagaquest-specificmechanicsnotprovided",
+      "Automaticrulesengine/appintegration"
+    ]
+  },
+  "assetCompleteness": {
+    "wholeTableIncluded": true,
+    "completeStructures": [
+      "quest/active/staging/encounterdeckdiscard/victory/setaside/campaign",
+      "all4players/12optionalheroguides/ally/enemy-shadow/playerdecks/discards/hands/two-digitthreat",
+      "allphysicalrelations/campaignlog/individualtokenpools/phase-resolutioncheckpoint"
+    ],
+    "remainingInDeclaredMode": [],
+    "noClaimOfAppIntegration": true
+  },
+  "tableZones": [
+    {
+      "id": "quest-future-stack",
+      "kind": "orderedqueststack",
+      "bounds": [
+        45,
+        171,
+        76,
+        49
+      ],
+      "stateKey": "shared.remainingQuestCardIds",
+      "visibility": "hiddenoractualA/Bface",
+      "ascendingStageOrder": true
+    },
+    {
+      "id": "completed-quests",
+      "kind": "completedquestcards",
+      "bounds": [
+        143,
+        171,
+        76,
+        49
+      ],
+      "stateKey": "shared.completedQuestCardIds",
+      "visibility": "public"
+    },
+    {
+      "id": "encounter-deck",
+      "kind": "encounter-deck",
+      "bounds": [
+        355,
+        37,
+        74,
+        106
+      ],
+      "stateKey": "shared.encounter-deck",
+      "visibility": "hidden-fronts"
+    },
+    {
+      "id": "encounter-discard",
+      "kind": "encounter-discard",
+      "bounds": [
+        452,
+        37,
+        74,
+        106
+      ],
+      "stateKey": "shared.encounter-discard",
+      "visibility": "public"
+    },
+    {
+      "id": "bank-damage",
+      "kind": "token-supply",
+      "bounds": [
+        250,
+        173,
+        78,
+        39
+      ],
+      "stateKey": "shared.supply.damage",
+      "visibility": "public"
+    },
+    {
+      "id": "bank-progress",
+      "kind": "token-supply",
+      "bounds": [
+        341,
+        173,
+        78,
+        39
+      ],
+      "stateKey": "shared.supply.progress",
+      "visibility": "public"
+    },
+    {
+      "id": "bank-resources",
+      "kind": "token-supply",
+      "bounds": [
+        432,
+        173,
+        78,
+        39
+      ],
+      "stateKey": "shared.supply.resources",
+      "visibility": "public"
+    },
+    {
+      "id": "resolution",
+      "kind": "resolutionCardIds",
+      "bounds": [
+        290,
+        245,
+        234,
+        92
+      ],
+      "stateKey": "shared.resolutionCardIds",
+      "visibility": "public",
+      "seatId": null
+    },
+    {
+      "id": "set-aside",
+      "kind": "setAsideCardIds",
+      "bounds": [
+        548,
+        245,
+        197,
+        92
+      ],
+      "stateKey": "shared.setAsideCardIds",
+      "visibility": "public",
+      "seatId": null
+    },
+    {
+      "id": "campaign-card",
+      "kind": "campaigncard-front/back",
+      "bounds": [
+        773,
+        245,
+        61,
+        90
+      ],
+      "stateKey": "campaign.currentCampaignCardId",
+      "visibility": "public"
+    },
+    {
+      "id": "campaign-pool",
+      "kind": "unassignedboons/burdens",
+      "bounds": [
+        851,
+        245,
+        112,
+        42
+      ],
+      "stateKey": "campaign.unassignedBoonBurdenIds",
+      "visibility": "printedpublicorconcealed"
+    },
+    {
+      "id": "campaign-log-guide",
+      "kind": "campaignlog",
+      "bounds": [
+        851,
+        299,
+        112,
+        34
+      ],
+      "stateKey": "campaign.log",
+      "visibility": "public"
+    },
+    {
+      "id": "seat-1-threat-dial",
+      "kind": "threatdial",
+      "bounds": [
+        263,
+        428,
+        104,
+        56
+      ],
+      "stateKey": "players.seat-1.threat",
+      "visibility": "public",
+      "seatId": "seat-1"
+    },
+    {
+      "id": "seat-1-first-player-guide",
+      "kind": "firstplayer-token-guide",
+      "bounds": [
+        390,
+        426,
+        40,
+        43
+      ],
+      "stateKey": "firstPlayerId",
+      "visibility": "public",
+      "seatId": "seat-1"
+    },
+    {
+      "id": "seat-1-deck",
+      "kind": "player-deck",
+      "bounds": [
+        325,
+        604,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-1.deckIds",
+      "visibility": "hidden-fronts",
+      "seatId": "seat-1"
+    },
+    {
+      "id": "seat-1-discard",
+      "kind": "player-discard",
+      "bounds": [
+        402,
+        604,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-1.discardIds",
+      "visibility": "public",
+      "seatId": "seat-1"
+    },
+    {
+      "id": "seat-1-attachments-guide",
+      "kind": "attachment-layer-inspector",
+      "bounds": [
+        36,
+        593,
+        202,
+        15
+      ],
+      "stateKey": "players.seat-1.attachments",
+      "visibility": "public",
+      "seatId": "seat-1"
+    },
+    {
+      "id": "seat-2-threat-dial",
+      "kind": "threatdial",
+      "bounds": [
+        753,
+        428,
+        104,
+        56
+      ],
+      "stateKey": "players.seat-2.threat",
+      "visibility": "public",
+      "seatId": "seat-2"
+    },
+    {
+      "id": "seat-2-first-player-guide",
+      "kind": "firstplayer-token-guide",
+      "bounds": [
+        880,
+        426,
+        40,
+        43
+      ],
+      "stateKey": "firstPlayerId",
+      "visibility": "public",
+      "seatId": "seat-2"
+    },
+    {
+      "id": "seat-2-deck",
+      "kind": "player-deck",
+      "bounds": [
+        815,
+        604,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-2.deckIds",
+      "visibility": "hidden-fronts",
+      "seatId": "seat-2"
+    },
+    {
+      "id": "seat-2-discard",
+      "kind": "player-discard",
+      "bounds": [
+        892,
+        604,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-2.discardIds",
+      "visibility": "public",
+      "seatId": "seat-2"
+    },
+    {
+      "id": "seat-2-attachments-guide",
+      "kind": "attachment-layer-inspector",
+      "bounds": [
+        526,
+        593,
+        202,
+        15
+      ],
+      "stateKey": "players.seat-2.attachments",
+      "visibility": "public",
+      "seatId": "seat-2"
+    },
+    {
+      "id": "seat-3-threat-dial",
+      "kind": "threatdial",
+      "bounds": [
+        263,
+        720,
+        104,
+        56
+      ],
+      "stateKey": "players.seat-3.threat",
+      "visibility": "public",
+      "seatId": "seat-3"
+    },
+    {
+      "id": "seat-3-first-player-guide",
+      "kind": "firstplayer-token-guide",
+      "bounds": [
+        390,
+        718,
+        40,
+        43
+      ],
+      "stateKey": "firstPlayerId",
+      "visibility": "public",
+      "seatId": "seat-3"
+    },
+    {
+      "id": "seat-3-deck",
+      "kind": "player-deck",
+      "bounds": [
+        325,
+        896,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-3.deckIds",
+      "visibility": "hidden-fronts",
+      "seatId": "seat-3"
+    },
+    {
+      "id": "seat-3-discard",
+      "kind": "player-discard",
+      "bounds": [
+        402,
+        896,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-3.discardIds",
+      "visibility": "public",
+      "seatId": "seat-3"
+    },
+    {
+      "id": "seat-3-attachments-guide",
+      "kind": "attachment-layer-inspector",
+      "bounds": [
+        36,
+        885,
+        202,
+        15
+      ],
+      "stateKey": "players.seat-3.attachments",
+      "visibility": "public",
+      "seatId": "seat-3"
+    },
+    {
+      "id": "seat-4-threat-dial",
+      "kind": "threatdial",
+      "bounds": [
+        753,
+        720,
+        104,
+        56
+      ],
+      "stateKey": "players.seat-4.threat",
+      "visibility": "public",
+      "seatId": "seat-4"
+    },
+    {
+      "id": "seat-4-first-player-guide",
+      "kind": "firstplayer-token-guide",
+      "bounds": [
+        880,
+        718,
+        40,
+        43
+      ],
+      "stateKey": "firstPlayerId",
+      "visibility": "public",
+      "seatId": "seat-4"
+    },
+    {
+      "id": "seat-4-deck",
+      "kind": "player-deck",
+      "bounds": [
+        815,
+        896,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-4.deckIds",
+      "visibility": "hidden-fronts",
+      "seatId": "seat-4"
+    },
+    {
+      "id": "seat-4-discard",
+      "kind": "player-discard",
+      "bounds": [
+        892,
+        896,
+        51,
+        65
+      ],
+      "stateKey": "players.seat-4.discardIds",
+      "visibility": "public",
+      "seatId": "seat-4"
+    },
+    {
+      "id": "seat-4-attachments-guide",
+      "kind": "attachment-layer-inspector",
+      "bounds": [
+        526,
+        885,
+        202,
+        15
+      ],
+      "stateKey": "players.seat-4.attachments",
+      "visibility": "public",
+      "seatId": "seat-4"
+    }
+  ],
+  "auxiliaryAssets": [
+    {
+      "id": "portrait-card",
+      "svg": "portrait-card.svg",
+      "viewBox": [
+        0,
+        0,
+        400,
+        560
+      ],
+      "label": "인물/적/장소/목표/부착 카드 원형"
+    },
+    {
+      "id": "quest-card",
+      "svg": "quest-card.svg",
+      "viewBox": [
+        0,
+        0,
+        560,
+        400
+      ],
+      "label": "퀘스트 가로 A/B 원형"
+    },
+    {
+      "id": "campaign-log",
+      "svg": "campaign-log.svg",
+      "viewBox": [
+        0,
+        0,
+        800,
+        800
+      ],
+      "label": "개정 코어 캠페인 기록 도식"
+    }
+  ],
+  "boardArt": [
+    {
+      "id": "quest-future-stack",
+      "type": "rect",
+      "x": 45,
+      "y": 171,
+      "w": 76,
+      "h": 49,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 4
+    },
+    {
+      "id": "completed-quests",
+      "type": "rect",
+      "x": 143,
+      "y": 171,
+      "w": 76,
+      "h": 49,
+      "fill": "#e4edf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 4
+    },
+    {
+      "id": "encounter-deck",
+      "type": "rect",
+      "x": 355,
+      "y": 37,
+      "w": 74,
+      "h": 106,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 5
+    },
+    {
+      "id": "encounter-discard",
+      "type": "rect",
+      "x": 452,
+      "y": 37,
+      "w": 74,
+      "h": 106,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 2,
+      "rx": 5
+    },
+    {
+      "id": "staging-outline",
+      "type": "rect",
+      "x": 550,
+      "y": 30,
+      "w": 416,
+      "h": 191,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "bank-damage",
+      "type": "rect",
+      "x": 250,
+      "y": 173,
+      "w": 78,
+      "h": 39,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "bank-progress",
+      "type": "rect",
+      "x": 341,
+      "y": 173,
+      "w": 78,
+      "h": 39,
+      "fill": "#83bf8b",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "bank-resources",
+      "type": "rect",
+      "x": 432,
+      "y": 173,
+      "w": 78,
+      "h": 39,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "victory-display-outline",
+      "type": "rect",
+      "x": 34,
+      "y": 245,
+      "w": 234,
+      "h": 92,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "resolution-outline",
+      "type": "rect",
+      "x": 290,
+      "y": 245,
+      "w": 234,
+      "h": 92,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "set-aside-outline",
+      "type": "rect",
+      "x": 548,
+      "y": 245,
+      "w": 197,
+      "h": 92,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "campaign-card",
+      "type": "rect",
+      "x": 773,
+      "y": 245,
+      "w": 61,
+      "h": 90,
+      "fill": "#e9e1cb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "campaign-pool",
+      "type": "rect",
+      "x": 851,
+      "y": 245,
+      "w": 112,
+      "h": 42,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "campaign-log-guide",
+      "type": "rect",
+      "x": 851,
+      "y": 299,
+      "w": 112,
+      "h": 34,
+      "fill": "#e4edf5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 5
+    },
+    {
+      "id": "phase-resource",
+      "type": "rect",
+      "x": 43,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-planning",
+      "type": "rect",
+      "x": 174,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-quest",
+      "type": "rect",
+      "x": 305,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#ffc935",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-travel",
+      "type": "rect",
+      "x": 436,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#83bf8b",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-encounter",
+      "type": "rect",
+      "x": 567,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#e9e1cb",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-combat",
+      "type": "rect",
+      "x": 698,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "phase-refresh",
+      "type": "rect",
+      "x": 829,
+      "y": 361,
+      "w": 113,
+      "h": 20,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 1,
+      "rx": 4
+    },
+    {
+      "id": "seat-1-station",
+      "type": "rect",
+      "x": 25,
+      "y": 405,
+      "w": 460,
+      "h": 280,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 13
+    },
+    {
+      "id": "seat-1-threat-dial",
+      "type": "rect",
+      "x": 263,
+      "y": 428,
+      "w": 104,
+      "h": 56,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 20
+    },
+    {
+      "id": "seat-1-dial-tens",
+      "type": "circle",
+      "cx": 292,
+      "cy": 456,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-0",
+      "type": "circle",
+      "cx": 292.0,
+      "cy": 442.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-1",
+      "type": "circle",
+      "cx": 300.228994,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-2",
+      "type": "circle",
+      "cx": 305.314791,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-3",
+      "type": "circle",
+      "cx": 305.314791,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-4",
+      "type": "circle",
+      "cx": 300.228994,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-5",
+      "type": "circle",
+      "cx": 292.0,
+      "cy": 470.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-6",
+      "type": "circle",
+      "cx": 283.771006,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-7",
+      "type": "circle",
+      "cx": 278.685209,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-8",
+      "type": "circle",
+      "cx": 278.685209,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-tens-9",
+      "type": "circle",
+      "cx": 283.771006,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-dial-ones",
+      "type": "circle",
+      "cx": 338,
+      "cy": 456,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-0",
+      "type": "circle",
+      "cx": 338.0,
+      "cy": 442.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-1",
+      "type": "circle",
+      "cx": 346.228994,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-2",
+      "type": "circle",
+      "cx": 351.314791,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-3",
+      "type": "circle",
+      "cx": 351.314791,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-4",
+      "type": "circle",
+      "cx": 346.228994,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-5",
+      "type": "circle",
+      "cx": 338.0,
+      "cy": 470.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-6",
+      "type": "circle",
+      "cx": 329.771006,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-7",
+      "type": "circle",
+      "cx": 324.685209,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-8",
+      "type": "circle",
+      "cx": 324.685209,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-ones-9",
+      "type": "circle",
+      "cx": 329.771006,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-first-player-guide",
+      "type": "polygon",
+      "points": [
+        [
+          410,
+          426
+        ],
+        [
+          430,
+          436
+        ],
+        [
+          430,
+          458
+        ],
+        [
+          410,
+          469
+        ],
+        [
+          390,
+          458
+        ],
+        [
+          390,
+          436
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-1-hero1-resources",
+      "type": "rect",
+      "x": 37,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hero1-damage",
+      "type": "rect",
+      "x": 63,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hero2-resources",
+      "type": "rect",
+      "x": 107,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hero2-damage",
+      "type": "rect",
+      "x": 133,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hero3-resources",
+      "type": "rect",
+      "x": 177,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-hero3-damage",
+      "type": "rect",
+      "x": 203,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-1-allies-outline",
+      "type": "rect",
+      "x": 36,
+      "y": 524,
+      "w": 202,
+      "h": 59,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-1-engaged-enemies-outline",
+      "type": "rect",
+      "x": 262,
+      "y": 505,
+      "w": 209,
+      "h": 78,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-1-hand-outline",
+      "type": "rect",
+      "x": 36,
+      "y": 621,
+      "w": 262,
+      "h": 49,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-1-deck",
+      "type": "rect",
+      "x": 325,
+      "y": 604,
+      "w": 51,
+      "h": 65,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-1-discard",
+      "type": "rect",
+      "x": 402,
+      "y": 604,
+      "w": 51,
+      "h": 65,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-1-attachments-guide",
+      "type": "rect",
+      "x": 36,
+      "y": 593,
+      "w": 202,
+      "h": 15,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-station",
+      "type": "rect",
+      "x": 515,
+      "y": 405,
+      "w": 460,
+      "h": 280,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 13
+    },
+    {
+      "id": "seat-2-threat-dial",
+      "type": "rect",
+      "x": 753,
+      "y": 428,
+      "w": 104,
+      "h": 56,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 20
+    },
+    {
+      "id": "seat-2-dial-tens",
+      "type": "circle",
+      "cx": 782,
+      "cy": 456,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-0",
+      "type": "circle",
+      "cx": 782.0,
+      "cy": 442.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-1",
+      "type": "circle",
+      "cx": 790.228994,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-2",
+      "type": "circle",
+      "cx": 795.314791,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-3",
+      "type": "circle",
+      "cx": 795.314791,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-4",
+      "type": "circle",
+      "cx": 790.228994,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-5",
+      "type": "circle",
+      "cx": 782.0,
+      "cy": 470.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-6",
+      "type": "circle",
+      "cx": 773.771006,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-7",
+      "type": "circle",
+      "cx": 768.685209,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-8",
+      "type": "circle",
+      "cx": 768.685209,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-tens-9",
+      "type": "circle",
+      "cx": 773.771006,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-dial-ones",
+      "type": "circle",
+      "cx": 828,
+      "cy": 456,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-0",
+      "type": "circle",
+      "cx": 828.0,
+      "cy": 442.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-1",
+      "type": "circle",
+      "cx": 836.228994,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-2",
+      "type": "circle",
+      "cx": 841.314791,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-3",
+      "type": "circle",
+      "cx": 841.314791,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-4",
+      "type": "circle",
+      "cx": 836.228994,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-5",
+      "type": "circle",
+      "cx": 828.0,
+      "cy": 470.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-6",
+      "type": "circle",
+      "cx": 819.771006,
+      "cy": 467.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-7",
+      "type": "circle",
+      "cx": 814.685209,
+      "cy": 460.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-8",
+      "type": "circle",
+      "cx": 814.685209,
+      "cy": 451.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-ones-9",
+      "type": "circle",
+      "cx": 819.771006,
+      "cy": 444.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-first-player-guide",
+      "type": "polygon",
+      "points": [
+        [
+          900,
+          426
+        ],
+        [
+          920,
+          436
+        ],
+        [
+          920,
+          458
+        ],
+        [
+          900,
+          469
+        ],
+        [
+          880,
+          458
+        ],
+        [
+          880,
+          436
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-2-hero1-resources",
+      "type": "rect",
+      "x": 527,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hero1-damage",
+      "type": "rect",
+      "x": 553,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hero2-resources",
+      "type": "rect",
+      "x": 597,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hero2-damage",
+      "type": "rect",
+      "x": 623,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hero3-resources",
+      "type": "rect",
+      "x": 667,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-hero3-damage",
+      "type": "rect",
+      "x": 693,
+      "y": 484,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-2-allies-outline",
+      "type": "rect",
+      "x": 526,
+      "y": 524,
+      "w": 202,
+      "h": 59,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-2-engaged-enemies-outline",
+      "type": "rect",
+      "x": 752,
+      "y": 505,
+      "w": 209,
+      "h": 78,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-2-hand-outline",
+      "type": "rect",
+      "x": 526,
+      "y": 621,
+      "w": 262,
+      "h": 49,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-2-deck",
+      "type": "rect",
+      "x": 815,
+      "y": 604,
+      "w": 51,
+      "h": 65,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-2-discard",
+      "type": "rect",
+      "x": 892,
+      "y": 604,
+      "w": 51,
+      "h": 65,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-2-attachments-guide",
+      "type": "rect",
+      "x": 526,
+      "y": 593,
+      "w": 202,
+      "h": 15,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-station",
+      "type": "rect",
+      "x": 25,
+      "y": 697,
+      "w": 460,
+      "h": 280,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 13
+    },
+    {
+      "id": "seat-3-threat-dial",
+      "type": "rect",
+      "x": 263,
+      "y": 720,
+      "w": 104,
+      "h": 56,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 20
+    },
+    {
+      "id": "seat-3-dial-tens",
+      "type": "circle",
+      "cx": 292,
+      "cy": 748,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-0",
+      "type": "circle",
+      "cx": 292.0,
+      "cy": 734.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-1",
+      "type": "circle",
+      "cx": 300.228994,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-2",
+      "type": "circle",
+      "cx": 305.314791,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-3",
+      "type": "circle",
+      "cx": 305.314791,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-4",
+      "type": "circle",
+      "cx": 300.228994,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-5",
+      "type": "circle",
+      "cx": 292.0,
+      "cy": 762.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-6",
+      "type": "circle",
+      "cx": 283.771006,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-7",
+      "type": "circle",
+      "cx": 278.685209,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-8",
+      "type": "circle",
+      "cx": 278.685209,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-tens-9",
+      "type": "circle",
+      "cx": 283.771006,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-dial-ones",
+      "type": "circle",
+      "cx": 338,
+      "cy": 748,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-0",
+      "type": "circle",
+      "cx": 338.0,
+      "cy": 734.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-1",
+      "type": "circle",
+      "cx": 346.228994,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-2",
+      "type": "circle",
+      "cx": 351.314791,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-3",
+      "type": "circle",
+      "cx": 351.314791,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-4",
+      "type": "circle",
+      "cx": 346.228994,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-5",
+      "type": "circle",
+      "cx": 338.0,
+      "cy": 762.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-6",
+      "type": "circle",
+      "cx": 329.771006,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-7",
+      "type": "circle",
+      "cx": 324.685209,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-8",
+      "type": "circle",
+      "cx": 324.685209,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-ones-9",
+      "type": "circle",
+      "cx": 329.771006,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-first-player-guide",
+      "type": "polygon",
+      "points": [
+        [
+          410,
+          718
+        ],
+        [
+          430,
+          728
+        ],
+        [
+          430,
+          750
+        ],
+        [
+          410,
+          761
+        ],
+        [
+          390,
+          750
+        ],
+        [
+          390,
+          728
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-3-hero1-resources",
+      "type": "rect",
+      "x": 37,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hero1-damage",
+      "type": "rect",
+      "x": 63,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hero2-resources",
+      "type": "rect",
+      "x": 107,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hero2-damage",
+      "type": "rect",
+      "x": 133,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hero3-resources",
+      "type": "rect",
+      "x": 177,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-hero3-damage",
+      "type": "rect",
+      "x": 203,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-3-allies-outline",
+      "type": "rect",
+      "x": 36,
+      "y": 816,
+      "w": 202,
+      "h": 59,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-3-engaged-enemies-outline",
+      "type": "rect",
+      "x": 262,
+      "y": 797,
+      "w": 209,
+      "h": 78,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-3-hand-outline",
+      "type": "rect",
+      "x": 36,
+      "y": 913,
+      "w": 262,
+      "h": 49,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-3-deck",
+      "type": "rect",
+      "x": 325,
+      "y": 896,
+      "w": 51,
+      "h": 65,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-3-discard",
+      "type": "rect",
+      "x": 402,
+      "y": 896,
+      "w": 51,
+      "h": 65,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-3-attachments-guide",
+      "type": "rect",
+      "x": 36,
+      "y": 885,
+      "w": 202,
+      "h": 15,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-station",
+      "type": "rect",
+      "x": 515,
+      "y": 697,
+      "w": 460,
+      "h": 280,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 3,
+      "rx": 13
+    },
+    {
+      "id": "seat-4-threat-dial",
+      "type": "rect",
+      "x": 753,
+      "y": 720,
+      "w": 104,
+      "h": 56,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 20
+    },
+    {
+      "id": "seat-4-dial-tens",
+      "type": "circle",
+      "cx": 782,
+      "cy": 748,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-0",
+      "type": "circle",
+      "cx": 782.0,
+      "cy": 734.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-1",
+      "type": "circle",
+      "cx": 790.228994,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-2",
+      "type": "circle",
+      "cx": 795.314791,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-3",
+      "type": "circle",
+      "cx": 795.314791,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-4",
+      "type": "circle",
+      "cx": 790.228994,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-5",
+      "type": "circle",
+      "cx": 782.0,
+      "cy": 762.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-6",
+      "type": "circle",
+      "cx": 773.771006,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-7",
+      "type": "circle",
+      "cx": 768.685209,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-8",
+      "type": "circle",
+      "cx": 768.685209,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-tens-9",
+      "type": "circle",
+      "cx": 773.771006,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-dial-ones",
+      "type": "circle",
+      "cx": 828,
+      "cy": 748,
+      "r": 19,
+      "fill": "#ffffff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-0",
+      "type": "circle",
+      "cx": 828.0,
+      "cy": 734.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-1",
+      "type": "circle",
+      "cx": 836.228994,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-2",
+      "type": "circle",
+      "cx": 841.314791,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-3",
+      "type": "circle",
+      "cx": 841.314791,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-4",
+      "type": "circle",
+      "cx": 836.228994,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-5",
+      "type": "circle",
+      "cx": 828.0,
+      "cy": 762.0,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-6",
+      "type": "circle",
+      "cx": 819.771006,
+      "cy": 759.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-7",
+      "type": "circle",
+      "cx": 814.685209,
+      "cy": 752.326238,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-8",
+      "type": "circle",
+      "cx": 814.685209,
+      "cy": 743.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-ones-9",
+      "type": "circle",
+      "cx": 819.771006,
+      "cy": 736.673762,
+      "r": 1.3,
+      "fill": "#16305c",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-first-player-guide",
+      "type": "polygon",
+      "points": [
+        [
+          900,
+          718
+        ],
+        [
+          920,
+          728
+        ],
+        [
+          920,
+          750
+        ],
+        [
+          900,
+          761
+        ],
+        [
+          880,
+          750
+        ],
+        [
+          880,
+          728
+        ]
+      ],
+      "fill": "#8fd3ff",
+      "stroke": "#16305c",
+      "strokeWidth": 1
+    },
+    {
+      "id": "seat-4-hero1-resources",
+      "type": "rect",
+      "x": 527,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hero1-damage",
+      "type": "rect",
+      "x": 553,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hero2-resources",
+      "type": "rect",
+      "x": 597,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hero2-damage",
+      "type": "rect",
+      "x": 623,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hero3-resources",
+      "type": "rect",
+      "x": 667,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#aeb8c5",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-hero3-damage",
+      "type": "rect",
+      "x": 693,
+      "y": 776,
+      "w": 21,
+      "h": 13,
+      "fill": "#df7471",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    },
+    {
+      "id": "seat-4-allies-outline",
+      "type": "rect",
+      "x": 526,
+      "y": 816,
+      "w": 202,
+      "h": 59,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-4-engaged-enemies-outline",
+      "type": "rect",
+      "x": 752,
+      "y": 797,
+      "w": 209,
+      "h": 78,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-4-hand-outline",
+      "type": "rect",
+      "x": 526,
+      "y": 913,
+      "w": 262,
+      "h": 49,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 7
+    },
+    {
+      "id": "seat-4-deck",
+      "type": "rect",
+      "x": 815,
+      "y": 896,
+      "w": 51,
+      "h": 65,
+      "fill": "#d7deeb",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-4-discard",
+      "type": "rect",
+      "x": 892,
+      "y": 896,
+      "w": 51,
+      "h": 65,
+      "fill": "#fff0b8",
+      "stroke": "#16305c",
+      "strokeWidth": 1.5,
+      "rx": 5
+    },
+    {
+      "id": "seat-4-attachments-guide",
+      "type": "rect",
+      "x": 526,
+      "y": 885,
+      "w": 202,
+      "h": 15,
+      "fill": "none",
+      "stroke": "#16305c",
+      "strokeWidth": 0.7,
+      "rx": 3
+    }
+  ]
+}

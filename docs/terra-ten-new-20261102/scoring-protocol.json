@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-01T16:08:36.490455+00:00",
+  "scoreSHA": "ac26b82a5b751c72a4bb44ec7b62ae0488cb9e2718b01c0202a59ffbcb3f7964",
+  "preOutputReview": "Scoring written before opening any new responses. Root batch API calls already started; references and primary IoU matching protocol were frozen before calls. No output used in reference/scoring decisions.",
+  "colorNormalization": "Case/whitespace/Korean basic-color aliases; cyan/turquoise accepted as blue for photographed blue dice. No mixed-color guesses accepted.",
+  "structured": "Object key order ignored; marks order ignored; explicit zero costs equivalent to absent zero-cost symbol.",
+  "unknown": "An observed claim where reference is ambiguous is unverified, not automatically a hallucination.",
+  "referenceLimit": "AI visual annotations, no independent human certification.",
+  "amendmentsAfterOpeningRootOutputs": [
+    {
+      "change": "Include failed API-200 semantic-decode attempts as zero usable observations / all reference facts missing; never omit failures from aggregate denominators.",
+      "reason": "Operational failure rate is essential; no paid retry."
+    },
+    {
+      "change": "Accept literal color plus plastic/wooden material suffix as same color, retaining initial root scores separately.",
+      "reason": "green plastic and green describe the same visible color; not a color error."
+    },
+    {
+      "change": "Report duplicate color aliases as one unique visible fact, alongside strict per-property metrics.",
+      "reason": "dieColor/observedColor and trainColor/observedColor describe the same fact; omission of a redundant alias must not be mistaken for loss of a distinct fact."
+    },
+    {
+      "change": "For projected Splendor cards, development/deck readout kind supplies front/back semantic face.",
+      "reason": "Native product record encodes face through kind; no actual face information was lost."
+    },
+    {
+      "change": "After worker outputs, expanded literal shape descriptors (four/five squares, T/L/Y/cross/straight), colored-wall synonyms, and Azul pattern color aliases. Exact bitmap identity under rotation/reflection remains required; non-equivalent cell counts remain wrong.",
+      "reason": "Avoid counting equivalent free-text descriptions as recognition errors. These post-output scoring changes are disclosed, not a preregistered independent measure."
+    }
+  ],
+  "currentScoreSHA": "5daa8f2e8c492e98566560a990370493cbd14233e627f253ccf2b1064a6180ab",
+  "workerBeforeCalls": {
+    "at": "2026-11-01T16:18:16.376257+00:00",
+    "scorerSHA": "ae01052cfc349828e0feafc5c3e6af687d315a225f56b9610c7dc73b8ee11e4f",
+    "partialInventories": "Blokus and Kingdomino explicitly have uncertain touching groups. Score clearly distinct single objects only; group regions ignore unmatched centers. Global full-inventory metrics separately restrict to eight exhaustive photographs.",
+    "aliases": "Azul printed patterns mapped to corresponding tile categories, terrain and marker descriptions lexical equivalents, polyomino bitmaps rotation/reflection canonicalized when supplied, duplicate printedName/word coalesced only when identical expected fact. Free text otherwise exact after case/whitespace normalization.",
+    "note": "All these worker rules frozen before worker paid calls. Root original reference/scoring remains separately retained."
+  },
+  "auditPolicy": "Post-call overrides separate; original references byte-identical. Uncertain component kind excluded from kind denominator only. See audit-overrides.json and reference-audit.json."
+}

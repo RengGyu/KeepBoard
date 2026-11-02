@@ -1,0 +1,77 @@
+{
+  "status": "IMPLEMENTED_AND_SCOPED_VERIFIED_WITH_UNRELATED_SUITE_FAILURES",
+  "modelCalls": 0,
+  "deployment": false,
+  "sourceHashes": [
+    {
+      "path": "shared/scanObservation.ts",
+      "sha256": "177f8b0e4fe1e5970417cda63d72dddee8e7d6b5bd3c2f9935ccfedcda3ffc71"
+    },
+    {
+      "path": "server/scanObservation.ts",
+      "sha256": "ee47a125c6194c32a317119d392f0aee92b864398a2aa3eaa30ada6676e56a5a"
+    },
+    {
+      "path": "server/observationFusion.ts",
+      "sha256": "7f6767496198ddb23677f549f2e6aaced6848c085e3f19e20aea6bb6b55e3c4e"
+    },
+    {
+      "path": "src/ScanObservationResults.tsx",
+      "sha256": "6d4ebd72db6086c5bd4f6d4d4fb575c183612eab1dfb0fe1986dc81511c77869"
+    },
+    {
+      "path": "tests/scan-observation-results-ui.test.ts",
+      "sha256": "281fc4bfe27a1b3b32f95f7ac944d470f785e8a300db5bb293ac9974610d70f4"
+    },
+    {
+      "path": "tests/observation-fusion.test.ts",
+      "sha256": "1d79d905b98f5973950bfa7a7cff05e17fe513ec9579b22f43ba7163b8eba6ef"
+    },
+    {
+      "path": "tests/observation-fusion-http.test.ts",
+      "sha256": "b0d3530e6e05e1ad1f3b0e0804696f628d301c8ac6b5369565cea1ae9f030e8d"
+    }
+  ],
+  "unchangedBaselineFiles": [
+    "src/SceneWorkspace.tsx",
+    "server/analysisTask.ts",
+    "server/ai/geminiGameReader.ts",
+    "server/ai/observationAssembly.ts",
+    "shared/lightweightRecognition.ts"
+  ],
+  "focused": {
+    "unitUI": 19,
+    "nativeHTTP": 16,
+    "pass": true
+  },
+  "fullSuite": {
+    "total": 827,
+    "pass": 825,
+    "fail": 2,
+    "failures": [
+      "tests/splendor-record-ui.test.ts:54 (points input markup expectation)",
+      "tests/splendor-record-ui.test.ts:67 (unknown noble points input markup expectation)"
+    ],
+    "note": "Untouched UI/test files; current rendered stepper uses output instead of expected input. Not repaired in fusion scope."
+  },
+  "typecheckAndBuildVercelExit": 0,
+  "savedRealResponses": {
+    "sets": 3,
+    "observations": 136,
+    "sameInputs": true,
+    "orderRedeliveryRawAndJSON": true
+  },
+  "browser": {
+    "surface": "native Chrome desktop",
+    "realUI": true,
+    "saveReopen": true,
+    "snapshotValueReceiptsFusionEqual": true,
+    "mobileViewport": "not measured"
+  },
+  "limits": [
+    "AI partial references reused from design, not held-out or human truth",
+    "Sagrada pips 4/19 mismatch remains",
+    "Different camera viewpoints and final board placement accuracy not validated",
+    "No new provider latency/token measurement"
+  ]
+}
