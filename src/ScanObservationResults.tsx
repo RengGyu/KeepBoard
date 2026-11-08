@@ -33,7 +33,7 @@ export function ScanProgressPreview({view,progress}:{view:SessionView;progress:i
  const {definition}=usePhotoDefinition(view.pack,!!progress);
  if(!progress||progress.captureEpoch!==view.session.captureEpoch)return null;
  const ready=progress.units.filter(u=>u.receipts?.length),first=ready[0]?.receipts?.[0],done=progress.units.filter(u=>['completed','failed','interrupted'].includes(u.state)).length;
- return <section className="scan-readout" aria-label="스캔 진행 관측" role="status"><p>사진 {done}/{progress.total}장 처리 · 판독 중인 부분 관측입니다. 최종 그림은 모두 처리한 뒤 반영돼요.</p>
+ return <section className="scan-readout" aria-label="스캔 진행 관측" role="status"><p>사진 {done}/{progress.total}장 처리 · 판독 중인 부분 관측입니다. 최종 그림은 모두 처리한 뒤 반영돼요.{progress.job?.liveRows?` 지금까지 실물 ${progress.job.liveRows}개를 읽었어요.`:''}</p>
  {first&&definition?<PhotoObservationOverlay key={first.scanUnitId} photos={view.session.evidence.filter(e=>e.scope===(progress.ownerId?'player':'public')&&e.ownerId===progress.ownerId)} request={first.request} result={first.result} geometry={first.geometryCandidates} definition={definition} transforms={first.transforms} compact open/>:null}
  {progress.units.map(u=><p key={u.index}>{u.index+1}번째 사진 · {u.state==='pending'?'대기':u.state==='running'?'읽는 중':u.state==='completed'?'읽음':u.state==='failed'?'실패 · 원본 보관':'중단 · 원본 보관'}</p>)}
  </section>;

@@ -14,7 +14,7 @@ export interface LiteralObservation {ref:string;imageIndex:number;panelRef:strin
 export interface ObservationResult {version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
 export interface GeometryCandidate {observationRef:string;frameId:string;locationCandidate:{type:'hex'|'edge'|'vertex';id:string};method:'confirmed-frame';status:'candidate'}
 export interface LocalReaderSelection {kind:'local-observation-v1';task?:'catan-numerals-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;inputMode?:'original'|'catan-atlas'}
-export interface HostedReaderSelection {kind:'gemini-game-observation-v1'|'terra-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
+export interface HostedReaderSelection {kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
 export type PhotoReaderSelection=LocalReaderSelection|HostedReaderSelection;
 export interface LocalTaskProfile {id:'catan-numerals-v1';wire:'qwen-number-grounding-v1';promptSHA256:string;schemaSHA256:string;runtimeSettingsSHA256:string;contextTokens:8192;maxOutputTokens:1024;imageMinTokens:1024;temperature:0;cachePrompt:false;stream:false;automaticRetries:0;parallelRequests:1}
 export interface LocalReaderTaskCapability {task:'catan-numerals-v1';available:boolean;reason?:string;profile:LocalTaskProfile|null}
@@ -24,9 +24,12 @@ export type PhysicalUnitClaim='single'|'group'|'unknown';
 export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1'|'terra-game-wire-v2'|'terra-game-wire-v3';physicalUnits?:Record<string,PhysicalUnitClaim>;providerResponse?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
 export interface ReaderIdentity {kind:'local-observation-v1';model:string;modelRevision:string;weightSHA:string;projectorSHA:string;runtimeRevision:string;contextTokens:number;maxOutputTokens:number}
 export interface GeminiReaderIdentity {kind:'gemini-game-observation-v1';model:'gemini-3.8-flash';thinkingLevel:'LOW';mediaResolution:'MEDIA_RESOLUTION_HIGH';maxOutputTokens:32768}
-export interface TerraReaderIdentity {kind:'terra-game-observation-v1';model:'gpt-6.1-terra';api:'responses';reasoningEffort:'low';imageDetail:'high';maxOutputTokens:32768;adapterVersion:'literal-named-fill-original-v1'|'literal-named-fill-unit-original-v2'|'literal-compact-unit-original-v3'|'literal-named-detail-unit-original-v4'|'literal-named-fill-unit-marks-v5';automaticRetries:0;timeoutMs:240000}
-export type HostedReaderIdentity=GeminiReaderIdentity|TerraReaderIdentity;
-export const isHostedReader=(value:unknown):value is {kind:HostedReaderIdentity['kind']}=>!!value&&typeof value==='object'&&'kind' in value&&['gemini-game-observation-v1','terra-game-observation-v1'].includes(String(value.kind));
+export interface TerraReaderIdentity {kind:'terra-game-observation-v1';model:'gpt-6.1-terra';api:'responses';reasoningEffort:'low';imageDetail:'high';maxOutputTokens:32768;adapterVersion:'literal-named-fill-original-v1'|'literal-named-fill-unit-original-v2'|'literal-compact-unit-original-v3'|'literal-named-detail-unit-original-v4'|'literal-named-fill-unit-marks-v5'|'literal-compact-visible-instance-v7';automaticRetries:0;timeoutMs:240000}
+/** Terra remains a readable historical receipt identity; new service scans use Luna/high. */
+export interface LunaReaderIdentity extends Omit<TerraReaderIdentity,'kind'|'model'|'reasoningEffort'|'automaticRetries'> {kind:'luna-game-observation-v1';model:'gpt-6-luna';reasoningEffort:'high';automaticRetries:0|1}
+export interface TerraHighReaderIdentity extends Omit<LunaReaderIdentity,'kind'|'model'|'timeoutMs'> {kind:'terra-high-game-observation-v1';model:'gpt-6.1-terra';timeoutMs:285000}
+export type HostedReaderIdentity=GeminiReaderIdentity|TerraReaderIdentity|LunaReaderIdentity|TerraHighReaderIdentity;
+export const isHostedReader=(value:unknown):value is {kind:HostedReaderIdentity['kind']}=>!!value&&typeof value==='object'&&'kind' in value&&['gemini-game-observation-v1','terra-game-observation-v1','luna-game-observation-v1','terra-high-game-observation-v1'].includes(String(value.kind));
 export type ObservationReaderIdentity=ReaderIdentity|HostedReaderIdentity;
 export interface CompileObservationInput {pack:GamePack;definition:PhotoDefinition;areaId:string;scope:ObservationScope;images:ObservationImage[];taskId:string;geometryFrameId?:string;referenceSetId?:string;transforms?:import('./photoGeometry').PhotoTransform[]}
 // Pure compilation/validation functions are implemented below after focused RED tests.

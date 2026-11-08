@@ -24,7 +24,6 @@ const identity=(a:Entry,b:Entry)=>a.member.unitId!==b.member.unitId&&compatible(
 // Reuse the existing conservative scan overlap criterion, without treating a visible pile as one individual.
 const groupSurface=(a:Entry,b:Entry)=>a.member.unitId!==b.member.unitId&&compatible(a,b)&&aggregate(a)&&aggregate(b)&&completeBox(a)&&completeBox(b)&&observationOverlap(a.box!,b.box!)>=.75;
 const singleFootprint=(a:Entry,b:Entry)=>a.member.unitId!==b.member.unitId&&!!a.source&&a.source===b.source&&a.field===b.field&&individual(a)&&individual(b)&&completeBox(a)&&completeBox(b)?observationOverlap(a.box!,b.box!):0;
-const focused=(a:Entry,b:Entry)=>!!a.box&&!!b.box&&a.source===b.source&&contains(a.roi,a.box)&&contains(b.roi,b.box)&&a.density>=b.density-1e-8&&area(a.roi)<area(b.roi)-1e-9;
 const valuePaths=(p:any)=>Object.fromEntries([...Object.entries(p).filter(([k])=>!['id','readout'].includes(k)),...Object.entries(p.readout?.values??{}).map(([k,v])=>['readout.values.'+k,v]),['$exists',true]]);
 /** Only typed generic records use this slice. Native scene assembly/placement retains its existing path. */
 export function supportsGenericFusion(scan:PinnedScanObservation,results:AnalysisResult[]){return scan.units.every(u=>(u.hosted??u.local)?.definition.nativeBridge===null)&&results.every(r=>r.assertions.every(a=>(a.value as any)?.version==='game-component-record-v1'&&(a.value as any).pieces.every((p:any)=>p.readout?.values)));}
@@ -127,9 +126,14 @@ export function projectGenericFusion(current:Session,pack:GamePack,scan:PinnedSc
    for(const property of [...new Set(claims.flatMap(e=>Object.keys(e.values)))].sort()){
     const path='readout.values.'+property,currentValue=p.readout.values[property],observed=claims.filter(e=>known(e.values[property])),conflict=new Set([...observed.map(e=>canonical(e.values[property])),...(known(currentValue)?[canonical(currentValue)]:[])]).size>1;
     if(existing&&locked(p,path)){fusion.decisions.push({pieceId:p.id,fieldPath:path,chosenMember:null,basis:'user-protected',alternativeMembers:es.map(e=>e.member),conflict});continue;}
-    if(!observed.length)continue;const previous=priorFusion?.decisions.find(d=>d.pieceId===p.id&&d.fieldPath===path)?.chosenMember,old=priorClaims.find(e=>previous&&key(e.member)===key(previous))??priorClaims.find(e=>canonical(e.values[property])===canonical(currentValue));const dominant=observed.filter(e=>observed.every(other=>e===other||focused(e,other))),typed=['integer','boolean','enum'].includes(representative.types[property]),chosen=typed&&dominant.length===1?dominant[0]:existing?observed.find(e=>e===old)??observed[0]:observed.find(e=>e===representative)??observed[0];
+    if(!observed.length)continue;const previous=priorFusion?.decisions.find(d=>d.pieceId===p.id&&d.fieldPath===path)?.chosenMember,old=priorClaims.find(e=>previous&&key(e.member)===key(previous))??priorClaims.find(e=>canonical(e.values[property])===canonical(currentValue));
+    // Spatial identity does not certify a value. Preserve an existing/anchor observation on disagreement;
+    // if that value was unknown, conflicting detail claims remain unknown with all alternatives retained.
+    const preferred=existing?observed.find(e=>e===old):observed.find(e=>e===representative&&e.role==='anchor');
+    if(conflict&&!preferred){p.readout.values[property]=null;p.readout.sources[property]=null;fusion.decisions.push({pieceId:p.id,fieldPath:path,chosenMember:null,basis:'unresolved',alternativeMembers:observed.map(e=>e.member),conflict:true});continue;}
+    const chosen=preferred??observed[0];
     if(known(chosen.values[property])){p.readout.values[property]=structuredClone(chosen.values[property]);p.readout.sources[property]='observation';}
-    fusion.decisions.push({pieceId:p.id,fieldPath:path,chosenMember:chosen.member,basis:conflict?typed&&dominant.length===1&&chosen===dominant[0]?'focused-provisional':'unresolved':'observed',alternativeMembers:observed.filter(e=>e!==chosen).map(e=>e.member),conflict});
+    fusion.decisions.push({pieceId:p.id,fieldPath:path,chosenMember:chosen.member,basis:conflict?'unresolved':'observed',alternativeMembers:observed.filter(e=>e!==chosen).map(e=>e.member),conflict});
    }
    if(existing)for(const path of Object.keys(valuePaths(p)))if(!path.startsWith('readout.values.')&&locked(p,path))fusion.decisions.push({pieceId:p.id,fieldPath:path,chosenMember:null,basis:'user-protected',alternativeMembers:es.map(e=>e.member),conflict:es.some(e=>path==='quantity'?known(e.identityQuantity)&&known(p.quantity)&&e.identityQuantity!==p.quantity:canonical(valuePaths(e.piece)[path])!==canonical(valuePaths(p)[path]))});
    if(!existing)accepted.push(p);for(const e of es){const r=receipts.find(r=>r.scanUnitId===e.member.unitId)!;r.componentRefs[e.member.observationRef]=p.id;}

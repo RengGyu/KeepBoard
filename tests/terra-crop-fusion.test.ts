@@ -11,7 +11,7 @@ async function fixture(items:any[][],options:{session?:Session;id?:string;detail
  const pack=effectiveRecognitionPack(catalogPacks.find(p=>p.id==='sagrada')!),definition=photoDefinition(pack);
  const evidence=items.map((_,i)=>({id:'e'+i,kind:'photo',scope:'public',captureEpoch:'epoch',url:'/synthetic/'+i,label:'synthetic',...(i&&!options.detail?{sourceEvidenceId:'e0',sourceRegion:{x:0,y:0,width:.5,height:.5}}:{})})as Evidence);
  const session=options.session??({id:'synthetic',gamePack:pack,captureEpoch:'epoch',turnInstanceId:'turn',players:[],evidence,assertions:[],notes:{},activity:[],snapshots:[]}as unknown as Session),reader=new TerraGameReader({key:async()=> 'synthetic'});
- const scan=await prepareScanObservation({session,pack,evidence,selection:{kind:'terra-game-observation-v1',definitionSHA:definition.definitionSHA,areaId:'window'},taskId:options.id??'unit-scan',reader,cloud:false,readImage:async()=>({data:bytes,mimeType:'image/png'})});
+ const scan=await prepareScanObservation({session,pack,evidence,selection:{kind:'luna-game-observation-v1',definitionSHA:definition.definitionSHA,areaId:'window'},taskId:options.id??'unit-scan',reader,cloud:false,readImage:async()=>({data:bytes,mimeType:'image/png'})});
  const results=scan.units.map((u,i)=>{const p=u.hosted!,native={status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify({items:items[i]})}]}]},decoded=decodeTerraGameObservation(native,p.request,p.definition,p.transforms),r=assembleObservations({request:p.request,result:decoded.raw,definition:p.definition,pack,turnInstanceId:'turn',reader:p.reader,transforms:p.transforms,sourceImageSHA:p.sourceImageSHA,hostedWire:decoded.hostedWire});r.observationReceipts![0].scanUnitId=u.id;r.scanBundle={plan:scan.plan,units:[{unitId:u.id,state:'completed',observationCount:decoded.raw.observations.length}],links:[]};return r;});
  return {session,pack,scan,results,project:(rs=results)=>projectScanResults(session,pack,scan,rs)};
 }
@@ -28,7 +28,7 @@ test('a retired aggregate remains raw evidence but cannot veto a separate comple
 });
 test('reciprocal complete group footprints preserve one visible surface without asserting individual identity',async()=>{
  const f=await fixture([[item('group',[200,200,300,300],6)],[item('group',[400,400,600,600],9)]]),r=f.project();
- assert.equal(pieces(r).length,1);assert.equal(pieces(r)[0].quantity,null);assert.equal(pieces(r)[0].readout.values.dieValue,9);
+ assert.equal(pieces(r).length,1);assert.equal(pieces(r)[0].quantity,null);assert.equal(pieces(r)[0].readout.values.dieValue,6);assert(r.scanBundle!.fusion!.decisions.some(d=>d.fieldPath==='readout.values.dieValue'&&d.conflict&&d.basis==='unresolved'));
  assert.equal(r.scanBundle!.links[0].relation,'same-visible-group-surface');assert.equal(r.scanBundle!.fusion!.refinements.length,0);
  assert.equal(r.observationReceipts!.reduce((n,r)=>n+r.result.observations.length,0),2);assert.equal(stable(r),stable(f.project([...f.results].reverse())));
 });
@@ -100,7 +100,7 @@ test('unknown null is not an individual or group assertion and cannot add overla
  const f=await fixture([[item('unknown',[100,100,900,900])],[item('single',[400,400,600,600],9)]]),r=f.project();assert.equal(pieces(r).length,1);assert.equal(r.scanBundle!.fusion!.refinements.length,0);assert.equal(r.scanBundle!.unresolvedGroups!.length,1);
 });
 test('explicit single null quantity supports one-to-one identity without filling quantity or joining same-unit neighbors',async()=>{
- const f=await fixture([[item('single',[200,200,300,300])],[item('single',[400,400,600,600],9),item('single',[400,650,600,850],3)]]),r=f.project();assert.equal(pieces(r).length,2);assert(pieces(r).every(p=>p.quantity===null));assert.equal(pieces(r)[0].readout.values.dieValue,9);assert.equal(r.scanBundle!.fusion!.refinements.length,0);
+ const f=await fixture([[item('single',[200,200,300,300])],[item('single',[400,400,600,600],9),item('single',[400,650,600,850],3)]]),r=f.project();assert.equal(pieces(r).length,2);assert(pieces(r).every(p=>p.quantity===null));assert.equal(pieces(r)[0].readout.values.dieValue,6);assert.equal(r.scanBundle!.fusion!.refinements.length,0);
 });
 test('overlapping aggregate parents, clipped crop children and missing boxes remain unresolved without losing useful base',async()=>{
  const both=await fixture([[item('group',[100,100,900,900]),item('group',[100,100,800,800])],[item('single',[400,400,600,600],9)]]),r=both.project();assert.equal(pieces(r).length,2);assert.equal(r.scanBundle!.fusion!.refinements.length,0);assert.equal(r.scanBundle!.unresolvedGroups!.length,1);

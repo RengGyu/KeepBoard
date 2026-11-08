@@ -24,7 +24,7 @@ export async function prepareHostedObservation(input:{pack:GamePack;evidence:Evi
  for(const component of definition.components)if(request.allowedPropertyIds[component.id])request.allowedPropertyIds[component.id]=request.allowedPropertyIds[component.id].filter(id=>hostedVisibleProperty(component,id));
  return {request,definition,reader:structuredClone(input.reader.identity),frame,transforms:[],sourceImageSHA};
 }
-export async function analyzeHostedObservation(input:{plan:PinnedHostedObservation;pack:GamePack;session:import('../shared/types').Session;turnInstanceId:string;evidence:Evidence[];reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;timings?:Record<string,number>;literal?:boolean}):Promise<AnalysisResult>{
+export async function analyzeHostedObservation(input:{plan:PinnedHostedObservation;pack:GamePack;session:import('../shared/types').Session;turnInstanceId:string;evidence:Evidence[];reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;timings?:Record<string,number>;literal?:boolean;onRows?:(count:number)=>void}):Promise<AnalysisResult>{
  const {plan,reader}=input;if(JSON.stringify(plan.reader)!==JSON.stringify(reader.identity))throw new AnalysisJobError('고정한 사진 판독 profile이 바뀌었습니다.',409);
  const bytes=await input.readImage(input.evidence[0]);if(sha(bytes.data)!==(plan.inputSHA??plan.sourceImageSHA))throw new AnalysisJobError('고정한 원본 사진이 바뀌었습니다.',409);
  if(!input.literal&&plan.definition.nativeBridge==='catan'&&plan.request.areaId==='board'&&plan.request.scope.partition==='common_public'){
@@ -33,6 +33,6 @@ export async function analyzeHostedObservation(input:{plan:PinnedHostedObservati
   for(const receipt of read.result.observationReceipts??[])receipt.frame=plan.frame??null;
   return read.result;
  }
- const read=await reader.read(plan.request,plan.definition,bytes.data,bytes.mimeType,plan.transforms);if(input.timings)input.timings.provider=read.timings.readerMs;
+ const read=await reader.read(plan.request,plan.definition,bytes.data,bytes.mimeType,plan.transforms,input.onRows);if(input.timings)input.timings.provider=read.timings.readerMs;
  return assembleObservations({request:plan.request,result:read.raw,definition:plan.definition,pack:input.pack,turnInstanceId:input.turnInstanceId,reader:plan.reader,frame:plan.frame,transforms:plan.transforms,sourceImageSHA:plan.sourceImageSHA,hostedWire:read.hostedWire});
 }

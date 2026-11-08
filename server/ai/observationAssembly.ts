@@ -65,7 +65,9 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
   assertions.push({id:randomUUID(),field,value:value as Value,ownerId,basis:'observation',status:'candidate',evidenceIds:[...new Set(items.flatMap((v:any)=>v.evidenceId?[v.evidenceId]:v.evidenceIds??[]))],updatedAt:new Date().toISOString(),turnInstanceId:input.turnInstanceId,observationReceipts:[receipt]});
  }
  if(!result.observations.length)warnings.push('확정할 관측값이 없습니다. 원본과 기존 기록은 유지됩니다.');
+ const dropped=input.hostedWire?.deferred.filter(d=>d.property==='row').length??0;if(dropped)warnings.push('형식이 맞지 않는 실물 '+dropped+'개는 제외했습니다. 원응답은 보존됩니다.');
+ if(input.hostedWire?.deferred.some(d=>d.reason==='provider-output-truncated'))warnings.push('답이 길어 사진의 일부 실물만 읽었습니다. 나머지는 직접 추가하거나 사진을 나눠 찍어 주세요.');
  const deferred=input.nativeWire?.deferred.length??0;if(deferred)warnings.push('패널 경계를 확인할 수 없는 숫자 관측 '+deferred+'개를 보류했습니다. 원응답은 보존됩니다.');
  const candidateObjects=[...groups.values()].reduce((n,items)=>n+items.length,0);
- return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':input.reader.kind==='terra-game-observation-v1'?'Terra':'Gemini')+' 사진 관측으로 '+candidateObjects+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 읽지 못한 값은 ?로 표시됩니다.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
+ return {assertions,summary:(input.reader.kind==='local-observation-v1'?'로컬':input.reader.kind==='terra-high-game-observation-v1'?'Terra high':input.reader.kind==='luna-game-observation-v1'?'Luna high':input.reader.kind==='terra-game-observation-v1'?'Terra':'Gemini')+' 사진 관측으로 '+candidateObjects+'개 '+(input.taskProfile?'숫자':'실물')+' 후보를 만들었습니다. 읽지 못한 값은 ?로 표시됩니다.'+(warnings.length?'\n'+warnings.join('\n'):''),mode:'live',warnings,observationReceipts:[receipt]};
 }

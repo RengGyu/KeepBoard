@@ -8,6 +8,8 @@ export interface PropertySpec {
  id:string; label:string; type:'text'|'integer'|'enum'|'boolean'|'marks'|'features'|'reference'|'player';
  acquisition:'visible'|'manual'; unit?:string; min?:number; max?:number;
  options?:readonly {value:string|number;label:string}[]; faceOnly?:boolean;
+ /** Visible printed digits/ranges remain text; accept a provider's safe integer literal losslessly. */
+ literalNumberText?:boolean;
  targetComponents?:readonly string[]; sourceText:string;
 }
 export interface ComponentSpec { id:string; name:string; kind:string; description:string; fields:readonly PropertySpec[] }

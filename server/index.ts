@@ -1,5 +1,5 @@
 import {isHostedReader} from '../shared/lightweightRecognition';
-import {TerraGameReader} from './ai/terraGameReader';
+import {LunaGameReader,TERRA_HIGH_IDENTITY} from './ai/terraGameReader';
 import type {HostedObservationReader} from './ai/hostedReader';
 import {ScanUploadBatches} from './scanUploadBatch';
 import {analysisBatches} from './analysisTask';
@@ -96,7 +96,7 @@ function activity(session: Session, type: string, message: string) {
   session.activity.push({ id: randomUUID(), at: new Date().toISOString(), type, message });
 }
 
-export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud,localReader,geminiReader=new GeminiGameReader(),terraReader=new TerraGameReader(),uiHmr=true }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>};localReader?:LocalReader;geminiReader?:GeminiGameReader;terraReader?:HostedObservationReader;uiHmr?:boolean } = {}) {
+export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud,localReader,geminiReader=new GeminiGameReader(),terraReader=new LunaGameReader(),terraHighReader=new LunaGameReader({identity:TERRA_HIGH_IDENTITY}),uiHmr=true }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>};localReader?:LocalReader;geminiReader?:GeminiGameReader;terraReader?:HostedObservationReader; terraHighReader?:HostedObservationReader;uiHmr?:boolean } = {}) {
   if(cloud){const run=analyzer;analyzer=input=>run({...input,readImage:async e=>{const b=await store.readEvidence(e);return {mimeType:b.mimeType,data:b.data.toString('base64')};}});}
   const app = express();
   const uploads=cloud?new CloudUploads(cloud.objects):undefined;
@@ -222,7 +222,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
   app.get('/api/settings', async (_req, res) => { res.json(await getAIStatus()); });
   app.get('/api/recognition/readers',async(_req,res)=>{
     const reader=cloud?{kind:'local-observation-v1',available:false,cloudSupported:false,identity:null,reason:'이 클라우드에는 로컬 모델이 없습니다. 유료 모델로 자동 전환하지 않습니다.'}:localReader?await localReader.status():{kind:'local-observation-v1',available:false,cloudSupported:false,identity:null,reason:'로컬 리더가 설정되지 않았습니다.'};
-    res.json({version:'local-reader-capabilities-v1',readers:[reader,await geminiReader.status(),await terraReader.status()],definitions:photoDefinitionsMetadata()});
+    res.json({version:'local-reader-capabilities-v1',readers:[reader,await geminiReader.status(),await terraReader.status(),await terraHighReader.status()],definitions:photoDefinitionsMetadata()});
   });
   app.put('/api/settings', async (req, res) => {
     if (!['gemini', 'openai'].includes(req.body?.provider) || typeof req.body.model !== 'string' || !req.body.model.trim()) throw new HttpError('제공자와 모델을 확인하세요.');
@@ -463,7 +463,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       validateStaticPhotos(evidence,body.sameStaticState);
       const input=session.room?rooms.roomInput(session,pack,rooms.actor(req,session),await pins.allowed(session.id,credential(req)),await pins.owners(session.id),!owner):redactSession(session,pack,new Set(session.players.filter(p=>p.id!==owner).map(p=>p.id)),new Set());
       const taskId=digest([session.id,owner??null,body.requestId,session.captureEpoch]),readImage=(e:Evidence)=>store.readEvidence(e);
-      const hostedScan=isHostedReader(body.reader),selectedReader=body.reader?.kind==='terra-game-observation-v1'?terraReader:geminiReader;
+      const hostedScan=isHostedReader(body.reader),selectedReader=body.reader?.kind==='terra-high-game-observation-v1'?terraHighReader:(body.reader?.kind==='luna-game-observation-v1'||body.reader?.kind==='terra-game-observation-v1')?terraReader:geminiReader;
       if(hostedScan){if(Object.keys(body.reader).some(k=>!['kind','definitionSHA','areaId','frame','target'].includes(k)))throw new HttpError('판독 선택을 확인하세요.');const d=photoDefinition(pack,body.reader.definitionSHA),area=d.areas.find(a=>a.id===body.reader.areaId);if(!area||(owner?area.partition!=='owner_private':area.partition==='owner_private')||evidence.some(e=>e.captureEpoch!==session.captureEpoch))throw new HttpError('현재 사진 영역을 확인하세요.',409);if(!(await selectedReader.status()).available)throw new HttpError('사진 판독기를 사용할 수 없습니다.',503);}
       const scanIntent:ScanIntent|undefined=hostedScan?{version:'scan-intent-v1',taskId,selection:structuredClone(body.reader),evidenceIds:[...body.evidenceIds],reader:structuredClone(selectedReader.identity)}:undefined;
       const scanObservation=body.reader&&!hostedScan?await prepareScanObservation({session:input,pack,evidence,selection:body.reader,taskId,reader:selectedReader,localReader,cloud:!!cloud,readImage}):undefined;

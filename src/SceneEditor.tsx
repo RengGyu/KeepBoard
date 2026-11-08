@@ -267,6 +267,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
         {(dirty || forceSave) && <button className="button primary small-button" onClick={() => void save().catch(() => {})} disabled={busy || saving}>반영</button>}
       </div>
     </div>
+    {photos.length>0&&<p className="small muted">사진에서 빠진 부품은 ‘추가’로 넣고, 가려진 값은 모름으로 남겨도 돼요.</p>}
     {pendingIncoming && <div className="se-banner"><span>새 사진 결과가 있어요. 지금 정정을 반영한 뒤 볼 수 있어요.</span></div>}
     {message && <p className={`se-message ${message.tone}`} role="status">{message.text}</p>}
     {multiple && <div className="se-batch" aria-label="여러 부품 수정"><strong>{picked.length}개 선택</strong><button className="button text small-button" onClick={() => { setSelection([]); setInlineNumberIds([]); }} disabled={!picked.length}>전체 해제</button>

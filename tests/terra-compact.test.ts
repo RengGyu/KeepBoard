@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {buildTerraGameBody,decodeTerraGameObservation,TerraGameReader,TERRA_IDENTITY} from '../server/ai/terraGameReader';
+import {buildTerraGameBody,decodeTerraGameObservation,TerraGameReader,LUNA_IDENTITY} from '../server/ai/terraGameReader';
 import {compactTerraKinds,COMPACT_TERRA_PROFILE} from '../server/ai/terraCompact';
 import {hostedReaderFor} from '../server/ai/hostedReader';
 import {catalogPacks} from '../gamepacks/catalog';
@@ -19,7 +19,7 @@ const definition:PhotoDefinition={version:'game-photo-definition-v1',gameId:'syn
  {id:'other',manualPropertyIds:[],properties:[field('otherOnly','text')]}
 ]};
 const request:ObservationRequest={version:'lightweight-observation-v1',taskId:'compact-test',gameId:'synthetic',packId:'synthetic',editionId:'base',sourceSHA:definition.sourceSHA,definitionSHA:definition.definitionSHA,areaId:'table',scope:{partition:'common_public',ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'photo',inputId:'photo',sha256:sha(bytes),width:1000,height:800,transformId:null}],allowedComponents:['tokens','other'],allowedPropertyIds:Object.fromEntries(definition.components.map(c=>[c.id,c.properties.map(p=>p.id)])),componentLabels:{tokens:{name:'토큰',physicalType:'token'},other:{name:'다른 실물',physicalType:'card'}},referenceSetId:null,geometryFrameId:null};
-const envelope=(payload:unknown)=>({model:'gpt-6.1-terra',status:'completed',output:[{type:'message',status:'completed',content:[{type:'output_text',text:JSON.stringify(payload)}]}]});
+const envelope=(payload:unknown)=>({model:'gpt-6-luna',status:'completed',output:[{type:'message',status:'completed',content:[{type:'output_text',text:JSON.stringify(payload)}]}]});
 const kinds=()=>compactTerraKinds(request,definition);
 const k=()=>kinds().find(x=>x.id==='tokens')!.k;
 const p=(id:string)=>kinds().find(x=>x.id==='tokens')!.properties.find(x=>x.id===id)!.p;
@@ -32,7 +32,7 @@ test('compact mappings depend on allowed request/definition only and strict sche
  assert.deepEqual(mapping,compactTerraKinds({...request,allowedComponents:[...request.allowedComponents].reverse(),allowedPropertyIds:Object.fromEntries(Object.entries(request.allowedPropertyIds).map(([id,v])=>[id,[...v].reverse()]))},{...definition,components:[...definition.components].reverse()}));
  assert(!mapping.flatMap(x=>x.properties).some(x=>['owner','manual'].includes(x.id)));
  const b=buildTerraGameBody(request,definition,bytes,'image/png',COMPACT_TERRA_PROFILE),schema=b.text.format.schema as any;
- assert.equal(b.model,TERRA_IDENTITY.model);assert.equal(b.reasoning.effort,'low');assert.equal(b.max_output_tokens,32768);assert.equal(b.input[0].content[1].detail,'high');
+ assert.equal(b.model,LUNA_IDENTITY.model);assert.equal(b.reasoning.effort,'high');assert.equal(b.max_output_tokens,32768);assert.equal(b.input[0].content[1].detail,'high');
  assert.equal(b.input[0].content[1].image_url,'data:image/png;base64,'+bytes.toString('base64'));
  assert.equal(schema.properties.v.enum[0],3);assert.deepEqual(schema.properties.items.items.required,['k','b','f','q','u','a']);
  const walk=(s:any)=>{if(s.properties){assert.equal(s.additionalProperties,false);assert.deepEqual(s.required,Object.keys(s.properties));Object.values(s.properties).forEach(walk);}if(s.items)walk(s.items);if(s.anyOf)s.anyOf.forEach(walk);};walk(schema);
@@ -70,8 +70,8 @@ test('compact rejects malformed shape, codes, arity and cross-kind fields before
 });
 
 test('compact profile dispatch does not reinterpret legacy payloads and default remains a named, non-compact profile',async()=>{
- assert.equal(TERRA_IDENTITY.adapterVersion,'literal-named-fill-unit-marks-v5');
- assert.deepEqual(hostedReaderFor({...TERRA_IDENTITY,adapterVersion:COMPACT_TERRA_PROFILE}).identity,{...TERRA_IDENTITY,adapterVersion:COMPACT_TERRA_PROFILE});
+ assert.equal(LUNA_IDENTITY.adapterVersion,'literal-named-fill-unit-marks-v5');
+ assert.deepEqual(hostedReaderFor({...LUNA_IDENTITY,adapterVersion:COMPACT_TERRA_PROFILE}).identity,{...LUNA_IDENTITY,adapterVersion:COMPACT_TERRA_PROFILE});
  assert.throws(()=>new TerraGameReader({profile:'unknown-profile' as any}));
  const legacy={kind:'tokens',box_1000:null,face:'unknown',quantity:null,attributes:[]};
  assert.throws(()=>decodeTerraGameObservation(envelope({items:[legacy]}),request,definition,[],COMPACT_TERRA_PROFILE));

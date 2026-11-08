@@ -37,7 +37,8 @@ import {RoomInvite,RoomProfile,RoomPublicBoard} from './RoomEntry';
 import {latestSnapshot} from '../shared/rooms';
 import './correction-workspace.css';
 
-type ReaderMode='existing'|'local'|'gemini'|'terra';
+type ReaderMode='existing'|'local'|'gemini'|'luna'|'terra';
+const isHostedMode=(mode:ReaderMode|undefined)=>mode==='gemini'||mode==='luna'||mode==='terra';
 interface RunningCapture { reader?:PhotoReaderSelection;readingMode:ReaderMode;batch: ScanBatch; captureTarget?:CaptureTarget; guidance?:string; staged?:Map<string,ScanUploadReady>; photoIds?:Map<PhotoInput,string>;tickets?:Map<string,ScanUploadTicket> }
 interface GalleryTransfer { run: RunningCapture; uploads: ReturnType<typeof createScanUploadQueue<PhotoInput, Evidence|ScanUploadReady>>; unread: File[]; snapshot: UploadSnapshot<Evidence|ScanUploadReady>; phase: 'reading' | 'sending' | 'failed' }
 interface BatchReadout { reader?:PhotoReaderSelection;readingMode?:ReaderMode;captureTarget?:CaptureTarget; context: ScanRunContext; evidenceIds: string[]; state: 'manual' | 'analyzing' | 'done' | 'failed'; error?: string; candidateCount?: number }
@@ -72,8 +73,8 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const gemini=readers?.readers.find(r=>r.kind==='gemini-game-observation-v1'),geminiAvailable=!!gemini?.available;
   // Keep the production reader fixed unless the user explicitly changes the optional settings.
   const [readerMode,setReaderMode]=useState<ReaderMode>('terra');
-  const terra=readers?.readers.find(r=>r.kind==='terra-game-observation-v1'),terraAvailable=!!terra?.available;
-  const hostedMode=readerMode==='gemini'||readerMode==='terra',hostedAvailable=readerMode==='terra'?terraAvailable:geminiAvailable;
+  const luna=readers?.readers.find(r=>r.kind==='luna-game-observation-v1'),lunaAvailable=!!luna?.available,terra=readers?.readers.find(r=>r.kind==='terra-high-game-observation-v1'),terraAvailable=!!terra?.available;
+  const hostedMode=isHostedMode(readerMode),hostedAvailable=readerMode==='terra'?terraAvailable:readerMode==='luna'?lunaAvailable:geminiAvailable;
   // A scoped scan keeps every selected current-epoch photo as a separate reading unit.
   const scoped=readerMode!=='existing';
   const [localTask,setLocalTask]=useState<LocalReaderSelection['task']>();
@@ -175,7 +176,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     const area=areas.find(a=>a.id===localCaptureAreaId)||(!localCaptureAreaId?areas.find(a=>observablePhotoArea(def,a))??areas[0]:undefined);
     if(!area||!observablePhotoArea(def,area))return undefined;
     const framed=mode==='local'&&useFrame&&canUseCatanFrame&&currentFrame?{frame:currentFrame}:{};
-    return mode==='gemini'||mode==='terra'?{kind:mode==='terra'?'terra-game-observation-v1':'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
+    return isHostedMode(mode)?{kind:mode==='terra'?'terra-high-game-observation-v1':mode==='luna'?'luna-game-observation-v1':'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
   }
   const resolveReaderRef=useRef(resolveReader);resolveReaderRef.current=resolveReader;
   function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture', useFrame=false): RunningCapture {
@@ -190,7 +191,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   async function saveRunPhoto(run: RunningCapture, input: PhotoInput): Promise<Evidence|ScanUploadReady> {
     const context = run.batch.context;
     if (run.batch.finished || run.batch.evidenceIds.length >= SCAN_LIMIT) throw new Error('마쳤거나 6장을 확보한 스캔입니다. 새 스캔을 시작해 주세요.');
-    if((run.readingMode==='gemini'||run.readingMode==='terra')){
+    if(isHostedMode(run.readingMode as ReaderMode)){
       run.photoIds??=new Map();let clientPhotoId=run.photoIds.get(input);if(!clientPhotoId){clientPhotoId='photo-'+run.photoIds.size;run.photoIds.set(input,clientPhotoId);}
       const ready=run.staged?.get(clientPhotoId);if(ready)return ready;
       const stage=await api.stageScanPhoto(context.sessionId,context.id,clientPhotoId,{...input,captureTarget:run.captureTarget,scope:context.ownerId?'player':'public',ownerId:context.ownerId,expectedCaptureEpoch:context.captureEpoch},run.tickets?.get(clientPhotoId));
@@ -230,7 +231,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   }
   async function finishCaptureRun(run: RunningCapture) {
     if (run.batch.analysisClaimed) return;
-    if((run.readingMode==='gemini'||run.readingMode==='terra')&&run.staged?.size){
+    if(isHostedMode(run.readingMode as ReaderMode)&&run.staged?.size){
       await mutate(async()=>{const ids=[...(run.photoIds?.values()??[])].filter(id=>run.staged!.has(id)),response=await api.registerScanPhotos(run.batch.context.sessionId,run.batch.context.id,ids,run.batch.context.captureEpoch);
         for(const clientId of ids){const e=response.session.evidence.find(e=>e.id===run.staged!.get(clientId)!.evidenceId);if(e&&!run.batch.evidenceIds.includes(e.id))run.batch=addSavedScanEvidence(run.batch,e);}return response;});
     }
@@ -261,7 +262,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
         const start = performance.now();
         const input = await readPhoto(file);
         recordScanTiming({ stage: 'gallery-read', ms: performance.now() - start, photos: 1, bytes: file.size });
-        if((transfer.run.readingMode==='gemini'||transfer.run.readingMode==='terra')){if(prepared.reduce((n,i)=>n+i.dataUrl.length*2,0)+input.dataUrl.length*2>SCAN_QUEUE_MAX_BYTES)throw Error('사진 전송 대기 공간 부족');prepared.push({...input,label:file.name});}
+        if(isHostedMode(transfer.run.readingMode as ReaderMode)){if(prepared.reduce((n,i)=>n+i.dataUrl.length*2,0)+input.dataUrl.length*2>SCAN_QUEUE_MAX_BYTES)throw Error('사진 전송 대기 공간 부족');prepared.push({...input,label:file.name});}
         else transfer.uploads.enqueue({ ...input, label: file.name }, input.dataUrl.length * 2);
       } catch { transfer.unread.push(file); }
     }
@@ -280,7 +281,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     transfer.snapshot = transfer.uploads.snapshot();
     setUploading(false);
     if (transfer.unread.length || transfer.snapshot.entries.some(e => e.state === 'failed')) {
-      transfer.phase = 'failed'; showGallery(transfer);if((transfer.run.readingMode==='gemini'||transfer.run.readingMode==='terra')&&transfer.run.staged?.size&&!transfer.run.batch.finished)await finishCaptureRun(transfer.run);return;
+      transfer.phase = 'failed'; showGallery(transfer);if(isHostedMode(transfer.run.readingMode as ReaderMode)&&transfer.run.staged?.size&&!transfer.run.batch.finished)await finishCaptureRun(transfer.run);return;
     }
     try{await finishCaptureRun(transfer.run);galleryRef.current=null;setGallery(null);}catch{transfer.phase='failed';showGallery(transfer);}
   }
@@ -333,12 +334,12 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const photoTools = editable ? <>
         <div className="cw-photo-bar" role="group" aria-label="사진 찍기와 읽기"><div className="cw-photo-actions"><button className="button secondary small-button" aria-label={captureLabel} disabled={locked} onClick={capture}><Camera size={18}/><span>{view.pack.id === 'rummikub' ? personalRummikub ? '받침대' : '판 찍기' : captureLabel}</span></button><button className="button secondary small-button" aria-label={uploadLabel} disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/><span>{view.pack.id === 'rummikub' ? '사진' : uploadLabel}</span></button></div>
         <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={scoped?localArea?.id??localCaptureAreaId:captureAreaId} onChange={scoped?id=>{setLocalCaptureAreaId(id);setLocalTask(undefined);setLocalInputMode('original');}:setCaptureAreaId} disabled={locked||!!cameraRun}/>
-        <LightweightReaderControls terraAvailable={terraAvailable} terraReason={terra?.reason} mode={readerMode} geminiAvailable={geminiAvailable} geminiReason={gemini&&'reason' in gemini?gemini.reason:undefined} geminiModel={gemini?.identity&&'model' in gemini.identity?gemini.identity.model:undefined} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/></div>
+        <LightweightReaderControls terraAvailable={terraAvailable} terraReason={terra?.reason} lunaAvailable={lunaAvailable} lunaReason={luna?.reason} mode={readerMode} geminiAvailable={geminiAvailable} geminiReason={gemini&&'reason' in gemini?gemini.reason:undefined} geminiModel={gemini?.identity&&'model' in gemini.identity?gemini.identity.model:undefined} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/></div>
         {scopedPending&&<section className="panel" aria-label="사진 상태 확인"><p>이 {scopedPending.evidenceIds.length}장은 같은 멈춘 판을 찍은 사진인가요?</p><div className="button-row"><button className="button primary" disabled={locked} onClick={()=>fire(analyzeBatch(scopedPending,true))}>네, 함께 읽기</button><button className="button secondary" disabled={locked} onClick={()=>fire(analyzeBatch({...scopedPending,context:{...scopedPending.context,id:crypto.randomUUID()},evidenceIds:scopedPending.evidenceIds.slice(-1)}))}>마지막 한 장만 읽기</button><button className="button text" onClick={()=>setPendingRead(null)}>지금은 사진만 보관</button></div></section>}
         {visibleJob&&<p className="scan-readout" role="status">{jobConnectionLost&&activeAnalysisJob(visibleJob)?jobAutoPaused?'자동 상태 확인을 멈췄어요. 서버 작업은 계속될 수 있어요.':'상태를 확인하지 못했어요. 서버 작업은 계속될 수 있어요.':numericJobMessage(visibleJob)||analysisJobMessage(visibleJob)}{jobConnectionLost&&<button className="button text small-button" onClick={()=>jobPolling.current?.refresh()}>상태 다시 확인</button>}</p>}
         {jobConnectionLost&&!visibleJob&&<p className="scan-readout" role="status">작업 상태를 확인하지 못했어요.<button className="button text small-button" onClick={()=>jobPolling.current?.refresh()}>상태 다시 확인</button></p>}
         {gallery&&gallery.run.batch.context.ownerId===ownerId && <div className="scan-readout" role="status"><span>{gallery.phase === 'reading' ? '사진을 준비하고 있어요…' : `사진 전송 ${gallery.snapshot.entries.filter(e => e.state === 'saved').length}/${gallery.snapshot.entries.length + gallery.unread.length}${gallery.phase === 'failed' ? ' · 보내지 못한 사진이 남아 있어요.' : ' · 보내는 중…'}`}</span>{gallery.phase === 'failed' && <><button className="button text small-button" disabled={busy || uploading} onClick={() => void retryGallery(galleryRef.current!)}>전송 다시 시도</button><button className="button text small-button" disabled={busy || uploading} onClick={() => void omitGalleryFailures(galleryRef.current!)}>실패한 사진 빼고 마치기</button></>}</div>}
-        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode!=='existing'?((lastScan.readingMode==='gemini'||lastScan.readingMode==='terra')?'선택한 판독기를 사용할 수 없어 사진만 보관했어요.':lastScan.reader&&'task' in lastScan.reader&&lastScan.reader.task&&lastScan.reader.inputMode==='catan-atlas'?'사진을 보관했어요. 새 원본의 기준점을 확인한 뒤 숫자만 읽기를 눌러 주세요.':'로컬 판독기를 사용할 수 없어 사진만 보관했어요.'):!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '사진에서 읽은 내용을 바로 적용했어요. 필요한 부분만 고쳐 주세요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
+        {lastScan && lastScan.context.ownerId === ownerId && (view.pack.id !== 'rummikub' || rummikubReadoutMessage(lastScan.state, lastScan.candidateCount)) && <p role="status" className={`scan-readout ${lastScan.state}`}>{view.pack.id === 'rummikub' ? rummikubReadoutMessage(lastScan.state, lastScan.candidateCount) : lastScan.state === 'analyzing' ? '사진을 읽고 있어요…' : lastScan.state === 'failed' ? (lastScan.error||'사진 읽기에 실패했어요. 원본은 남아 있어요.') : lastScan.state === 'manual' ? (lastScan.readingMode!=='existing'?((lastScan.readingMode==='gemini'||lastScan.readingMode==='luna')?'선택한 판독기를 사용할 수 없어 사진만 보관했어요.':lastScan.reader&&'task' in lastScan.reader&&lastScan.reader.task&&lastScan.reader.inputMode==='catan-atlas'?'사진을 보관했어요. 새 원본의 기준점을 확인한 뒤 숫자만 읽기를 눌러 주세요.':'로컬 판독기를 사용할 수 없어 사진만 보관했어요.'):!canRecognizePhotos(view.pack,ownerId) ? '이 영역은 사진 관측 미지원으로 원본만 보관했어요.' : 'AI가 연결되지 않아 사진만 보관했어요.') : generic ? lastScan.candidateCount ? view.session.assertions.some(a=>a.status==='candidate'&&a.ownerId===ownerId&&a.evidenceIds.some(id=>lastScan.evidenceIds.includes(id))) ? '사진 후보를 확인하고 적용해 주세요.' : '사진에서 읽은 내용을 바로 적용했어요. 필요한 부분만 고쳐 주세요.' : '확인할 수 있는 후보가 없어요. 원본은 보관했어요.' : personalCatan ? '카드 목록과 보유 수량을 확인해 주세요.' : '그림을 확인하고 다른 곳만 고쳐 주세요.'}{lastScan.state === 'failed' && <button className="button text small-button" disabled={locked} onClick={() => fire(analyzeBatch({...lastScan,context:{...lastScan.context,id:crypto.randomUUID()}}))}>다시 읽기</button>}</p>}
   </> : null;
   return <div className={`correction-workspace${view.pack.id === 'rummikub' ? ' rummikub-session' : generic ? ' board-record-session' : ''}${ownerId ? ' is-private' : ' is-public'}`}>
     <header className="correction-heading"><button className="icon-button cw-back" aria-label="내 보드로" disabled={locked} onClick={onBack}><ArrowLeft size={22}/></button><div className="cw-title"><div className="cw-title-line"><h1>{session.name}</h1></div><p><span>{view.pack.title}</span><span>{session.players.length}명</span><span className="cw-saved">{savedLabel}</span></p></div>
@@ -384,13 +385,13 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
       try {
         await flush(PHOTO_INPUT_SAVE_OPTIONS);
         const transfer = { run, unread: [], snapshot: { entries: [], active: false, retainedBytes: 0 }, phase: 'reading' } as unknown as GalleryTransfer;
-        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,(run.readingMode==='gemini'||run.readingMode==='terra')?6:1);
+        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,isHostedMode(run.readingMode as ReaderMode)?6:1);
         galleryRef.current = transfer; showGallery(transfer);
         if (files.length > SCAN_LIMIT) onToast(`처음 ${SCAN_LIMIT}장을 추가해요`);
         await sendGalleryFiles(transfer, files.slice(0, SCAN_LIMIT));
       } catch (reason) { setUploading(false); onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
     }}/>
-    {cameraRun && <CameraDialog parallelUpload={(cameraRun.readingMode==='gemini'||cameraRun.readingMode==='terra')} guidance={cameraRun.guidance} key={cameraRun.batch.context.id} onClose={() => finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
+    {cameraRun && <CameraDialog parallelUpload={isHostedMode(cameraRun.readingMode as ReaderMode)} guidance={cameraRun.guidance} key={cameraRun.batch.context.id} onClose={() => finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
     {canUseCatanFrame&&framePhoto&&definition&&<CatanPhotoFrame photo={framePhoto.photo} sourceSHA={framePhoto.sha} definitionSHA={definition.definitionSHA} initial={currentFrame?.sourceEvidenceId===framePhoto.photo.id?currentFrame:undefined} validate={f=>validatePhotoFrame(f,{evidenceId:framePhoto.photo.id,sourceSHA:framePhoto.sha,definitionSHA:definition.definitionSHA})} onClose={()=>setFramePhoto(null)} onConfirm={f=>{setFrame(f);setFramePhoto(null);}}/>}
     {photo && <PhotoDialog evidence={photo.evidence} region={photo.region} onClose={() => setPhoto(null)} onCrop={async input => { await mutate(() => api.evidence(session.id, { ...input, scope: photo.evidence.scope, ownerId: photo.evidence.ownerId, sourceEvidenceId: photo.evidence.id }), '확대한 사진을 추가했어요'); }}/>} 
     {(busy || working || uploading) && <div className="mutation-indicator" role="status"><Busy label={lastScan?.state === 'analyzing' ? '사진을 읽고 있어요' : uploading || cameraRun ? '사진을 보내고 있어요' : '저장하고 있어요'}/></div>}

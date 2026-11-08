@@ -60,11 +60,11 @@ export async function prepareScanObservation(input:{session:Session;pack:GamePac
  const first=units[0].hosted??units[0].local!;
  return {plan:{version:'scan-observation-plan-v1',id:input.taskId,gameId:first.request.gameId,definitionSHA:first.request.definitionSHA,scope:first.request.scope,anchorEvidenceId:planUnits[0].sourceEvidenceId,units:planUnits},units};
 }
-export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedObservationReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<AnalysisResult>{
+export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedObservationReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;onRows?:(count:number)=>void}):Promise<AnalysisResult>{
  const u=input.scan.units[input.index],unit=input.scan.plan.units[input.index],start=performance.now();if(!u)throw Error('없는 읽기 단위입니다.');
  try{
   const evidence=input.evidence.filter(e=>e.id===u.evidenceId),plan=u.hosted??u.local!;
-  const result=u.hosted?await analyzeHostedObservation({plan:u.hosted,pack:input.pack,session:input.session,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.reader,readImage:input.readImage,timings:input.timings,literal:unit.role!=='anchor'}):await analyzeLocalObservation({plan:u.local!,pack:input.pack,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.localReader!,readImage:input.readImage});
+  const result=u.hosted?await analyzeHostedObservation({plan:u.hosted,pack:input.pack,session:input.session,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.reader,readImage:input.readImage,timings:input.timings,literal:unit.role!=='anchor',onRows:input.onRows}):await analyzeLocalObservation({plan:u.local!,pack:input.pack,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.localReader!,readImage:input.readImage});
   const receipts=result.observationReceipts??[];for(const r of receipts)r.scanUnitId=u.id;
   return {...result,scanBundle:{plan:input.scan.plan,units:[{unitId:u.id,state:'completed',observationCount:receipts.reduce((n,r)=>n+r.result.observations.length,0),elapsedMs:performance.now()-start}],links:[]}};
  }catch{return {assertions:[],summary:'일부 사진을 읽지 못했어요. 원본과 다른 사진의 결과는 남아 있어요.',mode:'live',warnings:['읽기 단위 실패 · 자동 재시도 없음'],scanBundle:{plan:input.scan.plan,units:[{unitId:u.id,state:'failed',error:'analysis-failed',observationCount:0,elapsedMs:performance.now()-start}],links:[]}};}

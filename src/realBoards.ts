@@ -3,16 +3,17 @@ import { useEffect, useState } from 'react';
 // Drawn boards and piece symbols per game, from public/game-art/real-boards/{gameId}/.
 // Complete slot boards and explicitly location-only partial boards may be rendered.
 
-export interface RealSlot { id: string; x: number; y: number; w: number; h: number; capacity?: number; shape?: string; playerCounts?: number[] }
+export interface RealSlot { id: string; x: number; y: number; w: number; h: number; capacity?: number; shape?: string; label?: string; stack?: boolean; playerCounts?: number[] }
 export interface RealArea { id: string; label: string; field: string; scope?: string; accepts?: string[]; ordered?: boolean; slots: RealSlot[]; placement?: string; bounds?: [number, number, number, number] }
 export interface RealNetworkCity { id: string; label: string; x: number; y: number; labelX: number; labelY: number }
 export interface RealNetworkSegment { index: number; x: number; y: number; polygon: [number, number][] }
 export interface RealNetworkRoute { id: number; from: string; to: string; length: number; color: string; colorHex: string; routeType?: 'canal'|'rail'; path: { x1: number; y1: number; x2: number; y2: number }; segments: RealNetworkSegment[] }
 export interface RealNetwork { sourceNote?: string; areaId?:string; colorMeaning?:'route-color'|'neutral-diagram'; cities: RealNetworkCity[]; routes: RealNetworkRoute[] }
-export interface RealBoardVariant {id:string;svg:string;json:string;exclusive?:boolean}
+export interface RealBoardVariant {id:string;svg:string;json:string;exclusive?:boolean;label?:string;placementFrame?:string;fields?:string[]}
 export interface RealBoardVariantOption {id:string;label:string;value:string|number}
 export interface RealBoardVariantSelector {boardField:string;field:string;options:RealBoardVariantOption[]}
-export interface RealBoard { gameId: string; status?: string; recordingMode?: 'location-only'|'interactive-network'|'partial-slots'; svg: string; viewBox: [number, number, number, number]; areas: RealArea[]; network?: RealNetwork; playerCount?: Record<string, { hideAreas?: string[] }>; variants?:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;variant?:string }
+export interface RealBoardLayerView {field:string;property:string;componentIds:string[];label?:string}
+export interface RealBoard { gameId: string; status?: string; recordingMode?: 'location-only'|'interactive-network'|'partial-slots'; svg: string; viewBox: [number, number, number, number]; areas: RealArea[]; network?: RealNetwork; playerCount?: Record<string, { hideAreas?: string[] }>; variants?:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;manualVariantsFor?:string|string[];manualVariantLabel?:string;manualVariantLabels?:Record<string,string>;manualVariantBaseLabel?:string;layerView?:RealBoardLayerView;variant?:string;placementFrame?:string;supportedPlayerCounts?:number[];supportedPlayerCountsByField?:Record<string,number[]> }
 export interface RealAssets { board: RealBoard; symbols: string[];variants:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;selectedVariant:string }
 
 export function realBoardVariantForValue(selector:RealBoardVariantSelector|undefined,boardField:string,value:unknown){
@@ -22,6 +23,37 @@ export function realBoardVariantForValue(selector:RealBoardVariantSelector|undef
 
 export function realSlotAccepts(accepts: string[] | undefined, componentId: string | null | undefined) {
   return !accepts?.length || (!!componentId && accepts.includes(componentId));
+}
+
+// Existing placements use the generic surface's inset coordinates. Version the
+// free SVG frame inside the already-preserved layout identity; never reinterpret
+// untagged saved positions as exact SVG positions.
+const FREE_FRAME='free-board-v1:';
+export const realFreeLayoutVariant=(variant='base')=>FREE_FRAME+variant;
+export const realSlotLayoutVariant=(frame:string)=>'slot-board-v1:'+frame;
+export const isRealFreePlacement=(variant:string|undefined)=>!!variant?.startsWith(FREE_FRAME);
+export const realPlacementVariant=(variant:string|undefined)=>isRealFreePlacement(variant)?variant!.slice(FREE_FRAME.length):variant??'base';
+
+/** A view may be specific to one record field; older assets keep all their views. */
+export const realBoardVariantsFor=(board:RealBoard|undefined,field:string)=>(board?.variants??[]).filter(v=>!v.fields||v.fields.includes(field));
+
+export const realManualVariantsFor=(board:RealBoard|undefined,field:string)=>!board?.variantSelector&&(Array.isArray(board?.manualVariantsFor)?board.manualVariantsFor.includes(field):board?.manualVariantsFor===field);
+
+/** Restore a view from explicit saved coordinate identities, never from mission text,
+ * object values or untagged legacy positions. Mixed or shared frames stay at base. */
+export function realBoardViewForPlacements(board:RealBoard|undefined,field:string,placements:readonly({layoutVariant?:string}|undefined)[]){
+  if(!board||!realManualVariantsFor(board,field))return 'base';
+  const views=[{id:'base',placementFrame:board.placementFrame},...realBoardVariantsFor(board,field)],found=new Set<string>();
+  for(const placement of placements){
+    const tag=placement?.layoutVariant;
+    if(!tag)continue;
+    const matches=views.filter(v=>v.placementFrame&&(tag===realSlotLayoutVariant(v.placementFrame)||tag===realFreeLayoutVariant(v.placementFrame)));
+    // Identical geometry can support several physical subsets; coordinates do not
+    // establish which subset or scenario phase is currently present.
+    if(matches.length>1)return 'base';
+    if(matches.length===1)found.add(matches[0].id);
+  }
+  return found.size===1?[...found][0]:'base';
 }
 
 const cache = new Map<string, Promise<RealAssets | null>>();
@@ -44,7 +76,7 @@ export function loadRealAssets(gameId: string,selectedVariant='base'): Promise<R
       board=await variantResponse.json() as RealBoard;
       if(board.variant!==selectedVariant)return null;
     }
-    board={...board,variantSelector:baseBoard.variantSelector,variants};
+    board={...board,variantSelector:baseBoard.variantSelector,manualVariantsFor:baseBoard.manualVariantsFor,manualVariantLabel:baseBoard.manualVariantLabel,manualVariantLabels:baseBoard.manualVariantLabels,manualVariantBaseLabel:baseBoard.manualVariantBaseLabel,variants};
     const locationOnly = board.status === 'partial' && board.recordingMode === 'location-only' && board.areas.some(area => area.placement === 'location-only' && area.slots.length === 0);
     const network = board.network;
     const interactiveNetwork = board.status === 'partial' && board.recordingMode === 'interactive-network' && !!network && board.areas.some(area => area.id === network.areaId);
@@ -76,11 +108,13 @@ export function realAreasFor(board: RealBoard, field: string, players?: number) 
 
 /** Verified, variable-size collections on a complete board, not guessed slots. */
 export function realFreeAreasFor(board: RealBoard, field: string, players?: number) {
-  if (board.status !== 'complete') return [];
+  const verifiedPartial=board.status==='partial'&&board.recordingMode==='partial-slots';
+  if (board.status !== 'complete'&&!verifiedPartial) return [];
   const [vx, vy, vw, vh] = board.viewBox;
   return realAreasFor(board, field, players).filter(area => {
     const b = area.bounds;
-    return area.slots.length === 0 && b?.length === 4 && b.every(Number.isFinite)
+    // Cropped location-only maps retain their established inset coordinate frame.
+    return (!verifiedPartial||area.placement==='free-pieces') && area.placement !== 'location-only' && area.slots.length === 0 && b?.length === 4 && b.every(Number.isFinite)
       && b[2] > 0 && b[3] > 0 && b[0] >= vx && b[1] >= vy
       && b[0] + b[2] <= vx + vw && b[1] + b[3] <= vy + vh;
   });

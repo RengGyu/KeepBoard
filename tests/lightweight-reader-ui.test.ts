@@ -246,10 +246,10 @@ test('result overlay shows read values on the boxes, marks unreadable for review
  assert.match(html,/<details class="lightweight-reader is-result" open="">/);assert.match(html,/lw-photo-review is-compact/);assert.match(html,/<span>확인 필요<\/span>/,'unreadable has the shared review label');
  assert.match(html,/<details class="lw-list-fold"><summary>목록으로 보기 3개/);assert.match(html,/틀린 값이 있으면 아래 ‘직접 고치기’에서 고칠 수 있어요/);assert.doesNotMatch(html,/명시적으로 반영해 주세요/);
 });
-test('without a chosen provider the photo read stays on Terra (loading or unavailable): preserved photo, clear blocker, never a silent existing-AI start',async()=>{
+test('without a chosen provider the photo read stays on Terra high (loading or unavailable): preserved photo, clear blocker, never a silent existing-AI start',async()=>{
  const {default:SessionWorkspace}=await import('../src/SessionWorkspace.tsx'),{api}=await import('../src/api.ts'),{loadPhotoDefinitions}=await import('../src/photoDefinitions.ts');await loadPhotoDefinitions();
  const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob};
- const terra=(available:boolean)=>async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'terra-game-observation-v1',available,cloudSupported:true,identity:null,...(available?{}:{reason:'Terra 연결 설정이 없어요.'})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}} as any);
+ const terra=(available:boolean)=>async()=>({version:'local-reader-capabilities-v1',readers:[{kind:'terra-high-game-observation-v1',available,cloudSupported:true,identity:null,...(available?{}:{reason:'Terra high 연결 설정이 없어요.'})}],definitions:{indexSHA:'',version:'game-photo-definitions-v1',count:120}} as any);
  for(const [label,readers,wantStart] of [['terra offered',terra(true),true],['terra unavailable',terra(false),false],['capabilities still loading',()=>new Promise<any>(()=>{}),false],['capabilities failed',async()=>{throw new Error('offline');},false]] as const){
   const f=candidateFixture();Object.assign(f.view.session,{captureEpoch:'epoch',notes:{},activity:[],turnInstanceId:'turn'});const bodies:any[]=[];
   api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=readers as any;api.startAnalysisJob=async(_id,body)=>{bodies.push(body);return{job:{id:'job',sessionId:f.view.session.id,state:'completed',evidenceIds:body.evidenceIds,captureEpoch:'epoch',createdAt:'',updatedAt:''}};};
@@ -257,7 +257,7 @@ test('without a chosen provider the photo read stays on Terra (loading or unavai
   try{await new Promise(r=>setTimeout(r,0));ui.render();await new Promise(r=>setTimeout(r,0));ui.render();
    const c=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(c.props.mode,'terra',label);c.props.onRead();await new Promise(r=>setTimeout(r,0));
    assert.equal(bodies.length,wantStart?1:0,label);
-   if(wantStart){assert.equal(bodies[0].reader.kind,'terra-game-observation-v1',label);assert.deepEqual(Object.keys(bodies[0].reader).sort(),['areaId','definitionSHA','kind']);}
+   if(wantStart){assert.equal(bodies[0].reader.kind,'terra-high-game-observation-v1',label);assert.deepEqual(Object.keys(bodies[0].reader).sort(),['areaId','definitionSHA','kind']);}
   }finally{ui.dispose();}
  }
  api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;

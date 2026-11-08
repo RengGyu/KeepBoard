@@ -14,8 +14,7 @@ test('physical-unit claims are separate from quantity, with versioned source met
  const legacy=decodeTerraGameObservation(envelope([item()]),request,definition);assert.equal(legacy.hostedWire.id,'terra-game-wire-v1');assert.equal(legacy.hostedWire.physicalUnits,undefined);
  assert.throws(()=>decodeTerraGameObservation(envelope([item('probably-single')]),request,definition));
 });
-test('a pinned pre-unit Terra job retains its original adapter and body shape',()=>{
- const legacy=hostedReaderFor({kind:'terra-game-observation-v1',model:'gpt-6.1-terra',api:'responses',reasoningEffort:'low',imageDetail:'high',maxOutputTokens:32768,adapterVersion:'literal-named-fill-original-v1',automaticRetries:0,timeoutMs:240000});
- assert.equal(legacy.identity.kind,'terra-game-observation-v1');assert.equal('adapterVersion' in legacy.identity&&legacy.identity.adapterVersion,'literal-named-fill-original-v1');
+test('a retired Terra job is never silently sent to Luna, while old payload shape remains readable',()=>{
+ assert.throws(()=>hostedReaderFor({kind:'terra-game-observation-v1',model:'gpt-6.1-terra',api:'responses',reasoningEffort:'low',imageDetail:'high',maxOutputTokens:32768,adapterVersion:'literal-named-fill-original-v1',automaticRetries:0,timeoutMs:240000}),/이전 Terra|자동 대체/);
  const body=buildTerraGameBody(request,definition,Buffer.from('image'),'image/png','literal-named-fill-original-v1');assert.equal((body.text.format.schema as any).properties.items.items.properties.physicalUnit,undefined);
 });

@@ -38,13 +38,15 @@ export async function runHostedScan(input:{id:string;task:AnalysisTask;jobs:Scan
   photoDefinition(task.prepared.pack,scan.plan.definitionSHA);
   await taskTarget(input.store,input.pins,task);
   await input.jobs.update(input.id,{state:'running',timings:{prepareMs:performance.now()-start,...images.metrics()}});
-  const owned=new Set<number>(),live=new Map<number,AnalysisResult>();
+  const owned=new Set<number>(),live=new Map<number,AnalysisResult>(),rowCounts=new Map<number,number>();let saving=false;
+  // Progress is best effort: at most one write in flight, and a failed write never affects the reading.
+  const reportRows=(index:number,count:number)=>{rowCounts.set(index,count);if(saving)return;saving=true;void Promise.resolve().then(()=>input.jobs.update(input.id,{liveRows:[...rowCounts.values()].reduce((a,b)=>a+b,0)})).catch(()=>undefined).finally(()=>{saving=false;});};
   await Promise.allSettled(scan.units.map(async(_unit,index)=>{
    const previous=await input.jobs.batchResult(input.id,index);if(previous)return;
    const claim=await input.jobs.claimBatch(input.id,index);if(!claim)return;owned.add(index);
    // A scope failure before dispatch is terminal and must not manufacture a provider request.
    let result:AnalysisResult;const timings:Record<string,number>={};
-   try{await taskTarget(input.store,input.pins,task);result=await analyzeScanUnit({scan,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:input.reader,readImage:images.read,timings});}
+   try{await taskTarget(input.store,input.pins,task);result=await analyzeScanUnit({scan,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:input.reader,readImage:images.read,timings,onRows:n=>reportRows(index,n)});}
    catch{result={assertions:[],warnings:['범위가 바뀌어 이 단위의 읽기를 중단했습니다.'],summary:'원본 보관',mode:'live',scanBundle:{plan:scan.plan,units:[{unitId:scan.units[index].id,state:'interrupted',error:'stale',observationCount:0}],links:[]}};}
    live.set(index,result);await input.jobs.finishBatch(input.id,index,claim,result,timings);
   }));
