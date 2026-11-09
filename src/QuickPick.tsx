@@ -6,7 +6,7 @@ import { Minus, Plus } from 'lucide-react';
 export interface PickOption<T> { value: T; label: string; art?: ReactNode }
 
 /** A row (or grid, when options carry art) of choices; the current one is pressed. "?" sets unknown. */
-export function ChipPick<T extends string | number | boolean>({ label, options, value, onChange, disabled = false, unknown = true }: { label: string; options: PickOption<T>[]; value: T | null | undefined; onChange: (value: T | null) => void; disabled?: boolean; unknown?: boolean }) {
+export function ChipPick<T extends string | number | boolean>({ label, options, value, onChange, disabled = false, unknown = true, onNone }: { onNone?: () => void; label: string; options: PickOption<T>[]; value: T | null | undefined; onChange: (value: T | null) => void; disabled?: boolean; unknown?: boolean }) {
   const withArt = options.some(option => option.art);
   // Long lists (a few games have 17+ shapes) show the first row or two; the current value always stays visible.
   const [all, setAll] = useState(false);
@@ -16,6 +16,7 @@ export function ChipPick<T extends string | number | boolean>({ label, options, 
     {shown.map(option => <button type="button" key={String(option.value)} aria-pressed={value === option.value} aria-label={withArt ? option.label : undefined} disabled={disabled} onClick={() => onChange(option.value)}>{option.art}<span>{option.label}</span></button>)}
     {long && <button type="button" className="qp-more" aria-expanded={all} onClick={() => setAll(!all)}>{all ? '접기' : `+${options.length - shown.length}`}</button>}
     {unknown && <button type="button" className="qp-unknown" aria-pressed={value == null} aria-label={`${label} 모름`} disabled={disabled} onClick={() => onChange(null)}>?</button>}
+    {onNone && <button type="button" className="qp-none" disabled={disabled} onClick={onNone}>없음</button>}
   </div></fieldset>;
 }
 

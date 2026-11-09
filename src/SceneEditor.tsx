@@ -14,6 +14,9 @@ import { GameComponentArt } from './GameComponentArt';
 import { PlayerPiece } from './ui';
 import { groupSceneComponents, deleteSceneGroupSelection, type SceneGroup } from './sceneGroups';
 import './scene-editor.css';
+import {BulkBar} from './BulkBar';
+import {suggestSlots} from '../shared/catanSlotSuggestion';
+import {ChipPick} from './QuickPick';
 
 export interface SceneEditorProps {
   value: unknown;
@@ -84,6 +87,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   const [pendingIncoming, setPendingIncoming] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [multiple, setMultiple] = useState(false);
+  const [tapping, setTapping] = useState(false);
   const [selection, setSelection] = useState<string[]>([]);
   const [inlineNumberIds, setInlineNumberIds] = useState<string[]>([]);
   const selectedIds = multiple ? selection.filter(id => scene.components.some(c => c.id === id)) : selectedId ? [selectedId] : [];
@@ -106,6 +110,8 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   const catalog = catalogOnly || !!ownerId && !scene.components.some(c => slotPoint(c.location));
   const selected = scene.components.find(c => c.id === selectedId) ?? null;
   const picked = scene.components.filter(c => selectedIds.includes(c.id));
+  const unknownPieces = scene.components.filter(c => c.kind === 'unknown' && c.quantity !== 0);
+  const suggestedCount = game === 'catan-base' && !catalogOnly && !multiple && !adding ? suggestSlots(scene).length : 0;
   const groups = useMemo(() => groupSceneComponents(scene), [scene]);
   const activeGroup = groups.find(g => g.key === activeGroupKey && g.ids.includes(selectedId ?? ''));
   const inlineNumberSelected = activeGroup?.component.kind === 'number-token' && selected?.kind === 'terrain';
@@ -135,6 +141,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   }, [dirty]);
   function selectComponent(id: string, _armMove = false) {
     if (adding) return;
+    if (tapping && toggleBuilding(id)) return;
     if (multiple) { setInlineNumberIds(ids => ids.filter(item => item !== id)); setSelection(ids => ids.includes(id) ? ids.filter(item => item !== id) : [...ids, id]); return; }
     setSelectedId(id); setMoveMode(false); setActiveGroupKey(null);
   }
@@ -158,6 +165,25 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   }
   // One-tap type fix: a misread road that is really a city (or the reverse) changes kind and lands on the
   // nearest free slot of the new type next to where it was, instead of dropping off the board.
+  function toggleBuilding(id: string) {
+    const kind = sceneRef.current.components.find(c => c.id === id)?.kind;
+    if (kind !== 'settlement' && kind !== 'city') return false;
+    const result = changeSceneComponentKind(sceneRef.current, id, kind === 'city' ? 'settlement' : 'city');
+    if (result.status === 'updated') commit(result.scene); else setMessage({ tone: 'error', text: result.message });
+    return true;
+  }
+  function markUnknownAsSettlements(ids: string[]) {
+    let next = sceneRef.current, skipped = 0;
+    for (const id of ids) { const result = changeSceneComponentKind(next, id, 'settlement'); if (result.status === 'updated') next = result.scene; else skipped++; }
+    commit(next); setMultiple(false); setSelectedId(null); setMoveMode(false); setTapping(true);
+    setMessage(skipped ? { tone: 'error', text: `${skipped}개는 같은 자리에 다른 부품이 있어 바꾸지 못했어요.` } : null);
+  }
+  function placeSuggested() {
+    let next = sceneRef.current, placed = 0;
+    for (const suggestion of suggestSlots(next)) { const result = moveSceneComponent(next, suggestion.id, suggestion.location, { intent: 'correct' }); if (result.status !== 'rejected' && result.status !== 'noop') { next = result.scene; placed++; } }
+    commit(next); setSelectedId(null); setMoveMode(false);
+    setMessage({ tone: 'ok', text: `${placed}개를 놓았어요. 틀린 것만 끌어서 옮겨 주세요.` });
+  }
   function changeKindInPlace(id: string, kind: SceneKind) {
     const before = sceneRef.current.components.find(c => c.id === id);
     const result = changeSceneComponentKind(sceneRef.current, id, kind);
@@ -202,7 +228,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
   function beginDrag(event: ReactPointerEvent, id: string) {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     event.stopPropagation();
-    if (multiple) { selectComponent(id); return; }
+    if (multiple || tapping) { selectComponent(id); return; }
     if (adding) return;
     if (catalogOnly) { selectComponent(id); return; }
     const state: DragState = { id, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, active: false, point: null, snap: null, offBoard: false };
@@ -270,6 +296,8 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
     {photos.length>0&&<p className="small muted">사진에서 빠진 부품은 ‘추가’로 넣고, 가려진 값은 모름으로 남겨도 돼요.</p>}
     {pendingIncoming && <div className="se-banner"><span>새 사진 결과가 있어요. 지금 정정을 반영한 뒤 볼 수 있어요.</span></div>}
     {message && <p className={`se-message ${message.tone}`} role="status">{message.text}</p>}
+    {suggestedCount > 0 && <BulkBar message={`자리를 못 찾은 부품 ${suggestedCount}개`} actions={[{ label: '추천대로 놓기', onClick: placeSuggested }]} tapping={false} tapHint="" onDone={() => {}}/>}
+    {!catalogOnly && !multiple && !adding && (unknownPieces.length > 0 || tapping) && <BulkBar message={`종류를 모르는 부품 ${unknownPieces.length}개`} actions={[{ label: '전부 마을로', onClick: () => markUnknownAsSettlements(unknownPieces.map(c => c.id)) }]} tapping={tapping} tapHint="도시인 건물만 판에서 눌러 주세요" onDone={() => setTapping(false)}/>}
     {multiple && <div className="se-batch" aria-label="여러 부품 수정"><strong>{picked.length}개 선택</strong><button className="button text small-button" onClick={() => { setSelection([]); setInlineNumberIds([]); }} disabled={!picked.length}>전체 해제</button>
       {picked.length > 0 && picked.every(c => canEditOwner(c.kind)) && <OwnerColors game={game} players={players} value={picked.every(c => c.ownerId === picked[0].ownerId) ? picked[0].ownerId : undefined} onChange={ownerId => commit(editSceneSelection(scene, selectedIds, { ownerId }))}/>}
       <button className="button secondary small-button se-danger" disabled={!picked.length} onClick={() => commit(deleteSceneGroupSelection(scene, selectedIds, inlineNumberIds))}><Trash2 size={14}/>선택 삭제</button>
@@ -290,7 +318,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
             {!catalogOnly && boardSlotTypes(draft.kind).length > 0 && <><button className="button text small-button" onClick={() => finishAdd()}>보드 밖에 추가</button></>}
           </>}
         </div> : selected && !multiple && <div className="se-form"><header className="se-form-head"><GameComponentArt game={game} {...artProps(inspected!, players)} size={48}/><div><h4>{componentTitle(inspected!)}</h4><span className="small muted">{friendlyLocation(selected.location)}</span></div><button className="icon-button" aria-label="선택 해제" onClick={() => { setSelectedId(null); setMoveMode(false); }}><X size={18}/></button></header>
-          {!catalogOnly && PIECE_FAMILY.includes(selected.kind) && <fieldset className="se-pick"><legend>종류</legend><div className="se-pick-grid is-kinds">{PIECE_FAMILY.map(kind => <button type="button" key={kind} aria-pressed={selected.kind === kind} aria-label={pieceName(kind)} onClick={() => changeKindInPlace(selected.id, kind)}><GameComponentArt game={game} {...artProps({ ...inspected!, kind }, players)} size={40}/><span>{pieceName(kind)}</span></button>)}</div></fieldset>}
+          {!catalogOnly && (PIECE_FAMILY.includes(selected.kind) || selected.kind === 'unknown') && <ChipPick label="종류" unknown={false} value={selected.kind} options={PIECE_FAMILY.map(kind => ({ value: kind, label: pieceName(kind), art: <GameComponentArt game={game} {...artProps({ ...inspected!, kind }, players)} size={40}/> }))} onChange={kind => { if (kind) changeKindInPlace(selected.id, kind as SceneKind); }} onNone={() => { commit(editSceneSelection(scene, [selected.id], 'delete')); setSelectedId(null); setMoveMode(false); }}/>}
           {activeGroup && activeGroup.ids.length > 1 && <div className="se-group-members" aria-label="묶음의 개별 부품">{activeGroup.ids.map((id, index) => { const member = scene.components.find(c => c.id === id)!; return <button key={id} className={id === selectedId ? 'selected' : ''} aria-pressed={id === selectedId} onClick={() => { setSelectedId(id); setMoveMode(false); }}>{index + 1}<span>{friendlyLocation(member.location)}</span></button>; })}</div>}
           <PieceFields game={game} catalogOnly={catalogOnly} component={inspected!} players={players} onPatch={patch => {
             patchComponent(selected.id, patch);
@@ -300,7 +328,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
             }
           }}/>{!inlineNumberSelected && <details><summary>다른 종류로 바꾸기</summary><select aria-label="부품 종류 바꾸기" value={selected.kind} onChange={event => applyEdit(changeSceneComponentKind(scene, selected.id, event.target.value as SceneKind))}>{SCENE_KINDS.filter(kind => !catalogOnly || kind === selected.kind || ['resource-card', 'development-card', 'deck', 'token', 'container', 'unknown'].includes(kind)).map(kind => <option key={kind} value={kind}>{pieceName(kind)}</option>)}</select></details>}
           <div className="button-row">{!catalogOnly && !inlineNumberSelected && boardSlotTypes(selected.kind).length > 0 && <button className="button secondary small-button" onClick={() => { setMoveMode(!moveMode); setView('board'); requestAnimationFrame(() => svgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })); }}>자리 옮기기</button>}{!catalogOnly && !inlineNumberSelected && slotPoint(selected.location) && <button className="button text small-button" onClick={() => placeComponent(selected.id, { type: 'unplaced', id: null })}>보드에서 빼기</button>}<button className="button secondary small-button se-danger" onClick={() => { if (inlineNumberSelected) patchComponent(selected.id, { number: null }); else commit(editSceneSelection(scene, [selected.id], 'delete')); setSelectedId(null); setMoveMode(false); }}><Trash2 size={14}/>{inlineNumberSelected ? '숫자 지우기' : '삭제'}</button></div>
-          {onReadDetail&&!dirty&&<button className="button text small-button" disabled={busy} onClick={()=>onReadDetail(selected.id)}>이 실물 근접 사진으로 보충</button>}
+          {onReadDetail&&!dirty&&<button className="button text small-button" disabled={busy} onClick={()=>onReadDetail(selected.id)}>이 부분 추가로 찍기</button>}
           {selected.evidenceId && onEvidence && <button className="button text small-button" onClick={() => onEvidence(selected.evidenceId!, selected.region ?? undefined)}>원본 보기</button>}
         </div>}
       </aside>

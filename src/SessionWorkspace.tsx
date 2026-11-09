@@ -20,6 +20,8 @@ import { CatanOverview } from './CatanOverview';
 import { SceneWorkspace } from './SceneWorkspace';
 import { RummikubWorkspace } from './RummikubWorkspace';
 import {GameEssentials} from './GameEssentials';
+import {BulkBar} from './BulkBar';
+import {readingGaps} from './readingGaps';
 import { PlayersDialog } from './Dialogs';
 import { OwnerColors } from './SceneEditor';
 import { CameraDialog, PhotoDialog, type PhotoInput } from './Capture';
@@ -73,6 +75,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const gemini=readers?.readers.find(r=>r.kind==='gemini-game-observation-v1'),geminiAvailable=!!gemini?.available;
   // Keep the production reader fixed unless the user explicitly changes the optional settings.
   const [readerMode,setReaderMode]=useState<ReaderMode>('terra');
+  const [gapsDismissedAt,setGapsDismissedAt]=useState('');
   const luna=readers?.readers.find(r=>r.kind==='luna-game-observation-v1'),lunaAvailable=!!luna?.available,terra=readers?.readers.find(r=>r.kind==='terra-high-game-observation-v1'),terraAvailable=!!terra?.available;
   const hostedMode=isHostedMode(readerMode),hostedAvailable=readerMode==='terra'?terraAvailable:readerMode==='luna'?lunaAvailable:geminiAvailable;
   // A scoped scan keeps every selected current-epoch photo as a separate reading unit.
@@ -311,6 +314,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const owner = ownerId ? session.players.find(player => player.id === ownerId) : undefined;
   const editable = !privateLocked && !readonlyPublic;
   const capture = () => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()));
+  const gaps=readingGaps(session.assertions,ownerId),gapKey=`${ownerId??'public'}:${gaps?.unread}/${gaps?.total}`,gapsDismissed=gapsDismissedAt===gapKey;
   // Phone dock: the panels under the board open from one row of chips, one at a time, instead of
   // stacking full-width disclosure rows. It drives the existing <details> elements, so their state stays theirs.
   const dockItems = [
@@ -357,13 +361,14 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
         {view.pack.id !== 'rummikub' && !generic && !hasPhotos && !gallery && !cameraRun && <section className="capture-start" aria-label="첫 사진 찍기"><Camera className="capture-start-mark" size={22} aria-hidden="true"/><div><h2>{personalRummikub ? '내 받침대를 한 장 찍어 두세요' : personalCatan ? '내 카드를 한 장 찍어 두세요' : '판을 위에서 한 장 찍어 주세요'}</h2><p>{personalRummikub ? '숫자와 색이 보이게 찍어 주세요.' : personalCatan ? '손패와 개인 카드가 보이게 찍어 주세요.' : generic?'사진을 남기고 상태는 직접 기록해요.':'판 전체가 들어오게 찍으면 그림으로 바꿔 고칠 수 있어요.'}</p></div></section>}
         {personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
         {scanProgress&&visibleJob&&activeAnalysisJob(visibleJob)&&<ScanProgressPreview view={view} progress={scanProgress}/>}
+        {gaps&&!gapsDismissed&&!(visibleJob&&activeAnalysisJob(visibleJob))&&<BulkBar disabled={locked} message={`읽기 어려운 부분이 ${gaps.unread}곳 있어요. 그 부분을 더 가까이 추가로 찍어 주세요.`} actions={[{label:'추가로 찍기',onClick:capture},{label:'괜찮아요',onClick:()=>setGapsDismissedAt(gapKey)}]} tapping={false} tapHint="" onDone={()=>{}}/>}
         {view.pack.id === 'rummikub' ? <RummikubWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onEvidence={(evidence, region) => setPhoto({ evidence, region })} hasPhotos={hasPhotos} captureLabel={captureLabel} onCapture={gallery || cameraRun ? undefined : () => fire(flush(PHOTO_INPUT_SAVE_OPTIONS).then(() => openCamera()))} onOpenPublic={() => fire(changeOwner(undefined))} onReread={(scoped?localEnabled:status?.configured) && currentPhotos.length > 0 && !(visibleJob&&activeAnalysisJob(visibleJob)) ? () => fire(readStoredPhotos()) : undefined}/>
           : !generic && <SceneWorkspace key={`scene:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save => { editorSave.current = save; }} onReadDetail={hostedMode&&hostedAvailable?(target)=>{detailTarget.current=target;upload.current?.click();}:undefined} onEvidence={(evidence, region) => setPhoto({ evidence, region })}/>}
         {!wide && <div className="board-dock" ref={dockRoot} role="toolbar" aria-label="보드 아래 메뉴">{dockItems.filter(item => dockKeys.split(',').includes(item.key)).map(({ key, label, Icon }) => <button type="button" key={key} className="dock-chip" aria-expanded={dockOpen === key} onClick={() => toggleDock(key)}><Icon size={16} aria-hidden="true"/>{label}</button>)}</div>}
         {/* On a phone the board leads; the scan tools sit right under it. */}
         {!wide && photoTools && <details className="cw-mobile-photo-tools" open={photoToolsOpen??(!snapshot&&!readingKey)} onToggle={event=>setPhotoToolsOpen(event.currentTarget.open)}><summary><Camera size={18}/>스캔·사진{visibleJob&&activeAnalysisJob(visibleJob)&&<span role="status">읽는 중…</span>}{visibleJob?.state==='failed'&&<span role="status">읽기 확인 필요</span>}</summary>{photoTools}</details>}
         <ScanObservationResults view={view} ownerId={ownerId}/>
-        {view.pack.id !== 'rummikub' && <GameEssentials key={`essentials:${ownerId??'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save=>{essentialsSave.current=save;}} onEvidence={(evidence,region)=>setPhoto({evidence,region})}/>}
+        {view.pack.id !== 'rummikub' && <GameEssentials key={`essentials:${ownerId??'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onReadyToSave={save=>{essentialsSave.current=save;}} onEvidence={(evidence,region)=>setPhoto({evidence,region})} onReadDetail={hostedMode&&hostedAvailable?(target)=>{detailTarget.current=target;upload.current?.click();}:undefined}/>}
       </div>
       <aside className="cw-side" aria-label="사진과 차례·메모">
         {wide && photoTools}
