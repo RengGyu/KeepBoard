@@ -13,7 +13,7 @@ export function AzulScoreTrack({ value, busy, onSave }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const board = assets?.board as (RealBoard & { numericTracks?: NumericTrack[] }) | undefined;
-  const track = board?.numericTracks?.find(item => item.id === 'score' && item.field === 'score' && item.scope === 'player');
+  const track = board?.numericTracks?.find(item => item.field === 'score' && item.scope === 'player');
   if (!track) return null;
 
   const current = scoreTrackValue(value, track);

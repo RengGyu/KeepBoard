@@ -17,18 +17,18 @@ export function genericCandidateValue(value:unknown,rawPack:GamePack,field:strin
  if(definition.type!=='json'){if(typeof value!=='number'||!Number.isFinite(value))throw new Error('보이는 숫자만 기록하세요.');return value;}
  const sources=evidence.filter(e=>e.kind==='photo'&&(ownerId?e.ownerId===ownerId&&e.scope==='player':!e.ownerId&&e.scope==='public'));
  const prepared=freshIds?((pack.runtime?.source.gameId??pack.id)==='splendor'?normalizeSplendorModelRecord(value,warnings):normalizeGameModelRecord(value,pack,warnings,sources.filter(e=>e.captureEpoch===sources[0]?.captureEpoch).map(e=>e.id))):value;
- const record=validateGenericRecord(prepared as Value,pack,field,sources.map(e=>e.id),{mode:'ai'});
+ const record=validateGenericRecord(prepared as Value,pack,field,sources.map(e=>e.id),{mode:'ai',spatialOwnerId:ownerId});
  if(!record.pieces.length)throw new Error('확인한 실물이 없는 결과입니다. 기존 기록을 비우지 않았어요.');
  const crops=new Set<string>();
  const pieces=record.pieces.map(p=>{
   if(p.componentId!==null&&!pack.runtime!.components.some(c=>c.id===p.componentId))throw new Error('알 수 없는 구성물 종류입니다.');
   if(p.variant!==null&&(!p.componentId||!recognizedVariants(pack,p.componentId).includes(p.variant)))throw new Error('알 수 없는 대표 그림입니다.');
   if(!p.evidenceId||!sources.some(e=>e.id===p.evidenceId))throw new Error('실제 읽은 원본을 연결해 주세요.');
-  if(Object.hasOwn(p,'placement'))throw new Error('사진 좌표를 게임판 자리로 추정하지 않습니다.');
+  if(Object.hasOwn(p,'placement')&&!p.spatial)throw new Error('사진 좌표를 게임판 자리로 추정하지 않습니다.');
   if(p.region){const key=JSON.stringify([p.evidenceId,p.region]);if(crops.has(key))throw new Error('동일 원본 영역이 중복된 결과입니다.');crops.add(key);}
   if(p.label.length>500||p.anchor.length>300)throw new Error('관측 설명이 너무 깁니다.');
   const clearSingle=freshIds&&(pack.runtime?.source.gameId??pack.id)==='splendor'&&p.readout&&['development','noble'].includes(p.readout.kind??'')&&!/더미|뒷면|pile|stack|back|deck|추정|불확실|정체\s*불명|종류\s*불명|가려|가림/i.test(p.label);
-  return {id:freshIds?randomUUID():p.id,componentId:p.componentId,variant:p.variant,quantity:clearSingle&&p.quantity===null?1:p.quantity,label:p.label,anchor:p.anchor,evidenceId:p.evidenceId,region:p.region??null,...(p.readout?{readout:p.readout}:{})};
+  return {id:freshIds?randomUUID():p.id,componentId:p.componentId,variant:p.variant,quantity:clearSingle&&p.quantity===null?1:p.quantity,label:p.label,anchor:p.anchor,evidenceId:p.evidenceId,region:p.region??null,...(p.readout?{readout:p.readout}:{}),...(p.spatial?{spatial:p.spatial}:{}),...(p.spatialAlternatives?{spatialAlternatives:p.spatialAlternatives}:{}),...(p.spatial&&p.placement?{placement:p.placement}:{})};
  });
  return {version:'game-component-record-v1',pieces} as unknown as Value;
 }

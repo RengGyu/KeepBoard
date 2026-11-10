@@ -24,10 +24,11 @@ export function linkComponents(session:Session,pack:GamePack,request:ComponentLi
  const targetRecord=componentRecord(current);if(current&&!targetRecord)throw Error('기존 기록 형식은 그대로 보존됩니다. 다른 연결 영역을 선택해 주세요.');
  const corrections=r.corrections??selected;if(!Array.isArray(corrections)||corrections.length!==selected.length||new Set(corrections.map(p=>p.id)).size!==selected.length||corrections.some(p=>!selected.some(o=>o.id===p.id)))throw Error('선택한 실물만 정정할 수 있어요.');
  const added:GenericPiece[]=[];for(const original of selected){if(already.some(x=>x?.origin.pieceId===original.id))continue;const p=structuredClone(corrections.find(p=>p.id===original.id)!);
-  if(p.evidenceId!==original.evidenceId||!same(p.region,original.region)||!same(p.linkOrigin,original.linkOrigin)||!same(p.placement,original.placement))throw Error('연결하면서 원본·사진 영역·실물 연결을 바꿀 수 없어요.');
+  if(p.evidenceId!==original.evidenceId||!same(p.region,original.region)||!same(p.linkOrigin,original.linkOrigin)||!same(p.placement,original.placement)||!same(p.spatial,original.spatial)||!same(p.spatialAlternatives,original.spatialAlternatives))throw Error('연결하면서 원본·사진 영역·실물 연결을 바꿀 수 없어요.');
   if((targetRecord?.pieces??[]).some(q=>q.id===p.id))throw new ConflictError();
   const origin=p.linkOrigin??{assertionId:source.id,pieceId:p.id,field:source.field,...(source.ownerId?{ownerId:source.ownerId}:{})};
   if(p.placement&&!runtimeBinding(pack,r.target.field)?.areaIds.includes(p.placement.areaId)){if(r.clearPlacement!==true)throw Error('다른 영역의 배치는 추측하지 않아요. 배치하지 않고 옮기기를 확인해 주세요.');origin.previousPlacement=structuredClone(p.placement);delete p.placement;}
+  if(p.spatial&&p.spatial.source.partition==='player_public'){p.spatial.boundOwnerId=r.target.ownerId??null;for(const alternative of p.spatialAlternatives??[])if(alternative.source.partition==='player_public')alternative.boundOwnerId=r.target.ownerId??null;}
   p.linkOrigin=origin;added.push(p);
  }
  const staged=structuredClone(session);accepted(staged,pack,r.target.field,r.target.ownerId,{version:'game-component-record-v1',pieces:[...(targetRecord?.pieces??[]),...added]});

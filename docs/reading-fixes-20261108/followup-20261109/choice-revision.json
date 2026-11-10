@@ -1,0 +1,131 @@
+{
+  "changes": [
+    {
+      "gameId": "sagrada",
+      "componentId": "dice",
+      "propertyId": "dieValue",
+      "before": {
+        "id": "dieValue",
+        "type": "integer",
+        "label": "윗면 눈",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "주사위 색·윗면 값·창문/공급/라운드 위치."
+      },
+      "after": {
+        "id": "dieValue",
+        "type": "integer",
+        "label": "윗면 눈",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "주사위 색·윗면 값·창문/공급/라운드 위치.",
+        "correctionChoices": {
+          "min": 1,
+          "max": 6
+        }
+      }
+    },
+    {
+      "gameId": "grand-austria-hotel",
+      "componentId": "dice",
+      "propertyId": "dieValue",
+      "before": {
+        "id": "dieValue",
+        "type": "integer",
+        "label": "주사위 눈",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "눈별 묶음과 이미 사용된 주사위."
+      },
+      "after": {
+        "id": "dieValue",
+        "type": "integer",
+        "label": "주사위 눈",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "눈별 묶음과 이미 사용된 주사위.",
+        "correctionChoices": {
+          "min": 1,
+          "max": 6
+        }
+      }
+    },
+    {
+      "gameId": "six-nimmt",
+      "componentId": "cards",
+      "propertyId": "number",
+      "before": {
+        "id": "number",
+        "type": "integer",
+        "label": "카드 숫자",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "숫자와 벌점 아이콘, 줄/손패/벌점 더미.",
+        "faceOnly": true
+      },
+      "after": {
+        "id": "number",
+        "type": "integer",
+        "label": "카드 숫자",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "숫자와 벌점 아이콘, 줄/손패/벌점 더미.",
+        "faceOnly": true,
+        "correctionChoices": {
+          "min": 1,
+          "max": 104
+        }
+      }
+    },
+    {
+      "gameId": "six-nimmt",
+      "componentId": "cards",
+      "propertyId": "penaltyIcons",
+      "before": {
+        "id": "penaltyIcons",
+        "type": "integer",
+        "label": "벌점 아이콘 수",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "숫자와 벌점 아이콘, 줄/손패/벌점 더미.",
+        "faceOnly": true
+      },
+      "after": {
+        "id": "penaltyIcons",
+        "type": "integer",
+        "label": "벌점 아이콘 수",
+        "acquisition": "visible",
+        "min": 0,
+        "sourceText": "숫자와 벌점 아이콘, 줄/손패/벌점 더미.",
+        "faceOnly": true,
+        "correctionChoices": {
+          "options": [
+            1,
+            2,
+            3,
+            5,
+            7
+          ]
+        }
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "file": "shared/readouts/catalogs/01-spatial-tiles.json",
+      "preSHA256": "a384f0778a12f0855d4997b5586e55054f2386f102c4db53bbaed81a3300424a",
+      "postSHA256": "0edafad1ff54e1eb194092722c593db186e0ed3fda293f2ac647dccd2e84de75"
+    },
+    {
+      "file": "shared/readouts/catalogs/03-workers-economy.json",
+      "preSHA256": "618e851122465457036cf360e6680598a30e80f1fe431cd562a551c7df6f7664",
+      "postSHA256": "83171a68bc09b37bd38fbcf1ad22074e2d0f441529e070b1b5d9ee65f1125b6a"
+    },
+    {
+      "file": "shared/readouts/catalogs/02-cards-tableau.json",
+      "preSHA256": "f1d2a04777e41ea9e596429157a9696105e355606aabfa6f1e4285ff460da01b",
+      "postSHA256": "d904bd29860ef95e1d879217166200693814e4fe24bc62da00db648e8ccdf04a"
+    }
+  ],
+  "compatibility": "Official quick-correction choices, not a retroactive storage validation restriction. Existing nonnegative literal values remain valid and unchanged."
+}

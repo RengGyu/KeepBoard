@@ -3,10 +3,16 @@ import type {GamePack} from '../shared/types';
 import type {ArtMapping} from './artResolver';
 import {GameComponentArt} from './GameComponentArt';
 import {pieceSymbolFor,pieceSymbolHref} from './realBoards';
+import {readoutDieArt} from './pieceReadoutArt';
 /** A null style is a known category, not a guessed first commercial subtype. Never writes to the record. */
 export function GenericPieceArt({pack,piece,mapping,size=52,symbols}:{pack:GamePack;piece:GenericPiece;mapping?:ArtMapping;size?:number;symbols?:string[]}){
  const component=pack.runtime?.components.find(c=>c.id===piece.componentId);
  const gameId=pack.runtime?.source.gameId;
+ const die=symbols?readoutDieArt(pack,piece,symbols):undefined;
+ if(die&&gameId){
+  const label=`${component!.name} · 색 ${die.colorName??'?'} · 눈 ${die.number??'?'}`;
+  return <svg className="real-piece" viewBox="0 0 120 120" width={size} height={size} role="img" aria-label={label} style={{color:die.color??'#d8dde5'}}>{die.symbol?<use href={pieceSymbolHref(gameId,die.symbol)}/>:<><rect x="13" y="13" width="94" height="94" rx="20" fill={die.color??'#d8dde5'} stroke="#16305c" strokeWidth="5"/><text x="60" y="62" textAnchor="middle" dominantBaseline="middle" fill={die.colorName==='black'?'#ffffff':'#16305c'} fontSize="48" fontWeight="700">{die.number??'?'}</text></>}</svg>;
+ }
  // A completed real board ships symbols for pieces that had no dedicated art; they replace the neutral category shape.
  const symbol=!piece.variant&&component&&symbols?pieceSymbolFor(symbols,component.id):undefined;
  if(symbol&&gameId)return <svg className="real-piece" viewBox="0 0 120 120" width={size} height={size} role="img" aria-label={piece.label||component!.name}><use href={pieceSymbolHref(gameId,symbol)}/></svg>;

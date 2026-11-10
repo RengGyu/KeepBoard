@@ -7,6 +7,8 @@ export type DetailValue = string|number|boolean|null|SymbolValue[]|LocalFeature[
 export interface PropertySpec {
  id:string; label:string; type:'text'|'integer'|'enum'|'boolean'|'marks'|'features'|'reference'|'player';
  acquisition:'visible'|'manual'; unit?:string; min?:number; max?:number;
+ /** Official quick correction suggestions; not a retroactive restriction on stored literal values. */
+ correctionChoices?:{min?:number;max?:number;options?:readonly number[]};
  options?:readonly {value:string|number;label:string}[]; faceOnly?:boolean;
  /** Visible printed digits/ranges remain text; accept a provider's safe integer literal losslessly. */
  literalNumberText?:boolean;

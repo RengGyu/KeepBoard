@@ -7,6 +7,22 @@ const json=(file:string)=>JSON.parse(readFileSync(file,'utf8'));
 const sha=(file:string)=>createHash('sha256').update(readFileSync(file)).digest('hex');
 const H='docs/gamepack-revision-20261026/history/before-runtime-revision/';
 const ledger=json('docs/gamepack-revision-20261026/revision.json');
+const conditionCorrections=json('docs/recognition-conditions-20261102/condition-corrections.json').corrections;
+function afterApprovedPropertyCorrections(original:any){
+ const expected=structuredClone(original);
+ for(const c of expected.components)for(const p of c.properties){
+  if(conditionCorrections.some((r:any)=>r.gameId===expected.gameId&&r.componentId===c.id&&r.propertyId===p.id))delete p.faceOnly;
+  if(expected.gameId==='catan'&&c.id==='container'&&p.id==='variant')delete p.faceOnly;
+  if(expected.gameId==='machi-koro'&&c.id==='cards'&&p.id==='activationNumber')p.literalNumberText=true;
+  if(expected.gameId==='gloomhaven'&&c.id==='map'&&p.id==='featureType'){delete p.faceOnly;p.label='보이는 문·장애물·지형(입체물 포함)';}
+ }
+ const canonical=(v:any):string=>Array.isArray(v)?'['+v.map(canonical).join(',')+']':v&&typeof v==='object'?'{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonical(v[k])).join(',')+'}':JSON.stringify(v);
+ for(const r of json('tools/readouts/visible-choice-ranges.json').changes.filter((r:any)=>r.gameId===expected.gameId)){
+  const p=expected.components.find((c:any)=>c.id===r.componentId).properties.find((p:any)=>p.id===r.propertyId);
+  p.correctionChoices=Object.fromEntries(['min','max','options'].filter(k=>r[k]!==undefined).map(k=>[k,r[k]]));
+ }
+ const {definitionSHA,...body}=expected;expected.definitionSHA=createHash('sha256').update(canonical(body)).digest('hex');return expected;
+}
 const revised=new Set(Object.keys(ledger.games));
 
 test('the preserved history files still hash to the manifest recorded before the revision',()=>{
@@ -28,7 +44,7 @@ test('unrevised games keep their exact historical capture profile, contract row 
    assert.notEqual(def.definitionSHA,oldDef.definitionSHA,id);
    for(const area of oldProfiles[id].areas){const now=profiles[id].areas.find((a:any)=>a.id===area.id);if(now&&now.partition===area.partition)for(const f of area.fields)if(row.manual_state_fields.includes(f))assert.fail(`${id}/${area.id}: a previously photographed field became manual-only`);}
   }else{
-   assert.deepEqual(profiles[id],oldProfiles[id],id);assert.deepEqual(row,old,id);assert.deepEqual(def,oldDef,id);
+   assert.deepEqual(profiles[id],oldProfiles[id],id);assert.deepEqual(row,old,id);assert.deepEqual(def,afterApprovedPropertyCorrections(oldDef),id);
   }
  }
 });

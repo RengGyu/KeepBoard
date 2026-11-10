@@ -13,6 +13,6 @@ export function unlinkedComponentPieces(session:Pick<Session,'assertions'>,sourc
 /** Only existing pack destinations; ownership is explicit at assertion scope, never inferred from a crop. */
 export function componentLinkTargets(pack:GamePack,players:Player[],pieces:GenericPiece[]):ComponentLinkTarget[]{
  if(!pieces.length||pack.runtime?.support.recording==='native')return [];
- return pack.fields.flatMap(f=>{const b=runtimeBinding(pack,f.key);if(b?.editor!=='component-catalog'||physicalOnlyField(pack,f.key)||!['public','player'].includes(f.scope)||!['public','owner'].includes(f.visibility??'public')||pieces.some(p=>p.componentId!==null&&!b.componentIds.includes(p.componentId)))return [];
+ return pack.fields.flatMap(f=>{const b=runtimeBinding(pack,f.key);if(b?.editor!=='component-catalog'||physicalOnlyField(pack,f.key)||!['public','player'].includes(f.scope)||!['public','owner'].includes(f.visibility??'public')||pieces.some(p=>p.componentId!==null&&!b.componentIds.includes(p.componentId)||p.spatial?.source.partition==='player_public'&&(f.scope!=='player'||f.visibility!=='public')||p.spatial?.source.partition==='owner_private'&&(f.scope!=='player'||f.visibility!=='owner')))return [];
  const target={field:f.key,label:f.label,visibility:(f.visibility??'public') as 'public'|'owner'};return f.scope==='player'?players.map(p=>({...target,ownerId:p.id,ownerName:p.name})):[target];});
 }

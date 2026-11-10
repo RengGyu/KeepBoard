@@ -468,7 +468,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       const scanIntent:ScanIntent|undefined=hostedScan?{version:'scan-intent-v1',taskId,selection:structuredClone(body.reader),evidenceIds:[...body.evidenceIds],reader:structuredClone(selectedReader.identity)}:undefined;
       const scanObservation=body.reader&&!hostedScan?await prepareScanObservation({session:input,pack,evidence,selection:body.reader,taskId,reader:selectedReader,localReader,cloud:!!cloud,readImage}):undefined;
       const localObservation=!scanObservation&&body.reader?.kind==='local-observation-v1'?await prepareLocalObservation({pack,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:localReader,cloud:!!cloud,readImage}):undefined;
-      const hostedObservation=!scanIntent&&!scanObservation&&isHostedReader(body.reader)?await prepareHostedObservation({pack,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:selectedReader,readImage}):undefined;
+      const hostedObservation=!scanIntent&&!scanObservation&&isHostedReader(body.reader)?await prepareHostedObservation({pack,playerCount:session.players.length,evidence,captureEpoch:session.captureEpoch,selection:body.reader,taskId,reader:selectedReader,readImage}):undefined;
       if(body.reader&&!scanIntent&&!scanObservation&&!localObservation&&!hostedObservation)throw new HttpError('사진 판독기 종류를 확인하세요.');
       const observationPlan=localObservation??hostedObservation??scanObservation?.units[0].hosted??scanObservation?.units[0].local;
       const taskEvidence=scanObservation||scanIntent?scanSourceEvidence(evidence,session):evidence,sourceEvidence=storedEvidence.concat(taskEvidence.filter(e=>!storedEvidence.some(s=>s.id===e.id)));

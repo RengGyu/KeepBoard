@@ -1,3 +1,4 @@
+import {remapSpatialRelations} from './spatialProjection';
 import {isHostedReader} from '../shared/lightweightRecognition';
 import {createHash,randomUUID} from 'node:crypto';
 import type {AnalysisResult,Assertion,Evidence,GamePack,Session,Value} from '../shared/types';
@@ -33,13 +34,13 @@ export async function prepareScanObservation(input:{session:Session;pack:GamePac
   const frame=input.selection.frame,index=input.evidence.findIndex(e=>e.id===frame?.sourceEvidenceId);
   if(!frame||typeof frame!=='object'||Array.isArray(frame)||index<0)throw new AnalysisJobError('사진 기준점의 선택된 원본을 확인하세요.',409);
   const {target:_target,...selection}=input.selection as PhotoReaderSelection&{target?:ScanTarget};
-  const common={pack:input.pack,evidence:[input.evidence[index]],captureEpoch:input.session.captureEpoch,selection,taskId:input.taskId+'-unit-'+index,readImage};
+  const common={pack:input.pack,playerCount:input.session.players?.length,evidence:[input.evidence[index]],captureEpoch:input.session.captureEpoch,selection,taskId:input.taskId+'-unit-'+index,readImage};
   framed=isHostedReader(selection)?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
  }
  const preparedUnits=await Promise.all(input.evidence.map(async(e,index)=>{
   const {target:_target,...selection}=input.selection as PhotoReaderSelection&{target?:ScanTarget};
   if(selection.frame&&selection.frame.sourceEvidenceId!==e.id)delete selection.frame;
-  const id=input.taskId+'-unit-'+index,common={pack:input.pack,evidence:[e],captureEpoch:input.session.captureEpoch,selection,taskId:id,readImage};
+  const id=input.taskId+'-unit-'+index,common={pack:input.pack,playerCount:input.session.players?.length,evidence:[e],captureEpoch:input.session.captureEpoch,selection,taskId:id,readImage};
   const pinned=framed&&input.selection.frame!.sourceEvidenceId===e.id?framed:isHostedReader(selection)?await prepareHostedObservation({...common,reader:input.reader}):await prepareLocalObservation({...common,reader:input.localReader,cloud:input.cloud});
   const bytes=await readImage(e);let source=e,sourceSHA=sha(bytes.data);
   if(e.sourceRegion&&e.sourceEvidenceId){
@@ -93,7 +94,7 @@ export function projectScanResults(current:Session,pack:GamePack,scan:PinnedScan
  }
  const receipts=results.flatMap(r=>r.observationReceipts??[]),entries=receipts.flatMap(r=>r.result.observations.map(o=>{const unit=scan.plan.units.find(u=>u.id===r.scanUnitId)!;return {unitId:unit.id,observationRef:o.ref,sourceSHA:unit.sourceEvidenceId+':'+unit.sourceSHA+':'+unit.areaId,componentId:o.componentId,bbox:mapObservationRegion(o,r.request,r.transforms),properties:o.properties,quantity:o.quantity,face:o.face,role:unit.role};})),links=linkScanObservations(entries),units=results.flatMap(r=>r.scanBundle?.units??[]);
  const bundle:ScanBundleReceipt={plan:scan.plan,units,links};
- if(supportsGenericFusion(scan,results))return projectGenericFusion(current,pack,scan,results,bundle);
+ if(supportsGenericFusion(scan,results))return remapSpatialRelations(projectGenericFusion(current,pack,scan,results,bundle));
  const incoming=results.flatMap(r=>r.assertions),objects=new Map<string,any>();for(const a of incoming)for(const o of observationObjects(a.value))objects.set(o.id,o);
  const refId=(unitId:string,ref:string)=>receipts.find(r=>r.scanUnitId===unitId)?.componentRefs[ref];
  const confirmed=new Set<string>();for(const r of receipts)for(const g of r.geometryCandidates){const id=r.componentRefs[g.observationRef],o=objects.get(id);if(o&&o.quantity===1&&o.location?.type==='unplaced'){o.location=structuredClone(g.locationCandidate);confirmed.add(id);}}

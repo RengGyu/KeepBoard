@@ -51,6 +51,11 @@ export async function commitAnalysisTask(store:Store,pins:PrivatePins,t:Analysis
   const candidate:Assertion={...a,value,analysisJobId:job.id,id:randomUUID(),basis:'observation',status:'accepted',turnInstanceId:current.turnInstanceId,updatedAt:new Date().toISOString()};
   // The reading is the current editable record, not a separate approval queue.
   if(pack.id==='catan-base'&&!candidate.ownerId&&candidate.field==='components.observed')candidate.field='board.layout';
+  if(!t.prepared.scanObservation&&(value as any)?.pieces?.some((p:any)=>p.spatial)){
+   const prior=current.assertions.filter(a=>a.field===candidate.field&&a.ownerId===candidate.ownerId&&a.status==='accepted').at(-1),old=(prior?.value as any)?.pieces??[],incoming=(value as any).pieces;
+   candidate.value={...(value as any),pieces:[...old,...incoming.filter((p:any)=>!old.some((o:any)=>o.id===p.id||o.spatial&&p.spatial&&o.spatial.source.taskId===p.spatial.source.taskId&&o.spatial.observationRef===p.spatial.observationRef))]};
+   candidate.observationReceipts=[...(prior?.observationReceipts??[]),...(candidate.observationReceipts??[])];
+  }
   next.push(candidate);
  }
  for(const a of next){

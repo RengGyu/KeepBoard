@@ -13,7 +13,7 @@ export interface RealBoardVariant {id:string;svg:string;json:string;exclusive?:b
 export interface RealBoardVariantOption {id:string;label:string;value:string|number}
 export interface RealBoardVariantSelector {boardField:string;field:string;options:RealBoardVariantOption[]}
 export interface RealBoardLayerView {field:string;property:string;componentIds:string[];label?:string}
-export interface RealBoard { gameId: string; status?: string; recordingMode?: 'location-only'|'interactive-network'|'partial-slots'; svg: string; viewBox: [number, number, number, number]; areas: RealArea[]; network?: RealNetwork; playerCount?: Record<string, { hideAreas?: string[] }>; variants?:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;manualVariantsFor?:string|string[];manualVariantLabel?:string;manualVariantLabels?:Record<string,string>;manualVariantBaseLabel?:string;layerView?:RealBoardLayerView;variant?:string;placementFrame?:string;supportedPlayerCounts?:number[];supportedPlayerCountsByField?:Record<string,number[]> }
+export interface RealBoard {assetSHA?:string; gameId: string; status?: string; recordingMode?: 'location-only'|'interactive-network'|'partial-slots'; svg: string; viewBox: [number, number, number, number]; areas: RealArea[]; network?: RealNetwork; playerCount?: Record<string, { hideAreas?: string[] }>; variants?:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;manualVariantsFor?:string|string[];manualVariantLabel?:string;manualVariantLabels?:Record<string,string>;manualVariantBaseLabel?:string;layerView?:RealBoardLayerView;variant?:string;placementFrame?:string;supportedPlayerCounts?:number[];supportedPlayerCountsByField?:Record<string,number[]> }
 export interface RealAssets { board: RealBoard; symbols: string[];variants:RealBoardVariant[];variantSelector?:RealBoardVariantSelector;selectedVariant:string }
 
 export function realBoardVariantForValue(selector:RealBoardVariantSelector|undefined,boardField:string,value:unknown){
@@ -59,13 +59,15 @@ export function realBoardViewForPlacements(board:RealBoard|undefined,field:strin
 const cache = new Map<string, Promise<RealAssets | null>>();
 const base = (gameId: string) => `/game-art/real-boards/${gameId}`;
 
-export function loadRealAssets(gameId: string,selectedVariant='base'): Promise<RealAssets | null> {
+export function loadRealAssets(gameId: string,selectedVariant='base',verifySpatialAsset=false): Promise<RealAssets | null> {
   if (typeof fetch !== 'function') return Promise.resolve(null);
-  const key=`${gameId}:${selectedVariant}`;
+  const key=`${gameId}:${selectedVariant}:${verifySpatialAsset}`;
   if (!cache.has(key)) cache.set(key, (async () => {
     const response = await fetch(`${base(gameId)}/board.json`);
     if (!response.ok) return null;
-    const baseBoard = await response.json() as RealBoard;
+    const assetHash=async(r:Response)=>{try{if(!r.clone||!globalThis.crypto?.subtle)return undefined;const bytes=await r.clone().arrayBuffer();return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');}catch{return undefined;}};
+    const baseHash=verifySpatialAsset?await assetHash(response):undefined;
+    const baseBoard = {...await response.json(),...(baseHash?{assetSHA:baseHash}:{})} as RealBoard;
     const variants=baseBoard.variants??[];
     let board=baseBoard;
     if(selectedVariant!=='base'){
@@ -73,7 +75,8 @@ export function loadRealAssets(gameId: string,selectedVariant='base'): Promise<R
       if(!asset)return null;
       const variantResponse=await fetch(`${base(gameId)}/${asset.json}`);
       if(!variantResponse.ok)return null;
-      board=await variantResponse.json() as RealBoard;
+      const variantHash=verifySpatialAsset?await assetHash(variantResponse):undefined;
+      board={...await variantResponse.json(),...(variantHash?{assetSHA:variantHash}:{})} as RealBoard;
       if(board.variant!==selectedVariant)return null;
     }
     board={...board,variantSelector:baseBoard.variantSelector,manualVariantsFor:baseBoard.manualVariantsFor,manualVariantLabel:baseBoard.manualVariantLabel,manualVariantLabels:baseBoard.manualVariantLabels,manualVariantBaseLabel:baseBoard.manualVariantBaseLabel,variants};
@@ -90,9 +93,9 @@ export function loadRealAssets(gameId: string,selectedVariant='base'): Promise<R
   return cache.get(key)!;
 }
 
-export function useRealAssets(gameId: string | undefined,selectedVariant='base') {
+export function useRealAssets(gameId: string | undefined,selectedVariant='base',verifySpatialAsset=false) {
   const [assets, setAssets] = useState<RealAssets | null>(null);
-  useEffect(() => { if (!gameId) {setAssets(null);return;} let alive = true;setAssets(null);void loadRealAssets(gameId,selectedVariant).then(next => { if (alive) setAssets(next); }); return () => { alive = false; }; }, [gameId,selectedVariant]);
+  useEffect(() => { if (!gameId) {setAssets(null);return;} let alive = true;setAssets(null);void loadRealAssets(gameId,selectedVariant,verifySpatialAsset).then(next => { if (alive) setAssets(next); }); return () => { alive = false; }; }, [gameId,selectedVariant,verifySpatialAsset]);
   return assets;
 }
 

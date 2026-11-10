@@ -1,3 +1,4 @@
+import {currentBoardRoundtrip} from './helpers/current-board-record.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import React from 'react';
@@ -25,68 +26,131 @@ function mount(component: (props: any) => any, props: any) {
 function nodes(tree: any): any[] { if (!tree || typeof tree !== 'object') return []; if (Array.isArray(tree)) return tree.flatMap(nodes); return [tree, ...nodes(tree.props?.children)]; }
 function find(tree: any, predicate: (node: any) => boolean) { const node = nodes(tree).find(predicate); assert(node, 'expected UI element missing'); return node; }
 
-const cases = [
-  { gameId: 'five-tribes', fieldKey: 'board.scene', slotCount: 30, componentId: 'tiles' },
-  { gameId: 'five-tribes', fieldKey: 'market.scene', slotCount: 12, componentId: 'cards' },
-  { gameId: 'king-of-tokyo', fieldKey: 'tokyo.scene', slotCount: 1, componentId: 'monsters', players: 4 },
-  { gameId: 'king-of-tokyo', fieldKey: 'roll.scene', slotCount: 6, componentId: 'dice', players: 4 },
-  { gameId: 'stone-age', fieldKey: 'market.scene', slotCount: 4, componentId: 'cards' },
-  { gameId: 'monopoly', fieldKey: 'track.scene', slotCount: 40, componentId: 'tokens' },
-  { gameId: 'aeons-end', fieldKey: 'mages.scene', slotCount: 4, componentId: 'mages' },
-  { gameId: 'aeons-end', fieldKey: 'market.scene', slotCount: 9, componentId: 'player-cards' }
-];
 
-test('source-confirmed board and market positions preserve each game field and player-count visibility', async () => {
-  const originalFetch = globalThis.fetch, hadWindow = Object.hasOwn(globalThis, 'window'), originalWindow = (globalThis as any).window;
-  const mapping = JSON.parse(await readFile(new URL('../public/game-art/boards/mapping.json', import.meta.url), 'utf8'));
-  const packs = new Map(catalogPacks.map(pack => [pack.id, pack]));
-  const boards = new Map<string, any>(), pieces = new Map<string, string>();
-  for (const item of cases) {
-    if (!boards.has(item.gameId)) {
-      boards.set(item.gameId, JSON.parse(await readFile(new URL(`../public/game-art/real-boards/${item.gameId}/board.json`, import.meta.url), 'utf8')));
-      pieces.set(item.gameId, await readFile(new URL(`../public/game-art/real-boards/${item.gameId}/pieces.svg`, import.meta.url), 'utf8'));
-    }
-    const board = boards.get(item.gameId);
-    assert.equal(board.status, 'partial'); assert.equal(board.recordingMode, 'partial-slots');
-    const actual = board.areas.filter((area: any) => area.field === item.fieldKey && !(item.players && board.playerCount?.[String(item.players)]?.hideAreas?.includes(area.id))).flatMap((area: any) => area.slots);
-    assert.equal(actual.length, item.slotCount, `${item.gameId}/${item.fieldKey} visible slots`);
-  }
-  globalThis.fetch = (async (input: RequestInfo | URL) => {
-    const url = String(input);
-    if (url.endsWith('/mapping.json')) return new Response(JSON.stringify(mapping), { status: 200 });
-    const match = url.match(/\/game-art\/real-boards\/([^/]+)\/(board\.json|pieces\.svg)$/);
-    if (match?.[2] === 'board.json') return new Response(JSON.stringify(boards.get(match[1])), { status: 200 });
-    if (match?.[2] === 'pieces.svg') return new Response(pieces.get(match[1]) ?? '', { status: pieces.has(match[1]) ? 200 : 404 });
-    return new Response('', { status: 404 });
-  }) as typeof fetch;
-  (globalThis as any).window = { matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }) };
 
-  try {
-    for (const item of cases) {
-      const pack = packs.get(item.gameId)!;
-      await loadRealAssets(item.gameId);
-      const piece = { id: `${item.gameId}-${item.fieldKey}-selected`, componentId: item.componentId, variant: null, quantity: 1, label: `${item.gameId} test piece`, anchor: '', evidenceId: null, region: null };
-      const record: GenericRecord = { version: 'game-component-record-v1', pieces: [piece] }; let saved: GenericRecord | undefined;
-      const props = { players: item.players, pack, fieldKey: item.fieldKey, record, selected: piece.id, busy: false, onChange: (next: GenericRecord) => { saved = next; } };
-      const ui = mount(GameBoardRecord, props);
-      try {
-        await new Promise(resolve => setImmediate(resolve)); ui.render();
-        assert.equal(nodes(ui.tree).filter(node => node.type === 'button' && String(node.props.className).includes('gb-slot')).length, item.slotCount, `${item.gameId}/${item.fieldKey} UI slot count`);
-        find(ui.tree, node => node.type === 'button' && String(node.props.className).includes('gb-slot')).props.onClick();
-        assert(saved, `${item.gameId}/${item.fieldKey} should save`);
-        const binding = pack.runtime!.fieldBindings!.find(candidate => candidate.key === item.fieldKey)!;
-        assert.equal(saved!.pieces[0].placement?.areaId, binding.areaIds[0]);
-        const validated = validateGenericRecord(saved as any, pack, item.fieldKey, []);
-        assert.deepEqual(validated.pieces[0].placement, saved!.pieces[0].placement);
-        const reopened = mount(GameBoardRecord, { ...props, record: validated, onChange() {} });
-        try {
-          await new Promise(resolve => setImmediate(resolve)); reopened.render();
-          assert(nodes(reopened.tree).some(node => node.type === 'button' && String(node.props.className).includes('gb-slot') && String(node.props.className).includes('filled')));
-        } finally { reopened.dispose(); }
-      } finally { ui.dispose(); }
+test("source-confirmed board and market positions preserve each game field and player-count visibility (current whole-table layout)",async()=>{await currentBoardRoundtrip([
+  {
+    "gameId": "five-tribes",
+    "fieldKey": "board.scene",
+    "componentId": "tiles",
+    "slotCount": 30,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": null,
+    "areaId": "board",
+    "areaSlots": {
+      "sultanate": 30,
+      "tribes-on-map": 0
     }
-  } finally {
-    globalThis.fetch = originalFetch;
-    if (hadWindow) (globalThis as any).window = originalWindow; else delete (globalThis as any).window;
+  },
+  {
+    "gameId": "five-tribes",
+    "fieldKey": "market.scene",
+    "componentId": "cards",
+    "slotCount": 12,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": null,
+    "areaId": "market",
+    "areaSlots": {
+      "resources-market": 9,
+      "djinn-market": 3
+    }
+  },
+  {
+    "gameId": "king-of-tokyo",
+    "fieldKey": "tokyo.scene",
+    "componentId": "monsters",
+    "players": 4,
+    "slotCount": 1,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "tokyo",
+    "areaSlots": {
+      "tokyo-city": 1
+    }
+  },
+  {
+    "gameId": "king-of-tokyo",
+    "fieldKey": "roll.scene",
+    "componentId": "dice",
+    "players": 4,
+    "slotCount": 8,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "roll",
+    "areaSlots": {
+      "dice-roll": 8
+    }
+  },
+  {
+    "gameId": "stone-age",
+    "fieldKey": "market.scene",
+    "componentId": "cards",
+    "slotCount": 8,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "market",
+    "areaSlots": {
+      "building-market-1": 1,
+      "civilization-market-4": 1,
+      "building-market-2": 1,
+      "civilization-market-3": 1,
+      "building-market-3": 1,
+      "civilization-market-2": 1,
+      "building-market-4": 1,
+      "civilization-market-1": 1
+    }
+  },
+  {
+    "gameId": "monopoly",
+    "fieldKey": "track.scene",
+    "componentId": "tokens",
+    "slotCount": 40,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "track",
+    "areaSlots": {
+      "whole-track": 40
+    }
+  },
+  {
+    "gameId": "aeons-end",
+    "fieldKey": "mages.scene",
+    "componentId": "mages",
+    "slotCount": 16,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "mages",
+    "areaSlots": {
+      "breaches-1": 4,
+      "mage-1": 0,
+      "breaches-2": 4,
+      "mage-2": 0,
+      "breaches-3": 4,
+      "mage-3": 0,
+      "breaches-4": 4,
+      "mage-4": 0
+    }
+  },
+  {
+    "gameId": "aeons-end",
+    "fieldKey": "market.scene",
+    "componentId": "player-cards",
+    "slotCount": 9,
+    "input": "slot",
+    "status": "complete",
+    "recordingMode": "full-table-schematic",
+    "areaId": "market",
+    "areaSlots": {
+      "gems": 3,
+      "relics": 2,
+      "spells": 4
+    }
   }
-});
+]);});

@@ -1,3 +1,4 @@
+import {attachSpatialReading} from './spatialReading';
 import {isHostedReader} from '../shared/lightweightRecognition';
 import type {HostedObservationReader} from './ai/hostedReader';
 import {createHash} from 'node:crypto';
@@ -12,7 +13,7 @@ import {AnalysisJobError} from './analysisJobs';
 
 const sha=(data:Buffer)=>createHash('sha256').update(data).digest('hex');
 export interface PinnedHostedObservation {request:ObservationRequest;definition:PhotoDefinition;reader:HostedReaderIdentity;frame?:ConfirmedPhotoFrame;transforms:import('../shared/photoGeometry').PhotoTransform[];sourceImageSHA:string;inputSHA?:string;taskProfile?:undefined}
-export async function prepareHostedObservation(input:{pack:GamePack;evidence:Evidence[];captureEpoch:string;selection:unknown;taskId:string;reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedHostedObservation>{
+export async function prepareHostedObservation(input:{pack:GamePack;playerCount?:number;evidence:Evidence[];captureEpoch:string;selection:unknown;taskId:string;reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedHostedObservation>{
  const s=input.selection as HostedReaderSelection;if(!s||typeof s!=='object'||Object.keys(s).some(k=>!['kind','definitionSHA','areaId','frame'].includes(k))||!isHostedReader(s)||s.kind!==input.reader.identity.kind||input.evidence.length!==1)throw new AnalysisJobError('사진 판독기와 한 촬영 영역·원본 사진을 확인하세요.');
  if(!(await input.reader.status()).available)throw new AnalysisJobError('서버에 선택한 게임 사진 판독용 키가 연결되지 않았습니다.',503);
  const e=input.evidence[0],definition=photoDefinition(input.pack,s.definitionSHA),area=definition.areas.find(a=>a.id===s.areaId);
@@ -20,7 +21,7 @@ export async function prepareHostedObservation(input:{pack:GamePack;evidence:Evi
  if(e.captureEpoch!==input.captureEpoch)throw new AnalysisJobError('현재 촬영 단계의 사진만 읽을 수 있습니다. 과거 사진과 저장 기록은 유지됩니다.',409);
  if(s.frame&&(definition.nativeBridge!=='catan'||area.id!=='board'||area.partition!=='common_public'||e.scope!=='public'||e.ownerId))throw new AnalysisJobError('카탄 공용 판 사진의 기준점만 사용할 수 있습니다.',409);
  const bytes=await input.readImage(e),sourceImageSHA=sha(bytes.data),dimensions=imageDimensions(bytes.data),frame=s.frame?validatePhotoFrame(s.frame,{evidenceId:e.id,sourceSHA:sourceImageSHA,definitionSHA:definition.definitionSHA}):undefined;
- const request=compileObservationTask({pack:input.pack,definition,areaId:s.areaId,taskId:input.taskId,scope:{partition:area.partition,ownerId:e.ownerId??null,captureEpoch:e.captureEpoch},images:[{evidenceId:e.id,inputId:e.id,sha256:sourceImageSHA,...dimensions,transformId:null}],geometryFrameId:frame?.frameId});
+ const request=attachSpatialReading(compileObservationTask({pack:input.pack,definition,areaId:s.areaId,taskId:input.taskId,scope:{partition:area.partition,ownerId:e.ownerId??null,captureEpoch:e.captureEpoch},images:[{evidenceId:e.id,inputId:e.id,sha256:sourceImageSHA,...dimensions,transformId:null}],geometryFrameId:frame?.frameId}),input.pack,definition,input.playerCount);
  for(const component of definition.components)if(request.allowedPropertyIds[component.id])request.allowedPropertyIds[component.id]=request.allowedPropertyIds[component.id].filter(id=>hostedVisibleProperty(component,id));
  return {request,definition,reader:structuredClone(input.reader.identity),frame,transforms:[],sourceImageSHA};
 }

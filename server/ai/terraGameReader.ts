@@ -102,7 +102,7 @@ export function terraResponsePayload(native:unknown):unknown{return readTerraRes
 export function decodeTerraGameObservation(native:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[]=[],profile?:TerraReaderIdentity['adapterVersion']){
  if(profile!==undefined)validateProfile(profile);
  const {payload,truncated}=readTerraResponse(native),compact=profile===COMPACT_TERRA_PROFILE||profile===LEAN_TERRA_PROFILE;
- const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).length!==1)throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
+ const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).some(k=>!['items',...(request.spatial?['spatial']:[])].includes(k)))throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
  const physicalUnits:Record<string,PhysicalUnitClaim>={},unitDeferred:HostedObservationWire['deferred']=[];let version2=false;
  const decodingItems=(profile===DETAIL_TERRA_PROFILE||profile==='literal-named-fill-unit-marks-v5'||profile===LEAN_TERRA_PROFILE)?normalizeTerraDetailItems(sourceItems,request,definition):sourceItems;
  const items=decodingItems.map((source:any,index:number)=>{
@@ -118,7 +118,7 @@ export function decodeTerraGameObservation(native:unknown,request:ObservationReq
   return {...item,box_1000:[b.ymin,b.xmin,b.ymax,b.xmax]};
  });
  const trace:HostedObservationWire={id:'terra-game-wire-v1',items:[],deferred:[],providerResponse:structuredClone(native)};
- const raw=decodeLiteralObservationPayload({items},request,definition,trace,transforms);
+ const raw=decodeLiteralObservationPayload({items,...(request.spatial?{spatial:(payload as any)?.spatial}: {})},request,definition,trace,transforms);
  const kept=new Set(raw.observations.map(o=>o.ref));
  trace.items=structuredClone(sourceItems);if(version2||compact){trace.id=compact?'terra-game-wire-v3':'terra-game-wire-v2';trace.physicalUnits=Object.fromEntries(Object.entries(physicalUnits).filter(([ref])=>kept.has(ref)));trace.deferred.push(...unitDeferred);}
  if(truncated)trace.deferred.push({ref:'response',property:'items',reason:'provider-output-truncated'});

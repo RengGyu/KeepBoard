@@ -1,3 +1,5 @@
+import {spatialInstructions,spatialWireSchema} from './spatialWire';
+import {validateSpatialResult} from '../../shared/spatialObservation';
 import type {Session,GamePack,Evidence} from '../../shared/types';
 import {catanScenePrompt,catanSceneResponseSchema,decodeCatanSceneReading} from './catanSceneReading';
 import {createHash} from 'node:crypto';
@@ -18,13 +20,14 @@ export const hostedVisibleProperty=(component:PhotoComponentDefinition,id:string
 export function buildGeminiGameBody(request:ObservationRequest,definition:PhotoDefinition,image:Buffer,mimeType:string){
  const components=definition.components.filter(c=>request.allowedComponents.includes(c.id)).map(c=>({id:c.id,...(request.componentLabels?.[c.id]??{}),properties:c.properties.filter(p=>request.allowedPropertyIds[c.id]?.includes(p.id)&&hostedVisibleProperty(c,p.id)).map(p=>({id:p.id,label:p.label,type:p.type,...(p.min!==undefined?{min:p.min}:{}),...(p.max!==undefined?{max:p.max}:{}),...(p.options?{options:p.options.map(o=>o.value)}:{}),...(p.faceOnly?{frontOnly:true}:{})}))}));
  const terrainGuide=definition.nativeBridge==='catan'&&request.areaId==='board'&&request.allowedComponents.includes('terrain')?'For this Catan board, terrain means each visible hexagonal land region, including printed regions as well as separate tiles. Observe its visible terrain illustration independently of any number disc or playing piece on it. A number-token is the disc on a land region, not a replacement for that terrain observation. Do not infer hidden terrain or an expected count.\n':'';
- const prompt=`Observe this ${request.gameId} photograph, selected area ${request.areaId} (${request.scope.partition}). The allowed physical kinds and their own visible properties are ${JSON.stringify(components)}. Use each component's name and physicalType to interpret its id; the output kind is that id, not physicalType.
+ let prompt=`Observe this ${request.gameId} photograph, selected area ${request.areaId} (${request.scope.partition}). The allowed physical kinds and their own visible properties are ${JSON.stringify(components)}. Use each component's name and physicalType to interpret its id; the output kind is that id, not physicalType.
 ${terrainGuide}First inspect the whole photographed area for physical objects of EACH allowed kind, including small, overlapping and edge objects. Movable pieces, tokens, tiles and cards are distinct from the printed board and its illustrations. Return their visible presence and boxes even when their names, numbers or colours cannot be read. A board-only result must not replace pieces visibly lying on it. Do not invent missing kinds or expected inventory.
 Then read only the listed properties belonging to that object's kind. Keep a visible value even if other properties are unreadable. Unknown, absent-unconfirmed or occluded properties use valueJson:null with the matching reason; an unreadable label must not remove the physical object. Use each listed property's type: integer values are JSON numbers; text values are JSON strings, including printed digits and ranges. Booleans are JSON booleans. Unknown uses actual null, never the string "null". No attribute may use another kind's property.
 Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information. A colour alone does not prove an owner. Read face-only properties only when the front is visible. A printed number is a property, not the physical quantity. One row is one physical object; if a visible inseparable group is returned, quantity is its visible count or null when uncountable, never 1 just because it is one box. Do not guess a total or game state. Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain. Each attribute has id, valueJson (a JSON literal encoded as a string for an observed value, otherwise null), and unknownReason (null for observed, otherwise unreadable/occluded/out-of-frame/not-present-unconfirmed/wrong-face/ambiguous/unsupported). Include no manual properties. Return only JSON {"items":[...]}; an empty list is valid when no allowed physical objects can be identified.`;
  // Keep the proven flat wire schema; component-specific alternatives were rejected by the live endpoint.
  const ids=[...new Set(components.flatMap(c=>c.properties.map(p=>p.id)))];
  const schema={type:'object',properties:{items:{type:'array',items:{type:'object',properties:{kind:{type:'string',enum:components.map(c=>c.id)},box_1000:{type:['array','null'],items:{type:'number',minimum:0,maximum:1000},minItems:4,maxItems:4},face:{type:'string',enum:['front','back','unknown']},quantity:{type:['integer','null'],minimum:0},attributes:{type:'array',items:{type:'object',properties:{id:ids.length?{type:'string',enum:ids}:{type:'string'},valueJson:{type:['string','null']},unknownReason:{type:['string','null'],enum:[...reasons,null]}},required:['id','valueJson','unknownReason'],additionalProperties:false}}},required:['kind','box_1000','face','quantity','attributes'],additionalProperties:false}}},required:['items'],additionalProperties:false};
+ if(request.spatial){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, role, hidden face, rules inference, or off-area information. Only the supplied spatial contract permits observed board addresses.').replace('Return only JSON {"items":[...]};','Return only JSON {"items":[...],"spatial":{...}};')+spatialInstructions(request);(schema.properties as any).spatial=spatialWireSchema();schema.required.push('spatial');}
  return {contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType,data:image.toString('base64')}}]}],generationConfig:{candidateCount:1,maxOutputTokens:32768,thinkingConfig:{thinkingLevel:'LOW'},mediaResolution:'MEDIA_RESOLUTION_HIGH',responseFormat:{text:{mimeType:'APPLICATION_JSON',schema}}}};
 }
 
@@ -38,7 +41,7 @@ export function decodeGeminiGameObservation(native:unknown,request:ObservationRe
 
 /** Provider-neutral visible payload decoder; envelopes remain the adapter's responsibility. */
 export function decodeLiteralObservationPayload(wire:unknown,request:ObservationRequest,definition:PhotoDefinition,trace?:HostedObservationWire,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[]):ObservationResult{
- if(!exact(wire,['items'])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
+ if(!exact(wire,request.spatial&&record(wire)&&Object.hasOwn(wire,'spatial')?['items','spatial']:['items'])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
  const deferred:HostedObservationWire['deferred']=[];
  // One row that breaks the contract costs only that row; the rest of a paid response is kept and the loss recorded.
  const dropRow=(index:number)=>{deferred.push({ref:'item-'+(index+1),property:'row',reason:'invalid-row'});return null;};
@@ -84,6 +87,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
  }).filter(o=>o!==null);
  if(wire.items.length&&!observations.length)return invalid();
  const result=validateObservationResult({version:OBSERVATION_VERSION,observations,coverage:'partial',completion:'complete'},request,definition,transforms);
+ if(request.spatial){result.spatial=validateSpatialResult(wire.spatial,request,result);if(trace){trace.spatial=structuredClone(wire.spatial??null);deferred.push(...result.spatial.deferred.map(d=>({ref:d.section+':'+d.index,property:'spatial',reason:d.reason})));}}
  if(trace){trace.items=structuredClone(wire.items);trace.deferred=deferred;}
  return result;
 }

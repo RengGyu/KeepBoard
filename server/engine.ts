@@ -95,7 +95,7 @@ export function validateComponentRecord(session:Pick<Session,'players'|'evidence
  if(field.scope==='player'?!session.players.some(p=>p.id===ownerId):!!ownerId)throw new Error('구성물 소유 범위를 확인하세요.');
  const ids=session.evidence.filter(e=>field.visibility==='public'||!ownerId?e.scope==='public'&&!e.ownerId:e.ownerId===ownerId||e.scope==='public'&&!e.ownerId).map(e=>e.id);
  if(assertionEvidenceIds&&(!Array.isArray(assertionEvidenceIds)||assertionEvidenceIds.some(id=>!ids.includes(id))))throw new Error('이 영역에서 볼 수 있는 원본만 근거로 연결하세요.');
- const record=validateGenericRecord(value,pack,fieldKey,ids,{playerIds:session.players.map(p=>p.id)});
+ const record=validateGenericRecord(value,pack,fieldKey,ids,{playerIds:session.players.map(p=>p.id),spatialOwnerId:ownerId});
  const prior=(session.assertions??[]).filter(a=>a.field===fieldKey&&a.ownerId===ownerId&&['accepted','candidate'].includes(a.status)).flatMap(a=>{const r=a.value as unknown as GenericRecord;return r?.version==='game-component-record-v1'&&Array.isArray(r.pieces)?r.pieces:[];});
  for(const p of record.pieces){
   const old=[...prior].reverse().find(o=>o.id===p.id&&o.evidenceId===p.evidenceId);

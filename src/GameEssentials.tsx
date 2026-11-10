@@ -15,7 +15,7 @@ import {loadArtMapping} from './artLoader';
 import {artVariantLabel,type ArtMapping} from './artResolver';
 import './game-essentials.css';
 import {Modal} from './ui';
-import {recognitionCapability} from '../shared/recognition';
+import {recognitionCapability,observationTray} from '../shared/recognition';
 import {GenericPieceArt} from './GenericPieceArt';
 import {ChipPick,Stepper} from './QuickPick';
 import {realBoardVariantForValue,useRealAssets} from './realBoards';
@@ -40,7 +40,8 @@ export function GameEssentials({view,ownerId,busy,mutate,onEvidence,onReadyToSav
  const generic=runtime.support.recording==='generic';
  const locked=ownerId&&view.privacy?.protectedOwnerIds.includes(ownerId)&&!view.privacy?.unlockedOwnerIds.includes(ownerId);if(locked)return null;
  const fields=pack.fields.filter(f=>f.scope===(ownerId?'player':'public')&&runtimeBinding(pack,f.key)&&!['native','opaque-preserve','physical-only'].includes(runtimeBinding(pack,f.key)!.editor));
- const boardFields=fields.filter(f=>runtimeBinding(pack,f.key)?.editor==='component-catalog');
+ const boardFields=fields.filter(f=>runtimeBinding(pack,f.key)?.editor==='component-catalog'&&!observationTray(f.key));
+ const trays=fields.filter(f=>observationTray(f.key)).flatMap(field=>{const assertion=latestComponentAssertion(session,field.key,ownerId);return assertion&&componentRecord(assertion)?.pieces.length?[{field,assertion,count:componentRecord(assertion)!.pieces.length}]:[];});
  const activeBoard=boardFields.find(f=>f.key===boardKey)??boardFields[0];
  const boardVariantSelector=!ownerId&&realBoardAssets?.variantSelector&&boardFields.some(f=>f.key===realBoardAssets.variantSelector!.boardField)?realBoardAssets.variantSelector:undefined;
  const hiddenVariantField=boardVariantSelector?.field;
@@ -77,6 +78,7 @@ function candidateView(a:Assertion){const f=fields.find(f=>f.key===a.field)!;con
  const items=session.preservations.filter(p=>p.ownerId===ownerId&&p.templateId.startsWith('spec.'));
  return <section className="game-essentials" aria-label="게임별 기록과 보관"><header><h3>{ownerId?`${session.players.find(p=>p.id===ownerId)?.name??'내'} 개인 기록`:'공용 기록'}</h3>{generic&&<p className="small muted">{recognitionCapability(pack).mode==='assisted'?'사진 보조 인식 · 확인 후 적용':'수동 기록 · 사진 관측 미지원'}</p>}</header>
   {linkedCount>0&&<p className="small muted">사진 실물 {linkedCount}개 연결됨</p>}
+  {trays.map(({field,assertion,count})=><section key={field.key} aria-label="미배정 사진 관측"><h4>미배정 사진 관측 · {count}개</h4><button className="button secondary small-button" disabled={busy} onClick={()=>setLink({source:assertion})}>사람·영역에 연결</button><details><summary>관측 실물 보기 ({count}개)</summary>{render(field)}</details></section>)}
   {ownerId&&<PurchasedBonus view={view} ownerId={ownerId}/>}
   {candidates.length>0&&<section className="generic-candidates" aria-label="사진에서 찾은 후보"><h4>사진에서 찾은 후보 · {candidates.length}개 영역</h4>{candidates.map(a=>candidateView(a))}{olderCandidates.length>0&&<details className="generic-older"><summary>이전 후보 {olderCandidates.length}개</summary>{olderCandidates.map(a=>candidateView(a))}</details>}</section>}
   {questions.length>0&&<p className="essentials-ask">확인할 기록 {questions.length}개 · 모르면 비워 둬도 돼요.</p>}
@@ -84,7 +86,7 @@ function candidateView(a:Assertion){const f=fields.find(f=>f.key===a.field)!;con
   {activeBoard&&<>{boardFields.length>1&&<label className="gb-field-picker">기록 영역<select aria-label="기록 영역" value={activeBoard.key} disabled={busy} onChange={event=>{const next=event.target.value;void(async()=>{try{for(const save of [...saves.current.values()])await save();setBoardKey(next);setBoardError('');}catch(e){setBoardError(e instanceof Error?e.message:'먼저 저장해 주세요.');}})();}}>{boardFields.map(f=><option key={f.key} value={f.key}>{f.label}{ownerId?` (${visibilityLabel(f)})`:''}</option>)}</select></label>}{ownerId&&<VisibilityNote field={activeBoard}/>}{render(activeBoard)}</>}
   {boardError&&<p role="alert">{boardError}</p>}
   {fields.filter(f=>first.has(f.key)&&runtimeBinding(pack,f.key)?.editor!=='component-catalog'&&f.key!==hiddenVariantField).map(f=>render(f))}
-  {fields.some(f=>!first.has(f.key)&&f.key!==hiddenVariantField)&&<details><summary className="disclosure">선택 기록 더 보기</summary>{fields.filter(f=>!first.has(f.key)&&f.key!==hiddenVariantField).map(f=>render(f))}</details>}
+  {fields.some(f=>!first.has(f.key)&&f.key!==hiddenVariantField&&!observationTray(f.key))&&<details><summary className="disclosure">선택 기록 더 보기</summary>{fields.filter(f=>!first.has(f.key)&&f.key!==hiddenVariantField&&!observationTray(f.key)).map(f=>render(f))}</details>}
   {!ownerId&&!session.room&&pack.fields.some(f=>f.scope==='player'&&f.visibility==='public'&&!!runtimeBinding(pack,f.key)&&(['scalar','component-catalog'].includes(runtimeBinding(pack,f.key)!.editor)||runtimeBinding(pack,f.key)!.editor==='native'&&f.type!=='json'))&&<details><summary>플레이어 공개 기록</summary>{session.players.map(player=><section key={player.id}><h4>{player.name}</h4>{pack.fields.filter(f=>f.scope==='player'&&f.visibility==='public'&&!!runtimeBinding(pack,f.key)&&(['scalar','component-catalog'].includes(runtimeBinding(pack,f.key)!.editor)||runtimeBinding(pack,f.key)!.editor==='native'&&f.type!=='json')).map(f=>render(f,player.id))}</section>)}</details>}
   {runtime.fieldBindings.some(b=>(b.editor==='physical-only'||b.editor==='opaque-preserve')&&b.scope===(ownerId?'player':'public'))&&<p className="small muted">입력할 수 없는 상태는 실물 그대로 보관하세요. 비밀 내용은 입력하지 않아요.</p>}
   {items.length>0&&<details open={session.stage==='restore'}><summary>실물 보관·복원 {items.length}개</summary>{restoreOrder(items).map(item=><PreservationItem key={item.id} item={item} onReadyToSave={save=>{const key=`preservation:${item.id}`;if(save)saves.current.set(key,save);else saves.current.delete(key);}} owner={ownerId?session.players.find(p=>p.id===ownerId)?.name??'개인':'공용'} busy={busy} restoring={session.stage==='restore'} onChange={body=>mutate(()=>api.preservation(session.id,item.id,body))}/>)}</details>}

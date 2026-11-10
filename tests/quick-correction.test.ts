@@ -5,7 +5,7 @@ const pack=effectiveRecognitionPack(catalogPacks.find(p=>p.id==='sagrada')!),ids
 const card=(id:string,readout:unknown=emptyGameReadout(pack,'cards'))=>({id,componentId:'cards',variant:null,quantity:1,label:'',anchor:'',evidenceId:'e',region:null,readout}) as any;
 test('the choices come from the pack; a value with no fixed choices offers none',()=>{
  const c=quickChoice(pack,card('a'),ids)!;assert.equal(c.fieldId,'face');assert.equal(c.current,null);assert.equal(c.options.length,2);
- assert.equal(quickChoice(pack,{...card('d',emptyGameReadout(pack,'dice')),componentId:'dice'},ids),null,'an open-ended number keeps its stepper');
+ const die=quickChoice(pack,{...card('d',emptyGameReadout(pack,'dice')),componentId:'dice'},ids)!;assert.equal(die.fieldId,'dieValue');assert.deepEqual(die.options.map(o=>o.value),[1,2,3,4,5,6]);
  const unknown=quickChoice(pack,{...card('u'),componentId:null,label:'미확인 실물'},ids)!;assert.equal(unknown.fieldId,null);assert.deepEqual(unknown.options.map(o=>o.value).sort(),[...ids].sort());
  const patched=applyQuickChoice(pack,{...card('u'),componentId:null,label:'미확인 실물'},null,'cards');assert.equal(patched.componentId,'cards');assert.equal(patched.label,'');
 });

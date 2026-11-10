@@ -38,6 +38,7 @@ ENUM_OVERRIDES={
  ('scout','cards','activeEnd'):[('top','위쪽 숫자'),('bottom','아래쪽 숫자')],
  ('forest-shuffle','cards','usedSection'):[('whole','전체'),('top','상단'),('bottom','하단'),('left','왼쪽'),('right','오른쪽')]
 }
+CHOICE_RANGES=json.loads((HERE/'visible-choice-ranges.json').read_text())['changes']
 BOUNDS={('hanabi','cards','number'):(1,5),('codenames','words','row'):(1,5),('codenames','words','column'):(1,5)}
 # Photo colour is not ownership. Exact lists only where current source explicitly supplies the types.
 SOURCES_CHECKED={
@@ -94,6 +95,9 @@ def build_game(g,profiles):
             if key in ENUM_OVERRIDES:
                 f['type']='enum';f.pop('min',None);f['options']=[{'value':v,'label':l} for v,l in ENUM_OVERRIDES[key]]
             if key in BOUNDS:f['min'],f['max']=BOUNDS[key]
+            for choice in CHOICE_RANGES:
+                if (choice['gameId'],choice['componentId'],choice['propertyId'])==key:
+                    f['correctionChoices']={k:choice[k] for k in ['min','max','options'] if k in choice}
             fields[f['id']]=f
         components.append({'id':c['id'],'name':c['name'],'kind':c['kind'],'description':source,'fields':list(fields.values())})
     return {'gameId':gid,'runtimePackId':g['runtimePackId'],'schema':gid+'-v1','editionId':g['editionId'],'sourceSHA':g['sourceSHA'],'packVersion':g['packVersion'],'title':g['title'],'batch':batch,'sourceVerification':SOURCES_CHECKED.get(gid,{}).get('status','attachment-only'),'components':components}

@@ -1,3 +1,4 @@
+import {validateSpatialResult} from './spatialObservation';
 import type {GamePack} from './types';
 import type {PropertySpec} from './readouts/types';
 export const OBSERVATION_VERSION='lightweight-observation-v1' as const;
@@ -6,12 +7,12 @@ export interface PhotoComponentDefinition {id:string;properties:PropertySpec[];m
 export interface PhotoDefinition {version:'game-photo-definition-v1';gameId:string;packId:string;packVersion:string;editionId:string;sourceSHA:string;definitionSHA:string;nativeBridge:'catan'|'rummikub'|'splendor'|null;readoutSchema:string|null;areas:{id:string;partition:ObservationPartition;fields:string[];componentIds:string[]}[];components:PhotoComponentDefinition[]}
 export interface ObservationScope {partition:ObservationPartition;ownerId:string|null;captureEpoch:string}
 export interface ObservationImage {evidenceId:string;sha256:string;width:number;height:number;inputId:string;transformId:string|null}
-export interface ObservationRequest {version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
+export interface ObservationRequest {spatial?:import('./spatialDefinition').SpatialRequest;version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
 export type ObservationUnknownReason='unreadable'|'occluded'|'out-of-frame'|'not-present-unconfirmed'|'wrong-face'|'ambiguous'|'unsupported';
 export type ObservationProperty={state:'observed';value:string|number|boolean|unknown[]|Record<string,unknown>}|{state:'unknown';value:null;reason:ObservationUnknownReason};
 export interface ObservationBox {x:number;y:number;width:number;height:number}
 export interface LiteralObservation {ref:string;imageIndex:number;panelRef:string|null;componentId:string|null;bbox:ObservationBox|null;face:'front'|'back'|'unknown';quantity:number|null;rotationDegrees:number|null;properties:Record<string,ObservationProperty>;referenceCandidates:{referenceId:string;assetSHA:string}[]}
-export interface ObservationResult {version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
+export interface ObservationResult {spatial?:import('./spatialObservation').SpatialResult;version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
 export interface GeometryCandidate {observationRef:string;frameId:string;locationCandidate:{type:'hex'|'edge'|'vertex';id:string};method:'confirmed-frame';status:'candidate'}
 export interface LocalReaderSelection {kind:'local-observation-v1';task?:'catan-numerals-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;inputMode?:'original'|'catan-atlas'}
 export interface HostedReaderSelection {kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
@@ -21,7 +22,7 @@ export interface LocalReaderTaskCapability {task:'catan-numerals-v1';available:b
 export interface NativeNumeralWire {id:'qwen-number-grounding-v1';result:{items:{bbox_2d:number[];text:string|null}[]};deferred:{ref:string;reason:string}[]}
 /** Original visible-only provider wire, separate from the validated facts used by the game. */
 export type PhysicalUnitClaim='single'|'group'|'unknown';
-export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1'|'terra-game-wire-v2'|'terra-game-wire-v3';physicalUnits?:Record<string,PhysicalUnitClaim>;providerResponse?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
+export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1'|'terra-game-wire-v2'|'terra-game-wire-v3';physicalUnits?:Record<string,PhysicalUnitClaim>;providerResponse?:unknown;spatial?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
 export interface ReaderIdentity {kind:'local-observation-v1';model:string;modelRevision:string;weightSHA:string;projectorSHA:string;runtimeRevision:string;contextTokens:number;maxOutputTokens:number}
 export interface GeminiReaderIdentity {kind:'gemini-game-observation-v1';model:'gemini-3.8-flash';thinkingLevel:'LOW';mediaResolution:'MEDIA_RESOLUTION_HIGH';maxOutputTokens:32768}
 export interface TerraReaderIdentity {kind:'terra-game-observation-v1';model:'gpt-6.1-terra';api:'responses';reasoningEffort:'low';imageDetail:'high';maxOutputTokens:32768;adapterVersion:'literal-named-fill-original-v1'|'literal-named-fill-unit-original-v2'|'literal-compact-unit-original-v3'|'literal-named-detail-unit-original-v4'|'literal-named-fill-unit-marks-v5'|'literal-compact-visible-instance-v7';automaticRetries:0;timeoutMs:240000}
@@ -52,7 +53,7 @@ export function compileObservationTask(input:CompileObservationInput):Observatio
  return {version:OBSERVATION_VERSION,taskId,gameId:d.gameId,packId:d.packId,editionId:d.editionId,sourceSHA:d.sourceSHA,definitionSHA:d.definitionSHA,areaId,scope:structuredClone(scope),images:structuredClone(images),allowedComponents:[...components],allowedPropertyIds:Object.fromEntries(components.map(id=>[id,d.components.find(c=>c.id===id)!.properties.map(f=>f.id)])),componentLabels,referenceSetId:null,geometryFrameId:input.geometryFrameId??null};
 }
 export function validateObservationResult(raw:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[]=[]):ObservationResult {
- const r=exact(raw,['version','observations','coverage','completion'],'관측 응답');if(r.version!==OBSERVATION_VERSION||r.coverage!=='partial'||r.completion!=='complete')return fail('관측 응답이 완료되지 않았거나 잘렸습니다(truncated). 기존 기록은 보존됩니다.');
+ const r=exact(raw,['version','observations','coverage','completion',...(isObject(raw)&&Object.hasOwn(raw,'spatial')?['spatial']:[])],'관측 응답');if(r.version!==OBSERVATION_VERSION||r.coverage!=='partial'||r.completion!=='complete')return fail('관측 응답이 완료되지 않았거나 잘렸습니다(truncated). 기존 기록은 보존됩니다.');
  if(request.definitionSHA!==definition.definitionSHA||!Array.isArray(r.observations)||r.observations.length>512)return fail('관측 정의와 결과를 확인하세요.');const seen=new Set<string>();
  for(const item of r.observations){const o=exact(item,['ref','imageIndex','panelRef','componentId','bbox','face','quantity','rotationDegrees','properties','referenceCandidates'],'실물 관측');
   if(!nonempty(o.ref)||seen.has(o.ref as string))return fail('실물 관측 ref가 중복됐습니다.');seen.add(o.ref as string);
@@ -70,7 +71,10 @@ export function validateObservationResult(raw:unknown,request:ObservationRequest
    else{const p=exact(rawProperty,['state','value'],'관측 속성');if(p.state!=='observed'||p.value===null||f.faceOnly&&o.face!=='front')return fail('보이지 않는 앞면/속성은 확정할 수 없습니다.');validateDetailValue(p.value,f);if(f.options&&f.type!=='marks'&&!f.options.some(x=>x.value===p.value))return fail('관측 값 도메인을 확인하세요.');if(id==='face'&&p.value!==o.face||id==='quantity'&&p.value!==o.quantity)return fail('면/수량 중복 값이 일치하지 않습니다.');}
   }
  }
- return structuredClone(raw) as ObservationResult;
+ if(Object.hasOwn(r,'spatial')&&!request.spatial)return fail('요청하지 않은 공간 응답입니다.');
+ const checked=structuredClone(raw) as ObservationResult;
+ if(checked.spatial){const {deferred,...payload}=checked.spatial;const validated=validateSpatialResult(payload,request,checked);validated.deferred=[...new Map([...(Array.isArray(deferred)?deferred.filter(d=>d&&typeof d.section==='string'&&Number.isSafeInteger(d.index)&&typeof d.reason==='string'):[]),...validated.deferred].map(d=>[JSON.stringify(d),d])).values()];checked.spatial=validated;}
+ return checked;
 }
 export interface ObservationReceipt {version:typeof OBSERVATION_VERSION;request:ObservationRequest;result:ObservationResult;reader:ObservationReaderIdentity;frame:import('./photoGeometry').ConfirmedPhotoFrame|null;transforms:import('./photoGeometry').PhotoTransform[];geometryCandidates:GeometryCandidate[];componentRefs:Record<string,string>;taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire;hostedWire?:HostedObservationWire;scanBundle?:import('./scanObservation').ScanBundleReceipt;scanUnitId?:string}
 export interface LocalReaderCapabilities {version:'local-reader-capabilities-v1';readers:({kind:'local-observation-v1';available:boolean;cloudSupported:false;reason?:string;identity:ReaderIdentity|null;tasks?:LocalReaderTaskCapability[]}|{kind:HostedReaderIdentity['kind'];available:boolean;cloudSupported:true;reason?:string;identity:HostedReaderIdentity|null})[];definitions:{indexSHA:string;version:'game-photo-definitions-v1';count:number}}

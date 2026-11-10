@@ -1,3 +1,4 @@
+export {generateSpatialDefinitions} from './generate-spatial-definitions.mts';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {resolve} from 'node:path';
@@ -73,13 +74,23 @@ export function generateDefinitions(root:string){
   'shared/readouts/catalogs/02-cards-tableau.json':{contractSHA:'645dc7ed62de8e28724f0f4b1094c69752bf53392e0ec9b36cf7fcd95bda947b',sha256:'f1d2a04777e41ea9e596429157a9696105e355606aabfa6f1e4285ff460da01b'},
   'shared/readouts/catalogs/05-campaign-combat.json':{contractSHA:'13f18bfaa1100b37995cb5722ca134cb00ec7fc70a40a4c852bf36ff58b44a28',sha256:'07a7069523adb1e0fb2d4219c68b9ff9dfc08bbd82642110d7a9a85af643f74a'}
  };
+
+ const approvedChoices:Record<string,string>={
+  "shared/readouts/catalogs/01-spatial-tiles.json": "0edafad1ff54e1eb194092722c593db186e0ed3fda293f2ac647dccd2e84de75",
+  "shared/readouts/catalogs/03-workers-economy.json": "83171a68bc09b37bd38fbcf1ad22074e2d0f441529e070b1b5d9ee65f1125b6a",
+  "shared/readouts/catalogs/02-cards-tableau.json": "d904bd29860ef95e1d879217166200693814e4fe24bc62da00db648e8ccdf04a",
+  "shared/readouts/types.ts": "f9517cdac064f3369cf2cbb19e8dec59c22bf17f5f930a25745c2445c56076a6"
+};
  const actualInputs=inputs.map((input:any)=>{
   const actualSHA=sha(readFileSync(resolve(root,input.file))),r3=input.file==='shared/splendor.ts'&&input.sha256===approvedSplendorR3.contractSHA&&actualSHA===approvedSplendorR3.sha256;
   const sceneNull=input.file==='shared/scene.ts'&&input.sha256===approvedSceneNullQuantity.contractSHA&&actualSHA===approvedSceneNullQuantity.sha256;
+  const choices=approvedChoices[input.file]===actualSHA;
   const condition=approvedConditions[input.file],conditions=condition?.contractSHA===input.sha256&&condition.sha256===actualSHA;
+  // 2026-11-09: canonical regeneration only reorders the existing Catan inventory citation.
+  const citationOrder=input.file==='gamepacks/generated/game-essentials.json'&&input.sha256===approvedConditions[input.file].contractSHA&&actualSHA==='1c54d7621b7d3ab9a2e4b6fe3d6c060177d0f8b6cf0ff926ddb2c0bf5584dced';
   const correction=approvedReadingCorrections[input.file],readingCorrection=correction?.contractSHA===input.sha256&&correction.sha256===actualSHA;
-  if(actualSHA!==input.sha256&&!r3&&!sceneNull&&!conditions&&!readingCorrection)throw Error(`Pinned input changed: ${input.file}`);
-  const reason=readingCorrection?'Approved 2026-11-03: opt-in literal numeric text and front-independent visible 3D feature description; two field contracts, no quantity/role inference or source identity change.':conditions?'Approved 2026-11-02: front-independent physical outline/visible side conditions, and source-backed Catan inventory metadata; domains and source identities unchanged.':r3?'Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged.':sceneNull?'Approved 2026-10-29 null quantity fix: preserve explicit unknown quantity; CATAN_NUMBERS, SCENE_VARIANTS and generated definitions unchanged.':null;
+  if(actualSHA!==input.sha256&&!r3&&!sceneNull&&!conditions&&!readingCorrection&&!citationOrder&&!choices)throw Error(`Pinned input changed: ${input.file}`);
+  const reason=choices?'Approved 2026-11-09 visible-choice ranges from official sources; exact property deltas and previous input SHAs: docs/reading-fixes-20261108/followup-20261109/choice-revision.json.':citationOrder?'Approved 2026-11-09 canonical regeneration: same Catan inventory, values, pack versions and citations; native inventory citation now precedes spec citations as emitted by the generator. Previous exact input 9ea8249443b9129c151de89a4ac67613716db1169b3cde16c795566a8702ffd0 remains recorded in docs/recognition-conditions-20261102/handoff.json.':readingCorrection?'Approved 2026-11-03: opt-in literal numeric text and front-independent visible 3D feature description; two field contracts, no quantity/role inference or source identity change.':conditions?'Approved 2026-11-02: front-independent physical outline/visible side conditions, and source-backed Catan inventory metadata; domains and source identities unchanged.':r3?'Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged.':sceneNull?'Approved 2026-10-29 null quantity fix: preserve explicit unknown quantity; CATAN_NUMBERS, SCENE_VARIANTS and generated definitions unchanged.':null;
   return {file:input.file,sha256:actualSHA,...(reason?{approvedContractSHA256:input.sha256,revisionReason:reason}:{})};
  });
  const profiles=read(root,'shared/capture-profiles.json'),packs=read(root,'gamepacks/generated/game-essentials.json');

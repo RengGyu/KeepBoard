@@ -1,3 +1,4 @@
+import {storedSpatialFor,spatialDestination} from './spatialAssembly';
 import {randomUUID} from 'node:crypto';
 import type {Assertion,AnalysisResult,GamePack,Value} from '../../shared/types';
 import {normalizeSceneDetailed,type SceneComponent,type SceneKind} from '../../shared/scene';
@@ -14,12 +15,13 @@ const literal=(o:LiteralObservation,key:string)=>o.properties[key]?.state==='obs
 export function assembleObservations(input:AssemblyInput):AnalysisResult {
  const {request,definition,pack}=input,transforms=input.transforms??[],result=validateObservationResult(input.result,request,definition,transforms),ownerId=request.scope.ownerId??undefined,area=definition.areas.find(a=>a.id===request.areaId)!,groups=new Map<string,any[]>(),refs:Record<string,string>={},warnings:string[]=[];
  const add=(field:string,value:any)=>{groups.set(field,[...(groups.get(field)??[]),value]);};
+ const spatialIds=request.spatial?Object.fromEntries(result.observations.map(o=>[o.ref,randomUUID()])):undefined;
  for(const o of result.observations){
   if(definition.nativeBridge==='rummikub'&&o.componentId==='racks'){
    warnings.push(`${o.ref}: 받침대 관측은 원관측으로 보존하며 타일로 추가하지 않습니다.`);
    continue;
   }
-  const image=request.images[o.imageIndex],region=mapObservationRegion(o,request,transforms),evidenceId=image.evidenceId,id=randomUUID();refs[o.ref]=id;
+  const image=request.images[o.imageIndex],region=mapObservationRegion(o,request,transforms),evidenceId=image.evidenceId,id=spatialIds?.[o.ref]??randomUUID();refs[o.ref]=id;
   if(definition.nativeBridge==='catan'){
    const kind=(o.componentId??'unknown') as SceneKind,c:SceneComponent={id,kind,variant:literal(o,'variant') as string|null,ownerId:null,quantity:o.quantity,location:{type:'unplaced',id:null},region,evidenceId,face:o.face==='unknown'?null:o.face,observedColor:literal(o,'observedColor') as string|null};
    if(kind==='number-token')c.number=literal(o,'number') as number|null;
@@ -29,9 +31,10 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
    const tile:RummikubTile={id,kind:o.componentId==='numbers'?'number':o.componentId==='jokers'?'joker':'unknown',color:literal(o,'color') as RummikubTile['color'],number:o.componentId==='numbers'?literal(o,'number') as number|null:null,face:o.face,representedColor:null,representedNumber:null,evidenceIds:[evidenceId],region,note:''};
    add(ownerId?'rack.scene':'table.scene',tile);
   }else{
-   const field=area.fields.find(key=>{const f=pack.fields.find(f=>f.key===key),b=runtimeBinding(pack,key);return f&&b?.editor==='component-catalog'&&(!o.componentId||b.componentIds.includes(o.componentId))&&(ownerId?f.scope==='player'&&f.visibility==='owner':f.scope==='public'&&f.visibility==='public');})??(ownerId?PHOTO_OWNER:PHOTO_PUBLIC);
+   let field=area.fields.find(key=>{const f=pack.fields.find(f=>f.key===key),b=runtimeBinding(pack,key);return f&&b?.editor==='component-catalog'&&(!o.componentId||b.componentIds.includes(o.componentId))&&(ownerId?f.scope==='player'&&f.visibility==='owner':f.scope==='public'&&f.visibility==='public');})??(ownerId?PHOTO_OWNER:PHOTO_PUBLIC);
    if(!runtimeBinding(pack,field))throw new Error('사진 실물의 허용 목적지 양식이 없습니다. 기존 기록은 보존됩니다.');
    const piece:GenericPiece={id,componentId:o.componentId,variant:null,quantity:o.quantity,label:o.componentId?'':'미확인 실물',anchor:'',evidenceId,region};
+   const spatial=storedSpatialFor(request,result,o,spatialIds??refs,transforms,input.sourceImageSHA);if(spatial){piece.spatial=spatial;field=spatialDestination(pack,piece,area.fields,ownerId)??field;}
    if(definition.nativeBridge==='splendor'){
     const fallback:SplendorKind=o.componentId==='nobles'?'noble':o.componentId==='chips'?'token':o.componentId==='development'?o.face==='back'?'deck':o.face==='front'?'development':null:null;
     let kind=(literal(o,'kind') as SplendorKind)??fallback;
@@ -61,7 +64,7 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
   else if(definition.nativeBridge==='rummikub'){
    const raw:RummikubScene={version:'rummikub-classic-v1',ownerId:ownerId??null,coverage:'partial',groups:[],loose:items},n=normalizeRummikubDetailed(raw,{ownerId,evidenceIds:request.images.map(i=>i.evidenceId),colorPolicy:'classic'});
    if(!n.recognized)throw new Error('타일 관측 형식을 확인하세요.');value=n.scene;
-  }else value=validateGenericRecord({version:'game-component-record-v1',pieces:items}as unknown as Value,pack,field,request.images.map(i=>i.evidenceId),{mode:'ai'});
+  }else value=validateGenericRecord({version:'game-component-record-v1',pieces:items}as unknown as Value,pack,field,request.images.map(i=>i.evidenceId),{mode:'ai',spatialOwnerId:ownerId});
   assertions.push({id:randomUUID(),field,value:value as Value,ownerId,basis:'observation',status:'candidate',evidenceIds:[...new Set(items.flatMap((v:any)=>v.evidenceId?[v.evidenceId]:v.evidenceIds??[]))],updatedAt:new Date().toISOString(),turnInstanceId:input.turnInstanceId,observationReceipts:[receipt]});
  }
  if(!result.observations.length)warnings.push('확정할 관측값이 없습니다. 원본과 기존 기록은 유지됩니다.');

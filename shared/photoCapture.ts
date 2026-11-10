@@ -33,7 +33,9 @@ export function captureComponentIds(pack:GamePack,evidence:Evidence[]):string[]|
 }
 /** Provider/mocked results must also respect the selected part before becoming candidates. */
 export function validateCaptureObservation(pack:GamePack,field:string,value:Value,evidence:Evidence[]){
- if(!captureFields(pack,evidence,pack.fields).some(f=>f.key===field))throw new Error('선택한 촬영 부분 밖의 결과입니다.');
+ const pieces=value&&typeof value==='object'&&!Array.isArray(value)&&Array.isArray(value.pieces)?value.pieces:[];
+ const spatialStaging=field==='__photo.public'&&pieces.length>0&&pieces.every((p:any)=>p?.spatial?.source?.partition==='player_public'&&p.spatial.boundOwnerId===null&&p.spatial.source.sourceSHA===pack.runtime?.source.sha256&&evidence.some(e=>e.id===p.evidenceId&&e.scope==='public'&&!e.ownerId&&e.captureEpoch===p.spatial.source.captureEpoch&&targetArea(pack,e)?.partition==='player_public'&&targetArea(pack,e)?.id===p.spatial.source.captureAreaId));
+ if(!spatialStaging&&!captureFields(pack,evidence,pack.fields).some(f=>f.key===field))throw new Error('선택한 촬영 부분 밖의 결과입니다.');
  const ids=captureComponentIds(pack,evidence);if(!ids||!value||typeof value!=='object'||Array.isArray(value))return;
  const entries=Array.isArray(value.pieces)?value.pieces:Array.isArray(value.components)?value.components:[];
  for(const p of entries)if(p&&typeof p==='object'&&!Array.isArray(p)){

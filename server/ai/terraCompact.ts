@@ -1,3 +1,4 @@
+import {spatialWireSchema} from './spatialWire';
 import type {ObservationRequest,PhotoDefinition,ObservationUnknownReason} from '../../shared/lightweightRecognition';
 import {hostedVisibleProperty} from './geminiGameReader';
 import {VISIBLE_INSTANCE_CONTRACT} from './visibleUnitContract';
@@ -48,7 +49,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
  replace('Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain.','Box each whole object as b:[ymin,xmin,ymax,xmax] in coordinates 0..1000 with ymin<ymax and xmin<xmax, or b:null when uncertain.');
  replace('Each attribute has id, valueJson (a JSON literal encoded as a string for an observed value, otherwise null), and unknownReason (null for observed, otherwise unreadable/occluded/out-of-frame/not-present-unconfirmed/wrong-face/ambiguous/unsupported).',
   lean?'Account for every listed property of the kind exactly once: a value you can read goes in a as a row with p (the property code) and v (a JSON literal encoded as a string); a property you cannot read goes in x as its bare code. Preserve every read value; do not drop a value because other properties are unknown. The only exception: when f is b, leave frontOnly properties out of both a and x. Do not repeat a property code.':'Each sparse attribute row a has p (the property code), v (a JSON literal encoded as a string for an observed value, otherwise actual null), and r (null for observed, otherwise u=unreadable/o=occluded/f=out-of-frame/n=not-present-unconfirmed/w=wrong-face/a=ambiguous/s=unsupported). Preserve every read value; do not drop a value because other properties are unknown. An explicit unknown needs its reason row. Omit a property row only when making no claim about it; omission is distinct from an explicit unknown. Do not repeat a property code.');
- replace('Return only JSON {"items":[...]};','Return only JSON {"v":3,"items":[...]};');
+ if(request.spatial){replace('Return only JSON {"items":[...],"spatial":{...}};','Return only JSON {"v":3,"items":[...],"spatial":{...}};');(schema.properties as any).spatial=spatialWireSchema();schema.required.push('spatial');}else replace('Return only JSON {"items":[...]};','Return only JSON {"v":3,"items":[...]};');
  if(lean){prompt+='\nEach item has exactly k,b,f,q,u,a,x. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. u is s=single, g=group or u=unknown.\n'+VISIBLE_INSTANCE_CONTRACT.replace('Report physicalUnit from','Report u from').replace('Quantity remains','q remains');return {prompt,schema};}
  prompt+='\nEach item has exactly k,b,f,q,u,a. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. Report u as s=single when it is one distinguishable physical object, g=group when the box describes several objects as an inseparable aggregate, or u=unknown when that distinction cannot be observed. This is separate from physical quantity: do not invent a count for a single or group, and do not split a group using expected inventory. A group can have q:null. Preserve individually distinguishable neighboring objects separately.';
  return {prompt,schema};
@@ -56,7 +57,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
 
 /** Validate the compact transport before the existing semantic validator sees reconstructed rows. */
 export function expandCompactTerraPayload(payload:unknown,request:ObservationRequest,definition:PhotoDefinition,profile:CompactProfile=COMPACT_TERRA_PROFILE){
- if(!exact(payload,['v','items'])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
+ if(!exact(payload,request.spatial&&record(payload)&&Object.hasOwn(payload,'spatial')?['v','items','spatial']:['v','items'])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
  const lean=profile===LEAN_TERRA_PROFILE,kinds=compactTerraKinds(request,definition,profile);
  // A row that breaks the contract becomes null, which the literal decoder drops and records.
  return payload.items.map((raw:unknown)=>{try{
