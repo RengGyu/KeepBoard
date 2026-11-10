@@ -39,20 +39,20 @@ test('unknown quantity cannot be stepped, while a known count remains adjustable
 test('corrected Splendor direct readout value clears its observation gap',()=>{
  const p=pack('splendor'),base={...piece('card','development'),readout:{schema:'splendor-v1',kind:'development',points:null,bonus:null,cost:null,requirements:null,color:null,level:null}};
  const draw=(points:number|null)=>renderToStaticMarkup(React.createElement(GapNote,{pack:p,piece:{...base,readout:{...base.readout,points}},gaps:[{property:'points',reason:'unreadable'}]} as any));
- assert.match(draw(null),/points \?/);
+ assert.match(draw(null),/사진 참고/);
  assert.equal(draw(3),'');
 });
 
 test('link correction can reference an existing accepted target without adding it to selected corrections',async()=>{
  const p=pack('carcassonne'),follower=piece('new-follower','followers'),tile=piece('saved-tile','tiles');
- const source={id:'candidate',status:'candidate',field:'supply.scene',value:{version:'game-component-record-v1',pieces:[follower]},evidenceIds:[],observationReceipts:[{componentRefs:{ref:'new-follower'},result:{observations:[{ref:'ref',properties:{face:{state:'unknown',reason:'unreadable'}}}]}}]};
+ const source={id:'candidate',status:'candidate',field:'supply.scene',value:{version:'game-component-record-v1',pieces:[follower]},evidenceIds:[],observationReceipts:[{request:{allowedPropertyIds:{followers:['face']}},componentRefs:{ref:'new-follower'},result:{observations:[{ref:'ref',componentId:'followers',face:'unknown',quantity:null,properties:{face:{state:'unknown',reason:'unreadable'}}}]}}]};
  const session={id:'synthetic',players:[],assertions:[{id:'saved',status:'accepted',field:'map.scene',value:{version:'game-component-record-v1',pieces:[tile]}},source]};
  const original=api.componentLinkOptions;api.componentLinkOptions=async()=>({sourceAssertionId:source.id,pieces:[follower],targets:[{field:'map.scene',label:'지도',visibility:'public'}],targetVersions:{'["map.scene",null]':'saved'}} as any);
  const ui=mount(ComponentLinkDialog,{view:{pack:p,session},source,initialIds:[follower.id],initialTarget:{field:'map.scene'},busy:false,dirtyTarget:()=>false,mutate:async()=>{},onClose(){}});
  try{
   await new Promise(resolve=>setImmediate(resolve));ui.render();
   assert.equal(find(ui.tree,n=>n.type==='details'&&n.props.className==='cl-correct').props.open,false);
-  find(ui.tree,n=>n.type==='button'&&Array.isArray(n.props.children)&&n.props.children.join('')==='new-follower (?)').props.onClick();ui.render();
+  find(ui.tree,n=>n.type==='button'&&Array.isArray(n.props.children)&&n.props.children.join('')==='new-follower (사진 참고)').props.onClick();ui.render();
   const editor=find(ui.tree,n=>n.type?.name==='GameDetailFields');
   assert.deepEqual(editor.props.record.pieces.map((x:any)=>x.id),['saved-tile','new-follower']);
   assert.match(renderToStaticMarkup(React.createElement(editor.type,editor.props)),/<option value="saved-tile"/);

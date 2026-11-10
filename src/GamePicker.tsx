@@ -1,3 +1,4 @@
+import {drawingEnabled} from '../shared/releaseSupport';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Check, ChevronDown, Search, X } from 'lucide-react';
 import type { GameCatalogEntry } from '../shared/gameEssentials';
@@ -59,7 +60,7 @@ export function GamePicker({ packs, value, onChange, disabled = false, initialOp
         {results.map(pack => <li key={pack.id} role="none">
           <button type="button" role="option" aria-selected={pack.id === value} className={`game-picker-option ${pack.id === value ? 'selected' : ''}`} onClick={() => choose(pack.id)}>
             <span className="game-picker-option-text"><strong>{pack.title}</strong><small>{pack.edition}</small></span>
-            <span className={`game-picker-badge ${pack.support?.recording === 'native' ? 'native' : 'manual'}`}>{supportLabel(pack)}</span>
+            <span className={`game-picker-badge ${drawingEnabled(pack) ? 'native' : 'manual'}`}>{supportLabel(pack)}</span>
             {pack.id === value && <Check size={18} className="game-picker-check" aria-hidden="true"/>}
           </button>
         </li>)}

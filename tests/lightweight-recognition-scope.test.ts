@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import path from 'node:path';import os from 'node:os';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';import defs from '../game-photo-definitions/index.json';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';import defs from '../game-photo-definitions/index.json';
 import {compileObservationTask,type PhotoDefinition} from '../shared/lightweightRecognition';import {effectiveRecognitionPack} from '../shared/recognition';import {catalogPacks} from '../gamepacks/catalog';import {prepareLocalObservation} from '../server/localObservation';
 import {prepareScanObservation} from '../server/scanObservation';import {CATAN_TOPOLOGY} from '../shared/scene';import {createHash} from 'node:crypto';import type {Evidence,Session} from '../shared/types';
 const identity={kind:'local-observation-v1',model:'scope-fixture',modelRevision:'fixture',weightSHA:'a'.repeat(64),projectorSHA:'b'.repeat(64),runtimeRevision:'fixture',contextTokens:8192,maxOutputTokens:2048}as const;

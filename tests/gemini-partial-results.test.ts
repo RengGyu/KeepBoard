@@ -6,7 +6,8 @@ import {compileObservationTask,type HostedObservationWire} from '../shared/light
 import {buildGeminiGameBody,decodeGeminiGameObservation} from '../server/ai/geminiGameReader';
 import {assembleObservations} from '../server/ai/observationAssembly';
 
-const pack=catalogPacks.find(p=>p.id==='catan-base')!;
+// This test defines its own visible schema; it is not the source-pinned release policy.
+const pack={...catalogPacks.find(p=>p.id==='catan-base')!};delete pack.photoReadingPolicy;
 const base=photoDefinition(pack);
 // Arbitrary visible fields verify generic behavior, independent of the photo corpus.
 const definition={...base,components:[

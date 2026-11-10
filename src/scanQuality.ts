@@ -32,6 +32,11 @@ export interface ScanSelector {
   lastCapturedAt?: number;
 }
 export const emptyScanSelector = (): ScanSelector => ({ previous: null, stableSince: null, lastAcceptedAt: null, accepted: [] });
+/** Advice only: manual capture never inherits the automatic selector's rejection gate. */
+export function manualCaptureGuidance(frame:ScanFrame){
+ const reason=stepScanSelector(emptyScanSelector(),frame,0).reason;
+ return ['dark','bright','flat','blur'].includes(reason)?SCAN_REASON_LABELS[reason]:'작은 숫자까지 선명하면 사진 찍기를 눌러 주세요.';
+}
 export const resetScanDwell = (state: ScanSelector): ScanSelector => ({ ...state, previous: null, stableSince: null });
 
 /** Input is a small device-local RGBA sample; the captured original uses a different full-size canvas. */

@@ -5,7 +5,7 @@ import os from 'node:os';import path from 'node:path';
 import type {GamePack,SessionView} from '../shared/types.ts';
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-optional-bootstrap-'));
 process.chdir(bootstrap);
-const {createApp}=await import('../server/index.ts');const {Store}=await import('../server/store.ts');
+const {createApp}=await import('./fixtures/drawingTestApp');const {Store}=await import('../server/store.ts');
 process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
 const oldPacks:GamePack[]=JSON.parse(await readFile(new URL('../docs/game-essentials/runtime/fixture-packs.json',import.meta.url),'utf8'));
 async function fixture(game='rummikub',historical=false){

@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {catalogPacks} from '../gamepacks/catalog';import {photoDefinition} from '../server/photoDefinitions';
 import {compileObservationTask,type HostedObservationWire,type PhotoDefinition} from '../shared/lightweightRecognition';
 import {decodeLiteralObservationPayload} from '../server/ai/geminiGameReader';
-const pack=catalogPacks.find(p=>p.id==='catan-base')!,base=photoDefinition(pack);
+const pack={...catalogPacks.find(p=>p.id==='catan-base')!};delete pack.photoReadingPolicy;const base=photoDefinition(pack);
 const fields=[
  {id:'label',type:'text'},{id:'printed',type:'text',faceOnly:true},
  {id:'choice',type:'text',options:[{value:'amber',label:'amber'}]},
@@ -30,8 +30,8 @@ test('unknown/null and non-text domains are not recovered or guessed; valid zero
 });
 test('recovered text still passes options, face-only, face equality and quantity equality validation',()=>{
  const p=decode([attr('choice','violet'),attr('printed','visible text'),attr('face','front'),attr('quantity','2')],'back').properties;
- for(const id of ['choice','printed','face','quantity'])assert.equal(p[id].state,'unknown');
- assert.deepEqual(p.printed,{state:'unknown',value:null,reason:'wrong-face'});
+ for(const id of ['choice','face','quantity'])assert.equal(p[id].state,'unknown');
+ assert.equal(Object.hasOwn(p,'printed'),false,'front-only text on a confirmed back is inapplicable, not a fabricated unknown');
 });
 test('malformed structured/quoted JSON and reserved or truncated literals never become text facts',()=>{
  for(const value of ['{"a":','[1,','"unfinished',"'unfinished",'`unfinished','nul','tru','fal','undefined','NaN','Infinity','-','1e','01','1.','null','true','false','   '])

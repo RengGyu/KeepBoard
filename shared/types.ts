@@ -18,6 +18,8 @@ export interface Requirement { id: string; scope: Scope; fields: string[]; when?
 export interface DerivedRule { id: string; scope: Scope; when: Condition; field: string; value: Value; reason: string; sourceId?: string }
 export interface PreservationTemplate { id: string; label: string; description: string; scope: Scope; conditions: string[]; restoreAfter: string[]; when?: Condition; visualFields?: string[];externalOnly?:boolean;sourceVisibility?:string;orderSensitive?:boolean;method?:string }
 export interface GamePack {
+  releaseTier?:import('./releaseSupport').ReleaseTier;
+  photoReadingPolicy?:{policySHA:string;definitionSHA:string;areas:Record<string,Record<string,string[]>>};
   runtime?:GameRuntimeMetadata;
   id: string; version: string; title: string; edition: string; description: string;
   sources: { id: string; title: string; url: string; section: string }[];

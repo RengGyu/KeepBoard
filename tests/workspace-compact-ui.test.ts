@@ -17,6 +17,7 @@ const essentials:GamePack[]=JSON.parse(readFileSync('gamepacks/generated/game-es
 const pack=(id:string)=>fixtures.find(p=>p.id===id)??effectiveRecognitionPack(essentials.find(p=>p.id===id)!);
 const players=[{id:'p1',name:'하나',color:'red'},{id:'p2',name:'두리',color:'blue'}];
 function view(p:GamePack,assertions:Assertion[]=[],stage:Session['stage']='capture'):SessionView{
+ p={...p,releaseTier:'drawing'}; // Synthetic approved fixture; production defaults remain photo-only.
  const session:Session={id:'synthetic',name:'합성 보드',createdAt:'now',updatedAt:'now',gamePackId:p.id,gamePackVersion:p.version,gamePack:p,players,captureEpoch:'epoch',turnInstanceId:'turn',stage,evidence:[],assertions,preservations:[],snapshots:[],notes:{},activity:[],example:false};
  const v=recompute(session,p);v.privacy={protectedOwnerIds:[],unlockedOwnerIds:[],setupRequiredOwnerIds:[]};return v;
 }

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { createApp } from '../server/index.ts';
+import { createApp } from './fixtures/drawingTestApp';
 import { Store } from '../server/store.ts';
 import type { SessionView, Value } from '../shared/types.ts';
 

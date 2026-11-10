@@ -6,7 +6,10 @@ import type {Session,Evidence,AnalysisResult} from '../shared/types';
 const image=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=','base64');
 const item=(box:number[],value:number|null=6,quantity:number|null=1)=>({kind:'dice',box_1000:box,face:'front',quantity,attributes:[{id:'dieValue',valueJson:value===null?null:JSON.stringify(value),unknownReason:value===null?'unreadable':null},{id:'dieColor',valueJson:'"yellow"',unknownReason:null},{id:'observedColor',valueJson:'"yellow"',unknownReason:null}]});
 async function fixture(items:any[][],options:{session?:Session;id?:string;detail?:boolean;game?:string}={}){
- const pack=effectiveRecognitionPack(catalogPacks.find(p=>p.id===(options.game??'sagrada'))!),definition=photoDefinition(pack),area=definition.areas.find(a=>a.id===(options.game==='carcassonne'?'map':'window'))!;
+ // Fusion deliberately exercises legacy/free-colour observations as well as typed values.
+ // Keep that complete historical request contract; area filtering is tested separately in release-reading-policy.
+ const sourcePack={...catalogPacks.find(p=>p.id===(options.game??'sagrada'))!};delete sourcePack.photoReadingPolicy;
+ const pack=effectiveRecognitionPack(sourcePack),definition=photoDefinition(pack),area=definition.areas.find(a=>a.id===(options.game==='carcassonne'?'map':'window'))!;
  const evidence=items.map((_,i)=>({id:'e'+i,kind:'photo',scope:'public',captureEpoch:'epoch',url:'/synthetic/'+i,label:'synthetic',...(i&&!options.detail?{sourceEvidenceId:'e0',sourceRegion:{x:0,y:0,width:.5,height:.5}}:{})})as Evidence);
  const session=options.session??({id:'synthetic',name:'synthetic',gamePack:pack,gamePackId:pack.id,gamePackVersion:pack.version,captureEpoch:'epoch',turnInstanceId:'turn',stage:'capture',players:[],evidence,assertions:[],notes:{},activity:[],preservations:[],snapshots:[]}as unknown as Session);
  const reader:any={identity:{kind:'gemini-game-observation-v1',model:'synthetic',thinkingLevel:'LOW',mediaResolution:'MEDIA_RESOLUTION_HIGH',maxOutputTokens:32768},status:async()=>({available:true})};

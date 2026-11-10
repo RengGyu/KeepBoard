@@ -1,5 +1,6 @@
 import type {GamePack} from '../shared/types';
 import {captureAreas,captureProfile,type CaptureArea} from '../shared/photoCapture';
+export const CAPTURE_RELEASE_GUIDANCE='찍을 부분은 크게 · 작은 숫자는 선명하게 · 빛 반사는 피해 주세요.';
 /** User copy only; the profile's machine instructions and scope remain exact. */
 export function captureGuideText(pack:GamePack,area?:CaptureArea){
  if(pack.runtime?.source.gameId==='catan'&&area?.id==='board')return '섬 전체와 항구가 한 화면에 들어오게 찍어 주세요. 숫자 토큰과 도로·마을·도시가 겹친 곳은 같은 멈춘 상태에서 가까이 찍어 주세요.';
@@ -9,8 +10,8 @@ export function captureGuideText(pack:GamePack,area?:CaptureArea){
  return Object.entries(terms).reduce((copy,[term,label])=>term.includes(' ')?copy.split(term).join(label):copy.replace(new RegExp('\\b'+term+'\\b','g'),label),text);
 }
 export function PhotoCaptureGuide({pack,ownerId,areaId,onChange,disabled}:{pack:GamePack;ownerId?:string;areaId:string;onChange:(id:string)=>void;disabled?:boolean}){
- const profile=captureProfile(pack);if(!profile)return null;
+ const profile=captureProfile(pack);if(!profile)return <p className="small capture-release-guidance">{CAPTURE_RELEASE_GUIDANCE}</p>;
  const areas=captureAreas(pack,ownerId),selected=areas.find(a=>a.id===areaId);
  // The current target stays visible in the summary; the picker and guidance open on demand so the board starts higher on phones.
- return <section className="panel capture-guide" aria-label="게임별 촬영 안내"><details className="capture-guide-help"><summary>{ownerId?'본인 사진':'공용 사진'} · 찍을 부분: <b>{selected?.name??'전체'}</b></summary><label className="field capture-guide-target">찍을 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label><p>{captureGuideText(pack,selected)}</p><p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></details></section>;
+ return <section className="panel capture-guide" aria-label="게임별 촬영 안내"><p className="small capture-release-guidance">{CAPTURE_RELEASE_GUIDANCE}</p><details className="capture-guide-help"><summary>{ownerId?'본인 사진':'공용 사진'} · 찍을 부분: <b>{selected?.name??'전체'}</b></summary><label className="field capture-guide-target">찍을 부분<select value={selected?.id??''} disabled={disabled} onChange={e=>onChange(e.target.value)}><option value="">전체 · 부분 미지정</option>{areas.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label><p>{captureGuideText(pack,selected)}</p><p className="small muted">{ownerId?'비공개 앞면이 함께 보이면 사진 전체를 본인 범위에 보관해요.':'손패·개인 목표 앞면은 본인 탭에서 따로 찍어 주세요. 공개 개인물의 주인은 나중에 선택해요.'} 모르는 내용은 건너뛰어도 돼요.</p></details></section>;
 }

@@ -8,7 +8,7 @@ import {Store} from '../server/store.ts';
 import {PrivatePins} from '../server/privatePin.ts';
 // Server startup must not load the project's real .env in a synthetic test.
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-pin-bootstrap-'));process.chdir(bootstrap);
-const {createApp}=await import('../server/index.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+const {createApp}=await import('./fixtures/drawingTestApp');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
 async function fixture(){
  const root=await mkdtemp(path.join(os.tmpdir(),'keepboard-pin-')),store=new Store(root),app=await createApp({store});
  const server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;

@@ -87,15 +87,15 @@ test('unresolved source claims are visible near their game record without becomi
  const view=fixture();view.pack={...view.pack,runtime:{...view.pack.runtime!,support:{...view.pack.runtime!.support,recording:'generic'}}};
  const receipt=view.session.assertions[0].observationReceipts![0];receipt.scanBundle!.unresolvedGroups=[{id:'group',reason:'possible-same-object',members:[{unitId:'read',observationRef:'number'}],relatedPieceIds:[]}];delete receipt.componentRefs.number;
  const before=structuredClone(view),html=render(view);
- assert.match(html,/미해결 관측 묶음 1건/);assert.match(html,/실물 수량에 더하지 않습니다/);assert.match(html,/숫자 토큰/);assert.match(html,/8/);assert.match(html,/원사진 영역/);assert.match(html,/수정 없이 저장/);assert.doesNotMatch(html,/필수 확인|확인해야 저장/);assert.deepEqual(view,before);
+ assert.match(html,/사진 참고 · 1곳/);assert.doesNotMatch(html,/같은 실물일 수 있는 겹침|미해결 관측 묶음/);assert.match(html,/숫자 토큰/);assert.match(html,/8/);assert.match(html,/원사진 영역/);assert.match(html,/수정 없이 저장/);assert.doesNotMatch(html,/필수 확인|확인해야 저장/);assert.deepEqual(view,before);
 });
 
 test('Catan unresolved observations follow the primary editable board, including unknown and zero quantities',()=>{
  const view=fixture(),a=view.session.assertions[0],r=a.observationReceipts![0];a.field='board.layout';a.value={version:2,coverage:'partial',components:[]};
  r.result.observations[0].quantity=null;r.scanBundle!.unresolvedGroups=[{id:'group',reason:'missing-source-box',members:[{unitId:'read',observationRef:'number'}],relatedPieceIds:[]}];
  const html=renderToStaticMarkup(createElement(SceneWorkspace,{view,busy:false,mutate:async()=>{},onEvidence(){}}));
- assert(html.indexOf('scene-primary-board')>=0&&html.indexOf('scene-primary-board')<html.indexOf('미해결 관측 묶음 1건'));
- assert.match(html,/관측 수량 확인 필요/);assert.match(html,/숫자 토큰/);assert.match(html,/원사진 영역 보기/);
+ assert(html.indexOf('scene-primary-board')>=0&&html.indexOf('scene-primary-board')<html.indexOf('사진 참고 · 1곳'));
+ assert.doesNotMatch(html,/관측 수량 [^0-9]/);assert.match(html,/사진 참고/);assert.match(html,/숫자 토큰/);assert.match(html,/원사진 영역/);
  r.result.observations[0].quantity=0;
  assert.match(renderToStaticMarkup(createElement(ScanUnresolvedGroups,{view})),/관측 수량 0/);
  r.request.scope.ownerId='other';

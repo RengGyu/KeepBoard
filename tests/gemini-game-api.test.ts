@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import {createApp} from '../server/index';
+import {createApp} from './fixtures/drawingTestApp';
 import {Store} from '../server/store';
 import {GeminiGameReader} from '../server/ai/geminiGameReader';
 import {decodeCatanSceneReading} from '../server/ai/catanSceneReading';

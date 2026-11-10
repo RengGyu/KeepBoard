@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {MemoryObjects} from '../server/objects';import {BlobObjects} from '../server/blobObjects';import {BlobStore} from '../server/blobStore';
-import {createApp} from '../server/index';import {cloudRunHostedScan,finishCloudJob} from '../server/cloudRuntime';
+import {createApp} from './fixtures/drawingTestApp';import {cloudRunHostedScan,finishCloudJob} from '../server/cloudRuntime';
 import defs from '../game-photo-definitions/index.json';
 const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
 test('cloud factory uses pinned Terra, durable unit claims prevent redelivery requests, raw/value/timing survive commit',async t=>{

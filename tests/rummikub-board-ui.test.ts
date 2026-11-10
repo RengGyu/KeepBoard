@@ -17,7 +17,7 @@ const scene=(ownerId:string|null,groups:ReturnType<typeof tile>[][])=>({version:
 const fact=(id:string,field:string,value:unknown,ownerId?:string,status:Assertion['status']='accepted',updatedAt='2026-10-22T10:00:00Z'):Assertion=>({id,field,value:value as Value,ownerId,basis:'user',status,evidenceIds:[],updatedAt});
 function render(assertions:Assertion[],ownerId?:string,protectedOwnerIds:string[]=[],extra:Partial<Session>={}){
  const session:Session={id:'synthetic',name:'합성 루미큐브',createdAt:'now',updatedAt:'now',gamePackId:rummikubPack.id,gamePackVersion:rummikubPack.version,gamePack:rummikubPack,players:[{id:'p1',name:'하나',color:'red'},{id:'p2',name:'둘',color:'blue'}],captureEpoch:'epoch',turnInstanceId:'turn',stage:'capture',evidence:[],assertions,preservations:[],snapshots:[],notes:{},activity:[],example:false,...extra};
- const view=recompute(session,rummikubPack);view.privacy={protectedOwnerIds,unlockedOwnerIds:[],setupRequiredOwnerIds:[]};
+ const view=recompute(session,{...rummikubPack,releaseTier:'drawing'});view.privacy={protectedOwnerIds,unlockedOwnerIds:[],setupRequiredOwnerIds:[]};
  return renderToStaticMarkup(createElement(Workspace,{view,ownerId,busy:false,status:{configured:true,provider:'gateway',model:'synthetic'},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}}));
 }
 

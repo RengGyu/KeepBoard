@@ -26,7 +26,7 @@ test('picker search finds real catalog games by Korean title, spacing-insensitiv
  if(spaced)assert(filterCatalog(packs,spaced.title.replace(/\s/g,'')).some(p=>p.id===spaced.id),'spaces ignored');
  assert.deepEqual(filterCatalog(packs,'존재하지않는게임xyz'),[],'no results stays empty, never falls back to another game');
  assert.equal(filterCatalog(packs,'   ').length,packs.length,'blank query lists everything');
- assert.equal(supportLabel(catan),'전용 그림 편집·판독');
+ assert.equal(supportLabel(catan),'사진 기록');assert.equal(supportLabel({...catan,releaseTier:'drawing'}),'그림 복원');
 });
 
 test('searching never selects or replaces the chosen game; creation sends the chosen id and pinned version only',async()=>{

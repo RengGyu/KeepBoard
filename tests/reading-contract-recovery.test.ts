@@ -10,7 +10,8 @@ test('opted-in printed numeric text preserves numeric literal as text, including
 });
 test('3D visible terrain description is not a hidden front; actual front-only identities stay blocked',()=>{
  const f=decode('gloomhaven','map','featureType','coffin terrain','unknown');assert.deepEqual(f.raw.observations[0].properties.featureType,{state:'observed',value:'coffin terrain'});assert.equal(f.raw.observations[0].face,'unknown');
- const hidden=decode('machi-koro','cards','activationNumber',3,'back');assert.equal(hidden.raw.observations[0].properties.activationNumber.state,'unknown');assert(hidden.trace.deferred.some((d:any)=>d.reason==='front-not-visible'));
+ const hidden=decode('machi-koro','cards','activationNumber',3,'back');assert.equal(Object.hasOwn(hidden.raw.observations[0].properties,'activationNumber'),false);assert(hidden.trace.deferred.some((d:any)=>d.reason==='inapplicable-back-face'));assert.deepEqual(hidden.trace.items,hidden.wire.items);
+ const uncertain=decode('machi-koro','cards','activationNumber',3,'unknown');assert.deepEqual(uncertain.raw.observations[0].properties.activationNumber,{state:'unknown',value:null,reason:'ambiguous'});assert(uncertain.trace.deferred.some((d:any)=>d.reason==='front-not-visible'));
 });
 test('unrelated text, invalid enums and typed numbers are not repaired by numeric-text preservation',()=>{
  assert.equal(decode('gloomhaven-jaws','map','pageLabel',2).raw.observations[0].properties.pageLabel.state,'unknown');

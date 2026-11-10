@@ -2,7 +2,8 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import * as compiler from '../shared/lightweightRecognition.ts';
 import {catalogPacks} from '../gamepacks/catalog.ts';
 import type {PhotoDefinition} from '../shared/lightweightRecognition.ts';
-const pack=catalogPacks.find(p=>p.id==='catan-base')!;
+// This test defines its own visible schema; it is not the source-pinned release policy.
+const pack={...catalogPacks.find(p=>p.id==='catan-base')!};delete pack.photoReadingPolicy;
 const definition:PhotoDefinition={version:'game-photo-definition-v1',gameId:'catan',packId:pack.id,packVersion:pack.version,editionId:pack.runtime!.source.editionId,sourceSHA:pack.runtime!.source.sha256,definitionSHA:'a'.repeat(64),nativeBridge:'catan',readoutSchema:null,areas:[{id:'board',partition:'common_public',fields:['components.observed','board.layout'],componentIds:['terrain','number-token']}],components:[{id:'terrain',properties:[{id:'variant',label:'지형',type:'enum',acquisition:'visible',sourceText:'native',options:[{value:'forest',label:'숲'},{value:'desert',label:'사막'}]}],manualPropertyIds:['ownerId','location']},{id:'number-token',properties:[{id:'number',label:'숫자',type:'integer',acquisition:'visible',sourceText:'native',min:2,max:12,options:[{value:2,label:'2'},{value:6,label:'6'}]}],manualPropertyIds:['location']}]};
 const input=()=>({pack,definition,areaId:'board',scope:{partition:'common_public' as const,ownerId:null,captureEpoch:'epoch'},images:[{evidenceId:'original',inputId:'original',sha256:'b'.repeat(64),width:850,height:637,transformId:null}],taskId:'synthetic-task'});
 const observation=()=>({ref:'tile-1',imageIndex:0,panelRef:null,componentId:'terrain',bbox:{x:.2,y:.3,width:.1,height:.1},face:'front',quantity:1,rotationDegrees:null,properties:{variant:{state:'observed',value:'forest'}},referenceCandidates:[]});

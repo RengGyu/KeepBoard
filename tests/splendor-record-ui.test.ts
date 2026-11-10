@@ -45,9 +45,9 @@ test('applied record lists every card as a readable card; legacy label values ar
  const unread={id:'unread',componentId:'nobles',variant:null,quantity:null,label:'귀족 타일',anchor:'',evidenceId:null,region:null};
  const html=renderToStaticMarkup(createElement(GameBoardRecord,{pack,fieldKey:'market.scene',record:record([...twelve.slice(0,2),legacy,unread]) as never,busy:false}));
  assert.match(html,/카드로 보기 · 4개/);
- // Colours the old label never mentioned stay unknown ("?"), not zero.
- assert.match(html,/2점, 보너스 빨강, 비용 흰색 \? 파랑 \? 초록 1 빨강 4 검정 2, 글에서 읽은 값/);assert.match(html,/글에서 읽음/);
- assert.match(html,/귀족 타일, 점수 \?, 필요 보너스 \?/);
+ // Unmentioned legacy colours remain null in storage and use one photo fallback, never zero.
+ assert.match(html,/2점, 보너스 빨강, 비용 초록 1 빨강 4 검정 2, 사진 참고, 글에서 읽은 값/);assert.match(html,/글에서 읽음/);
+ assert.match(html,/귀족 타일, 사진 참고/);assert.doesNotMatch(html,/점수 \?|필요 보너스 \?/);assert.equal(splendorView(legacy as never).cost!.white,null);assert.equal(splendorView(legacy as never).cost!.blue,null);
  assert.equal(splendorView(unread as never).points,null);
 });
 
@@ -71,6 +71,6 @@ test('known noble/token with unread kind stays unknown in display but opens matc
 
 test('unknown development kind retains visible/editable level without choosing a front or deck kind',async()=>{
  const {SplendorReadout}=await import('../src/SplendorReadout.tsx');const piece={id:'level-only',componentId:'development',variant:null,quantity:null,label:'원문',anchor:'',evidenceId:null,region:null,readout:{schema:'splendor-v1',kind:null,points:null,bonus:null,cost:null,requirements:null,color:null,level:2}} as const,before=JSON.stringify(piece);
- const read=splendorView(piece as never);assert.equal(read.kind,'unknown');assert.equal(read.level,2);assert.match(renderToStaticMarkup(createElement(SplendorReadout,read)),/2레벨 · 종류 \?/);
+ const read=splendorView(piece as never);assert.equal(read.kind,'unknown');assert.equal(read.level,2);const display=renderToStaticMarkup(createElement(SplendorReadout,read));assert.match(display,/2레벨/);assert.match(display,/사진 참고/);assert.doesNotMatch(display,/종류 \?/);
  const fields=SplendorFields({piece:piece as never,disabled:false,onPatch(){}});const html=renderToStaticMarkup(fields);assert.match(html,/aria-label="레벨"/);assert.match(html,/aria-pressed="true"[^>]*>2레벨/);assert.doesNotMatch(html,/점수<input|보너스 보석/);assert.equal(JSON.stringify(piece),before);
 });

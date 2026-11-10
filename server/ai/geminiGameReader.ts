@@ -1,3 +1,4 @@
+import {observationPropertyApplicable} from '../../shared/observationGaps';
 import {spatialInstructions,spatialWireSchema} from './spatialWire';
 import {validateSpatialResult} from '../../shared/spatialObservation';
 import type {Session,GamePack,Evidence} from '../../shared/types';
@@ -23,7 +24,7 @@ export function buildGeminiGameBody(request:ObservationRequest,definition:PhotoD
  let prompt=`Observe this ${request.gameId} photograph, selected area ${request.areaId} (${request.scope.partition}). The allowed physical kinds and their own visible properties are ${JSON.stringify(components)}. Use each component's name and physicalType to interpret its id; the output kind is that id, not physicalType.
 ${terrainGuide}First inspect the whole photographed area for physical objects of EACH allowed kind, including small, overlapping and edge objects. Movable pieces, tokens, tiles and cards are distinct from the printed board and its illustrations. Return their visible presence and boxes even when their names, numbers or colours cannot be read. A board-only result must not replace pieces visibly lying on it. Do not invent missing kinds or expected inventory.
 Then read only the listed properties belonging to that object's kind. Keep a visible value even if other properties are unreadable. Unknown, absent-unconfirmed or occluded properties use valueJson:null with the matching reason; an unreadable label must not remove the physical object. Use each listed property's type: integer values are JSON numbers; text values are JSON strings, including printed digits and ranges. Booleans are JSON booleans. Unknown uses actual null, never the string "null". No attribute may use another kind's property.
-Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information. A colour alone does not prove an owner. Read face-only properties only when the front is visible. A printed number is a property, not the physical quantity. One row is one physical object; if a visible inseparable group is returned, quantity is its visible count or null when uncountable, never 1 just because it is one box. Do not guess a total or game state. Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain. Each attribute has id, valueJson (a JSON literal encoded as a string for an observed value, otherwise null), and unknownReason (null for observed, otherwise unreadable/occluded/out-of-frame/not-present-unconfirmed/wrong-face/ambiguous/unsupported). Include no manual properties. Return only JSON {"items":[...]}; an empty list is valid when no allowed physical objects can be identified.`;
+Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information. A colour alone does not prove an owner. Read face-only properties only when the front is visible. For an explicitly back-facing object omit front-only attributes instead of inventing unknowns for them. An unknown face does not establish a back face; applicable unread values remain unknown. A printed number is a property, not the physical quantity. One row is one physical object; if a visible inseparable group is returned, quantity is its visible count or null when uncountable, never 1 just because it is one box. Do not guess a total or game state. Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain. Each attribute has id, valueJson (a JSON literal encoded as a string for an observed value, otherwise null), and unknownReason (null for observed, otherwise unreadable/occluded/out-of-frame/not-present-unconfirmed/wrong-face/ambiguous/unsupported). Include no manual properties. Return only JSON {"items":[...]}; an empty list is valid when no allowed physical objects can be identified.`;
  // Keep the proven flat wire schema; component-specific alternatives were rejected by the live endpoint.
  const ids=[...new Set(components.flatMap(c=>c.properties.map(p=>p.id)))];
  const schema={type:'object',properties:{items:{type:'array',items:{type:'object',properties:{kind:{type:'string',enum:components.map(c=>c.id)},box_1000:{type:['array','null'],items:{type:'number',minimum:0,maximum:1000},minItems:4,maxItems:4},face:{type:'string',enum:['front','back','unknown']},quantity:{type:['integer','null'],minimum:0},attributes:{type:'array',items:{type:'object',properties:{id:ids.length?{type:'string',enum:ids}:{type:'string'},valueJson:{type:['string','null']},unknownReason:{type:['string','null'],enum:[...reasons,null]}},required:['id','valueJson','unknownReason'],additionalProperties:false}}},required:['kind','box_1000','face','quantity','attributes'],additionalProperties:false}}},required:['items'],additionalProperties:false};
@@ -60,6 +61,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
     defer(a.id,'property-belongs-to-another-component');continue;
    }
    const field=component.properties.find(p=>p.id===a.id)!;
+   if(!observationPropertyApplicable(request,{componentId:raw.kind,face:raw.face as 'front'|'back'|'unknown',properties:{}},a.id,definition)){defer(a.id,'inapplicable-back-face');continue;}
    if(a.valueJson===null){
     if(reasons.includes(a.unknownReason as ObservationUnknownReason))unknown(a.id,a.unknownReason as ObservationUnknownReason);
     else {unknown(a.id,'unreadable');defer(a.id,'unknown-value-encoding');}
@@ -72,7 +74,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
      value=text;
     }
     if(value===null||a.unknownReason!==null){unknown(a.id,reasons.includes(a.unknownReason as ObservationUnknownReason)?a.unknownReason as ObservationUnknownReason:'unreadable');defer(a.id,'unknown-value-encoding');continue;}
-    if(field.faceOnly&&raw.face!=='front'){unknown(a.id,'wrong-face');defer(a.id,'front-not-visible');continue;}
+    if(field.faceOnly&&raw.face!=='front'){unknown(a.id,'ambiguous');defer(a.id,'front-not-visible');continue;}
     if(field.type==='text'&&field.literalNumberText===true&&typeof value==='number'&&Number.isSafeInteger(value))value=String(value);
     try{validateDetailValue(value,field);if(field.options&&field.type!=='marks'&&!field.options.some(o=>o.value===value))throw Error();
      if(a.id==='face'&&value!==raw.face||a.id==='quantity'&&value!==raw.quantity)throw Error();
@@ -80,7 +82,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
     }catch{unknown(a.id,'unreadable');defer(a.id,'invalid-visible-value');}
    }
   }
-  for(const field of component.properties)if(request.allowedPropertyIds[component.id]?.includes(field.id)&&hostedVisibleProperty(component,field.id)&&!Object.hasOwn(properties,field.id))unknown(field.id,field.faceOnly&&raw.face!=='front'?'wrong-face':'not-present-unconfirmed');
+  for(const field of component.properties)if(request.allowedPropertyIds[component.id]?.includes(field.id)&&hostedVisibleProperty(component,field.id)&&observationPropertyApplicable(request,{componentId:raw.kind,face:raw.face as 'front'|'back'|'unknown',properties},field.id,definition)&&!Object.hasOwn(properties,field.id))unknown(field.id,'not-present-unconfirmed');
   let bbox:null|{x:number;y:number;width:number;height:number}=null;
   if(raw.box_1000!==null){const b=raw.box_1000;if(!Array.isArray(b)||b.length!==4||b.some((v:unknown)=>typeof v!=='number'||!Number.isFinite(v)||v<0||v>1000)||b[0]>=b[2]||b[1]>=b[3])defer('box_1000','invalid-box-geometry');else bbox={x:b[1]/1000,y:b[0]/1000,width:(b[3]-b[1])/1000,height:(b[2]-b[0])/1000};}
   return {ref:'item-'+(index+1),imageIndex:0,panelRef:null,componentId:raw.kind,bbox,face:raw.face as 'front'|'back'|'unknown',quantity:raw.quantity as number|null,rotationDegrees:null,properties,referenceCandidates:[]};

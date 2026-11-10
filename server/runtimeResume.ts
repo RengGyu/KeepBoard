@@ -1,3 +1,4 @@
+import {hasPhotoRecord} from '../shared/sessionSummary';
 import {componentRecord} from '../shared/componentLinking.ts';
 import {randomUUID} from 'node:crypto';
 import type {GamePack,Session} from '../shared/types.ts';
@@ -7,8 +8,15 @@ import {isTurnField} from './engine.ts';
 
 /** Explicit restore changes one visibility partition; opening a session never calls this. */
 export function resumeSnapshot(session:Session,pack:GamePack,scope:'public'|'owner'='public',ownerId?:string){
- const saved=latestSnapshot(session,scope==='public'?'public':ownerId);if(!saved)throw new Error('먼저 저장본을 만드세요.');
  if(scope==='owner'&&!session.players.some(p=>p.id===ownerId))throw new Error('복원할 플레이어를 지정하세요.');
+ const saved=latestSnapshot(session,scope==='public'?'public':ownerId);
+ if(!saved){
+  if(!hasPhotoRecord(session,scope==='owner'?ownerId:undefined))throw new Error('먼저 저장본을 만드세요.');
+  // The current persisted photo record needs no fabricated snapshot, accepted fact or packed/restored flag.
+  if(scope==='public'){session.stage='restore';session.captureEpoch=randomUUID();}
+  if(scope==='public'&&!session.analysisSummaryOwnerId||scope==='owner'&&session.analysisSummaryOwnerId===ownerId){session.analysisSummary=undefined;session.analysisSummaryOwnerId=undefined;}
+  return;
+ }
  const assertion=(a:Session['assertions'][number])=>session.room?inRoomScope(pack,a,scope==='public'?'public':ownerId!):scope==='owner'?a.ownerId===ownerId&&privateField(pack,a.field):!privateField(pack,a.field);
  const photo=(e:Session['evidence'][number])=>scope==='owner'?e.ownerId===ownerId:!e.ownerId&&e.scope==='public';
  const preserve=(p:Session['preservations'][number])=>scope==='owner'?p.ownerId===ownerId:!p.ownerId;

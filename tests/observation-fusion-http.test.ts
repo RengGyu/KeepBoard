@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {catalogPacks} from '../gamepacks/catalog';import {effectiveRecognitionPack} from '../shared/recognition';import {photoDefinition} from '../server/photoDefinitions';import {createApp} from '../server/index';import {Store} from '../server/store';import {GeminiGameReader,decodeGeminiGameObservation} from '../server/ai/geminiGameReader';
+import {catalogPacks} from '../gamepacks/catalog';import {effectiveRecognitionPack} from '../shared/recognition';import {photoDefinition} from '../server/photoDefinitions';import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {GeminiGameReader,decodeGeminiGameObservation} from '../server/ai/geminiGameReader';
 const bytes=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=','base64');
 class Reader extends GeminiGameReader{
  calls=0;block=false;started:()=>void=()=>{};release:Promise<void>=Promise.resolve();

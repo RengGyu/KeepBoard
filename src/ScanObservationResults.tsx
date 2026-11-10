@@ -1,25 +1,24 @@
+import {PhotoReference} from './PhotoReference';
 import {SCENE_KIND_LABELS,SCENE_VARIANTS,type SceneKind} from '../shared/scene';
 import {mapObservationRegion} from '../shared/photoGeometry';
-import type {UnresolvedScanGroup} from '../shared/scanObservation';
 import type {Assertion,Evidence,SessionView} from '../shared/types';
 import {usePhotoDefinition} from './photoDefinitions';
 import {PhotoObservationOverlay} from './PhotoObservationOverlay';
 import {scanReviewValue} from './scanReviewValue';
 /** Source observations stay separate from the linked physical inventory; nothing here requires confirmation. */
-export function ScanObservationResults({view,ownerId}:{view:SessionView;ownerId?:string}){
+export function ScanObservationResults({view,ownerId,onEvidence}:{view:SessionView;ownerId?:string;onEvidence?:(photo:Evidence,region?:Assertion['region'])=>void}){
  const assertions=view.session.assertions.filter(a=>a.ownerId===ownerId),latest=assertions.flatMap(a=>a.observationReceipts??[]).filter(r=>r.scanBundle).at(-1),bundle=latest?.scanBundle;
  const {definition}=usePhotoDefinition(view.pack,!!bundle);
  if(!bundle)return null;
  const receipts=[...new Map(assertions.flatMap(a=>a.observationReceipts??[]).filter(r=>r.scanBundle?.plan.id===bundle.plan.id).map(r=>[r.scanUnitId,r])).values()];
  const photos=view.session.evidence.filter(p=>p.ownerId===ownerId&&p.scope===(ownerId?'player':'public'));
- const pending=bundle.links.filter(l=>l.status!=='linked'||!l.targetPieceId);
- return <><ScanFusionNotes view={view} ownerId={ownerId}/>{(view.pack.runtime?.support.recording==='generic'||view.pack.id==='rummikub')&&<ScanUnresolvedGroups view={view} ownerId={ownerId}/>}<details className="lightweight-reader"><summary>스캔 원사진 · {bundle.units.filter(u=>u.state==='completed').length}/{bundle.plan.units.length}장 읽음{pending.length?` · 미연결·충돌 ${pending.length}건`:''}</summary>
-  <p className="small">같은 원본에서 대응한 관측은 그림에 반영했어요. 미연결·충돌은 실물 수에 합산하지 않고 원사진에 남아 있어요. 수정 없이 저장할 수 있어요.</p>
+ return <>{(view.pack.runtime?.support.recording==='generic'||view.pack.id==='rummikub')&&<ScanUnresolvedGroups view={view} ownerId={ownerId} onEvidence={onEvidence}/>}<details className="lightweight-reader"><summary>읽은 값 · 사진 참고 · {bundle.units.filter(u=>u.state==='completed').length}/{bundle.plan.units.length}장 읽음</summary>
+  <p className="small">읽은 값은 기록에, 나머지는 원사진에 남겨요. 수정 없이 저장할 수 있어요.</p>
   {bundle.plan.units.map((u,i)=>{
    const state=bundle.units.find(s=>s.unitId===u.id),r=receipts.find(r=>r.scanUnitId===u.id),photo=photos.find(p=>p.id===u.sourceEvidenceId);
    return <section key={u.id}>
     <p>{i+1}번째 사진 · {state?.state==='completed'?`관측 ${state.observationCount}건`:state?.state==='failed'?'읽기 실패 · 원본 보관':'중단 · 원본 보관'}{u.target?' · 선택 실물 보충':''}</p>
-    {r?.hostedWire?.physicalUnits&&<p className="small muted">판독 단위 · 개별 주장 {Object.values(r.hostedWire.physicalUnits).filter(v=>v==='single').length}건 · 묶음 주장 {Object.values(r.hostedWire.physicalUnits).filter(v=>v==='group').length}건 · 단위 미확정 {Object.values(r.hostedWire.physicalUnits).filter(v=>v==='unknown').length}건. 실물 총수나 전체 판독을 뜻하지 않아요.</p>}
+
     {r&&definition?<PhotoObservationOverlay photos={photos} request={r.request} result={r.result} geometry={r.geometryCandidates} definition={definition} transforms={r.transforms} compact open={false}/>:photo?
      <details className="lightweight-reader is-result"><summary>사진 원본 보기</summary><div className="lw-photo-review"><img src={photo.url} alt={`${i+1}번째 사진 원본`} loading="lazy"/></div></details>:
      <p className="small muted">원본 사진을 찾을 수 없어요.</p>}
@@ -39,7 +38,6 @@ export function ScanProgressPreview({view,progress}:{view:SessionView;progress:i
  </section>;
 }
 
-const groupReason:Record<UnresolvedScanGroup['reason'],string>={'possible-same-object':'같은 실물일 수 있는 겹침','unregistered-view':'사진·기존 기록 사이의 연결 미확정','missing-source-box':'원사진 범위 미확인'};
 /** These are source relationships, not extra pieces; optional legacy metadata is never required for save. */
 export function ScanUnresolvedGroups({view,ownerId,assertion,onEvidence}:{view:SessionView;ownerId?:string;assertion?:Assertion;onEvidence?:(photo:Evidence,region?:Assertion['region'])=>void}){
  const assertions=(assertion?[assertion]:view.session.assertions).filter(a=>a.ownerId===ownerId),all=assertions.flatMap(a=>a.observationReceipts??[]),latest=all.filter(r=>r.scanBundle).at(-1),bundle=latest?.scanBundle;
@@ -50,24 +48,13 @@ export function ScanUnresolvedGroups({view,ownerId,assertion,onEvidence}:{view:S
  const photos=view.session.evidence.filter(p=>p.ownerId===ownerId&&p.scope===(ownerId?'player':'public'));
  const visibleGroups=groups.filter(g=>g.members.some(m=>receipts.some(r=>r.scanUnitId===m.unitId&&r.result.observations.some(o=>o.ref===m.observationRef))));
  if(!visibleGroups.length)return null;
- const display=(value:unknown):string=>scanReviewValue(value,undefined,v=>typeof v==='object'?JSON.stringify(v):String(v));
- const describe=(o:typeof receipts[number]['result']['observations'][number])=>{
-  const component=definition?.components.find(c=>c.id===o.componentId),kind=o.componentId?(SCENE_KIND_LABELS[o.componentId as SceneKind]??view.pack.runtime?.components.find(c=>c.id===o.componentId)?.name??o.componentId):'종류 ?';
-  const labels:Record<string,string>={observedColor:'관찰 색',face:'앞·뒷면',quantity:'수량',variant:'종류',number:'숫자',ratio:'교환 비율',color:'색'};
-  const properties=Object.entries(o.properties).map(([id,p])=>{const field=component?.properties.find(f=>f.id===id),value=p.state==='observed'?p.value:null,option=field?.options?.find(option=>option.value===value),variant=id==='variant'?SCENE_VARIANTS[o.componentId as SceneKind]?.find(option=>option.value===value):undefined;return {id,label:field?.label??labels[id],text:`${field?.label??labels[id]??id}: ${scanReviewValue(value,field,v=>option?.label??variant?.label??display(v))}`};});
-  return {kind,values:properties.map(p=>p.text).join(' · '),summary:[kind,...properties.filter(p=>p.label&&!['observedColor','face','quantity'].includes(p.id)).slice(0,2).map(p=>p.text)].join(' · ')};
- };
- return <section className="lightweight-reader is-result" aria-label="미해결 관측 묶음"><h4>미해결 관측 묶음 {visibleGroups.length}건</h4><p className="small">읽힌 개별 관측입니다. 한 묶음이 실물 한 개라는 뜻이 아니며 실물 수량에 더하지 않습니다. 수정 없이 저장할 수 있어요.</p>
- {visibleGroups.map(g=>{const summaries=[...new Set(g.members.flatMap(m=>{const o=receipts.find(r=>r.scanUnitId===m.unitId)?.result.observations.find(o=>o.ref===m.observationRef);return o?[describe(o).summary]:[];}))];return <details key={g.id} aria-label={groupReason[g.reason]}><summary>{summaries.slice(0,2).join(' / ')}{summaries.length>2?' 외':''} · 관측 {g.members.length}건</summary><p className="small">{groupReason[g.reason]} · 실물 개수 미확정</p>
-  <ul>{g.members.map(m=>{const receipt=receipts.find(r=>r.scanUnitId===m.unitId),o=receipt?.result.observations.find(o=>o.ref===m.observationRef);if(!receipt||!o)return <li key={m.unitId+':'+m.observationRef}>원관측을 찾을 수 없어요.</li>;
-   const {kind,values}=describe(o),photo=photos.find(p=>p.id===receipt.request.images[o.imageIndex]?.evidenceId);
-   let region:Assertion['region'];try{region=mapObservationRegion(o,receipt.request,receipt.transforms)??undefined;}catch{region=undefined;}
-   const unit=receipt.hostedWire?.physicalUnits?.[o.ref];
-   return <li key={m.unitId+':'+m.observationRef}><b>{kind}</b>{values?' · '+values:''}<span className="small"> · 관측 수량 {display(o.quantity)}{unit?` · ${unit==='group'?'묶음 판독':unit==='single'?'한 실물 판독':'단위 미확정'}`:''}</span><p className="small">{bundle.plan.units.findIndex(u=>u.id===m.unitId)+1}번째 사진 · {region?'원사진 영역 있음':'원사진 영역 ?'} {photo&&onEvidence?<button type="button" className="button text small-button" onClick={()=>onEvidence(photo,region)}>원사진 영역 보기</button>:!photo?' · 원본을 찾을 수 없어요.':null}</p></li>;
-  })}</ul>
-  {receipts.filter(r=>g.members.some(m=>m.unitId===r.scanUnitId)).map(r=>{const refs=new Set(g.members.filter(m=>m.unitId===r.scanUnitId).map(m=>m.observationRef)),observations=r.result.observations.filter(o=>refs.has(o.ref));return definition?<PhotoObservationOverlay key={r.scanUnitId} photos={photos} request={r.request} result={{...r.result,observations}} geometry={r.geometryCandidates.filter(c=>refs.has(c.observationRef))} definition={definition} transforms={r.transforms} compact open={false}/>:null;})}
- </details>;})}
- </section>;
+ return <details className="lightweight-reader is-result" aria-label="사진 참고"><summary>사진 참고 · {visibleGroups.length}곳</summary>
+ {visibleGroups.map(g=><div key={g.id}>{g.members.map(m=>{const receipt=receipts.find(r=>r.scanUnitId===m.unitId),o=receipt?.result.observations.find(o=>o.ref===m.observationRef);if(!receipt||!o)return null;
+  const photo=photos.find(p=>p.id===receipt.request.images[o.imageIndex]?.evidenceId);let region:Assertion['region'];try{region=mapObservationRegion(o,receipt.request,receipt.transforms)??undefined;}catch{region=undefined;}
+  const component=definition?.components.find(c=>c.id===o.componentId),values=Object.entries(o.properties).filter(([id,p])=>p.state==='observed').map(([id,p])=>{const field=component?.properties.find(f=>f.id===id);return `${field?.label??id}: ${scanReviewValue(p.value,field)}`;});
+  return <div key={m.unitId+':'+m.observationRef}><strong>{SCENE_KIND_LABELS[o.componentId as SceneKind]??view.pack.runtime?.components.find(c=>c.id===o.componentId)?.name??'사진 참고'}</strong><PhotoReference photo={photo} region={region} onOpen={photo&&onEvidence?()=>onEvidence(photo,region):undefined}/>{values.length>0&&<p className="small">{values.join(' · ')}</p>}{o.quantity!==null&&<span className="small">관측 수량 {o.quantity}</span>}</div>;
+ })}</div>)}
+ </details>;
 }
 
 /** Optional provenance, including earlier jobs. Values remain in immutable receipts or the editable record. */

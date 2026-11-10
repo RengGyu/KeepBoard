@@ -11,7 +11,7 @@ import type { Evidence, GamePack, SessionView } from '../shared/types.ts';
 
 // Server startup must not load the project's real .env in a synthetic test.
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-rummikub-bootstrap-'));process.chdir(bootstrap);
-const {createApp}=await import('../server/index.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+const {createApp}=await import('./fixtures/drawingTestApp');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
 
 const tile = (id: string, color: string | null, number: number | null) => ({ id, kind: 'number', color, number, face: 'front', evidenceIds: [], region: null });
 const scene = (ownerId: string | null, tiles: unknown[]) => ({ version: 'rummikub-classic-v1', ownerId, coverage: 'partial', groups: [{ id: 'group-one', label: '중단한 묶음', tiles }], loose: [] });

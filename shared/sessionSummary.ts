@@ -1,5 +1,8 @@
 import type {Session} from './types';
 
+/** An uploaded original is already a durable record; it is not a completed restoration claim. */
+export function hasPhotoRecord(session:Pick<Session,'evidence'>,ownerId?:string):boolean{return session.evidence.some(e=>e.kind==='photo'&&(ownerId?e.ownerId===ownerId:e.scope==='public'&&!e.ownerId));}
+
 /** List cards never carry board state, snapshots, private photos or room credentials. */
 export interface SessionSummary {
  id:string;name:string;gamePackId:string;gamePackVersion:string;updatedAt:string;
@@ -10,6 +13,6 @@ export function sessionSummary(session:Session):SessionSummary {
  const ownerURLs=new Set(evidence.filter(e=>e.ownerId).map(e=>e.url));
  const thumbnail=session.evidence.find(e=>e.scope==='public'&&!e.ownerId&&!ownerURLs.has(e.url))?.url;
  return {id:session.id,name:session.name,gamePackId:session.gamePackId,gamePackVersion:session.gamePackVersion,
-  updatedAt:session.updatedAt,saved:session.snapshots.length>0,room:!!session.room,
+  updatedAt:session.updatedAt,saved:session.snapshots.length>0||session.evidence.some(e=>e.kind==='photo'),room:!!session.room,
   ...(session.example?{example:true}:{}),...(session.deletedAt?{deletedAt:session.deletedAt}:{}),...(thumbnail?{thumbnail}:{})};
 }

@@ -5,7 +5,8 @@ import type { Evidence } from '../shared/types';
 import { Modal } from './ui';
 import { CaptureHelp } from './BoardFeedback';
 import { BRAND_IMAGES } from './brandImages';
-import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, type ScanFrame } from './scanQuality';
+import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, manualCaptureGuidance, type ScanFrame } from './scanQuality';
+import {CAPTURE_RELEASE_GUIDANCE} from './PhotoCaptureGuide';
 
 import { createScanUploadQueue, type UploadSnapshot } from './scanUploads';
 import { recordScanTiming } from './scanTiming';
@@ -151,7 +152,7 @@ export function CameraDialog({ onClose, onCapture, guidance,parallelUpload=false
           const frame = sampleFrame();
           if (mounted.current) setReady(true);
           if (!automaticRef.current) {
-            if (mounted.current) setStatus('숫자와 말이 선명하게 보이면 사진 찍기를 눌러 주세요.');
+            if (mounted.current) setStatus(manualCaptureGuidance(frame));
             return;
           }
           const step = stepScanSelector(selector.current, frame, now);
@@ -231,7 +232,7 @@ export function CameraDialog({ onClose, onCapture, guidance,parallelUpload=false
     <div className="camera-view"><video ref={video} playsInline muted autoPlay poster={BRAND_IMAGES.captureGuide}/><div className="camera-guide" aria-hidden="true"/><span className="camera-count">확보 {count} / {SCAN_LIMIT}장</span>{paused && <span className="camera-paused">{count >= SCAN_LIMIT ? '사진 확보 마침' : '일시정지'}</span>}</div>
     <div className="modal-body">
       <CaptureHelp/>
-      <ol className="scan-guidance"><li>찍을 영역을 화면에 크게</li><li>숫자·말에 초점 맞추기</li><li>사진 찍기</li></ol>
+      <p className="scan-guidance">{CAPTURE_RELEASE_GUIDANCE}</p>
       <p className="camera-status" role="status" aria-live="polite">{status}</p>
       {count > 0 && <><p className="camera-status" role="status">사진 전송 {savedCount}/{count}{transfers.active ? ' · 보내는 중…' : failedCount ? ` · ${failedCount}장 실패` : ' · 완료'}</p><div className="scan-thumbnails" aria-label="이번 스캔에서 확보한 사진">{transfers.entries.map((entry, index) => { const preview = capturePreviews.current.get(entry.id); return <div key={entry.id}>{preview?.url && <img src={preview.url} alt={`확보한 사진 ${index + 1}`}/>}<span>{index + 1} · {entry.state === 'saved' ? '전송됨' : entry.state === 'failed' ? '전송 실패' : '전송 중'}</span></div>; })}</div></>}
       {failedCount > 0 && <div className="button-row"><button className="button secondary" disabled={transfers.active || finishing} onClick={() => void retryUploads()}>전송 다시 시도</button><button className="button text" disabled={transfers.active || finishing} onClick={omitFailedAndFinish}>실패한 {failedCount}장 빼고 마치기</button></div>}
@@ -245,7 +246,7 @@ export function CameraDialog({ onClose, onCapture, guidance,parallelUpload=false
 }
 
 type Region = { x: number; y: number; width: number; height: number };
-export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: Evidence; region?: Region; onClose: () => void; onCrop: (photo: PhotoInput) => Promise<void> }) {
+export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: Evidence; region?: Region; onClose: () => void; onCrop?: (photo: PhotoInput) => Promise<void> }) {
   const image = useRef<HTMLImageElement>(null);
   const start = useRef<{ x: number; y: number } | null>(null);
   const [selection, setSelection] = useState<Region | undefined>(region);
@@ -258,7 +259,7 @@ export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: E
     return { x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)), y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)) };
   };
   const saveCrop = async () => {
-    if (!image.current || !selection || selection.width < 0.01 || selection.height < 0.01) return;
+    if (!onCrop || !image.current || !selection || selection.width < 0.01 || selection.height < 0.01) return;
     setBusy(true); setError('');
     try {
       const img = image.current;
@@ -279,9 +280,9 @@ export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: E
     }} onPointerUp={() => { start.current = null; }} onPointerCancel={() => { start.current = null; }}>
       <img ref={image} src={evidence.url} alt={evidence.label} draggable={false}/>{selection && <div className="crop-region" style={{ left: `${selection.x * 100}%`, top: `${selection.y * 100}%`, width: `${selection.width * 100}%`, height: `${selection.height * 100}%` }}/>}
     </div></div>
-    <div className="modal-body"><div className="inspector-tools"><label>확대 <input aria-label="사진 확대" type="range" min="1" max="3" step="0.1" value={zoom} onChange={event => setZoom(Number(event.target.value))}/></label><button className={`button small-button ${selecting ? 'primary' : 'secondary'}`} onClick={() => setSelecting(!selecting)}><Crop size={16}/>영역 선택</button><button className="icon-button" aria-label="확대와 선택 초기화" onClick={() => { setSelection(undefined); setZoom(1); }}><RotateCcw size={17}/></button></div>
+    <div className="modal-body"><div className="inspector-tools"><label>확대 <input aria-label="사진 확대" type="range" min="1" max="3" step="0.1" value={zoom} onChange={event => setZoom(Number(event.target.value))}/></label>{onCrop&&<button className={`button small-button ${selecting ? 'primary' : 'secondary'}`} onClick={() => setSelecting(!selecting)}><Crop size={16}/>영역 선택</button>}<button className="icon-button" aria-label="확대와 선택 초기화" onClick={() => { setSelection(undefined); setZoom(1); }}><RotateCcw size={17}/></button></div>
       <p className="muted small">{selecting ? '사진 위를 드래그해 확인할 영역을 선택하세요.' : '원본을 확대해 말·카드·숫자를 직접 확인하세요.'} {evidence.kind === 'example' && '이 이미지는 예시 도식입니다.'}</p>
-      {selection && <button className="button primary" disabled={busy || selection.width < 0.01} onClick={() => void saveCrop()}><Crop size={17}/>{busy ? '저장 중…' : '선택 영역을 근거 사진으로 추가'}</button>}
+      {onCrop&&selection && <button className="button primary" disabled={busy || selection.width < 0.01} onClick={() => void saveCrop()}><Crop size={17}/>{busy ? '저장 중…' : '선택 영역을 근거 사진으로 추가'}</button>}
       {error && <p className="inline-error">{error}</p>}
     </div>
   </Modal>;

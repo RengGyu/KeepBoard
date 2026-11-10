@@ -61,7 +61,7 @@ test('visible group surface linking protects manual null/zero, placement and del
 });
 test('optional group surface provenance is shown without claiming a recovered inventory or requiring correction',async()=>{
  const f=await fixture([[item('group',[200,200,300,300])],[item('group',[400,400,600,600])]]),r=f.project();f.session.assertions=r.assertions;
- const html=renderToStaticMarkup(React.createElement(ScanObservationResults,{view:{session:f.session,pack:f.pack} as any}));assert.match(html,/가시 묶음 표면 1건/);assert.match(html,/숨은 구성과 총수량은 확인하지 않았어요/);assert(!html.includes('required'));
+ const html=renderToStaticMarkup(React.createElement(ScanObservationResults,{view:{session:f.session,pack:f.pack} as any}));assert.match(html,/읽은 값 · 사진 참고/);assert.match(html,/수정 없이 저장할 수 있어요/);assert.doesNotMatch(html,/필수 확인|확인해야 저장|required/);
 });
 test('a later whole-only scan cannot reintroduce a previously refined group, even after child edits or deletion',async()=>{
  for(const deleted of [false,true]){
@@ -122,5 +122,5 @@ test('unit claims do not authorize cross-source, owner, epoch or selected-area l
 });
 test('optional source display distinguishes group claims from physical count and adds no confirmation gate',async()=>{
  const f=await fixture([[item('group',[100,100,900,900])],[item('single',[400,400,600,600],9)]]),r=f.project();f.session.assertions=r.assertions;
- const html=renderToStaticMarkup(React.createElement(ScanObservationResults,{view:{session:f.session,pack:f.pack} as any}));assert.match(html,/개별 주장 1건/);assert.match(html,/묶음 주장 1건/);assert.match(html,/실물 총수나 전체 판독을 뜻하지 않아요/);assert.match(html,/수정 없이 저장할 수 있어요/);assert(!html.includes('required'));
+ const html=renderToStaticMarkup(React.createElement(ScanObservationResults,{view:{session:f.session,pack:f.pack} as any}));assert.match(html,/읽은 값 · 사진 참고/);assert.match(html,/사진 원본 보기/);assert.equal((html.match(/src="\/synthetic\/0"/g)??[]).length,2);assert.match(html,/수정 없이 저장할 수 있어요/);assert.doesNotMatch(html,/필수 확인|확인해야 저장|required/);
 });

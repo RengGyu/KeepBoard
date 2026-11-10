@@ -1,0 +1,200 @@
+{
+  "version": "release-reading-policy-v1",
+  "games": [
+    {
+      "gameId": "catan",
+      "packId": "catan-base",
+      "packVersion": "2.0.0-essentials-2.51a3a1dd68fe",
+      "sourceSHA": "51a3a1dd68fe5689a8741fd9e3bca31a0a924284524950ebb4824961caee5d61",
+      "definitionSHA": "dd392903bb404e776f2edaa2049cce70c292170fa019458d6a6d92008ce3f8f3",
+      "areas": {
+        "board": {
+          "terrain": [
+            "observedColor",
+            "quantity",
+            "face",
+            "variant"
+          ],
+          "number-token": [
+            "observedColor",
+            "quantity",
+            "face",
+            "number"
+          ],
+          "road": [
+            "observedColor",
+            "quantity",
+            "face"
+          ],
+          "settlement": [
+            "observedColor",
+            "quantity",
+            "face"
+          ],
+          "city": [
+            "observedColor",
+            "quantity",
+            "face"
+          ],
+          "robber": [
+            "observedColor",
+            "quantity",
+            "face"
+          ],
+          "harbor": [
+            "observedColor",
+            "quantity",
+            "face",
+            "variant",
+            "ratio"
+          ],
+          "token": [
+            "observedColor",
+            "quantity",
+            "face",
+            "variant"
+          ],
+          "unknown": [
+            "observedColor",
+            "quantity",
+            "face"
+          ]
+        },
+        "hand": {
+          "resource-card": [
+            "observedColor",
+            "quantity",
+            "face",
+            "variant"
+          ],
+          "development-card": [
+            "observedColor",
+            "quantity",
+            "face",
+            "variant"
+          ]
+        }
+      }
+    },
+    {
+      "gameId": "rummikub",
+      "packId": "rummikub",
+      "packVersion": "1.1.0-essentials-2.fb4be402632a",
+      "sourceSHA": "fb4be402632a82c3b96eac327ddca8922f79219b9d5f4a83794c08fa59de64d9",
+      "definitionSHA": "4780fe59176b3689a352a60d0944577d17ec2c5af389bf676b96c0480acf47fe",
+      "areas": {
+        "table": {
+          "numbers": [
+            "color",
+            "number",
+            "face"
+          ],
+          "jokers": [
+            "color",
+            "face"
+          ]
+        },
+        "rack": {
+          "numbers": [
+            "color",
+            "number",
+            "face"
+          ],
+          "jokers": [
+            "color",
+            "face"
+          ],
+          "racks": []
+        }
+      }
+    },
+    {
+      "gameId": "sagrada",
+      "packId": "sagrada",
+      "packVersion": "1.0.0-essentials-2.2e9d6c491427",
+      "sourceSHA": "2e9d6c491427f8cd6be9cbe822c49046f8e4fb854903bd429e4ca7bdf2b3981e",
+      "definitionSHA": "5a544c6e03afcfb895c15933066b6017b90dcb3600d04d6505258811d1bae24c",
+      "areas": {
+        "window": {
+          "dice": [
+            "dieColor",
+            "dieValue"
+          ],
+          "windows": [
+            "printedName",
+            "sideLabel",
+            "patternLabel",
+            "selectedSide",
+            "cellConstraint"
+          ]
+        },
+        "draft": {
+          "dice": [
+            "dieColor",
+            "dieValue"
+          ]
+        },
+        "round-track": {
+          "dice": [
+            "dieColor",
+            "dieValue"
+          ]
+        },
+        "tools": {
+          "cards": [
+            "face",
+            "printedName",
+            "cardType"
+          ],
+          "tokens": [
+            "observedColor",
+            "tokenType"
+          ]
+        },
+        "private": {
+          "cards": [
+            "face",
+            "printedName",
+            "cardType"
+          ]
+        }
+      }
+    },
+    {
+      "gameId": "hanabi",
+      "packId": "hanabi",
+      "packVersion": "1.0.0-essentials-2.0b8fb054dd44",
+      "sourceSHA": "0b8fb054dd44daac539cadf112fdf9b5157a945a751750a81ca3f0aa88b486eb",
+      "definitionSHA": "f11a801a6a93af9d8e47e8ee6de2565901ea5a237f5d17167ccdfe831a993e9e",
+      "areas": {
+        "fireworks": {
+          "cards": [
+            "face",
+            "suit",
+            "number"
+          ]
+        },
+        "discard": {
+          "cards": [
+            "face",
+            "suit",
+            "number"
+          ]
+        },
+        "tokens": {
+          "tokens": [
+            "observedColor",
+            "tokenType",
+            "tokenSide"
+          ]
+        }
+      }
+    }
+  ],
+  "rationale": {
+    "catan": "Preserve all existing board/hand fields and placement-independent observations; no source or native scene contract change.",
+    "rummikub": "Preserve visible tile number/color/face in table and private rack; rack itself has no invented tile properties.",
+    "sagrada": "In each dice area request canonical dieColor and dieValue; observedColor is a duplicate free color note. All window/tool/private fields remain requested.",
+    "hanabi": "In fireworks and discard, request visible face/suit/number. Do not ask for an additional card printedName to reproduce those same identity facts. Tokens retain their own distinct fields."
+  }
+}

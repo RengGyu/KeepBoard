@@ -17,7 +17,7 @@ const find=(tree:any,predicate:(node:any)=>boolean)=>{const node=nodes(tree).fin
 
 
 
-function view(){const pack=effectiveRecognitionPack(structuredClone((packs as any[]).find(p=>p.id==='splendor')));return {pack,session:{id:'synthetic-photo-ui',name:'합성',players:[{id:'p1',name:'시험',color:'red'}],stage:'capture',captureEpoch:'epoch',turnInstanceId:'turn',assertions:[],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[]};}
+function view(){const pack=effectiveRecognitionPack(structuredClone((packs as any[]).find(p=>p.id==='splendor')));return {pack:{...pack,releaseTier:'drawing'},session:{id:'synthetic-photo-ui',name:'합성',players:[{id:'p1',name:'시험',color:'red'}],stage:'capture',captureEpoch:'epoch',turnInstanceId:'turn',assertions:[],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[]};}
 test('camera starts with manual photos and automatic capture requires an explicit choice',()=>{
  const previous=globalThis.document;globalThis.document={addEventListener(){},removeEventListener(){}} as unknown as Document;
  const ui=mount(CameraDialog,{onClose(){},async onCapture(){throw new Error('No capture expected');}});

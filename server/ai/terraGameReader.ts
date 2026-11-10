@@ -11,7 +11,7 @@ import {COMPACT_TERRA_PROFILE,LEAN_TERRA_PROFILE,compactTerraContract,expandComp
 import {DETAIL_TERRA_PROFILE,terraDetailInstructions,normalizeTerraDetailItems} from './terraDetail';
 import {visibleUnitContract,type VisibleUnitOptions} from './visibleUnitContract';
 const object=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
-export const TERRA_FILL_SENTENCE='For every returned object, include exactly one attribute row for each listed property of its kind; when a property is not visible use valueJson null with its reason, and when two listed properties describe the same visible fact, fill both.';
+export const TERRA_FILL_SENTENCE='For every returned object, include exactly one attribute row for each listed property of its kind; when a property is not visible use valueJson null with its reason, and when two listed properties describe the same visible fact, fill both. Exception: omit front-only properties on an explicitly back-facing object; unknown face is not confirmed back.';
 export const TERRA_IDENTITY:TerraReaderIdentity={kind:'terra-game-observation-v1',model:'gpt-6.1-terra',api:'responses',reasoningEffort:'low',imageDetail:'high',maxOutputTokens:32768,adapterVersion:'literal-named-fill-unit-marks-v5',automaticRetries:0,timeoutMs:240000};
 export const LUNA_IDENTITY:LunaReaderIdentity={...TERRA_IDENTITY,kind:'luna-game-observation-v1',model:'gpt-6-luna',reasoningEffort:'high',automaticRetries:1};
 // Default service reader. Deadline stays inside the 300s function limit, leaving room to save the result.

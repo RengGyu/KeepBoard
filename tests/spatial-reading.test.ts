@@ -7,9 +7,30 @@ import {assembleObservations} from '../server/ai/observationAssembly';import {va
 import {image,fixture,spatialFixture,board,placement,spatial,item,assemble} from './fixtures/spatial/builders';
 const hash=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
 
-test('switch off preserves pre-extension request and Gemini/Terra-high v7 bytes for113 selected areas',()=>{
+// These are the ONLY release-layer changes separated from the pre-spatial golden bytes.
+// Keep the original113 hashes intact: no newly generated hash is used as its own expected value.
+const releaseFaceRule=' For an explicitly back-facing object omit front-only attributes instead of inventing unknowns for them. An unknown face does not establish a back face; applicable unread values remain unknown.';
+function preReleasePrompt(text:string){assert.equal(text.split(releaseFaceRule).length,2);return text.replace(releaseFaceRule,'');}
+test('spatial OFF preserves release-aware request/body bytes; original113 golden hashes retain only explicit release-layer differences',()=>{
  const before=process.env.KEEPBOARD_SPATIAL_READING;delete process.env.KEEPBOARD_SPATIAL_READING;
- try{for(const row of legacy.rows){const f=fixture(row.gameId,row.areaId),req=attachSpatialReading(f.request,f.pack,f.definition);assert.equal(req,f.request);assert.equal(hash(req),row.requestSHA);assert.equal(hash(buildGeminiGameBody(req,f.definition,Buffer.from('synthetic'),'image/png')),row.geminiSHA);assert.equal(hash(buildTerraGameBody(req,f.definition,Buffer.from('synthetic'),'image/png','literal-compact-visible-instance-v7',{},TERRA_HIGH_IDENTITY)),row.terraSHA);}}finally{if(before!==undefined)process.env.KEEPBOARD_SPATIAL_READING=before;}
+ try{for(const row of legacy.rows){
+  const f=fixture(row.gameId,row.areaId),bytes=JSON.stringify(f.request),gemini=buildGeminiGameBody(f.request,f.definition,Buffer.from('synthetic'),'image/png'),terra=buildTerraGameBody(f.request,f.definition,Buffer.from('synthetic'),'image/png','literal-compact-visible-instance-v7',{},TERRA_HIGH_IDENTITY);
+  const req=attachSpatialReading(f.request,f.pack,f.definition);
+  assert.equal(req,f.request);assert.equal(JSON.stringify(req),bytes);assert.equal(req.spatial,undefined);
+  assert.deepEqual(buildGeminiGameBody(req,f.definition,Buffer.from('synthetic'),'image/png'),gemini);
+  assert.deepEqual(buildTerraGameBody(req,f.definition,Buffer.from('synthetic'),'image/png','literal-compact-visible-instance-v7',{},TERRA_HIGH_IDENTITY),terra);
+  // Recover the actual pre-release fixture contract, not the spatial variant: no area filter or new applicability metadata.
+  const pack={...f.pack};delete pack.photoReadingPolicy;
+  const compiled=compileObservationTask({pack,definition:f.definition,areaId:row.areaId,taskId:f.request.taskId,scope:f.request.scope,images:f.request.images});
+  const {propertyApplicability:_releaseMetadata,...originalRequest}=compiled;
+  assert.equal(hash(originalRequest),row.requestSHA);
+  const originalGemini=buildGeminiGameBody(originalRequest,f.definition,Buffer.from('synthetic'),'image/png');
+  originalGemini.contents[0].parts[0].text=preReleasePrompt(originalGemini.contents[0].parts[0].text!);
+  assert.equal(hash(originalGemini),row.geminiSHA);
+  const originalTerra=buildTerraGameBody(originalRequest,f.definition,Buffer.from('synthetic'),'image/png','literal-compact-visible-instance-v7',{},TERRA_HIGH_IDENTITY);
+  originalTerra.input[0].content[0].text=preReleasePrompt(originalTerra.input[0].content[0].text!);
+  assert.equal(hash(originalTerra),row.terraSHA);
+ }}finally{if(before!==undefined)process.env.KEEPBOARD_SPATIAL_READING=before;}
 });
 test('all31 frozen sidecars preserve canonical masked/signed/named addresses and hidden exclusions',()=>{
  assert.equal(data.definitions.length,31);assert.equal(data.definitions.filter(d=>d.status==='excluded').length,2);

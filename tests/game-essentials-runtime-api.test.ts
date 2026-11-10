@@ -8,7 +8,7 @@ import {rummikubPack} from '../gamepacks/rummikub.ts';
 const packs:GamePack[]=JSON.parse(await readFile(new URL('../docs/game-essentials/runtime/fixture-packs.json',import.meta.url),'utf8'));
 // Import the server from a fresh directory so no real .env/settings/Store can be loaded.
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-runtime-bootstrap-'));process.chdir(bootstrap);
-const {createApp}=await import('../server/index.ts');const {Store}=await import('../server/store.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+const {createApp}=await import('./fixtures/drawingTestApp');const {Store}=await import('../server/store.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
 async function fixture(game='ticket-to-ride',fullCatalog=false){
  const root=await mkdtemp(path.join(os.tmpdir(),'kb-essentials-')),store=new Store(root,path.join(project,'public')),app=await createApp({store,...(fullCatalog?{}:{runtimePacks:packs})});const server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  async function call(route:string,method='GET',body?:unknown,token?:string){const r=await fetch(base+route,{method,headers:{...(body===undefined?{}:{'Content-Type':'application/json'}),...(token?{'X-KeepBoard-Private-Token':token}:{})},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()};}

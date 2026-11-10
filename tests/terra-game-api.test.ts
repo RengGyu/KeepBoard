@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {TerraGameReader} from '../server/ai/terraGameReader';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {TerraGameReader} from '../server/ai/terraGameReader';
 import defs from '../game-photo-definitions/index.json';
 const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
 const envelope=(payload:unknown)=>({model:'gpt-6-luna',status:'completed',output:[{type:'message',status:'completed',content:[{type:'output_text',text:JSON.stringify(payload)}]}],usage:{input_tokens:1,output_tokens:1,total_tokens:2}});

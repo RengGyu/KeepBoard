@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {mkdtemp,rm,readFile} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';
 import {verifiedNumeralProfile} from '../server/ai/localTaskProfile';import {prepareLocalObservation,analyzeLocalObservation} from '../server/localObservation';
 import defs from '../game-photo-definitions/index.json';import {CATAN_TOPOLOGY} from '../shared/scene';
 import type {LocalReaderTaskCapability,LocalTaskProfile,ObservationRequest,PhotoDefinition} from '../shared/lightweightRecognition';

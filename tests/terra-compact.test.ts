@@ -56,7 +56,7 @@ test('compact preserves typed zero/false/structured values, explicit unknown vs 
 test('compact reason codes are unambiguous and invalid visible values keep existing normalization semantics',()=>{
  for(const [code,reason]of Object.entries({u:'unreadable',o:'occluded',f:'out-of-frame',n:'not-present-unconfirmed',w:'wrong-face',a:'ambiguous',s:'unsupported'}))assert.deepEqual(decode([item([{p:p('number'),v:null,r:code}])]).raw.observations[0].properties.number,{state:'unknown',value:null,reason});
  const invalid=decode([item([attr('number',100)])]);assert.equal(invalid.raw.observations[0].properties.number.state,'unknown');assert(invalid.hostedWire.deferred.some(x=>x.reason==='invalid-visible-value'));assert.equal((invalid.hostedWire.items[0]as any).attributes[0].valueJson,'100');
- const back=decode([{...item([attr('front','seen')]),f:'b'}]);assert.deepEqual(back.raw.observations[0].properties.front,{state:'unknown',value:null,reason:'wrong-face'});
+ const back=decode([{...item([attr('front','seen')]),f:'b'}]);assert.equal(Object.hasOwn(back.raw.observations[0].properties,'front'),false);assert(back.hostedWire.deferred.some(d=>d.property==='front'&&d.reason==='inapplicable-back-face'));
 });
 
 test('compact rejects malformed shape, codes, arity and cross-kind fields before literal normalization',()=>{

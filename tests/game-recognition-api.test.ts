@@ -3,7 +3,7 @@ import {normalizeObservations} from '../server/ai/index.ts';import {PHOTO_PUBLIC
 import type {AnalysisResult,Assertion,Evidence,GamePack,Session} from '../shared/types.ts';
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-recognition-bootstrap-'));process.chdir(bootstrap);
 for(const key of ['OPENAI_API_KEY','GEMINI_API_KEY','GOOGLE_API_KEY','KEEPBOARD_AI_GATEWAY_URL'])delete process.env[key];
-const {createApp}=await import('../server/index.ts');const {Store}=await import('../server/store.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+const {createApp}=await import('./fixtures/drawingTestApp');const {Store}=await import('../server/store.ts');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
 type Input={session:Session;pack:GamePack;evidence:Evidence[]};
 const rec=(componentId:string,id='original',evidenceId:string|null=null)=>({version:'game-component-record-v1',pieces:[{id,componentId,variant:null,quantity:1,label:'합성 확인 물체',anchor:'왼쪽',evidenceId,region:null}]});
 function mock(input:Input):AnalysisResult{const owner=input.evidence[0].ownerId;return normalizeObservations({summary:'합성 모델 결과',assertions:[{field:owner?PHOTO_OWNER:PHOTO_PUBLIC,value:rec('chips','model-id',input.evidence[0].id),evidenceIds:input.evidence.map(e=>e.id)}]},input.pack,input.evidence,input.session.turnInstanceId,input.session.players.map(p=>p.id));}

@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import path from 'node:path';import os from 'node:os';
 import {createHash} from 'node:crypto';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';import defs from '../game-photo-definitions/index.json';import {allRummikubTiles} from '../shared/rummikub';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {LocalReader} from '../server/ai/localReader';import defs from '../game-photo-definitions/index.json';import {allRummikubTiles} from '../shared/rummikub';
 import {assembleObservations} from '../server/ai/observationAssembly';import {compileObservationTask,type PhotoDefinition} from '../shared/lightweightRecognition';import {effectiveRecognitionPack} from '../shared/recognition';
 const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
 const identity={kind:'local-observation-v1',model:'review-fixture',modelRevision:'test',weightSHA:'a'.repeat(64),projectorSHA:'b'.repeat(64),runtimeRevision:'test',contextTokens:8192,maxOutputTokens:2048}as const;

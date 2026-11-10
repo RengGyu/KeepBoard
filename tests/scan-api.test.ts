@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { mkdtemp, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { createApp } from '../server/index.ts';
+import { createApp } from './fixtures/drawingTestApp';
 import { Store } from '../server/store.ts';
 import { saveAISettings } from '../server/ai/index.ts';
 import type { SessionView } from '../shared/types.ts';

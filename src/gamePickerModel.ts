@@ -1,4 +1,6 @@
+import {drawingEnabled} from '../shared/releaseSupport';
 import type { GameCatalogEntry } from '../shared/gameEssentials';
+import type {GamePack} from '../shared/types';
 import type { Player } from '../shared/types';
 
 // Hangul syllable → initial consonant (초성), so "ㅋㅌ" finds 카탄 on a phone keyboard.
@@ -23,8 +25,8 @@ export function filterCatalog(packs: readonly GameCatalogEntry[], query: string)
   });
 }
 
-export function supportLabel(pack?: Pick<GameCatalogEntry, 'support'>) {
-  return pack?.support?.recording === 'native' ? '전용 그림 편집·판독' : pack?.support?.recognition==='assisted'?'사진 보조 인식·수동 정정':'수동 기록·실물 보존';
+export function supportLabel(pack?: GameCatalogEntry|GamePack) {
+  return pack&&drawingEnabled(pack)?'그림 복원':'사진 기록';
 }
 
 /** The API receives the chosen catalog entry's id and pinned version — never the search text. */

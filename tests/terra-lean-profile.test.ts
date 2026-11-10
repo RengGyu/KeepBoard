@@ -17,10 +17,10 @@ test('every game still has a valid request with the visible-instance contract',(
  let n=0;for(const pack of catalogPacks){const d=photoDefinition(pack);for(const a of d.areas){if(!a.componentIds.length)continue;const r=compileObservationTask({pack,definition:d,areaId:a.id,taskId:'x',scope:{partition:a.partition,ownerId:a.partition==='owner_private'?'o':null,captureEpoch:'e'},images:tr.request.images});const b=buildTerraGameBody(r,d,Buffer.from('i'),'image/png',LEAN_TERRA_PROFILE);const t=(b.input[0].content[0] as any).text;assert(t.includes('Report u from visible physical instance boundaries'));assert(!t.includes('physicalUnit'));assert(!t.includes('valueJson'));n++;}}
  assert(n>=120);assert(VISIBLE_INSTANCE_CONTRACT.startsWith('Report physicalUnit from'));
 });
-test('an omitted property is unknown, and a front-only property on a back face stays wrong-face',()=>{
+test('an omitted applicable property is unknown, while an explicit back face has no synthetic front-only gap',()=>{
  const sp=task('splendor','market'),kinds=compactTerraKinds(sp.request,sp.definition,LEAN_TERRA_PROFILE),dev=kinds.find(x=>x.properties.some(q=>q.frontOnly))!;
  const o=decode([{k:dev.k,b:null,f:'b',q:null,u:'s',a:[],x:[]}],sp).raw.observations[0],front=dev.properties.find(q=>q.frontOnly)!.id;
- assert.equal((o.properties[front] as any).reason,'wrong-face');assert.equal(o.face,'back');
+ assert.equal(Object.hasOwn(o.properties,front),false);assert.equal(o.face,'back');
  const c=decode([{k:k.k,b:null,f:'u',q:null,u:'u',a:[],x:[]}]).raw.observations[0];assert.equal(c.properties.trainColor.state,'unknown');assert.equal(c.properties.observedColor.state,'unknown');
 });
 test('every property is either a value or a bare unknown code; a value wins over a repeated code',()=>{

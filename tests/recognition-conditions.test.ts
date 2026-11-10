@@ -23,13 +23,15 @@ test('physical tile outline and visible side remain observable on back or uncert
   assert.equal(readout.values[property],value);
  }
 });
-test('front printing stays unknown on a hidden face and explicitly occluded values stay unknown',()=>{
+test('confirmed back printing is inapplicable while uncertain face and explicitly occluded values stay unknown',()=>{
  const {definition,request}=context('patchwork','patches');
  for(const [face,attributes]of [['back',[{id:'printedName',valueJson:'"unseen"',unknownReason:null}]],['front',[{id:'printedName',valueJson:null,unknownReason:'occluded'}]]] as const){
   const result=decodeLiteralObservationPayload({items:[{kind:'patches',box_1000:[10,10,200,200],face,quantity:1,attributes}]},request,definition);
-  assert.equal(result.observations[0].properties.printedName.state,'unknown');
-  assert.equal(result.observations[0].properties.printedName.value,null);
+  if(face==='back')assert.equal(Object.hasOwn(result.observations[0].properties,'printedName'),false);
+  else assert.deepEqual(result.observations[0].properties.printedName,{state:'unknown',value:null,reason:'occluded'});
  }
+ const uncertainFront=decodeLiteralObservationPayload({items:[{kind:'patches',box_1000:[10,10,200,200],face:'unknown',quantity:1,attributes:[{id:'printedName',valueJson:null,unknownReason:'occluded'}]}]},request,definition);
+ assert.deepEqual(uncertainFront.observations[0].properties.printedName,{state:'unknown',value:null,reason:'occluded'});
  const occluded=decodeLiteralObservationPayload({items:[{kind:'patches',box_1000:[10,10,200,200],face:'unknown',quantity:1,attributes:[{id:'shape',valueJson:null,unknownReason:'occluded'}]}]},request,definition);
  assert.deepEqual(occluded.observations[0].properties.shape,{state:'unknown',value:null,reason:'occluded'});
  const catan=photoDefinition(catalogPacks.find(p=>p.id==='catan-base')!);

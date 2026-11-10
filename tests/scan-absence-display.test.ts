@@ -27,10 +27,10 @@ function fixture(claim:ObservationProperty):SessionView {
 }
 function overlay(claim:ObservationProperty){const v=fixture(claim),r=v.session.assertions[0].observationReceipts![0];return renderToStaticMarkup(React.createElement(PhotoObservationOverlay,{photos:v.session.evidence,request:r.request,result:r.result,geometry:[],definition,compact:true}));}
 
-test('unknown and observed boolean absence have identical concise source property and box labels',()=>{
+test('unknown and observed boolean absence use neutral property labels outside text-free source boxes',()=>{
  const unknown=overlay({state:'unknown',value:null,reason:'occluded'}),absent=overlay({state:'observed',value:false});
- assert.match(unknown,/도시 표시: 확인 필요/);assert.match(absent,/도시 표시: 확인 필요/);
- assert.match(unknown,/>확인 필요<\/span>/);assert.match(absent,/>확인 필요<\/span>/);
+ assert.match(unknown,/사진 참고/);assert.doesNotMatch(unknown,/도시 표시:/);assert.match(absent,/도시 표시: 사진 참고/);
+ for(const html of [unknown,absent]){assert.match(html,/class="lw-source-box"[^>]*aria-label="원본 관측 1"[^>]*><\/button>/);assert.match(html,/문장 표시 수: 0/);}
  assert.doesNotMatch(unknown,/도시 표시: 모름|가려져/);assert.doesNotMatch(absent,/도시 표시: 아니오|도시 표시: false/);
  assert.match(overlay({state:'observed',value:true}),/도시 표시: 예/);
 });
@@ -40,7 +40,7 @@ test('unresolved and fusion property review share the neutral label without chan
   const view=fixture(claim),before=structuredClone(view);
   for(const component of [ScanUnresolvedGroups,ScanFusionNotes]){
    const html=renderToStaticMarkup(React.createElement(component,{view}));
-   assert.match(html,/도시 표시: 확인 필요/);assert.doesNotMatch(html,/도시 표시: (?:\?|false|없음)/);assert.doesNotMatch(html,/required|disabled|<form/);
+   assert.match(html,/사진 참고/);if(component===ScanFusionNotes||claim.state==='observed')assert.match(html,/도시 표시: 사진 참고/);assert.doesNotMatch(html,/도시 표시: (?:\?|false|없음)/);assert.doesNotMatch(html,/required|disabled|<form/);
   }
   const html=renderToStaticMarkup(React.createElement(ScanUnresolvedGroups,{view}));assert.match(html,/관측 수량 0/);assert.match(html,/문장 표시 수: 0/);
   assert.deepEqual(view,before);
@@ -58,8 +58,8 @@ test('meaningful zero, empty data and literal text are not guessed to mean absen
  assert.match(render(2,'integer'),/값: 2/);
  assert.match(render('없음','text'),/값: 없음/);
  assert.match(render(0,'enum',[{value:0,label:'기본 단계'}]),/값: 기본 단계/);
- for(const x of ['',[]])assert.doesNotMatch(render(x,typeof x==='string'?'text':'marks'),/확인 필요/);
- assert.match(render('absent','enum',[{value:'absent',label:'없음'}]),/값: 확인 필요/);
+ for(const x of ['',[]])assert.doesNotMatch(render(x,typeof x==='string'?'text':'marks'),/사진 참고/);
+ assert.match(render('absent','enum',[{value:'absent',label:'없음'}]),/값: 사진 참고/);
 });
 
 function nodes(t:any):any[]{if(!t||typeof t!=='object')return[];return Array.isArray(t)?t.flatMap(nodes):[t,...nodes(t.props?.children)];}
@@ -76,8 +76,8 @@ test('existing editable controls emit exact false/zero/unknown values without to
 
 test('domain enum labeled unknown shares the neutral display while literal text and stored enum value stay intact',()=>{
  const field={type:'enum' as const,options:[{value:'unknown',label:'모름'},{value:'front',label:'앞면'}]},claim={state:'observed',value:'unknown'},before=structuredClone({field,claim});
- assert.equal(scanReviewValue(claim.value,field),'확인 필요');
- assert.equal(scanReviewValue(null,field),'확인 필요');
+ assert.equal(scanReviewValue(claim.value,field),'사진 참고');
+ assert.equal(scanReviewValue(null,field),'사진 참고');
  assert.equal(scanReviewValue('front',field,v=>field.options.find(o=>o.value===v)!.label),'앞면');
  assert.equal(scanReviewValue('모름',{type:'text'}),'모름');
  assert.equal(scanReviewValue('unknown',{type:'text'}),'unknown');

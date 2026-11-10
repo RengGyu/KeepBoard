@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {normalizeObservations} from '../server/ai/index';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {normalizeObservations} from '../server/ai/index';
 import type {GamePack} from '../shared/types';import {captureProfile} from '../shared/photoCapture';import {effectiveRecognitionPack} from '../shared/recognition';
 const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jA4kAAAAASUVORK5CYII=';
 async function fixture(game='splendor',unscopedProvider=false){

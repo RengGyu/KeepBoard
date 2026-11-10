@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
-import {createApp} from '../server/index';import {Store} from '../server/store';import {TerraGameReader} from '../server/ai/terraGameReader';
+import {createApp} from './fixtures/drawingTestApp';import {Store} from '../server/store';import {TerraGameReader} from '../server/ai/terraGameReader';
 import {catalogPacks} from '../gamepacks/catalog';import {effectiveRecognitionPack} from '../shared/recognition';import {photoDefinition} from '../server/photoDefinitions';
 const image=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=','base64');
 test('Terra group surface, refinement and retired parent remain nonadditive through subsequent HTTP jobs and save/resume',async()=>{

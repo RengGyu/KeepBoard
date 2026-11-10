@@ -1,5 +1,6 @@
+import {drawingEnabled} from '../shared/releaseSupport';
 import {isHostedReader} from '../shared/lightweightRecognition';
-import {sessionSummary} from '../shared/sessionSummary';
+import {sessionSummary,hasPhotoRecord} from '../shared/sessionSummary';
 import {LunaGameReader,TERRA_HIGH_IDENTITY} from './ai/terraGameReader';
 import type {HostedObservationReader} from './ai/hostedReader';
 import {ScanUploadBatches} from './scanUploadBatch';
@@ -15,7 +16,7 @@ import {BlobStore} from './blobStore.ts';
 import {Readable} from 'node:stream';
 import {CloudJobs} from './cloudJobs.ts';
 import {ConflictError,type Objects} from './objects.ts';
-import {digest,scopeVersion,taskTarget,commitAnalysisTask,type AnalysisTask} from './analysisTask.ts';
+import {digest,readingScopeVersion,taskTarget,commitAnalysisTask,type AnalysisTask} from './analysisTask.ts';
 import {validateCaptureTarget,validateCaptureObservation,validateStaticPhotos} from '../shared/photoCapture.ts';
 import express, { type ErrorRequestHandler, type Request } from 'express';
 import { existsSync } from 'node:fs';
@@ -159,6 +160,8 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     return { session, pack };
   }
 
+  // Admission is current server policy, not an approval copied into an old save or supplied by a client.
+  async function requireDrawing(pack:GamePack){const current=(await packs()).find(p=>p.id===pack.id);if(!current||!drawingEnabled(current))throw new HttpError('이 게임은 사진 기록으로 저장됩니다. 그림 복원 판독은 아직 승인되지 않았습니다.',409);}
   const pending = new Map<string, Promise<unknown>>();
   async function authorizeMutation(req: Request, session: Session, pack: GamePack) {
     const scopes=session.room?rooms.authorizeRoom(req,session,pack):new Set<string>();
@@ -177,7 +180,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       const source=session.evidence.find(e=>e.id===body.sourceEvidenceId);if(source)await requireOwner(source.ownerId);
     }
     if(req.method==='DELETE'&&req.params.evidenceId)await requireOwner(session.evidence.find(e=>e.id===req.params.evidenceId)?.ownerId);
-    if(req.path.endsWith('/analyze')){for(const e of session.evidence.filter(e=>!body.evidenceIds||body.evidenceIds.includes(e.id))){if(!canRecognizePhotos(pack,e.ownerId))throw new HttpError('이 영역은 사진 관측이 허용되지 않습니다. 원본과 실물을 보관해 주세요.');await requireOwner(e.ownerId);}}
+    if(req.path.endsWith('/analyze')){await requireDrawing(pack);for(const e of session.evidence.filter(e=>!body.evidenceIds||body.evidenceIds.includes(e.id))){if(!canRecognizePhotos(pack,e.ownerId))throw new HttpError('이 영역은 사진 관측이 허용되지 않습니다. 원본과 실물을 보관해 주세요.');await requireOwner(e.ownerId);}}
     if(req.params.assertionId){const a=session.assertions.find(a=>a.id===req.params.assertionId);if(a)await requireField(a.field,a.ownerId);}
     if(req.params.preservationId)await requireOwner(session.preservations.find(p=>p.id===req.params.preservationId)?.ownerId);
     if(req.path.endsWith('/resume')){if(body.scope==='owner')await requireOwner(body.ownerId);else if(body.scope!==undefined&&body.scope!=='public')throw new HttpError('복원 범위를 확인하세요.');else if(body.scope===undefined&&!pack.runtime)for(const owner of await pins.owners(session.id))await requireOwner(owner);}
@@ -211,6 +214,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
   app.get('/api/packs', async (_req, res) => { res.json(await packs()); });
   app.post('/api/packs', async (req, res) => {
     validatePack(req.body);
+    if(req.body.releaseTier==='drawing')throw new HttpError('그림 복원 등급은 출시 정책에서 승인해야 합니다.',409);
     await store.savePack(req.body);
     res.status(201).json(req.body);
   });
@@ -218,6 +222,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     if (typeof req.body?.title !== 'string' || !req.body.title.trim() || typeof req.body.sourceText !== 'string' || !req.body.sourceText.trim()) throw new HttpError('게임 제목과 규칙 원문을 입력하세요.');
     const pack = await generateGamePack({ title: req.body.title, edition: req.body.edition, sourceText: req.body.sourceText });
     validatePack(pack);
+    if(pack.releaseTier==='drawing')throw new HttpError('생성한 팩은 사진 기록부터 시작합니다. 그림 복원 승인은 별도 출시 정책입니다.',409);
     await store.savePack(pack);
     res.status(201).json(pack);
   });
@@ -458,7 +463,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     if(body.ownerId!==undefined&&typeof body.ownerId!=='string')throw new HttpError('개인 영역을 확인하세요.');
     const auth=analyzeRequest(req,body);
     const job=await queued(req.params.id,async()=>{
-      const prepareAt=performance.now();const {session,pack}=await sessionFor(req.params.id),owner=body.ownerId as string|undefined;await jobScope(req,session,owner);await authorizeMutation(auth,session,pack);
+      const prepareAt=performance.now();const {session,pack}=await sessionFor(req.params.id),owner=body.ownerId as string|undefined;await requireDrawing(pack);await jobScope(req,session,owner);await authorizeMutation(auth,session,pack);
       if(body.expectedCaptureEpoch!==session.captureEpoch)throw new HttpError('촬영 단계가 바뀌었어요. 원본은 유지됩니다.',409);
       const storedEvidence=(body.evidenceIds as string[]).map(id=>session.evidence.find(e=>e.id===id)).filter((e):e is Evidence=>!!e);
       if(body.reader&&body.captureTarget&&body.captureTarget.areaId!==body.reader.areaId)throw new HttpError('선택한 촬영 부분과 판독기 영역이 다릅니다.');
@@ -477,9 +482,9 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       if(body.reader&&!scanIntent&&!scanObservation&&!localObservation&&!hostedObservation)throw new HttpError('사진 판독기 종류를 확인하세요.');
       const observationPlan=localObservation??hostedObservation??scanObservation?.units[0].hosted??scanObservation?.units[0].local;
       const taskEvidence=scanObservation||scanIntent?scanSourceEvidence(evidence,session):evidence,sourceEvidence=storedEvidence.concat(taskEvidence.filter(e=>!storedEvidence.some(s=>s.id===e.id)));
-      const epoch=session.captureEpoch,version=scopeVersion(session,pack,owner),source=digest(session.evidence.filter(e=>sourceEvidence.some(x=>x.id===e.id))),pin=await pins.configurationStamp(session.id,owner),signature=digest([owner??null,epoch,body.evidenceIds,body.purpose??'capture',body.instruction??'',body.sameStaticState===true,captureTarget??null,[pack.id,pack.version,pack.runtime?.source.sha256],scanIntent??scanObservation??observationPlan??null]);
+      const epoch=session.captureEpoch,version=readingScopeVersion(session,pack,owner),source=digest(session.evidence.filter(e=>sourceEvidence.some(x=>x.id===e.id))),pin=await pins.configurationStamp(session.id,owner),signature=digest([owner??null,epoch,body.evidenceIds,body.purpose??'capture',body.instruction??'',body.sameStaticState===true,captureTarget??null,[pack.id,pack.version,pack.runtime?.source.sha256],scanIntent??scanObservation??observationPlan??null]);
       const prepared={session:structuredClone(input),pack:structuredClone(pack),evidence:structuredClone(taskEvidence),purpose:body.purpose??'capture',instruction:body.instruction,sameStaticState:body.sameStaticState===true,...(localObservation?{localObservation}:{}),...(hostedObservation?{hostedObservation}:{}),...(scanObservation?{scanObservation}:{}),...(scanIntent?{scanIntent}:{})};
-      const task:AnalysisTask={prepared,epoch,version,source,pin,owner,actorHash:rooms.deviceHash(req),roomRevisions:body.expectedRevisions};
+      const task:AnalysisTask={versionPolicy:'photo-input-v2',prepared,epoch,version,source,pin,owner,actorHash:rooms.deviceHash(req),roomRevisions:body.expectedRevisions};
       return analysisJobs.start({sessionId:session.id,...(owner?{ownerId:owner}:{}),evidenceIds:[...body.evidenceIds],captureEpoch:epoch,requestId:body.requestId,signature,revision:version,timings:{prepareMs:performance.now()-prepareAt},...(scanIntent?{reader:scanIntent.reader,definitionSHA:scanIntent.selection.definitionSHA}:{}),...(observationPlan?{reader:observationPlan.reader,definitionSHA:observationPlan.request.definitionSHA,inputSHA:observationPlan.request.images[0].sha256,...(observationPlan.taskProfile?{taskProfile:observationPlan.taskProfile}:{})}:{})},async job=>{
         if(scanIntent){
          const run=await runHostedScan({id:job.id,task,jobs:analysisJobs,store,pins,reader:selectedReader});if(!run.results)return {};
@@ -604,13 +609,14 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     res.json(await change(req, req.params.id, (session, pack) => {
       if (req.body?.recordingMode === 'simple' && pack.id === 'catan-base' && (!session.room||rooms.target(req.body)==='public')) session.recordingMode = 'simple';
       const view = recompute(session, pack);
-      if (!view.ready && req.body?.allowIncomplete !== true) throw new HttpError('남은 질문을 확인하거나 미완료 저장을 명시적으로 선택하세요.', 409);
       const key=session.room?rooms.target(req.body):undefined;
+      const photoRecord=key?hasPhotoRecord(session,key==='public'?undefined:key):session.evidence.some(e=>e.kind==='photo');
+      if (!view.ready && !photoRecord && req.body?.allowIncomplete !== true) throw new HttpError('남은 질문을 확인하거나 미완료 저장을 명시적으로 선택하세요.', 409);
       const assertion=(a:Session['assertions'][number])=>!key||fieldScope(pack,a.field,a.ownerId)===key;
       const refs=new Set(session.assertions.filter(assertion).flatMap(a=>a.evidenceIds));
       session.snapshots.push({ id: randomUUID(), createdAt: new Date().toISOString(), captureEpoch: session.captureEpoch, turnInstanceId: session.turnInstanceId, gamePackVersion: session.gamePackVersion, ...(key?{savedScope:key==='public'?{scope:'public' as const}:{scope:'owner' as const,ownerId:key}}:{}), assertions: structuredClone(session.assertions.filter(assertion)), evidence: structuredClone(session.evidence.filter(e=>!key||(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))), preservations: structuredClone(session.preservations.filter(p=>!key||(p.ownerId??'public')===key)), notes: key?Object.fromEntries(Object.entries(session.notes).filter(([k])=>k===key)):structuredClone(session.notes) });
       if(!key||key==='public')session.stage = 'saved';
-      activity(session, 'commit', view.ready ? '게임 상태와 보존 정보를 저장했습니다.' : '미완료 항목을 포함해 명시적으로 저장했습니다.');
+      activity(session, 'commit', view.ready ? '게임 상태와 보존 정보를 저장했습니다.' : photoRecord ? '사진과 현재 기록을 저장했습니다. 실물 보존·숨은 상태 완료는 승인하지 않았습니다.' : '미완료 항목을 포함해 명시적으로 저장했습니다.');
     }));
   });
   app.post('/api/sessions/:id/resume', async (req, res) => {
