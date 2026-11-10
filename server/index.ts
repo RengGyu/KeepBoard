@@ -1,4 +1,5 @@
 import {isHostedReader} from '../shared/lightweightRecognition';
+import {sessionSummary} from '../shared/sessionSummary';
 import {LunaGameReader,TERRA_HIGH_IDENTITY} from './ai/terraGameReader';
 import type {HostedObservationReader} from './ai/hostedReader';
 import {ScanUploadBatches} from './scanUploadBatch';
@@ -97,6 +98,7 @@ function activity(session: Session, type: string, message: string) {
 }
 
 export async function createApp({ store = new Store(), ui = false, runtimePacks, analyzer = analyzeEvidence, cloud,localReader,geminiReader=new GeminiGameReader(),terraReader=new LunaGameReader(),terraHighReader=new LunaGameReader({identity:TERRA_HIGH_IDENTITY}),uiHmr=true }: { store?: Store; ui?: boolean; runtimePacks?:GamePack[]; analyzer?:typeof analyzeEvidence;cloud?:{objects:Objects;dispatch:(id:string)=>Promise<void>};localReader?:LocalReader;geminiReader?:GeminiGameReader;terraReader?:HostedObservationReader; terraHighReader?:HostedObservationReader;uiHmr?:boolean } = {}) {
+  await store.prepareUploadReferences();
   if(cloud){const run=analyzer;analyzer=input=>run({...input,readImage:async e=>{const b=await store.readEvidence(e);return {mimeType:b.mimeType,data:b.data.toString('base64')};}});}
   const app = express();
   const uploads=cloud?new CloudUploads(cloud.objects):undefined;
@@ -125,7 +127,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
   });
   app.use('/uploads', async (req, res, next) => {
     try {
-      const filename = path.basename(req.path), sessions = await store.listSessions(true);
+      const filename = path.basename(req.path), sessions = await store.sessionsForUpload(filename);
       let found = false;
       for (const session of sessions) {
         const photos=[...session.evidence,...session.snapshots.flatMap(s=>s.evidence)].filter(e=>e.url===`/uploads/${filename}`);
@@ -228,7 +230,10 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     if (!['gemini', 'openai'].includes(req.body?.provider) || typeof req.body.model !== 'string' || !req.body.model.trim()) throw new HttpError('제공자와 모델을 확인하세요.');
     res.json(await saveAISettings(req.body));
   });
-  app.get('/api/sessions', async (req, res) => { res.json(await store.listSessions(req.query.includeDeleted === 'true')); });
+  app.get('/api/sessions', async (req, res) => {
+    const sessions=await store.listSessions(req.query.includeDeleted==='true');
+    res.json(sessions.filter(s=>!s.room||rooms.record(s)?.members.some(m=>m.hash===rooms.deviceHash(req))).map(sessionSummary));
+  });
   app.post('/api/sessions/archive', async (req, res) => {
     if (typeof req.body?.hidden !== 'boolean' || (req.body.ids !== undefined && (!Array.isArray(req.body.ids) || req.body.ids.some((id: unknown) => typeof id !== 'string')))) throw new HttpError('보드 식별자와 삭제/복원 상태를 확인하세요.');
     if (!req.body.hidden && !req.body.ids) throw new HttpError('복원할 보드를 선택하세요.');

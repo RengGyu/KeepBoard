@@ -1,6 +1,6 @@
 import type {ObservationReviewAnswer} from '../shared/observationReview';
 import type {PhotoReaderSelection,LocalReaderCapabilities} from '../shared/lightweightRecognition';
-import {upload} from '@vercel/blob/client';
+import type {SessionSummary} from '../shared/sessionSummary';
 import type {ComponentLinkOptions,ComponentLinkRequest} from '../shared/componentLinking';
 import type {AnalysisJob} from '../shared/analysisJobs';
 import type {GameCatalogEntry} from '../shared/gameEssentials';
@@ -10,6 +10,7 @@ import { parseServerTiming, recordScanTiming } from './scanTiming';
 import {clearPrivateAccess,privateGeneration,privatePhotos,privateToken,setPrivateAccess} from './privateAccess';
 import {rememberRoom,roomBody} from './roomAccess';
 
+const upload=(...args:Parameters<typeof import('@vercel/blob/client')['upload']>)=>import('@vercel/blob/client').then(m=>m.upload(...args));
 const revisions=new Map<string,string>();
 type StorageMode={directPrivateUpload:boolean;provider:'none'|'blob'|'supabase'};
 let storageMode:Promise<StorageMode>|undefined;
@@ -59,7 +60,7 @@ export const api = {
   unlockPrivate: async(id:string,ownerId:string,pin:string)=>{const generation=privateGeneration();const result=await request<{token:string}>(`/sessions/${id}/privacy/${ownerId}/unlock`,'POST',{pin});if(generation!==privateGeneration())throw new Error('개인 영역을 닫았어요.');setPrivateAccess(id,ownerId,result.token);return api.session(id);},
   configurePrivate: async(id:string,ownerId:string,body:{enabled:boolean;pin?:string;currentPin?:string})=>{const view=await request<SessionView>(`/sessions/${id}/privacy/${ownerId}`,'PUT',body);clearPrivateAccess();return view;},
   lockPrivate: async(id?:string)=>{const token=privateToken();clearPrivateAccess();if(id&&token)await fetch(`/api/sessions/${id}/privacy/lock`,{method:'POST',headers:{'Content-Type':'application/json','X-KeepBoard-Private-Token':token},body:'{}',cache:'no-store'}).catch(()=>{});},
-  sessions: (includeDeleted = false) => request<Session[]>(`/sessions${includeDeleted ? '?includeDeleted=true' : ''}`),
+  sessions: (includeDeleted = false) => request<SessionSummary[]>(`/sessions${includeDeleted ? '?includeDeleted=true' : ''}`),
   removeSession: (id: string) => request<{ ids: string[] }>(`/sessions/${id}`, 'DELETE'),
   archiveSessions: (ids?: string[]) => request<{ ids: string[] }>('/sessions/archive', 'POST', { ids, hidden: true }),
   restoreSessions: (ids: string[]) => request<{ ids: string[] }>('/sessions/archive', 'POST', { ids, hidden: false }),

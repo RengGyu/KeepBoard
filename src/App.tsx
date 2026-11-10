@@ -1,20 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Archive, BookOpen, Check, Hexagon, House, LogIn, MoreHorizontal, Plus, RefreshCw, Search, Trash2, Undo2, X } from 'lucide-react';
 import type {GameCatalogEntry} from '../shared/gameEssentials';
-import type { AIStatus, Session, SessionView } from '../shared/types';
+import type { AIStatus, SessionView } from '../shared/types';
 import { api } from './api';
-import { LibraryDialog, LibraryPanel } from './Dialogs';
-import { fire, type Mutate } from './Fields';
-import SessionWorkspace from './SessionWorkspace';
+import type { Mutate } from './Fields';
 import { Busy, Empty, formatDate } from './ui';
-import {redactSession,redactView} from '../shared/privacy';
+import {sessionSummary,type SessionSummary} from '../shared/sessionSummary';
 import {GameCover} from './GameCover';
 import {BoardEvent} from './BoardFeedback';
 
-import {RoomEntry} from './RoomEntry';
 import {withTransition} from './viewTransition';
 import {attachPullToRefresh, attachSwipeToDelete} from './gestures';
 import {rememberRoom,selectRoomScope} from './roomAccess';
+const SessionWorkspace=lazy(()=>import('./SessionWorkspace'));
+const RoomEntry=lazy(()=>import('./RoomCreateDialog').then(m=>({default:m.RoomEntry})));
+const LibraryDialog=lazy(()=>import('./Dialogs').then(m=>({default:m.LibraryDialog})));
+const LibraryPanel=lazy(()=>import('./Dialogs').then(m=>({default:m.LibraryPanel})));
+const fire=(promise:Promise<unknown>)=>{void promise.catch(()=>{});};
 type Dialog = 'create' | 'join' | 'library' | null;
 type Tab = 'home' | 'archive' | 'games';
 type Filter = 'all' | 'saved' | 'trash';
@@ -22,15 +24,14 @@ const TABS: { id: Tab; label: string; Icon: typeof House }[] = [{ id: 'home', la
 const readFilter = (): Filter => { const value = new URLSearchParams(location.search).get('filter'); return value === 'saved' || value === 'trash' ? value : 'all'; };
 const readTab = (): Tab => { const tab = new URLSearchParams(location.search).get('tab'); return tab === 'archive' || tab === 'games' ? tab : 'home'; };
 
-function SessionCard({ session, pack, busy, manage, onOpen, onRestore, onDelete }: { session: Session; pack?: GameCatalogEntry; busy: boolean; manage: boolean; onOpen: () => void; onRestore: () => void; onDelete: () => void }) {
-  const evidence = session.evidence.find(item => item.scope === 'public' && !item.ownerId);
-  const saved = session.snapshots.length > 0;
+function SessionCard({ session, pack, busy, manage, onOpen, onRestore, onDelete }: { session: SessionSummary; pack?: GameCatalogEntry; busy: boolean; manage: boolean; onOpen: () => void; onRestore: () => void; onDelete: () => void }) {
+  const saved = session.saved;
   const swipeable = !session.deletedAt && !session.room;
-  return <article className="session-card" data-session={session.id} data-swipe={swipeable ? '' : undefined}>{swipeable && <span className="swipe-action" aria-hidden="true"><Trash2 size={20}/>삭제</span>}<button type="button" className="session-open" disabled={busy || !!session.deletedAt} onClick={onOpen}><div className="session-card-image">{evidence?.url ? <img src={evidence.url} alt="" loading="lazy" width={320} height={240}/> : <div className="session-card-cover" aria-hidden="true"><GameCover gameId={session.gamePackId}/></div>}{saved && <span className="session-status is-saved"><Check size={13} aria-hidden="true"/>저장됨</span>}</div><div className="session-card-body"><h3>{session.name}</h3><p className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}<time dateTime={session.updatedAt}>{formatDate(session.updatedAt)}</time></p></div></button>{session.deletedAt ? <button type="button" className="button secondary small-button restore-board" disabled={busy} onClick={onRestore}><Undo2 size={15}/>복원</button> : manage && !session.room ? <button type="button" className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={onDelete}><Trash2 size={16}/></button> : null}</article>;
+  return <article className="session-card" data-session={session.id} data-swipe={swipeable ? '' : undefined}>{swipeable && <span className="swipe-action" aria-hidden="true"><Trash2 size={20}/>삭제</span>}<button type="button" className="session-open" disabled={busy || !!session.deletedAt} onClick={onOpen}><div className="session-card-image">{session.thumbnail ? <img src={session.thumbnail} alt="" loading="lazy" width={320} height={240}/> : <div className="session-card-cover" aria-hidden="true"><GameCover gameId={session.gamePackId}/></div>}{saved && <span className="session-status is-saved"><Check size={13} aria-hidden="true"/>저장됨</span>}</div><div className="session-card-body"><h3>{session.name}</h3><p className="session-card-meta">{pack?.title || session.gamePackId}{session.example && <span>예시</span>}<time dateTime={session.updatedAt}>{formatDate(session.updatedAt)}</time></p></div></button>{session.deletedAt ? <button type="button" className="button secondary small-button restore-board" disabled={busy} onClick={onRestore}><Undo2 size={15}/>복원</button> : manage && !session.room ? <button type="button" className="icon-button session-delete" aria-label={`${session.name} 삭제`} disabled={busy} onClick={onDelete}><Trash2 size={16}/></button> : null}</article>;
 }
 
 export default function App() {
-  const [sessions, setSessions] = useState<Session[]>([]);
+  const [sessions, setSessions] = useState<SessionSummary[]>([]);
   const [packs, setPacks] = useState<GameCatalogEntry[]>([]);
   const [status, setStatus] = useState<AIStatus | null>(null);
   const [view, setView] = useState<SessionView | null>(null);
@@ -74,15 +75,14 @@ export default function App() {
     if(view.roomAccess&&id&&id!==view.roomAccess.playerId)id=view.roomAccess.playerId;
     const sessionId=view.session.id;
     const locking=api.lockPrivate(sessionId);
-    receive(redactView(view,new Set(view.privacy?.protectedOwnerIds??[]),new Set()));
-    setOwnerIdState(id);updateUrl(sessionId,id);setBusy(true);
-    try{await locking;const next=await api.session(sessionId);selectRoomScope(next,id);setConflict(false);receive(next);}finally{setBusy(false);}
+    setBusy(true);
+    try{const {redactView}=await import('../shared/privacy');receive(redactView(view,new Set(view.privacy?.protectedOwnerIds??[]),new Set()));setOwnerIdState(id);updateUrl(sessionId,id);await locking;const next=await api.session(sessionId);selectRoomScope(next,id);setConflict(false);receive(next);}finally{setBusy(false);}
   };
   const receive = (next: SessionView) => {
     rememberRoom(next);
     liveView.current = next;
     setView(next);
-    const listSession=redactSession(next.session,next.pack,new Set(next.privacy?.protectedOwnerIds??[]),new Set());
+    const listSession=sessionSummary(next.session);
     setSessions(current => [{ ...listSession, deletedAt: current.find(item => item.id === next.session.id)?.deletedAt }, ...current.filter(item => item.id !== next.session.id)]);
   };
   const open = async (id: string) => {
@@ -154,11 +154,11 @@ export default function App() {
   }, [view?.session.id, ownerId]);
 
   const liveSessions = sessions.filter(session => !session.deletedAt);
-  const visibleSessions = sessions.filter(session => (filter === 'trash' ? !!session.deletedAt : !session.deletedAt) && (!search || `${session.name} ${packs.find(pack => pack.id === session.gamePackId)?.title || ''}`.toLowerCase().includes(search.toLowerCase())) && (filter !== 'saved' || session.snapshots.length > 0));
-  const savedCount = liveSessions.filter(session => session.snapshots.length).length;
+  const visibleSessions = sessions.filter(session => (filter === 'trash' ? !!session.deletedAt : !session.deletedAt) && (!search || `${session.name} ${packs.find(pack => pack.id === session.gamePackId)?.title || ''}`.toLowerCase().includes(search.toLowerCase())) && (filter !== 'saved' || session.saved));
+  const savedCount = liveSessions.filter(session => session.saved).length;
   const openExample = () => fire(mutate(() => api.create({ example: true }), '카탄 예시를 열었어요').then(() => { const next = liveView.current; if (next) updateUrl(next.session.id); }));
   const recentSessions = liveSessions.slice(0, 5);
-  const card = (session: Session) => <SessionCard key={session.id} session={session} pack={packs.find(item => item.id === session.gamePackId)} busy={busy} manage={manage} onOpen={() => void open(session.id)} onRestore={() => void restoreBoards([session.id])} onDelete={() => void hideBoards(session.id)}/>;
+  const card = (session: SessionSummary) => <SessionCard key={session.id} session={session} pack={packs.find(item => item.id === session.gamePackId)} busy={busy} manage={manage} onOpen={() => void open(session.id)} onRestore={() => void restoreBoards([session.id])} onDelete={() => void hideBoards(session.id)}/>;
   const onHome = !view && tab === 'home';
   return <div className={`app-shell${view ? ' is-session' : ' has-tabbar'}${onHome ? ' is-home' : ''}`}>
     <a className="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -169,7 +169,7 @@ export default function App() {
     </header>
     <main id="main" ref={mainArea} tabIndex={-1} className={`main-content ${view ? 'in-session' : ''}`}>
       {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
-      {loading ? <div className="skeleton" role="status" aria-label="보드를 불러오고 있어요"><span className="sk sk-title"/><div className="sk-row"><span className="sk sk-button"/><span className="sk sk-button"/></div><span className="sk sk-heading"/>{[0, 1, 2].map(index => <div className="sk-card" key={index}><span className="sk sk-thumb"/><div><span className="sk sk-line"/><span className="sk sk-line short"/></div></div>)}</div> : view ? <SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/> : tab === 'home' ? <div className="home home-tab">
+      {loading ? <div className="skeleton" role="status" aria-label="보드를 불러오고 있어요"><span className="sk sk-title"/><div className="sk-row"><span className="sk sk-button"/><span className="sk sk-button"/></div><span className="sk sk-heading"/>{[0, 1, 2].map(index => <div className="sk-card" key={index}><span className="sk sk-thumb"/><div><span className="sk sk-line"/><span className="sk sk-line short"/></div></div>)}</div> : view ? <Suspense fallback={<Busy/>}><SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/></Suspense> : tab === 'home' ? <div className="home home-tab">
         <h1 className="page-title">보드게임 기록</h1>
         <div className="home-actions">
           <button type="button" className="button primary" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/>새 보드</button>
@@ -187,12 +187,12 @@ export default function App() {
         {visibleSessions.length ? <div className="session-list">{visibleSessions.map(card)}</div> : <Empty title={search ? '검색 결과가 없어요' : filter === 'trash' ? '삭제한 보드가 없어요' : filter === 'saved' ? '아직 저장한 판이 없어요' : '첫 번째 판을 기록해 보세요'} action={filter === 'trash' || search ? undefined : <div className="button-row empty-actions"><button type="button" className="button primary" disabled={!packs.length || busy} onClick={() => setDialog('create')}><Plus size={17}/>새 보드</button><button type="button" className="button secondary" disabled={!packs.length || busy} onClick={openExample}>카탄 예시 열기</button></div>}>{search ? '다른 이름이나 게임으로 찾아보세요.' : filter === 'trash' ? '삭제한 보드는 여기서 복원할 수 있어요.' : '게임 사진과 상태를 함께 남기면 이어볼 수 있어요.'}</Empty>}
       </div> : <div className="home games-tab">
         <h1 className="page-title">게임</h1>
-        <LibraryPanel packs={packs}/>
+        <Suspense fallback={<Busy/>}><LibraryPanel packs={packs}/></Suspense>
       </div>}
       {error && <div className="error-banner" role="alert"><div><strong>요청을 완료하지 못했어요</strong><p>{error}</p></div><button className="icon-button" aria-label="오류 닫기" onClick={() => setError('')}><X size={18}/></button></div>}
     </main>
-    {(dialog === 'create'||dialog==='join') && <RoomEntry packs={packs} joining={dialog==='join'} initialInvite={initialInvite} onClose={() => {setDialog(null);setInitialInvite('');const u=new URL(location.href);u.hash='';history.replaceState({},'',u);}} onCreated={created}/>}
-    {dialog === 'library' && <LibraryDialog packs={packs} onClose={() => setDialog(null)} onChanged={refreshPacks}/>}
+    {(dialog === 'create'||dialog==='join') && <Suspense fallback={<Busy/>}><RoomEntry packs={packs} joining={dialog==='join'} initialInvite={initialInvite} onClose={() => {setDialog(null);setInitialInvite('');const u=new URL(location.href);u.hash='';history.replaceState({},'',u);}} onCreated={created}/></Suspense>}
+    {dialog === 'library' && <Suspense fallback={<Busy/>}><LibraryDialog packs={packs} onClose={() => setDialog(null)} onChanged={refreshPacks}/></Suspense>}
     {deleteUndo.length > 0 && <div className="delete-undo" role="status"><span>보드 {deleteUndo.length}개를 삭제했어요.</span><button disabled={busy} onClick={() => void restoreBoards(deleteUndo)}><Undo2 size={15}/>되돌리기</button></div>}
     {toast && !deleteUndo.length && <div className="toast" role="status"><Check size={17}/>{toast}</div>}
     {reopenFeedback > 0 && <BoardEvent key={reopenFeedback} kind="reopen"/>}

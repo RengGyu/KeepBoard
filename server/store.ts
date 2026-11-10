@@ -10,6 +10,43 @@ export interface SessionExport {
 }
 
 export class Store {
+  private uploadChange: Promise<unknown> = Promise.resolve();
+  private knownUploadRefs = new Set<string>();
+  private uploadIndexPath(filename:string){return path.join(this.root,'upload-references',filename+'.json');}
+  /** Old URLs remain unchanged. This one-time migration runs before serving requests,
+   * never inside the photo handler. Entries are additive; live sessions remain authoritative. */
+  async prepareUploadReferences(){
+    const marker=path.join(this.root,'upload-references','ready.json');
+    if(await this.readJSON(marker))return;
+    for(const session of await this.list<Session>('sessions'))await this.recordUploadReferences(session);
+    await this.mergeUploadDocument(marker,old=>old?undefined:{version:1});
+  }
+  private async mergeUploadDocument<T>(filename:string,update:(old:T|undefined)=>T|undefined){
+    for(let attempt=0;;attempt++){
+      const old=await this.readJSON<T>(filename),next=update(old);if(next===undefined)return;
+      try{await this.atomicWrite(filename,next);return;}catch(error){if((error as {status?:number}).status!==409||attempt>=7)throw error;}
+    }
+  }
+  protected async recordUploadReferences(session:Session){
+    const filenames=new Set([...session.evidence,...session.snapshots.flatMap(s=>s.evidence)].filter(e=>e.url.startsWith('/uploads/')).map(e=>path.basename(e.url)));
+    const work=this.uploadChange.catch(()=>undefined).then(async()=>{
+      for(const filename of filenames){
+        const key=JSON.stringify([filename,session.id]);if(this.knownUploadRefs.has(key))continue;
+        await this.mergeUploadDocument<string[]>(this.uploadIndexPath(filename),old=>{
+          if(old?.includes(session.id))return undefined;
+          // Keep the same object when updating, for BlobStore's CAS token.
+          const ids=old??[];ids.push(session.id);return ids;
+        });
+        this.knownUploadRefs.add(key);
+      }
+    });this.uploadChange=work;await work;
+  }
+  async sessionsForUpload(filename:string):Promise<Session[]>{
+    if(!filename||filename!==path.basename(filename))return [];
+    const ids=await this.readJSON<string[]>(this.uploadIndexPath(filename))??[];
+    const sessions=await Promise.all(ids.map(id=>this.getSession(id)));
+    return sessions.filter((s):s is Session=>!!s);
+  }
   private listChange: Promise<unknown> = Promise.resolve();
   private async hiddenSessions(): Promise<Record<string, { deletedAt: string }>> {
     return await this.readJSON<Record<string,{deletedAt:string}>>(path.join(this.root,'session-list.json'))??{};
@@ -51,6 +88,7 @@ export class Store {
   async getSession(id:string):Promise<Session|undefined>{return this.readJSON<Session>(this.filename('sessions',id));}
 
   async saveSession(session: Session) {
+    await this.recordUploadReferences(session);
     session.updatedAt = new Date().toISOString();
     await this.atomicWrite(this.filename('sessions', session.id), session);
   }

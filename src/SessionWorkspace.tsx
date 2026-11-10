@@ -214,7 +214,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   async function analyzeBatch(batch: Pick<BatchReadout, 'context' | 'evidenceIds' | 'captureTarget' | 'reader' | 'readingMode'>,sameStaticState=false) {
     const {context,evidenceIds,captureTarget,readingMode}=batch;let {reader}=batch;if(!evidenceIds.length||analysisInFlight.current.has(context.id))return;
     if(evidenceIds.length>1&&!sameStaticState&&readingMode==='existing'){setPendingRead(batch);return;}
-    if(readingMode!=='existing'&&!reader){await loadPhotoDefinitions().catch(()=>undefined);reader=resolveReaderRef.current(readingMode as ReaderMode,false);}
+    if(readingMode!=='existing'&&!reader){await loadPhotoDefinitions(view.pack).catch(()=>undefined);reader=resolveReaderRef.current(readingMode as ReaderMode,false);}
     if(readingMode!=='existing'&&!reader)throw new Error('이 저장본의 촬영 정의가 맞지 않아 선택한 판독을 시작하지 않았어요. 원본은 보관돼요.');
     setPendingRead(null);analysisInFlight.current.add(context.id);setLastScan(null);
     try{const response=await api.startAnalysisJob(context.sessionId,{requestId:context.id,evidenceIds:[...evidenceIds],expectedCaptureEpoch:context.captureEpoch,purpose:context.purpose,instruction:context.instruction,captureTarget,reader,sameStaticState:readingMode!=='existing'||sameStaticState,scope:context.ownerId?'owner':'public',ownerId:context.ownerId});if(alive.current&&currentScreen.current.sessionId===context.sessionId&&currentScreen.current.ownerId===context.ownerId&&response.job.captureEpoch===context.captureEpoch){setServerJob(response.job);jobPolling.current?.accept(response.job);}}

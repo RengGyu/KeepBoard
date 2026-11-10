@@ -6,6 +6,7 @@ import {loadPhotoDefinitions,photoDefinitionFor} from '../src/photoDefinitions.t
 test('reader selection loads exact definitions for existing retired boards and current boards',async()=>{
  await loadPhotoDefinitions();
  for(const pack of [...retiredPacks,...catalogPacks]){
+  await loadPhotoDefinitions(pack);
   const definition=photoDefinitionFor(pack);
   assert(definition,`${pack.id}@${pack.version}`);
   assert.equal(definition.sourceSHA,pack.runtime!.source.sha256);
