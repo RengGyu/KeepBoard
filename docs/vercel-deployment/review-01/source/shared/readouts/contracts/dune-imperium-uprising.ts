@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type DuneImperiumUprisingReadout =
-  {schema:"dune-imperium-uprising-v1";kind:"agents";values:{"observedColor": string | null; "pieceType": string | null; "owner": string | null; "actionSlot": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "owner": 'user' | null; "actionSlot": 'user' | null}}
- | {schema:"dune-imperium-uprising-v1";kind:"troops";values:{"observedColor": string | null; "unitType": string | null; "unitZone": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "unitType": FieldBasis | null; "unitZone": 'user' | null; "owner": 'user' | null}}
- | {schema:"dune-imperium-uprising-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"dune-imperium-uprising-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "displayValue": FieldBasis | null}}
- | {schema:"dune-imperium-uprising-v1";kind:"leaders";values:{"printedName": string | null; "sideLabel": string | null; "leader": string | null; "abilityUsed": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "leader": FieldBasis | null; "abilityUsed": 'user' | null}}
- | {schema:"dune-imperium-uprising-v1";kind:null;values:{};sources:{}};

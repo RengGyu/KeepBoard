@@ -1,8 +1,0 @@
-import {readFileSync,writeFileSync} from 'node:fs';import {spawnSync} from 'node:child_process';
-const tool='docs/game-photo-corpus/tools/corpus.mjs',file='docs/game-photo-corpus/manifest.json';
-const ids=['descent-legends-dark','frosthaven','just-one','love-letter','quacks','underwater-cities','stone-age','isle-of-cats','journeys-middle-earth','mage-knight'];
-for(const id of ids){let m=JSON.parse(readFileSync(file,'utf8')),g=m.games[id];const q=spawnSync(process.execPath,[tool,'gallery',String(g.bggId),'','30','hot'],{encoding:'utf8',timeout:30000});if(q.status!==0){console.log(JSON.stringify({gameId:id,error:q.stderr.slice(0,100)}));continue;}
- const seen=new Set(m.images.map(i=>i.pageUrl));const list=JSON.parse(q.stdout).filter(i=>!seen.has(i.pageUrl)&&!(/custom|retheme|insert|unbox|3d.?print|organizer|storage|prototype|render|digital|logo|rulebook|miniature|painted|close.up|bag|quality control/i.test(i.caption||''))).slice(0,2);
- for(const i of list){const r=spawnSync(process.execPath,[tool,'fetch',JSON.stringify({gameId:id,pageUrl:i.pageUrl,imageUrl:i.imageUrl,caption:i.caption,uploader:i.uploader,source:'BoardGameGeek public image gallery',sourceKind:'community (BGG untagged hot gallery)'})],{encoding:'utf8',timeout:30000});console.log(JSON.stringify({gameId:id,exit:r.status,result:r.stdout.trim()}));await new Promise(r=>setTimeout(r,450));}
- m=JSON.parse(readFileSync(file,'utf8'));(m.games[id].fallbackLookups??=[]).push({at:new Date().toISOString(),url:`https://api.geekdo.com/api/images?objectid=${g.bggId}&objecttype=thing&nosession=1&sort=hot&showcount=30`,selected:list.length,method:'caption preselection then direct visual review required'});writeFileSync(file,JSON.stringify(m,null,1)+'\n');
-}

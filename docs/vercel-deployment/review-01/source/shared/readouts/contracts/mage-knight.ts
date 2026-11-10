@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type MageKnightReadout =
-  {schema:"mage-knight-v1";kind:"map";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "cityLevel": number | null; "enemyLabel": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "cityLevel": FieldBasis | null; "enemyLabel": FieldBasis | null; "location": 'user' | null}}
- | {schema:"mage-knight-v1";kind:"heroes";values:{"observedColor": string | null; "heroType": string | null; "location": string | null; "unitState": string | null};sources:{"observedColor": FieldBasis | null; "heroType": FieldBasis | null; "location": 'user' | null; "unitState": 'user' | null}}
- | {schema:"mage-knight-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null; "targetUnit": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null; "targetUnit": 'user' | null}}
- | {schema:"mage-knight-v1";kind:"mana";values:{"observedColor": string | null; "manaType": string | null; "dieFace": string | null; "storage": string | null};sources:{"observedColor": FieldBasis | null; "manaType": FieldBasis | null; "dieFace": FieldBasis | null; "storage": 'user' | null}}
- | {schema:"mage-knight-v1";kind:"skills";values:{"observedColor": string | null; "itemType": string | null; "displayValue": number | null; "used": string | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "displayValue": FieldBasis | null; "used": 'user' | null}}
- | {schema:"mage-knight-v1";kind:null;values:{};sources:{}};

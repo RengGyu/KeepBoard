@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type QuacksReadout =
-  {schema:"quacks-v1";kind:"chips";values:{"observedColor": string | null; "chipColor": string | null; "chipNumber": number | null; "chipZone": string | null; "pathPosition": string | null};sources:{"observedColor": FieldBasis | null; "chipColor": FieldBasis | null; "chipNumber": FieldBasis | null; "chipZone": 'user' | null; "pathPosition": 'user' | null}}
- | {schema:"quacks-v1";kind:"pot";values:{"printedName": string | null; "sideLabel": string | null; "potSide": string | null; "dropPosition": string | null; "ratPosition": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "potSide": FieldBasis | null; "dropPosition": 'user' | null; "ratPosition": 'user' | null}}
- | {schema:"quacks-v1";kind:"books";values:{"face": "front" | "back" | null; "printedName": string | null; "setLabel": string | null; "fortuneLabel": string | null; "roundValue": number | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "setLabel": FieldBasis | null; "fortuneLabel": FieldBasis | null; "roundValue": FieldBasis | null}}
- | {schema:"quacks-v1";kind:"goods";values:{"observedColor": string | null; "itemType": string | null; "flaskSide": string | null; "sealFace": string | null; "trackValue": number | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "flaskSide": FieldBasis | null; "sealFace": FieldBasis | null; "trackValue": FieldBasis | null}}
- | {schema:"quacks-v1";kind:null;values:{};sources:{}};

@@ -1,9 +1,0 @@
-import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {pathToFileURL} from 'node:url';
-const pre=JSON.parse(await fs.readFile(new URL('./preflight.json',import.meta.url),'utf8')),a=await import(pathToFileURL(pre.privateAdapterPath).href);
-const json=JSON.stringify({objects:[{id:'x',kind:'die',box:null,color:null,value:0}],warnings:[]});
-const g=a.parse('argon',{status:'completed',model:'gemini-4-argon',id:'synthetic-only',steps:[{type:'model_output',content:[{type:'text',text:json}]}],usage:{total_input_tokens:7,total_output_tokens:20,total_thought_tokens:22,total_tokens:49,total_cached_tokens:0}});
-assert.equal(g.usage.outputTokensIncludingThinking,42);assert.equal(g.raw.objects[0].value,0);assert.equal(g.raw.objects[0].color,null);
-const d=a.parse('deepseek',{status:'completed',model:'deepseek-flash',id:'synthetic-only',output:[{type:'message',role:'assistant',content:[{type:'output_text',text:json}]}],usage:{input_tokens:7,output_tokens:42,total_tokens:49,output_tokens_details:{reasoning_tokens:22},input_tokens_details:{cached_tokens:0}}});assert.equal(d.usage.outputTokensIncludingThinking,42);assert.deepEqual(g.raw,d.raw);
-const b=a.requestBody('argon','synthetic prompt',Buffer.from('synthetic bytes'));assert.equal(b.model,'gemini-4-argon');assert.equal(b.generation_config.thinking_level,'high');assert.equal(b.generation_config.max_output_tokens,32768);assert.equal(b.input[1].resolution,'high');assert.equal(b.store,false);assert.equal(b.background,false);
-const c=a.requestBody('deepseek','synthetic prompt',Buffer.from('synthetic bytes'));assert.equal(c.model,'deepseek-flash');assert.equal(c.reasoning.effort,'high');assert.equal(c.max_output_tokens,32768);assert.equal(c.input[0].content[1].detail,'high');
-console.log('PASS offline provider contract / final JSON / native usage conversion / null-vs0; model calls0');

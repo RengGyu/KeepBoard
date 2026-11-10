@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type PandemicLegacy1Readout =
-  {schema:"pandemic-legacy-1-v1";kind:"map";values:{"printedName": string | null; "sideLabel": string | null; "cityLabel": string | null; "permanentMarks": string | null; "confirmedChange": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "cityLabel": FieldBasis | null; "permanentMarks": FieldBasis | null; "confirmedChange": 'user' | null}}
- | {schema:"pandemic-legacy-1-v1";kind:"pieces";values:{"observedColor": string | null; "pieceType": string | null; "displayValue": number | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "displayValue": FieldBasis | null; "location": 'user' | null}}
- | {schema:"pandemic-legacy-1-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"pandemic-legacy-1-v1";kind:"record";values:{"printedName": string | null; "sideLabel": string | null; "recordType": string | null; "confirmedEntry": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "recordType": FieldBasis | null; "confirmedEntry": 'user' | null}}
- | {schema:"pandemic-legacy-1-v1";kind:null;values:{};sources:{}};

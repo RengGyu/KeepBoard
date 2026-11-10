@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type CastlesMadLudwigReadout =
-  {schema:"castles-mad-ludwig-v1";kind:"rooms";values:{"face": "front" | "back" | null; "printedName": string | null; "roomType": string | null; "shape": string | null; "doors": string | null; "completed": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "roomType": FieldBasis | null; "shape": FieldBasis | null; "doors": FieldBasis | null; "completed": 'user' | null}}
- | {schema:"castles-mad-ludwig-v1";kind:"market";values:{"printedName": string | null; "sideLabel": string | null; "slot": string | null; "price": number | null; "masterBuilder": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "slot": 'user' | null; "price": FieldBasis | null; "masterBuilder": 'user' | null}}
- | {schema:"castles-mad-ludwig-v1";kind:"money";values:{"observedColor": string | null; "itemType": string | null; "nominalValue": number | null; "trackValue": number | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "nominalValue": FieldBasis | null; "trackValue": FieldBasis | null}}
- | {schema:"castles-mad-ludwig-v1";kind:"goals";values:{"face": "front" | "back" | null; "printedName": string | null; "goalType": string | null; "printedGoal": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "goalType": 'user' | null; "printedGoal": FieldBasis | null}}
- | {schema:"castles-mad-ludwig-v1";kind:null;values:{};sources:{}};

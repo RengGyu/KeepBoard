@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type DescentLegendsDarkReadout =
-  {schema:"descent-legends-dark-v1";kind:"terrain";values:{"face": "front" | "back" | null; "printedName": string | null; "terrainType": string | null; "layer": number | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "terrainType": FieldBasis | null; "layer": 'user' | null; "location": 'user' | null}}
- | {schema:"descent-legends-dark-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "damage": number | null; "layer": number | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "damage": FieldBasis | null; "layer": 'user' | null}}
- | {schema:"descent-legends-dark-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "fatigue": number | null; "status": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "fatigue": FieldBasis | null; "status": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"descent-legends-dark-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "shownSymbol": string | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "shownSymbol": FieldBasis | null; "target": 'user' | null}}
- | {schema:"descent-legends-dark-v1";kind:null;values:{};sources:{}};

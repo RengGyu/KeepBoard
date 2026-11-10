@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type RootReadout =
-  {schema:"root-v1";kind:"warriors";values:{"observedColor": string | null; "pieceType": string | null; "faction": string | null; "owner": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "faction": FieldBasis | null; "owner": 'user' | null; "location": 'user' | null}}
- | {schema:"root-v1";kind:"buildings";values:{"face": "front" | "back" | null; "printedName": string | null; "buildingType": string | null; "slot": string | null; "owner": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "buildingType": FieldBasis | null; "slot": 'user' | null; "owner": 'user' | null}}
- | {schema:"root-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "location": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "location": 'user' | null; "owner": 'user' | null}}
- | {schema:"root-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardArea": string | null; "column": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardArea": 'user' | null; "column": 'user' | null}}
- | {schema:"root-v1";kind:"items";values:{"observedColor": string | null; "itemType": string | null; "exhausted": string | null; "damaged": string | null; "relationship": string | null};sources:{"observedColor": FieldBasis | null; "itemType": FieldBasis | null; "exhausted": 'user' | null; "damaged": 'user' | null; "relationship": 'user' | null}}
- | {schema:"root-v1";kind:null;values:{};sources:{}};

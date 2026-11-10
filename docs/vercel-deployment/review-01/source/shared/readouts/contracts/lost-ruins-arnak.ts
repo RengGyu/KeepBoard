@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type LostRuinsArnakReadout =
-  {schema:"lost-ruins-arnak-v1";kind:"workers";values:{"observedColor": string | null; "workerType": string | null; "workerState": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "workerType": FieldBasis | null; "workerState": 'user' | null; "owner": 'user' | null}}
- | {schema:"lost-ruins-arnak-v1";kind:"sites";values:{"face": "front" | "back" | null; "printedName": string | null; "siteType": string | null; "bonusFace": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "siteType": FieldBasis | null; "bonusFace": FieldBasis | null; "location": 'user' | null}}
- | {schema:"lost-ruins-arnak-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"lost-ruins-arnak-v1";kind:"research";values:{"observedColor": string | null; "pieceType": string | null; "trackLabel": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "trackLabel": FieldBasis | null; "owner": 'user' | null}}
- | {schema:"lost-ruins-arnak-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "assistantSide": string | null; "used": string | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "assistantSide": FieldBasis | null; "used": 'user' | null}}
- | {schema:"lost-ruins-arnak-v1";kind:null;values:{};sources:{}};

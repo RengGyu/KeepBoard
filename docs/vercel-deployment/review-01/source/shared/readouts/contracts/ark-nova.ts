@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type ArkNovaReadout =
-  {schema:"ark-nova-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "tileType": string | null; "footprint": string | null; "flipped": boolean | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileType": FieldBasis | null; "footprint": FieldBasis | null; "flipped": FieldBasis | null; "location": 'user' | null}}
- | {schema:"ark-nova-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"ark-nova-v1";kind:"actions";values:{"face": "front" | "back" | null; "printedName": string | null; "actionType": string | null; "upgradedFace": string | null; "lineupIndex": number | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "actionType": FieldBasis | null; "upgradedFace": FieldBasis | null; "lineupIndex": 'user' | null}}
- | {schema:"ark-nova-v1";kind:"workers";values:{"observedColor": string | null; "workerType": string | null; "workerZone": string | null; "owner": string | null};sources:{"observedColor": FieldBasis | null; "workerType": FieldBasis | null; "workerZone": 'user' | null; "owner": 'user' | null}}
- | {schema:"ark-nova-v1";kind:"tracks";values:{"observedColor": string | null; "trackType": string | null; "displayValue": number | null};sources:{"observedColor": FieldBasis | null; "trackType": FieldBasis | null; "displayValue": FieldBasis | null}}
- | {schema:"ark-nova-v1";kind:null;values:{};sources:{}};

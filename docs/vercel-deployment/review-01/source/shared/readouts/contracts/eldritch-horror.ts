@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type EldritchHorrorReadout =
-  {schema:"eldritch-horror-v1";kind:"world";values:{"printedName": string | null; "sideLabel": string | null; "nodeLabel": string | null; "nodeType": string | null; "ancientOneFace": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "nodeLabel": FieldBasis | null; "nodeType": FieldBasis | null; "ancientOneFace": FieldBasis | null}}
- | {schema:"eldritch-horror-v1";kind:"pieces";values:{"observedColor": string | null; "pieceType": string | null; "instanceLabel": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "instanceLabel": FieldBasis | null; "location": 'user' | null}}
- | {schema:"eldritch-horror-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "printedSymbols": SymbolValue[] | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": 'user' | null; "printedSymbols": FieldBasis | null}}
- | {schema:"eldritch-horror-v1";kind:"markers";values:{"observedColor": string | null; "markerType": string | null; "displayValue": number | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "markerType": FieldBasis | null; "displayValue": FieldBasis | null; "target": 'user' | null}}
- | {schema:"eldritch-horror-v1";kind:null;values:{};sources:{}};

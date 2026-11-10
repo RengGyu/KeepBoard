@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type JourneysMiddleEarthReadout =
-  {schema:"journeys-middle-earth-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "mapType": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "mapType": 'user' | null; "location": 'user' | null}}
- | {schema:"journeys-middle-earth-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "location": 'user' | null}}
- | {schema:"journeys-middle-earth-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null; "printedSymbols": SymbolValue[] | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null; "printedSymbols": FieldBasis | null}}
- | {schema:"journeys-middle-earth-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "shownSide": string | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "shownSide": FieldBasis | null; "target": 'user' | null}}
- | {schema:"journeys-middle-earth-v1";kind:null;values:{};sources:{}};

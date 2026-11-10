@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type EclipseSecondDawnReadout =
-  {schema:"eclipse-second-dawn-v1";kind:"sectors";values:{"face": "front" | "back" | null; "printedName": string | null; "sectorLabel": string | null; "wormholes": string | null; "planets": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "sectorLabel": FieldBasis | null; "wormholes": FieldBasis | null; "planets": FieldBasis | null}}
- | {schema:"eclipse-second-dawn-v1";kind:"ships";values:{"observedColor": string | null; "shipType": string | null; "owner": string | null; "blueprintPart": string | null};sources:{"observedColor": FieldBasis | null; "shipType": FieldBasis | null; "owner": 'user' | null; "blueprintPart": 'user' | null}}
- | {schema:"eclipse-second-dawn-v1";kind:"discs";values:{"observedColor": string | null; "pieceType": string | null; "shownSide": string | null; "pool": string | null};sources:{"observedColor": FieldBasis | null; "pieceType": FieldBasis | null; "shownSide": FieldBasis | null; "pool": 'user' | null}}
- | {schema:"eclipse-second-dawn-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "tileType": string | null; "tileArea": string | null; "printedValue": number | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileType": FieldBasis | null; "tileArea": 'user' | null; "printedValue": FieldBasis | null}}
- | {schema:"eclipse-second-dawn-v1";kind:null;values:{};sources:{}};

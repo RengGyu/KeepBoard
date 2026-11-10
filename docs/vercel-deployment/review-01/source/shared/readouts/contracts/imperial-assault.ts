@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type ImperialAssaultReadout =
-  {schema:"imperial-assault-v1";kind:"map";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "tileSide": string | null; "featureType": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "tileSide": FieldBasis | null; "featureType": FieldBasis | null; "location": 'user' | null}}
- | {schema:"imperial-assault-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "groupLabel": string | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "groupLabel": 'user' | null}}
- | {schema:"imperial-assault-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"imperial-assault-v1";kind:"tokens";values:{"observedColor": string | null; "markType": string | null; "displayValue": number | null; "target": string | null};sources:{"observedColor": FieldBasis | null; "markType": FieldBasis | null; "displayValue": FieldBasis | null; "target": 'user' | null}}
- | {schema:"imperial-assault-v1";kind:null;values:{};sources:{}};

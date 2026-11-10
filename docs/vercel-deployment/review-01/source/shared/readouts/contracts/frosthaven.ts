@@ -1,9 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type FrosthavenReadout =
-  {schema:"frosthaven-v1";kind:"map";values:{"face": "front" | "back" | null; "printedName": string | null; "tileLabel": string | null; "featureType": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "tileLabel": FieldBasis | null; "featureType": FieldBasis | null; "location": 'user' | null}}
- | {schema:"frosthaven-v1";kind:"figures";values:{"observedColor": string | null; "instanceLabel": string | null; "rank": string | null; "health": number | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "instanceLabel": FieldBasis | null; "rank": FieldBasis | null; "health": FieldBasis | null; "location": 'user' | null}}
- | {schema:"frosthaven-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"frosthaven-v1";kind:"outpost";values:{"printedName": string | null; "sideLabel": string | null; "buildingLabel": string | null; "level": number | null; "buildingState": string | null; "scheduled": string | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "buildingLabel": FieldBasis | null; "level": FieldBasis | null; "buildingState": 'user' | null; "scheduled": 'user' | null}}
- | {schema:"frosthaven-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "storage": string | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "storage": 'user' | null}}
- | {schema:"frosthaven-v1";kind:null;values:{};sources:{}};

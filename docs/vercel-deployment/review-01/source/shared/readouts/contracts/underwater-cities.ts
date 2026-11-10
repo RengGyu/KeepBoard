@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type UnderwaterCitiesReadout =
-  {schema:"underwater-cities-v1";kind:"cities";values:{"observedColor": string | null; "structureType": string | null; "upgradeState": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "structureType": FieldBasis | null; "upgradeState": FieldBasis | null; "location": 'user' | null}}
- | {schema:"underwater-cities-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null; "used": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null; "used": 'user' | null}}
- | {schema:"underwater-cities-v1";kind:"boards";values:{"printedName": string | null; "sideLabel": string | null; "slotType": string | null; "slotLabel": string | null; "trackValue": number | null};sources:{"printedName": FieldBasis | null; "sideLabel": FieldBasis | null; "slotType": FieldBasis | null; "slotLabel": FieldBasis | null; "trackValue": FieldBasis | null}}
- | {schema:"underwater-cities-v1";kind:"resources";values:{"observedColor": string | null; "resourceType": string | null; "resourceZone": string | null};sources:{"observedColor": FieldBasis | null; "resourceType": FieldBasis | null; "resourceZone": 'user' | null}}
- | {schema:"underwater-cities-v1";kind:null;values:{};sources:{}};

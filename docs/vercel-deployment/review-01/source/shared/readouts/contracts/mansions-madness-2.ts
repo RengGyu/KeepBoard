@@ -1,8 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type MansionsMadness2Readout =
-  {schema:"mansions-madness-2-v1";kind:"map";values:{"face": "front" | "back" | null; "printedName": string | null; "roomLabel": string | null; "featureType": string | null; "location": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "roomLabel": FieldBasis | null; "featureType": FieldBasis | null; "location": 'user' | null}}
- | {schema:"mansions-madness-2-v1";kind:"figures";values:{"observedColor": string | null; "figureType": string | null; "instanceLabel": string | null; "location": string | null};sources:{"observedColor": FieldBasis | null; "figureType": FieldBasis | null; "instanceLabel": FieldBasis | null; "location": 'user' | null}}
- | {schema:"mansions-madness-2-v1";kind:"cards";values:{"face": "front" | "back" | null; "printedName": string | null; "cardType": string | null; "cardArea": string | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "cardType": FieldBasis | null; "cardArea": 'user' | null}}
- | {schema:"mansions-madness-2-v1";kind:"tokens";values:{"observedColor": string | null; "tokenType": string | null; "target": string | null; "printedLabel": string | null};sources:{"observedColor": FieldBasis | null; "tokenType": FieldBasis | null; "target": 'user' | null; "printedLabel": FieldBasis | null}}
- | {schema:"mansions-madness-2-v1";kind:null;values:{};sources:{}};

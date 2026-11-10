@@ -1,7 +1,0 @@
-[Unit]
-Description=Renew six-day KeepBoard IP certificate and reload nginx
-After=network-online.target
-
-[Service]
-Type=oneshot
-ExecStart=/snap/bin/certbot renew --quiet --deploy-hook "/usr/sbin/nginx -t && /bin/systemctl reload nginx"

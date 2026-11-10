@@ -1,7 +1,0 @@
-// Generated discriminated type. Runtime validator additionally checks source, visibility, evidence and relations.
-import type {FieldBasis,SymbolValue,LocalFeature,PieceReference} from '../types';
-export type CarcassonneReadout =
-  {schema:"carcassonne-v1";kind:"tiles";values:{"face": "front" | "back" | null; "printedName": string | null; "city": boolean | null; "road": boolean | null; "monastery": boolean | null; "shields": number | null; "gridX": number | null; "gridY": number | null; "features": LocalFeature[] | null};sources:{"face": FieldBasis | null; "printedName": FieldBasis | null; "city": FieldBasis | null; "road": FieldBasis | null; "monastery": FieldBasis | null; "shields": FieldBasis | null; "gridX": 'user' | null; "gridY": 'user' | null; "features": 'user' | null}}
- | {schema:"carcassonne-v1";kind:"followers";values:{"posture": "standing" | "lying" | null; "observedColor": string | null; "owner": string | null; "attachedTo": PieceReference | null};sources:{"posture": FieldBasis | null; "observedColor": FieldBasis | null; "owner": 'user' | null; "attachedTo": 'user' | null}}
- | {schema:"carcassonne-v1";kind:"score";values:{"trackValue": number | null; "observedColor": string | null; "owner": string | null};sources:{"trackValue": FieldBasis | null; "observedColor": FieldBasis | null; "owner": 'user' | null}}
- | {schema:"carcassonne-v1";kind:null;values:{};sources:{}};

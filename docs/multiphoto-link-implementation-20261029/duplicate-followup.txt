@@ -1,9 +1,0 @@
-TASK: 실제 재시험에서 드러난 source-box 없는 anchor와 crop 관측의 불명확한 동일성 처리.
-OUTCOME: 같은 원본에서 anchor에 이미 같은 종류가 있으나 비교 가능한 원사진 영역이 없을 때 crop을 별개 물리 실물로 확정해 추가하지 않는다. raw/종류/값은 미해결 관계로 보존하며 기존 anchor와 수동값은 유지. anchor가 실제로 해당 종류를 누락한 경우의 crop 보충은 계속 동작.
-CAPABILITY / MODEL / EFFORT: 기존 구현솔 gpt-6.1-sol/high, C2.
-AUTHORITY: 이전6파일 및 직접 테스트, 본 docs/sol만. 단일제품 소유권 재위임. 다른 편집 되돌리지 말 것.
-CONTEXT: 실제 재시험 docs/multiphoto-link-implementation-20261029/result.json, private ~/Library/Application Support/KeepBoard/research/multiphoto-link-live-20261029/{0..4.native.json,final-view.json}. provider5/peak5/retry0, 51.2초. anchor47개 중 number17/robber1, 최종number33/robber2. 해당 anchor number 관측 bbox=null 및 scene.region=null. 현재 crop-only의 overlaps 조건이 이 anchor들을 비교하지 못해 별개로 추가. 모델누락·변동과 처리결함을 분리할 것. 기존P0 이전 응답에는 항구 anchor0이므로6후보+2관측1그룹 동작 유지.
-ALLOWED SCOPE: 기존 source-box/관측연결 일반 규칙을 수정하고 필요한 관련PieceIds/미해결근거를 함께 보존. 같은종류/값만으로 merge 금지. 건물 city/settlement 종류불확실성은 기존kind 호환층으로 고려. 확실한 비겹침근거가 있으면 기존crop보충 유지. 동일원본/범위·출처 불명확성 구별. 이 사진 수량·좌표 상수 금지.
-FORBIDDEN: 실제 모델/API/추가prompt/schema/팩/정합/배포/commit/새agent 변경. 이번 새로운 실응답을 고정해 offline검증만. 숫자17/도둑1로 맞추기·expected count 강제 금지.
-ACCEPTANCE: 새 실제원응답 재생에서 중복위험crop은 물리추가 대신미해결관계로 보존; 전체raw를 편집참조 또는 그룹으로설명, anchor47유지, 원문불변/순서120/저장·재열기. 이전항구8=6+2그룹1유지. 일반 synthetic 같은종류anchor영역없음/서로다른종류/anchor해당종류없음/유효영역비겹침/수동baseline/부분실패·scope 경계 테스트. 숫자·종류가같다고임의identity 생성0. 최종freeze와직접검증인계.
-ESCALATE IF: 확정불가하면 미해결로두되 관측을버리지말고 정확한근거만 보고. 범위확대하지말것.
