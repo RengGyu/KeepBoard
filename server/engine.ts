@@ -1,3 +1,4 @@
+import {rebaseEstimatedReferences} from './estimatedReferenceRebase';
 import {linkedComponents} from '../shared/componentLinking.ts';
 import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
 import { randomUUID } from 'node:crypto';
@@ -131,11 +132,14 @@ export function answerField(session: Session, pack: GamePack, fieldKey: string, 
   if (isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && [1,2].includes(Number(value.version))) value = normalizeScene(value) as unknown as Value;
   const review=observationAnswerContext(session,pack,fieldKey,value,ownerId,observationReview);
   const previous = session.assertions.find(item => item.field === fieldKey && item.ownerId === ownerId && item.basis !== 'rule');
+  const previousAccepted=session.assertions.find(item=>item.field===fieldKey&&item.ownerId===ownerId&&item.status==='accepted'&&item.basis!=='rule');
+  const nextAssertionId=randomUUID();
   const observationReceipts=[...(value===null?[]:receiptsForValue(session,value,ownerId)),...(review.reviewed?.observationReceipts??[]),...(previous?.observationReceipts??[])].filter((r,i,all)=>all.findIndex(x=>x.request.taskId===r.request.taskId)===i);
   session.assertions = session.assertions.filter(item => !review.consumed.has(item.id)&&(fieldId(item.field,item.ownerId)!==fieldId(fieldKey,ownerId)||item.status==='candidate'&&!!item.observationReceipts?.length));
   // A correction changes the value, while its photographed target stays linked.
   const sceneEvidence = isSceneField(field) && value && typeof value === 'object' && !Array.isArray(value) && Array.isArray(value.components) ? value.components.flatMap(raw => { const c = objectValue(raw); return typeof c.evidenceId === 'string' && session.evidence.some(e => e.id === c.evidenceId && (ownerId ? e.ownerId === ownerId || e.scope === 'public' : e.scope === 'public')) ? [c.evidenceId] : []; }) : [];
-  if (value !== null) session.assertions.push({ id: randomUUID(), field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: [...new Set([...(previous?.evidenceIds || []), ...sceneEvidence, ...tileEvidence])], ...(previous?.region ? { region: previous.region } : {}), ...(observationReceipts.length?{observationReceipts}:{}),updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
+  if (value !== null) session.assertions.push({ id: nextAssertionId, field: fieldKey, value, ownerId, basis: 'user', status: 'accepted', evidenceIds: [...new Set([...(previous?.evidenceIds || []), ...sceneEvidence, ...tileEvidence])], ...(previous?.region ? { region: previous.region } : {}), ...(observationReceipts.length?{observationReceipts}:{}),updatedAt: new Date().toISOString(), turnInstanceId: session.turnInstanceId });
+  if(value!==null)session.assertions=rebaseEstimatedReferences(session.assertions,previousAccepted,nextAssertionId,value,session.evidence);
 }
 
 export function recompute(session: Session, pack: GamePack): SessionView {
