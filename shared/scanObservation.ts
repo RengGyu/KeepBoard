@@ -1,6 +1,6 @@
 import type {ObservationBox,ObservationProperty,ObservationScope} from './lightweightRecognition';
 export interface ScanTarget {assertionId:string;pieceId:string}
-export interface ScanPlan {version:'scan-observation-plan-v1';id:string;gameId:string;definitionSHA:string;scope:ObservationScope;anchorEvidenceId:string;units:{id:string;evidenceId:string;sourceEvidenceId:string;sourceSHA:string;inputSHA:string;areaId:string;role:'anchor'|'crop'|'detail';target:ScanTarget|null}[]}
+export interface ScanPlan {version:'scan-observation-plan-v1';id:string;gameId:string;definitionSHA:string;scope:ObservationScope;anchorEvidenceId:string;units:{id:string;evidenceId:string;sourceEvidenceId:string;sourceSHA:string;inputSHA:string;areaId:string;readingTarget?:import('./restoration').ReadingTarget;role:'anchor'|'crop'|'detail';target:ScanTarget|null}[]}
 export interface ScanUnitStatus {unitId:string;state:'completed'|'failed'|'interrupted';error?:string;observationCount:number;elapsedMs?:number}
 export interface ScanMember {unitId:string;observationRef:string}
 export interface ObservationLink {members:ScanMember[];status:'linked'|'conflict'|'unlinked';basis:'same-source-overlap'|'confirmed-frame'|'model-proposal'|'user-target'|'unlinked';conflicts:string[];targetPieceId:string|null;relation?:'same-visible-group-surface'}

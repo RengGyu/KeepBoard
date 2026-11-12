@@ -5,12 +5,16 @@ import type {ObservationUnknownReason,ObservationRequest,LiteralObservation,Phot
 export const GAP_REASON:Record<ObservationUnknownReason|'quantity',string>={unreadable:'읽기 어려움',occluded:'가림','out-of-frame':'사진 밖','not-present-unconfirmed':'유무 미확인','wrong-face':'앞면 아님',ambiguous:'구분 어려움',unsupported:'관측 미지원',quantity:'수량 모름'};
 export interface ObservationGap {property:string|null;reason:ObservationUnknownReason|'quantity'}
 
-/** Whether a requested value applies to the observed face. Unknown face never proves a back face.
+/** Whether a requested value is needed for the observed area and face. Unknown area/face never proves inapplicability.
  * New receipts carry front-only IDs. A caller may pass the exact pinned definition for older receipts.
  */
-export function observationPropertyApplicable(request:Pick<ObservationRequest,'allowedPropertyIds'|'propertyApplicability'>&Partial<Pick<ObservationRequest,'definitionSHA'>>,observation:Pick<LiteralObservation,'componentId'|'face'|'properties'>,property:string,definition?:PhotoDefinition):boolean{
+export function observationPropertyApplicable(request:Pick<ObservationRequest,'allowedPropertyIds'|'propertyApplicability'>&Partial<Pick<ObservationRequest,'definitionSHA'|'readingTarget'>>,observation:Pick<LiteralObservation,'componentId'|'face'|'properties'>&Partial<Pick<LiteralObservation,'sourceAreaId'>>,property:string,definition?:PhotoDefinition):boolean{
  const component=observation.componentId,asked=component?request.allowedPropertyIds?.[component]:undefined;
  if(request.allowedPropertyIds&&(!asked||!asked.includes(property)))return false;
+ const sourceAreaId=observation.sourceAreaId,target=request.readingTarget;
+ // Only a validated explicit scene area can narrow a union. Unassigned and historical observations retain the union.
+ const areaFields=sourceAreaId&&target?.mode==='public-scene'&&target.areaIds.includes(sourceAreaId)&&component?request.propertyApplicability?.areaPropertyIds?.[sourceAreaId]?.[component]:undefined;
+ if(areaFields&&!areaFields.includes(property))return false;
  const pinnedDefinition=definition&&request.definitionSHA===definition.definitionSHA?definition:undefined;
  const frontOnly=component&&(request.propertyApplicability?.frontOnlyPropertyIds[component]?.includes(property)||pinnedDefinition?.components.find(c=>c.id===component)?.properties.find(p=>p.id===property)?.faceOnly);
  const value=observation.properties[property];

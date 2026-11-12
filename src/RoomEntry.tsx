@@ -1,10 +1,12 @@
+import {projectRummikubDrawing} from '../shared/drawingProjection';
+import {photoDrawingItems,photoLayoutEvidence} from './PhotoLayoutBoard';
 import {useState} from 'react';
 import type {SessionView} from '../shared/types';
 import {api} from './api';
 import {Modal,Busy} from './ui';
 import './rooms.css';
-import {SceneWorkspace} from './SceneWorkspace';
-import {RummikubBoardView,boardStyle,pickRummikubSource} from './RummikubBoard';
+import {SceneWorkspace,RummikubBoardView} from './nativeScreens';
+import {boardStyle,pickRummikubSource} from './rummikubViewModel';
 import {normalizeRummikubDetailed} from '../shared/rummikub';
 import {GameBoardRecord} from './GameBoardRecord';
 import type {GenericRecord} from '../shared/genericRecord';
@@ -13,7 +15,7 @@ import {preferredPublicBoard} from './genericDraft';
 import {RoomPublicHoldings} from './GameEssentials';
 import {realBoardVariantForValue,useRealAssets} from './realBoards';
 export function RoomPublicBoard({view}:{view:SessionView}){const [key,setKey]=useState('');const fields=view.pack.fields.filter(f=>f.scope==='public'),boards=fields.filter(f=>view.pack.runtime?.fieldBindings.some(b=>b.key===f.key&&b.editor==='component-catalog')),field=preferredPublicBoard(boards,view.session,key);const assets=useRealAssets(view.pack.runtime?.source.gameId);const selector=assets?.variantSelector&&field&&assets.variantSelector.boardField===field.key?assets.variantSelector:undefined;const age=view.session.assertions.filter(a=>a.field===selector?.field&&!a.ownerId&&a.status==='accepted').at(-1)?.value;const layoutVariant=selector?realBoardVariantForValue(selector,field!.key,age):'base';const pick=pickRummikubSource(view.session.assertions.filter(a=>a.field==='table.scene'&&!a.ownerId)),source=pick.candidate??pick.accepted,scene=source?normalizeRummikubDetailed(source.value).scene:null;
- return <section className="room-public" aria-label="공용 보드 읽기 전용"><h3>공용 보드 <span className="small muted">보기 전용</span></h3>{view.pack.id==='rummikub'?scene?<div className="rt-board" style={boardStyle(28)}><RummikubBoardView scene={scene} rack={false}/></div>:<p>방장이 공용판을 기록하면 여기에 보여요.</p>:view.pack.runtime?.support.recording==='generic'?<>{boards.length>1&&<label>공용 영역<select value={field?.key} onChange={e=>setKey(e.target.value)}>{boards.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select></label>}{field&&(()=>{const a=view.session.assertions.filter(a=>a.field===field.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<GameBoardRecord players={view.session.players.length} playerDetails={view.session.players} pack={view.pack} fieldKey={field.key} record={a.value as unknown as GenericRecord} readonly busy={false} layoutVariant={layoutVariant}/>:<p>아직 기록한 구성물이 없어요.</p>;})()}</>:<div inert className="room-readonly"><SceneWorkspace view={view} busy mutate={async()=>{throw new Error('공용판은 보기 전용이에요.');}} onEvidence={()=>{}}/></div>}
+ return <section className="room-public" aria-label="공용 보드 읽기 전용"><h3>공용 보드 <span className="small muted">보기 전용</span></h3>{view.pack.id==='rummikub'?scene?<div className="rt-board" style={boardStyle(56)}><RummikubBoardView scene={scene} rack={false} evidence={photoLayoutEvidence(source?[source]:[],view.session.evidence)} drawingItems={source?photoDrawingItems(projectRummikubDrawing(source,scene,view.session.evidence)):[]}/></div>:<p>방장이 공용판을 기록하면 여기에 보여요.</p>:view.pack.runtime?.support.recording==='generic'?<>{boards.length>1&&<label>공용 영역<select value={field?.key} onChange={e=>setKey(e.target.value)}>{boards.map(f=><option key={f.key} value={f.key}>{f.label}</option>)}</select></label>}{field&&(()=>{const a=view.session.assertions.filter(a=>a.field===field.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<GameBoardRecord assertion={a} evidence={view.session.evidence} players={view.session.players.length} playerDetails={view.session.players} pack={view.pack} fieldKey={field.key} record={a.value as unknown as GenericRecord} readonly busy={false} layoutVariant={layoutVariant}/>:<p>아직 기록한 구성물이 없어요.</p>;})()}</>:<div inert className="room-readonly"><SceneWorkspace view={view} busy mutate={async()=>{throw new Error('공용판은 보기 전용이에요.');}} onEvidence={()=>{}}/></div>}
  {fields.filter(f=>f.type!=='json').map(f=>{const a=view.session.assertions.filter(a=>a.field===f.key&&!a.ownerId&&a.status==='accepted').at(-1);return a?<p key={f.key}><strong>{f.label}</strong> · {previewValue(a.value,f,view.session.players)}</p>:null;})}{view.session.notes.public&&<p>{view.session.notes.public}</p>}<RoomPublicHoldings view={view} ownerId={view.roomAccess?.playerId} busy={false}/></section>;
 }
 export {RoomEntry} from './RoomCreateDialog';

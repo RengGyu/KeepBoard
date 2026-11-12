@@ -9,11 +9,13 @@ import {PrivatePins} from '../server/privatePin.ts';
 // Server startup must not load the project's real .env in a synthetic test.
 const project=process.cwd(),bootstrap=await mkdtemp(path.join(os.tmpdir(),'kb-pin-bootstrap-'));process.chdir(bootstrap);
 const {createApp}=await import('./fixtures/drawingTestApp');process.chdir(project);await rm(bootstrap,{recursive:true,force:true});
+// Admit this exact legacy native fixture so PIN checks run after admission, without changing production policy.
 async function fixture(){
- const root=await mkdtemp(path.join(os.tmpdir(),'keepboard-pin-')),store=new Store(root),app=await createApp({store});
+ const root=await mkdtemp(path.join(os.tmpdir(),'keepboard-pin-')),store=new Store(root),app=await createApp({store,runtimePacks:[catanPack]});
  const server=app.listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  const call=async(route:string,method='GET',body?:unknown,token?:string)=>{const response=await fetch(base+route,{method,headers:{...(body===undefined?{}:{'Content-Type':'application/json'}),...(token?{'X-KeepBoard-Private-Token':token}:{})},body:body===undefined?undefined:JSON.stringify(body)});return {status:response.status,body:await response.json()};};
  const created=await call('/api/sessions','POST',{gamePackVersion:catanPack.version,example:true,recordingMode:'simple'}),id=created.body.session.id,owner=created.body.session.players[0].id,other=created.body.session.players[1].id;
+ assert.equal(created.body.pack.version,catanPack.version);assert.equal(created.body.pack.releaseTier,'drawing');
  const session=await store.getSession(id);assert(session);session.notes[owner]='synthetic-owner-secret';await store.saveSession(session);
  const prefix=`/api/sessions/${id}`;
  await call(prefix,'PATCH',{answers:[{field:'player.resources.counts',ownerId:owner,value:{lumber:7,brick:0,wool:0,grain:0,ore:0}},{field:'player.resources.total',ownerId:owner,value:7}]});

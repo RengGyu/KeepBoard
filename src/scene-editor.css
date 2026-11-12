@@ -191,3 +191,9 @@
   .se-groups{grid-template-columns:1fr}
   .se-add-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* Native artwork and topology are unchanged; small screens pan a readable board. */
+.se-board-pan{width:100%;max-height:min(58dvh,520px);overflow:auto;overscroll-behavior:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+.se-board-working-surface{width:760px;min-width:100%}
+.se-board-pan .se-board{width:100%;height:auto;max-height:none}
+.se-board-pan .se-piece{touch-action:pan-x pan-y}

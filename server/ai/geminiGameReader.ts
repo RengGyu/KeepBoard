@@ -28,7 +28,21 @@ Use no owner, turn, role, hidden face, board slot, rules inference, or off-area 
  // Keep the proven flat wire schema; component-specific alternatives were rejected by the live endpoint.
  const ids=[...new Set(components.flatMap(c=>c.properties.map(p=>p.id)))];
  const schema={type:'object',properties:{items:{type:'array',items:{type:'object',properties:{kind:{type:'string',enum:components.map(c=>c.id)},box_1000:{type:['array','null'],items:{type:'number',minimum:0,maximum:1000},minItems:4,maxItems:4},face:{type:'string',enum:['front','back','unknown']},quantity:{type:['integer','null'],minimum:0},attributes:{type:'array',items:{type:'object',properties:{id:ids.length?{type:'string',enum:ids}:{type:'string'},valueJson:{type:['string','null']},unknownReason:{type:['string','null'],enum:[...reasons,null]}},required:['id','valueJson','unknownReason'],additionalProperties:false}}},required:['kind','box_1000','face','quantity','attributes'],additionalProperties:false}}},required:['items'],additionalProperties:false};
- if(request.spatial){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, role, hidden face, rules inference, or off-area information. Only the supplied spatial contract permits observed board addresses.').replace('Return only JSON {"items":[...]};','Return only JSON {"items":[...],"spatial":{...}};')+spatialInstructions(request);(schema.properties as any).spatial=spatialWireSchema();schema.required.push('spatial');}
+ if(request.readMode)prompt+='\nExplicit read mode value policy visible-values-v1: For dieValue, read the top face only; never sum or substitute side-face pips. For printed numeral cards, establish the printed reading orientation before distinguishing digits such as 6 and 9; if orientation is ambiguous keep the value unknown. Never combine numerals belonging to overlapping neighbouring cards.';
+ if(request.readMode==='values'||request.readMode==='cells'){
+  delete (schema.properties.items.items.properties as any).box_1000;schema.properties.items.items.required=schema.properties.items.items.required.filter(k=>k!=='box_1000');
+  prompt=prompt.replace('Box each whole object in [ymin,xmin,ymax,xmax] coordinates 0..1000, or null when uncertain.','Do not return per-object boxes; literal locations remain unknown unless the separate supplied cell contract establishes them.');
+ }
+ if(request.readingTarget?.mode==='public-scene'){
+  const areas=definition.areas.filter(a=>request.readingTarget!.mode==='public-scene'&&request.readingTarget!.areaIds.includes(a.id));
+  (schema.properties.items.items.properties as any).sourceAreaId={type:['string','null'],enum:[...areas.map(a=>a.id),null]};schema.properties.items.items.required.push('sourceAreaId');
+  prompt+='\nThis is one public scene across these existing areas: '+JSON.stringify(areas.map(a=>({id:a.id,partition:a.partition,componentIds:a.componentIds})))+'. Read their union once. sourceAreaId is an observed area from this list or null when ambiguous. Never infer a human owner from a board instance, position or colour. Private areas are excluded.';
+ }
+ if(request.propertyApplicability?.areaPropertyIds){
+  const requirements=Object.fromEntries(Object.entries(request.propertyApplicability.areaPropertyIds).map(([area,components])=>[area,Object.fromEntries(Object.entries(components).map(([id,fields])=>[id,fields.filter(p=>request.allowedPropertyIds[id]?.includes(p)&&definition.components.some(c=>c.id===id&&hostedVisibleProperty(c,p)))]))]));
+  prompt+='\nRequired properties by observed source area: '+JSON.stringify(requirements)+'. For a confirmed sourceAreaId, omit unread properties not required in that area; keep any actually read listed values. When sourceAreaId is null, retain the full kind property requirements. Area assignment never proves a pile is uniform or that occluded lower values are irrelevant.';
+ }
+ if(request.spatial){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, role, hidden face, rules inference, or off-area information. Only the supplied spatial contract permits observed board addresses.').replace('Return only JSON {"items":[...]};','Return only JSON {"items":[...],"spatial":{...}};')+spatialInstructions(request);(schema.properties as any).spatial=spatialWireSchema(request.readMode);schema.required.push('spatial');}
  return {contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType,data:image.toString('base64')}}]}],generationConfig:{candidateCount:1,maxOutputTokens:32768,thinkingConfig:{thinkingLevel:'LOW'},mediaResolution:'MEDIA_RESOLUTION_HIGH',responseFormat:{text:{mimeType:'APPLICATION_JSON',schema}}}};
 }
 
@@ -46,12 +60,17 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
  const deferred:HostedObservationWire['deferred']=[];
  // One row that breaks the contract costs only that row; the rest of a paid response is kept and the loss recorded.
  const dropRow=(index:number)=>{deferred.push({ref:'item-'+(index+1),property:'row',reason:'invalid-row'});return null;};
- const observations=wire.items.map((raw:unknown,index:number)=>{
-  if(!exact(raw,['kind','box_1000','face','quantity','attributes'])||typeof raw.kind!=='string'||!request.allowedComponents.includes(raw.kind)||!['front','back','unknown'].includes(raw.face as string)||raw.quantity!==null&&(!Number.isSafeInteger(raw.quantity)||(raw.quantity as number)<0)||!Array.isArray(raw.attributes))return dropRow(index);
+ const observations=wire.items.map((source:unknown,index:number)=>{
+  const omittedBox=request.readMode==='values'||request.readMode==='cells';
+  const raw=omittedBox&&record(source)&&!Object.hasOwn(source,'box_1000')?{...source,box_1000:null}:source;
+  if(!exact(raw,['kind','box_1000','face','quantity','attributes',...(request.readingTarget?.mode==='public-scene'&&record(raw)&&Object.hasOwn(raw,'sourceAreaId')?['sourceAreaId']:[])])||typeof raw.kind!=='string'||!request.allowedComponents.includes(raw.kind)||!['front','back','unknown'].includes(raw.face as string)||raw.quantity!==null&&(!Number.isSafeInteger(raw.quantity)||(raw.quantity as number)<0)||!Array.isArray(raw.attributes))return dropRow(index);
   const component=definition.components.find(c=>c.id===raw.kind)!;
   const properties:ObservationResult['observations'][number]['properties']={},seen=new Set<string>();
-  const unknown=(id:string,reason:ObservationUnknownReason)=>{properties[id]={state:'unknown',value:null,reason};};
   const defer=(id:string,reason:string)=>deferred.push({ref:'item-'+(index+1),property:id,reason});
+  const sourceAreaId=request.readingTarget?.mode==='public-scene'&&typeof raw.sourceAreaId==='string'&&request.readingTarget.areaIds.includes(raw.sourceAreaId)&&definition.areas.some(a=>a.id===raw.sourceAreaId&&a.partition!=='owner_private'&&a.componentIds.includes(raw.kind))?raw.sourceAreaId:null;
+  if(request.readingTarget?.mode==='public-scene'&&raw.sourceAreaId!=null&&sourceAreaId===null)defer('sourceAreaId','unresolved-source-area');
+  const applies=(id:string)=>observationPropertyApplicable(request,{componentId:raw.kind,face:raw.face as 'front'|'back'|'unknown',properties,sourceAreaId},id,definition);
+  const unknown=(id:string,reason:ObservationUnknownReason)=>{if(applies(id))properties[id]={state:'unknown',value:null,reason};else defer(id,'inapplicable-source-area');};
   for(const a of raw.attributes){
    if(!exact(a,['id','valueJson','unknownReason'])||typeof a.id!=='string'||seen.has(a.id))return dropRow(index);
    seen.add(a.id);
@@ -61,7 +80,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
     defer(a.id,'property-belongs-to-another-component');continue;
    }
    const field=component.properties.find(p=>p.id===a.id)!;
-   if(!observationPropertyApplicable(request,{componentId:raw.kind,face:raw.face as 'front'|'back'|'unknown',properties:{}},a.id,definition)){defer(a.id,'inapplicable-back-face');continue;}
+   if(raw.face==='back'&&field.faceOnly){defer(a.id,'inapplicable-back-face');continue;}
    if(a.valueJson===null){
     if(reasons.includes(a.unknownReason as ObservationUnknownReason))unknown(a.id,a.unknownReason as ObservationUnknownReason);
     else {unknown(a.id,'unreadable');defer(a.id,'unknown-value-encoding');}
@@ -82,10 +101,10 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
     }catch{unknown(a.id,'unreadable');defer(a.id,'invalid-visible-value');}
    }
   }
-  for(const field of component.properties)if(request.allowedPropertyIds[component.id]?.includes(field.id)&&hostedVisibleProperty(component,field.id)&&observationPropertyApplicable(request,{componentId:raw.kind,face:raw.face as 'front'|'back'|'unknown',properties},field.id,definition)&&!Object.hasOwn(properties,field.id))unknown(field.id,'not-present-unconfirmed');
+  for(const field of component.properties)if(request.allowedPropertyIds[component.id]?.includes(field.id)&&hostedVisibleProperty(component,field.id)&&applies(field.id)&&!Object.hasOwn(properties,field.id))unknown(field.id,'not-present-unconfirmed');
   let bbox:null|{x:number;y:number;width:number;height:number}=null;
   if(raw.box_1000!==null){const b=raw.box_1000;if(!Array.isArray(b)||b.length!==4||b.some((v:unknown)=>typeof v!=='number'||!Number.isFinite(v)||v<0||v>1000)||b[0]>=b[2]||b[1]>=b[3])defer('box_1000','invalid-box-geometry');else bbox={x:b[1]/1000,y:b[0]/1000,width:(b[3]-b[1])/1000,height:(b[2]-b[0])/1000};}
-  return {ref:'item-'+(index+1),imageIndex:0,panelRef:null,componentId:raw.kind,bbox,face:raw.face as 'front'|'back'|'unknown',quantity:raw.quantity as number|null,rotationDegrees:null,properties,referenceCandidates:[]};
+  return {...(request.readingTarget?.mode==='public-scene'?{sourceAreaId}:{}),ref:'item-'+(index+1),imageIndex:0,panelRef:null,componentId:raw.kind,bbox,face:raw.face as 'front'|'back'|'unknown',quantity:raw.quantity as number|null,rotationDegrees:null,properties,referenceCandidates:[]};
  }).filter(o=>o!==null);
  if(wire.items.length&&!observations.length)return invalid();
  const result=validateObservationResult({version:OBSERVATION_VERSION,observations,coverage:'partial',completion:'complete'},request,definition,transforms);
@@ -127,7 +146,7 @@ export class GeminiGameReader{
   const result=decodeCatanSceneReading(await response.json(),{request,definition,session,pack,evidence,reader:this.identity,sourceImageSHA:sha(image)});
   return {result,timings:{readerMs:performance.now()-start}};
  }
- async read(request:ObservationRequest,definition:PhotoDefinition,image:Buffer,mimeType:string,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[],_onRows?:(count:number)=>void){
+ async read(request:ObservationRequest,definition:PhotoDefinition,image:Buffer,mimeType:string,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[],_onRows?:import('../../shared/lightweightRecognition').ObservationProgressCallback){
   if(request.images.length!==1||sha(image)!==request.images[0].sha256||!['image/jpeg','image/png','image/webp'].includes(mimeType))throw new Error('고정한 원본 사진을 확인하세요.');
   const file=process.env.KEEPBOARD_GEMINI_GAME_API_KEY_FILE,key=extractGeminiKey(file?await readFile(file,'utf8'):process.env.GEMINI_API_KEY??'');
   const body=buildGeminiGameBody(request,definition,image,mimeType),start=performance.now();

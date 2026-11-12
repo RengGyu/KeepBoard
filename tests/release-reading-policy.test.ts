@@ -9,8 +9,8 @@ import {decodeLiteralObservationPayload} from '../server/ai/geminiGameReader';
 import {observationGaps,observationPropertyApplicable} from '../shared/observationGaps';
 
 const compile=(pack:any,areaId:string)=>{const definition=photoDefinition(pack),area=definition.areas.find(a=>a.id===areaId)!;return {definition,request:compileObservationTask({pack,definition,areaId,taskId:'fixture',scope:{partition:area.partition,ownerId:area.partition==='owner_private'?'owner':null,captureEpoch:'epoch'},images:[{evidenceId:'photo',inputId:'photo',sha256:'a'.repeat(64),width:1000,height:800,transformId:null}]})};};
-test('all shipped packs default to photo; only explicit drawing policy admits a new reading',()=>{
- for(const pack of catalogPacks){assert.equal(support.releaseTierFor(pack),'photo');assert.equal(support.drawingEnabled(catalogSummary(pack)),false);}
+test('pinned technical restoration capabilities enable shipped packs; unpinned packs still default to photo',()=>{
+ for(const pack of catalogPacks){assert.equal(support.releaseTierFor(pack),'drawing');assert.equal(support.drawingEnabled(catalogSummary(pack)),true);const unpinned={...pack};delete unpinned.restorationPolicy;assert.equal(support.releaseTierFor(unpinned),'photo');}
  const fixture={...catalogPacks[0],releaseTier:'drawing' as const};assert.equal(support.drawingEnabled(fixture),true);assert.equal(support.drawingEnabled(catalogSummary(fixture)),true);
 });
 test('area policy filters only requested fields and retains exact definition/source/version guards',()=>{

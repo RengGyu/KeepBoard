@@ -13,7 +13,7 @@ export function createJobStatusPolling(options: {
   schedule: (check: () => void, delay: number) => ReturnType<typeof setTimeout>;
   cancel: (timer: ReturnType<typeof setTimeout>) => void;
 }) {
-  let stopped = false, inFlight = false, failed = false, generation = 0, autoChecks = 0;
+  let stopped = false, inFlight = false, failed = false, generation = 0, autoChecks = 0, unchangedChecks = 0;
   let current: AnalysisJob | null = null;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let unsubscribe: (() => void) | undefined;
@@ -27,7 +27,8 @@ export function createJobStatusPolling(options: {
       const fast=isHostedReader(current.reader);
       const limit=fast?140:MAX_AUTO_CHECKS;
       if(autoChecks>=limit){failed=true;options.onError('auto-limit');return;}
-      const delay = fast?(autoChecks<60?1000:3000):[10000, 20000, 30000][Math.min(autoChecks, 2)];
+      // Keep newly arriving results responsive; quiet jobs need fewer repeated reads.
+      const delay = fast?(unchangedChecks<5?1000:unchangedChecks<10?2000:5000):[10000, 20000, 30000][Math.min(autoChecks, 2)];
       timer = options.schedule(() => { timer = undefined; void check(); }, delay);
     }
   };
@@ -36,6 +37,8 @@ export function createJobStatusPolling(options: {
     generation++;
     failed = false;
     if (current?.id !== job?.id) autoChecks = 0;
+    const sameProgress=current?.id===job?.id&&current?.state===job?.state&&current?.updatedAt===job?.updatedAt&&current?.liveRows===job?.liveRows;
+    unchangedChecks=sameProgress?unchangedChecks+1:0;
     current = job;
     options.onJob(job);
     if (job?.state === 'completed' && !completed.has(job.id)) {

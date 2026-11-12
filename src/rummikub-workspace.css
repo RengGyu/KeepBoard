@@ -65,3 +65,35 @@ span.rt-meld{cursor:default}
 @media(prefers-reduced-motion:reduce){.rt-meld{transition:none}}
 
 .rt-overview>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600}
+
+/* Keep existing Meld/TileFace and manual order at readable size. Pan instead of wrapping a meld. */
+.rt-board{--rt-tile:56px;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.rt-table{min-width:760px;min-height:220px;align-content:flex-start;align-items:flex-start;max-height:min(58dvh,480px);overflow:auto;gap:20px}
+.rt-table>.photo-layout-board{flex:0 0 100%;max-width:calc(100% - 2px)}
+.rt-meld,.rt-rack-row .rt-meld{flex-wrap:nowrap;max-width:none;gap:8px}
+.rt-rack{min-width:720px;max-height:min(58dvh,480px);overflow:auto}
+.rt-rack-row>.rt-meld{flex-wrap:nowrap;justify-content:flex-start;gap:8px}
+.rt-board-tile{flex-shrink:0;height:calc(var(--rt-tile)*76/56)}
+
+/* The existing full-board dialog dedicates short landscape viewports to the board. */
+.modal-backdrop:has(>.modal>.rt-full){padding:8px;align-items:center}
+.modal:has(>.rt-full){display:flex;flex-direction:column;width:min(1100px,calc(100vw - 16px));height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);padding-bottom:0;overflow:hidden}
+.modal:has(>.rt-full)>.sheet-handle{display:none}
+.modal:has(>.rt-full)>.modal-header{flex:none;padding:4px 10px;gap:8px;min-height:44px}
+.modal:has(>.rt-full)>.modal-header h2{font-size:16px;line-height:1.2;margin:0}
+.modal-body.rt-full{flex:1;min-height:0;padding:6px 8px 8px;gap:4px;overflow:hidden}
+.rt-full>.rt-zoom{flex:none;gap:8px;font-size:14px;line-height:1}
+.rt-full>.rt-pan{flex:1;min-height:0;max-height:none;border-radius:8px}
+.rt-full .rt-board{overflow:visible}
+.rt-full .rt-table,.rt-full .rt-rack{max-height:none;overflow:visible;min-height:0;padding:4px}
+.rt-full .photo-layout-board{margin:0}
+.rt-full .photo-layout-board>header{margin:0;gap:8px}
+.rt-full .photo-layout-board>header strong{font-size:14px}
+.rt-full .photo-layout-hint{margin-bottom:2px}
+.rt-full .photo-layout-pan{max-height:none;overflow:visible}
+.rt-table:has(>.photo-layout-board),.rt-rack:has(>.photo-layout-board){min-width:0;width:100%;box-sizing:border-box;max-height:none;overflow:visible}
+.rt-table>.photo-layout-board{max-width:100%}
+.rt-full .photo-layout-rows{max-height:none;overflow:visible}
+.rt-full .rt-table:has(>.photo-layout-board){min-width:0}
+.rt-quick>.photo-layout-location{margin-top:0}
+@media(max-height:450px) and (orientation:landscape){.rt-quick>.photo-layout-location{float:right;width:42%;margin:0 0 6px 10px}.rt-quick>.photo-layout-location .photo-layout-location-image{flex-basis:110px}.rt-quick>.photo-layout-location figcaption{font-size:12px}}

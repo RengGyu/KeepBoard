@@ -1,5 +1,5 @@
 import type {ObservationReviewAnswer} from '../shared/observationReview';
-import type {PhotoReaderSelection,LocalReaderCapabilities} from '../shared/lightweightRecognition';
+import type {PhotoReaderSelection,HostedReaderSelection,LocalReaderCapabilities} from '../shared/lightweightRecognition';
 import type {SessionSummary} from '../shared/sessionSummary';
 import type {ComponentLinkOptions,ComponentLinkRequest} from '../shared/componentLinking';
 import type {AnalysisJob} from '../shared/analysisJobs';
@@ -81,15 +81,15 @@ export const api = {
     return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',{...meta,uploadTicket:ticket.ticket});
   },
   removeEvidence: (id: string, evidenceId: string) => request<SessionView>(`/sessions/${id}/evidence/${evidenceId}`, 'DELETE'),
-  startAnalysisJob:(id:string,body:{requestId:string;evidenceIds:string[];expectedCaptureEpoch:string;scope:'public'|'owner';ownerId?:string;purpose?:'capture'|'restore';instruction?:string;captureTarget?:import('../shared/photoCapture').CaptureTarget;sameStaticState?:boolean;reader?:PhotoReaderSelection})=>request<{job:AnalysisJob}>(`/sessions/${id}/analysis-jobs`,'POST',body),
+  startAnalysisJob:(id:string,body:{requestId:string;saveIntentId?:string;evidenceIds:string[];expectedCaptureEpoch:string;scope:'public'|'owner';ownerId?:string;purpose?:'capture'|'restore';instruction?:string;captureTarget?:import('../shared/photoCapture').CaptureTarget;sameStaticState?:boolean;reader?:PhotoReaderSelection})=>request<{job:AnalysisJob}>(`/sessions/${id}/analysis-jobs`,'POST',body),
   componentLinkOptions:(id:string,assertionId:string,pieceIds:string[])=>request<ComponentLinkOptions>(`/sessions/${id}/component-links/${encodeURIComponent(assertionId)}?pieceIds=${pieceIds.map(encodeURIComponent).join(',')}`),
   linkComponents:(id:string,body:ComponentLinkRequest)=>request<SessionView>(`/sessions/${id}/component-links`,'POST',body),
-  scanProgress:(id:string,jobId:string,ownerId?:string,seen:number[]=[])=>request<import('../shared/analysisJobs').ScanProgress>(`/sessions/${id}/analysis-jobs/${jobId}/progress?seen=${seen.join(',')}${ownerId?'&ownerId='+encodeURIComponent(ownerId):''}`),
+  scanProgress:(id:string,jobId:string,ownerId?:string,seen:number[]=[])=>request<import('../shared/analysisJobs').ScanProgress>(`/sessions/${id}/analysis-jobs/${jobId}/progress?thin=1&seen=${seen.join(',')}${ownerId?'&ownerId='+encodeURIComponent(ownerId):''}`),
   analysisJobs:(id:string,ownerId?:string)=>request<{jobs:AnalysisJob[]}>(`/sessions/${id}/analysis-jobs${ownerId?'?ownerId='+encodeURIComponent(ownerId):''}`),
   analyze: (id: string, body: { purpose?: 'capture' | 'restore'; instruction?: string; sameStaticState?:boolean; evidenceIds?: string[]; expectedCaptureEpoch?: string }) => request<SessionView>(`/sessions/${id}/analyze`, 'POST', body),
   accept: (id: string, assertionId: string) => request<SessionView>(`/sessions/${id}/assertions/${assertionId}/accept`, 'POST', {}),
   preservation: (id: string, itemId: string, body: { container?: string; packed?: boolean; restored?: boolean }) => request<SessionView>(`/sessions/${id}/preservations/${itemId}`, 'PATCH', body),
-  commit: (id: string, allowIncomplete: boolean) => request<SessionView>(`/sessions/${id}/commit`, 'POST', { allowIncomplete, recordingMode: 'simple' }),
+  commit: (id: string, allowIncomplete: boolean,reading?:{reader:HostedReaderSelection;evidenceIds:string[]},ownerId?:string) => request<SessionView>(`/sessions/${id}/commit`, 'POST', { allowIncomplete, recordingMode: 'simple',...(reading?{reading}:{}),...(ownerId?{ownerId}:{}) }),
   resume: (id:string,scope:'public'|'owner'='public',ownerId?:string)=>request<SessionView>(`/sessions/${id}/resume`,'POST',{scope,ownerId}),
   nextTurn: (id: string, playerId?: string) => request<SessionView>(`/sessions/${id}/next-turn`, 'POST', { playerId }),
   importSession: async(body:unknown)=>{const storage=await cloudStorage();if(!storage.directPrivateUpload)return request<SessionView>('/sessions/import','POST',body);

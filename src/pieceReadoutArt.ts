@@ -12,7 +12,16 @@ const colors=[
  ['black','#343b48',['black','검정','검은색']],
  ['orange','#f28a32',['orange','주황','주황색']],
  ['pink','#e99ac6',['pink','분홍','분홍색']],
+ ['brown','#a47046',['brown','갈색']],
+ ['gray','#8a949f',['gray','grey','회색']],
+ ['gold','#d5aa31',['gold','금색']],
+ ['silver','#b7c0ca',['silver','은색']],
 ] as const;
+export function readoutColor(value:unknown,optionLabel?:string){
+ const names=[value,optionLabel].filter((v):v is string=>typeof v==='string').map(v=>v.trim().toLowerCase());
+ const row=colors.find(c=>names.some(n=>(c[2] as readonly string[]).includes(n)));
+ return row?{name:row[0],color:row[1]}:undefined;
+}
 /** Symbol grammar and the pinned readout contract, never game IDs or illustrative labels. */
 export function readoutDieArt(pack:GamePack,piece:GenericPiece,symbols:readonly string[]){
  if(piece.variant||!piece.componentId)return;

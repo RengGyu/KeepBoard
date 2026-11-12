@@ -30,6 +30,15 @@ function nativeProperty(game:string,component:string,id:string):PropertySpec {
 /** The historical contract (frozen before the runtime revision) and the one reviewed revision derived from it by tools/game-runtime/revise-inputs.ts contract. Only the reviewed revision is accepted. */
 export const HISTORICAL_CONTRACT_SHA256='2423a7b0601bddb9c3759b0e9c60b5602cc6045a86437975e101984320d4464b';
 export const APPROVED_CONTRACT={revision:'gamepack-revision-20261026',sha256:'00be673c319254b83941f88f09a8e33d4d1f29c0d8b5970d4080f72eb2c0c799'};
+// Exact reviewed loader extraction: no catalog/domain edits or source/version fallback.
+export const APPROVED_READOUT_LOADER_REVISION={
+ registry:{file:'shared/readouts/registry.ts',contractSHA:'37572f10ec17c9b52cfbb4301336d6ed5fadb73b31617984dd5e7ffd441a8dce',sha256:'1cb96fd213efe6422ddae3472b93dec1ed3ceeda77496115d1ebc329a63b848a'},
+ dependencies:[
+  {file:'shared/readouts/dataSource.ts',sha256:'72d7079c32fd3013b97a881bcaf83311e6390dee790b22565769e2e93b89f8bd'},
+  {file:'shared/readouts/identity.ts',sha256:'70205db73944b172a14722a64e68b5ec6cd101a2c966b1f631b1c875a9fda033'}
+ ]
+};
+const loaderRevisionReason='Approved 2026-11-12 selected-game loader extraction: exact current/retired source and version lookup retained; generated definition domains unchanged.';
 export function generateDefinitions(root:string){
  const contractFile='game-photo-definitions/contract.json',contractBytes=readFileSync(resolve(root,contractFile));
  if(sha(contractBytes)!==APPROVED_CONTRACT.sha256)throw Error('Approved contract hash changed; do not silently rebind saved games.');
@@ -89,10 +98,19 @@ export function generateDefinitions(root:string){
   // 2026-11-09: canonical regeneration only reorders the existing Catan inventory citation.
   const citationOrder=input.file==='gamepacks/generated/game-essentials.json'&&input.sha256===approvedConditions[input.file].contractSHA&&actualSHA==='1c54d7621b7d3ab9a2e4b6fe3d6c060177d0f8b6cf0ff926ddb2c0bf5584dced';
   const correction=approvedReadingCorrections[input.file],readingCorrection=correction?.contractSHA===input.sha256&&correction.sha256===actualSHA;
-  if(actualSHA!==input.sha256&&!r3&&!sceneNull&&!conditions&&!readingCorrection&&!citationOrder&&!choices)throw Error(`Pinned input changed: ${input.file}`);
+  const loader=input.file===APPROVED_READOUT_LOADER_REVISION.registry.file&&input.sha256===APPROVED_READOUT_LOADER_REVISION.registry.contractSHA&&actualSHA===APPROVED_READOUT_LOADER_REVISION.registry.sha256;
+  if(actualSHA!==input.sha256&&!r3&&!sceneNull&&!conditions&&!readingCorrection&&!citationOrder&&!choices&&!loader)throw Error(`Pinned input changed: ${input.file}`);
   const reason=choices?'Approved 2026-11-09 visible-choice ranges from official sources; exact property deltas and previous input SHAs: docs/reading-fixes-20261108/followup-20261109/choice-revision.json.':citationOrder?'Approved 2026-11-09 canonical regeneration: same Catan inventory, values, pack versions and citations; native inventory citation now precedes spec citations as emitted by the generator. Previous exact input 9ea8249443b9129c151de89a4ac67613716db1169b3cde16c795566a8702ffd0 remains recorded in docs/recognition-conditions-20261102/handoff.json.':readingCorrection?'Approved 2026-11-03: opt-in literal numeric text and front-independent visible 3D feature description; two field contracts, no quantity/role inference or source identity change.':conditions?'Approved 2026-11-02: front-independent physical outline/visible side conditions, and source-backed Catan inventory metadata; domains and source identities unchanged.':r3?'Approved R3: retain observed card level with unknown kind; SPLENDOR_GEMS and generated definitions unchanged.':sceneNull?'Approved 2026-10-29 null quantity fix: preserve explicit unknown quantity; CATAN_NUMBERS, SCENE_VARIANTS and generated definitions unchanged.':null;
-  return {file:input.file,sha256:actualSHA,...(reason?{approvedContractSHA256:input.sha256,revisionReason:reason}:{})};
+  return {file:input.file,sha256:actualSHA,...(loader?{approvedContractSHA256:input.sha256,revisionReason:loaderRevisionReason}:reason?{approvedContractSHA256:input.sha256,revisionReason:reason}:{})};
  });
+ // New dependencies belong only to the exact approved registry revision. They have no historical per-file pin.
+ if(actualInputs.some((input:any)=>input.file===APPROVED_READOUT_LOADER_REVISION.registry.file&&input.sha256===APPROVED_READOUT_LOADER_REVISION.registry.sha256)){
+  for(const dependency of APPROVED_READOUT_LOADER_REVISION.dependencies){
+   let actualSHA:string;try{actualSHA=sha(readFileSync(resolve(root,dependency.file)));}catch{throw Error(`Pinned input missing: ${dependency.file}`);}
+   if(actualSHA!==dependency.sha256)throw Error(`Pinned input changed: ${dependency.file}`);
+   actualInputs.push({file:dependency.file,sha256:actualSHA,introducedByContractFile:APPROVED_READOUT_LOADER_REVISION.registry.file,approvedContractSHA256:APPROVED_READOUT_LOADER_REVISION.registry.contractSHA,revisionReason:loaderRevisionReason});
+  }
+ }
  const profiles=read(root,'shared/capture-profiles.json'),packs=read(root,'gamepacks/generated/game-essentials.json');
  const definitions:PhotoDefinition[]=contract.games.map((g:any)=>{
   const profile=profiles[g.game_id],pack=packs.find((p:any)=>p.id===g.pack_id);

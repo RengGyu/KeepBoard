@@ -1,3 +1,5 @@
+import {projectRummikubDrawing,photoDrawingReference} from '../shared/drawingProjection';
+import {photoDrawingItems,photoLayoutEvidence,PhotoLayoutLocation} from './PhotoLayoutBoard';
 import type {NativeObservationReview,ObservationReviewAnswer} from '../shared/observationReview';
 import {useEffect,useMemo,useRef,useState,type ReactNode} from 'react';
 import {createPortal} from 'react-dom';
@@ -18,7 +20,7 @@ export interface RummikubWorkspaceProps {view:SessionView;ownerId?:string;busy:b
 /** Dedicated ordered tile editor: does not normalize through ComponentScene/Catan geometry. */
 export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyToSave,onCapture,captureLabel,hasPhotos=false,onOpenPublic,onReread}:RummikubWorkspaceProps){
  const context=`${view.session.id}:${ownerId??'public'}`,field=rummikubField(ownerId);
- const evidence=rummikubSourceEvidence(view.session.evidence,ownerId);
+ const evidence=photoLayoutEvidence(view.session.assertions,rummikubSourceEvidence(view.session.evidence,ownerId));
  const evidenceKey=evidence.map(e=>e.id).join('|');
  const assertions=view.session.assertions.filter(a=>a.field===field&&a.ownerId===ownerId);
  const {accepted,candidate}=pickRummikubSource(assertions);
@@ -36,12 +38,16 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
  const openedBase=typeof openedAssertion?.value==='boolean'?String(openedAssertion.value):'';
  const pendingBase=typeof pendingAssertion?.value==='string'?pendingAssertion.value:'';
  const [opened,setOpened]=useState(openedBase),[pending,setPending]=useState(pendingBase);
- const [focus,setFocus]=useState<string|null>(null),[full,setFull]=useState(false),[zoom,setZoom]=useState<number>(1.5);
+ const [focus,setFocus]=useState<string|null>(null),[full,setFull]=useState(false),[zoom,setZoom]=useState<number>(1);
  // Personal screen shows the shared table above the owner's own rack; other players' racks are never included.
  const publicPick=pickRummikubSource(ownerId?view.session.assertions.filter(a=>a.field===rummikubField()&&!a.ownerId):[]);
  const publicSource=publicPick.accepted??publicPick.candidate;
  const publicScene=useMemo(()=>publicSource?normalizeRummikubDetailed(publicSource.value,{evidenceIds:rummikubSourceEvidence(view.session.evidence).map(e=>e.id)}):null,[publicSource?.value,evidenceKey]);
  const scene=state.history.present,dirty=keyOf(scene)!==state.base;
+ const drawings=source?photoDrawingItems(projectRummikubDrawing(source,scene,evidence)):[];
+ const publicDrawings=publicSource&&publicScene?.recognized?photoDrawingItems(projectRummikubDrawing(publicSource,publicScene.scene,rummikubSourceEvidence(view.session.evidence))):[];
+ const referenceFor=(a:Assertion|undefined,photos:readonly Evidence[])=>a?photoDrawingReference(a,photos,view.pack.runtime?.fieldBindings.find(b=>b.key===a.field)):[];
+ const drawingReference=referenceFor(source,evidence),publicDrawingReference=referenceFor(publicSource,rummikubSourceEvidence(view.session.evidence));
  const acceptedScene=accepted?normalizeRummikubDetailed(accepted.value,{ownerId,evidenceIds:evidence.map(e=>e.id)}):null;
  const needsReview=!!candidate?.observationReceipts?.length&&!!acceptedScene?.recognized&&allRummikubTiles(acceptedScene.scene).length>0;
  const reviewing=review?.context===context?review:null;
@@ -92,37 +98,40 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
  function patch(patch:Partial<Omit<RummikubTile,'id'>>){if(selected)change({type:'edit',tileId:selected.id,patch});else setDraft(d=>({...d,...patch}));}
  const editing=selected??draft;
  const quickTile=quickId?all.find(t=>t.id===quickId):undefined;
+ const quickPosition=drawings.find(d=>d.pieceId===quickId)?.position,quickPhoto=quickPosition&&evidence.find(e=>e.id===quickPosition.evidenceId);
+ function openQuick(id:string){clearTimeout(quickTimer.current);setFull(false);setQuickId(id);}
  function closeQuick(){clearTimeout(quickTimer.current);setQuickId(null);}
  // A tap fixes the tile at once; the sheet closes itself a beat later unless another tap follows (number then color).
  function quickPatch(next:Partial<Omit<RummikubTile,'id'>>){if(!quickTile)return;change({type:'edit',tileId:quickTile.id,patch:next});clearTimeout(quickTimer.current);quickTimer.current=setTimeout(()=>setQuickId(null),900);}
  const status=needsReview&&!reviewing&&!showAccepted?'새 사진 결과예요 · 기존 판과 함께 정정한 뒤 반영해 주세요':reviewing&&!dirty?'기존 판과 새 사진 후보를 함께 확인 중이에요 · 중복 실물은 직접 빼고 저장해 주세요':dirty||contextDirty?'고친 내용이 있어요':forceSave?'사진에서 읽은 후보예요 · 저장하면 기록돼요':saved?'저장했어요':'';
  const zoomIndex=ZOOMS.indexOf(zoom as typeof ZOOMS[number]);
- const baseTile=rack?42:28;
+ const baseTile=56;
  return <section className="rt-workspace" aria-label={rack?'내 루미큐브 받침대':'루미큐브 공용판'}>
-  {rack&&publicScene?.recognized&&<details className="rt-overview"><summary>공용판 보기</summary><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(22)}><RummikubBoardView scene={publicScene.scene} rack={false} compact/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</details>}
+  {rack&&publicScene?.recognized&&<details className="rt-overview"><summary>공용판 보기</summary><div className="rt-heading"><h3>공용판</h3>{onOpenPublic&&<button className="button text small-button" disabled={blocked} onClick={onOpenPublic}>공용판으로</button>}</div>{allRummikubTiles(publicScene.scene).length?<div style={boardStyle(baseTile)}><RummikubBoardView scene={publicScene.scene} rack={false} compact drawingItems={publicDrawings} referenceItems={publicDrawingReference} evidence={rummikubSourceEvidence(view.session.evidence)} onEvidence={onEvidence}/></div>:<p className="small muted">아직 놓인 타일이 없어요.</p>}</details>}
   {needsReview&&!reviewing&&<button className="button secondary small-button" disabled={blocked||dirty||contextDirty} onClick={startReview}>기존 판과 함께 정정</button>}
   <header className="rt-heading"><h3>{rack?'내 받침대':'공용판'}</h3><div className="button-row">
    {source&&source.status!=='accepted'&&!showAccepted&&accepted&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>{setReview(null);setShowAccepted(true);}}>이전 기록 보기</button>}
    {showAccepted&&candidate&&<button className="button text small-button" disabled={blocked||dirty} onClick={()=>{setReview(null);setShowAccepted(false);}}>새 사진 결과 보기</button>}
    {onReread&&<button className="button text small-button" disabled={blocked} onClick={onReread}>다시 읽기</button>}
    <button className="icon-button" aria-label="타일 변경 되돌리기" disabled={blocked||!state.history.past.length} onClick={()=>{setState({...state,history:undoRummikub(state.history)});setError('');setSaved(false);}}><Undo2 size={18}/></button>
-   {all.length>0&&<button className="button secondary small-button" disabled={blocked} onClick={()=>setFull(true)}><Maximize2 size={16}/>크게 보기</button>}
+   {all.length>0&&<button className="button secondary small-button" disabled={blocked} onClick={()=>{setZoom(1);setFull(true);}}><Maximize2 size={16}/>크게 보기</button>}
   </div></header>
   {dirty&&incomingKey!==state.base&&<p role="status" className="small muted">편집 중인 타일을 유지하고 있어요.</p>}
   {incoming.warnings.length>0&&<details className="rt-notes"><summary>사진 판독 확인</summary>{incoming.warnings.map(w=><p key={w}>{w}</p>)}</details>}
-  {all.length||scene.groups.length?<div className="rt-board" style={boardStyle(baseTile)}><RummikubBoardView scene={scene} rack={rack} disabled={blocked} onOpenGroup={openGroup} onOpenTile={id=>{clearTimeout(quickTimer.current);setQuickId(id);}} onAddGroup={newGroup}/></div>
+  {all.length||scene.groups.length?<div className="rt-board" style={boardStyle(baseTile)}><RummikubBoardView scene={scene} rack={rack} drawingItems={drawings} referenceItems={drawingReference} evidence={evidence} onEvidence={onEvidence} disabled={blocked} onOpenGroup={openGroup} onOpenTile={openQuick} onAddGroup={newGroup}/></div>
    :<div className="rt-empty-board"><p className="rt-empty-title">{hasPhotos?'타일을 놓아 주세요':rack?'내 받침대를 찍어 주세요':'판을 찍어 주세요'}</p><div className="button-row">{onCapture&&<button className="button primary" disabled={blocked} onClick={onCapture}><Camera size={18}/>{captureLabel??(rack?'받침대 찍기':'판 찍기')}</button>}<button className="button secondary" disabled={blocked} onClick={newGroup}><Plus size={17}/>직접 놓기</button></div></div>}
   <details className="rt-notes"><summary>{rack?'최초 등록 · 선택':'재배열 메모 · 선택'}</summary>{rack?<label>최초 등록<select value={opened} disabled={blocked} onChange={e=>setOpened(e.target.value)}><option value="">모름</option><option value="true">등록함</option><option value="false">아직</option></select></label>:<label>멈춘 지점<textarea value={pending} disabled={blocked} placeholder="예: 조커를 옮기는 중" onChange={e=>setPending(e.target.value)}/></label>}</details>
   {error&&!sheetOpen&&<p role="alert" className="rt-error">{error}</p>}
   {status&&<p className="rt-status small muted" role="status">{status}</p>}
   {quickTile&&overlay(<Modal title="타일 고치기" onClose={closeQuick}><div className="modal-body rt-quick">
+   {quickTile&&quickPosition&&quickPhoto&&<PhotoLayoutLocation photo={quickPhoto} box={quickPosition.box} label={tileName(quickTile)} onEvidence={onEvidence}/>}
    <div className="rt-quick-row" role="group" aria-label="색">{CLASSIC_COLORS.map(color=><button type="button" key={color} className="rt-quick-tile" aria-pressed={quickTile.kind==='number'&&quickTile.color===color} aria-label={colorNames[color]} disabled={blocked} onClick={()=>quickPatch({kind:'number',face:'front',color})}><TileFace tile={{...quickTile,kind:'number',face:'front',color,number:quickTile.kind==='number'?quickTile.number:null}}/></button>)}</div>
    <div className="rt-quick-numbers" role="group" aria-label="숫자">{Array.from({length:13},(_,i)=><button type="button" key={i+1} aria-pressed={quickTile.kind==='number'&&quickTile.number===i+1} disabled={blocked} style={{color:quickTile.kind==='number'&&quickTile.color?colors[quickTile.color]:undefined}} onClick={()=>quickPatch({kind:'number',face:'front',number:i+1})}>{i+1}</button>)}<button type="button" className="rt-quick-joker" aria-pressed={quickTile.kind==='joker'} aria-label="조커" disabled={blocked} onClick={()=>quickPatch({kind:'joker',face:'front'})}><TileFace tile={{...quickTile,kind:'joker',face:'front'}}/></button></div>
    <div className="rt-quick-more"><button type="button" className="button text small-button" disabled={blocked} onClick={()=>{const id=quickTile.id,group=scene.groups.find(g=>g.tiles.some(t=>t.id===id));closeQuick();openGroup(group?.id??'loose');setSelectedId(id);}}>자리·순서 바꾸기</button><button type="button" className="button text small-button" disabled={blocked} onClick={()=>{change({type:'remove',tileId:quickTile.id});closeQuick();}}><Trash2 size={15}/>빼기</button></div>
   </div></Modal>)}
   {full&&overlay(<Modal title={rack?'내 받침대 크게 보기':'공용판 크게 보기'} wide onClose={()=>setFull(false)}><div className="modal-body rt-full">
    <div className="rt-zoom" role="group" aria-label="확대·축소"><button className="icon-button" aria-label="축소" disabled={zoomIndex<=0} onClick={()=>setZoom(ZOOMS[Math.max(0,zoomIndex-1)])}><Minus size={18}/></button><span aria-live="polite">{Math.round(zoom*100)}%</span><button className="icon-button" aria-label="확대" disabled={zoomIndex>=ZOOMS.length-1} onClick={()=>setZoom(ZOOMS[Math.min(ZOOMS.length-1,zoomIndex+1)])}><Plus size={18}/></button></div>
-   <div className="rt-pan" tabIndex={0} aria-label="가로·세로로 밀어 보기"><div className="rt-board" style={{...boardStyle(Math.round(baseTile*zoom)),width:`${Math.round(360*zoom)}px`}}><RummikubBoardView scene={scene} rack={rack} disabled={blocked} onOpenGroup={openGroup}/></div></div>
+   <div className="rt-pan" tabIndex={0} aria-label="가로·세로로 밀어 보기"><div className="rt-board" style={{...boardStyle(Math.round(baseTile*zoom)),width:`${Math.round(360*zoom)}px`}}><RummikubBoardView scene={scene} rack={rack} tileSize={Math.round(baseTile*zoom)} drawingItems={drawings} referenceItems={drawingReference} evidence={evidence} onEvidence={onEvidence} disabled={blocked} onOpenGroup={openGroup} onOpenTile={openQuick}/></div></div>
   </div></Modal>)}
   {sheetOpen&&overlay(<Modal title={focus==='loose'?'따로 둔 타일':groupName(focusGroup,focusIndex,rack)} onClose={closeSheet}><div className="modal-body rt-sheet">
    <div className="rt-sheet-tiles" aria-label="타일 순서">{sheetTiles.map((tile,i)=><TileButton key={tile.id} tile={tile} position={i} selected={selectedId===tile.id} disabled={blocked} onClick={()=>{setSelectedId(tile.id);setAdding(false);}}/>)}<button type="button" className="rt-sheet-add" aria-label="타일 추가" aria-pressed={adding} disabled={blocked} onClick={()=>{setSelectedId(null);setTarget(focus==='loose'?'':focus!);setAdding(true);}}><Plus size={22}/></button></div>
@@ -134,7 +143,7 @@ export function RummikubWorkspace({view,ownerId,busy,mutate,onEvidence,onReadyTo
     <div className="rt-input-row"><label>앞·뒤<select value={editing.face} disabled={blocked} onChange={e=>patch({face:e.target.value as RummikubTile['face']})}><option value="front">앞면</option><option value="back">뒷면</option><option value="unknown">모름</option></select></label><label>{selected?'옮길 곳':'놓을 곳'}<select aria-label="타일 묶음 선택" disabled={blocked} value={selected?selectedGroup?.id??'':target} onChange={e=>{if(selected){const g=scene.groups.find(g=>g.id===e.target.value);if((selectedGroup?.id??'')!==e.target.value){change({type:'move',tileId:selected.id,groupId:e.target.value||null,index:g?.tiles.length??scene.loose.length});setFocus(e.target.value||'loose');}}else setTarget(e.target.value);}}><option value="">따로 두기</option>{scene.groups.map((g,i)=><option value={g.id} key={g.id}>{groupName(g,i,rack)}</option>)}</select></label></div>
     {editing.kind==='joker'&&<details className="rt-notes"><summary>조커가 대신하는 값 · 선택</summary><label>대신하는 숫자<NumberSelect value={editing.representedNumber} disabled={blocked} onChange={representedNumber=>patch({representedNumber})}/></label><ColorChips label="대신하는 색" value={editing.representedColor} disabled={blocked} onChange={representedColor=>patch({representedColor})}/></details>}
     {!selected?<button className="button primary full" disabled={blocked} onClick={addTile}><Plus size={16}/>타일 추가</button>:<><div className="button-row"><button className="button secondary small-button" disabled={blocked||index<=0} onClick={()=>change({type:'move',tileId:selected.id,groupId:selectedGroup?.id??null,index:index-1})}><ArrowLeft size={16}/>앞으로</button><button className="button secondary small-button" disabled={blocked||index>=selectedList.length-1} onClick={()=>change({type:'move',tileId:selected.id,groupId:selectedGroup?.id??null,index:index+1})}>뒤로<ArrowRight size={16}/></button>{selectedGroup&&index>0&&<button className="button secondary small-button" disabled={blocked} onClick={()=>{const id=crypto.randomUUID();change({type:'split',groupId:selectedGroup.id,index,newGroupId:id});setFocus(id);}}>여기서 나누기</button>}<button className="button text small-button" disabled={blocked} onClick={()=>{change({type:'remove',tileId:selected.id});setSelectedId(null);}}><Trash2 size={15}/>빼기</button></div>
-    {selected.evidenceIds.map((id,i)=>{const source=evidence.find(e=>e.id===id);return source?<button className="button text small-button" key={id} disabled={blocked} onClick={()=>onEvidence(source,i===0?selected.region??undefined:undefined)}><ImageIcon size={15}/>{i===0&&selected.region?'타일 원본 영역':'근거 원본 보기'}</button>:null;})}</>}
+    {selected.evidenceIds.map((id,i)=>{const source=evidence.find(e=>e.id===id),position=drawings.find(d=>d.pieceId===selected.id&&d.position.evidenceId===id)?.position;return source?<button className="button text small-button" key={id} disabled={blocked} onClick={()=>onEvidence(source,position?.box)}><ImageIcon size={15}/>{position?'타일 원본 영역':'근거 원본 보기'}</button>:null;})}</>}
    </div>}
    {error&&<p role="alert" className="rt-error">{error}</p>}
    <button className="button primary full rt-sheet-done" onClick={closeSheet}><Check size={17}/>완료</button>

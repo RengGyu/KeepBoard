@@ -7,6 +7,7 @@ import { CaptureHelp } from './BoardFeedback';
 import { BRAND_IMAGES } from './brandImages';
 import { reserveScanFrame, settleScanFrame, analyzeScanFrame, emptyScanSelector, resetScanDwell, SCAN_LIMIT, SCAN_REASON_LABELS, SCAN_SAMPLE_INTERVAL_MS, stepScanSelector, manualCaptureGuidance, type ScanFrame } from './scanQuality';
 import {CAPTURE_RELEASE_GUIDANCE} from './PhotoCaptureGuide';
+import {sourceCropPixels} from './photoRegionReread';
 
 import { createScanUploadQueue, type UploadSnapshot } from './scanUploads';
 import { recordScanTiming } from './scanTiming';
@@ -246,7 +247,7 @@ export function CameraDialog({ onClose, onCapture, guidance,parallelUpload=false
 }
 
 type Region = { x: number; y: number; width: number; height: number };
-export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: Evidence; region?: Region; onClose: () => void; onCrop?: (photo: PhotoInput) => Promise<void> }) {
+export function PhotoDialog({ evidence, region, onClose, onCrop,onReread }: { evidence: Evidence; region?: Region; onClose: () => void; onCrop?: (photo: PhotoInput) => Promise<void>;onReread?: (photo:PhotoInput)=>Promise<void> }) {
   const image = useRef<HTMLImageElement>(null);
   const start = useRef<{ x: number; y: number } | null>(null);
   const [selection, setSelection] = useState<Region | undefined>(region);
@@ -258,16 +259,17 @@ export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: E
     const bounds = image.current!.getBoundingClientRect();
     return { x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)), y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)) };
   };
-  const saveCrop = async () => {
-    if (!onCrop || !image.current || !selection || selection.width < 0.01 || selection.height < 0.01) return;
+  const saveCrop = async (reread=false) => {
+    const submit=reread?onReread:onCrop;
+    if (busy||!submit || !image.current || !selection || selection.width < 0.01 || selection.height < 0.01) return;
     setBusy(true); setError('');
     try {
       const img = image.current;
       const canvas = document.createElement('canvas');
-      canvas.width = Math.max(1, Math.round(selection.width * img.naturalWidth));
-      canvas.height = Math.max(1, Math.round(selection.height * img.naturalHeight));
-      canvas.getContext('2d')!.drawImage(img, selection.x * img.naturalWidth, selection.y * img.naturalHeight, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-      await onCrop({ dataUrl: canvas.toDataURL('image/jpeg', 0.95), label: `${evidence.label} · 확대 영역`, width: canvas.width, height: canvas.height, sourceRegion:{x:selection.x,y:selection.y,width:canvas.width/img.naturalWidth,height:canvas.height/img.naturalHeight} });
+      const crop=sourceCropPixels(selection,img.naturalWidth,img.naturalHeight,!reread);
+      canvas.width = crop.width;canvas.height = crop.height;
+      canvas.getContext('2d')!.drawImage(img, crop.x,crop.y,crop.width,crop.height, 0, 0, crop.width,crop.height);
+      await submit({ dataUrl: canvas.toDataURL('image/jpeg', 0.95), label: `${evidence.label} · 확대 영역`, width: canvas.width, height: canvas.height, sourceRegion:crop.sourceRegion });
       onClose();
     } catch (reason) { setError(reason instanceof Error ? reason.message : '영역 저장 실패'); }
     finally { setBusy(false); }
@@ -280,9 +282,10 @@ export function PhotoDialog({ evidence, region, onClose, onCrop }: { evidence: E
     }} onPointerUp={() => { start.current = null; }} onPointerCancel={() => { start.current = null; }}>
       <img ref={image} src={evidence.url} alt={evidence.label} draggable={false}/>{selection && <div className="crop-region" style={{ left: `${selection.x * 100}%`, top: `${selection.y * 100}%`, width: `${selection.width * 100}%`, height: `${selection.height * 100}%` }}/>}
     </div></div>
-    <div className="modal-body"><div className="inspector-tools"><label>확대 <input aria-label="사진 확대" type="range" min="1" max="3" step="0.1" value={zoom} onChange={event => setZoom(Number(event.target.value))}/></label>{onCrop&&<button className={`button small-button ${selecting ? 'primary' : 'secondary'}`} onClick={() => setSelecting(!selecting)}><Crop size={16}/>영역 선택</button>}<button className="icon-button" aria-label="확대와 선택 초기화" onClick={() => { setSelection(undefined); setZoom(1); }}><RotateCcw size={17}/></button></div>
+    <div className="modal-body"><div className="inspector-tools"><label>확대 <input aria-label="사진 확대" type="range" min="1" max="3" step="0.1" value={zoom} onChange={event => setZoom(Number(event.target.value))}/></label>{(onCrop||onReread)&&<button className={`button small-button ${selecting ? 'primary' : 'secondary'}`} disabled={busy} onClick={() => setSelecting(!selecting)}><Crop size={16}/>영역 선택</button>}<button className="icon-button" aria-label="확대와 선택 초기화" disabled={busy} onClick={() => { setSelection(undefined); setZoom(1); }}><RotateCcw size={17}/></button></div>
       <p className="muted small">{selecting ? '사진 위를 드래그해 확인할 영역을 선택하세요.' : '원본을 확대해 말·카드·숫자를 직접 확인하세요.'} {evidence.kind === 'example' && '이 이미지는 예시 도식입니다.'}</p>
       {onCrop&&selection && <button className="button primary" disabled={busy || selection.width < 0.01} onClick={() => void saveCrop()}><Crop size={17}/>{busy ? '저장 중…' : '선택 영역을 근거 사진으로 추가'}</button>}
+      {onReread&&selection&&<button type="button" className="button secondary" disabled={busy||selection.width<0.01||selection.height<0.01||selection.width===1&&selection.height===1} onClick={()=>void saveCrop(true)}>이 부분 다시 읽기</button>}
       {error && <p className="inline-error">{error}</p>}
     </div>
   </Modal>;

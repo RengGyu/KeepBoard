@@ -29,10 +29,10 @@ for(const backend of ['local','cloud'] as const)test(`${backend}: indexed origin
   let lists=0,gets=0,metadataReads=0;const list=store.listSessions.bind(store),get=store.getSession.bind(store),read=(store as any).readJSON.bind(store);
   (store as any).readJSON=async(...args:any[])=>{metadataReads++;return read(...args);};
   store.listSessions=async(...args)=>{lists++;return list(...args);};store.getSession=async(...args)=>{gets++;return get(...args);};
-  const fetched=await fetch(base+url);assert.equal(fetched.status,200);assert.equal(await fetched.text(),'photo');assert.equal(fetched.headers.get('cache-control'),'no-store');
+  const fetched=await fetch(base+url);assert.equal(fetched.status,200);assert.equal(await fetched.text(),'photo');assert.equal(fetched.headers.get('cache-control'),'private, max-age=0, must-revalidate');
   assert.equal(lists,0);assert.equal(gets,1,'one matching session JSON, independent of unrelated boards');
   assert.equal(metadataReads,2,'one reference lookup plus one session read');
-  const rows=await call('/api/sessions'),row=rows.find((s:any)=>s.id===id);
+  const beforeListReads={lists,gets};const rows=await call('/api/sessions'),row=rows.find((s:any)=>s.id===id);assert.deepEqual({lists,gets},beforeListReads,'normal summary listing reads neither the source session nor the old full-list path');
   assert.equal(row.saved,true);assert.equal(row.room,false);
   for(const k of ['assertions','snapshots','evidence','notes','activity','gamePack','players'])assert(!Object.hasOwn(row,k),k);
   const fullBytes=Buffer.byteLength(JSON.stringify(await list())),summaryBytes=Buffer.byteLength(JSON.stringify(rows));assert(summaryBytes<fullBytes/10);

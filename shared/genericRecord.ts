@@ -1,3 +1,4 @@
+import {validateStructureOverride,type EstimatedStructureOverride} from './estimatedStructureOverride';
 import {validateStoredSpatial,type StoredSpatialPiece} from './spatialObservation';
 import type {ComponentLinkOrigin} from './componentLinking.ts';
 import type {Assertion,GamePack,Value} from './types.ts';
@@ -6,7 +7,7 @@ import {validateGameReadout,type GameReadout,type ReadoutContext} from './readou
 import {validateReadoutRelations} from './readouts/relations.ts';
 import {runtimeBinding} from './gameEssentials.ts';
 export interface GenericPlacement {areaId:string;x:number;y:number;rotation:0|90|180|270;layoutVariant?:string}
-export interface GenericPiece {spatial?:StoredSpatialPiece;spatialAlternatives?:StoredSpatialPiece[];linkOrigin?:ComponentLinkOrigin;readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
+export interface GenericPiece {structureOverride?:EstimatedStructureOverride;spatial?:StoredSpatialPiece;spatialAlternatives?:StoredSpatialPiece[];linkOrigin?:ComponentLinkOrigin;readout?:SplendorObservation|GameReadout;placement?:GenericPlacement;id:string;componentId:string|null;variant:string|null;quantity:number|null;label:string;anchor:string;evidenceId:string|null;region:Assertion['region']|null}
 export interface GenericRecord {version:'game-component-record-v1';pieces:GenericPiece[]}
 export function emptyGenericRecord():GenericRecord{return {version:'game-component-record-v1',pieces:[]};}
 export function validateGenericRecord(value:Value,pack:GamePack,field:string,allowedEvidenceIds:string[],context:ReadoutContext&{spatialOwnerId?:string}={}):GenericRecord {
@@ -15,6 +16,7 @@ export function validateGenericRecord(value:Value,pack:GamePack,field:string,all
  const seen=new Set<string>();
  for(const p of raw.pieces){
   if(!p||typeof p.id!=='string'||!p.id||seen.has(p.id))throw new Error('실물별로 서로 다른 ID가 필요합니다.');seen.add(p.id);
+  if(Object.hasOwn(p,'structureOverride'))validateStructureOverride(p.structureOverride!,pack.runtime?.source.gameId??pack.id,context.mode);
   if(Object.hasOwn(p,'linkOrigin')){const o=p.linkOrigin;if(context.mode==='ai'||!o||typeof o!=='object'||Object.keys(o).some(k=>!['assertionId','pieceId','field','ownerId','previousPlacement'].includes(k))||[o.assertionId,o.pieceId,o.field].some(v=>typeof v!=='string'||!v)||o.pieceId!==p.id||o.ownerId!==undefined&&(typeof o.ownerId!=='string'||!o.ownerId))throw new Error('실물 연결 원본을 확인하세요.');const q=o.previousPlacement;if(q&&(!q.areaId||typeof q.areaId!=='string'||![q.x,q.y].every(Number.isFinite)||q.x<0||q.x>1||q.y<0||q.y>1||![0,90,180,270].includes(q.rotation)))throw new Error('이전 배치 정보를 확인하세요.');}
   if(p.spatial||p.spatialAlternatives){if(p.spatialAlternatives&&(!Array.isArray(p.spatialAlternatives)||p.spatialAlternatives.length>128))throw Error('공간 관측 대안을 확인하세요.');for(const spatial of [p.spatial,...(p.spatialAlternatives??[])].filter((s):s is StoredSpatialPiece=>!!s)){validateStoredSpatial(spatial,pack.runtime?.source.sha256,spatial.source?.evidenceId);if(!allowedEvidenceIds.includes(spatial.source.evidenceId))throw Error('공간 관측 원본의 범위를 확인하세요.');const f=pack.fields.find(f=>f.key===field),tray=field.startsWith('__photo.');if(!tray&&(spatial.source.partition==='player_public'&&(f?.scope!=='player'||f.visibility!=='public'||!spatial.boundOwnerId||context.spatialOwnerId!==undefined&&context.spatialOwnerId!==spatial.boundOwnerId)||spatial.source.partition==='owner_private'&&(f?.scope!=='player'||f.visibility!=='owner'||spatial.boundOwnerId!==spatial.source.ownerId)))throw Error('공간 관측의 공용·개인 범위를 확인하세요.');}}
   if(Object.hasOwn(p,'readout')){if((pack.runtime?.source.gameId??pack.id)==='splendor')validateSplendorObservation(p.readout,p.componentId,p.label);else validateGameReadout(p.readout,pack,p.componentId,p.evidenceId,context);}

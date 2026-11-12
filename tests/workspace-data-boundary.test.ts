@@ -1,0 +1,26 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {register} from 'node:module';import React from 'react';
+import {catalogPacks} from '../gamepacks/catalog';
+register('../docs/board-story/feedback/skip-css.mjs',import.meta.url);
+(globalThis as any).window={addEventListener(){},removeEventListener(){}};
+const {GameDataBoundary}=await import('../src/WorkspaceEntry');
+function mount(props:any){const H=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,slots:any[]=[];let tree:any,cursor=0,pending:(()=>void)[]=[];const render=()=>{cursor=0;pending=[];const old=H.H;H.H={useState(v:any){const i=cursor++;if(!(i in slots))slots[i]=v;return[slots[i],(v:any)=>slots[i]=typeof v==='function'?v(slots[i]):v];},useEffect(fn:any,deps:any[]){const i=cursor++,p=slots[i];if(!p||deps.some((d,j)=>!Object.is(d,p.deps[j])))pending.push(()=>{p?.clean?.();slots[i]={deps,clean:fn()};});}};try{tree=GameDataBoundary(props);}finally{H.H=old;}pending.forEach(f=>f());};render();return {render,get tree(){return tree;},dispose(){slots.forEach(s=>s?.clean?.());}};}
+const flush=()=>new Promise(r=>setImmediate(r));
+test('loading/error/switch never mount the wrong editor or call a save; stale completion is ignored and explicit retry keeps the draft',async()=>{
+ const pack=catalogPacks.find(p=>p.id==='sagrada')!,other={...pack,version:'old-version'},draft={value:2,unknown:null,zero:0,flag:false};let finish!:()=>void,fail!:(e:Error)=>void,saves=0,attempt=0;
+ const props:any={pack,children:React.createElement('button',{onClick:()=>{saves++;}},'editor'),ready:()=>false,load:()=>++attempt===1?new Promise<void>(r=>{finish=r;}):new Promise<void>((_,r)=>{fail=r;})},ui=mount(props);
+ try{assert.notEqual(ui.tree.props.children,props.children);props.pack=other;ui.render();finish();await flush();ui.render();assert.notEqual(ui.tree.props.children,props.children,'prior pack success cannot expose the new editor');fail(Error('offline'));await flush();ui.render();assert.equal(ui.tree.props.role,'alert');assert.equal(saves,0);assert.deepEqual(draft,{value:2,unknown:null,zero:0,flag:false});props.load=async()=>{};ui.tree.props.children[1].props.onClick();ui.render();await flush();ui.render();assert.equal(ui.tree.props.children,props.children);assert.equal(saves,0);}finally{ui.dispose();}
+});
+
+test('actual App keeps the opened workspace/draft identity when preparation of a returned version fails',async()=>{
+ const {default:App}=await import('../src/App'),{api}=await import('../src/api'),{gameDataAssets}=await import('../tools/readouts/client-assets'),data=await gameDataAssets(),pack=catalogPacks.find(p=>p.id==='sagrada')!;
+ const old={fetch:globalThis.fetch,window:(globalThis as any).window,location:(globalThis as any).location,roomDevice:api.roomDevice,sessions:api.sessions,catalog:api.catalog,status:api.status,session:api.session};
+ const view:any={pack,session:{id:'edited-board',name:'saved',players:[],snapshots:[],assertions:[],evidence:[],preservations:[],notes:{public:'keep draft'},activity:[],updatedAt:''},questions:[],briefing:[]};
+ globalThis.fetch=(async(url:any)=>{const a=data.get(String(url));return new Response(a?.source??'',{status:a?200:404});}) as typeof fetch;(globalThis as any).window={addEventListener(){},removeEventListener(){}};(globalThis as any).location={search:'?session=edited-board',hash:'',href:'http://localhost/?session=edited-board'};
+ api.roomDevice=async()=>({} as any);api.sessions=async()=>[];api.catalog=async()=>[];api.status=async()=>({configured:false} as any);api.session=async()=>view;
+ const H=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,slots:any[]=[];let cursor=0,tree:any,pending:(()=>void)[]=[];
+ const draw=()=>{cursor=0;pending=[];const before=H.H;H.H={useState(v:any){const i=cursor++;if(!(i in slots))slots[i]=typeof v==='function'?v():v;return[slots[i],(n:any)=>slots[i]=typeof n==='function'?n(slots[i]):n];},useRef(v:any){return slots[cursor++]??={current:v};},useCallback(v:any){cursor++;return v;},useEffect(f:any,deps:any[]){const i=cursor++,p=slots[i];if(!p||!deps||deps.some((d,j)=>!Object.is(d,p.deps?.[j])))pending.push(()=>{p?.clean?.();slots[i]={deps,clean:f()};});}};try{tree=App();}finally{H.H=before;}pending.forEach(f=>f());};
+ const nodes=(n:any):any[]=>!n||typeof n!=='object'?[]:Array.isArray(n)?n.flatMap(nodes):[n,...nodes(n.props?.children)];
+ try{draw();for(let i=0;i<8&&!nodes(tree).some(n=>n.props?.view?.session.id===view.session.id);i++){await flush();draw();}const workspace=nodes(tree).find(n=>n.props?.view?.session.id===view.session.id);assert(workspace,'initial opened workspace');const key=workspace.key;
+  await assert.rejects(workspace.props.mutate(async()=>({...view,pack:{...pack,version:'unknown-version'}})));draw();const after=nodes(tree).find(n=>n.props?.view?.session.id===view.session.id);assert.equal(after.key,key);assert.equal(after.props.view,view);assert.equal(after.props.view.session.notes.public,'keep draft');
+ }finally{slots.forEach(s=>s?.clean?.());globalThis.fetch=old.fetch;(globalThis as any).window=old.window;(globalThis as any).location=old.location;Object.assign(api,{roomDevice:old.roomDevice,sessions:old.sessions,catalog:old.catalog,status:old.status,session:old.session});}
+});

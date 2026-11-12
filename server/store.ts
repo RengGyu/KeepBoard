@@ -1,3 +1,6 @@
+import {encodeSession,decodeSession} from './sessionCodec';
+import {SessionIndex,emptySessionIndex} from './sessionIndex';
+import {thumbnailJPEG,thumbnailName} from './thumbnail';
 import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -9,7 +12,12 @@ export interface SessionExport {
   evidenceData: Record<string, string>;
 }
 
+const documentChanges=new Map<string,Promise<unknown>>();
 export class Store {
+  private readonly summaries=new SessionIndex({read:()=>this.readJSON(path.join(this.root,'session-summaries.json')),mutate:change=>this.mergeUploadDocument<any>(path.join(this.root,'session-summaries.json'),old=>{const index=old??emptySessionIndex();change(index);return index;}),sessions:()=>this.list<Session>('sessions'),session:id=>this.getSession(id)});
+  async listSessionSummaries(includeDeleted=false,memberHash?:string){return this.summaries.list(includeDeleted,await this.hiddenSessions(),memberHash);}
+  async getSessionAccess(id:string){return this.summaries.access(id);}
+  protected transferVersion(_from:object,_to:object){}
   private uploadChange: Promise<unknown> = Promise.resolve();
   private knownUploadRefs = new Set<string>();
   private uploadIndexPath(filename:string){return path.join(this.root,'upload-references',filename+'.json');}
@@ -21,14 +29,16 @@ export class Store {
     for(const session of await this.list<Session>('sessions'))await this.recordUploadReferences(session);
     await this.mergeUploadDocument(marker,old=>old?undefined:{version:1});
   }
-  private async mergeUploadDocument<T>(filename:string,update:(old:T|undefined)=>T|undefined){
-    for(let attempt=0;;attempt++){
-      const old=await this.readJSON<T>(filename),next=update(old);if(next===undefined)return;
-      try{await this.atomicWrite(filename,next);return;}catch(error){if((error as {status?:number}).status!==409||attempt>=7)throw error;}
-    }
+  protected async mergeUploadDocument<T>(filename:string,update:(old:T|undefined)=>T|undefined){
+    const work=(documentChanges.get(filename)??Promise.resolve()).catch(()=>undefined).then(async()=>{
+      for(let attempt=0;;attempt++){
+        const old=await this.readJSON<T>(filename),next=update(old);if(next===undefined)return;
+        try{await this.atomicWrite(filename,next);return;}catch(error){if((error as {status?:number}).status!==409||attempt>=7)throw error;}
+      }
+    });documentChanges.set(filename,work);try{await work;}finally{if(documentChanges.get(filename)===work)documentChanges.delete(filename);}
   }
   protected async recordUploadReferences(session:Session){
-    const filenames=new Set([...session.evidence,...session.snapshots.flatMap(s=>s.evidence)].filter(e=>e.url.startsWith('/uploads/')).map(e=>path.basename(e.url)));
+    const filenames=new Set([...session.evidence,...session.snapshots.flatMap(s=>s.evidence)].filter(e=>e.url.startsWith('/uploads/')).flatMap(e=>[path.basename(e.url),...(e.thumbnailUrl?.startsWith('/uploads/')?[path.basename(e.thumbnailUrl)]:[])]));
     const work=this.uploadChange.catch(()=>undefined).then(async()=>{
       for(const filename of filenames){
         const key=JSON.stringify([filename,session.id]);if(this.knownUploadRefs.has(key))continue;
@@ -48,20 +58,20 @@ export class Store {
     return sessions.filter((s):s is Session=>!!s);
   }
   private listChange: Promise<unknown> = Promise.resolve();
-  private async hiddenSessions(): Promise<Record<string, { deletedAt: string }>> {
+  protected async hiddenSessions(): Promise<Record<string, { deletedAt: string }>> {
     return await this.readJSON<Record<string,{deletedAt:string}>>(path.join(this.root,'session-list.json'))??{};
   }
   async setSessionsHidden(ids: string[] | undefined, hidden: boolean): Promise<string[]> {
     const job = this.listChange.catch(() => undefined).then(async () => {
-      const metadata = await this.hiddenSessions();
-      const selected = ids ?? (await this.list<Session>('sessions')).filter(s => !metadata[s.id]).map(s => s.id);
-      const changed: string[] = [];
-      for (const id of [...new Set(selected)]) {
-        if (!await this.getSession(id)) throw new Error('숨기거나 복원할 보드를 찾을 수 없습니다.');
-        if (hidden && !metadata[id]) { metadata[id] = { deletedAt: new Date().toISOString() }; changed.push(id); }
-        else if (!hidden && metadata[id]) { delete metadata[id]; changed.push(id); }
-      }
-      await this.atomicWrite(path.join(this.root, 'session-list.json'), metadata);
+      const metadata=await this.hiddenSessions(),selected=ids??(await this.list<Session>('sessions')).filter(s=>!metadata[s.id]).map(s=>s.id);
+      for(const id of [...new Set(selected)])if(!await this.getSession(id))throw new Error('숨기거나 복원할 보드를 찾을 수 없습니다.');
+      let changed:string[]=[],updated:Record<string,{deletedAt:string}>={};
+      await this.mergeUploadDocument<Record<string,{deletedAt:string}>>(path.join(this.root,'session-list.json'),old=>{
+        updated=old??{};changed=[];
+        for(const id of [...new Set(selected)]){if(hidden&&!updated[id]){updated[id]={deletedAt:new Date().toISOString()};changed.push(id);}else if(!hidden&&updated[id]){delete updated[id];changed.push(id);}}
+        return updated;
+      });
+      await this.summaries.hidden(changed,updated).catch(()=>undefined);
       return changed;
     });
     this.listChange = job;
@@ -77,7 +87,7 @@ export class Store {
   protected async atomicWrite(filename: string, value: unknown) {
     await mkdir(path.dirname(filename), { recursive: true });
     const temporary = `${filename}.${randomUUID()}.tmp`;
-    await writeFile(temporary, JSON.stringify(value, null, 2), {mode:0o600});
+    await writeFile(temporary, JSON.stringify(value), {mode:0o600});
     await rename(temporary, filename);
   }
 
@@ -85,19 +95,25 @@ export class Store {
     try{return JSON.parse(await readFile(filename,'utf8'));}
     catch(error){if((error as NodeJS.ErrnoException).code==='ENOENT')return undefined;throw error;}
   }
-  async getSession(id:string):Promise<Session|undefined>{return this.readJSON<Session>(this.filename('sessions',id));}
+  async getSession(id:string):Promise<Session|undefined>{const stored=await this.readJSON<object>(this.filename('sessions',id));if(!stored)return;const session=decodeSession(stored);this.transferVersion(stored,session);return session;}
 
   async saveSession(session: Session) {
-    await this.recordUploadReferences(session);
-    session.updatedAt = new Date().toISOString();
-    await this.atomicWrite(this.filename('sessions', session.id), session);
+    const token=randomUUID();await this.summaries.begin(session.id,token);
+    try{
+      await this.recordUploadReferences(session);
+      session.updatedAt=new Date().toISOString();session.storageRevision=token;
+      const stored=encodeSession(session);this.transferVersion(session,stored);
+      await this.atomicWrite(this.filename('sessions',session.id),stored);this.transferVersion(stored,session);
+    }catch(error){const previous=await this.getSession(session.id).catch(()=>undefined);await this.summaries.finish(session.id,token,previous).catch(()=>undefined);throw error;}
+    // Source is authoritative. A failed index finalization remains pending and repairs from this exact committed token on the next read.
+    await this.summaries.finish(session.id,token,session).catch(()=>undefined);
   }
 
   protected async list<T>(kind: 'sessions' | 'packs'): Promise<T[]> {
     let files: string[];
     try { files = await readdir(path.join(this.root, kind)); }
     catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return []; throw error; }
-    return Promise.all(files.filter(file => file.endsWith('.json')).map(async file => JSON.parse(await readFile(path.join(this.root, kind, file), 'utf8'))));
+    return (await Promise.all(files.filter(file=>file.endsWith('.json')).map(file=>kind==='sessions'?this.getSession(file.slice(0,-5)) as Promise<T|undefined>:this.readJSON<T>(path.join(this.root,kind,file))))).filter((x):x is Awaited<T>=>x!==undefined) as T[];
   }
 
   async listSessions(includeDeleted = false) {
@@ -116,8 +132,13 @@ export class Store {
     const filename = `${randomUUID()}.${extension}`;
     await mkdir(path.join(this.root, 'uploads'), { recursive: true });
     await writeFile(path.join(this.root, 'uploads', filename), bytes);
+    await this.createThumbnail(filename,bytes);
     return `/uploads/${filename}`;
   }
+
+
+  protected async createThumbnail(filename:string,bytes:Buffer){try{const jpeg=await thumbnailJPEG(bytes);if(jpeg)await writeFile(path.join(this.root,'uploads',thumbnailName(filename)),jpeg,{mode:0o600});}catch{/* The durable original remains usable. */}}
+  async evidenceThumbnail(url:string):Promise<string|undefined>{if(!url.startsWith('/uploads/'))return;const filename=thumbnailName(path.basename(url));try{await readFile(path.join(this.root,'uploads',filename));return '/uploads/'+filename;}catch{return undefined;}}
 
   async readEvidence(evidence:Evidence):Promise<{data:Buffer;mimeType:string}>{
     if(evidence.url.startsWith('data:image/')){const m=/^data:([^;]+);base64,(.+)$/s.exec(evidence.url);if(!m)throw Error('사진 형식을 확인하세요.');return {data:Buffer.from(m[2],'base64'),mimeType:m[1]};}
@@ -145,6 +166,7 @@ export class Store {
         urls.set(item.id, await this.saveEvidence(data));
       }
       item.url = urls.get(item.id)!;
+      item.thumbnailUrl=await this.evidenceThumbnail(item.url);
     }
     session.id = randomUUID();
     await this.saveSession(session);

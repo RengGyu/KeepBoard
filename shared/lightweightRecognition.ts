@@ -1,3 +1,4 @@
+import {readingAreas,compatibleRestoration,type ReadingTarget} from './restoration';
 import {validateSpatialResult} from './spatialObservation';
 import type {GamePack} from './types';
 import type {PropertySpec} from './readouts/types';
@@ -7,15 +8,19 @@ export interface PhotoComponentDefinition {id:string;properties:PropertySpec[];m
 export interface PhotoDefinition {version:'game-photo-definition-v1';gameId:string;packId:string;packVersion:string;editionId:string;sourceSHA:string;definitionSHA:string;nativeBridge:'catan'|'rummikub'|'splendor'|null;readoutSchema:string|null;areas:{id:string;partition:ObservationPartition;fields:string[];componentIds:string[]}[];components:PhotoComponentDefinition[]}
 export interface ObservationScope {partition:ObservationPartition;ownerId:string|null;captureEpoch:string}
 export interface ObservationImage {evidenceId:string;sha256:string;width:number;height:number;inputId:string;transformId:string|null}
-export interface ObservationRequest {propertyApplicability?:{frontOnlyPropertyIds:Record<string,string[]>;policySHA?:string};spatial?:import('./spatialDefinition').SpatialRequest;version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
+export type ObservationReadMode='values'|'cells'|'boxes';
+export const validObservationReadMode=(v:unknown):v is ObservationReadMode=>['values','cells','boxes'].includes(v as string);
+export interface ObservationRequest {readModePolicy?:'visible-values-v1';readMode?:ObservationReadMode;readingTarget?:ReadingTarget;propertyApplicability?:{frontOnlyPropertyIds:Record<string,string[]>;areaPropertyIds?:Record<string,Record<string,string[]>>;policySHA?:string};spatial?:import('./spatialDefinition').SpatialRequest;version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
 export type ObservationUnknownReason='unreadable'|'occluded'|'out-of-frame'|'not-present-unconfirmed'|'wrong-face'|'ambiguous'|'unsupported';
 export type ObservationProperty={state:'observed';value:string|number|boolean|unknown[]|Record<string,unknown>}|{state:'unknown';value:null;reason:ObservationUnknownReason};
 export interface ObservationBox {x:number;y:number;width:number;height:number}
-export interface LiteralObservation {ref:string;imageIndex:number;panelRef:string|null;componentId:string|null;bbox:ObservationBox|null;face:'front'|'back'|'unknown';quantity:number|null;rotationDegrees:number|null;properties:Record<string,ObservationProperty>;referenceCandidates:{referenceId:string;assetSHA:string}[]}
+export interface LiteralObservation {sourceAreaId?:string|null;ref:string;imageIndex:number;panelRef:string|null;componentId:string|null;bbox:ObservationBox|null;face:'front'|'back'|'unknown';quantity:number|null;rotationDegrees:number|null;properties:Record<string,ObservationProperty>;referenceCandidates:{referenceId:string;assetSHA:string}[]}
+export interface ObservationProgressUpdate {timings?:Record<string,number>;preview?:LiteralObservation[]}
+export type ObservationProgressCallback=(count:number,update?:ObservationProgressUpdate)=>void;
 export interface ObservationResult {spatial?:import('./spatialObservation').SpatialResult;version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
 export interface GeometryCandidate {observationRef:string;frameId:string;locationCandidate:{type:'hex'|'edge'|'vertex';id:string};method:'confirmed-frame';status:'candidate'}
 export interface LocalReaderSelection {kind:'local-observation-v1';task?:'catan-numerals-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;inputMode?:'original'|'catan-atlas'}
-export interface HostedReaderSelection {kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
+export interface HostedReaderSelection {readMode?:ObservationReadMode;readingTarget?:ReadingTarget;kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
 export type PhotoReaderSelection=LocalReaderSelection|HostedReaderSelection;
 export interface LocalTaskProfile {id:'catan-numerals-v1';wire:'qwen-number-grounding-v1';promptSHA256:string;schemaSHA256:string;runtimeSettingsSHA256:string;contextTokens:8192;maxOutputTokens:1024;imageMinTokens:1024;temperature:0;cachePrompt:false;stream:false;automaticRetries:0;parallelRequests:1}
 export interface LocalReaderTaskCapability {task:'catan-numerals-v1';available:boolean;reason?:string;profile:LocalTaskProfile|null}
@@ -32,7 +37,7 @@ export interface TerraHighReaderIdentity extends Omit<LunaReaderIdentity,'kind'|
 export type HostedReaderIdentity=GeminiReaderIdentity|TerraReaderIdentity|LunaReaderIdentity|TerraHighReaderIdentity;
 export const isHostedReader=(value:unknown):value is {kind:HostedReaderIdentity['kind']}=>!!value&&typeof value==='object'&&'kind' in value&&['gemini-game-observation-v1','terra-game-observation-v1','luna-game-observation-v1','terra-high-game-observation-v1'].includes(String(value.kind));
 export type ObservationReaderIdentity=ReaderIdentity|HostedReaderIdentity;
-export interface CompileObservationInput {pack:GamePack;definition:PhotoDefinition;areaId:string;scope:ObservationScope;images:ObservationImage[];taskId:string;geometryFrameId?:string;referenceSetId?:string;transforms?:import('./photoGeometry').PhotoTransform[]}
+export interface CompileObservationInput {readMode?:ObservationReadMode;readingTarget?:ReadingTarget;pack:GamePack;definition:PhotoDefinition;areaId:string;scope:ObservationScope;images:ObservationImage[];taskId:string;geometryFrameId?:string;referenceSetId?:string;transforms?:import('./photoGeometry').PhotoTransform[]}
 // Pure compilation/validation functions are implemented below after focused RED tests.
 import {isObject,validateDetailValue} from './readouts/registry';
 import {mapObservationRegion,validCropTransform,type PhotoTransform} from './photoGeometry';
@@ -42,28 +47,32 @@ const nonempty=(v:unknown)=>typeof v==='string'&&v.length>0&&v.length<=200;
 function exact(v:unknown,keys:string[],label:string):Record<string,unknown>{if(!isObject(v)||Object.keys(v).length!==keys.length||keys.some(k=>!Object.hasOwn(v,k)))return fail(label+' 형식을 확인하세요.');return v;}
 export function compileObservationTask(input:CompileObservationInput):ObservationRequest {
  const {pack,definition:d,areaId,scope,images,taskId}=input,s=pack.runtime?.source;
+ if(input.readMode!==undefined&&!validObservationReadMode(input.readMode))return fail('판독 모드를 확인하세요.');
  if(d.version!=='game-photo-definition-v1'||!s||d.gameId!==s.gameId||d.packId!==pack.id||d.packVersion!==pack.version||d.editionId!==s.editionId||d.sourceSHA!==s.sha256||!hash(d.definitionSHA))return fail('게임 판본·source·촬영 정의가 일치하지 않습니다. 기존 기록은 보존됩니다.');
- const area=d.areas.find(a=>a.id===areaId);if(!area||area.partition!==scope.partition||!nonempty(scope.captureEpoch)||(scope.partition==='owner_private'?!nonempty(scope.ownerId):scope.ownerId!==null))return fail('촬영 영역(scope)과 소유 범위를 확인하세요.');
+ const areas=readingAreas(pack,d,areaId,input.readingTarget),area=areas[0],scene=input.readingTarget?.mode==='public-scene';if(!area||(!scene&&area.partition!==scope.partition)||(scene&&(scope.partition!=='common_public'||scope.ownerId!==null))||!nonempty(scope.captureEpoch)||(scope.partition==='owner_private'?!nonempty(scope.ownerId):scope.ownerId!==null))return fail('촬영 영역(scope)과 소유 범위를 확인하세요.');
  if(!nonempty(taskId)||images.length!==1||images.some(i=>!nonempty(i.evidenceId)||!nonempty(i.inputId)||!hash(i.sha256)||!Number.isInteger(i.width)||!Number.isInteger(i.height)||i.width<1||i.height<1))return fail('한 원본 사진의 해시·크기를 확인하세요.');
  for(const i of images)if(i.transformId!==null){const t=input.transforms?.find(t=>t.transformId===i.transformId);if(t?.kind==='crop'){if(!validCropTransform(t)||t.inputSHA!==i.sha256||t.inputDimensions.width!==i.width||t.inputDimensions.height!==i.height)return fail('원본 crop 변환을 확인하세요.');continue;}if(d.nativeBridge!=='catan'||area.id!=='board'||scope.partition!=='common_public'||!input.geometryFrameId||!t||t.inputSHA!==i.sha256||!hash(t.sourceSHA)||t.inputDimensions.width!==i.width||t.inputDimensions.height!==i.height||!t.panels.length||new Set(t.panels.map(p=>p.panelRef)).size!==t.panels.length)return fail('확인한 카탄 frame·atlas 해시·패널을 확인하세요.');}
  if(input.referenceSetId)return fail('허용된 실물 참조 집합이 없습니다.');
- const components=area.componentIds.filter(id=>d.components.some(c=>c.id===id));if(components.length!==area.componentIds.length||!components.length)return fail('촬영 정의의 구성물 연결을 확인하세요.');
+ const areaComponents=[...new Set(areas.flatMap(a=>a.componentIds))];const components=areaComponents.filter(id=>d.components.some(c=>c.id===id));if(components.length!==areaComponents.length||!components.length)return fail('촬영 정의의 구성물 연결을 확인하세요.');
  for(const id of components){const c=d.components.find(c=>c.id===id)!;if(new Set(c.properties.map(f=>f.id)).size!==c.properties.length||c.properties.some(f=>f.acquisition!=='visible'||c.manualPropertyIds.includes(f.id)))return fail('관측과 수동 입력 정의가 섞여 있습니다.');}
- const policy=pack.photoReadingPolicy;
+ const restoration=scene?compatibleRestoration(pack):undefined,policy=restoration?{...restoration}:pack.photoReadingPolicy;
  if(policy&&(policy.definitionSHA!==d.definitionSHA||!hash(policy.policySHA)||!policy.areas[areaId]))return fail('게임 판독 정책의 정의·영역이 일치하지 않습니다.');
+ if(policy)for(const a of areas)for(const id of a.componentIds){const selected=policy.areas[a.id]?.[id],fields=d.components.find(c=>c.id===id)!.properties;if(!Array.isArray(selected)||new Set(selected).size!==selected.length||selected.some(p=>!fields.some(f=>f.id===p)))return fail('게임 판독 정책의 영역별 속성을 확인하세요.');}
  const allowedPropertyIds=Object.fromEntries(components.map(id=>{
-  const fields=d.components.find(c=>c.id===id)!.properties,selected=policy?policy.areas[areaId][id]:fields.map(f=>f.id);
+  const fields=d.components.find(c=>c.id===id)!.properties,selected=policy?[...new Set(areas.flatMap(a=>policy.areas[a.id]?.[id]??[]))]:fields.map(f=>f.id);
   if(!Array.isArray(selected)||new Set(selected).size!==selected.length||selected.some(p=>!fields.some(f=>f.id===p)))return fail('게임 판독 정책 속성을 확인하세요.');
   return [id,[...selected]];
  }));
- const propertyApplicability={frontOnlyPropertyIds:Object.fromEntries(components.map(id=>[id,d.components.find(c=>c.id===id)!.properties.filter(f=>f.faceOnly&&allowedPropertyIds[id].includes(f.id)).map(f=>f.id)])),...(policy?{policySHA:policy.policySHA}:{})};
+ const areaPropertyIds=scene&&policy?Object.fromEntries(areas.map(a=>[a.id,Object.fromEntries(a.componentIds.map(id=>[id,[...(policy.areas[a.id]?.[id]??[])]]))])):undefined;
+ const propertyApplicability={...(areaPropertyIds?{areaPropertyIds}:{}),frontOnlyPropertyIds:Object.fromEntries(components.map(id=>[id,d.components.find(c=>c.id===id)!.properties.filter(f=>f.faceOnly&&allowedPropertyIds[id].includes(f.id)).map(f=>f.id)])),...(policy?{policySHA:policy.policySHA}:{})};
  const componentLabels=Object.fromEntries((pack.runtime?.components??[]).filter(c=>components.includes(c.id)).map(c=>[c.id,{name:c.name,physicalType:c.kind}]));
- return {version:OBSERVATION_VERSION,taskId,gameId:d.gameId,packId:d.packId,editionId:d.editionId,sourceSHA:d.sourceSHA,definitionSHA:d.definitionSHA,areaId,scope:structuredClone(scope),images:structuredClone(images),allowedComponents:[...components],allowedPropertyIds,propertyApplicability,componentLabels,referenceSetId:null,geometryFrameId:input.geometryFrameId??null};
+ return {...(input.readMode?{readMode:input.readMode,readModePolicy:'visible-values-v1' as const}:{}),...(input.readingTarget?{readingTarget:structuredClone(input.readingTarget)}:{}),version:OBSERVATION_VERSION,taskId,gameId:d.gameId,packId:d.packId,editionId:d.editionId,sourceSHA:d.sourceSHA,definitionSHA:d.definitionSHA,areaId,scope:structuredClone(scope),images:structuredClone(images),allowedComponents:[...components],allowedPropertyIds,propertyApplicability,componentLabels,referenceSetId:null,geometryFrameId:input.geometryFrameId??null};
 }
 export function validateObservationResult(raw:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[]=[]):ObservationResult {
  const r=exact(raw,['version','observations','coverage','completion',...(isObject(raw)&&Object.hasOwn(raw,'spatial')?['spatial']:[])],'관측 응답');if(r.version!==OBSERVATION_VERSION||r.coverage!=='partial'||r.completion!=='complete')return fail('관측 응답이 완료되지 않았거나 잘렸습니다(truncated). 기존 기록은 보존됩니다.');
  if(request.definitionSHA!==definition.definitionSHA||!Array.isArray(r.observations)||r.observations.length>512)return fail('관측 정의와 결과를 확인하세요.');const seen=new Set<string>();
- for(const item of r.observations){const o=exact(item,['ref','imageIndex','panelRef','componentId','bbox','face','quantity','rotationDegrees','properties','referenceCandidates'],'실물 관측');
+ for(const item of r.observations){const o=exact(item,['ref','imageIndex','panelRef','componentId','bbox','face','quantity','rotationDegrees','properties','referenceCandidates',...(isObject(item)&&Object.hasOwn(item,'sourceAreaId')?['sourceAreaId']:[])],'실물 관측');
+  if(o.sourceAreaId!==undefined&&o.sourceAreaId!==null&&(!request.readingTarget||request.readingTarget.mode!=='public-scene'||!request.readingTarget.areaIds.includes(o.sourceAreaId as string)||!definition.areas.some(a=>a.id===o.sourceAreaId&&a.partition!=='owner_private'&&a.componentIds.includes(o.componentId as string))))return fail('관측 영역의 연결을 확인하세요.');
   if(!nonempty(o.ref)||seen.has(o.ref as string))return fail('실물 관측 ref가 중복됐습니다.');seen.add(o.ref as string);
   if(!Number.isInteger(o.imageIndex)||(o.imageIndex as number)<0||!request.images[o.imageIndex as number])return fail('보낸 원본/패널만 관측할 수 있습니다.');
   const image=request.images[o.imageIndex as number],transform=image.transformId?transforms.find(t=>t.transformId===image.transformId&&t.inputSHA===image.sha256):undefined;

@@ -39,7 +39,9 @@ test('accepted unassigned photo observations remain visible after a different em
   f.parent.render();const panel=find(f.parent.tree,n=>n.props?.['aria-label']==='미배정 사진 관측');
   assert(nodes(panel).some(n=>n.type==='h4'&&JSON.stringify(n.props.children).includes('1')));
   assert.equal(nodes(panel).filter(n=>n.type==='p').length,0,'unassigned tray stays concise without explanatory paragraphs');
-  assert(nodes(panel).some(n=>n.type==='details'),'individual objects remain accessible');
+  const entry=find(panel,n=>typeof n.type==='function'&&n.type.name==='GenericComponents');
+  assert.equal(entry.props.sourceAssertion.id,'new-unassigned');const child=mount(entry.type,entry.props);
+  try{const board=find(child.tree,n=>n.type===GameBoardRecord);assert.equal(board.props.record.pieces[0].id,'unassigned','original individual object remains in the existing editable board');assert.equal(typeof board.props.onSelect,'function');assert.equal(typeof board.props.onChange,'function');}finally{child.dispose();}
   const button=find(panel,n=>n.type==='button'&&n.props.children==='사람·영역에 연결');button.props.onClick();f.parent.render();
   const dialog=find(f.parent.tree,n=>typeof n.type==='function'&&n.type.name==='ComponentLinkDialog');assert.equal(dialog.props.source.id,'new-unassigned');assert.equal(f.writes.length,0,'viewing or opening a link never writes or assigns an owner');
  }finally{f.restore();}

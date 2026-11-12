@@ -82,6 +82,18 @@ test('hosted scan discovers first completed unit after one second and remains bo
  let reads=0;const f=fixture(async()=>{reads++;return {...job('fast','running'),reader:{kind:'gemini-game-observation-v1'},createdAt:new Date().toISOString()} as AnalysisJob;});f.poller.start();await f.flush();await f.advance(1000);assert.equal(reads,2);await f.advance(30000);assert(reads>10);f.hide(true);const n=reads;await f.advance(60000);assert.equal(reads,n);f.poller.stop();
 });
 
+test('quiet hosted work uses fewer reads, then returns to fast checks when progress changes',async()=>{
+ let reads=0,version='first',state:AnalysisJob['state']='running';
+ const current=()=>({...job('hosted',state),reader:{kind:'terra-high-game-observation-v1'},updatedAt:version,createdAt:new Date().toISOString()} as AnalysisJob);
+ const f=fixture(async()=>{reads++;return current();});
+ f.poller.start();await f.flush();await f.advance(60000);
+ assert(reads>=17&&reads<=22,`quiet hosted work made ${reads} reads in 60 seconds`);
+ const quietReads=reads;version='new-unit';await f.advance(5000);
+ assert.equal(reads,quietReads+1);await f.advance(2000);assert.equal(reads,quietReads+3,'new progress restores one-second checks');
+ state='completed';await f.advance(1000);assert.equal(f.completed,1);
+ const doneReads=reads;await f.advance(60000);assert.equal(reads,doneReads);f.poller.stop();
+});
+
 test('late progress discovery for job A is not accepted after job B was explicitly started in the same scope',async()=>{
  let resolve!:(value:AnalysisJob)=>void;let pendingProgress='';const displayed:string[]=[];
  const poller=createJobStatusPolling({read:async()=>{const job=await new Promise<AnalysisJob>(r=>{resolve=r;});pendingProgress=job.id;return job;},onJob:j=>{if(j?.id===pendingProgress)displayed.push(pendingProgress);},onCompleted:async()=>{},onError:()=>{},visible:()=>true,subscribeVisibility:()=>()=>{},schedule:(r,d)=>setTimeout(r,d),cancel:clearTimeout});

@@ -1,3 +1,4 @@
+import {requestAreas} from '../shared/restoration';
 import {remapSpatialRelations} from './spatialProjection';
 import {isHostedReader} from '../shared/lightweightRecognition';
 import {createHash,randomUUID} from 'node:crypto';
@@ -49,25 +50,25 @@ export async function prepareScanObservation(input:{session:Session;pack:GamePac
    const transform=cropPhotoTransform({transformId:id+'-crop',sourceSHA,inputSHA:sha(bytes.data),sourceDimensions:imageDimensions(original.data),inputDimensions:imageDimensions(bytes.data),region:e.sourceRegion});
    pinned.transforms=[transform];(pinned as PinnedHostedObservation).inputSHA=sha(bytes.data);pinned.sourceImageSHA=sourceSHA;pinned.request.images[0]={...pinned.request.images[0],evidenceId:source.id,transformId:transform.transformId};
   }
-  const area=pinned.definition.areas.find(a=>a.id===pinned.request.areaId)!;
+  const areas=requestAreas(pinned.request,pinned.definition);
   if(target){const a=input.session.assertions.find(a=>a.id===target.assertionId)!;const object=observationObjects(a.value).find(p=>p.id===target.pieceId),kind=object.kind??object.componentId;
-   if(!area.fields.includes(a.field)||!pinned.request.allowedComponents.includes(kind))throw new AnalysisJobError('보충할 실물과 촬영 영역이 다릅니다.');
+   if(!areas.some(area=>area.fields.includes(a.field))||!pinned.request.allowedComponents.includes(kind))throw new AnalysisJobError('보충할 실물과 촬영 영역이 다릅니다.');
    pinned.request.allowedComponents=[kind];pinned.request.allowedPropertyIds={[kind]:pinned.request.allowedPropertyIds[kind]};
   }
   const unit={id,evidenceId:e.id,...(isHostedReader(selection)?{hosted:pinned as PinnedHostedObservation}:{local:pinned as PinnedLocalObservation})};
-  const planUnit:ScanPlan['units'][number]={id,evidenceId:e.id,sourceEvidenceId:source.id,sourceSHA,inputSHA:sha(bytes.data),areaId:pinned.request.areaId,role:target?'detail':e.sourceRegion?'crop':index===0?'anchor':'detail',target:target??null};return {unit,planUnit};
+  const planUnit:ScanPlan['units'][number]={id,evidenceId:e.id,sourceEvidenceId:source.id,sourceSHA,inputSHA:sha(bytes.data),areaId:pinned.request.areaId,...(pinned.request.readingTarget?{readingTarget:pinned.request.readingTarget}:{}),role:target?'detail':e.sourceRegion?'crop':index===0?'anchor':'detail',target:target??null};return {unit,planUnit};
  }));
  for(const p of preparedUnits){units.push(p.unit);planUnits.push(p.planUnit);}
  const first=units[0].hosted??units[0].local!;
  return {plan:{version:'scan-observation-plan-v1',id:input.taskId,gameId:first.request.gameId,definitionSHA:first.request.definitionSHA,scope:first.request.scope,anchorEvidenceId:planUnits[0].sourceEvidenceId,units:planUnits},units};
 }
-export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedObservationReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;onRows?:(count:number)=>void}):Promise<AnalysisResult>{
+export async function analyzeScanUnit(input:{scan:PinnedScanObservation;index:number;pack:GamePack;session:Session;evidence:Evidence[];reader:HostedObservationReader;localReader?:LocalReader;timings?:Record<string,number>;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;onRows?:import('../shared/lightweightRecognition').ObservationProgressCallback}):Promise<AnalysisResult>{
  const u=input.scan.units[input.index],unit=input.scan.plan.units[input.index],start=performance.now();if(!u)throw Error('없는 읽기 단위입니다.');
  try{
   const evidence=input.evidence.filter(e=>e.id===u.evidenceId),plan=u.hosted??u.local!;
   const result=u.hosted?await analyzeHostedObservation({plan:u.hosted,pack:input.pack,session:input.session,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.reader,readImage:input.readImage,timings:input.timings,literal:unit.role!=='anchor',onRows:input.onRows}):await analyzeLocalObservation({plan:u.local!,pack:input.pack,turnInstanceId:input.session.turnInstanceId,evidence,reader:input.localReader!,readImage:input.readImage});
   const receipts=result.observationReceipts??[];for(const r of receipts)r.scanUnitId=u.id;
-  return {...result,scanBundle:{plan:input.scan.plan,units:[{unitId:u.id,state:'completed',observationCount:receipts.reduce((n,r)=>n+r.result.observations.length,0),elapsedMs:performance.now()-start}],links:[]}};
+  return {...result,scanBundle:{plan:input.scan.plan,units:[{unitId:u.id,state:receipts.some(r=>r.result.completion!=='complete')?'interrupted':'completed',observationCount:receipts.reduce((n,r)=>n+r.result.observations.length,0),elapsedMs:performance.now()-start}],links:[]}};
  }catch{return {assertions:[],summary:'일부 사진을 읽지 못했어요. 원본과 다른 사진의 결과는 남아 있어요.',mode:'live',warnings:['읽기 단위 실패 · 자동 재시도 없음'],scanBundle:{plan:input.scan.plan,units:[{unitId:u.id,state:'failed',error:'analysis-failed',observationCount:0,elapsedMs:performance.now()-start}],links:[]}};}
 }
 /** Hosted selected units fan out immediately; local model retains two units; indexed results retain the pinned photo order, regardless of completion order. */
@@ -80,9 +81,12 @@ export function projectScanResults(current:Session,pack:GamePack,scan:PinnedScan
  const deliveries=new Map<string,{signature:string;result:AnalysisResult}>();
  for(const result of results){const unitId=result.scanBundle?.units[0]?.unitId??result.observationReceipts?.[0]?.scanUnitId??'',signature=JSON.stringify(result);if(!order.has(unitId))throw Error('스캔 단위의 범위를 확인하세요.');const prior=deliveries.get(unitId);if(prior&&prior.signature!==signature)throw Error('같은 스캔 단위의 결과가 다릅니다.');if(!prior)deliveries.set(unitId,{signature,result});}
  results=[...deliveries.values()].map(x=>x.result);
- for(const r of results)for(const receipt of r.observationReceipts??[]){const u=scan.plan.units.find(u=>u.id===receipt.scanUnitId),scope=receipt.request.scope;if(!u||scope.partition!==scan.plan.scope.partition||scope.ownerId!==scan.plan.scope.ownerId||scope.captureEpoch!==scan.plan.scope.captureEpoch||receipt.request.definitionSHA!==scan.plan.definitionSHA||receipt.request.areaId!==u.areaId)throw Error('관측의 영역·소유자·촬영 범위가 다릅니다.');}
+ for(const r of results)for(const receipt of r.observationReceipts??[]){const u=scan.plan.units.find(u=>u.id===receipt.scanUnitId),scope=receipt.request.scope;if(!u||scope.partition!==scan.plan.scope.partition||scope.ownerId!==scan.plan.scope.ownerId||scope.captureEpoch!==scan.plan.scope.captureEpoch||receipt.request.definitionSHA!==scan.plan.definitionSHA||receipt.request.areaId!==u.areaId||JSON.stringify(receipt.request.readingTarget)!==JSON.stringify(u.readingTarget))throw Error('관측의 영역·소유자·촬영 범위가 다릅니다.');}
 
  results=structuredClone(results).sort((a,b)=>(order.get(a.scanBundle?.units[0]?.unitId??a.observationReceipts?.[0]?.scanUnitId??'')??999)-(order.get(b.scanBundle?.units[0]?.unitId??b.observationReceipts?.[0]?.scanUnitId??'')??999));
+ const allReceipts=results.flatMap(r=>r.observationReceipts??[]),allUnits=results.flatMap(r=>r.scanBundle?.units??[]);
+ results=results.filter(r=>r.scanBundle?.units.every(u=>u.state==='completed')!==false);
+ if(!results.length)return {assertions:[],summary:'완료된 판독 없음 · 원문 보관',warnings:[],mode:'live',observationReceipts:allReceipts,scanBundle:{plan:scan.plan,units:allUnits,links:[]}};
  for(const r of results){
   const unitId=r.scanBundle?.units[0]?.unitId??r.observationReceipts?.[0]?.scanUnitId??'',refs=r.observationReceipts?.[0]?.componentRefs??{},ids=new Map<string,string>();
   for(const a of r.assertions)for(const [i,o]of observationObjects(a.value).entries()){
@@ -92,14 +96,14 @@ export function projectScanResults(current:Session,pack:GamePack,scan:PinnedScan
   for(const a of r.assertions)for(const o of observationObjects(a.value)){o.id=ids.get(o.id)!;if(o.attachedToId&&ids.has(o.attachedToId))o.attachedToId=ids.get(o.attachedToId);}
   for(const receipt of r.observationReceipts??[])for(const ref of Object.keys(receipt.componentRefs))receipt.componentRefs[ref]=ids.get(receipt.componentRefs[ref])??receipt.componentRefs[ref];
  }
- const receipts=results.flatMap(r=>r.observationReceipts??[]),entries=receipts.flatMap(r=>r.result.observations.map(o=>{const unit=scan.plan.units.find(u=>u.id===r.scanUnitId)!;return {unitId:unit.id,observationRef:o.ref,sourceSHA:unit.sourceEvidenceId+':'+unit.sourceSHA+':'+unit.areaId,componentId:o.componentId,bbox:mapObservationRegion(o,r.request,r.transforms),properties:o.properties,quantity:o.quantity,face:o.face,role:unit.role};})),links=linkScanObservations(entries),units=results.flatMap(r=>r.scanBundle?.units??[]);
+ const receipts=results.flatMap(r=>r.observationReceipts??[]),entries=receipts.flatMap(r=>r.result.observations.map(o=>{const unit=scan.plan.units.find(u=>u.id===r.scanUnitId)!;return {unitId:unit.id,observationRef:o.ref,sourceSHA:unit.sourceEvidenceId+':'+unit.sourceSHA+':'+unit.areaId,componentId:o.componentId,bbox:mapObservationRegion(o,r.request,r.transforms),properties:o.properties,quantity:o.quantity,face:o.face,role:unit.role};})),links=linkScanObservations(entries),units=allUnits;
  const bundle:ScanBundleReceipt={plan:scan.plan,units,links};
- if(supportsGenericFusion(scan,results))return remapSpatialRelations(projectGenericFusion(current,pack,scan,results,bundle));
+ if(supportsGenericFusion(scan,results)){const projected=remapSpatialRelations(projectGenericFusion(current,pack,scan,results,bundle));projected.observationReceipts=allReceipts;return projected;}
  const incoming=results.flatMap(r=>r.assertions),objects=new Map<string,any>();for(const a of incoming)for(const o of observationObjects(a.value))objects.set(o.id,o);
  const refId=(unitId:string,ref:string)=>receipts.find(r=>r.scanUnitId===unitId)?.componentRefs[ref];
  const confirmed=new Set<string>();for(const r of receipts)for(const g of r.geometryCandidates){const id=r.componentRefs[g.observationRef],o=objects.get(id);if(o&&o.quantity===1&&o.location?.type==='unplaced'){o.location=structuredClone(g.locationCandidate);confirmed.add(id);}}
  const handled=new Set<string>(),assertions:Assertion[]=[];
- const fields=new Set([...incoming.map(a=>a.field),...receipts.flatMap(r=>{const d=(scan.units.find(u=>u.id===r.scanUnitId)?.hosted??scan.units.find(u=>u.id===r.scanUnitId)?.local)?.definition;return d?.areas.find(a=>a.id===r.request.areaId)?.fields.filter(f=>pack.fields.some(x=>x.key===f&&(x.presentation==='scene'||x.type==='json'))).slice(0,1)??[];})]);
+ const fields=new Set([...incoming.map(a=>a.field),...receipts.flatMap(r=>{const d=(scan.units.find(u=>u.id===r.scanUnitId)?.hosted??scan.units.find(u=>u.id===r.scanUnitId)?.local)?.definition;return (d?requestAreas(r.request,d).flatMap(a=>a.fields):[]).filter(f=>pack.fields.some(x=>x.key===f&&(x.presentation==='scene'||x.type==='json'))).slice(0,1)??[];})]);
  for(let field of fields){if(pack.id==='catan-base'&&field==='components.observed')field='board.layout';if(assertions.some(a=>a.field===field))continue;
   const owner=scan.plan.scope.ownerId??undefined,baseline=current.assertions.filter(a=>a.field===field&&a.ownerId===owner&&a.status==='accepted').at(-1);
   const candidates=incoming.filter(a=>a.field===field||field==='board.layout'&&a.field==='components.observed');
@@ -154,7 +158,7 @@ export function projectScanResults(current:Session,pack:GamePack,scan:PinnedScan
   return [{id,reason,members,relatedPieceIds}];
  });
  for(const r of receipts){r.scanBundle=bundle;for(const ref of Object.keys(r.componentRefs)){const link=links.find(l=>l.members.some(m=>m.unitId===r.scanUnitId&&m.observationRef===ref));if(link?.targetPieceId)r.componentRefs[ref]=link.targetPieceId;else delete r.componentRefs[ref];}}
- return {assertions,summary:`사진 ${units.filter(u=>u.state==='completed').length}/${units.length}장 읽음 · 미연결·충돌은 원사진과 함께 보관합니다.`,mode:'live',warnings:results.flatMap(r=>r.warnings),observationReceipts:receipts,scanBundle:bundle};
+ return {assertions,summary:`사진 ${units.filter(u=>u.state==='completed').length}/${units.length}장 읽음 · 미연결·충돌은 원사진과 함께 보관합니다.`,mode:'live',warnings:results.flatMap(r=>r.warnings),observationReceipts:allReceipts,scanBundle:bundle};
 }
 
 function mergeScanFacts(base:any,members:any[]){

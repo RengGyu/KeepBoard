@@ -27,7 +27,8 @@ test('exact sweep retries send six originals once per request, retain accepted s
   });
   await new Promise<void>(resolve => model.listen(0, '127.0.0.1', resolve));
   const modelAddress = model.address(); assert(modelAddress && typeof modelAddress !== 'string');
-  const app = await createApp({ store: new Store(directory) });
+  // Admit the pinned native fixture so this test reaches same-state/epoch guards and the loopback model.
+  const app = await createApp({ store: new Store(directory), runtimePacks: [catanPack] });
   const server = app.listen(0, '127.0.0.1');
   await new Promise<void>(resolve => server.once('listening', resolve));
   const address = server.address(); assert(address && typeof address !== 'string');
@@ -48,6 +49,8 @@ test('exact sweep retries send six originals once per request, retain accepted s
   try {
     await saveAISettings({ provider: 'gemini', model: 'local-only', apiKey: 'test-only', baseUrl: `http://127.0.0.1:${modelAddress.port}` });
     let view: SessionView = await call('/api/sessions', { name: '실사진 묶음', gamePackVersion: catanPack.version, example: true });
+    assert.equal(view.pack.version, catanPack.version);
+    assert.equal(view.pack.releaseTier, 'drawing');
     const route = `/api/sessions/${view.session.id}`;
     const epoch = view.session.captureEpoch;
     view = await call(route, { answers: [{ field: 'robber.hexAnchor', value: 'r3c3' }] }, 'PATCH');

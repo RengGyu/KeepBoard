@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {mkdtemp,rm} from 'node:fs/promises';import {AnalysisJobs} from '../server/analysisJobs';import {catalogPacks} from '../gamepacks/catalog';import {photoDefinition} from '../server/photoDefinitions';import {GeminiGameReader} from '../server/ai/geminiGameReader';
 test('hosted jobs do not wait behind two legacy jobs; unit claims/results and task survive reload',async()=>{
  const root=await mkdtemp('/private/tmp/kb-fastest-jobs-');try{const jobs=new AnalysisJobs(root);let release!:()=>void;const wait=new Promise<void>(r=>{release=r;});let started=0;
- const task={prepared:{scanIntent:{selection:{kind:'gemini-game-observation-v1'},evidenceIds:['e']}}} as any;
+ const task={prepared:{evidence:[{id:'e'}],scanIntent:{selection:{kind:'gemini-game-observation-v1'},evidenceIds:['e']}}} as any;
  const base={evidenceIds:['e'],captureEpoch:'epoch'};
  const first=await jobs.start({...base,sessionId:'1',requestId:'1',signature:'1'},async()=>{started++;await wait;return {state:'completed'};},task);
  await jobs.start({...base,sessionId:'2',requestId:'2',signature:'2'},async()=>{started++;await wait;return {state:'completed'};},task);

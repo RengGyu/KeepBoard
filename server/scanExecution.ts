@@ -1,6 +1,6 @@
 import {isHostedReader} from '../shared/lightweightRecognition';
 import type {Evidence,AnalysisResult} from '../shared/types';
-import type {HostedReaderSelection,HostedReaderIdentity} from '../shared/lightweightRecognition';
+import type {HostedReaderSelection,HostedReaderIdentity,ObservationProgressUpdate} from '../shared/lightweightRecognition';
 import type {ScanTarget} from '../shared/scanObservation';
 import {prepareScanObservation,analyzeScanUnit} from './scanObservation';
 import {photoDefinition} from './photoDefinitions';
@@ -9,6 +9,8 @@ import type {HostedObservationReader} from './ai/hostedReader';
 import type {Store} from './store';import type {PrivatePins} from './privatePin';
 export interface ScanIntent {version:'scan-intent-v1';taskId:string;selection:HostedReaderSelection&{target?:ScanTarget};evidenceIds:string[];reader:HostedReaderIdentity}
 export interface ScanExecutionJobs {
+ updateUnitProgress?(id:string,index:number,update:import('../shared/analysisJobs').ScanUnitProgressUpdate):Promise<void>;
+ progress?(id:string):Promise<{job:import('../shared/analysisJobs').AnalysisJob}|undefined>;
  savePrepared(id:string,task:AnalysisTask):Promise<AnalysisTask>;
  batchResult(id:string,index:number):Promise<{state:string;startedAt?:string;result?:AnalysisResult}|undefined>;
  claimBatch(id:string,index:number):Promise<string|null>;
@@ -37,18 +39,26 @@ export async function runHostedScan(input:{id:string;task:AnalysisTask;jobs:Scan
   const scan=task.prepared.scanObservation!;
   photoDefinition(task.prepared.pack,scan.plan.definitionSHA);
   await taskTarget(input.store,input.pins,task);
-  await input.jobs.update(input.id,{state:'running',timings:{prepareMs:performance.now()-start,...images.metrics()}});
-  const owned=new Set<number>(),live=new Map<number,AnalysisResult>(),rowCounts=new Map<number,number>();let saving=false;
-  // Progress is best effort: at most one write in flight, and a failed write never affects the reading.
-  const reportRows=(index:number,count:number)=>{rowCounts.set(index,count);if(saving)return;saving=true;void Promise.resolve().then(()=>input.jobs.update(input.id,{liveRows:[...rowCounts.values()].reduce((a,b)=>a+b,0)})).catch(()=>undefined).finally(()=>{saving=false;});};
+  const previousProgress=await input.jobs.progress?.(input.id),now=Date.now();
+  await input.jobs.update(input.id,{state:'running',timings:{...previousProgress?.job.timings,prepareMs:performance.now()-start,...images.metrics(),scanStartedAt:now,jobStartedAt:previousProgress?.job.timings?.jobStartedAt??now,...(previousProgress?{queueMs:previousProgress.job.timings?.queueMs??now-Date.parse(previousProgress.job.createdAt)}:{})}});
+  const owned=new Set<number>(),live=new Map<number,AnalysisResult>(),rowCounts=new Map<number,number>();let progressWrites=Promise.resolve(),writing=false;const pendingProgress=new Map<number,import('../shared/analysisJobs').ScanUnitProgressUpdate>();
+  // Serialize sidecar writes and drain before finalization: an early row cannot arrive after completion.
+  const reportRows=(index:number,count:number,update?:ObservationProgressUpdate)=>{
+   rowCounts.set(index,Math.max(rowCounts.get(index)??0,count));
+   const pinned=scan.units[index].hosted,unit=scan.plan.units[index];
+   const change:import('../shared/analysisJobs').ScanUnitProgressUpdate={liveRows:rowCounts.get(index),...(update?.timings?{timings:update.timings}:{}),...(update?.preview&&pinned?{preview:{version:'literal-preview-v1',provisional:true,taskId:pinned.request.taskId,definitionSHA:pinned.request.definitionSHA,sourceSHA:unit.sourceSHA,inputSHA:unit.inputSHA,evidenceId:unit.evidenceId,captureEpoch:pinned.request.scope.captureEpoch,ownerId:pinned.request.scope.ownerId,readMode:pinned.request.readMode,observations:update.preview}}:{})};
+   const pending=pendingProgress.get(index);pendingProgress.set(index,{...pending,...change,timings:{...pending?.timings,...change.timings}});
+   if(writing)return;writing=true;
+   progressWrites=(async()=>{while(pendingProgress.size){const batch=[...pendingProgress];pendingProgress.clear();for(const [i,u]of batch)try{await input.jobs.updateUnitProgress?.(input.id,i,u);}catch{/* Progress availability never corrupts final results. */}}})().finally(()=>{writing=false;});
+  };
   await Promise.allSettled(scan.units.map(async(_unit,index)=>{
    const previous=await input.jobs.batchResult(input.id,index);if(previous)return;
    const claim=await input.jobs.claimBatch(input.id,index);if(!claim)return;owned.add(index);
    // A scope failure before dispatch is terminal and must not manufacture a provider request.
    let result:AnalysisResult;const timings:Record<string,number>={};
-   try{await taskTarget(input.store,input.pins,task);result=await analyzeScanUnit({scan,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:input.reader,readImage:images.read,timings,onRows:n=>reportRows(index,n)});}
+   try{reportRows(index,0,{timings:{unitStartedAt:Date.now()}});await taskTarget(input.store,input.pins,task);result=await analyzeScanUnit({scan,index,pack:task.prepared.pack,session:task.prepared.session,evidence:task.prepared.evidence,reader:input.reader,readImage:images.read,timings,onRows:(n,update)=>reportRows(index,n,update)});}
    catch{result={assertions:[],warnings:['범위가 바뀌어 이 단위의 읽기를 중단했습니다.'],summary:'원본 보관',mode:'live',scanBundle:{plan:scan.plan,units:[{unitId:scan.units[index].id,state:'interrupted',error:'stale',observationCount:0}],links:[]}};}
-   live.set(index,result);await input.jobs.finishBatch(input.id,index,claim,result,timings);
+   await progressWrites;live.set(index,result);await input.jobs.finishBatch(input.id,index,claim,result,timings);
   }));
   const stored=await Promise.all(scan.units.map((_,i)=>input.jobs.batchResult(input.id,i)));
   // A competing delivery may still own started units. It must not finalize partial in-flight work.

@@ -1,6 +1,5 @@
 import type {GamePack} from '../types.ts';
-import {GAME_READOUTS} from './catalog.ts';
-import retired from './retired.json';
+import {readoutDefinitionFor} from './dataSource.ts';
 import type {ComponentSpec,DetailValue,GameReadout,GameReadoutDefinition,PropertySpec,ReadoutContext} from './types.ts';
 export type {GameReadout,GameReadoutDefinition,PropertySpec,DetailValue,ReadoutContext} from './types.ts';
 const fail=(message:string):never=>{throw new Error(message);};
@@ -9,13 +8,7 @@ const exact=(v:unknown,keys:readonly string[],name:string):Record<string,unknown
  if(!isObject(v)||Object.keys(v).length!==keys.length||keys.some(k=>!Object.hasOwn(v,k)))return fail(name+'의 필드를 확인하세요.');return v;
 };
 const nonempty=(v:unknown,max=160)=>typeof v==='string'&&v.trim().length>0&&v.length<=max;
-export function readoutDefinition(pack:GamePack):GameReadoutDefinition|undefined {
- const s=pack.runtime?.source;
- if(!s)return undefined;
- const matches=(d:GameReadoutDefinition|undefined)=>d&&s.editionId===d.editionId&&s.sha256===d.sourceSHA&&pack.id===d.runtimePackId&&pack.version===d.packVersion;
- const current=GAME_READOUTS[s.gameId],old=(retired as Record<string,GameReadoutDefinition>)[s.gameId];
- return matches(current)?current:matches(old)?old:undefined;
-}
+export function readoutDefinition(pack:GamePack):GameReadoutDefinition|undefined{return readoutDefinitionFor(pack);}
 export function componentDefinition(pack:GamePack,componentId:string|null):ComponentSpec|undefined{return readoutDefinition(pack)?.components.find(c=>c.id===componentId);}
 export function emptyGameReadout(pack:GamePack,kind:string|null):GameReadout {
  const d=readoutDefinition(pack);if(!d)return fail('판본·원명세에 맞는 상세 양식이 없습니다. 기존 기록은 보존됩니다.');

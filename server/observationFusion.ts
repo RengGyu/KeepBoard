@@ -29,7 +29,7 @@ const valuePaths=(p:any)=>Object.fromEntries([...Object.entries(p).filter(([k])=
 export function supportsGenericFusion(scan:PinnedScanObservation,results:AnalysisResult[]){return scan.units.every(u=>(u.hosted??u.local)?.definition.nativeBridge===null)&&results.every(r=>r.assertions.every(a=>(a.value as any)?.version==='game-component-record-v1'&&(a.value as any).pieces.every((p:any)=>p.readout?.values)));}
 export function projectGenericFusion(current:Session,pack:GamePack,scan:PinnedScanObservation,results:AnalysisResult[],bundle:ScanBundleReceipt):AnalysisResult{
  const owner=scan.plan.scope.ownerId??undefined,receipts=results.flatMap(r=>r.observationReceipts??[]),incoming=results.flatMap(r=>r.assertions),entries:Entry[]=[],members=new Map<string,Entry>();
- const sourceKey=(u:any)=>canonical([u.sourceEvidenceId,u.sourceSHA,u.areaId,scan.plan.scope,scan.plan.definitionSHA]);
+ const sourceKey=(u:any)=>canonical([u.sourceEvidenceId,u.sourceSHA,u.readingTarget??u.areaId,scan.plan.scope,scan.plan.definitionSHA]);
  function entry(receipt:ObservationReceipt,o:ObservationReceipt['result']['observations'][number],u:any,index:number,field:string,piece:any,definition?:PhotoDefinition):Entry{
   const image=receipt.request.images[o.imageIndex],tr=receipt.transforms.find(t=>t.transformId===image?.transformId);
   if(receipt.sourceImageSHA&&receipt.sourceImageSHA!==u.sourceSHA)throw Error('관측 원본 SHA가 다릅니다.');
@@ -51,7 +51,7 @@ export function projectGenericFusion(current:Session,pack:GamePack,scan:PinnedSc
  const output:Assertion[]=[];
  for(const field of resultFields){
   const baseline=current.assertions.filter(a=>a.field===field&&a.ownerId===owner&&a.status==='accepted').at(-1),base:any[]=structuredClone((baseline?.value as any)?.pieces??[]),baseById=new Map(base.map(p=>[p.id,p])),oldReceipts=baseline?.observationReceipts??[];
-  const matchingBundle=(r:ObservationReceipt)=>r.scanBundle?.plan.definitionSHA===scan.plan.definitionSHA&&canonical(r.request.scope)===canonical(scan.plan.scope)&&scan.plan.units.some(u=>u.areaId===r.request.areaId);
+  const matchingBundle=(r:ObservationReceipt)=>r.scanBundle?.plan.definitionSHA===scan.plan.definitionSHA&&canonical(r.request.scope)===canonical(scan.plan.scope)&&scan.plan.units.some(u=>u.areaId===r.request.areaId&&canonical(u.readingTarget)===canonical(r.request.readingTarget));
   const priorFusion=oldReceipts.filter(matchingBundle).map(r=>r.scanBundle?.fusion).filter((f):f is ScanFusion=>!!f).at(-1),previousDigests=new Map((priorFusion?.projectionDigests??[]).map(d=>[d.pieceId+'|'+d.fieldPath,d.digest]));
   const history=oldReceipts.filter(matchingBundle),retirements=[...new Map(history.flatMap(r=>r.scanBundle?.fusion?.refinements??[]).map(r=>[key(r.aggregateMember),r])).values()],retiredParents:Entry[]=[];
   for(const retirement of retirements){

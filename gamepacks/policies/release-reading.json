@@ -189,12 +189,75 @@
           ]
         }
       }
+    },
+    {
+      "gameId": "azul",
+      "packId": "azul",
+      "packVersion": "1.0.0-essentials-2.e1ca1494e4dc",
+      "sourceSHA": "e1ca1494e4dc2b968e419b0b0c226a0b9a5823af7dc2a009e54d625f47957b38",
+      "definitionSHA": "9f59b84d2f7691bc80689ebd157cf2d4755805bc35a75fa5c6645d4d223f55e1",
+      "areas": {
+        "offer": {
+          "tiles": [
+            "face",
+            "tileColor"
+          ],
+          "boards": [
+            "factoryLabel"
+          ],
+          "first": [
+            "observedColor",
+            "tokenLabel"
+          ]
+        },
+        "pattern": {
+          "tiles": [
+            "face",
+            "tileColor"
+          ],
+          "boards": [
+            "printedName",
+            "sideLabel",
+            "boardSide",
+            "scoreTrack"
+          ]
+        },
+        "wall": {
+          "tiles": [
+            "face",
+            "tileColor"
+          ],
+          "boards": [
+            "printedName",
+            "sideLabel",
+            "boardSide",
+            "scoreTrack"
+          ]
+        },
+        "floor": {
+          "tiles": [
+            "face",
+            "tileColor"
+          ],
+          "first": [
+            "observedColor",
+            "tokenLabel"
+          ]
+        },
+        "box-lid": {
+          "tiles": [
+            "face",
+            "tileColor"
+          ]
+        }
+      }
     }
   ],
   "rationale": {
     "catan": "Preserve all existing board/hand fields and placement-independent observations; no source or native scene contract change.",
     "rummikub": "Preserve visible tile number/color/face in table and private rack; rack itself has no invented tile properties.",
     "sagrada": "In each dice area request canonical dieColor and dieValue; observedColor is a duplicate free color note. All window/tool/private fields remain requested.",
-    "hanabi": "In fireworks and discard, request visible face/suit/number. Do not ask for an additional card printedName to reproduce those same identity facts. Tokens retain their own distinct fields."
+    "hanabi": "In fireworks and discard, request visible face/suit/number. Do not ask for an additional card printedName to reproduce those same identity facts. Tokens retain their own distinct fields.",
+    "azul": "Current pinned original-base colour tiles are identified by face and tileColor, not an individual printedName (tiles sourceText: colour and current factory/centre/pattern/wall/floor). offer boards are factories (factoryLabel); pattern/wall boards are personal boards (printedName, sideLabel, boardSide, scoreTrack). Quantity, first marker, board side, score, geometry and physical bag preservation remain unchanged. No occluded-pile identity rule is inferred."
   }
 }

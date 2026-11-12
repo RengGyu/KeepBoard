@@ -8,11 +8,12 @@ import { Busy, Empty, formatDate } from './ui';
 import {sessionSummary,type SessionSummary} from '../shared/sessionSummary';
 import {GameCover} from './GameCover';
 import {BoardEvent} from './BoardFeedback';
+import {prepareWorkspace} from './workspacePreparation';
 
 import {withTransition} from './viewTransition';
 import {attachPullToRefresh, attachSwipeToDelete} from './gestures';
 import {rememberRoom,selectRoomScope} from './roomAccess';
-const SessionWorkspace=lazy(()=>import('./SessionWorkspace'));
+const SessionWorkspace=lazy(()=>import('./WorkspaceEntry'));
 const RoomEntry=lazy(()=>import('./RoomCreateDialog').then(m=>({default:m.RoomEntry})));
 const LibraryDialog=lazy(()=>import('./Dialogs').then(m=>({default:m.LibraryDialog})));
 const LibraryPanel=lazy(()=>import('./Dialogs').then(m=>({default:m.LibraryPanel})));
@@ -57,6 +58,7 @@ export default function App() {
   const leaveWorkspace = useRef<(() => Promise<void>) | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pending = useRef(0);
+  const workspaceRequest=useRef(0);
   const liveView = useRef(view); liveView.current = view;
   const showToast = useCallback((message: string) => { setToast(message); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToast(''), 4200); }, []);
   const refreshPacks = async () => setPacks(await api.catalog());
@@ -76,7 +78,7 @@ export default function App() {
     const sessionId=view.session.id;
     const locking=api.lockPrivate(sessionId);
     setBusy(true);
-    try{const {redactView}=await import('../shared/privacy');receive(redactView(view,new Set(view.privacy?.protectedOwnerIds??[]),new Set()));setOwnerIdState(id);updateUrl(sessionId,id);await locking;const next=await api.session(sessionId);selectRoomScope(next,id);setConflict(false);receive(next);}finally{setBusy(false);}
+    try{const {redactView}=await import('../shared/privacy');receive(redactView(view,new Set(view.privacy?.protectedOwnerIds??[]),new Set()));setOwnerIdState(id);updateUrl(sessionId,id);await locking;const next=await prepareWorkspace(await api.session(sessionId));selectRoomScope(next,id);setConflict(false);receive(next);}finally{setBusy(false);}
   };
   const receive = (next: SessionView) => {
     rememberRoom(next);
@@ -86,18 +88,20 @@ export default function App() {
     setSessions(current => [{ ...listSession, deletedAt: current.find(item => item.id === next.session.id)?.deletedAt }, ...current.filter(item => item.id !== next.session.id)]);
   };
   const open = async (id: string) => {
+    const request=++workspaceRequest.current;
     setBusy(true); setError('');
-    try { await api.lockPrivate(view?.session.id);const next = await api.session(id);const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;withTransition('forward', () => { setOwnerIdState(selected);selectRoomScope(next,selected);setConflict(false);receive(next); if (next.session.snapshots.length) setReopenFeedback(current => current + 1); updateUrl(id, selected); window.scrollTo({ top: 0 }); }, { from: () => document.querySelector(`[data-session="${id}"] h3`), to: () => document.querySelector('.cw-title h1') }); }
-    catch (reason) { setError(reason instanceof Error ? reason.message : '기록을 열지 못했습니다.'); } finally { setBusy(false); }
+    try { await api.lockPrivate(view?.session.id);const next = await prepareWorkspace(await api.session(id));if(request!==workspaceRequest.current)return;const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;withTransition('forward', () => { setOwnerIdState(selected);selectRoomScope(next,selected);setConflict(false);receive(next); if (next.session.snapshots.length) setReopenFeedback(current => current + 1); updateUrl(id, selected); window.scrollTo({ top: 0 }); }, { from: () => document.querySelector(`[data-session="${id}"] h3`), to: () => document.querySelector('.cw-title h1') }); }
+    catch (reason) { if(request===workspaceRequest.current)setError(reason instanceof Error ? reason.message : '기록을 열지 못했습니다.'); } finally { if(request===workspaceRequest.current)setBusy(false); }
   };
-  const created = async (next: SessionView) => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;selectRoomScope(next,selected);receive(next);setConflict(false);setInitialInvite('');setDialog(null);setOwnerIdState(selected);updateUrl(next.session.id,selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); };
+  const created = async (next: SessionView) => { const request=++workspaceRequest.current;await leaveWorkspace.current?.();await prepareWorkspace(next);if(request!==workspaceRequest.current)return;await api.lockPrivate(view?.session.id); const selected=next.roomAccess?.role==='member'?next.roomAccess.playerId:undefined;selectRoomScope(next,selected);receive(next);setConflict(false);setInitialInvite('');setDialog(null);setOwnerIdState(selected);updateUrl(next.session.id,selected); requestAnimationFrame(() => window.scrollTo({ top: 0 })); };
   const mutate: Mutate = async (task, message, options) => {
+    const scope=liveView.current?.session.id;
     pending.current += 1; setBusy(true); setError('');
-    try { receive(await task()); if (message) showToast(message); }
+    try { const next=await prepareWorkspace(await task());if(scope&&liveView.current?.session.id!==scope)return;receive(next); if (message) showToast(message); }
     catch (reason) { if(!options?.localError)setError(reason instanceof Error ? reason.message : '변경 내용을 저장하지 못했습니다.'); throw reason; }
     finally { pending.current -= 1; setBusy(pending.current > 0); }
   };
-  const back = () => fire((async () => { await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const leaving = liveView.current?.session.id; withTransition('back', () => { setView(null); setOwnerIdState(undefined); updateUrl(); }, { from: () => document.querySelector('.cw-title h1'), to: () => leaving ? document.querySelector(`[data-session="${leaving}"] h3`) : null }); setSessions(await api.sessions(true)); })());
+  const back = () => fire((async () => { ++workspaceRequest.current;await leaveWorkspace.current?.();await api.lockPrivate(view?.session.id); const leaving = liveView.current?.session.id; withTransition('back', () => { setView(null); setOwnerIdState(undefined); updateUrl(); }, { from: () => document.querySelector('.cw-title h1'), to: () => leaving ? document.querySelector(`[data-session="${leaving}"] h3`) : null }); setSessions(await api.sessions(true)); })());
   const setFilter = (next: Filter) => { liveFilter.current = next; setFilterState(next); if (!view) updateUrl(); };
   const goTab = (next: Tab, nextFilter?: Filter) => {
     const change = () => { if (nextFilter) { liveFilter.current = nextFilter; setFilterState(nextFilter); } liveTab.current = next; setTabState(next); };
@@ -129,7 +133,7 @@ export default function App() {
         if (cancelled) return;
         setSessions(results[0]); setPacks(results[1]); setStatus(results[2]);
         const id = new URLSearchParams(location.search).get('session');
-        if (id) { const next = await api.session(id); if (!cancelled) { const requested=new URLSearchParams(location.search).get('player')||undefined;const selected=next.roomAccess&&requested&&requested!==next.roomAccess.playerId?next.roomAccess.playerId:requested;setOwnerIdState(selected);selectRoomScope(next,selected);receive(next);if (next.session.snapshots.length) setReopenFeedback(current => current + 1); } }
+        if (id) { const next = await prepareWorkspace(await api.session(id)); if (!cancelled) { const requested=new URLSearchParams(location.search).get('player')||undefined;const selected=next.roomAccess&&requested&&requested!==next.roomAccess.playerId?next.roomAccess.playerId:requested;setOwnerIdState(selected);selectRoomScope(next,selected);receive(next);if (next.session.snapshots.length) setReopenFeedback(current => current + 1); } }
       } catch (reason) { if (!cancelled) setError(reason instanceof Error ? reason.message : '서버에 연결하지 못했습니다.'); }
       finally { if (!cancelled) setLoading(false); }
     };
@@ -168,7 +172,7 @@ export default function App() {
       <button type="button" className="button primary small-button app-new" aria-label="새 보드" disabled={busy || !packs.length} onClick={() => setDialog('create')}><Plus size={18}/><span>새 보드</span></button>
     </header>
     <main id="main" ref={mainArea} tabIndex={-1} className={`main-content ${view ? 'in-session' : ''}`}>
-      {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await api.session(view.session.id);selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
+      {conflict&&view&&<div className="room-conflict" role="status"><p>다른 창에서 바뀌었어요. 편집 중인 초안은 유지했어요.</p><button className="button secondary small-button" onClick={()=>fire((async()=>{const next=await prepareWorkspace(await api.session(view.session.id));selectRoomScope(next,ownerId);setConflict(false);receive(next);setRoomReload(n=>n+1);setReopenFeedback(n=>n+1);})())}>초안 버리고 최신 기록 보기</button></div>}
       {loading ? <div className="skeleton" role="status" aria-label="보드를 불러오고 있어요"><span className="sk sk-title"/><div className="sk-row"><span className="sk sk-button"/><span className="sk sk-button"/></div><span className="sk sk-heading"/>{[0, 1, 2].map(index => <div className="sk-card" key={index}><span className="sk sk-thumb"/><div><span className="sk sk-line"/><span className="sk sk-line short"/></div></div>)}</div> : view ? <Suspense fallback={<Busy/>}><SessionWorkspace key={`${view.session.id}:${roomReload}:${ownerId||'public'}:${view.privacy?.unlockedOwnerIds.join(',')||'locked'}`} view={view} busy={busy} status={status} mutate={mutate} onBack={back} onNewBoard={() => setDialog('create')} ownerId={ownerId} setOwnerId={setOwnerId} onToast={showToast} onReadyToLeave={save => { leaveWorkspace.current = save; }}/></Suspense> : tab === 'home' ? <div className="home home-tab">
         <h1 className="page-title">보드게임 기록</h1>
         <div className="home-actions">

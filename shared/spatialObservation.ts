@@ -5,7 +5,7 @@ export interface SpatialPlacement {observationRef:string;boardInstanceRef:string
 export interface SpatialRelation {fromRef:string;toRef:string;kind:'on'|'above'|'covers'|'attached-to'|'before'|'next-in-cycle'|'adjacent-to'|'same-visible-stack';basis:'observed-visible-relation';partial:boolean}
 export interface SpatialCellState {boardInstanceRef:string;areaId:string;address:string;state:'empty'|'occupied'|'unknown';observedObjectRefs:string[];fullyVisible:boolean;reason:string|null}
 export interface SpatialResult {version:'spatial-observation-v1';boardInstances:SpatialBoardInstance[];placements:SpatialPlacement[];relations:SpatialRelation[];cellStates:SpatialCellState[];deferred:{section:string;index:number;reason:string}[]}
-export interface StoredSpatialPiece {version:'spatial-piece-v1';source:{taskId:string;evidenceId:string;imageSHA:string;captureEpoch:string;photoDefinitionSHA:string;spatialDefinitionSHA:string;runtimeDefinitionSHA:string;schemaSHA256:string;responseSchemaSHA:string;sourceSHA:string;partition:ObservationPartition;captureAreaId:string;ownerId:string|null};observationRef:string;board:SpatialBoardInstance|null;placement:SpatialPlacement|null;resolved:{frameId:string;frameSHA:string;placementFrame:string;templateAreaId:string;sourceAreaId:string;fieldKey:string;viewBox:[number,number,number,number];anchor:SpatialAddress|null;covered:SpatialAddress[]|null;requiresOwner:boolean}|null;relations:(SpatialRelation&{fromId:string;toId:string})[];boundOwnerId:string|null;manualAnchor?:SpatialAddress|null;manualCovered?:SpatialAddress[]|null;manualCoverageComplete?:boolean|null;manualOverride?:boolean;manualRotationDegrees?:number|null;manualReflected?:boolean|null}
+export interface StoredSpatialPiece {version:'spatial-piece-v1';source:{readingTarget?:import('./restoration').ReadingTarget;taskId:string;evidenceId:string;imageSHA:string;captureEpoch:string;photoDefinitionSHA:string;spatialDefinitionSHA:string;runtimeDefinitionSHA:string;schemaSHA256:string;responseSchemaSHA:string;sourceSHA:string;partition:ObservationPartition;captureAreaId:string;ownerId:string|null};observationRef:string;board:SpatialBoardInstance|null;placement:SpatialPlacement|null;resolved:{frameId:string;frameSHA:string;placementFrame:string;templateAreaId:string;sourceAreaId:string;fieldKey:string;viewBox:[number,number,number,number];anchor:SpatialAddress|null;covered:SpatialAddress[]|null;requiresOwner:boolean}|null;relations:(SpatialRelation&{fromId:string;toId:string})[];boundOwnerId:string|null;manualAnchor?:SpatialAddress|null;manualCovered?:SpatialAddress[]|null;manualCoverageComplete?:boolean|null;manualOverride?:boolean;manualRotationDegrees?:number|null;manualReflected?:boolean|null}
 const obj=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const exact=(v:unknown,keys:string[])=>obj(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));
 const str=(v:unknown):v is string=>typeof v==='string'&&v.length>0&&v.length<=300;
@@ -17,10 +17,18 @@ const boardKeys=['ref','imageIndex','panelRef','sourceRegion','templateFrameId',
 const placementKeys=['observationRef','boardInstanceRef','areaId','namespace','anchorAddress','coveredAddresses','coverageComplete','boardRotationDegrees','reflected','unknowns'];
 const relationKeys=['fromRef','toRef','kind','basis','partial'];
 const cellKeys=['boardInstanceRef','areaId','address','state','observedObjectRefs','fullyVisible','reason'];
+/** Canonical tokens keep their meaning. Only one exact declared cell identity in this area
+ * may alias one canonical address; no other area/frame or inferred grid syntax is searched. */
+function declaredAddress(token:string,addresses:readonly SpatialAddress[]):string|undefined{
+ if(addresses.some(a=>a.address===token))return token;
+ const matches=addresses.filter(a=>a.slotId===token);
+ return matches.length===1&&addresses.filter(a=>a.address===matches[0].address).length===1?matches[0].address:undefined;
+}
 export function validateSpatialResult(raw:unknown,request:ObservationRequest,result:Pick<ObservationResult,'observations'>):SpatialResult{
  const out:SpatialResult={version:'spatial-observation-v1',boardInstances:[],placements:[],relations:[],cellStates:[],deferred:[]},contract=request.spatial;
  if(!contract)return out;
  const defer=(section:string,index:number,reason:string)=>out.deferred.push({section,index,reason});
+ if(request.readMode==='cells'&&exact(raw,['version','boardInstances','placements']))raw={...(raw as any),relations:[],cellStates:[]};
  if(!exact(raw,['version','boardInstances','placements','relations','cellStates'])||(raw as any).version!=='spatial-observation-v1'){defer('response',0,'missing-or-invalid-spatial-section');return out;}
  const payload=raw as any,refs=new Set(result.observations.map(o=>o.ref)),boards=new Map<string,SpatialBoardInstance>();
  const rows=(key:string)=>Array.isArray(payload[key])&&payload[key].length<=512?payload[key]:[];
@@ -44,6 +52,15 @@ export function validateSpatialResult(raw:unknown,request:ObservationRequest,res
   const allowed=new Set(copy.namespace==='structural'?ns?.entries.map(e=>e.address):resolved?.area.addresses.map(a=>a.address));
   if(copy.namespace!=='photo-local'&&!authorized){copy.namespace='photo-local';copy.anchorAddress=null;copy.coveredAddresses=null;copy.coverageComplete=null;copy.unknowns.push({field:'anchorAddress',reason:'unregistered-or-out-of-scope-area'});defer('placements',i,'unregistered-or-out-of-scope-area');}
   else if(copy.namespace!=='photo-local'){
+   const resolve=(token:string)=>copy.namespace==='area-slots'&&resolved?declaredAddress(token,resolved.area.addresses):allowed.has(token)?token:undefined;
+   if(copy.anchorAddress!==null){const address=resolve(copy.anchorAddress);if(address!==undefined&&address!==copy.anchorAddress){copy.anchorAddress=address;defer('placements',i,'normalized-anchor-slot-id');}}
+   if(copy.coveredAddresses!==null){
+    const candidates=copy.coveredAddresses.map(token=>({token,address:resolve(token)}));
+    // A canonical cell plus its alias is not two occupied cells or complete coverage.
+    // Keep existing canonical tokens; conflicting aliases take the existing invalid path below.
+    copy.coveredAddresses=candidates.map(({token,address})=>address!==undefined&&address!==token&&candidates.filter(c=>c.address===address).length===1?address:token);
+    if(copy.coveredAddresses.some((address,index)=>address!==candidates[index].token))defer('placements',i,'normalized-covered-slot-id');
+   }
    if(copy.anchorAddress!==null&&!allowed.has(copy.anchorAddress)){copy.anchorAddress=null;copy.unknowns.push({field:'anchorAddress',reason:'invalid-address'});defer('placements',i,'invalid-anchor-address');}
    if(copy.coveredAddresses!==null&&copy.coveredAddresses.some(a=>!allowed.has(a))){copy.coveredAddresses=copy.coveredAddresses.filter(a=>allowed.has(a));if(!copy.coveredAddresses.length)copy.coveredAddresses=null;copy.coverageComplete=false;copy.unknowns.push({field:'coveredAddresses',reason:'invalid-covered-address'});defer('placements',i,'invalid-covered-address');}
   }else if(copy.anchorAddress!==null||copy.coveredAddresses!==null){copy.anchorAddress=null;copy.coveredAddresses=null;copy.unknowns.push({field:'anchorAddress',reason:'photo-local-has-no-canonical-address'});}

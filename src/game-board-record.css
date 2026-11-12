@@ -47,3 +47,35 @@
 .gb-free-area.ready:not(:disabled){outline:2px dashed var(--accent);outline-offset:-2px;background:var(--accent-soft);cursor:pointer}
 .gb-free-area:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
 .gb-real[data-coordinates="board"]>.gb-piece.placed{z-index:4}
+
+/* Canonical boards stay canonical, with readable cells and a bounded finger-pan viewport. */
+.gb-workbench-wrap{min-width:0;max-width:100%;margin:8px 0}
+.gb-workbench-tools{display:flex;align-items:center;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+.gb-workbench-tools select{max-width:100%;min-height:44px}
+.gb-workbench{width:100%;max-height:min(58dvh,520px);overflow:auto;overscroll-behavior:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px}
+.gb-working-surface{min-width:100%;max-width:none}
+.gb-workbench .photo-layout-canvas{border:0;border-radius:0}
+.gb-workbench .gb-network-map .gb-city-label,.gb-pan .gb-network-map .gb-city-label{font-size:12px;padding:2px 3px}
+.gb-workbench .gb-location-map .gb-location-target{font-size:12px}
+.gb-workbench .gb-network-map .gb-piece.placed{width:44px;height:50px}
+.gb-workbench .gb-network-map .gb-piece.placed>span{font-size:10px;max-width:42px}
+.gb-workbench .gb-piece{touch-action:pan-x pan-y}
+
+/* Keep the existing generic board dialog usable on short landscape screens. */
+.modal-backdrop:has(.gb-pan){padding:8px;align-items:center}
+.modal:has(.gb-pan){display:flex;flex-direction:column;width:min(1100px,calc(100vw - 16px));height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);overflow:hidden;padding-bottom:0}
+.modal:has(.gb-pan)>.sheet-handle{display:none}
+.modal:has(.gb-pan)>.modal-header{flex:none;min-height:44px;padding:4px 10px;gap:8px}
+.modal:has(.gb-pan)>.modal-header h2{font-size:16px;line-height:1.2;margin:0}
+.modal-body:has(>.gb-pan){display:flex;flex-direction:column;flex:1;min-height:0;padding:6px 8px 8px;gap:4px;overflow:hidden}
+.modal-body:has(>.gb-pan)>.gb-zoom{flex:none;margin:0}
+.modal-body:has(>.gb-pan)>.gb-pan{flex:1;min-height:0;max-height:none}
+/* Coverage can be known while its anchor stays unknown. The box is display-only. */
+.gb-covered-piece{position:absolute;z-index:5;display:flex;align-items:center;justify-content:center;min-width:0!important;min-height:0!important;padding:0;border:2px dashed var(--accent);border-radius:5px;background:#ffffff88;touch-action:pan-x pan-y}
+.gb-covered-piece>svg,.gb-covered-piece>.photo-reference{width:100%;height:100%;max-width:100%;max-height:100%}
+.gb-covered-piece:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.gb-covered-piece{pointer-events:none}
+.gb-covered-art{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.gb-covered-art>svg,.gb-covered-art>.photo-reference{width:100%;height:100%;max-width:100%;max-height:100%}
+.gb-covered-hit{min-width:0!important;min-height:0!important;padding:0;border-radius:0;touch-action:pan-x pan-y}

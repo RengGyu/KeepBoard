@@ -9,6 +9,7 @@ import {catalogPacks} from '../gamepacks/catalog';
 const image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9H8AAAAASUVORK5CYII=';
 async function fixture(approved:boolean,analyzer:any,simple=true){
  const root=await mkdtemp(path.join(tmpdir(),'kb-release-photo-')),store=new Store(root),pack={...catalogPacks.find(p=>p.id==='catan-base')!,...(approved?{releaseTier:'drawing' as const}:{})};
+ if(!approved){delete pack.restorationPolicy;pack.version+='-photo-only-fixture';}
  const server=(await createApp({store,runtimePacks:[pack],analyzer})).listen(0,'127.0.0.1');await new Promise<void>(r=>server.once('listening',r));
  const base='http://127.0.0.1:'+(server.address() as any).port;
  const call=async(route:string,body?:unknown,method=body?'POST':'GET')=>{const r=await fetch(base+'/api'+route,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()};};
@@ -54,7 +55,7 @@ test('failed analysis leaves the same durable photo record saved and resumable',
   const resumed=await f.call(f.p+'/resume',{scope:'public'});assert.equal(resumed.status,200);assert(resumed.body.session.evidence.some((e:any)=>e.id===id));
  }finally{await f.close();}
 });
-test('revoked drawing admission does not hide or rewrite a saved drawing/receipt and still permits manual correction',async()=>{
+test('removing an old quality label does not erase pinned technical capability, saved drawing/receipt or manual corrections',async()=>{
  const {compileObservationTask}=await import('../shared/lightweightRecognition'),{photoDefinition}=await import('../server/photoDefinitions'),{assembleObservations}=await import('../server/ai/observationAssembly');
  const f=await fixture(true,async(input:any)=>{
   const definition=photoDefinition(input.pack),e=input.evidence[0],request=compileObservationTask({pack:input.pack,definition,taskId:'mock-legacy',areaId:'board',scope:{partition:'common_public',ownerId:null,captureEpoch:input.session.captureEpoch},images:[{evidenceId:e.id,inputId:e.id,sha256:'a'.repeat(64),width:1,height:1,transformId:null}]});
@@ -65,7 +66,7 @@ test('revoked drawing admission does not hide or rewrite a saved drawing/receipt
   let job:any;for(let i=0;i<100;i++){job=(await f.call(f.p+'/analysis-jobs')).body.jobs[0];if(job.state==='completed')break;await new Promise(r=>setTimeout(r,5));}assert.equal(job.state,'completed');
   const assertion=(await f.call(f.p)).body.session.assertions.find((a:any)=>a.field==='board.layout'&&a.status==='accepted'),receipt=structuredClone(assertion.observationReceipts);assert.equal(assertion.value.components[0].number,8);
   delete f.pack.releaseTier;
-  assert.equal((await f.call(f.p+'/analysis-jobs',{...body,requestId:'after-revoke'})).status,409);
+  const capability=(await f.call(f.p)).body.pack;assert(capability.restorationPolicy,'technical capability is independent of the historical quality label');
   const value=structuredClone(assertion.value);value.components[0].number=9;assert.equal((await f.call(f.p,{answers:[{field:'board.layout',value}]},'PATCH')).status,200);
   assert.equal((await f.call(f.p+'/commit',{})).status,200);assert.equal((await f.call(f.p+'/resume',{scope:'public'})).status,200);
   const reopened=(await f.call(f.p)).body.session.assertions.find((a:any)=>a.field==='board.layout'&&a.status==='accepted');assert.equal(reopened.value.components[0].number,9);assert.deepEqual(reopened.observationReceipts,receipt);

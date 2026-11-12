@@ -3,13 +3,14 @@ import {componentRecord} from '../shared/componentLinking.ts';
 import {randomUUID} from 'node:crypto';
 import type {GamePack,Session} from '../shared/types.ts';
 import {privateField} from '../shared/privacy.ts';
-import {latestSnapshot,inRoomScope} from '../shared/rooms.ts';
+import {latestSnapshot,inRoomScope,roomScopeKey} from '../shared/rooms.ts';
 import {isTurnField} from './engine.ts';
 
 /** Explicit restore changes one visibility partition; opening a session never calls this. */
-export function resumeSnapshot(session:Session,pack:GamePack,scope:'public'|'owner'='public',ownerId?:string){
+export function resumeSnapshot(session:Session,pack:GamePack,scope:'public'|'owner'='public',ownerId?:string,snapshotId?:string){
  if(scope==='owner'&&!session.players.some(p=>p.id===ownerId))throw new Error('복원할 플레이어를 지정하세요.');
- const saved=latestSnapshot(session,scope==='public'?'public':ownerId);
+ const key=scope==='public'?'public':ownerId!,saved=snapshotId?session.snapshots.find(s=>s.id===snapshotId&&(!s.savedScope?!session.room:roomScopeKey(s.savedScope)===key)):latestSnapshot(session,key);
+ if(snapshotId&&!saved)throw new Error('선택한 범위의 저장본을 찾을 수 없습니다.');
  if(!saved){
   if(!hasPhotoRecord(session,scope==='owner'?ownerId:undefined))throw new Error('먼저 저장본을 만드세요.');
   // The current persisted photo record needs no fabricated snapshot, accepted fact or packed/restored flag.

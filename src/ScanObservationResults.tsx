@@ -5,14 +5,20 @@ import type {Assertion,Evidence,SessionView} from '../shared/types';
 import {usePhotoDefinition} from './photoDefinitions';
 import {PhotoObservationOverlay} from './PhotoObservationOverlay';
 import {scanReviewValue} from './scanReviewValue';
+import {EarlyScanValues} from './EarlyScanValues';
+import {spatialDiagnostics} from '../shared/spatialDiagnostics';
+export function SpatialLocationSummary({receipts}:{receipts:readonly import('../shared/lightweightRecognition').ObservationReceipt[]}){
+ const d=spatialDiagnostics(receipts);if(!d.total)return null;
+ return <p className="small" aria-label="읽은 칸 위치 요약">칸 위치 연결 {d.placed}개 · 칸 위치 미확정 {d.unplaced}개{d.rejected?` (유효하지 않은 위치 포함 ${d.rejected}개)`:''}{d.normalized?` · 같은 칸 표기 연결 ${d.normalized}개`:''}</p>;
+}
 /** Source observations stay separate from the linked physical inventory; nothing here requires confirmation. */
 export function ScanObservationResults({view,ownerId,onEvidence}:{view:SessionView;ownerId?:string;onEvidence?:(photo:Evidence,region?:Assertion['region'])=>void}){
  const assertions=view.session.assertions.filter(a=>a.ownerId===ownerId),latest=assertions.flatMap(a=>a.observationReceipts??[]).filter(r=>r.scanBundle).at(-1),bundle=latest?.scanBundle;
  const {definition}=usePhotoDefinition(view.pack,!!bundle);
- if(!bundle)return null;
+ if(!bundle)return <SpatialLocationSummary receipts={assertions.flatMap(a=>a.observationReceipts??[])}/>;
  const receipts=[...new Map(assertions.flatMap(a=>a.observationReceipts??[]).filter(r=>r.scanBundle?.plan.id===bundle.plan.id).map(r=>[r.scanUnitId,r])).values()];
  const photos=view.session.evidence.filter(p=>p.ownerId===ownerId&&p.scope===(ownerId?'player':'public'));
- return <>{(view.pack.runtime?.support.recording==='generic'||view.pack.id==='rummikub')&&<ScanUnresolvedGroups view={view} ownerId={ownerId} onEvidence={onEvidence}/>}<details className="lightweight-reader"><summary>읽은 값 · 사진 참고 · {bundle.units.filter(u=>u.state==='completed').length}/{bundle.plan.units.length}장 읽음</summary>
+ return <><SpatialLocationSummary receipts={receipts}/>{(view.pack.runtime?.support.recording==='generic'||view.pack.id==='rummikub')&&<ScanUnresolvedGroups view={view} ownerId={ownerId} onEvidence={onEvidence}/>}<details className="lightweight-reader"><summary>읽은 값 · 사진 참고 · {bundle.units.filter(u=>u.state==='completed').length}/{bundle.plan.units.length}장 읽음</summary>
   <p className="small">읽은 값은 기록에, 나머지는 원사진에 남겨요. 수정 없이 저장할 수 있어요.</p>
   {bundle.plan.units.map((u,i)=>{
    const state=bundle.units.find(s=>s.unitId===u.id),r=receipts.find(r=>r.scanUnitId===u.id),photo=photos.find(p=>p.id===u.sourceEvidenceId);
@@ -28,11 +34,12 @@ export function ScanObservationResults({view,ownerId,onEvidence}:{view:SessionVi
 }
 
 /** In-flight receipts are source overlays only, never an accepted board or save payload. */
-export function ScanProgressPreview({view,progress}:{view:SessionView;progress:import('../shared/analysisJobs').ScanProgress|null}){
+export function ScanProgressPreview({view,progress,ownerId,jobId}:{view:SessionView;progress:import('../shared/analysisJobs').ScanProgress|null;ownerId?:string;jobId?:string}){
  const {definition}=usePhotoDefinition(view.pack,!!progress);
- if(!progress||progress.captureEpoch!==view.session.captureEpoch)return null;
+ if(!progress||progress.captureEpoch!==view.session.captureEpoch||progress.ownerId!==ownerId||jobId&&progress.jobId!==jobId||progress.job&&progress.job.sessionId!==view.session.id)return null;
  const ready=progress.units.filter(u=>u.receipts?.length),first=ready[0]?.receipts?.[0],done=progress.units.filter(u=>['completed','failed','interrupted'].includes(u.state)).length;
- return <section className="scan-readout" aria-label="스캔 진행 관측" role="status"><p>사진 {done}/{progress.total}장 처리 · 판독 중인 부분 관측입니다. 최종 그림은 모두 처리한 뒤 반영돼요.{progress.job?.liveRows?` 지금까지 실물 ${progress.job.liveRows}개를 읽었어요.`:''}</p>
+ return <section className="scan-readout" aria-label="스캔 진행 관측" role="status"><p>사진 {done}/{progress.total}장 처리 · {progress.job&&['failed','interrupted'].includes(progress.job.state)?'중단 전 도착한 읽기 전용 관측입니다.':'판독 중인 부분 관측입니다. 최종 그림은 모두 처리한 뒤 반영돼요.'}</p>
+ <EarlyScanValues view={view} progress={progress} definition={definition} ownerId={ownerId} jobId={jobId}/>
  {first&&definition?<PhotoObservationOverlay key={first.scanUnitId} photos={view.session.evidence.filter(e=>e.scope===(progress.ownerId?'player':'public')&&e.ownerId===progress.ownerId)} request={first.request} result={first.result} geometry={first.geometryCandidates} definition={definition} transforms={first.transforms} compact open/>:null}
  {progress.units.map(u=><p key={u.index}>{u.index+1}번째 사진 · {u.state==='pending'?'대기':u.state==='running'?'읽는 중':u.state==='completed'?'읽음':u.state==='failed'?'실패 · 원본 보관':'중단 · 원본 보관'}</p>)}
  </section>;

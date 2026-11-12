@@ -33,7 +33,7 @@ const nodes=(t:any):any[]=>!t||typeof t!=='object'?[]:Array.isArray(t)?t.flatMap
 const find=(t:any,p:(n:any)=>boolean)=>{const n=nodes(t).find(p);assert(n,'control missing');return n;};
 const tick=()=>new Promise(r=>setImmediate(r));
 function workspaceFixture(tier:'photo'|'drawing'='photo'){
- const view:any={pack:{...catalogPacks.find(p=>p.id==='sagrada')!,releaseTier:tier},session:{id:'synthetic-release',name:'paused',gamePackId:'sagrada',gamePackVersion:'current',players:[],evidence:[{id:'source',kind:'photo',scope:'public',url:'/uploads/fake.png',captureEpoch:'epoch',capturedAt:new Date().toISOString(),label:''}],snapshots:[],assertions:[],notes:{public:'saved memo'},preservations:[],activity:[],captureEpoch:'epoch',turnInstanceId:'turn'},questions:[],briefing:[]};
+ const view:any={pack:{...catalogPacks.find(p=>p.id==='sagrada')!,releaseTier:tier,...(tier==='photo'?{restorationPolicy:undefined}:{})},session:{id:'synthetic-release',name:'paused',gamePackId:'sagrada',gamePackVersion:'current',players:[],evidence:[{id:'source',kind:'photo',scope:'public',url:'/uploads/fake.png',captureEpoch:'epoch',capturedAt:new Date().toISOString(),label:''}],snapshots:[],assertions:[],notes:{public:'saved memo'},preservations:[],activity:[],captureEpoch:'epoch',turnInstanceId:'turn'},questions:[],briefing:[]};
  const originals={jobs:api.analysisJobs,readers:api.recognitionReaders,update:api.update,start:api.startAnalysisJob,evidence:api.evidence};
  const job:any={id:'pending',sessionId:view.session.id,captureEpoch:'epoch',state:'failed',ownerId:undefined};
  api.analysisJobs=async()=>({jobs:[job]});api.recognitionReaders=async()=>({readers:[]} as any);let starts=0,updates:any[]=[];
@@ -74,7 +74,7 @@ test('reference-only photos from snapshots retain the selected original source r
 
 
 test('photo-tier legacy values and native drawings stay accessible without enabling a fresh read',async()=>{
- const f=workspaceFixture();f.view.pack=catalogPacks.find(p=>p.id==='rummikub')!;
+ const f=workspaceFixture();f.view.pack={...catalogPacks.find(p=>p.id==='rummikub')!,restorationPolicy:undefined};
  f.view.session.assertions=[{id:'manual',ownerId:undefined,field:'table.scene',status:'accepted',value:{version:2,components:[]}}];
  const before=structuredClone(f.view.session),ui=mount(SessionWorkspace,f.props);
  try{await tick();ui.render();const legacy=find(ui.tree,n=>n.type==='details'&&n.props.className==='photo-legacy-drawing');assert(legacy);

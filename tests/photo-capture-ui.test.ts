@@ -18,6 +18,36 @@ const find=(tree:any,predicate:(node:any)=>boolean)=>{const node=nodes(tree).fin
 
 
 function view(){const pack=effectiveRecognitionPack(structuredClone((packs as any[]).find(p=>p.id==='splendor')));return {pack:{...pack,releaseTier:'drawing'},session:{id:'synthetic-photo-ui',name:'합성',players:[{id:'p1',name:'시험',color:'red'}],stage:'capture',captureEpoch:'epoch',turnInstanceId:'turn',assertions:[],evidence:[],preservations:[],snapshots:[],notes:{},activity:[]},questions:[],briefing:[]};}
+test('photo region re-read is an explicit click, crops original pixels without upscale, and is absent without a ready callback',async()=>{
+ const {PhotoDialog}=await import('../src/Capture');let received:any,calls=0,closed=0,draw:any;
+ const previous=globalThis.document;globalThis.document={createElement:()=>({width:0,height:0,getContext:()=>({drawImage:(...args:any[])=>{draw=args;}}),toDataURL:()=> 'data:image/jpeg;base64,synthetic'})} as any;
+ const props={evidence:{id:'source',url:'/source.jpg',label:'원본',kind:'photo'},region:{x:.1,y:.25,width:.2,height:.25},onClose(){closed++;},onReread:async(input:any)=>{calls++;received=input;}};
+ const ui=mount(PhotoDialog,props);
+ try{
+  const image=find(ui.tree,n=>n.type==='img');image.props.ref.current={naturalWidth:1000,naturalHeight:800};assert.equal(calls,0);
+  find(ui.tree,n=>n.type==='button'&&n.props.children==='이 부분 다시 읽기').props.onClick();await new Promise(r=>setTimeout(r,0));
+  assert.equal(calls,1);assert.equal(closed,1);assert.deepEqual([received.width,received.height],[200,200]);assert.deepEqual(received.sourceRegion,props.region);assert.deepEqual(draw.slice(1),[100,200,200,200,0,0,200,200]);
+  ui.render({...props,onReread:undefined});assert(!nodes(ui.tree).some(n=>n.type==='button'&&n.props.children==='이 부분 다시 읽기'));
+ }finally{ui.dispose();globalThis.document=previous;}
+});
+test('current ready workspace exposes explicit region read and repeated clicks share the existing upload/intent/job flow',async()=>{
+ const {PhotoDialog}=await import('../src/Capture'),{GameEssentials}=await import('../src/GameEssentials'),{loadPhotoDefinitions}=await import('../src/photoDefinitions');
+ const old={jobs:api.analysisJobs,readers:api.recognitionReaders,evidence:api.evidence,commit:api.commit,start:api.startAnalysisJob};
+ const current:any=view(),source:any={id:'original',kind:'photo',scope:'public',captureEpoch:'epoch',width:1000,height:800,url:'/source.jpg'};current.session.evidence.push(source);await loadPhotoDefinitions(current.pack);
+ let uploads=0,starts=0,body:any;api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({readers:[{kind:'terra-high-game-observation-v1',available:true}]} as any);
+ api.evidence=async()=>{uploads++;return {...current,createdEvidenceId:'crop',session:{...current.session,evidence:[source,{...source,id:'crop',sourceEvidenceId:source.id}]}};};
+ api.commit=async(_id,_incomplete,reading)=>{assert.deepEqual(reading!.evidenceIds,['crop']);return {...current,saveIntentId:'crop-intent'};};
+ api.startAnalysisJob=async(_id,b)=>{starts++;body=b;return {job:{id:'crop-job',sessionId:current.session.id,captureEpoch:'epoch',state:'queued',createdAt:new Date().toISOString(),updatedAt:'',evidenceIds:['crop'],reader:{kind:'terra-high-game-observation-v1'}}} as any;};
+ const ui=mount(SessionWorkspace,{view:current,busy:false,status:{configured:false},mutate:async(task:any)=>task(),onBack(){},setOwnerId:async()=>{},onToast(){}});
+ try{
+  await new Promise(r=>setTimeout(r,0));ui.render();
+  find(ui.tree,n=>n.type===GameEssentials).props.onEvidence(source,{x:.1,y:.25,width:.2,height:.25});ui.render();
+  const dialog=find(ui.tree,n=>n.type===PhotoDialog);assert.equal(typeof dialog.props.onReread,'function');assert.equal(starts,0);
+  const crop={dataUrl:'data:image/jpeg;base64,synthetic',width:200,height:200,sourceRegion:{x:.1,y:.25,width:.2,height:.25}};
+  await Promise.all([dialog.props.onReread(crop),dialog.props.onReread(crop)]);assert.equal(uploads,1);assert.equal(starts,1);assert.equal(body.saveIntentId,'crop-intent');assert.deepEqual(body.evidenceIds,['crop']);
+  ui.render();assert.equal(find(ui.tree,n=>n.type===PhotoDialog).props.onReread,undefined,'running job cannot start another region request');
+ }finally{ui.dispose();api.analysisJobs=old.jobs;api.recognitionReaders=old.readers;api.evidence=old.evidence;api.commit=old.commit;api.startAnalysisJob=old.start;}
+});
 test('camera starts with manual photos and automatic capture requires an explicit choice',()=>{
  const previous=globalThis.document;globalThis.document={addEventListener(){},removeEventListener(){}} as unknown as Document;
  const ui=mount(CameraDialog,{onClose(){},async onCapture(){throw new Error('No capture expected');}});
@@ -30,16 +60,17 @@ test('camera starts with manual photos and automatic capture requires an explici
   assert.equal(find(ui.tree,n=>n.type==='input'&&n.props.type==='checkbox').props.checked,false);
  }finally{ui.dispose();globalThis.document=previous;}
 });
-test('actual workspace capture events bind selected part, postpone multi-photo analysis until explicit same-state answer, and show camera guidance',async()=>{
- const oldJobs=api.analysisJobs,oldEvidence=api.evidence,oldStart=api.startAnalysisJob;api.analysisJobs=async()=>({jobs:[]});let count=0,starts:any[]=[],uploads:any[]=[];
- api.evidence=async(_id,body)=>{uploads.push(body);const id='synthetic-'+(++count);return {createdEvidenceId:id,session:{evidence:[{id,...body,captureEpoch:'epoch',kind:'photo'}]}} as any;};api.startAnalysisJob=async(_id,body)=>{starts.push(body);return {job:{id:'synthetic-job',sessionId:'synthetic-photo-ui',evidenceIds:body.evidenceIds,captureEpoch:'epoch',state:'queued'}} as any;};
- const ui=mount(SessionWorkspace,{view:view(),busy:false,status:{configured:true},mutate:async(task:()=>Promise<any>)=>task(),onBack(){},setOwnerId:async()=>{},onToast(){}});
+test('capture stores selected-part photos first and existing Save is the only automatic analysis trigger',async()=>{
+ const old={jobs:api.analysisJobs,evidence:api.evidence,start:api.startAnalysisJob,commit:api.commit};api.analysisJobs=async()=>({jobs:[]});let count=0,starts:any[]=[],uploads:any[]=[];const current=view() as unknown as import('../shared/types').SessionView;
+ api.evidence=async(_id,body)=>{uploads.push(body);const id='synthetic-'+(++count);current.session.evidence.push({id,...body,captureEpoch:'epoch',kind:'photo'} as any);return {...current,createdEvidenceId:id};};api.commit=async()=>current;
+ api.startAnalysisJob=async(_id,body)=>{starts.push(body);return {job:{id:'synthetic-job',sessionId:'synthetic-photo-ui',evidenceIds:body.evidenceIds,captureEpoch:'epoch',state:'queued'}} as any;};
+ const ui=mount(SessionWorkspace,{view:current,busy:false,status:{configured:true},mutate:async(task:()=>Promise<any>)=>task(),onBack(){},setOwnerId:async()=>{},onToast(){}});
  try{
   find(ui.tree,n=>n.type===LightweightReaderControls).props.onMode('existing');ui.render();
   find(ui.tree,n=>n.type===PhotoCaptureGuide).props.onChange('player');ui.render();find(ui.tree,n=>n.type==='button'&&n.props['aria-label']==='판 찍기').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();
-  const camera=find(ui.tree,n=>n.type===CameraDialog);assert.match(camera.props.guidance,/구매 카드/);await camera.props.onCapture({dataUrl:'synthetic',label:'one'});await camera.props.onCapture({dataUrl:'synthetic',label:'two'});await camera.props.onClose();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,0);assert(uploads.every(b=>b.captureTarget.areaId==='player'));
-  find(ui.tree,n=>n.type==='button'&&n.props.children==='네, 함께 읽기').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,1);assert.equal(starts[0].sameStaticState,true);assert.equal(starts[0].captureTarget.areaId,'player');assert.deepEqual(starts[0].evidenceIds,['synthetic-1','synthetic-2']);
- }finally{ui.dispose();api.analysisJobs=oldJobs;api.evidence=oldEvidence;api.startAnalysisJob=oldStart;}
+  const camera=find(ui.tree,n=>n.type===CameraDialog);assert.match(camera.props.guidance,/구매 카드/);await camera.props.onCapture({dataUrl:'synthetic',label:'one'});await camera.props.onCapture({dataUrl:'synthetic',label:'two'});await camera.props.onClose();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,0);assert(uploads.every(b=>b.captureTarget.areaId==='player'));await (await import('../src/photoDefinitions')).loadPhotoDefinitions(current.pack);
+  assert(!nodes(ui.tree).some(n=>n.type==='button'&&n.props.children==='네, 함께 읽기'));find(ui.tree,n=>n.type==='button'&&n.props.className==='button primary quick-save-button').props.onClick();await new Promise(r=>setTimeout(r,0));ui.render();assert.equal(starts.length,1);assert.equal(starts[0].sameStaticState,true);assert.equal(starts[0].captureTarget.areaId,'player');assert.deepEqual(starts[0].evidenceIds,['synthetic-1','synthetic-2']);
+ }finally{ui.dispose();api.analysisJobs=old.jobs;api.evidence=old.evidence;api.startAnalysisJob=old.start;api.commit=old.commit;}
 });
 
 test('Catan user guidance is Korean shooting help while machine profile and prompt remain unchanged',async()=>{

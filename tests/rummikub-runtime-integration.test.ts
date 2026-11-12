@@ -132,7 +132,7 @@ test('Rummikub photo analysis uses the tile contract and cannot infer a private 
   });
   await new Promise<void>(resolve => model.listen(0, '127.0.0.1', resolve));
   const address = model.address(); assert(address && typeof address !== 'string');
-  const server = (await createApp({ store: new Store(directory) })).listen(0, '127.0.0.1');
+  const server = (await createApp({ store: new Store(directory), runtimePacks: [rummikubPack] })).listen(0, '127.0.0.1');
   await new Promise<void>(resolve => server.once('listening', resolve));
   const apiAddress = server.address(); assert(apiAddress && typeof apiAddress !== 'string');
   const call = async (route: string, body: unknown): Promise<SessionView> => {
@@ -141,7 +141,10 @@ test('Rummikub photo analysis uses the tile contract and cannot infer a private 
   };
   try {
     await saveAISettings({ provider: 'gemini', model: 'synthetic-only', apiKey: 'test-only', baseUrl: `http://127.0.0.1:${address.port}` });
+    // The mock exercises the original native tile contract, not the current catalog's different source-pinned version.
     let view = await call('/api/sessions', { gamePackId: 'rummikub', gamePackVersion: rummikubPack.version });
+    assert.equal(view.pack.version, rummikubPack.version);
+    assert.equal(view.pack.releaseTier, 'drawing');
     const route = `/api/sessions/${view.session.id}`;
     view = await call(`${route}/evidence`, { dataUrl: 'data:image/png;base64,aGVsbG8=', expectedCaptureEpoch: view.session.captureEpoch });
     evidenceId = view.session.evidence[0].id;

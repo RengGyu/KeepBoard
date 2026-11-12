@@ -1,3 +1,4 @@
+import {requestAreas} from '../../shared/restoration';
 import {storedSpatialFor,spatialDestination} from './spatialAssembly';
 import {randomUUID} from 'node:crypto';
 import type {Assertion,AnalysisResult,GamePack,Value} from '../../shared/types';
@@ -13,10 +14,11 @@ import {geometryCandidates,mapObservationRegion,type ConfirmedPhotoFrame,type Ph
 export interface AssemblyInput {request:ObservationRequest;result:ObservationResult;definition:PhotoDefinition;pack:GamePack;turnInstanceId:string;reader:ObservationReaderIdentity;frame?:ConfirmedPhotoFrame;transforms?:PhotoTransform[];taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire;hostedWire?:HostedObservationWire}
 const literal=(o:LiteralObservation,key:string)=>o.properties[key]?.state==='observed'?o.properties[key].value:null;
 export function assembleObservations(input:AssemblyInput):AnalysisResult {
- const {request,definition,pack}=input,transforms=input.transforms??[],result=validateObservationResult(input.result,request,definition,transforms),ownerId=request.scope.ownerId??undefined,area=definition.areas.find(a=>a.id===request.areaId)!,groups=new Map<string,any[]>(),refs:Record<string,string>={},warnings:string[]=[];
+ const {request,definition,pack}=input,transforms=input.transforms??[],result=validateObservationResult(input.result,request,definition,transforms),ownerId=request.scope.ownerId??undefined,areas=requestAreas(request,definition),groups=new Map<string,any[]>(),refs:Record<string,string>={},warnings:string[]=[];
  const add=(field:string,value:any)=>{groups.set(field,[...(groups.get(field)??[]),value]);};
  const spatialIds=request.spatial?Object.fromEntries(result.observations.map(o=>[o.ref,randomUUID()])):undefined;
  for(const o of result.observations){
+  const candidates=areas.filter(a=>!o.componentId||a.componentIds.includes(o.componentId)),area=(o.sourceAreaId?candidates.find(a=>a.id===o.sourceAreaId):candidates.length===1?candidates[0]:undefined),fields=area?.fields??[];
   if(definition.nativeBridge==='rummikub'&&o.componentId==='racks'){
    warnings.push(`${o.ref}: 받침대 관측은 원관측으로 보존하며 타일로 추가하지 않습니다.`);
    continue;
@@ -31,10 +33,10 @@ export function assembleObservations(input:AssemblyInput):AnalysisResult {
    const tile:RummikubTile={id,kind:o.componentId==='numbers'?'number':o.componentId==='jokers'?'joker':'unknown',color:literal(o,'color') as RummikubTile['color'],number:o.componentId==='numbers'?literal(o,'number') as number|null:null,face:o.face,representedColor:null,representedNumber:null,evidenceIds:[evidenceId],region,note:''};
    add(ownerId?'rack.scene':'table.scene',tile);
   }else{
-   let field=area.fields.find(key=>{const f=pack.fields.find(f=>f.key===key),b=runtimeBinding(pack,key);return f&&b?.editor==='component-catalog'&&(!o.componentId||b.componentIds.includes(o.componentId))&&(ownerId?f.scope==='player'&&f.visibility==='owner':f.scope==='public'&&f.visibility==='public');})??(ownerId?PHOTO_OWNER:PHOTO_PUBLIC);
+   let field=fields.find(key=>{const f=pack.fields.find(f=>f.key===key),b=runtimeBinding(pack,key);return f&&b?.editor==='component-catalog'&&(!o.componentId||b.componentIds.includes(o.componentId))&&(ownerId?f.scope==='player'&&f.visibility==='owner':f.scope==='public'&&f.visibility==='public');})??(ownerId?PHOTO_OWNER:PHOTO_PUBLIC);
    if(!runtimeBinding(pack,field))throw new Error('사진 실물의 허용 목적지 양식이 없습니다. 기존 기록은 보존됩니다.');
    const piece:GenericPiece={id,componentId:o.componentId,variant:null,quantity:o.quantity,label:o.componentId?'':'미확인 실물',anchor:'',evidenceId,region};
-   const spatial=storedSpatialFor(request,result,o,spatialIds??refs,transforms,input.sourceImageSHA);if(spatial){piece.spatial=spatial;field=spatialDestination(pack,piece,area.fields,ownerId)??field;}
+   const spatial=storedSpatialFor(request,result,o,spatialIds??refs,transforms,input.sourceImageSHA);if(spatial){piece.spatial=spatial;field=spatialDestination(pack,piece,fields,ownerId)??field;}
    if(definition.nativeBridge==='splendor'){
     const fallback:SplendorKind=o.componentId==='nobles'?'noble':o.componentId==='chips'?'token':o.componentId==='development'?o.face==='back'?'deck':o.face==='front'?'development':null:null;
     let kind=(literal(o,'kind') as SplendorKind)??fallback;

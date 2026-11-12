@@ -4,7 +4,7 @@ import {readFileSync,mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync} fro
 import {tmpdir} from 'node:os';
 import {join,dirname,resolve} from 'node:path';
 import {createHash} from 'node:crypto';
-import {generateDefinitions,canonicalJSON} from '../tools/lightweight-recognition/generate-photo-definitions.mts';
+import {generateDefinitions,canonicalJSON,APPROVED_READOUT_LOADER_REVISION} from '../tools/lightweight-recognition/generate-photo-definitions.mts';
 const hash=(v:unknown)=>createHash('sha256').update(canonicalJSON(v)).digest('hex');
 const contract=JSON.parse(readFileSync('game-photo-definitions/contract.json','utf8'));
 test('explicit-null runtime revision records exact scene provenance without rebinding saved definition domains',()=>{
@@ -34,6 +34,30 @@ test('exact pinned 120 definitions regenerate byte-for-byte, keeping source/edit
   const sidecar=generated.manifest.games.find((g:any)=>g.gameId===d.gameId)!;assert.deepEqual(sidecar.referenceSets,[]);assert.deepEqual(sidecar.physicalPreserve,original.physical_preserve);
  }
  assert.deepEqual(JSON.parse(readFileSync('game-photo-definitions/index.json','utf8')),generated.index);
+ assert.equal(JSON.stringify(generated.index,null,2)+'\n',readFileSync('game-photo-definitions/index.json','utf8'));
+});
+test('reviewed registry extraction pins original provenance and every new helper, rejecting arbitrary variants',()=>{
+ const revision=APPROVED_READOUT_LOADER_REVISION,generated=generateDefinitions(process.cwd());
+ const registry=generated.manifest.inputs.find((i:any)=>i.file===revision.registry.file)!;
+ assert.equal(registry.approvedContractSHA256,contract.inputs.find((i:any)=>i.file===revision.registry.file).sha256);
+ assert.equal(registry.sha256,revision.registry.sha256);assert.match(registry.revisionReason,/loader extraction/);
+ for(const dependency of revision.dependencies){
+  const input=generated.manifest.inputs.find((i:any)=>i.file===dependency.file)!;
+  assert.equal(input.sha256,createHash('sha256').update(readFileSync(dependency.file)).digest('hex'));
+  assert.equal(input.introducedByContractFile,revision.registry.file);
+  assert.equal(input.approvedContractSHA256,revision.registry.contractSHA);
+ }
+ const files=[...contract.inputs.filter((i:any)=>i.file.startsWith('shared/')||i.file==='gamepacks/generated/game-essentials.json'),...revision.dependencies];
+ // A valid isolated input set regenerates exactly; any changed registry/helper is rejected.
+ for(const changed of [null,revision.registry.file,...revision.dependencies.map(d=>d.file)]){
+  const root=mkdtempSync(join(tmpdir(),'kb-definition-loader-'));
+  try{
+   const copy='game-photo-definitions/contract.json';mkdirSync(dirname(join(root,copy)),{recursive:true});writeFileSync(join(root,copy),readFileSync(copy));
+   for(const item of files){const target=join(root,item.file);mkdirSync(dirname(target),{recursive:true});if(item.file===changed)writeFileSync(target,readFileSync(item.file,'utf8')+'\n// unapproved revision\n');else symlinkSync(resolve(item.file),target);}
+   if(changed)assert.throws(()=>generateDefinitions(root),{message:`Pinned input changed: ${changed}`});
+   else assert.equal(JSON.stringify(generateDefinitions(root).index,null,2)+'\n',readFileSync('game-photo-definitions/index.json','utf8'));
+  }finally{rmSync(root,{recursive:true,force:true});}
+ }
 });
 test('native bridges keep literal colors and numbers separate from manual owner/placement and unsupported interiors',()=>{
  const {definitions,manifest}=generateDefinitions(process.cwd());const c=definitions.find(d=>d.gameId==='catan')!,r=definitions.find(d=>d.gameId==='rummikub')!,s=definitions.find(d=>d.gameId==='splendor')!;

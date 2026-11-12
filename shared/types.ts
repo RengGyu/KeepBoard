@@ -18,6 +18,7 @@ export interface Requirement { id: string; scope: Scope; fields: string[]; when?
 export interface DerivedRule { id: string; scope: Scope; when: Condition; field: string; value: Value; reason: string; sourceId?: string }
 export interface PreservationTemplate { id: string; label: string; description: string; scope: Scope; conditions: string[]; restoreAfter: string[]; when?: Condition; visualFields?: string[];externalOnly?:boolean;sourceVisibility?:string;orderSensitive?:boolean;method?:string }
 export interface GamePack {
+  restorationPolicy?:import('./restoration').RestorationPolicy;
   releaseTier?:import('./releaseSupport').ReleaseTier;
   photoReadingPolicy?:{policySHA:string;definitionSHA:string;areas:Record<string,Record<string,string[]>>};
   runtime?:GameRuntimeMetadata;
@@ -31,6 +32,7 @@ export interface GamePack {
 }
 import type {CaptureTarget} from './photoCapture';
 export interface Evidence {
+  thumbnailUrl?: string;
   id: string; url: string; capturedAt: string; captureEpoch: string;
   label: string; scope: Scope; ownerId?: string;
   kind: 'photo' | 'note' | 'example'; width?: number; height?: number;
@@ -58,12 +60,15 @@ export interface Preservation {
 }
 export interface Activity { id: string; at: string; type: string; message: string }
 export interface Snapshot {
+  saveIntentId?:string;analysisJobId?:string;
   savedScope?:SavedScope;
   id: string; createdAt: string; captureEpoch: string; turnInstanceId: string;
   gamePackVersion: string; assertions: Assertion[]; evidence: Evidence[];
   preservations: Preservation[]; notes: Record<string,string>;
 }
 export interface Session {
+  storageRevision?:string;
+  saveIntents?:import('./saveIntent').SaveIntent[];
   room?:RoomMetadata;
   id: string; name: string; createdAt: string; updatedAt: string;
   gamePackId: string; gamePackVersion: string; gamePack?: GamePack;
@@ -82,6 +87,7 @@ export interface PlannedAction {
   evidenceIds: string[]; priority: number;
 }
 export interface SessionView {
+  saveIntentId?:string;
   analysis?:{mode:AnalysisResult['mode'];warnings:string[]};
   roomAccess?:RoomAccess;
   privacy?: {protectedOwnerIds:string[];unlockedOwnerIds:string[];setupRequiredOwnerIds?:string[]};

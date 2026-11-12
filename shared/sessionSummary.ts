@@ -10,8 +10,9 @@ export interface SessionSummary {
 }
 export function sessionSummary(session:Session):SessionSummary {
  const evidence=[...session.evidence,...session.snapshots.flatMap(s=>s.evidence)];
- const ownerURLs=new Set(evidence.filter(e=>e.ownerId).map(e=>e.url));
- const thumbnail=session.evidence.find(e=>e.scope==='public'&&!e.ownerId&&!ownerURLs.has(e.url))?.url;
+ const ownerURLs=new Set(evidence.filter(e=>e.ownerId||e.scope==='player').flatMap(e=>[e.url,...(e.thumbnailUrl?[e.thumbnailUrl]:[])]));
+ const photo=session.evidence.find(e=>e.scope==='public'&&!e.ownerId&&!ownerURLs.has(e.url)&&(!e.thumbnailUrl||!ownerURLs.has(e.thumbnailUrl)));
+ const thumbnail=photo?.thumbnailUrl??photo?.url;
  return {id:session.id,name:session.name,gamePackId:session.gamePackId,gamePackVersion:session.gamePackVersion,
   updatedAt:session.updatedAt,saved:session.snapshots.length>0||session.evidence.some(e=>e.kind==='photo'),room:!!session.room,
   ...(session.example?{example:true}:{}),...(session.deletedAt?{deletedAt:session.deletedAt}:{}),...(thumbnail?{thumbnail}:{})};

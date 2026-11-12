@@ -1,11 +1,14 @@
+import {publicSceneTarget} from '../shared/restoration';
+import {ClipboardPhotoPaste} from './testOnly/ClipboardPhotoPaste';
 import {drawingEnabled} from '../shared/releaseSupport';
 import {PhotoRecordPanel,PhotoPreservation,recordPhotos} from './PhotoRecordPanel';
 import {isHostedReader} from '../shared/lightweightRecognition';
 import {ScanObservationResults,ScanProgressPreview} from './ScanObservationResults';
+import {rereadPhotoRegion} from './photoRegionReread';
 import type {LocalReaderSelection,LocalReaderCapabilities,PhotoReaderSelection} from '../shared/lightweightRecognition';
 import {validatePhotoFrame,type ConfirmedPhotoFrame} from '../shared/photoGeometry';
 import {LightweightReaderControls} from './LightweightReaderControls';
-import {CatanPhotoFrame} from './CatanPhotoFrame';
+import {CatanPhotoFrame,CatanOverview,SceneWorkspace,RummikubWorkspace} from './nativeScreens';
 import {usePhotoDefinition,observablePhotoArea,loadPhotoDefinitions,photoDefinitionFor} from './photoDefinitions';
 import {PhotoCaptureGuide,captureGuideText} from './PhotoCaptureGuide';
 import {captureProfile,captureAreas,type CaptureTarget} from '../shared/photoCapture';
@@ -18,14 +21,11 @@ import { ArrowLeft, Camera, Check, Hexagon, ImagePlus, LockKeyhole, MoreHorizont
 import type { AIStatus, Assertion, Evidence, SessionView, Value } from '../shared/types';
 import { confirmed } from '../shared/catanSummary';
 import { api, readPhoto,type ScanUploadTicket,type ScanUploadReady } from './api';
-import { CatanOverview } from './CatanOverview';
-import { SceneWorkspace } from './SceneWorkspace';
-import { RummikubWorkspace } from './RummikubWorkspace';
 import {GameEssentials} from './GameEssentials';
 import {BulkBar} from './BulkBar';
 import {readingGaps} from './readingGaps';
 import { PlayersDialog } from './Dialogs';
-import { OwnerColors } from './SceneEditor';
+import { OwnerColors } from './OwnerColors';
 import { CameraDialog, PhotoDialog, type PhotoInput } from './Capture';
 import { fire, type Mutate } from './Fields';
 import { addSavedScanEvidence, createScanBatch, finishScanBatch, type ScanBatch, type ScanRunContext } from './scanBatch';
@@ -40,6 +40,9 @@ import {canRecognizePhotos} from '../shared/recognition';
 import {RoomInvite,RoomProfile,RoomPublicBoard} from './RoomEntry';
 import {latestSnapshot} from '../shared/rooms';
 import './correction-workspace.css';
+
+// TEST_ONLY clipboard-photo-paste: Vite removes this branch from production.
+const TEST_ONLY_CLIPBOARD_PHOTO_PASTE=typeof import.meta.env!=='undefined'&&import.meta.env.DEV;
 
 type ReaderMode='existing'|'local'|'gemini'|'luna'|'terra';
 const isHostedMode=(mode:ReaderMode|undefined)=>mode==='gemini'||mode==='luna'||mode==='terra';
@@ -94,12 +97,15 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const numberCapability=readers?.readers.find(r=>r.kind==='local-observation-v1')?.tasks?.find(t=>t.task==='catan-numerals-v1');
   const numericScope=view.pack.id==='catan-base'&&definition?.nativeBridge==='catan'&&definition.gameId==='catan'&&definition.gameId===view.pack.runtime?.source?.gameId&&!ownerId&&localArea?.id==='board'&&localArea.partition==='common_public';
   const canUseCatanFrame=readerMode==='local'&&view.pack.id==='catan-base'&&!ownerId&&localArea?.id==='board'&&localArea.partition==='common_public';
-  useEffect(()=>{if(!drawing)return;let active=true;api.recognitionReaders().then(r=>{if(active)setReaders(r);},()=>{if(active)setReaders(null);});return()=>{active=false;};},[session.id,drawing]);
+  useEffect(()=>{if(!drawing)return;let active=true;api.recognitionReaders().then(r=>{if(active){setReaders(r);}},()=>{if(active){setReaders(null);}});return()=>{active=false;};},[session.id,drawing]);
   const [pendingRead,setPendingRead]=useState<Pick<BatchReadout,'context'|'evidenceIds'|'captureTarget'|'reader'|'readingMode'>|null>(null);
   const scopedPending=pendingRead?.context.sessionId===session.id&&pendingRead.context.ownerId===ownerId?pendingRead:null;
   useEffect(()=>{setPhotoToolsOpen(null);setCaptureAreaId('');setLocalCaptureAreaId('');setLocalTask(undefined);setLocalInputMode('original');setPendingRead(null);setFrame(null);setFramePhoto(null);},[session.id,ownerId]);
   const [lastScan, setLastScan] = useState<BatchReadout | null>(null);
   const analysisInFlight = useRef(new Set<string>());
+  const saveReadClaims=useRef(new Set<string>()),saveInFlight=useRef(false);
+  const savedPhotoTargets=useRef(new Map<string,{sessionId:string;epoch:string;ownerId?:string;reader:PhotoReaderSelection}>());
+  const discoveredJobs=useRef<Promise<{job:AnalysisJob|null}|null>>(Promise.resolve(null)),latestAnalysisJob=useRef<AnalysisJob|null>(null);
   const [scanProgress,setScanProgress]=useState<import('../shared/analysisJobs').ScanProgress|null>(null);
   const [serverJob,setServerJob]=useState<AnalysisJob|null>(null);
   const visibleJob=serverJob?.sessionId===session.id&&serverJob.ownerId===ownerId?serverJob:null;
@@ -108,14 +114,15 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const jobRefresh=useRef({mutate});jobRefresh.current={mutate};
   const refreshedJobs=useRef(new Set<string>());
   const jobPolling=useRef<ReturnType<typeof createJobStatusPolling>|null>(null);
-  useEffect(()=>{let active=true;const received=new Set<number>();let partial:import('../shared/analysisJobs').ScanProgress|null=null;let pendingProgress:import('../shared/analysisJobs').ScanProgress|null=null;let requestedJob:AnalysisJob|null=null;const capturedEpoch=session.captureEpoch;setScanProgress(null);setServerJob(null);setJobConnectionLost(false);setJobAutoPaused(false);if(privateLocked)return;
+  useEffect(()=>{let active=true;const received=new Set<number>();let partial:import('../shared/analysisJobs').ScanProgress|null=null;let pendingProgress:import('../shared/analysisJobs').ScanProgress|null=null;let requestedJob:AnalysisJob|null=null;const capturedEpoch=session.captureEpoch;setScanProgress(null);setServerJob(null);latestAnalysisJob.current=null;setJobConnectionLost(false);setJobAutoPaused(false);if(privateLocked)return;
     const poller=createJobStatusPolling({
-      read:async()=>{if(isHostedReader(requestedJob?.reader)&&activeAnalysisJob(requestedJob)){pendingProgress=await api.scanProgress(session.id,requestedJob.id,ownerId,partial?.jobId===requestedJob.id?[...received]:[]);return pendingProgress.job??requestedJob;}const response=await api.analysisJobs(session.id,ownerId),job=response.jobs[0]??null;
+      read:async()=>{if(isHostedReader(requestedJob?.reader)&&activeAnalysisJob(requestedJob)){pendingProgress=await api.scanProgress(session.id,requestedJob.id,ownerId,partial?.jobId===requestedJob.id?[...received]:[]);return pendingProgress.job??requestedJob;}const lookup=api.analysisJobs(session.id,ownerId);discoveredJobs.current=lookup.then(r=>({job:r.jobs[0]??null}),()=>null);const response=await lookup,job=response.jobs[0]??null;
         if(isHostedReader(job?.reader)&&activeAnalysisJob(job)&&job.captureEpoch===capturedEpoch){
           pendingProgress=await api.scanProgress(session.id,job.id,ownerId,partial?.jobId===job.id?[...received]:[]);
         }return job;},
-      onJob:job=>{if(!active)return;requestedJob=job;
-        if(!job||!activeAnalysisJob(job)){setScanProgress(null);partial=null;received.clear();}
+      onJob:job=>{if(!active)return;requestedJob=job;latestAnalysisJob.current=job;
+        if(job&&['failed','interrupted'].includes(job.state)&&partial?.jobId===job.id&&partial.captureEpoch===capturedEpoch){partial={...partial,job};setScanProgress(partial);}
+        else if(!job||!activeAnalysisJob(job)){setScanProgress(null);partial=null;received.clear();}
         else if(pendingProgress?.jobId===job.id&&pendingProgress.captureEpoch===capturedEpoch){
           const p=pendingProgress;if(partial?.jobId!==job.id){partial=null;received.clear();}
           p.units=p.units.map(u=>({...u,receipts:u.receipts??partial?.units.find(old=>old.index===u.index)?.receipts}));for(const u of p.units)if(u.receipts)received.add(u.index);partial=p;setScanProgress(p);
@@ -165,15 +172,39 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     setDockOpen(current => current === openKey ? current : openKey);
   });
   const editorSave = useRef<SaveDraft>(null), contextSave = useRef<SaveDraft>(null), assetSave = useRef<SaveDraft>(null), essentialsSave=useRef<SaveDraft>(null), preservationSave=useRef<SaveDraft>(null);
-  const currentScreen = useRef({ sessionId: session.id, ownerId });
-  currentScreen.current = { sessionId: session.id, ownerId };
+  const currentScreen = useRef({ sessionId: session.id, ownerId, captureEpoch:session.captureEpoch });
+  currentScreen.current = { sessionId: session.id, ownerId, captureEpoch:session.captureEpoch };
   const snapshot = latestSnapshot(session,ownerId??'public');
   const locked = busy || working || uploading || !!gallery&&gallery.phase!=='failed';
   async function flush(options?:RummikubSaveOptions) { if (cameraRun || galleryRef.current&&galleryRef.current.phase!=='failed') throw new Error('사진 전송을 마치거나 실패한 사진을 제외한 뒤 이동해 주세요.'); await editorSave.current?.(options); await essentialsSave.current?.(); await assetSave.current?.(); await contextSave.current?.(); await preservationSave.current?.(); }
   useEffect(() => { onReadyToLeave?.(()=>flush(PHOTO_INPUT_SAVE_OPTIONS)); return () => onReadyToLeave?.(null); });
   async function changeOwner(id?: string) { setWorking(true); try { await flush(PHOTO_INPUT_SAVE_OPTIONS);await setOwnerId(id); } finally { setWorking(false); } }
-  async function saveBoard() { setWorking(true); try { await flush(); await mutate(() => api.commit(session.id, true), '저장했어요'); if (alive.current) setSaveFeedback(event => event + 1); } finally { setWorking(false); } }
+  async function saveBoard() {
+    if(saveInFlight.current)return;saveInFlight.current=true;setWorking(true);
+    try{
+      await flush();const reading=await prepareSavedReading();let saved:SessionView|undefined;
+      await mutate(async()=>{saved=await api.commit(session.id,true,reading&&isHostedReader(reading.reader)?{reader:reading.reader,evidenceIds:reading.evidenceIds}:undefined,ownerId);return saved;},'저장했어요');
+      if(alive.current)setSaveFeedback(event=>event+1);
+      if(!reading||reading.reuseOnly||currentScreen.current.sessionId!==session.id||currentScreen.current.ownerId!==ownerId||currentScreen.current.captureEpoch!==session.captureEpoch)return;
+      const intent=saved?.saveIntentId,key=intent??reading.key;
+      if(saveReadClaims.current.has(key))return;
+      saveReadClaims.current.add(key);saveReadClaims.current.add(reading.key);const run=newCaptureRun(ownerId,'capture',true,true);
+      if(intent)run.batch.context.id=intent;
+      await analyzeBatch({reader:reading.reader,readingMode:readerMode,captureTarget:run.captureTarget,context:run.batch.context,evidenceIds:reading.evidenceIds},true,intent);
+    }finally{saveInFlight.current=false;setWorking(false);}
+  }
   async function startTurn(playerId: string) { setWorking(true); try { await flush(); await mutate(() => api.nextTurn(session.id, playerId), '새 차례를 시작했어요'); } finally { setWorking(false); } }
+  const regionReadInFlight=useRef(false);
+  const mayRereadRegion=drawing&&!readonlyPublic&&!privateLocked&&!locked&&hostedMode&&hostedAvailable&&!(visibleJob&&activeAnalysisJob(visibleJob));
+  async function rereadRegion(source:Evidence,input:PhotoInput){
+    if(!mayRereadRegion||regionReadInFlight.current)return;
+    const reader=resolveReader(readerMode,false);if(!isHostedReader(reader))throw Error('선택한 판독기를 준비한 뒤 다시 시도해 주세요.');
+    regionReadInFlight.current=true;setWorking(true);
+    const current=()=>alive.current&&currentScreen.current.sessionId===session.id&&currentScreen.current.ownerId===ownerId&&currentScreen.current.captureEpoch===session.captureEpoch;
+    try{const response=await rereadPhotoRegion({sessionId:session.id,epoch:session.captureEpoch,ownerId,source,input,reader,requestId:crypto.randomUUID(),current,flush,mutate});
+      if(current()){setServerJob(response.job);jobPolling.current?.accept(response.job);}
+    }finally{regionReadInFlight.current=false;if(current())setWorking(false);}
+  }
   // Built from the definition table itself (not hook state) so a photo added the moment the board opens still starts its read.
   function resolveReader(mode:ReaderMode,useFrame:boolean):PhotoReaderSelection|undefined{
     if(!drawing||mode==='existing')return undefined;
@@ -182,14 +213,15 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     const area=areas.find(a=>a.id===localCaptureAreaId)||(!localCaptureAreaId?areas.find(a=>observablePhotoArea(def,a))??areas[0]:undefined);
     if(!area||!observablePhotoArea(def,area))return undefined;
     const framed=mode==='local'&&useFrame&&canUseCatanFrame&&currentFrame?{frame:currentFrame}:{};
-    return isHostedMode(mode)?{kind:mode==='terra'?'terra-high-game-observation-v1':mode==='luna'?'luna-game-observation-v1':'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
+    const readingTarget=!ownerId&&!localCaptureAreaId?publicSceneTarget(view.pack):undefined;
+    return isHostedMode(mode)?{...(readingTarget?{readingTarget}:{}),kind:mode==='terra'?'terra-high-game-observation-v1':mode==='luna'?'luna-game-observation-v1':'gemini-game-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,...framed}:{kind:'local-observation-v1',definitionSHA:def.definitionSHA,areaId:area.id,inputMode:localTask?localInputMode:'original',...(localTask?{task:localTask}:{}),...framed};
   }
   const resolveReaderRef=useRef(resolveReader);resolveReaderRef.current=resolveReader;
-  function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture', useFrame=false): RunningCapture {
+  function newCaptureRun(capturedOwner: string | undefined, purpose: 'capture' | 'restore' = 'capture', useFrame=false,explicitRead=false): RunningCapture {
     setLastScan(null);
-    const profile=captureProfile(view.pack),area=captureAreas(view.pack,capturedOwner).find(a=>a.id===(scoped?localArea?.id:captureAreaId));
-    const mode=drawing?readerMode:'existing',reader=resolveReader(mode,useFrame);
-    return {reader,readingMode:mode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: drawing&&(hostedMode?hostedAvailable:scoped?localEnabled&&(!localTask||localInputMode!=='catan-atlas'||useFrame):!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner)) }) };
+    const profile=captureProfile(view.pack),area=captureAreas(view.pack,capturedOwner).find(a=>a.id===(scoped?localCaptureAreaId:captureAreaId));
+    const mayRead=drawing&&explicitRead,mode=drawing?readerMode:'existing',reader=resolveReader(mode,useFrame);
+    return {reader,readingMode:mode, guidance:profile?`${view.pack.title} · ${area?.name??'전체'}: ${captureGuideText(view.pack,area)}`:undefined,...(profile&&area?{captureTarget:{version:1 as const,gameId:profile.gameId,sourceSHA:profile.sourceSHA,areaId:area.id}}:{}),batch: createScanBatch({ id: globalThis.crypto?.randomUUID?.() || `scan-${Date.now()}-${Math.random().toString(36).slice(2)}`, sessionId: session.id, captureEpoch: session.captureEpoch, ownerId: capturedOwner, purpose, instruction: '', aiEnabled: mayRead&&(hostedMode?hostedAvailable:scoped?localEnabled&&(!localTask||localInputMode!=='catan-atlas'||useFrame):!!status?.configured&&canRecognizePhotos(view.pack,capturedOwner)) }) };
   }
   function openCamera(options?: { ownerId?: string; purpose?: 'capture' | 'restore' }) {
     setCameraRun(newCaptureRun(options ? options.ownerId : ownerId, options?.purpose));
@@ -214,22 +246,55 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     });
     return saved!;
   }
-  async function analyzeBatch(batch: Pick<BatchReadout, 'context' | 'evidenceIds' | 'captureTarget' | 'reader' | 'readingMode'>,sameStaticState=false) {
+  async function analyzeBatch(batch: Pick<BatchReadout, 'context' | 'evidenceIds' | 'captureTarget' | 'reader' | 'readingMode'>,sameStaticState=false,saveIntentId?:string) {
     const {context,evidenceIds,captureTarget,readingMode}=batch;let {reader}=batch;if(!drawing)return;if(!evidenceIds.length||analysisInFlight.current.has(context.id))return;
     if(evidenceIds.length>1&&!sameStaticState&&readingMode==='existing'){setPendingRead(batch);return;}
     if(readingMode!=='existing'&&!reader){await loadPhotoDefinitions(view.pack).catch(()=>undefined);reader=resolveReaderRef.current(readingMode as ReaderMode,false);}
     if(readingMode!=='existing'&&!reader)throw new Error('이 저장본의 촬영 정의가 맞지 않아 선택한 판독을 시작하지 않았어요. 원본은 보관돼요.');
     setPendingRead(null);analysisInFlight.current.add(context.id);setLastScan(null);
-    try{const response=await api.startAnalysisJob(context.sessionId,{requestId:context.id,evidenceIds:[...evidenceIds],expectedCaptureEpoch:context.captureEpoch,purpose:context.purpose,instruction:context.instruction,captureTarget,reader,sameStaticState:readingMode!=='existing'||sameStaticState,scope:context.ownerId?'owner':'public',ownerId:context.ownerId});if(alive.current&&currentScreen.current.sessionId===context.sessionId&&currentScreen.current.ownerId===context.ownerId&&response.job.captureEpoch===context.captureEpoch){setServerJob(response.job);jobPolling.current?.accept(response.job);}}
-    catch(reason){if(alive.current)setLastScan({context,captureTarget,reader,readingMode,evidenceIds:[...evidenceIds],state:'failed',error:reason instanceof Error?reason.message:'사진 읽기를 시작하지 못했어요.'});throw reason;}
+    try{const response=await api.startAnalysisJob(context.sessionId,{requestId:context.id,...(saveIntentId?{saveIntentId}:{}),evidenceIds:[...evidenceIds],expectedCaptureEpoch:context.captureEpoch,purpose:context.purpose,instruction:context.instruction,captureTarget,reader,sameStaticState:readingMode!=='existing'||sameStaticState,scope:context.ownerId?'owner':'public',ownerId:context.ownerId});if(alive.current&&currentScreen.current.sessionId===context.sessionId&&currentScreen.current.ownerId===context.ownerId&&currentScreen.current.captureEpoch===context.captureEpoch&&response.job.captureEpoch===context.captureEpoch){setServerJob(response.job);jobPolling.current?.accept(response.job);}}
+    catch(reason){if(alive.current&&currentScreen.current.sessionId===context.sessionId&&currentScreen.current.ownerId===context.ownerId&&currentScreen.current.captureEpoch===context.captureEpoch)setLastScan({context,captureTarget,reader,readingMode,evidenceIds:[...evidenceIds],state:'failed',error:reason instanceof Error?reason.message:'사진 읽기를 시작하지 못했어요.'});throw reason;}
     finally{analysisInFlight.current.delete(context.id);}
+  }
+  // Save is the single automatic reading trigger. Durable uploads themselves never start a provider job.
+  async function prepareSavedReading(){
+    if(!editable||privateLocked||!drawing)return;
+    const discovered=await discoveredJobs.current;
+    if(!discovered){onToast('사진은 저장해요. 작업 상태를 확인한 뒤 저장하면 판독을 이어갈 수 있어요.');return;}
+    if(currentScreen.current.sessionId!==session.id||currentScreen.current.ownerId!==ownerId||currentScreen.current.captureEpoch!==session.captureEpoch)return;
+    await loadPhotoDefinitions(view.pack).catch(()=>undefined);
+    if(currentScreen.current.sessionId!==session.id||currentScreen.current.ownerId!==ownerId||currentScreen.current.captureEpoch!==session.captureEpoch)return;
+    let reader=resolveReader(readerMode,true);
+    const job=latestAnalysisJob.current??discovered.job,currentJob=job?.sessionId===session.id&&job.ownerId===ownerId&&job.captureEpoch===session.captureEpoch?job:null;
+    if(currentJob&&activeAnalysisJob(currentJob)){
+      const intent=session.saveIntents?.find(i=>i.id===currentJob.saveIntentId),saved=latestSnapshot(session,ownerId??'public');
+      const sameIds=(a:readonly string[],b:readonly string[])=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
+      const savedPhotos=saved?.evidence.filter(e=>e.kind==='photo'&&e.captureEpoch===session.captureEpoch&&e.ownerId===ownerId&&e.scope===(ownerId?'player':'public')).map(e=>e.id)??[];
+      const sameTarget=!!intent&&isHostedReader(reader)&&reader.kind===intent.reader.kind&&reader.definitionSHA===intent.definitionSHA&&JSON.stringify(reader.readingTarget??null)===JSON.stringify(intent.reader.readingTarget??null)&&(reader.readingTarget?.mode==='public-scene'||reader.areaId===intent.reader.areaId)&&JSON.stringify(reader.frame??null)===JSON.stringify(intent.reader.frame??null);
+      if(intent&&sameTarget&&intent.scopeKey===(ownerId??'public')&&intent.captureEpoch===session.captureEpoch&&intent.packVersion===view.pack.version&&intent.sourceSHA===view.pack.runtime?.source.sha256&&saved?.saveIntentId===intent.id&&sameIds(currentJob.evidenceIds,intent.evidenceIds)&&sameIds(readingPhotos.map(p=>p.id),savedPhotos)&&intent.evidenceIds.every(id=>readingPhotos.some(p=>p.id===id)))return {reader:intent.reader,evidenceIds:[...intent.evidenceIds],key:intent.id,reuseOnly:true};
+      return;
+    }
+    if(scoped&&!localEnabled||!scoped&&!status?.configured){onToast('사진은 저장해요. 판독기가 준비되지 않아 판독은 시작하지 않아요.');return;}
+    if(readerMode!=='existing'&&!reader)return;
+    const receipts=session.assertions.filter(a=>a.ownerId===ownerId).flatMap(a=>a.observationReceipts??[]).filter(r=>r.request.scope.ownerId===(ownerId??null)&&r.request.scope.captureEpoch===session.captureEpoch&&(!reader||(r.request.definitionSHA===reader.definitionSHA&&JSON.stringify(r.request.readingTarget??null)===JSON.stringify(isHostedReader(reader)?reader.readingTarget??null:null)&&r.request.areaId===reader.areaId)));
+    const ids=readingPhotos.filter(p=>!currentJob?.evidenceIds?.includes(p.id)&&!receipts.some(r=>r.request.images.some(image=>image.evidenceId===p.id))).slice(-SCAN_LIMIT).map(p=>p.id);
+    if(!ids.length)return;
+    // Keep an explicitly chosen supplementary target across upload→Save, only for its exact source batch.
+    const targets=ids.map(id=>savedPhotoTargets.current.get(id));
+    if(isHostedReader(reader)&&targets.every(t=>t&&t.sessionId===session.id&&t.epoch===session.captureEpoch&&t.ownerId===ownerId&&isHostedReader(t.reader)&&t.reader.kind===reader!.kind&&t.reader.definitionSHA===reader!.definitionSHA&&t.reader.areaId===reader!.areaId)){
+      const selections=targets.map(t=>isHostedReader(t!.reader)?t!.reader.target:undefined);
+      if(selections[0]&&selections.every(t=>JSON.stringify(t)===JSON.stringify(selections[0])))reader={...reader,target:selections[0]};
+    }
+    const key=JSON.stringify([session.id,ownerId??null,session.captureEpoch,reader??readerMode,[...ids].sort()]);
+    if(saveReadClaims.current.has(key))return;
+    return {reader,evidenceIds:ids,key,reuseOnly:false};
   }
   async function readStoredPhotos() {
     setWorking(true);
     try {
       if(scoped&&!localEnabled)throw new Error('선택한 판독기·촬영 부분·현재 사진을 확인해 주세요. 원본은 보관돼요.');
       await flush(PHOTO_INPUT_SAVE_OPTIONS);
-      const run = newCaptureRun(ownerId,'capture',true);
+      const run = newCaptureRun(ownerId,'capture',true,true);
       const photos=readingPhotos;
       const ids=photos.slice(-SCAN_LIMIT).map(p=>p.id);
       await analyzeBatch({reader:run.reader,readingMode:run.readingMode,captureTarget:run.captureTarget,context:run.batch.context,evidenceIds:ids});
@@ -241,12 +306,13 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
       await mutate(async()=>{const ids=[...(run.photoIds?.values()??[])].filter(id=>run.staged!.has(id)),response=await api.registerScanPhotos(run.batch.context.sessionId,run.batch.context.id,ids,run.batch.context.captureEpoch);
         for(const clientId of ids){const e=response.session.evidence.find(e=>e.id===run.staged!.get(clientId)!.evidenceId);if(e&&!run.batch.evidenceIds.includes(e.id))run.batch=addSavedScanEvidence(run.batch,e);}return response;});
     }
+    if(isHostedReader(run.reader)&&run.reader.target)for(const id of run.batch.evidenceIds)savedPhotoTargets.current.set(id,{sessionId:run.batch.context.sessionId,epoch:run.batch.context.captureEpoch,ownerId:run.batch.context.ownerId,reader:run.reader});
     const finished = finishScanBatch(run.batch);
     run.batch = finished.batch;
     setCameraRun(current => current === run ? null : current);
     if (!run.batch.evidenceIds.length) return;
     if (finished.evidenceIds.length) await analyzeBatch({ reader:run.reader,readingMode:run.readingMode,captureTarget:run.captureTarget,context: run.batch.context, evidenceIds:finished.evidenceIds });
-    else setLastScan({reader:run.reader,readingMode:run.readingMode, context: run.batch.context, evidenceIds: [...run.batch.evidenceIds], state: 'manual' });
+    else setLastScan(null);
   };
 
   async function prepareFrame(){
@@ -301,6 +367,20 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     transfer.uploads.discardFailed(); transfer.unread = []; await finishGallery(transfer);
   }
 
+  async function addGalleryFiles(files:File[]) {
+    if(!files.length||!editable||locked||cameraRun||galleryRef.current)return;
+    setUploading(true); const run = newCaptureRun(ownerId);
+    if(detailTarget.current&&isHostedReader(run.reader))run.reader={...run.reader,target:detailTarget.current};detailTarget.current=null;
+    try {
+      await flush(PHOTO_INPUT_SAVE_OPTIONS);
+      const transfer = { run, unread: [], snapshot: { entries: [], active: false, retainedBytes: 0 }, phase: 'reading' } as unknown as GalleryTransfer;
+      transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,isHostedMode(run.readingMode as ReaderMode)?6:1);
+      galleryRef.current = transfer; showGallery(transfer);
+      if (files.length > SCAN_LIMIT) onToast(`처음 ${SCAN_LIMIT}장을 추가해요`);
+      await sendGalleryFiles(transfer, files.slice(0, SCAN_LIMIT));
+    } catch (reason) { setUploading(false); onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
+  }
+
   const captureLabel = personalRummikub ? '받침대 찍기' : personalCatan ? '손패 찍기' : ownerId ? '개인 사진 찍기' : '판 찍기';
   const uploadLabel = ownerId ? '개인 사진 추가' : '사진 추가';
   const savedLabel = recordPhotos(session,ownerId).length?'사진 저장됨':snapshot?`마지막 저장 ${formatDate(snapshot.createdAt)}`:'아직 저장 전';
@@ -344,7 +424,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
   const hasExistingRecord=session.assertions.some(a=>a.ownerId===ownerId);
   const photoTools = editable ? <>
         <div className="cw-photo-bar" role="group" aria-label="사진 찍기와 읽기"><div className="cw-photo-actions"><button className="button secondary small-button" aria-label={captureLabel} disabled={locked} onClick={capture}><Camera size={18}/><span>{view.pack.id === 'rummikub' ? personalRummikub ? '받침대' : '판 찍기' : captureLabel}</span></button><button className="button secondary small-button" aria-label={uploadLabel} disabled={locked} onClick={() => upload.current?.click()}><ImagePlus size={18}/><span>{view.pack.id === 'rummikub' ? '사진' : uploadLabel}</span></button></div>
-        <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={scoped?localArea?.id??localCaptureAreaId:captureAreaId} onChange={scoped?id=>{setLocalCaptureAreaId(id);setLocalTask(undefined);setLocalInputMode('original');}:setCaptureAreaId} disabled={locked||!!cameraRun}/>
+        <PhotoCaptureGuide pack={view.pack} ownerId={ownerId} areaId={scoped?hostedMode&&!ownerId&&!localCaptureAreaId?'':localArea?.id??localCaptureAreaId:captureAreaId} onChange={scoped?id=>{setLocalCaptureAreaId(id);setLocalTask(undefined);setLocalInputMode('original');}:setCaptureAreaId} disabled={locked||!!cameraRun}/>
         {drawing&&<LightweightReaderControls terraAvailable={terraAvailable} terraReason={terra?.reason} lunaAvailable={lunaAvailable} lunaReason={luna?.reason} mode={readerMode} geminiAvailable={geminiAvailable} geminiReason={gemini&&'reason' in gemini?gemini.reason:undefined} geminiModel={gemini?.identity&&'model' in gemini.identity?gemini.identity.model:undefined} onMode={mode=>{setReaderMode(mode);setLocalTask(undefined);setLocalInputMode('original');}} numericScope={numericScope} task={localTask} onTask={task=>{setLocalTask(task);setLocalInputMode('original');}} numberCapability={numberCapability} inputMode={localInputMode} onInputMode={setLocalInputMode} available={localAvailable} availabilityMessage={readers?'로컬 판독기가 준비되지 않았어요. 기존 AI 설정은 바꾸지 않았어요.':'로컬 판독기에 연결할 수 없어요.'} busy={locked||!!visibleJob&&activeAnalysisJob(visibleJob)} hasDefinition={!!definition} definitionLoading={definitionLoading} definitionError={definitionError} showReadButton={view.pack.id!=='rummikub'} supportedArea={supportedLocalArea} hasPhotos={readingPhotos.length>0} onRead={()=>fire(readStoredPhotos())} onFrame={canUseCatanFrame?()=>fire(prepareFrame()):undefined} frameConfirmed={!!currentFrame} existingAvailable={!!status?.configured&&canRecognizePhotos(view.pack,ownerId)}/>}</div>
         {drawing&&scopedPending&&<section className="panel" aria-label="사진 상태 확인"><p>이 {scopedPending.evidenceIds.length}장은 같은 멈춘 판을 찍은 사진인가요?</p><div className="button-row"><button className="button primary" disabled={locked} onClick={()=>fire(analyzeBatch(scopedPending,true))}>네, 함께 읽기</button><button className="button secondary" disabled={locked} onClick={()=>fire(analyzeBatch({...scopedPending,context:{...scopedPending.context,id:crypto.randomUUID()},evidenceIds:scopedPending.evidenceIds.slice(-1)}))}>마지막 한 장만 읽기</button><button className="button text" onClick={()=>setPendingRead(null)}>지금은 사진만 보관</button></div></section>}
         {visibleJob&&<p className="scan-readout" role="status">{jobConnectionLost&&activeAnalysisJob(visibleJob)?jobAutoPaused?'자동 상태 확인을 멈췄어요. 서버 작업은 계속될 수 있어요.':'상태를 확인하지 못했어요. 서버 작업은 계속될 수 있어요.':numericJobMessage(visibleJob)||analysisJobMessage(visibleJob)}{jobConnectionLost&&<button className="button text small-button" onClick={()=>jobPolling.current?.refresh()}>상태 다시 확인</button>}</p>}
@@ -362,13 +442,14 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
     {view.roomAccess&&<div className="room-bar"><span className="small muted">참가 {session.players.length}/{session.room!.capacity} · {session.players.map(p=>p.name).join(' · ')}</span>{view.roomAccess.role==='host'&&<button className="button secondary small-button" onClick={()=>setShowInvite(true)}>초대</button>}{!readonlyPublic&&snapshot&&<button className="button text small-button" disabled={locked} onClick={()=>fire((async()=>{await flush();await mutate(()=>api.resume(session.id,ownerId?'owner':'public',ownerId),'저장본을 열었어요');})())}>저장본 열기</button>}</div>}
     {ownerId&&<PrivatePin key={`${ownerId}:${privateLocked}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} beforeChange={flush}/>}
     {!privateLocked&&<PhotoRecordPanel view={view} ownerId={ownerId} onEvidence={(evidence,region)=>setPhoto({evidence,region})}/>}
+    {TEST_ONLY_CLIPBOARD_PHOTO_PASTE&&editable&&<ClipboardPhotoPaste enabled={TEST_ONLY_CLIPBOARD_PHOTO_PASTE} disabled={locked||!!cameraRun||!!gallery} onFiles={addGalleryFiles}/>}
     {readonlyPublic?<RoomPublicBoard view={view}/>:!privateLocked&&<div className="cw-grid">
       <div className="cw-main">
         {owner && <p className="cw-private-note"><LockKeyhole size={15} aria-hidden="true"/><span><b>{owner.name}</b>의 개인 기록이에요. 본인만 보는 내용은 공용 보드에 나오지 않아요.</span></p>}
 
         {drawing&&view.pack.id !== 'rummikub' && !generic && !hasPhotos && !gallery && !cameraRun && <section className="capture-start" aria-label="첫 사진 찍기"><Camera className="capture-start-mark" size={22} aria-hidden="true"/><div><h2>{personalRummikub ? '내 받침대를 한 장 찍어 두세요' : personalCatan ? '내 카드를 한 장 찍어 두세요' : '판을 위에서 한 장 찍어 주세요'}</h2><p>{personalRummikub ? '숫자와 색이 보이게 찍어 주세요.' : personalCatan ? '손패와 개인 카드가 보이게 찍어 주세요.' : generic?'사진을 남기고 상태는 직접 기록해요.':'판 전체가 들어오게 찍으면 그림으로 바꿔 고칠 수 있어요.'}</p></div></section>}
         {drawing&&personalCatan && <CatanOverview key={`assets:${ownerId}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
-        {scanProgress&&visibleJob&&activeAnalysisJob(visibleJob)&&<ScanProgressPreview view={view} progress={scanProgress}/>}
+        {scanProgress&&visibleJob&&(activeAnalysisJob(visibleJob)||['failed','interrupted'].includes(visibleJob.state))&&<ScanProgressPreview view={view} progress={scanProgress} ownerId={ownerId} jobId={visibleJob.id}/>}
         {drawing&&gaps&&!gapsDismissed&&!(visibleJob&&activeAnalysisJob(visibleJob))&&<BulkBar disabled={locked} message={`사진을 참고할 부분 ${gaps.unread}곳 · 필요한 부분만 고쳐도 돼요.`} actions={[{label:'추가로 찍기',onClick:capture},{label:'괜찮아요',onClick:()=>setGapsDismissedAt(gapKey)}]} tapping={false} tapHint="" onDone={()=>{}}/>}
         {drawing?nativeBoard:hasExistingRecord&&<details className="photo-legacy-drawing"><summary>기존 기록·그림 보기</summary>{nativeBoard}</details>}
         {!wide && <div className="board-dock" ref={dockRoot} role="toolbar" aria-label="보드 아래 메뉴">{dockItems.filter(item => dockKeys.split(',').includes(item.key)).map(({ key, label, Icon }) => <button type="button" key={key} className="dock-chip" aria-expanded={dockOpen === key} onClick={() => toggleDock(key)}><Icon size={16} aria-hidden="true"/>{label}</button>)}</div>}
@@ -383,7 +464,7 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
         <details className="cw-context" open={contextOpen??wide} onToggle={event=>setContextOpen(event.currentTarget.open)}><summary>{ownerId?'내 메모':'차례·메모'}</summary>
           <QuickContext onStartTurn={id => fire(startTurn(id))} key={ownerId || 'public'} view={view} ownerId={ownerId} busy={busy||working} mutate={mutate} onReadyToSave={save => { contextSave.current = save; }}/>
         </details>
-        {drawing&&!personalCatan && !view.roomAccess && <CatanOverview key={`assets:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
+        {drawing&&view.pack.id==='catan-base'&&!personalCatan && !view.roomAccess && <CatanOverview key={`assets:${ownerId || 'public'}`} view={view} ownerId={ownerId} busy={locked} mutate={mutate} onOwner={id => fire(changeOwner(id))} onReadyToSave={save => { assetSave.current = save; }}/>}
       </aside>
     </div>}
     {!readonlyPublic&&<footer className="quick-save"><p>{savedLabel}</p><button className="button primary quick-save-button" disabled={locked} onClick={() => fire(saveBoard())}><span className="quick-save-label"><Save size={18}/>저장</span>{saveFeedback > 0 && <span key={saveFeedback} className="quick-save-done" aria-hidden="true"><Check size={18}/>저장됨</span>}</button></footer>}
@@ -393,20 +474,11 @@ export default function SessionWorkspace({ view, busy, status, mutate, onBack, o
 
     <input hidden ref={upload} type="file" accept="image/*" multiple onChange={async event => {
       const files = Array.from(event.target.files || []); event.target.value = ''; if (!files.length) return;
-      setUploading(true); const run = newCaptureRun(ownerId);
-      if(detailTarget.current&&isHostedReader(run.reader))run.reader={...run.reader,target:detailTarget.current};detailTarget.current=null;
-      try {
-        await flush(PHOTO_INPUT_SAVE_OPTIONS);
-        const transfer = { run, unread: [], snapshot: { entries: [], active: false, retainedBytes: 0 }, phase: 'reading' } as unknown as GalleryTransfer;
-        transfer.uploads = createScanUploadQueue(input => saveRunPhoto(transfer.run, input), snapshot => { transfer.snapshot = snapshot; showGallery(transfer); },undefined,isHostedMode(run.readingMode as ReaderMode)?6:1);
-        galleryRef.current = transfer; showGallery(transfer);
-        if (files.length > SCAN_LIMIT) onToast(`처음 ${SCAN_LIMIT}장을 추가해요`);
-        await sendGalleryFiles(transfer, files.slice(0, SCAN_LIMIT));
-      } catch (reason) { setUploading(false); onToast(reason instanceof Error ? reason.message : '사진을 추가하지 못했어요.'); }
+      await addGalleryFiles(files);
     }}/>
     {cameraRun && <CameraDialog parallelUpload={isHostedMode(cameraRun.readingMode as ReaderMode)} guidance={cameraRun.guidance} key={cameraRun.batch.context.id} onClose={() => finishCaptureRun(cameraRun)} onCapture={input => saveRunPhoto(cameraRun, input)}/>}
     {canUseCatanFrame&&framePhoto&&definition&&<CatanPhotoFrame photo={framePhoto.photo} sourceSHA={framePhoto.sha} definitionSHA={definition.definitionSHA} initial={currentFrame?.sourceEvidenceId===framePhoto.photo.id?currentFrame:undefined} validate={f=>validatePhotoFrame(f,{evidenceId:framePhoto.photo.id,sourceSHA:framePhoto.sha,definitionSHA:definition.definitionSHA})} onClose={()=>setFramePhoto(null)} onConfirm={f=>{setFrame(f);setFramePhoto(null);}}/>}
-    {photo && <PhotoDialog evidence={photo.evidence} region={photo.region} onClose={() => setPhoto(null)} onCrop={editable?async input => { await mutate(() => api.evidence(session.id, { ...input, scope: photo.evidence.scope, ownerId: photo.evidence.ownerId, sourceEvidenceId: photo.evidence.id }), '확대한 사진을 추가했어요'); }:undefined}/>}
+    {photo && <PhotoDialog evidence={photo.evidence} region={photo.region} onClose={() => setPhoto(null)} onReread={mayRereadRegion&&!photo.evidence.sourceEvidenceId&&photo.evidence.captureEpoch===session.captureEpoch&&photo.evidence.ownerId===ownerId&&photo.evidence.scope===(ownerId?'player':'public')?input=>rereadRegion(photo.evidence,input):undefined} onCrop={editable?async input => { await mutate(() => api.evidence(session.id, { ...input, scope: photo.evidence.scope, ownerId: photo.evidence.ownerId, sourceEvidenceId: photo.evidence.id }), '확대한 사진을 추가했어요'); }:undefined}/>}
     {(busy || working || uploading) && <div className="mutation-indicator" role="status"><Busy label={lastScan?.state === 'analyzing' ? '사진을 읽고 있어요' : uploading || cameraRun ? '사진을 보내고 있어요' : '저장하고 있어요'}/></div>}
   </div>;
 }

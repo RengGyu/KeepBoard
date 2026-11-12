@@ -2,23 +2,9 @@ import {useEffect,useState} from 'react';
 import type {PhotoDefinition} from '../shared/lightweightRecognition';
 import type {GamePack} from '../shared/types';
 
-type Source={default:{games:unknown[]}};
-const matches=(d:PhotoDefinition,pack:GamePack)=>d.packId===pack.id&&d.packVersion===pack.version&&d.gameId===pack.runtime?.source.gameId&&d.editionId===pack.runtime?.source.editionId&&d.sourceSHA===pack.runtime?.source.sha256;
-/** Independent promises ensure a current board never downloads the historical catalog.
- * Rejected loads are retryable, and exact version/SHA lookup remains mandatory. */
-export function createPhotoDefinitionLoader(current:()=>Promise<Source>,retired:()=>Promise<Source>){
- let currentRows:PhotoDefinition[]|undefined,retiredRows:PhotoDefinition[]|undefined;
- let currentPending:Promise<void>|undefined,retiredPending:Promise<void>|undefined;
- const find=(pack:GamePack)=>currentRows?.find(d=>matches(d,pack))??retiredRows?.find(d=>matches(d,pack));
- const load=async(pack?:GamePack)=>{
-  await (currentPending??=current().then(m=>{currentRows=m.default.games as PhotoDefinition[];}).catch(e=>{currentPending=undefined;throw e;}));
-  if(pack&&!find(pack))await (retiredPending??=retired().then(m=>{retiredRows=m.default.games as PhotoDefinition[];}).catch(e=>{retiredPending=undefined;throw e;}));
- };
- return {load,find};
-}
-const loader=createPhotoDefinitionLoader(()=>import('../game-photo-definitions/index.json'),()=>import('../docs/gamepack-revision-20261026/history/before-runtime-revision/game-photo-definitions/index.json'));
-export const loadPhotoDefinitions=loader.load;
-export const photoDefinitionFor=loader.find;
+export {createPhotoDefinitionLoader} from './photoDefinitionLoader';
+export {loadPhotoDefinitions,photoDefinitionFor} from './photoDefinitionSource';
+import {loadPhotoDefinitions,photoDefinitionFor} from './photoDefinitionSource';
 export function usePhotoDefinition(pack:GamePack,enabled:boolean){
  const key=JSON.stringify([pack.id,pack.version,pack.runtime?.source]);
  const [state,setState]=useState<{key:string;error:string;ready:boolean}|null>(null);

@@ -11,7 +11,7 @@ import { changeSceneComponentKind, moveSceneComponent, sameSceneLocation, type S
 import { canEditOwner, editSceneSelection } from '../shared/sceneEditing';
 import { observedColorCSS, linkObservedColor } from '../shared/playerColors';
 import { GameComponentArt } from './GameComponentArt';
-import { PlayerPiece } from './ui';
+import {OwnerColors} from './OwnerColors';
 import { groupSceneComponents, deleteSceneGroupSelection, type SceneGroup } from './sceneGroups';
 import './scene-editor.css';
 import {BulkBar} from './BulkBar';
@@ -306,7 +306,7 @@ export function SceneEditor({ value, onSave, players, busy, evidence = [], onEvi
       <div className="se-stage">
         {moveMode && !adding && <div className="se-move-banner"><span>옮길 자리를 누르세요. 같은 부품이 있으면 서로 바꿔요.</span><button className="button text small-button" onClick={() => setMoveMode(false)}>취소</button></div>}
         {adding && draft && !catalogOnly && boardSlotTypes(draft.kind).length > 0 && <div className="se-move-banner">추가할 자리를 누르세요.</div>}
-        {view === 'board' && catalog && (!targetKind || catalogOnly) ? <div className="se-catalog">{groups.length ? groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>) : <p>사진을 추가하거나 필요한 부품만 놓아 주세요.</p>}</div> : view === 'board' ? <BoardView game={game} svgRef={svgRef} scene={previewScene} players={players} selectedId={adding ? draft?.id ?? null : selectedId} selectedIds={adding && draft ? [draft.id] : selectedIds} selectedHex={null} targetKind={targetKind} drag={drag} dragComponent={dragComponent} onBeginDrag={beginDrag} onSelect={id => selectComponent(id)} onTarget={location => { if (Date.now() - lastDragEnd.current < 250) return; if (adding) finishAdd(location); else if (selected) placeComponent(selected.id, location); }} onHex={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }} onBackground={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }}/>
+        {view === 'board' && catalog && (!targetKind || catalogOnly) ? <div className="se-catalog">{groups.length ? groups.map(group => <GroupButton game={game} key={group.key} group={group} players={players} selected={group.ids.some(id => selectedIds.includes(id))} onClick={() => selectGroup(group)}/>) : <p>사진을 추가하거나 필요한 부품만 놓아 주세요.</p>}</div> : view === 'board' ? <div className="se-board-pan" tabIndex={0} aria-label="그림판 가로·세로로 밀어 보기"><div className="se-board-working-surface"><BoardView game={game} svgRef={svgRef} scene={previewScene} players={players} selectedId={adding ? draft?.id ?? null : selectedId} selectedIds={adding && draft ? [draft.id] : selectedIds} selectedHex={null} targetKind={targetKind} drag={drag} dragComponent={dragComponent} onBeginDrag={beginDrag} onSelect={id => selectComponent(id)} onTarget={location => { if (Date.now() - lastDragEnd.current < 250) return; if (adding) finishAdd(location); else if (selected) placeComponent(selected.id, location); }} onHex={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }} onBackground={() => { if (!multiple && !adding) { setSelectedId(null); setMoveMode(false); } }}/></div></div>
           : photo && <PhotoView photo={photo} photos={photos} scene={scene} selected={selected} drawing={false} onPhoto={setPhotoId} onSelect={id => selectComponent(id)} onRegion={() => {}}/>}
         {multiple && <p className="se-hint">부품을 누르면 선택하거나 해제해요.</p>}
       </div>
@@ -348,12 +348,7 @@ function GroupButton({ group, players, selected, onClick, game }: { game?: strin
     <b>×{group.quantity ?? '?'}</b>
   </button>;
 }
-export function OwnerColors({ players, value, onChange, label = '소유색', game }: { label?: string; game?: string; players: Player[]; value: string | null | undefined; onChange: (ownerId: string | null) => void }) {
-  return <fieldset className="se-owner-colors"><legend>{label}</legend><div>
-    <button type="button" aria-pressed={value === null} className={value === null ? 'selected' : ''} onClick={() => onChange(null)}><i className="se-color-dot"/>모름</button>
-    {players.map(player => <button type="button" key={player.id} aria-pressed={value === player.id} className={value === player.id ? 'selected' : ''} onClick={() => onChange(player.id)}><PlayerPiece color={player.color} game={game} size={22}/>{player.name}</button>)}
-  </div></fieldset>;
-}
+export {OwnerColors} from './OwnerColors';
 function friendlyLocation(location: SceneLocation) {
   if (!location.id || location.type === 'unplaced') return '위치 미정';
   if (location.type === 'area') return '보드 밖';

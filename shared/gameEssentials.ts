@@ -19,14 +19,14 @@ export interface GameRuntimeMetadata {
  resume:{requiredFieldIds:string[];mustAskFieldIds:string[];pendingActionFields:string[];notes:string[]};
  gaps:string[];
 }
-export interface GameCatalogEntry {releaseTier?:ReleaseTier;id:string;title:string;edition:string;version:string;support?:GameRuntimeMetadata['support'];limitations:string[]}
+export interface GameCatalogEntry {restorationPolicy?:import('./restoration').RestorationPolicy;releaseTier?:ReleaseTier;id:string;title:string;edition:string;version:string;support?:GameRuntimeMetadata['support'];limitations:string[]}
 // Current app policy is optional even when a pinned historical pack records an older policy.
 export const strictPrivate=(_pack:GamePack):boolean=>false;
 export function runtimeBinding(pack:GamePack,key:string){return pack.runtime?.fieldBindings.find(b=>b.key===key);}
 export function physicalOnlyField(pack:GamePack,key:string){const b=runtimeBinding(pack,key);return !!b&&(b.editor==='physical-only'||!(b.visibility==='public'&&['public','player'].includes(b.scope)||b.visibility==='owner'&&b.scope==='player'));}
 export function effectiveProtectedOwners(_pack:GamePack,_players:readonly Player[],configured:ReadonlySet<string>){return new Set(configured);}
 export function hasPrivateDigitalFields(pack:GamePack){return pack.fields.some(f=>f.scope==='player'&&f.visibility!=='public'&&runtimeBinding(pack,f.key)?.editor!=='physical-only');}
-export function catalogSummary(pack:GamePack):GameCatalogEntry{return {id:pack.id,title:pack.title,edition:pack.edition,version:pack.version,releaseTier:releaseTierFor(pack),support:pack.runtime?{...pack.runtime.support,recognition:recognitionCapability(pack).mode}:undefined,limitations:pack.supportGaps};}
+export function catalogSummary(pack:GamePack):GameCatalogEntry{return {id:pack.id,title:pack.title,edition:pack.edition,version:pack.version,releaseTier:releaseTierFor(pack),...(pack.restorationPolicy?{restorationPolicy:pack.restorationPolicy}:{}),support:pack.runtime?{...pack.runtime.support,recognition:recognitionCapability(pack).mode}:undefined,limitations:pack.supportGaps};}
 
 // Source data is schema-validated by the generator before this single conversion entry point.
 export function adaptSpecification(spec:Record<string,any>,digest:string,native?:GamePack):GamePack {

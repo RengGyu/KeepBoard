@@ -1,3 +1,4 @@
+import {thumbnailJPEG,thumbnailName} from './thumbnail';
 import {randomUUID} from 'node:crypto';
 import {handleUpload,type HandleUploadBody} from '@vercel/blob/client';
 import {head} from '@vercel/blob';import type {Request} from 'express';
@@ -19,6 +20,6 @@ export class CloudUploads{
  async inspect(t:Ticket){if(this.objects instanceof SupabaseObjects){if(!t.storagePath)throw Error('비공개 업로드 위치가 없습니다.');const size=await this.objects.inspectUpload(t.storagePath,t.meta.contentType,50_000_000);await this.objects.attachUpload(t.key,t.storagePath,t.meta.contentType,size);return;}
   if(this.objects instanceof BlobObjects){const h=await head(this.objects.pathname(t.key));if(h.contentType!==t.meta.contentType||h.size>(t.purpose==='import'?80:60)*1024*1024)throw Error('업로드 원본 형식을 확인하세요.');return;}
   const r=await this.objects.read(t.key);if(!r||r.contentType!==t.meta.contentType)throw Error('업로드 원본이 없습니다.');}
- async evidence(id:unknown,sessionId:string,epoch:string,meta:any){const t=await this.ticket(id);if(t.purpose!=='evidence'||t.sessionId!==sessionId||t.epoch!==epoch)throw Error('현재 기록에서 받은 사진 요청만 사용할 수 있어요.');for(const k of ['scope','ownerId','sourceEvidenceId','sourceRegion','captureTarget','label','width','height'])if(JSON.stringify(meta[k])!==JSON.stringify(t.meta[k]))throw Error('사진의 범위나 원본 정보가 바뀌었어요.');await this.inspect(t);return '/uploads/'+t.key.split('/').at(-1);}
+ async evidence(id:unknown,sessionId:string,epoch:string,meta:any){const t=await this.ticket(id);if(t.purpose!=='evidence'||t.sessionId!==sessionId||t.epoch!==epoch)throw Error('현재 기록에서 받은 사진 요청만 사용할 수 있어요.');for(const k of ['scope','ownerId','sourceEvidenceId','sourceRegion','captureTarget','label','width','height'])if(JSON.stringify(meta[k])!==JSON.stringify(t.meta[k]))throw Error('사진의 범위나 원본 정보가 바뀌었어요.');await this.inspect(t);try{const key='uploads/'+thumbnailName(t.key.split('/').at(-1)!);if(!await this.objects.read(key)){const original=await this.objects.read(t.key),jpeg=original?await thumbnailJPEG(original.data):undefined;if(jpeg)await this.objects.write(key,jpeg,null,'image/jpeg');}}catch{/* Derived image failure must not lose a finalized original. */}return '/uploads/'+t.key.split('/').at(-1);}
  async imported(id:unknown){const t=await this.ticket(id);if(t.purpose!=='import')throw Error('가져오기 원본을 확인하세요.');await this.inspect(t);const r=await this.objects.read(t.key);if(!r)throw Error('가져오기 원본을 찾을 수 없습니다.');return JSON.parse(r.data.toString());}
 }
