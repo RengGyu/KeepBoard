@@ -156,3 +156,10 @@
 사용자가 권고 순서 전체를 승인했다: ① 관계/칸 추정 수정 → ② 기존 renderer 모바일 정보밀도 → ③ 기존6응답 기반 유효값·품질/강도 판단. 추가 판독 호출은 하지 않는다. 기존 구현솔2·구현솔 actual/effective/runtime gpt-6.1-sol/high 확인, Normal 프로필 재사용. 1단계는 솔2의 shared 구조/직접 검사 소유이며 카드 docs/structure-followup-20261112/phase1-task.md. 솔1 UI는 1단계 계약/수정 인계 이후 착수한다. 감독은 단계별 수락·최종 통합·원사진/실화면·공유·PROJECT_CONTEXT 갱신을 맡는다. 후속3단계는2단계 이후 시작하고 범위별 카드로 제한한다. 새 Astra/모델 교체·120종 확대·자동분할·추가 provider·운영 backend 배포·제품 commit/push는 포함하지 않는다.
 
 - 2026-11-12 구조 후속 UI: 구현솔(gpt-6.1-sol/high/Normal) Phase2, `docs/structure-followup-20261112/phase2-task.md`. Phase1 계약 도착 후 독립 src/관련 UI test만 연결. shared/server/사이트는 읽기 전용; 최종 Phase1 geometry 인계 후 통합. 감독은 기존6응답 비교/사이트/통합 소유.
+
+## 2026-11-13 Pro 설계 구현·원사진 대조
+사용자가 전체 진행을 승인했고 Sol high 하위 에이전트 사용/기존 런타임 재사용을 허용했다. 기존 두 Paseo 구현솔 actual/effective/runtime gpt-6.1-sol/high를 확인해 캐시와 기존 구현을 재사용한다. Sol1은 src/UI·공통 safety helper(별도 단독 파일)·직접 frontend tests, Sol2는 shared 구조/관계·저장 validator 최소 연결·backend tests와 contract.md를 소유한다. 카드 docs/pro-implementation-20261113/{sol1-task.md,sol2-task.md}. 사진 대조는 독립 Sol/high의 docs/pro-implementation-20261113/photo-audit/**만 소유하며 제품은 읽기 전용이다. 감독은 계약/최종 통합·실제 화면/원사진 근거·PROJECT_CONTEXT를 담당한다. 새 Astra/유료 판독/운영 접근/commit/push/deploy는 worker 범위 밖이다. 30초는 선행 목표가 아니다.
+
+저장 통합에서 assertion ID 교체로 qualified 참조가 끊기는 결함이 확인돼 Sol2 소유에 `server/engine.ts::answerField`의 좁은 재식별 연결·직접 HTTP 회귀를 추가했다. photo_audit는 원사진3종의 독립 메모·부분 정답·9사례 대조·7W31표본 근거를 동결하고 소유권을 반환했다. Sol1은 P0/관계·모서리 정정/위치 우선순위 및 후보 사진위치 라벨을 동결했고, 감독이 최종 통합·공유를 이어간다.
+
+최종 통합·소유권 반환: 두 구현자와 사진 작업자 모두 동결했다. 전체1420/1420·타입·Vercel 빌드, 기존9재생·16소스 동결 SHA, Chrome 세로/가로·frame18칸·실제 판정정33→34를 감독이 확인했다. 역할 영역/저장 오류 재선택은 후속 직접 UI/HTTP 회귀로 마감했다. 기존 private Sites source6e0603e... 배포 succeeded. 자동 위치는 미완료이며 7W33맞음/0오소속/68미연결/16유보와 LC baseline16/42 손실을 현재인계에 남겼다. 추가provider0·Astra0, 운영backend배포0.

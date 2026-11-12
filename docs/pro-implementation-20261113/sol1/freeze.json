@@ -1,0 +1,118 @@
+{
+  "state": "source-frozen",
+  "time": "2026-11-12T23:09:21.326790+00:00",
+  "files": [
+    {
+      "path": "src/EstimatedBoardView.tsx",
+      "beforeSHA256": "8a9a408f585e83abae6b5e7d060f12cc5feff685dae8c9a0ee7933800576eda9",
+      "sha256": "99d403bfd889a82f071fc4d7246c2858cee81b3a89ebd1a28035522b4a3dda48",
+      "bytes": 23901
+    },
+    {
+      "path": "src/GameBoardRecord.tsx",
+      "beforeSHA256": "bf6b87e7cb94a8ad4fefecaae0c86c3d62605af3aeed50e252fb261c40edaf1d",
+      "sha256": "7f8e8d3ff4f68919ad766332aa3c43b3b8d3944356ce3cb9dc9bc92e3cbe4dca",
+      "bytes": 53525
+    },
+    {
+      "path": "src/estimated-board.css",
+      "beforeSHA256": "4a67bf6d2dce162d7f54102cdcb3c45a4c7d8634747db48958c8336081820159",
+      "sha256": "b552972b332a6e00befebff037244ce666c0eb8e452ef9957d9823531d380629",
+      "bytes": 4450
+    },
+    {
+      "path": "shared/estimatedStructureSafety.ts",
+      "beforeSHA256": null,
+      "sha256": "c1debb8c0e719d1a5d60c97e7180e9034a3b7fbe09e7528c6401cc48f8a36c91",
+      "bytes": 4195
+    },
+    {
+      "path": "tests/estimated-structure-safety.test.ts",
+      "beforeSHA256": null,
+      "sha256": "e440feba20e14755de31fd38f357e1a9bbfb4c09eaf9da9a592c0080be7b420d",
+      "bytes": 3211
+    },
+    {
+      "path": "tests/pro-attachment-ui.test.ts",
+      "beforeSHA256": null,
+      "sha256": "c1e6799312fab877946050b13e366744da593d78991aa2eca331ade5c8ab6770",
+      "bytes": 2456
+    },
+    {
+      "path": "tests/pro-native-priority-ui.test.ts",
+      "beforeSHA256": null,
+      "sha256": "9b95a1b36e9ec7c58686be21fd547cdeaad22e0eaea7e0a743336fae5180d9c8",
+      "bytes": 4209
+    },
+    {
+      "path": "tests/pro-structure-controls-ui.test.ts",
+      "beforeSHA256": null,
+      "sha256": "1296434b79fef9cf50e8d6b51a4904555a6fe786321c3e885b38dc4d1ffea8ab",
+      "bytes": 16914
+    }
+  ],
+  "patchSHA256": "3f4a63bf0281ad0a0c6830bb6dcef2a44039ec5d83e03c75a694d3b1f88760ed",
+  "verification": [
+    {
+      "command": "node --import tsx --test tests/estimated-structure-safety.test.ts tests/pro-attachment-ui.test.ts tests/pro-native-priority-ui.test.ts tests/pro-structure-controls-ui.test.ts tests/estimated-board-ui.test.ts tests/structure-followup-ui.test.ts tests/spatial-reading-ui.test.ts tests/restoration-drawing-ui.test.ts",
+      "exitCode": 0,
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "log": "focused-tests.log"
+    },
+    {
+      "command": "npx tsc --noEmit -p docs/pro-implementation-20261113/sol1/tsconfig.json",
+      "exitCode": 0,
+      "log": "typecheck.log"
+    },
+    {
+      "command": "git diff --check -- [owned files]",
+      "exitCode": 0
+    },
+    {
+      "command": "node --import tsx --test tests/pro-structure-controls-ui.test.ts tests/estimated-board-ui.test.ts",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "exitCode": 0,
+      "log": "board-label-followup-tests.log"
+    },
+    {
+      "command": "npx tsc --noEmit -p docs/pro-implementation-20261113/sol1/tsconfig.json",
+      "exitCode": 0,
+      "log": "board-label-followup-typecheck.log"
+    },
+    {
+      "command": "git diff --check -- src/EstimatedBoardView.tsx tests/pro-structure-controls-ui.test.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "node --import tsx --test tests/pro-structure-controls-ui.test.ts tests/estimated-board-ui.test.ts",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "exitCode": 0,
+      "log": "role-area-followup-tests.log"
+    },
+    {
+      "command": "npx tsc --noEmit -p docs/pro-implementation-20261113/sol1/tsconfig.json",
+      "exitCode": 0,
+      "log": "role-area-followup-typecheck.log"
+    },
+    {
+      "command": "git diff --check -- src/EstimatedBoardView.tsx tests/pro-structure-controls-ui.test.ts",
+      "exitCode": 0
+    }
+  ],
+  "providerCalls": 0,
+  "fullSuiteRun": false,
+  "buildRun": false,
+  "limitations": [
+    "Browser and full integrated test/build verification belong to supervisor.",
+    "Direct frame tests exercise React handlers and shared projection after JSON reopen; they do not certify touchscreen accuracy or visual placement truth.",
+    "Read-only shared previews require the existing temporary local onChange host; this delta does not make read-only persisted boards writable.",
+    "No model/prompt/artwork/owner/source/geometry values changed by Sol1."
+  ],
+  "revision": "explicit-anchor-role-area-followup"
+}

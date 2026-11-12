@@ -1,0 +1,66 @@
+TAP version 13
+# Subtest: qualified cross-field relations and board frame use validated exports, preserve current-field values and reopen through the shared adapter
+ok 1 - qualified cross-field relations and board frame use validated exports, preserve current-field values and reopen through the shared adapter
+  ---
+  duration_ms: 10.7645
+  type: 'test'
+  ...
+# Subtest: four original-photo taps submit semantic corners with no source-key/coordinate input; window guidance targets the 4x5 grid
+ok 2 - four original-photo taps submit semantic corners with no source-key/coordinate input; window guidance targets the 4x5 grid
+  ---
+  duration_ms: 6.522792
+  type: 'test'
+  ...
+# Subtest: relative bands, partial order and qualified namesakes stay distinct and selectable without claiming printed rounds
+ok 3 - relative bands, partial order and qualified namesakes stay distinct and selectable without claiming printed rounds
+  ---
+  duration_ms: 2.191
+  type: 'test'
+  ...
+# Subtest: unread 7W board candidates have distinct photo-position labels while keeping their qualified selection IDs
+ok 4 - unread 7W board candidates have distinct photo-position labels while keeping their qualified selection IDs
+  ---
+  duration_ms: 1.071958
+  type: 'test'
+  ...
+# Subtest: explicit board choice adopts a known-role suggested area and updates actual reopened counts without losing the selected physical ID
+not ok 5 - explicit board choice adopts a known-role suggested area and updates actual reopened counts without losing the selected physical ID
+  ---
+  duration_ms: 7.328833
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/pro-structure-controls-ui.test.ts:1:11512'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert(changed.pieces.every(p=>p.structureOverride?.areaId==='tableau'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/pro-structure-controls-ui.test.ts:45:440)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: board choice alone keeps an unknown card role unclassified and clearing a board does not adopt a role
+ok 6 - board choice alone keeps an unknown card role unclassified and clearing a board does not adopt a role
+  ---
+  duration_ms: 0.709542
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 367.089792

@@ -1,0 +1,174 @@
+--- a/shared/estimatedBoardStructure.ts
++++ b/shared/estimatedBoardStructure.ts
+@@ -1,6 +1,7 @@
+ import type {Assertion,Evidence} from './types';import type {GenericPiece} from './genericRecord';import type {DrawingItem} from './drawingProjection';
+ import {projectGenericDrawing,photoDrawingReference} from './drawingProjection';import {mapObservationRegion} from './photoGeometry';import type {ObservationBox,ObservationReceipt} from './lightweightRecognition';
+ import {sourceLine,expeditionColor,diceLattice} from './estimatedGeometry';
++import {resolveEstimatedReference,type EstimatedReferenceRecord} from './estimatedStructureSafety';
+ import {ESTIMATED_AREAS} from './estimatedStructureOverride';import {estimatedBoardMetrics,type EstimatedBoardMetrics} from './estimatedBoardMetrics';
+ export type {EstimatedStructureOverride} from './estimatedStructureOverride';export {ESTIMATED_AREAS,estimatedBoardMetrics};
+ export type EstimatedBoardGrid={rows:4;columns:5;rowAxis:{x:number;y:number};orientation:'source-order-not-printed';basis:'observed-dice-lattice'}|{rows:4;columns:5;rowAxis:null;orientation:'unknown';basis:'manual-slot-order'};
+@@ -32,6 +33,7 @@
+ /** Derived view only. Does not mutate items, receipts, owner, source geometry or canonical spatial. */
+ export function estimateBoardStructure(input:{gameId:string;items:readonly DrawingItem[];assertions:readonly Assertion[];allAssertions?:readonly Assertion[];evidence:readonly Evidence[]}):EstimatedBoardStructure{
+  const {gameId,assertions,evidence}=input,items=[...new Map(input.items.map(i=>[identity(i),i])).values()],allowedAssertions=[...new Map([...assertions,...(input.allAssertions??[])].map(a=>[a.id,a])).values()],requested=new Set(items.map(identity)),extra=allowedAssertions.filter(a=>!items.some(i=>i.assertionId===a.id)).flatMap(a=>{const v=a.value as any;return v?.version==='game-component-record-v1'&&Array.isArray(v.pieces)?projectGenericDrawing({...a,observationReceipts:scopeReceipts(a)},v.pieces,evidence).filter(i=>['board','wonder',...(gameId==='sagrada'?['windows','cards','dice']:gameId==='lost-cities'?['cards']:[])].includes((i.value as GenericPiece).componentId??'')):[];}),out:EstimatedBoardStructure={version:'estimated-board-structure-v1',gameId,areas:(ESTIMATED_AREAS[gameId]??[]).map(a=>({...a,status:'empty',total:0,placed:0,unassigned:0,notes:[]})),groups:[],placements:[],retained:[],unassigned:[],metrics:{total:0,placed:0,readKnown:0,readTotal:0,readUnknown:0,errorKnown:null,errorUnknown:0}},nodes:Node[]=[],placed=new Set<string>(),handled=new Set<string>();
++ const manualChecks:{item:DrawingItem;refs:string[];areaId:string}[]=[];
+  const unassigned=(i:DrawingItem,reason:string)=>{if(!requested.has(identity(i)))return;placed.delete(identity(i));if(!out.unassigned.some(u=>identity(u)===identity(i)))out.unassigned.push({assertionId:i.assertionId,pieceId:i.pieceId,reason});};
+  const group=(sourceKey:string,areaId:string,token:string,extras:Partial<EstimatedBoardGroup>={})=>{const id=scopedGroup(sourceKey,areaId,token);let g=out.groups.find(g=>g.id===id);if(!g){g={id,areaId,label:out.areas.find(a=>a.id===areaId)?.label??areaId,sourceKey,anchorPieceId:null,side:null,color:null,axis:null,slots:[],...extras};out.groups.push(g);}else for(const [key,value]of Object.entries(extras)){if((g as any)[key]===null||(g as any)[key]===undefined||key==='slots'&&!g.slots.length||key==='grid'&&g.grid?.basis==='manual-slot-order'&&(value as EstimatedBoardGrid)?.basis==='observed-dice-lattice'||(key==='label'&&g.label===(out.areas.find(a=>a.id===areaId)?.label??areaId)))(g as any)[key]=value;}return g;};
+  const put=(n:Node,g:EstimatedBoardGroup,extra:Partial<EstimatedBoardPlacement>={})=>{if(handled.has(identity(n.item)))return;handled.add(identity(n.item));out.placements.push({assertionId:n.item.assertionId,pieceId:n.item.pieceId,areaId:g.areaId,groupId:g.id,order:0,slot:null,anchorPieceId:g.anchorPieceId,attachedToPieceId:null,basis:'estimated',notes:['bbox와 현재 읽힌 값에 따른 표시 추정'],...extra});if(g.areaId!=='unclassified')placed.add(identity(n.item));};
+@@ -41,11 +43,19 @@
+   const receipts=scopeReceipts(a),refs=photoDrawingReference({...a,observationReceipts:receipts},evidence,{componentIds:[...new Set(receipts.flatMap(r=>r.result.observations.flatMap(o=>o.componentId?[o.componentId]:[])))]}),ref=refs.find(r=>r.pieceId===item.pieceId),e=evidence.find(e=>e.id===ref?.position.evidenceId),definitions=new Set(receipts.filter(r=>Object.values(r.componentRefs).includes(p.id)).map(r=>r.request.definitionSHA));
+   const sourceKey=JSON.stringify([a.ownerId??null,ref?.position.evidenceId??p.evidenceId,ref?.position.sourceSHA??null,e?.captureEpoch??null,definitions.size===1?[...definitions][0]:null]);
+   if(isRequested&&p.structureOverride){const q=p.structureOverride,g=group(sourceKey,q.areaId,q.groupId,{anchorPieceId:q.anchorPieceId,...(gameId==='sagrada'&&q.areaId==='window'?{role:'window-grid' as const,grid:{rows:4 as const,columns:5 as const,rowAxis:null,orientation:'unknown' as const,basis:'manual-slot-order' as const}}:{}),slots:gameId==='sagrada'&&['window','round-track'].includes(q.areaId)?Array.from({length:q.areaId==='window'?20:10},(_,i)=>i+1):[]});out.placements.push({assertionId:item.assertionId,pieceId:item.pieceId,areaId:q.areaId,groupId:g.id,order:q.order,slot:q.slot,anchorPieceId:q.anchorPieceId,attachedToPieceId:q.attachedToPieceId,basis:'manual',...(gameId==='sagrada'&&q.areaId==='window'&&q.slot!==null?{cell:{row:Math.floor((q.slot-1)/5)+1,column:(q.slot-1)%5+1}}:{}),notes:['사용자가 정정한 추정 구조']});handled.add(identity(item));
+-   const refs=[q.anchorPieceId,q.attachedToPieceId].filter((s):s is string=>!!s),same=(id:string)=>items.some(i=>i.pieceId===id&&i.assertionId===a.id&&(i.value as GenericPiece).evidenceId===p.evidenceId);if(refs.some(id=>!same(id)))unassigned(item,'manual-anchor-or-attachment-unavailable');else if(q.areaId!=='unclassified')placed.add(identity(item));
++   manualChecks.push({item,refs:[q.anchorPieceId,q.attachedToPieceId].filter((s):s is string=>!!s),areaId:q.areaId});
+   }else if(isRequested&&['manual','board','group'].includes(item.position.space)){out.retained.push(item);handled.add(identity(item));placed.add(identity(item));}
+   if(!ref||!e||definitions.size!==1||p.region&&!['x','y','width','height'].every(k=>Math.abs((p.region as any)[k]-(ref.position.box as any)[k])<1e-9)){if(!handled.has(identity(item)))unassigned(item,'missing-or-conflicting-source-geometry');continue;}
+   const areas=new Set(receipts.flatMap(r=>r.result.observations.filter(o=>r.componentRefs[o.ref]===item.pieceId).map(o=>o.sourceAreaId??null))),aspect=e.width&&e.height?e.width/e.height:1;
+   nodes.push({item,piece:p,box:ref.position.box,sourceKey,aspect,sourceAreaId:areas.size===1?[...areas][0]:null,field:a.field,receipts});
++ }
++ // Resolve after all live source-qualified nodes exist. No receipt resurrection.
++ const nodeByIdentity=new Map(nodes.map(n=>[identity(n.item),n]));
++ const liveReferences:EstimatedReferenceRecord[]=[...new Map([...items,...extra].map(i=>[identity(i),i])).values()].map(i=>({assertionId:i.assertionId,pieceId:i.pieceId,evidenceId:(i.value as GenericPiece).evidenceId,sourceKey:nodeByIdentity.get(identity(i))?.sourceKey??null}));
++ for(const check of manualChecks){const source=liveReferences.find(r=>identity(r)===identity(check.item));
++  const unresolved=source?check.refs.map(id=>resolveEstimatedReference(source,id,liveReferences)).find(r=>r.status!=='resolved'):{status:'unavailable' as const};
++  if(unresolved)unassigned(check.item,unresolved.status==='ambiguous'?'manual-anchor-or-attachment-ambiguous':'manual-anchor-or-attachment-unavailable');
++  else if(check.areaId!=='unclassified')placed.add(identity(check.item));
+  }
+  const partitions=new Map<string,Node[]>();for(const n of nodes)partitions.set(n.sourceKey,[...(partitions.get(n.sourceKey)??[]),n]);
+  for(const [sourceKey,ns]of partitions){
+--- a/src/EstimatedBoardView.tsx
++++ b/src/EstimatedBoardView.tsx
+@@ -3,6 +3,7 @@
+ import type {GamePack} from '../shared/types';
+ import {estimateBoardStructure,type EstimatedStructureOverride} from '../shared/estimatedBoardStructure';
+ import {pieceFaceValues} from './pieceFaceValues';
++import {estimatedAttachmentForest} from '../shared/estimatedStructureSafety';
+ import './estimated-board.css';
+ type Structure=ReturnType<typeof estimateBoardStructure>;
+ 
+@@ -20,9 +21,10 @@
+  const anchorLabel=(id:string)=>{const p=record.pieces.find(p=>p.id===id)??contextPieces.find(p=>p.id===id);return p?pieceFaceValues(pack,p).filter(v=>!v.unknown).map(v=>v.text).join(' · '):'';};
+  const render=(id:string)=>{const p=piece(id),values=pieceFaceValues(pack,p),known=values.filter(v=>!v.unknown),kind=pack.runtime?.components.find(c=>c.id===p.componentId)?.kind,unread=known.length===0,rich=known.some(v=>v.text.length>18);
+   return <button type="button" key={id} className={['estimated-piece',selected===id?'selected':'',unread?'unread':'',kind==='card'?'is-card':kind==='board'?'is-board':'is-token',rich?'rich-values':''].filter(Boolean).join(' ')} data-drawing-piece={id} aria-pressed={selected===id} disabled={busy} onClick={()=>onSelect(id)}>{renderPiece(p)}{values.length===0&&<strong className="estimated-unknown-value">{pack.runtime?.components.find(c=>c.id===p.componentId)?.name??'종류'} ?</strong>}</button>;};
+- const children=(id:string)=>placements.filter(p=>p.attachedToPieceId===id&&p.pieceId!==id);
+- const renderWithAttachments=(id:string)=><div key={id} className="estimated-piece-group">{render(id)}{children(id).length>0&&<div className="estimated-attachments"><small>부착 · 추정/수동</small>{children(id).map(c=>render(c.pieceId))}</div>}</div>;
+- const roots=(g:Structure['groups'][number])=>placements.filter(p=>p.groupId===g.id&&(!p.attachedToPieceId||!ids.has(p.attachedToPieceId))).sort((a,b)=>a.order-b.order||a.pieceId.localeCompare(b.pieceId));
++ const attachmentTree=estimatedAttachmentForest(placements),rootIds=new Set(attachmentTree.roots);
++ const children=(id:string)=>attachmentTree.children[id]??[];
++ const renderWithAttachments=(id:string):ReactNode=><div key={id} className="estimated-piece-group">{render(id)}{attachmentTree.problems[id]&&<small role="status">부착 관계 확인 필요 · 원래 기록은 유지됨</small>}{children(id).length>0&&<div className="estimated-attachments"><small>부착 · 추정/수동</small>{children(id).map(child=>renderWithAttachments(child))}</div>}</div>;
++ const roots=(g:Structure['groups'][number])=>placements.filter(p=>p.groupId===g.id&&rootIds.has(p.pieceId)).sort((a,b)=>a.order-b.order||a.pieceId.localeCompare(b.pieceId));
+  const groups=structure.groups.filter(g=>roots(g).length>0||g.side!==null&&placements.some(p=>{const other=structure.groups.find(q=>q.id===p.groupId);return other?.sourceKey===g.sourceKey&&other.areaId===g.areaId;}));
+  const groupLabel=(g:Structure['groups'][number])=>g.role==='expedition'||g.role==='discard'?[g.side==='near'?'가까운 편':g.side==='far'?'먼 편':null,g.role==='discard'?'버림':'원정',g.color].filter(Boolean).join(' · '):g.label;
+  const renderGroup=(g:Structure['groups'][number])=>{
+--- /dev/null
++++ b/shared/estimatedStructureSafety.ts
+@@ -0,0 +1,85 @@
++/** Derived display safety, not visual truth or an authorization boundary.
++ * Callers must pass live records already allowed for this viewer. A non-null
++ * sourceKey must come from verified receipt geometry, never from model text.
++ */
++export interface EstimatedReferenceRecord {
++  assertionId: string;
++  pieceId: string;
++  evidenceId: string | null;
++  sourceKey: string | null;
++}
++export type EstimatedReferenceResolution =
++  | { status: 'resolved'; target: EstimatedReferenceRecord }
++  | { status: 'unavailable' | 'ambiguous' };
++
++/** Preserve existing same-field manual links; permit cross-field links only
++ * when both endpoints have the same validated source/epoch/owner/definition.
++ * Unqualified legacy IDs with multiple eligible targets are not guessed.
++ */
++export function resolveEstimatedReference(
++  source: EstimatedReferenceRecord,
++  targetId: string,
++  live: readonly EstimatedReferenceRecord[],
++): EstimatedReferenceResolution {
++  const candidates = live.filter(target => target.pieceId === targetId &&
++    target.evidenceId === source.evidenceId &&
++    (target.assertionId === source.assertionId ||
++      source.sourceKey !== null && target.sourceKey === source.sourceKey));
++  const unique = [...new Map(candidates.map(target =>
++    [JSON.stringify([target.assertionId, target.pieceId]), target])).values()];
++  return unique.length === 1 ? { status: 'resolved', target: unique[0] } :
++    { status: unique.length ? 'ambiguous' : 'unavailable' };
++}
++
++export interface EstimatedAttachmentItem {
++  pieceId: string;
++  attachedToPieceId: string | null;
++}
++export interface EstimatedAttachmentForest {
++  roots: string[];
++  children: Record<string, string[]>;
++  externalParent: Record<string, string>;
++  problems: Record<string, 'self-attachment' | 'attachment-cycle'>;
++}
++
++/** Every current-field piece stays reachable exactly once. Invalid cycles are
++ * broken in the derived display ONLY. Stored overrides are retained for editing.
++ * Targets in another assertion remain visible external links, not hidden roots.
++ */
++export function estimatedAttachmentForest(
++  placements: readonly EstimatedAttachmentItem[],
++): EstimatedAttachmentForest {
++  const ids = [...new Set(placements.map(item => item.pieceId))];
++  const idSet = new Set(ids), parent = new Map<string, string>();
++  const externalParent: Record<string, string> = Object.create(null);
++  const problems: EstimatedAttachmentForest['problems'] = Object.create(null);
++  for (const item of placements) {
++    const target = item.attachedToPieceId;
++    if (target === null) continue;
++    if (target === item.pieceId) problems[item.pieceId] = 'self-attachment';
++    else if (idSet.has(target)) parent.set(item.pieceId, target);
++    else externalParent[item.pieceId] = target;
++  }
++  const done = new Set<string>();
++  for (const start of ids) {
++    if (done.has(start)) continue;
++    const path: string[] = [], at = new Map<string, number>();
++    let cursor: string | undefined = start;
++    while (cursor !== undefined && !done.has(cursor)) {
++      const previous = at.get(cursor);
++      if (previous !== undefined) {
++        for (const cyclicId of path.slice(previous)) {
++          parent.delete(cyclicId);
++          problems[cyclicId] = 'attachment-cycle';
++        }
++        break;
++      }
++      at.set(cursor, path.length); path.push(cursor); cursor = parent.get(cursor);
++    }
++    for (const id of path) done.add(id);
++  }
++  const children: Record<string, string[]> = Object.create(null);
++  for (const id of ids) children[id] = [];
++  for (const id of ids) { const target = parent.get(id); if (target) children[target].push(id); }
++  return { roots: ids.filter(id => !parent.has(id)), children, externalParent, problems };
++}
+--- /dev/null
++++ b/tests/estimated-structure-safety.test.ts
+@@ -0,0 +1,20 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {resolveEstimatedReference,estimatedAttachmentForest} from '../shared/estimatedStructureSafety';
++const source={assertionId:'cards',pieceId:'card',evidenceId:'photo',sourceKey:'verified'};
++const target={assertionId:'boards',pieceId:'board',evidenceId:'photo',sourceKey:'verified'};
++test('manual references resolve across fields only in the same qualified source',()=>{
++ assert.equal(resolveEstimatedReference(source,'board',[target]).status,'resolved');
++ assert.equal(resolveEstimatedReference(source,'board',[{...target,sourceKey:'foreign'}]).status,'unavailable');
++ assert.equal(resolveEstimatedReference({...source,sourceKey:null},'board',[{...target,sourceKey:null}]).status,'unavailable');
++ assert.equal(resolveEstimatedReference(source,'board',[target,{...target,assertionId:'other'}]).status,'ambiguous');
++});
++test('cycles keep all pieces visible and do not mutate saved data',()=>{
++ const rows=[{pieceId:'a',attachedToPieceId:'b'},{pieceId:'b',attachedToPieceId:'a'},{pieceId:'c',attachedToPieceId:'b'}];const before=JSON.stringify(rows);
++ const result=estimatedAttachmentForest(rows);
++ assert.deepEqual(result.roots,['a','b']);assert.deepEqual(result.children.b,['c']);assert.equal(result.problems.a,'attachment-cycle');assert.equal(JSON.stringify(rows),before);
++});
++test('nested and cross-field attachments remain reachable',()=>{
++ const result=estimatedAttachmentForest([{pieceId:'a',attachedToPieceId:null},{pieceId:'b',attachedToPieceId:'a'},{pieceId:'c',attachedToPieceId:'b'},{pieceId:'d',attachedToPieceId:'other-field-card'}]);
++ assert.deepEqual(result.roots,['a','d']);assert.deepEqual(result.children.b,['c']);assert.equal(result.externalParent.d,'other-field-card');
++});

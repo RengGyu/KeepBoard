@@ -1,0 +1,15 @@
+
+> keepboard@0.1.0 typecheck
+> tsc --noEmit
+
+shared/structureRelations.ts(38,94): error TS18048: 'stored' is possibly 'undefined'.
+shared/structureRelations.ts(38,154): error TS18048: 'stored' is possibly 'undefined'.
+shared/structureRelations.ts(38,220): error TS18048: 'stored' is possibly 'undefined'.
+shared/structureRelations.ts(38,303): error TS18048: 'stored' is possibly 'undefined'.
+src/EstimatedBoardView.tsx(63,68): error TS2322: Type '{ version: "estimated-structure-override-v1"; areaId: string; groupId: string; order: number; slot: number | null; anchorPieceId: string | null; attachedToPieceId: string | null; } | ... 4 more ... | { ...; }' is not assignable to type 'EstimatedStructureOverride'.
+  Type '{ version: "estimated-structure-override-v1" | "estimated-structure-override-v2"; sourceKey?: string | undefined; anchorRef?: (StructureAnchorRef | null) | undefined; attachedToRef?: (StructurePieceRef | null) | undefined; ... 8 more ...; attachedToPieceId: string | null; }' is not assignable to type 'EstimatedStructureOverride'.
+    Type '{ version: "estimated-structure-override-v1" | "estimated-structure-override-v2"; sourceKey?: string | undefined; anchorRef?: (StructureAnchorRef | null) | undefined; attachedToRef?: (StructurePieceRef | null) | undefined; ... 8 more ...; attachedToPieceId: string | null; }' is not assignable to type '{ version: "estimated-structure-override-v2"; sourceKey: string; anchorRef?: StructureAnchorRef | null | undefined; attachedToRef?: StructurePieceRef | null | undefined; beforeRefs?: StructurePieceRef[] | undefined; frame?: { ...; } | ... 1 more ... | undefined; active?: boolean | undefined; } & StructureOverrideBase'.
+      Type '{ version: "estimated-structure-override-v1" | "estimated-structure-override-v2"; sourceKey?: string | undefined; anchorRef?: (StructureAnchorRef | null) | undefined; attachedToRef?: (StructurePieceRef | null) | undefined; ... 8 more ...; attachedToPieceId: string | null; }' is not assignable to type '{ version: "estimated-structure-override-v2"; sourceKey: string; anchorRef?: StructureAnchorRef | null | undefined; attachedToRef?: StructurePieceRef | null | undefined; beforeRefs?: StructurePieceRef[] | undefined; frame?: { ...; } | ... 1 more ... | undefined; active?: boolean | undefined; }'.
+        Types of property 'version' are incompatible.
+          Type '"estimated-structure-override-v1" | "estimated-structure-override-v2"' is not assignable to type '"estimated-structure-override-v2"'.
+            Type '"estimated-structure-override-v1"' is not assignable to type '"estimated-structure-override-v2"'.

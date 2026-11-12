@@ -1,0 +1,27 @@
+--- a/shared/estimatedBoardStructure.ts
++++ b/shared/estimatedBoardStructure.ts
+@@ -76,10 +76,11 @@
+    const explicit=v2?.attachedToRef,id=explicit?.pieceId??q.attachedToPieceId;if(explicit===null){p.attachedToRef=null;p.attachedToPieceId=null;}else if(id){const target=resolve(id,explicit);if(target)p.attachedToRef=target;}
+    p.beforeRefs=[];for(const ref of v2?.beforeRefs??[]){const result=resolveEstimatedReference(origin,ref,liveReferences);if(result.status==='resolved'&&identity(result.target)===identity(ref))p.beforeRefs.push(ref);else p.notes.push('manual-before-reference-unavailable');}
+   }
++  if(!invalid&&n&&q.areaId==='unclassified'){const suggested=suggestedRoleArea(gameId,n);if(suggested)p.suggestedAreaId=suggested;}
+   p.basisByField={position:invalid?'unknown':'manual',anchor:p.anchorRef?'manual':'unknown',order:v2?.beforeRefs?.length?'manual':'unknown'};p.slotBasis='manual';p.orderStatus=v2?.beforeRefs?.length?'partial':'unknown';
+   if(invalid){p.anchorRef=null;p.attachedToRef=null;p.anchorPieceId=null;p.attachedToPieceId=null;p.beforeRefs=[];p.basisByField={position:'unknown',anchor:'unknown',attachment:'unknown',order:'unknown'};p.notes.push(invalid);unassigned(item,invalid);}else if(q.areaId!=='unclassified')placed.add(identity(item));
+  }
+- for(const g of out.groups){const ps=out.placements.filter(p=>p.groupId===g.id);if(ps.length&&ps.every(p=>p.basis==='manual')){const refs=[...new Map(ps.flatMap(p=>p.anchorRef?[[anchorIdentity(p.anchorRef),p.anchorRef] as const]:[])).values()];g.anchorRef=refs.length===1?refs[0]:null;g.anchorPieceId=g.anchorRef?.kind==='live-piece'?g.anchorRef.pieceId:null;}}
++ for(const g of out.groups){const ps=out.placements.filter(p=>p.groupId===g.id);if(ps.length&&ps.every(p=>p.basis==='manual')){const suggested=ps[0].suggestedAreaId;if(suggested&&ps.every(p=>p.suggestedAreaId===suggested))g.suggestedAreaId=suggested;const refs=[...new Map(ps.flatMap(p=>p.anchorRef?[[anchorIdentity(p.anchorRef),p.anchorRef] as const]:[])).values()];g.anchorRef=refs.length===1?refs[0]:null;g.anchorPieceId=g.anchorRef?.kind==='live-piece'?g.anchorRef.pieceId:null;}}
+  const partitions=new Map<string,Node[]>();for(const n of nodes)partitions.set(n.sourceKey,[...(partitions.get(n.sourceKey)??[]),n]);
+  for(const [sourceKey,ns]of partitions){
+   const boardsInScope=allBoards.filter(b=>b.sourceKey===sourceKey),relations=allRelations.filter(r=>ns.some(n=>identity(n.item)===identity(r.from)));
+--- a/tests/estimated-board-structure.test.ts
++++ b/tests/estimated-board-structure.test.ts
+@@ -179,3 +179,9 @@
+  assert.equal(p('city').areaId,'unclassified');assert.equal(p('city').suggestedAreaId,'tableau');assert.equal(r.groups.find(g=>g.id===p('city').groupId)!.suggestedAreaId,'tableau');assert.equal(p('stage').suggestedAreaId,'stages');assert.equal(p('unknown-role').suggestedAreaId,undefined);assert.equal(r.metrics.placed,1);assert.equal(JSON.stringify(f.a),before);
+  assert.equal(estimatedBoardAnchorCorrection(p('city'),anchor).areaId,'tableau');assert.equal(estimatedBoardAnchorCorrection(p('stage'),anchor).areaId,'stages');assert.equal(estimatedBoardAnchorCorrection(p('unknown-role'),anchor).areaId,'unclassified');assert.equal(estimatedBoardAnchorCorrection(p('city'),null).areaId,'unclassified');
+ });
++
++test('reopened unclassified manual override retains known-role suggestion without changing saved classification or invalid source',async()=>{
++ const {estimatedBoardAnchorCorrection}=await import('../shared/estimatedBoardStructure'),f=fixture('seven-wonders',[['board','wonder',[.6,.6,.2,.2]],['card','age-cards',[.1,.1,.05,.08],{cardColor:'yellow'},'city']]),sourceKey=f.run().referenceRecords!.find(r=>r.pieceId==='card')!.sourceKey!,anchor={kind:'live-piece' as const,assertionId:'a',pieceId:'board'};
++ f.pieces[1].structureOverride={...q,version:'estimated-structure-override-v2',sourceKey,areaId:'unclassified',groupId:'saved-unclassified',slot:null,anchorPieceId:'board',anchorRef:anchor};const before=JSON.stringify(f.a),r=f.run(),p=r.placements.find(p=>p.pieceId==='card')!;assert.equal(p.areaId,'unclassified');assert.equal(r.metrics.placed,1);assert.equal(p.suggestedAreaId,'tableau');assert.equal(r.groups.find(g=>g.id===p.groupId)!.suggestedAreaId,'tableau');assert.equal(estimatedBoardAnchorCorrection(p,anchor).areaId,'tableau');assert.equal(JSON.stringify(f.a),before);
++ f.pieces[1].structureOverride.sourceKey=sourceKey.replace('test-epoch','foreign-epoch');assert.equal(f.run().placements.find(p=>p.pieceId==='card')!.suggestedAreaId,undefined);assert.equal(f.run().placements.find(p=>p.pieceId==='card')!.anchorRef,null);
++});

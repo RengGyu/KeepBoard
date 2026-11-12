@@ -1,0 +1,10 @@
+
+> keepboard@0.1.0 typecheck
+> tsc --noEmit
+
+src/EstimatedBoardView.tsx(65,66): error TS2345: Argument of type '() => BoardCorners | null[]' is not assignable to parameter of type '({ x: number; y: number; } | null)[] | (() => ({ x: number; y: number; } | null)[])'.
+  Type '() => BoardCorners | null[]' is not assignable to type '() => ({ x: number; y: number; } | null)[]'.
+    Type 'BoardCorners | null[]' is not assignable to type '({ x: number; y: number; } | null)[]'.
+      The type 'BoardCorners' is 'readonly' and cannot be assigned to the mutable type '({ x: number; y: number; } | null)[]'.
+src/EstimatedBoardView.tsx(69,184): error TS2352: Conversion of type '({ x: number; y: number; } | null)[]' to type 'BoardCorners' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Target requires 4 element(s) but source may have fewer.

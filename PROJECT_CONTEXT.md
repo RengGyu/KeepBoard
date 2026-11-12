@@ -1,7 +1,7 @@
 # KeepBoard 작업 기준
 
 갱신: **2026-11-13**. 목표·현재 구현·남은 차이를 함께 읽는 진입점이다. 새 기능이나 승인 절차를 만드는 문서가 아니다.
-코드 기준: `handoff/claude-gamepacks-ui-20261026`, 제품 진행 스냅샷 `e4f9490` 및 후속 검토 자료 커밋. 11월12일까지의 미커밋·미추적 제품 구현을 스냅샷에 포함했다.
+코드 기준: `handoff/claude-gamepacks-ui-20261026`, 제품 진행 스냅샷 `e4f9490`, Pro P0/P1 제품 커밋 `a73acc2` 및 후속 검토 자료 커밋. 11월12일까지의 미커밋·미추적 제품 구현을 스냅샷에 포함했다.
 초기 감사는 소스/데이터 읽기였고 당시 판독·배포는 없었다. 후속 제품 구현·실호출·Chrome 검수·모바일 결과 공유는 아래 날짜별 통합 근거에 구분한다. [상세 근거와 범위](docs/code-context-audit-20261111/evidence.md).
 
 ## 작업을 시작할 때
@@ -13,7 +13,13 @@
 
 ## 사용자 목표와 바꾸지 않을 방향
 
-2026-11-13 사용자는 진행 코드를 GitHub에 올리고, 오푸스 검토·현재 사진/결과·문제를 ChatGPT Pro에 전달해 직접 고성능 분석/연구와 구현 설계를 받도록 요청했다. [검토 진입점](docs/pro-review-20261113/README.md), [전달 요청문](docs/pro-review-20261113/PRO_PROMPT.md). 원본3사진·기존9사례·공통 함수의 구조 계산·스크린샷·기존 검증 근거를 키 없는 자료로 묶었다. 오푸스가 medium의 미대응70/80을 채점기 결함 가능성으로 지적한 것을 포함하며, 과거 high 유지 결정을 현재 정확도 우승으로 인용하지 않는다. 이 전달 작업의 제품 수정/새 판독/Astra 호출은0회이고, Pro 검토 결과를 이미 받은 것은 아니다.
+2026-11-13 사용자는 진행 코드를 GitHub에 올리고, 오푸스 검토·현재 사진/결과·문제를 ChatGPT Pro에 전달해 직접 고성능 분석/연구와 구현 설계를 받도록 요청했다. [검토 진입점](docs/pro-review-20261113/README.md), [전달 요청문](docs/pro-review-20261113/PRO_PROMPT.md). 원본3사진·기존9사례·공통 함수의 구조 계산·스크린샷·기존 검증 근거를 키 없는 자료로 묶었다. 오푸스가 medium의 미대응70/80을 채점기 결함 가능성으로 지적한 것을 포함하며, 과거 high 유지 결정을 현재 정확도 우승으로 인용하지 않는다. 이 최초 전달 작업의 제품 수정/새 판독/Astra 호출은0회였으며, 이후 Pro 반환 검토·승인 구현은 아래에 구분한다.
+
+2026-11-13 후속: 사용자 요청으로 GitHub 저장소를 공개 전환하고 익명 접근을 확인했다. 이후 사용자가 Pro 반환 ZIP의 검토를 요청했다. [수령·감독 확인](docs/pro-review-return-20261113/README.md). 수령 검토 당시 기준d7e6d09와 원본3파일 동일, 패치 dry-run/적용 검사 PASS(실제 적용0), helper·반례21/21, 실제 제품 React SSR의 순환2→표시0/중첩3→표시2 누락을 재현했다. 사그라다54후보 전사는 원본 JSON과 일치한다. Pro의 P0는 수동 cross-field 기준판 참조와 부착 표시 소실이며, LC/7W 위치 알고리즘 P1은 별도 설계다. Pro는 원사진을 보지 못했다. 이후 사용자가 전체 구현과 Sol 직접 사진 대조를 승인했으며, Pro에 사진 판정을 다시 맡기지 않았다.
+
+2026-11-13 승인 구현·사진 대조: [현재 인계](docs/pro-implementation-20261113/README.md), [공유 계약](docs/pro-implementation-20261113/contract.md), [사진 직접 판정](docs/pro-implementation-20261113/photo-audit/README.md). 기존 renderer·아트·저장 경로를 유지하며 qualified 참조·부착 표시·판 내부 기준·부분 순서·네 모서리 정정·native 우선순위를 보완한다. 같은 저장 기록의 assertion ID 교체와 관계 참조 재식별도 기존 answerField에 연결한다. 새 판독·Astra·모델 기본값 변경은0회다. 원사진을 먼저 읽고 메모를 고정한 Sol 작업자는 사그라다 전경36속성에서 high32일치/2오독/2모름, medium35/0/1, low34/2/0을 판정했다. LC9→6 오독은 확인했으나 추가8과 medium 좌표 배율은 유보한다. 7W 수정 전117관측은74소속 일치/15다른판/12미분류/16유보이며 실제5무리에 응답판4개다. 이는 부분 사진 판정이지 사람 인증·전체 정확도 달성이 아니다. 최신 제품 통합 수치와 실제 화면 확인은 현재 인계의 감독 근거를 따른다.
+
+같은 승인 구현의 최종 통합은1420/1420·타입·Vercel 빌드와 Chrome390×844/844×390에서 확인했다. 부착 순환/다단계 표시, 검증된 cross-field 참조, 저장 ID 재식별, 수동frame18→18칸 보존, 명시 판 선택의 역할 영역·집계 및 저장 오류 재선택을 구현했다. 자동 위치는 부분 달성이다: 같은7W 사진 판정이74맞음/15오소속→33맞음/0오소속/68미연결/16유보로 바뀌었고 LC baseline연결도41→16/42로 줄었다. 최근접 강제를 없앤 대신 올바른 자동 연결도 잃었으므로 성공률 개선으로 단정하지 않는다. 기존117개는39그룹에서 전부 선택되며 Chrome 수동1개 정정은33→34로 반영됐다. [현재 private 공유판](https://keepboard-restoration-review-nov11.wjdrb3434.chatgpt.site/boards/)·[사진 대조표](https://keepboard-restoration-review-nov11.wjdrb3434.chatgpt.site/estimated/) 게시 succeeded. 운영 backend·실제 iPhone Safari·누락판 자동복원·전체 정확도 인증은 미완료다.
 
 - 목표는 **현 120종의 그림 복원과 향후 확장**이다. 4종 한정 출시나 전 게임 사진 보관만으로 완료하지 않는다.
 - 실제 흐름은 **스캔 → 게임팩 기반 상황 파악 → 필요한 질문 → 저장·실물 정리 → 재개·복원**이다.
@@ -29,6 +35,7 @@
 - ‘새 사진 3장/정정 5개 이하’, 옛 4종 게이트, 과거 캠페인 잔여 한도를 새 보편 요구·현재 호출 권한으로 가져오지 않는다.
 - 사용자 요구 밖 기능·지표·새 평가/보안 인프라를 선행 과제로 만들지 않는다. 필요한 변경 검증과 실제 사용 확인은 하되 중복 전체검사를 반복하지 않는다.
 - Astra 연구는 사용자 명시 의뢰 때만. 구현은 기존 구현솔·구현솔2, `gpt-6.1-sol/high/Normal`; 명시 요청 전 Fast 사용 금지.
+- 2026-11-13 후속 사용자 결정: Pro 설계 구현과 원사진 대조를 모두 진행한다. 사진 대조를 Pro에 다시 의뢰하지 않고 Sol/high 하위 작업자가 직접 수행한다. 기존 세션 재사용을 우선하되 같은 세션만 고집할 필요는 없으며, 별도 Sol/high 작업자도 허용한다. 현재 두 구현 Paseo는 actual/effective/runtime Sol/high 확인 후 재사용, 독립 사진 대조는 새 Sol/high 작업자로 분리했다. 새 유료 판독은 이 무료 기존 자료 작업과 구별한다.
 - `.keepboard/`·키·개인 원본을 소스/출력에 포함하지 않는다. 유료 호출·배포 권한은 최신 작업 범위로 판단한다.
 
 ## 지금 연결된 제품 흐름
@@ -58,7 +65,7 @@
 | 공간 판독 | [spatialReading](server/spatialReading.ts), [공간 정의](game-photo-definitions/spatial/index.json), [spatialAssembly](server/ai/spatialAssembly.ts) | 칸·방향·덮은 칸·관계·판 인스턴스. 유효 frame/address가 있어야 배치 |
 | 조립·결합 | [observationAssembly](server/ai/observationAssembly.ts), [scanObservation](server/scanObservation.ts), [observationFusion](server/observationFusion.ts) | 출처/좌표 변환, 물체·group 구분, 속성 충돌·수동값 보호. 미등록 다른 시점의 자동 정합은 제공하지 않음 |
 | 그림 투영 | [drawingProjection](shared/drawingProjection.ts), [PhotoLayoutBoard](src/PhotoLayoutBoard.tsx) | 수동 배치 → 검증된 보드 위치 → 출처 확인된 사진 위치 → 미배치. 사진 원관측과 분리한 고정 크기 가로 표시·원 ID 정정 구현 |
-| 추정 구조 | [estimatedBoardStructure](shared/estimatedBoardStructure.ts), [EstimatedBoardView](src/EstimatedBoardView.tsx) | LC 양쪽 색줄·7W 관측 판별 묶음·사그라다 트랙/카드/겹친 토큰. 원관측/owner와 분리한 추정+수동 override를 기존 저장에 보존; 정식 칸 배치를 덮지 않음 |
+| 추정 구조 | [estimatedBoardStructure](shared/estimatedBoardStructure.ts), [structureRelations](shared/structureRelations.ts), [EstimatedBoardView](src/EstimatedBoardView.tsx) | qualified 판/실물 참조·관측 관계·판 내부 A/B·부분 순서·상대 트랙. 순환 표시와 cross-field 정정, 원사진 네 모서리 frame을 기존 저장에 보존. 최근접 판 중심은 소속 확정 근거로 쓰지 않으며 원관측/owner/정식 칸을 덮지 않음 |
 | 공통 보드 | [GameBoardRecord](src/GameBoardRecord.tsx), [realBoards](src/realBoards.ts), [boardVisuals](src/boardVisuals.ts) | 기존 칸·노선·자유 영역·판 변형·회전·배치·원사진·선택 수정. 새 별도 renderer부터 만들지 않음 |
 | 카탄 | [SceneWorkspace](src/SceneWorkspace.tsx), [SceneEditor](src/SceneEditor.tsx), [catanSceneReading](server/ai/catanSceneReading.ts), [sceneEditing](shared/sceneEditing.ts) | native topology/hex·edge·vertex, 도로/건물 편집, 별도 장면 판독. 일반 bbox 판독과 다른 계약 |
 | 루미큐브 | [RummikubWorkspace](src/RummikubWorkspace.tsx), [RummikubBoard](src/RummikubBoard.tsx), [rummikub](shared/rummikub.ts) | 기존 타일 SVG·가로 묶음·순서·탭 숫자/색 정정·수정 저장. AI loose 사진 배열과 수동 group은 별개 |
@@ -206,4 +213,4 @@
 
 2026-11-12 사용자 확인: 이번 공유 화면의 오독5곳 정도는 수용한다고 응답했다. 이는 이번 표본에 대한 사용자 판단이며 전120종의5~10% 정확도 인증·위치 정답 확인을 대신하지 않는다.
 
-2026-11-12 추론 강도 비교: 같은 원본·boxes 요청에서 high/medium/low를 각1회(사그라다+LC 총6/retry0) 실행했다. 당시 HTTP 첫 미리보기는59.5/21.1/5.6초와58.5/23.7/3.3초, 완료79.5/39.8/28.9초와75.4/44.1/30.7초였다. low에서 생략/큰 bbox/모름 증가가 있어 제품 기본 high는 유지한다. boxes는 창문 칸 ID를 묻지 않으므로 그 응답의 정식 칸 연결은0이다. 후속 코드는 high/medium의18개를 추정 격자로 연결했으며 정식 칸·원응답과 혼합하지 않는다. 오독 최소 확인은 부분 사진 검토이고 전체 오답률은 계산하지 않았다. [실험·캡처](docs/estimated-board-20261112/README.md), [모바일 비교](https://keepboard-restoration-review-nov11.wjdrb3434.chatgpt.site/boards/). 실폰 Safari는 미검증.
+2026-11-12 추론 강도 비교: 같은 원본·boxes 요청에서 high/medium/low를 각1회(사그라다+LC 총6/retry0) 실행했다. 당시 HTTP 첫 미리보기는59.5/21.1/5.6초와58.5/23.7/3.3초, 완료79.5/39.8/28.9초와75.4/44.1/30.7초였다. 당시 기본 high를 유지했으나 medium의 미대응을 오독으로 보지 않는다. 11월13일 직접 사진 대조에서 사그라다 medium이 이 표본의 high보다 좋았고 LC medium은 좌표 대응을 유보했다. 기본값은 변경하지 않았으며 일반 우열은 미확인이다. boxes는 창문 칸 ID를 묻지 않아 정식 칸 연결은0이고, 후속 high/medium18개는 추정 격자다. 정식 칸·원응답과 혼합하지 않는다. [실험·캡처](docs/estimated-board-20261112/README.md), [현재 사진 대조](docs/pro-implementation-20261113/photo-audit/README.md), [모바일 비교](https://keepboard-restoration-review-nov11.wjdrb3434.chatgpt.site/boards/). 전체 오답률·실폰 Safari는 미검증.
