@@ -4,6 +4,8 @@
 
 설계·구현·남은 작업은 먼저 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)를 읽습니다. 기존 보드·아트·정정·저장 기능과 미완료 작업, 참고자료를 모은 작업 기준입니다.
 
+**2026-11-13 Pro 검토:** [빠른 진입점·오푸스 검토·최신 결과·요청문](docs/pro-review-20261113/README.md). 원사진/기존 응답/현재 구조 계산을 함께 제공하며, 위치 복원 정확도를 먼저 검토합니다. 최신 코드는 `handoff/claude-gamepacks-ui-20261026` 브랜치입니다.
+
 ```sh
 npm install
 ```

@@ -1,0 +1,5945 @@
+{
+  "status": "AI provisional photo-only answer key; not human-verified ground truth",
+  "authorModel": "gpt-6-astra",
+  "effort": "max",
+  "runMode": "Normal",
+  "phase": "A",
+  "appResultsReadBeforeFreeze": false,
+  "coordinateConvention": "bbox=[x0,y0,x1,y1] normalized to original photo; rectangles approximate visible extents. IDs are independent of app IDs. Rows/columns are local photo orientation.",
+  "unitDefinitions": {
+    "object": "one independently visible physical face/entity, or an explicitly marked pile/group; never hidden pile depth",
+    "attribute": "one listed property with readable/photo_unjudgeable status; easy visibility/component properties must not be mixed into core value accuracy",
+    "relation": "separate position/order/group evidence; values alone never establish correspondence",
+    "unknown": "null means photo cannot adjudicate, never a default value or app error"
+  },
+  "evaluationPlan": {
+    "coreValues": "numeric/colour/identity attributes requested by the app, with readable photo evidence and independently established spatial correspondence",
+    "statuses": [
+      "match",
+      "definite_misread",
+      "app_unknown",
+      "photo_unjudgeable",
+      "missing",
+      "extra_or_duplicate",
+      "unmatchable",
+      "not_requested"
+    ],
+    "conditionalAccuracy": "match / (match + definite_misread), only requested readable mapped attributes actually answered; do not report as overall accuracy",
+    "readableCoverage": "(match + definite_misread) / requested readable mapped attributes, with app_unknown and missing reported separately",
+    "objectRecall": "only for explicitly exhaustive photographed regions; partial-scene unmatched objects are not auto false positives/negatives",
+    "layout": "bbox/local group/order/slot checked separately from card/tile values",
+    "unnecessary": "only when exact edition/role proves a field unnecessary; ambiguous piles and important covered cards are not automatically unnecessary",
+    "amendments": "Any correction after Phase B exposure must be a separate file citing the original entry and post-exposure status; frozen files are never overwritten."
+  },
+  "createdAt": "2026-11-11T13:28:39.856791+00:00",
+  "cases": [
+    {
+      "caseId": "final-pool-02",
+      "gameId": "sagrada",
+      "photo": "photos/sagrada.jpg",
+      "sha256": "94368d0c2f995914b9e857ceafa04afbfaff112c2b309ee082a4d2d4ac7a4feb",
+      "scope": "All 18 foreground dice and 8 distinct background dice, 7 distinct glass favour tokens, 7 visible cards; two empty foreground slots recorded separately.",
+      "limitations": "Foreground top faces are scored, never front/side pips. Background top faces are too small/foreshortened for reliable pip counts. No total inventory or owner inferred.",
+      "objects": [
+        {
+          "photoObjectId": "sagrada:window-r1c1",
+          "kind": "die",
+          "bbox": [
+            0.23625,
+            0.590556,
+            0.297083,
+            0.682778
+          ],
+          "location": "Foreground window row 1, col 1",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 6,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "photoObjectId": "sagrada:window-r1c2",
+          "kind": "die",
+          "bbox": [
+            0.320417,
+            0.587222,
+            0.38125,
+            0.679444
+          ],
+          "location": "Foreground window row 1, col 2",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 1,
+          "column": 2
+        },
+        {
+          "photoObjectId": "sagrada:window-r1c3",
+          "kind": "die",
+          "bbox": [
+            0.402917,
+            0.590556,
+            0.46375,
+            0.682778
+          ],
+          "location": "Foreground window row 1, col 3",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 1,
+          "column": 3
+        },
+        {
+          "photoObjectId": "sagrada:window-r1c4",
+          "kind": "die",
+          "bbox": [
+            0.485417,
+            0.583889,
+            0.54625,
+            0.676111
+          ],
+          "location": "Foreground window row 1, col 4",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 1,
+          "column": 4
+        },
+        {
+          "photoObjectId": "sagrada:window-r1c5",
+          "kind": "die",
+          "bbox": [
+            0.564583,
+            0.579444,
+            0.625417,
+            0.671667
+          ],
+          "location": "Foreground window row 1, col 5",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 1,
+          "column": 5
+        },
+        {
+          "photoObjectId": "sagrada:window-r2c1",
+          "kind": "die",
+          "bbox": [
+            0.237917,
+            0.656111,
+            0.29875,
+            0.748333
+          ],
+          "location": "Foreground window row 2, col 1",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 2,
+          "column": 1
+        },
+        {
+          "photoObjectId": "sagrada:window-r2c3",
+          "kind": "die",
+          "bbox": [
+            0.41375,
+            0.655,
+            0.474583,
+            0.747222
+          ],
+          "location": "Foreground window row 2, col 3",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 2,
+          "column": 3
+        },
+        {
+          "photoObjectId": "sagrada:window-r2c4",
+          "kind": "die",
+          "bbox": [
+            0.497917,
+            0.646111,
+            0.55875,
+            0.738333
+          ],
+          "location": "Foreground window row 2, col 4",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 2,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 2,
+          "column": 4
+        },
+        {
+          "photoObjectId": "sagrada:window-r3c1",
+          "kind": "die",
+          "bbox": [
+            0.237917,
+            0.740556,
+            0.29875,
+            0.832778
+          ],
+          "location": "Foreground window row 3, col 1",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 3,
+          "column": 1
+        },
+        {
+          "photoObjectId": "sagrada:window-r3c2",
+          "kind": "die",
+          "bbox": [
+            0.329583,
+            0.733889,
+            0.390417,
+            0.826111
+          ],
+          "location": "Foreground window row 3, col 2",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 3,
+          "column": 2
+        },
+        {
+          "photoObjectId": "sagrada:window-r3c3",
+          "kind": "die",
+          "bbox": [
+            0.427083,
+            0.731667,
+            0.487917,
+            0.823889
+          ],
+          "location": "Foreground window row 3, col 3",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 3,
+          "column": 3
+        },
+        {
+          "photoObjectId": "sagrada:window-r3c4",
+          "kind": "die",
+          "bbox": [
+            0.51875,
+            0.723889,
+            0.579583,
+            0.816111
+          ],
+          "location": "Foreground window row 3, col 4",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 3,
+          "column": 4
+        },
+        {
+          "photoObjectId": "sagrada:window-r3c5",
+          "kind": "die",
+          "bbox": [
+            0.607917,
+            0.716111,
+            0.66875,
+            0.808333
+          ],
+          "location": "Foreground window row 3, col 5",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 6,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 3,
+          "column": 5
+        },
+        {
+          "photoObjectId": "sagrada:window-r4c1",
+          "kind": "die",
+          "bbox": [
+            0.23875,
+            0.829444,
+            0.299583,
+            0.921667
+          ],
+          "location": "Foreground window row 4, col 1",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 6,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 4,
+          "column": 1
+        },
+        {
+          "photoObjectId": "sagrada:window-r4c2",
+          "kind": "die",
+          "bbox": [
+            0.34375,
+            0.827222,
+            0.404583,
+            0.919444
+          ],
+          "location": "Foreground window row 4, col 2",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 4,
+          "column": 2
+        },
+        {
+          "photoObjectId": "sagrada:window-r4c3",
+          "kind": "die",
+          "bbox": [
+            0.444583,
+            0.816111,
+            0.505417,
+            0.908333
+          ],
+          "location": "Foreground window row 4, col 3",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 4,
+          "column": 3
+        },
+        {
+          "photoObjectId": "sagrada:window-r4c4",
+          "kind": "die",
+          "bbox": [
+            0.54375,
+            0.805,
+            0.604583,
+            0.897222
+          ],
+          "location": "Foreground window row 4, col 4",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 4,
+          "column": 4
+        },
+        {
+          "photoObjectId": "sagrada:window-r4c5",
+          "kind": "die",
+          "bbox": [
+            0.63875,
+            0.802778,
+            0.699583,
+            0.895
+          ],
+          "location": "Foreground window row 4, col 5",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": 2,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "board": "foreground-window",
+          "row": 4,
+          "column": 5
+        },
+        {
+          "photoObjectId": "sagrada:track-die-1",
+          "kind": "die",
+          "bbox": [
+            0.461667,
+            0.06,
+            0.49,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 1",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "sagrada:track-die-2",
+          "kind": "die",
+          "bbox": [
+            0.4975,
+            0.06,
+            0.525833,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 2",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "sagrada:track-die-3",
+          "kind": "die",
+          "bbox": [
+            0.534167,
+            0.06,
+            0.5625,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 3",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "sagrada:track-die-4",
+          "kind": "die",
+          "bbox": [
+            0.57,
+            0.06,
+            0.598333,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 4",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "sagrada:track-die-5",
+          "kind": "die",
+          "bbox": [
+            0.605833,
+            0.06,
+            0.634167,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 5",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "sagrada:track-die-6",
+          "kind": "die",
+          "bbox": [
+            0.643333,
+            0.06,
+            0.671667,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 6",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 6
+        },
+        {
+          "photoObjectId": "sagrada:track-die-7",
+          "kind": "die",
+          "bbox": [
+            0.673333,
+            0.06,
+            0.701667,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 7",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 7
+        },
+        {
+          "photoObjectId": "sagrada:track-die-8",
+          "kind": "die",
+          "bbox": [
+            0.709167,
+            0.06,
+            0.7375,
+            0.102222
+          ],
+          "location": "Background narrow track; left-to-right 8",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "value": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Top face is tiny and foreshortened. Readable side pips are not the value."
+            }
+          },
+          "groupId": "background-track",
+          "photoOrder": 8
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-1",
+          "kind": "token",
+          "bbox": [
+            0.0,
+            0.458333,
+            0.042917,
+            0.492778
+          ],
+          "location": "Visible glass token 1; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-2",
+          "kind": "token",
+          "bbox": [
+            0.08625,
+            0.456111,
+            0.130417,
+            0.490556
+          ],
+          "location": "Visible glass token 2; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-3",
+          "kind": "token",
+          "bbox": [
+            0.4125,
+            0.147778,
+            0.4475,
+            0.172222
+          ],
+          "location": "Visible glass token 3; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-4",
+          "kind": "token",
+          "bbox": [
+            0.456667,
+            0.14,
+            0.491667,
+            0.164444
+          ],
+          "location": "Visible glass token 4; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-5",
+          "kind": "token",
+          "bbox": [
+            0.48,
+            0.127778,
+            0.515,
+            0.152222
+          ],
+          "location": "Visible glass token 5; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-6",
+          "kind": "token",
+          "bbox": [
+            0.6075,
+            0.131111,
+            0.6425,
+            0.155556
+          ],
+          "location": "Visible glass token 6; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:glass-token-7",
+          "kind": "token",
+          "bbox": [
+            0.764167,
+            0.121111,
+            0.799167,
+            0.145556
+          ],
+          "location": "Visible glass token 7; two left of foreground and five on tool cards",
+          "attributes": {
+            "component": {
+              "value": "glass-favour-token",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "sagrada:tool-left",
+          "kind": "card",
+          "bbox": [
+            0.396667,
+            0.12,
+            0.5325,
+            0.187778
+          ],
+          "location": "tool-left",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "tool-card"
+        },
+        {
+          "photoObjectId": "sagrada:tool-middle",
+          "kind": "card",
+          "bbox": [
+            0.555,
+            0.12,
+            0.725,
+            0.185556
+          ],
+          "location": "tool-middle",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "tool-card"
+        },
+        {
+          "photoObjectId": "sagrada:tool-right",
+          "kind": "card",
+          "bbox": [
+            0.725,
+            0.116667,
+            0.916667,
+            0.186667
+          ],
+          "location": "tool-right",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "tool-card"
+        },
+        {
+          "photoObjectId": "sagrada:objective-left",
+          "kind": "card",
+          "bbox": [
+            0.411667,
+            0.201111,
+            0.585,
+            0.296667
+          ],
+          "location": "objective-left",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "public-objective"
+        },
+        {
+          "photoObjectId": "sagrada:objective-middle",
+          "kind": "card",
+          "bbox": [
+            0.59,
+            0.201111,
+            0.805,
+            0.295556
+          ],
+          "location": "objective-middle",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "public-objective"
+        },
+        {
+          "photoObjectId": "sagrada:objective-right",
+          "kind": "card",
+          "bbox": [
+            0.793333,
+            0.2,
+            1.0,
+            0.295556
+          ],
+          "location": "objective-right",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": true,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "public-objective"
+        },
+        {
+          "photoObjectId": "sagrada:card-back",
+          "kind": "card",
+          "bbox": [
+            0.660833,
+            0.423333,
+            1.0,
+            0.636667
+          ],
+          "location": "card-back",
+          "attributes": {
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Text is tiny/blurred, or only reverse artwork is visible."
+            },
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "visualRole": "card-back"
+        }
+      ],
+      "relations": [
+        {
+          "relationId": "slot-r1c1",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r1c1"
+          ],
+          "description": "Foreground 4x5 window r1c1",
+          "confidence": "high",
+          "row": 1,
+          "column": 1
+        },
+        {
+          "relationId": "slot-r1c2",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r1c2"
+          ],
+          "description": "Foreground 4x5 window r1c2",
+          "confidence": "high",
+          "row": 1,
+          "column": 2
+        },
+        {
+          "relationId": "slot-r1c3",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r1c3"
+          ],
+          "description": "Foreground 4x5 window r1c3",
+          "confidence": "high",
+          "row": 1,
+          "column": 3
+        },
+        {
+          "relationId": "slot-r1c4",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r1c4"
+          ],
+          "description": "Foreground 4x5 window r1c4",
+          "confidence": "high",
+          "row": 1,
+          "column": 4
+        },
+        {
+          "relationId": "slot-r1c5",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r1c5"
+          ],
+          "description": "Foreground 4x5 window r1c5",
+          "confidence": "high",
+          "row": 1,
+          "column": 5
+        },
+        {
+          "relationId": "slot-r2c1",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r2c1"
+          ],
+          "description": "Foreground 4x5 window r2c1",
+          "confidence": "high",
+          "row": 2,
+          "column": 1
+        },
+        {
+          "relationId": "slot-r2c3",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r2c3"
+          ],
+          "description": "Foreground 4x5 window r2c3",
+          "confidence": "high",
+          "row": 2,
+          "column": 3
+        },
+        {
+          "relationId": "slot-r2c4",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r2c4"
+          ],
+          "description": "Foreground 4x5 window r2c4",
+          "confidence": "high",
+          "row": 2,
+          "column": 4
+        },
+        {
+          "relationId": "slot-r3c1",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r3c1"
+          ],
+          "description": "Foreground 4x5 window r3c1",
+          "confidence": "high",
+          "row": 3,
+          "column": 1
+        },
+        {
+          "relationId": "slot-r3c2",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r3c2"
+          ],
+          "description": "Foreground 4x5 window r3c2",
+          "confidence": "high",
+          "row": 3,
+          "column": 2
+        },
+        {
+          "relationId": "slot-r3c3",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r3c3"
+          ],
+          "description": "Foreground 4x5 window r3c3",
+          "confidence": "high",
+          "row": 3,
+          "column": 3
+        },
+        {
+          "relationId": "slot-r3c4",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r3c4"
+          ],
+          "description": "Foreground 4x5 window r3c4",
+          "confidence": "high",
+          "row": 3,
+          "column": 4
+        },
+        {
+          "relationId": "slot-r3c5",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r3c5"
+          ],
+          "description": "Foreground 4x5 window r3c5",
+          "confidence": "high",
+          "row": 3,
+          "column": 5
+        },
+        {
+          "relationId": "slot-r4c1",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r4c1"
+          ],
+          "description": "Foreground 4x5 window r4c1",
+          "confidence": "high",
+          "row": 4,
+          "column": 1
+        },
+        {
+          "relationId": "slot-r4c2",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r4c2"
+          ],
+          "description": "Foreground 4x5 window r4c2",
+          "confidence": "high",
+          "row": 4,
+          "column": 2
+        },
+        {
+          "relationId": "slot-r4c3",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r4c3"
+          ],
+          "description": "Foreground 4x5 window r4c3",
+          "confidence": "high",
+          "row": 4,
+          "column": 3
+        },
+        {
+          "relationId": "slot-r4c4",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r4c4"
+          ],
+          "description": "Foreground 4x5 window r4c4",
+          "confidence": "high",
+          "row": 4,
+          "column": 4
+        },
+        {
+          "relationId": "slot-r4c5",
+          "type": "board_slot",
+          "members": [
+            "sagrada:window-r4c5"
+          ],
+          "description": "Foreground 4x5 window r4c5",
+          "confidence": "high",
+          "row": 4,
+          "column": 5
+        },
+        {
+          "relationId": "empty-r2c2",
+          "type": "empty_slot",
+          "members": [],
+          "description": "Foreground r2c2: printed cell and no die",
+          "confidence": "high",
+          "row": 2,
+          "column": 2
+        },
+        {
+          "relationId": "empty-r2c5",
+          "type": "empty_slot",
+          "members": [],
+          "description": "Foreground r2c5: printed cell and no die",
+          "confidence": "high",
+          "row": 2,
+          "column": 5
+        }
+      ],
+      "regions": [
+        {
+          "regionId": "small-marker",
+          "bbox": [
+            0.398,
+            0.076,
+            0.431,
+            0.104
+          ],
+          "description": "Small overlapping round marker(s) left of background track",
+          "visibleCountRange": [
+            1,
+            null
+          ],
+          "uncertainty": "Layer boundaries and printed value unresolved"
+        }
+      ]
+    },
+    {
+      "caseId": "final-pool-08",
+      "gameId": "seven-wonders",
+      "photo": "photos/seven-wonders.jpg",
+      "sha256": "ea5f475396df0714f212b4440bb18215b85fbcc717d103d48ce59db98fbbbd14",
+      "scope": "Detailed foreground Alexandria/Gizah/Rhodos tableaux, visible counters and age backs; background tableaux partially enumerated where hands obscure cards. Individual visible cards are units, never a presumed complete player inventory.",
+      "limitations": "This is a busy, occluded mid-action scene. Most names are covered; only directly readable titles are transcribed. Card colour, printed icon/value and name are separate attributes. Coins seen from the reverse and conflict glyphs too small to resolve stay unknown. Background counts are lower bounds; no full-scene recall/accuracy denominator.",
+      "objects": [
+        {
+          "photoObjectId": "seven-wonders:L-resource-1",
+          "kind": "card",
+          "bbox": [
+            0.201073,
+            0.392992,
+            0.242109,
+            0.449811
+          ],
+          "location": "L-resource-1",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "glass",
+                "glass"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-resource-2",
+          "kind": "card",
+          "bbox": [
+            0.235164,
+            0.362689,
+            0.276199,
+            0.419508
+          ],
+          "location": "L-resource-2",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "stone"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-resource-3",
+          "kind": "card",
+          "bbox": [
+            0.259154,
+            0.344697,
+            0.300189,
+            0.401515
+          ],
+          "location": "L-resource-3",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "ore"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-resource-4",
+          "kind": "card",
+          "bbox": [
+            0.262311,
+            0.327652,
+            0.303346,
+            0.38447
+          ],
+          "location": "L-resource-4",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-resource-5",
+          "kind": "card",
+          "bbox": [
+            0.280619,
+            0.311553,
+            0.321654,
+            0.368371
+          ],
+          "location": "L-resource-5",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "papyrus"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-resource-6",
+          "kind": "card",
+          "bbox": [
+            0.287563,
+            0.293561,
+            0.328598,
+            0.350379
+          ],
+          "location": "L-resource-6",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-military-1",
+          "kind": "card",
+          "bbox": [
+            0.248422,
+            0.425189,
+            0.289457,
+            0.482008
+          ],
+          "location": "L-military-1",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "shieldCount": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-military-2",
+          "kind": "card",
+          "bbox": [
+            0.273674,
+            0.413826,
+            0.31471,
+            0.470644
+          ],
+          "location": "L-military-2",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "shieldCount": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-military-3",
+          "kind": "card",
+          "bbox": [
+            0.297664,
+            0.400568,
+            0.338699,
+            0.457386
+          ],
+          "location": "L-military-3",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "shieldCount": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-military-4",
+          "kind": "card",
+          "bbox": [
+            0.31976,
+            0.386364,
+            0.360795,
+            0.443182
+          ],
+          "location": "L-military-4",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "shieldCount": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-guild",
+          "kind": "card",
+          "bbox": [
+            0.272412,
+            0.470644,
+            0.313447,
+            0.527462
+          ],
+          "location": "L-guild",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbols": {
+              "value": [
+                "compass",
+                "tablet",
+                "gear"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-blue-1",
+          "kind": "card",
+          "bbox": [
+            0.291982,
+            0.535038,
+            0.333018,
+            0.591856
+          ],
+          "location": "L-blue-1",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "victoryPoints": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-blue-2",
+          "kind": "card",
+          "bbox": [
+            0.31471,
+            0.515152,
+            0.355745,
+            0.57197
+          ],
+          "location": "L-blue-2",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "victoryPoints": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-blue-3",
+          "kind": "card",
+          "bbox": [
+            0.336174,
+            0.500947,
+            0.37721,
+            0.557765
+          ],
+          "location": "L-blue-3",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "victoryPoints": {
+              "value": 6,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-1",
+          "kind": "card",
+          "bbox": [
+            0.399306,
+            0.582386,
+            0.446654,
+            0.648674
+          ],
+          "location": "G-resource-1",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-2",
+          "kind": "card",
+          "bbox": [
+            0.404987,
+            0.612689,
+            0.452336,
+            0.678977
+          ],
+          "location": "G-resource-2",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "papyrus"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-3",
+          "kind": "card",
+          "bbox": [
+            0.410669,
+            0.637311,
+            0.458018,
+            0.703598
+          ],
+          "location": "G-resource-3",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "clay",
+                "or",
+                "ore"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-4",
+          "kind": "card",
+          "bbox": [
+            0.417614,
+            0.66572,
+            0.464962,
+            0.732008
+          ],
+          "location": "G-resource-4",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "stone",
+                "or",
+                "clay"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-5",
+          "kind": "card",
+          "bbox": [
+            0.423927,
+            0.694129,
+            0.471275,
+            0.760417
+          ],
+          "location": "G-resource-5",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "wood",
+                "or",
+                "ore"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-6",
+          "kind": "card",
+          "bbox": [
+            0.427715,
+            0.721591,
+            0.475063,
+            0.787879
+          ],
+          "location": "G-resource-6",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "wood"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-resource-7",
+          "kind": "card",
+          "bbox": [
+            0.411932,
+            0.75,
+            0.45928,
+            0.816288
+          ],
+          "location": "G-resource-7",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "stone"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-science-1",
+          "kind": "card",
+          "bbox": [
+            0.495581,
+            0.496212,
+            0.558712,
+            0.5625
+          ],
+          "location": "G-science-1",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "DISPENSARY",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "compass",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-science-2",
+          "kind": "card",
+          "bbox": [
+            0.486742,
+            0.546402,
+            0.549874,
+            0.612689
+          ],
+          "location": "G-science-2",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "gear",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-science-3",
+          "kind": "card",
+          "bbox": [
+            0.516414,
+            0.582386,
+            0.579545,
+            0.648674
+          ],
+          "location": "G-science-3",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "tablet",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-blue-1",
+          "kind": "card",
+          "bbox": [
+            0.468434,
+            0.673295,
+            0.531566,
+            0.739583
+          ],
+          "location": "G-blue-1",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "BATHS",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "victoryPoints": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Point icon is covered by board/overlapping card."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-blue-2",
+          "kind": "card",
+          "bbox": [
+            0.537247,
+            0.658144,
+            0.600379,
+            0.724432
+          ],
+          "location": "G-blue-2",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "COURTHOUSE",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "victoryPoints": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-military",
+          "kind": "card",
+          "bbox": [
+            0.653725,
+            0.649621,
+            0.701073,
+            0.715909
+          ],
+          "location": "G-military",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "shieldCount": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:G-guild",
+          "kind": "card",
+          "bbox": [
+            0.726957,
+            0.784091,
+            0.774306,
+            0.850379
+          ],
+          "location": "G-guild",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "WORKERS GUILD",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-1",
+          "kind": "card",
+          "bbox": [
+            0.663194,
+            0.526515,
+            0.697917,
+            0.585227
+          ],
+          "location": "R-resource-1",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "LOOM",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "papyrus"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-2",
+          "kind": "card",
+          "bbox": [
+            0.696023,
+            0.514205,
+            0.730745,
+            0.572917
+          ],
+          "location": "R-resource-2",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "glass"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-3",
+          "kind": "card",
+          "bbox": [
+            0.714331,
+            0.499053,
+            0.749053,
+            0.557765
+          ],
+          "location": "R-resource-3",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "CLAY POOL",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "clay"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-4",
+          "kind": "card",
+          "bbox": [
+            0.730114,
+            0.481061,
+            0.764836,
+            0.539773
+          ],
+          "location": "R-resource-4",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "wood",
+                "or",
+                "stone"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-5",
+          "kind": "card",
+          "bbox": [
+            0.754735,
+            0.475379,
+            0.789457,
+            0.534091
+          ],
+          "location": "R-resource-5",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "wood"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-resource-6",
+          "kind": "card",
+          "bbox": [
+            0.778093,
+            0.465909,
+            0.812816,
+            0.524621
+          ],
+          "location": "R-resource-6",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "resourceSymbols": {
+              "value": [
+                "ore"
+              ],
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-yellow-1",
+          "kind": "card",
+          "bbox": [
+            0.69476,
+            0.40625,
+            0.729482,
+            0.464962
+          ],
+          "location": "R-yellow-1",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "CARAVANSERY",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-yellow-2",
+          "kind": "card",
+          "bbox": [
+            0.723169,
+            0.409091,
+            0.757891,
+            0.467803
+          ],
+          "location": "R-yellow-2",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "coinValue": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-yellow-3",
+          "kind": "card",
+          "bbox": [
+            0.751578,
+            0.410985,
+            0.786301,
+            0.469697
+          ],
+          "location": "R-yellow-3",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-science-1",
+          "kind": "card",
+          "bbox": [
+            0.711174,
+            0.299242,
+            0.75221,
+            0.357955
+          ],
+          "location": "R-science-1",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "compass",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-science-2",
+          "kind": "card",
+          "bbox": [
+            0.668876,
+            0.344697,
+            0.709912,
+            0.403409
+          ],
+          "location": "R-science-2",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "tablet",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-science-3",
+          "kind": "card",
+          "bbox": [
+            0.690972,
+            0.349432,
+            0.732008,
+            0.408144
+          ],
+          "location": "R-science-3",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "gear",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-science-4",
+          "kind": "card",
+          "bbox": [
+            0.716225,
+            0.35322,
+            0.75726,
+            0.411932
+          ],
+          "location": "R-science-4",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            },
+            "scienceSymbol": {
+              "value": "compass",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-guild-1",
+          "kind": "card",
+          "bbox": [
+            0.591856,
+            0.403409,
+            0.626578,
+            0.462121
+          ],
+          "location": "R-guild-1",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:R-guild-2",
+          "kind": "card",
+          "bbox": [
+            0.635417,
+            0.421402,
+            0.670139,
+            0.480114
+          ],
+          "location": "R-guild-2",
+          "attributes": {
+            "color": {
+              "value": "purple",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": "MAGISTRATES GUILD",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-1",
+          "kind": "card",
+          "bbox": [
+            0.226326,
+            0.187973,
+            0.254735,
+            0.221117
+          ],
+          "location": "UL-visible-1",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-2",
+          "kind": "card",
+          "bbox": [
+            0.253472,
+            0.19839,
+            0.281881,
+            0.231534
+          ],
+          "location": "UL-visible-2",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-3",
+          "kind": "card",
+          "bbox": [
+            0.281881,
+            0.18608,
+            0.31029,
+            0.219223
+          ],
+          "location": "UL-visible-3",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-4",
+          "kind": "card",
+          "bbox": [
+            0.286932,
+            0.230587,
+            0.315341,
+            0.263731
+          ],
+          "location": "UL-visible-4",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-5",
+          "kind": "card",
+          "bbox": [
+            0.301452,
+            0.244792,
+            0.329861,
+            0.277936
+          ],
+          "location": "UL-visible-5",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-6",
+          "kind": "card",
+          "bbox": [
+            0.31976,
+            0.26089,
+            0.348169,
+            0.294034
+          ],
+          "location": "UL-visible-6",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-7",
+          "kind": "card",
+          "bbox": [
+            0.348169,
+            0.208807,
+            0.376578,
+            0.241951
+          ],
+          "location": "UL-visible-7",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-8",
+          "kind": "card",
+          "bbox": [
+            0.371528,
+            0.223011,
+            0.399937,
+            0.256155
+          ],
+          "location": "UL-visible-8",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-9",
+          "kind": "card",
+          "bbox": [
+            0.391098,
+            0.18892,
+            0.419508,
+            0.222064
+          ],
+          "location": "UL-visible-9",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-10",
+          "kind": "card",
+          "bbox": [
+            0.411301,
+            0.194602,
+            0.43971,
+            0.227746
+          ],
+          "location": "UL-visible-10",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-11",
+          "kind": "card",
+          "bbox": [
+            0.428346,
+            0.146307,
+            0.456755,
+            0.179451
+          ],
+          "location": "UL-visible-11",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-12",
+          "kind": "card",
+          "bbox": [
+            0.44476,
+            0.150095,
+            0.473169,
+            0.183239
+          ],
+          "location": "UL-visible-12",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-13",
+          "kind": "card",
+          "bbox": [
+            0.45928,
+            0.155777,
+            0.487689,
+            0.18892
+          ],
+          "location": "UL-visible-13",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-14",
+          "kind": "card",
+          "bbox": [
+            0.476326,
+            0.159564,
+            0.504735,
+            0.192708
+          ],
+          "location": "UL-visible-14",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-visible-15",
+          "kind": "card",
+          "bbox": [
+            0.494003,
+            0.165246,
+            0.522412,
+            0.19839
+          ],
+          "location": "UL-visible-15",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UL"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-1",
+          "kind": "card",
+          "bbox": [
+            0.543876,
+            0.172822,
+            0.572285,
+            0.205966
+          ],
+          "location": "UR-visible-1",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-2",
+          "kind": "card",
+          "bbox": [
+            0.651831,
+            0.117898,
+            0.68024,
+            0.151042
+          ],
+          "location": "UR-visible-2",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-3",
+          "kind": "card",
+          "bbox": [
+            0.630366,
+            0.192708,
+            0.658775,
+            0.225852
+          ],
+          "location": "UR-visible-3",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-4",
+          "kind": "card",
+          "bbox": [
+            0.610164,
+            0.218277,
+            0.638573,
+            0.25142
+          ],
+          "location": "UR-visible-4",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-5",
+          "kind": "card",
+          "bbox": [
+            0.68529,
+            0.214489,
+            0.713699,
+            0.247633
+          ],
+          "location": "UR-visible-5",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-6",
+          "kind": "card",
+          "bbox": [
+            0.701705,
+            0.231534,
+            0.730114,
+            0.264678
+          ],
+          "location": "UR-visible-6",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-7",
+          "kind": "card",
+          "bbox": [
+            0.71875,
+            0.245739,
+            0.747159,
+            0.278883
+          ],
+          "location": "UR-visible-7",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-8",
+          "kind": "card",
+          "bbox": [
+            0.771149,
+            0.216383,
+            0.799558,
+            0.249527
+          ],
+          "location": "UR-visible-8",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-9",
+          "kind": "card",
+          "bbox": [
+            0.788194,
+            0.233428,
+            0.816604,
+            0.266572
+          ],
+          "location": "UR-visible-9",
+          "attributes": {
+            "color": {
+              "value": "gray",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-10",
+          "kind": "card",
+          "bbox": [
+            0.799558,
+            0.25142,
+            0.827967,
+            0.284564
+          ],
+          "location": "UR-visible-10",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-11",
+          "kind": "card",
+          "bbox": [
+            0.801452,
+            0.27036,
+            0.829861,
+            0.303504
+          ],
+          "location": "UR-visible-11",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-visible-12",
+          "kind": "card",
+          "bbox": [
+            0.812184,
+            0.286458,
+            0.840593,
+            0.319602
+          ],
+          "location": "UR-visible-12",
+          "attributes": {
+            "color": {
+              "value": "brown",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct printed title only; otherwise title is covered/small/blurred."
+            }
+          },
+          "region": "UR"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-board",
+          "kind": "board",
+          "bbox": [
+            0.132576,
+            0.410038,
+            0.315657,
+            0.653409
+          ],
+          "location": "L-board",
+          "attributes": {
+            "boardName": {
+              "value": "ALEXANDRIA",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "side": {
+              "value": "A",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:G-board",
+          "kind": "board",
+          "bbox": [
+            0.404672,
+            0.704545,
+            0.739268,
+            0.954545
+          ],
+          "location": "G-board",
+          "attributes": {
+            "boardName": {
+              "value": "GIZAH",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "side": {
+              "value": "A",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:R-board",
+          "kind": "board",
+          "bbox": [
+            0.751263,
+            0.307765,
+            0.886995,
+            0.532197
+          ],
+          "location": "R-board",
+          "attributes": {
+            "boardName": {
+              "value": "RHODOS",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "side": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Tiny rotated side letter cannot be confidently resolved."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-board",
+          "kind": "board",
+          "bbox": [
+            0.281566,
+            0.119318,
+            0.457702,
+            0.234848
+          ],
+          "location": "UL-board",
+          "attributes": {
+            "boardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Hand occludes name."
+            },
+            "side": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Hand occlusion."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-board",
+          "kind": "board",
+          "bbox": [
+            0.647096,
+            0.132576,
+            0.823864,
+            0.233902
+          ],
+          "location": "UR-board",
+          "attributes": {
+            "boardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Small tilted name obscured."
+            },
+            "side": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Small/obscured."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-L1",
+          "kind": "coin",
+          "bbox": [
+            0.194129,
+            0.46733,
+            0.214962,
+            0.492898
+          ],
+          "location": "Coin L1",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-L2",
+          "kind": "coin",
+          "bbox": [
+            0.209912,
+            0.46733,
+            0.230745,
+            0.492898
+          ],
+          "location": "Coin L2",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-L3",
+          "kind": "coin",
+          "bbox": [
+            0.212437,
+            0.487216,
+            0.23327,
+            0.512784
+          ],
+          "location": "Coin L3",
+          "attributes": {
+            "denomination": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-L4",
+          "kind": "coin",
+          "bbox": [
+            0.227588,
+            0.499527,
+            0.248422,
+            0.525095
+          ],
+          "location": "Coin L4",
+          "attributes": {
+            "denomination": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-G1",
+          "kind": "coin",
+          "bbox": [
+            0.466856,
+            0.768466,
+            0.487689,
+            0.794034
+          ],
+          "location": "Coin G1",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-G2",
+          "kind": "coin",
+          "bbox": [
+            0.490215,
+            0.758049,
+            0.511048,
+            0.783617
+          ],
+          "location": "Coin G2",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-G3",
+          "kind": "coin",
+          "bbox": [
+            0.514205,
+            0.752367,
+            0.535038,
+            0.777936
+          ],
+          "location": "Coin G3",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-G4",
+          "kind": "coin",
+          "bbox": [
+            0.540088,
+            0.745739,
+            0.560922,
+            0.771307
+          ],
+          "location": "Coin G4",
+          "attributes": {
+            "denomination": {
+              "value": 1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-R1",
+          "kind": "coin",
+          "bbox": [
+            0.867109,
+            0.598011,
+            0.887942,
+            0.62358
+          ],
+          "location": "Coin R1",
+          "attributes": {
+            "denomination": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-R2",
+          "kind": "coin",
+          "bbox": [
+            0.884154,
+            0.589489,
+            0.904987,
+            0.615057
+          ],
+          "location": "Coin R2",
+          "attributes": {
+            "denomination": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-R3",
+          "kind": "coin",
+          "bbox": [
+            0.85827,
+            0.621686,
+            0.879104,
+            0.647254
+          ],
+          "location": "Coin R3",
+          "attributes": {
+            "denomination": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-R4",
+          "kind": "coin",
+          "bbox": [
+            0.887942,
+            0.622633,
+            0.908775,
+            0.648201
+          ],
+          "location": "Coin R4",
+          "attributes": {
+            "denomination": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:coin-R5",
+          "kind": "coin",
+          "bbox": [
+            0.874053,
+            0.647254,
+            0.894886,
+            0.672822
+          ],
+          "location": "Coin R5",
+          "attributes": {
+            "denomination": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Printed numeral visible; reverse faces have no reliably readable denomination."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-L1",
+          "kind": "token",
+          "bbox": [
+            0.175505,
+            0.431818,
+            0.195707,
+            0.458333
+          ],
+          "location": "Military token L1",
+          "attributes": {
+            "points": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-L2",
+          "kind": "token",
+          "bbox": [
+            0.183712,
+            0.44697,
+            0.203914,
+            0.473485
+          ],
+          "location": "Military token L2",
+          "attributes": {
+            "points": {
+              "value": -1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-L3",
+          "kind": "token",
+          "bbox": [
+            0.24053,
+            0.554924,
+            0.260732,
+            0.581439
+          ],
+          "location": "Military token L3",
+          "attributes": {
+            "points": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-L4",
+          "kind": "token",
+          "bbox": [
+            0.248106,
+            0.569129,
+            0.268308,
+            0.595644
+          ],
+          "location": "Military token L4",
+          "attributes": {
+            "points": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "L"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-G1",
+          "kind": "token",
+          "bbox": [
+            0.623737,
+            0.742424,
+            0.643939,
+            0.768939
+          ],
+          "location": "Military token G1",
+          "attributes": {
+            "points": {
+              "value": -1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-G2",
+          "kind": "token",
+          "bbox": [
+            0.651515,
+            0.736742,
+            0.671717,
+            0.763258
+          ],
+          "location": "Military token G2",
+          "attributes": {
+            "points": {
+              "value": -1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-G3",
+          "kind": "token",
+          "bbox": [
+            0.676136,
+            0.725379,
+            0.696338,
+            0.751894
+          ],
+          "location": "Military token G3",
+          "attributes": {
+            "points": {
+              "value": -1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "G"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-R1",
+          "kind": "token",
+          "bbox": [
+            0.794823,
+            0.620265,
+            0.815025,
+            0.64678
+          ],
+          "location": "Military token R1",
+          "attributes": {
+            "points": {
+              "value": -1,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-R2",
+          "kind": "token",
+          "bbox": [
+            0.782828,
+            0.651515,
+            0.80303,
+            0.67803
+          ],
+          "location": "Military token R2",
+          "attributes": {
+            "points": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:conflict-R3",
+          "kind": "token",
+          "bbox": [
+            0.805556,
+            0.677083,
+            0.825758,
+            0.703598
+          ],
+          "location": "Military token R3",
+          "attributes": {
+            "points": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct token glyph; tiny lower-left glyphs are not supplied from rules."
+            }
+          },
+          "region": "R"
+        },
+        {
+          "photoObjectId": "seven-wonders:L-stage1",
+          "kind": "card",
+          "bbox": [
+            0.09375,
+            0.492424,
+            0.141098,
+            0.539773
+          ],
+          "location": "L-stage1",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:L-stage2",
+          "kind": "card",
+          "bbox": [
+            0.116477,
+            0.547348,
+            0.163826,
+            0.594697
+          ],
+          "location": "L-stage2",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:G-stage1",
+          "kind": "card",
+          "bbox": [
+            0.464331,
+            0.942235,
+            0.511679,
+            0.989583
+          ],
+          "location": "G-stage1",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:G-stage2",
+          "kind": "card",
+          "bbox": [
+            0.565972,
+            0.916667,
+            0.613321,
+            0.964015
+          ],
+          "location": "G-stage2",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:G-stage3",
+          "kind": "card",
+          "bbox": [
+            0.661932,
+            0.900568,
+            0.70928,
+            0.947917
+          ],
+          "location": "G-stage3",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:R-stage1",
+          "kind": "card",
+          "bbox": [
+            0.882891,
+            0.401515,
+            0.93024,
+            0.448864
+          ],
+          "location": "R-stage1",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:R-stage2",
+          "kind": "card",
+          "bbox": [
+            0.891098,
+            0.470644,
+            0.938447,
+            0.517992
+          ],
+          "location": "R-stage2",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-stage1",
+          "kind": "card",
+          "bbox": [
+            0.334912,
+            0.114583,
+            0.38226,
+            0.161932
+          ],
+          "location": "UL-stage1",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:UL-stage2",
+          "kind": "card",
+          "bbox": [
+            0.367109,
+            0.107955,
+            0.414457,
+            0.155303
+          ],
+          "location": "UL-stage2",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:UR-stage",
+          "kind": "card",
+          "bbox": [
+            0.786301,
+            0.148674,
+            0.833649,
+            0.196023
+          ],
+          "location": "UR-stage",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "II",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose1",
+          "kind": "card",
+          "bbox": [
+            0.363321,
+            0.378788,
+            0.410669,
+            0.426136
+          ],
+          "location": "loose1",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose2",
+          "kind": "card",
+          "bbox": [
+            0.462437,
+            0.424242,
+            0.509785,
+            0.471591
+          ],
+          "location": "loose2",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose3",
+          "kind": "card",
+          "bbox": [
+            0.601957,
+            0.346591,
+            0.649306,
+            0.393939
+          ],
+          "location": "loose3",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose4",
+          "kind": "card",
+          "bbox": [
+            0.602588,
+            0.252841,
+            0.649937,
+            0.300189
+          ],
+          "location": "loose4",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose5",
+          "kind": "card",
+          "bbox": [
+            0.55524,
+            0.083333,
+            0.602588,
+            0.130682
+          ],
+          "location": "loose5",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose6",
+          "kind": "card",
+          "bbox": [
+            0.871528,
+            0.204545,
+            0.918876,
+            0.251894
+          ],
+          "location": "loose6",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        },
+        {
+          "photoObjectId": "seven-wonders:loose7",
+          "kind": "card",
+          "bbox": [
+            0.925821,
+            0.213068,
+            0.973169,
+            0.260417
+          ],
+          "location": "loose7",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "age": {
+              "value": "III",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "cardName": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Back-facing card: identity is hidden, not a failed text read."
+            }
+          }
+        }
+      ],
+      "relations": [
+        {
+          "relationId": "L-tableau",
+          "type": "visible_neighbourhood",
+          "members": [
+            "seven-wonders:L-resource-1",
+            "seven-wonders:L-resource-2",
+            "seven-wonders:L-resource-3",
+            "seven-wonders:L-resource-4",
+            "seven-wonders:L-resource-5",
+            "seven-wonders:L-resource-6",
+            "seven-wonders:L-military-1",
+            "seven-wonders:L-military-2",
+            "seven-wonders:L-military-3",
+            "seven-wonders:L-military-4",
+            "seven-wonders:L-guild",
+            "seven-wonders:L-blue-1",
+            "seven-wonders:L-blue-2",
+            "seven-wonders:L-blue-3",
+            "seven-wonders:coin-L1",
+            "seven-wonders:coin-L2",
+            "seven-wonders:coin-L3",
+            "seven-wonders:coin-L4",
+            "seven-wonders:conflict-L1",
+            "seven-wonders:conflict-L2",
+            "seven-wonders:conflict-L3",
+            "seven-wonders:conflict-L4"
+          ],
+          "description": "Visible board-local cluster; no person/owner inferred; below-card titles remain meaningful where exposed.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "G-tableau",
+          "type": "visible_neighbourhood",
+          "members": [
+            "seven-wonders:G-resource-1",
+            "seven-wonders:G-resource-2",
+            "seven-wonders:G-resource-3",
+            "seven-wonders:G-resource-4",
+            "seven-wonders:G-resource-5",
+            "seven-wonders:G-resource-6",
+            "seven-wonders:G-resource-7",
+            "seven-wonders:G-science-1",
+            "seven-wonders:G-science-2",
+            "seven-wonders:G-science-3",
+            "seven-wonders:G-blue-1",
+            "seven-wonders:G-blue-2",
+            "seven-wonders:G-military",
+            "seven-wonders:G-guild",
+            "seven-wonders:coin-G1",
+            "seven-wonders:coin-G2",
+            "seven-wonders:coin-G3",
+            "seven-wonders:coin-G4",
+            "seven-wonders:conflict-G1",
+            "seven-wonders:conflict-G2",
+            "seven-wonders:conflict-G3"
+          ],
+          "description": "Visible board-local cluster; no person/owner inferred; below-card titles remain meaningful where exposed.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "R-tableau",
+          "type": "visible_neighbourhood",
+          "members": [
+            "seven-wonders:R-resource-1",
+            "seven-wonders:R-resource-2",
+            "seven-wonders:R-resource-3",
+            "seven-wonders:R-resource-4",
+            "seven-wonders:R-resource-5",
+            "seven-wonders:R-resource-6",
+            "seven-wonders:R-yellow-1",
+            "seven-wonders:R-yellow-2",
+            "seven-wonders:R-yellow-3",
+            "seven-wonders:R-science-1",
+            "seven-wonders:R-science-2",
+            "seven-wonders:R-science-3",
+            "seven-wonders:R-science-4",
+            "seven-wonders:R-guild-1",
+            "seven-wonders:R-guild-2",
+            "seven-wonders:coin-R1",
+            "seven-wonders:coin-R2",
+            "seven-wonders:coin-R3",
+            "seven-wonders:coin-R4",
+            "seven-wonders:coin-R5",
+            "seven-wonders:conflict-R1",
+            "seven-wonders:conflict-R2",
+            "seven-wonders:conflict-R3"
+          ],
+          "description": "Visible board-local cluster; no person/owner inferred; below-card titles remain meaningful where exposed.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "G-wonder-under",
+          "type": "tucked_under_board",
+          "members": [
+            "seven-wonders:G-stage1",
+            "seven-wonders:G-stage2",
+            "seven-wonders:G-stage3"
+          ],
+          "description": "Three distinct age backs protrude below three foreground board stages; hidden card identities not read.",
+          "confidence": "high"
+        }
+      ],
+      "regions": [
+        {
+          "regionId": "upper-left-occlusion",
+          "bbox": [
+            0.25,
+            0.1,
+            0.46,
+            0.26
+          ],
+          "description": "Hand and overlapped background tableau; lower-bound enumeration only",
+          "visibleCountRange": [
+            null,
+            null
+          ],
+          "uncertainty": "Multiple faces are occluded; not an exhaustive inventory"
+        },
+        {
+          "regionId": "upper-right-occlusion",
+          "bbox": [
+            0.55,
+            0.06,
+            0.68,
+            0.27
+          ],
+          "description": "Hand covers cards and board",
+          "visibleCountRange": [
+            null,
+            null
+          ],
+          "uncertainty": "Occlusion and ongoing action; no stable owner assignment"
+        },
+        {
+          "regionId": "far-coins",
+          "bbox": [
+            0.855,
+            0.14,
+            0.901,
+            0.177
+          ],
+          "description": "Small round coin group at far upper right",
+          "visibleCountRange": [
+            3,
+            null
+          ],
+          "uncertainty": "Small/overlapping; denomination and exact layer count unresolved"
+        },
+        {
+          "regionId": "right-edge-back",
+          "bbox": [
+            0.94,
+            0.8,
+            1,
+            0.94
+          ],
+          "description": "Cropped purple back at lower-right image edge",
+          "visibleCountRange": [
+            1,
+            null
+          ],
+          "uncertainty": "Age numeral outside frame"
+        }
+      ]
+    },
+    {
+      "caseId": "final-pool-10",
+      "gameId": "lost-cities",
+      "photo": "photos/lost-cities.jpg",
+      "sha256": "d6abc06aca6feda5f747803aca9df403e93fddf8acd807c8b5e654afb11c78cc",
+      "scope": "All distinguishable exposed cards in eight expedition strips, two central discard piles, one face-down draw pile; visible rank strips individually located. Hands are excluded from card-face denominator.",
+      "limitations": "Photo resolution is 1024x768. Far yellow/blue ranks are blurred; no sequence or deck-inventory completion. Central covered cards and hand counts are lower bounds.",
+      "objects": [
+        {
+          "photoObjectId": "lost-cities:near-yellow-1",
+          "kind": "card",
+          "bbox": [
+            0.634766,
+            0.329427,
+            0.667969,
+            0.41276
+          ],
+          "location": "near-yellow exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-yellow",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:near-yellow-2",
+          "kind": "card",
+          "bbox": [
+            0.670898,
+            0.338542,
+            0.704102,
+            0.421875
+          ],
+          "location": "near-yellow exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-yellow",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:near-yellow-3",
+          "kind": "card",
+          "bbox": [
+            0.708008,
+            0.35026,
+            0.741211,
+            0.433594
+          ],
+          "location": "near-yellow exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-yellow",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:near-yellow-4",
+          "kind": "card",
+          "bbox": [
+            0.744141,
+            0.363281,
+            0.777344,
+            0.446615
+          ],
+          "location": "near-yellow exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 9,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-yellow",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:near-yellow-5",
+          "kind": "card",
+          "bbox": [
+            0.785645,
+            0.363281,
+            0.927246,
+            0.480469
+          ],
+          "location": "near-yellow exposed index 5 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 10,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-yellow",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "lost-cities:near-blue-1",
+          "kind": "card",
+          "bbox": [
+            0.578125,
+            0.408854,
+            0.611328,
+            0.492188
+          ],
+          "location": "near-blue exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 2,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-blue",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:near-blue-2",
+          "kind": "card",
+          "bbox": [
+            0.606445,
+            0.427083,
+            0.639648,
+            0.510417
+          ],
+          "location": "near-blue exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-blue",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:near-blue-3",
+          "kind": "card",
+          "bbox": [
+            0.646484,
+            0.447917,
+            0.679688,
+            0.53125
+          ],
+          "location": "near-blue exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 5,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-blue",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:near-blue-4",
+          "kind": "card",
+          "bbox": [
+            0.686523,
+            0.476562,
+            0.719727,
+            0.559896
+          ],
+          "location": "near-blue exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 7,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-blue",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:near-blue-5",
+          "kind": "card",
+          "bbox": [
+            0.720215,
+            0.49349,
+            0.861816,
+            0.610677
+          ],
+          "location": "near-blue exposed index 5 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 9,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-blue",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "lost-cities:near-white-1",
+          "kind": "card",
+          "bbox": [
+            0.499023,
+            0.488281,
+            0.588867,
+            0.571615
+          ],
+          "location": "near-white exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-white",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:near-white-2",
+          "kind": "card",
+          "bbox": [
+            0.557617,
+            0.527344,
+            0.59082,
+            0.610677
+          ],
+          "location": "near-white exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 2,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-white",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:near-white-3",
+          "kind": "card",
+          "bbox": [
+            0.59375,
+            0.546875,
+            0.626953,
+            0.630208
+          ],
+          "location": "near-white exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-white",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:near-white-4",
+          "kind": "card",
+          "bbox": [
+            0.632812,
+            0.567708,
+            0.666016,
+            0.651042
+          ],
+          "location": "near-white exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-white",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:near-white-5",
+          "kind": "card",
+          "bbox": [
+            0.668457,
+            0.597656,
+            0.810059,
+            0.714844
+          ],
+          "location": "near-white exposed index 5 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 8,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-white",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "lost-cities:near-green-1",
+          "kind": "card",
+          "bbox": [
+            0.390625,
+            0.617188,
+            0.423828,
+            0.700521
+          ],
+          "location": "near-green exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 6,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-green",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:near-green-2",
+          "kind": "card",
+          "bbox": [
+            0.426758,
+            0.647135,
+            0.459961,
+            0.730469
+          ],
+          "location": "near-green exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 7,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-green",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:near-green-3",
+          "kind": "card",
+          "bbox": [
+            0.466797,
+            0.677083,
+            0.5,
+            0.760417
+          ],
+          "location": "near-green exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 8,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-green",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:near-green-4",
+          "kind": "card",
+          "bbox": [
+            0.524902,
+            0.734375,
+            0.666504,
+            0.851562
+          ],
+          "location": "near-green exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 9,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "near-green",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-1",
+          "kind": "card",
+          "bbox": [
+            0.227051,
+            0.166667,
+            0.368652,
+            0.283854
+          ],
+          "location": "far-yellow exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-2",
+          "kind": "card",
+          "bbox": [
+            0.338867,
+            0.201823,
+            0.37207,
+            0.285156
+          ],
+          "location": "far-yellow exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-3",
+          "kind": "card",
+          "bbox": [
+            0.368164,
+            0.213542,
+            0.401367,
+            0.296875
+          ],
+          "location": "far-yellow exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-4",
+          "kind": "card",
+          "bbox": [
+            0.396484,
+            0.223958,
+            0.429688,
+            0.307292
+          ],
+          "location": "far-yellow exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-5",
+          "kind": "card",
+          "bbox": [
+            0.421875,
+            0.234375,
+            0.455078,
+            0.317708
+          ],
+          "location": "far-yellow exposed index 5 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "lost-cities:far-yellow-6",
+          "kind": "card",
+          "bbox": [
+            0.445312,
+            0.239583,
+            0.478516,
+            0.322917
+          ],
+          "location": "far-yellow exposed index 6 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "yellow",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-yellow",
+          "photoOrder": 6
+        },
+        {
+          "photoObjectId": "lost-cities:far-blue-1",
+          "kind": "card",
+          "bbox": [
+            0.225098,
+            0.247396,
+            0.366699,
+            0.364583
+          ],
+          "location": "far-blue exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-blue",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:far-blue-2",
+          "kind": "card",
+          "bbox": [
+            0.341797,
+            0.290365,
+            0.375,
+            0.373698
+          ],
+          "location": "far-blue exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-blue",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:far-white-1",
+          "kind": "card",
+          "bbox": [
+            0.055176,
+            0.285156,
+            0.196777,
+            0.402344
+          ],
+          "location": "far-white exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 10,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-white",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:far-white-2",
+          "kind": "card",
+          "bbox": [
+            0.171875,
+            0.329427,
+            0.205078,
+            0.41276
+          ],
+          "location": "far-white exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 9,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-white",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:far-white-3",
+          "kind": "card",
+          "bbox": [
+            0.206055,
+            0.345052,
+            0.239258,
+            0.428385
+          ],
+          "location": "far-white exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 8,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-white",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:far-white-4",
+          "kind": "card",
+          "bbox": [
+            0.235352,
+            0.356771,
+            0.268555,
+            0.440104
+          ],
+          "location": "far-white exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 7,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-white",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:far-white-5",
+          "kind": "card",
+          "bbox": [
+            0.261719,
+            0.367188,
+            0.294922,
+            0.450521
+          ],
+          "location": "far-white exposed index 5 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "white",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-white",
+          "photoOrder": 5
+        },
+        {
+          "photoObjectId": "lost-cities:far-green-1",
+          "kind": "card",
+          "bbox": [
+            0.0,
+            0.375,
+            0.125488,
+            0.492188
+          ],
+          "location": "far-green exposed index 1 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 4,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-green",
+          "photoOrder": 1
+        },
+        {
+          "photoObjectId": "lost-cities:far-green-2",
+          "kind": "card",
+          "bbox": [
+            0.091797,
+            0.423177,
+            0.125,
+            0.50651
+          ],
+          "location": "far-green exposed index 2 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-green",
+          "photoOrder": 2
+        },
+        {
+          "photoObjectId": "lost-cities:far-green-3",
+          "kind": "card",
+          "bbox": [
+            0.120117,
+            0.442708,
+            0.15332,
+            0.526042
+          ],
+          "location": "far-green exposed index 3 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-green",
+          "photoOrder": 3
+        },
+        {
+          "photoObjectId": "lost-cities:far-green-4",
+          "kind": "card",
+          "bbox": [
+            0.152344,
+            0.46224,
+            0.185547,
+            0.545573
+          ],
+          "location": "far-green exposed index 4 left-to-right",
+          "attributes": {
+            "color": {
+              "value": "green",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible rank or handshake; far blurred yellow/blue ranks left blank."
+            }
+          },
+          "groupId": "far-green",
+          "photoOrder": 4
+        },
+        {
+          "photoObjectId": "lost-cities:blue-discard-top",
+          "kind": "card",
+          "bbox": [
+            0.380859,
+            0.326823,
+            0.541992,
+            0.407552
+          ],
+          "location": "Central blue slot top card",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": "investment",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "lost-cities:blue-discard-under",
+          "kind": "card",
+          "bbox": [
+            0.419922,
+            0.36849,
+            0.556641,
+            0.421875
+          ],
+          "location": "One exposed layer below blue discard top",
+          "attributes": {
+            "color": {
+              "value": "blue",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Rank/symbol hidden by top card."
+            }
+          }
+        },
+        {
+          "photoObjectId": "lost-cities:red-discard-top",
+          "kind": "card",
+          "bbox": [
+            0.03418,
+            0.558594,
+            0.25,
+            0.72526
+          ],
+          "location": "Bottom-left central red slot top card",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": 3,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            }
+          }
+        },
+        {
+          "photoObjectId": "lost-cities:red-discard-under",
+          "kind": "card",
+          "bbox": [
+            0.020508,
+            0.657552,
+            0.238281,
+            0.75
+          ],
+          "location": "Exposed layer below red discard top",
+          "attributes": {
+            "color": {
+              "value": "red",
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "face": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Only lower edge/partial face visible."
+            }
+          }
+        },
+        {
+          "photoObjectId": "lost-cities:draw-pile",
+          "kind": "card-pile",
+          "bbox": [
+            0.570312,
+            0.220052,
+            0.702148,
+            0.298177
+          ],
+          "location": "Upper-right face-down pile under hand",
+          "attributes": {
+            "faceUp": {
+              "value": false,
+              "status": "readable",
+              "confidence": "high",
+              "evidence": "Direct visible face in the original photo; crop is only a viewing aid."
+            },
+            "count": {
+              "value": null,
+              "status": "photo_unjudgeable",
+              "confidence": "low",
+              "evidence": "Hand covers pile; exact layers not visible."
+            }
+          },
+          "countRange": [
+            1,
+            null
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "relationId": "near-yellow",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:near-yellow-1",
+            "lost-cities:near-yellow-2",
+            "lost-cities:near-yellow-3",
+            "lost-cities:near-yellow-4",
+            "lost-cities:near-yellow-5"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "near-blue",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:near-blue-1",
+            "lost-cities:near-blue-2",
+            "lost-cities:near-blue-3",
+            "lost-cities:near-blue-4",
+            "lost-cities:near-blue-5"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "near-white",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:near-white-1",
+            "lost-cities:near-white-2",
+            "lost-cities:near-white-3",
+            "lost-cities:near-white-4",
+            "lost-cities:near-white-5"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "near-green",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:near-green-1",
+            "lost-cities:near-green-2",
+            "lost-cities:near-green-3",
+            "lost-cities:near-green-4"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "far-yellow",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:far-yellow-1",
+            "lost-cities:far-yellow-2",
+            "lost-cities:far-yellow-3",
+            "lost-cities:far-yellow-4",
+            "lost-cities:far-yellow-5",
+            "lost-cities:far-yellow-6"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "far-blue",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:far-blue-1",
+            "lost-cities:far-blue-2"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "far-white",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:far-white-1",
+            "lost-cities:far-white-2",
+            "lost-cities:far-white-3",
+            "lost-cities:far-white-4",
+            "lost-cities:far-white-5"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "far-green",
+          "type": "visible_group_order",
+          "members": [
+            "lost-cities:far-green-1",
+            "lost-cities:far-green-2",
+            "lost-cities:far-green-3",
+            "lost-cities:far-green-4"
+          ],
+          "description": "Physical overlapping expedition strip, ordered image left-to-right; not player identity.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "blue-discard-layer",
+          "type": "overlapping_group",
+          "members": [
+            "lost-cities:blue-discard-top",
+            "lost-cities:blue-discard-under"
+          ],
+          "description": "At least two physical layers; total unknown.",
+          "confidence": "high"
+        },
+        {
+          "relationId": "red-discard-layer",
+          "type": "overlapping_group",
+          "members": [
+            "lost-cities:red-discard-top",
+            "lost-cities:red-discard-under"
+          ],
+          "description": "At least two physical layers; total unknown.",
+          "confidence": "high"
+        }
+      ],
+      "regions": [
+        {
+          "regionId": "upper-left-hand",
+          "bbox": [
+            0,
+            0,
+            0.22,
+            0.18
+          ],
+          "description": "Hand-held card backs",
+          "visibleCountRange": [
+            1,
+            null
+          ],
+          "uncertainty": "Overlapping cards and fingers; hidden ranks"
+        },
+        {
+          "regionId": "right-hand",
+          "bbox": [
+            0.95,
+            0.34,
+            1,
+            0.48
+          ],
+          "description": "Cropped held cards at right edge",
+          "visibleCountRange": [
+            1,
+            null
+          ],
+          "uncertainty": "Almost entirely outside photograph"
+        }
+      ]
+    }
+  ],
+  "deliveryWarning": "AI draft, not independent human truth. Includes uncertain/occluded values. Consult amendments; do not treat draft-model agreement as accuracy."
+}
