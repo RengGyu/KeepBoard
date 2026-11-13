@@ -1,5 +1,15 @@
 # KeepBoard 작업 세션
 
+## 2026-11-13 최신 — 종합 설계 전체 구현 / Sol high Fast
+
+사용자가 설계 전체 구현을 구현솔 Fast로 요청했다. 기존 구현솔 `da51c3c1-e75a-488e-9ef7-ea690b88866e`, 구현솔2 `93f1d851-6097-415a-97f6-929ed2d454b3`를 재개한 뒤 actual/effective/runtime gpt-6.1-sol/high, service_tier priority(Fast), plan_mode false를 확인했다. 사용자 이번 명시 Fast 예외이며 Astra 추가사용0. 솔1은 src/UI·shared/sceneLayout·직접UI검사, 솔2는 그 외 shared/프로필/생성기/backend·직접검사/contract.md, root는 루트 기준문서·실제브라우저/최종통합을 소유한다. [솔1 카드](restoration-system-implementation-20261113/sol1-task.md), [솔2 카드](restoration-system-implementation-20261113/sol2-task.md). 첫 T1–T4 후 T5–T9 및 T10을 의존 순서로 계속하며 중간별 재승인 없이 진행한다. 제품·기존9응답·native/수동·120종을 재사용하고 원자료/키/운영데이터와 Sites를 변경하지 않는다. workers의 provider/commit/push/deploy/추가agent 권한0. 실사진/실기기 성능과 코드 구현 상태를 구분한다.
+
+## 2026-11-13 최신 — 복원 시스템 종합 설계
+
+사용자가 Astra로 현재 주요 문제의 해결방향·기술 설계·해결방법을 요청했다. 새 agent `79e63ae1-21f6-4d91-a3d7-ee1dded44488` / server `srv_AlXOWgKXvFmY`, 실제/effective/runtime `gpt-6-astra/max`, Normal/default 확인. [설계 카드](restoration-system-design-20261113/task.md). 이 세션은 `docs/restoration-system-design-20261113/`만 쓰며 제품/기존 자료 읽기 전용이다. root는 PROJECT_CONTEXT/작업 세션·최종 근거 확인을 소유한다. 최신 코드 기준 `fedc735`. 구현·새 사진판독·키/운영데이터·배포·하위 추가 세션은 현재 카드 권한 밖이다. 기존 구현/대조 세션은 완료·동결 상태다.
+
+설계 세션 완료·소유권 반환: 8문서·T1–T10 카드와 계약 예시/근거 manifest를 인계했다. 감독은 현재 필드별 화면 및 미소비 tableModel/tableZones를 대조하고 문서 일관성 검사를 재실행했다. 추천 T1–T4는 기존9응답 기반 전체 가로 작업면·필드 간 묶음 정정·기존 저장/재개까지의 실제 흐름이며, 전체 설계는 아직 제품 미반영·사용자 미채택 제안이다. 새 판독/제품 suite/build/commit/push/배포0. [설계 진입점](restoration-system-design-20261113/README.md), [문서 검증](restoration-system-design-20261113/design-validation.json).
+
 ## 2026-11-13 최신 — Astra max 자동 위치 복원
 
 사용자가 새 세션·여러 하위 에이전트와 Astra/max 작업을 명시 요청했다. 기존 세션은 동결 상태로 두고 새 두 세션을 만들었으며 실제/effective/runtime gpt-6-astra/max, Normal/default를 확인했다. 초기 구현 세션의 capacity 오류는 동일 세션 재시도로 정상 착수했다. 이번 범위에서 Sol/high 기본의 사용자 예외이며 Fast는 사용하지 않는다.
@@ -176,3 +186,8 @@
 최종 통합·소유권 반환: 두 구현자와 사진 작업자 모두 동결했다. 전체1420/1420·타입·Vercel 빌드, 기존9재생·16소스 동결 SHA, Chrome 세로/가로·frame18칸·실제 판정정33→34를 감독이 확인했다. 역할 영역/저장 오류 재선택은 후속 직접 UI/HTTP 회귀로 마감했다. 기존 private Sites source6e0603e... 배포 succeeded. 자동 위치는 미완료이며 7W33맞음/0오소속/68미연결/16유보와 LC baseline16/42 손실을 현재인계에 남겼다. 추가provider0·Astra0, 운영backend배포0.
 
 최종 인계: 두 새 Astra/max 세션 모두 소스/평가를 동결·반환했다. 제품7파일 변경과 원사진 최종 대조를 감독이 통합해1430/1430·타입/Vercel/viewer빌드·모바일크기Chrome 화면을 확인했다. LC16→41맞음·같은줄63/63, 7W33→74맞음/0오소속/23미연결/20유보. low 격자18은 실제판0과 분리. Sites source credential 발급이 client-upgrade-required409로 실패해 Site체크아웃/기존게시변경0, 최신화면은 task RESULTS.md에 보존했다. 새사진provider0·운영데이터접근0.
+
+
+## 2026-11-13 종합 복원 설계 구현·최종 통합
+
+사용자가 기존 구현솔 Fast로 전체 구현을 승인했다. 실제/effective/runtime gpt-6.1-sol/high와 service_tier=priority를 확인한 기존 Sol1(UI/sceneLayout)·Sol2(shared/profile/backend)를 재사용했다. 작업 카드는 docs/restoration-system-implementation-20261113/{sol1-task.md,sol2-task.md}, actual 계약은 contract.md. 각 작업자는 소스/검사를 동결·반환했고 추가 agent/provider/운영 데이터/커밋·배포는 하지 않았다. 감독은 CAS false409·LC 중앙/양편 합침·초기 빈 viewport를 작업자에게 재현 근거로 전달해 교정하고, 최종 이동 선택지 이름·번호만 직접 보완했다. 제품 커밋58bd187. 전체1468/1468·타입/Vercel build·실제 App 정정→저장→reload/공개재개 확인, 원입력21 SHA 보존. 새 실사진/실폰/두 시점 정합 품질은 미검증이며251-snapshot 대형 저장의 성능 회귀(최종267.7초/과거64초)는 미해결로 명시했다. root 문서·캡처·검증은 동일 task README/supervisor에 있다. 기존 Site/운영 배포는 변경하지 않았다.

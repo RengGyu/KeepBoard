@@ -1,0 +1,24 @@
+shared/sceneProjection.ts(28,492): error TS18048: 'entity' is possibly 'undefined'.
+shared/sceneProjection.ts(44,304): error TS2322: Type 'GeometrySupport | { shape: { kind: "quad"; points: BoardCorners; }; extent: "visible-support" | "full-visible-object"; quality: "usable"; reasons: never[]; evidenceId: string; sourceSHA: string; transformId: string | null; coordinateSpace: "normalized-original"; }' is not assignable to type 'GeometrySupport'.
+  Types of property 'shape' are incompatible.
+    Type '{ kind: "quad"; points: BoardCorners; }' is not assignable to type '{ kind: "box"; x: number; y: number; width: number; height: number; } | { kind: "quad"; points: [Point, Point, Point, Point]; } | { kind: "visible-strip"; points: Point[]; }'.
+      Types of property 'points' are incompatible.
+        The type 'BoardCorners' is 'readonly' and cannot be assigned to the mutable type '[Point, Point, Point, Point]'.
+shared/sceneProjection.ts(44,339): error TS2322: Type '{ kind: "quad"; points: BoardCorners; }' is not assignable to type '{ kind: "box"; x: number; y: number; width: number; height: number; } | { kind: "quad"; points: [Point, Point, Point, Point]; } | { kind: "visible-strip"; points: Point[]; }'.
+  Types of property 'points' are incompatible.
+    The type 'BoardCorners' is 'readonly' and cannot be assigned to the mutable type '[Point, Point, Point, Point]'.
+shared/sceneProjection.ts(45,1007): error TS2322: Type 'Claim<{ readonly shape: { readonly kind: "quad"; readonly points: BoardCorners; }; readonly extent: "full-visible-object"; readonly quality: "usable"; readonly reasons: []; readonly evidenceId: string; readonly sourceSHA: string; readonly transformId: string | null; readonly coordinateSpace: "normalized-original"; }>' is not assignable to type 'Claim<GeometrySupport>'.
+  Type '{ id: string; status: "selected"; chosen: Candidate<{ readonly shape: { readonly kind: "quad"; readonly points: BoardCorners; }; readonly extent: "full-visible-object"; readonly quality: "usable"; ... 4 more ...; readonly coordinateSpace: "normalized-original"; }>; alternatives: Candidate<...>[]; }' is not assignable to type 'Claim<GeometrySupport>'.
+    Type '{ id: string; status: "selected"; chosen: Candidate<{ readonly shape: { readonly kind: "quad"; readonly points: BoardCorners; }; readonly extent: "full-visible-object"; readonly quality: "usable"; ... 4 more ...; readonly coordinateSpace: "normalized-original"; }>; alternatives: Candidate<...>[]; }' is not assignable to type '{ id: string; status: "selected"; chosen: Candidate<GeometrySupport>; alternatives: Candidate<GeometrySupport>[]; }'.
+      Types of property 'chosen' are incompatible.
+        Type 'Candidate<{ readonly shape: { readonly kind: "quad"; readonly points: BoardCorners; }; readonly extent: "full-visible-object"; readonly quality: "usable"; readonly reasons: []; readonly evidenceId: string; readonly sourceSHA: string; readonly transformId: string | null; readonly coordinateSpace: "normalized-original...' is not assignable to type 'Candidate<GeometrySupport>'.
+          Type '{ readonly shape: { readonly kind: "quad"; readonly points: BoardCorners; }; readonly extent: "full-visible-object"; readonly quality: "usable"; readonly reasons: []; readonly evidenceId: string; readonly sourceSHA: string; readonly transformId: string | null; readonly coordinateSpace: "normalized-original"; }' is not assignable to type 'GeometrySupport'.
+            Types of property 'shape' are incompatible.
+              Type '{ readonly kind: "quad"; readonly points: BoardCorners; }' is not assignable to type '{ kind: "box"; x: number; y: number; width: number; height: number; } | { kind: "quad"; points: [Point, Point, Point, Point]; } | { kind: "visible-strip"; points: Point[]; }'.
+                Type '{ readonly kind: "quad"; readonly points: BoardCorners; }' is not assignable to type '{ kind: "quad"; points: [Point, Point, Point, Point]; }'.
+                  Types of property 'points' are incompatible.
+                    The type 'BoardCorners' is 'readonly' and cannot be assigned to the mutable type '[Point, Point, Point, Point]'.
+shared/sceneProjection.ts(75,281): error TS2339: Property 'chosen' does not exist on type 'Claim<GeometrySupport>'.
+  Property 'chosen' does not exist on type '{ id: string; status: "conflict" | "unresolved"; candidates: Candidate<GeometrySupport>[]; reason: string; }'.
+shared/sceneProjection.ts(75,331): error TS2339: Property 'chosen' does not exist on type 'Claim<GeometrySupport>'.
+  Property 'chosen' does not exist on type '{ id: string; status: "conflict" | "unresolved"; candidates: Candidate<GeometrySupport>[]; reason: string; }'.

@@ -1,0 +1,71 @@
+{
+  "scope": "local synthetic original HTTP test; same assertions/request payloads; timing instrumentation only; not controlled hardware A/B or provider latency",
+  "priorRunReportedBySupervisorMs": 64009.228792,
+  "currentBeforeCostFixMs": 349537.565333,
+  "afterCostFixInstrumentedMs": 253889.39025,
+  "reductionObserved": 0.2736420475775677,
+  "remainingRegression": true,
+  "requestCount": 826,
+  "statuses": {
+    "200": 808,
+    "201": 12,
+    "400": 6
+  },
+  "responseBytes": {
+    "min": 62,
+    "max": 12613501
+  },
+  "requestMs": {
+    "median": 276.6840000000011,
+    "p95": 708.7205829999875,
+    "max": 947.1335419999959
+  },
+  "nestedMethodTotals": {
+    "atomicWrite": {
+      "count": 2242,
+      "ms": 7519.177186000714,
+      "sampleBytes": [
+        53849,
+        20589,
+        220338,
+        518144,
+        793317,
+        1091117,
+        1366299,
+        1664107,
+        1939294,
+        2237104,
+        2512307,
+        2810152,
+        3085352,
+        3383196,
+        3658390,
+        3956235,
+        4231437,
+        4529276,
+        4804464,
+        5102299,
+        5377535,
+        5676051
+      ]
+    },
+    "getSession": {
+      "count": 2188,
+      "ms": 110738.40541800024
+    },
+    "saveSession": {
+      "count": 560,
+      "ms": 54305.91492900005,
+      "maxSnapshots": 251
+    },
+    "cloneSessionForUpdate": {
+      "count": 554,
+      "ms": 24934.478016999958
+    }
+  },
+  "methodTotalsOverlap": true,
+  "sourceTimingNote": "The after run loaded the codec/detached optimization before the subsequent closed-check correction. That later correction preserves original pre-prune counts; final focused scope regression verifies it. Do not present this run as a new live/provider measurement.",
+  "costContract": "commit/save-intent still materialize additive sidecar and pin snapshots; no lazy skip applied",
+  "cpuProfileLocator": "/private/tmp/kb-free-save-current.cpuprofile",
+  "cpuScope": "30-second pre-cost-fix diagnostic sample; startup and concurrent synthetic run included"
+}

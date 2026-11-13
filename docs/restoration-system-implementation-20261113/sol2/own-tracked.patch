@@ -1,0 +1,559 @@
+diff --git a/gamepacks/catalog.ts b/gamepacks/catalog.ts
+index c94fb08..5e30ad3 100644
+--- a/gamepacks/catalog.ts
++++ b/gamepacks/catalog.ts
+@@ -1,9 +1,12 @@
++import restorationProfiles from './generated/restoration-profiles.json';
++import {compatibleRestorationProfile,type RestorationProfileV1} from '../shared/restorationProfile';
+ import generated from './generated/game-essentials.json';
+ import retired from './generated/retired-packs.json';
+ import reading from './generated/release-reading.json';
+ import restoration from './policies/restoration/index.json';
+ import type {RestorationPolicy} from '../shared/restoration';
+-export const withRestoration=(pack:GamePack):GamePack=>{const p=restoration.policies.find(p=>p.packId===pack.id&&p.packVersion===pack.version&&p.sourceSHA===pack.runtime?.source.sha256);return p?{...pack,restorationPolicy:p as unknown as RestorationPolicy}:pack;};
++export function withRestorationProfile(pack:GamePack):GamePack{if(compatibleRestorationProfile(pack,pack.restorationProfile))return pack;const profile=restorationProfiles.profiles.find(p=>p.pin.packId===pack.id&&p.pin.packVersion===pack.version&&p.pin.sourceSHA===(pack.runtime?.source.sha256??null)&&p.pin.editionId===(pack.runtime?.source.editionId??null)) as unknown as RestorationProfileV1|undefined;return profile&&compatibleRestorationProfile(pack,profile)?{...pack,restorationProfile:profile}:pack;}
++export const withRestoration=(pack:GamePack):GamePack=>{const p=restoration.policies.find(p=>p.packId===pack.id&&p.packVersion===pack.version&&p.sourceSHA===pack.runtime?.source.sha256);return withRestorationProfile(p?{...pack,restorationPolicy:p as unknown as RestorationPolicy}:pack);};
+ import {catanPack} from './catan.ts';
+ import {rummikubPack,legacyRummikubPack} from './rummikub.ts';
+ import type {GamePack} from '../shared/types.ts';
+diff --git a/server/ai/geminiGameReader.ts b/server/ai/geminiGameReader.ts
+index bb8b152..398e5d1 100644
+--- a/server/ai/geminiGameReader.ts
++++ b/server/ai/geminiGameReader.ts
+@@ -1,3 +1,5 @@
++import {sceneWireSchema,sceneInstructions} from './sceneWire';
++import {decodeSceneReading} from '../../shared/sceneReading';
+ import {observationPropertyApplicable} from '../../shared/observationGaps';
+ import {spatialInstructions,spatialWireSchema} from './spatialWire';
+ import {validateSpatialResult} from '../../shared/spatialObservation';
+@@ -43,6 +45,7 @@ Use no owner, turn, role, hidden face, board slot, rules inference, or off-area
+   prompt+='\nRequired properties by observed source area: '+JSON.stringify(requirements)+'. For a confirmed sourceAreaId, omit unread properties not required in that area; keep any actually read listed values. When sourceAreaId is null, retain the full kind property requirements. Area assignment never proves a pile is uniform or that occluded lower values are irrelevant.';
+  }
+  if(request.spatial){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, role, hidden face, rules inference, or off-area information. Only the supplied spatial contract permits observed board addresses.').replace('Return only JSON {"items":[...]};','Return only JSON {"items":[...],"spatial":{...}};')+spatialInstructions(request);(schema.properties as any).spatial=spatialWireSchema(request.readMode);schema.required.push('spatial');}
++ if(request.scene){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, hidden face, rules inference, or off-area information. Only the supplied scene contract allows visible functional roles and frames.');prompt+=sceneInstructions(request);(schema.properties as any).scene=sceneWireSchema();schema.required.push('scene');}
+  return {contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType,data:image.toString('base64')}}]}],generationConfig:{candidateCount:1,maxOutputTokens:32768,thinkingConfig:{thinkingLevel:'LOW'},mediaResolution:'MEDIA_RESOLUTION_HIGH',responseFormat:{text:{mimeType:'APPLICATION_JSON',schema}}}};
+ }
+ 
+@@ -56,7 +59,7 @@ export function decodeGeminiGameObservation(native:unknown,request:ObservationRe
+ 
+ /** Provider-neutral visible payload decoder; envelopes remain the adapter's responsibility. */
+ export function decodeLiteralObservationPayload(wire:unknown,request:ObservationRequest,definition:PhotoDefinition,trace?:HostedObservationWire,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[]):ObservationResult{
+- if(!exact(wire,request.spatial&&record(wire)&&Object.hasOwn(wire,'spatial')?['items','spatial']:['items'])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
++ if(!exact(wire,['items',...(request.spatial&&record(wire)&&Object.hasOwn(wire,'spatial')?['spatial']:[]),...(request.scene&&record(wire)&&Object.hasOwn(wire,'scene')?['scene']:[])])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
+  const deferred:HostedObservationWire['deferred']=[];
+  // One row that breaks the contract costs only that row; the rest of a paid response is kept and the loss recorded.
+  const dropRow=(index:number)=>{deferred.push({ref:'item-'+(index+1),property:'row',reason:'invalid-row'});return null;};
+@@ -109,6 +112,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
+  if(wire.items.length&&!observations.length)return invalid();
+  const result=validateObservationResult({version:OBSERVATION_VERSION,observations,coverage:'partial',completion:'complete'},request,definition,transforms);
+  if(request.spatial){result.spatial=validateSpatialResult(wire.spatial,request,result);if(trace){trace.spatial=structuredClone(wire.spatial??null);deferred.push(...result.spatial.deferred.map(d=>({ref:d.section+':'+d.index,property:'spatial',reason:d.reason})));}}
++ if(request.scene){result.scene=decodeSceneReading(wire.scene,request,result,transforms);if(trace){trace.id='gemini-game-scene-wire-v1';trace.scene=structuredClone(wire.scene??null);deferred.push(...result.scene.deferred.map(d=>({ref:d.ref??'scene',property:'scene',reason:d.reason})));}}
+  if(trace){trace.items=structuredClone(wire.items);trace.deferred=deferred;}
+  return result;
+ }
+diff --git a/server/ai/terraCompact.ts b/server/ai/terraCompact.ts
+index c174691..bf100ca 100644
+--- a/server/ai/terraCompact.ts
++++ b/server/ai/terraCompact.ts
+@@ -1,3 +1,4 @@
++import {sceneWireSchema,sceneInstructions} from './sceneWire';
+ import {spatialWireSchema} from './spatialWire';
+ import type {ObservationRequest,PhotoDefinition,ObservationUnknownReason} from '../../shared/lightweightRecognition';
+ import {hostedVisibleProperty} from './geminiGameReader';
+@@ -54,6 +55,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
+  if(lean&&request.propertyApplicability?.areaPropertyIds)prompt=prompt.replace('The only exception: when f is b, leave frontOnly properties out of both a and x.','Exceptions: when f is b, leave frontOnly properties out of both a and x; omit unread properties inapplicable to the observed area from both a and x. For ar:null use all kind properties. Keep read supplemental values.');
+  if(request.spatial){replace('Return only JSON {"items":[...],"spatial":{...}};','Return only JSON {"v":3,"items":[...],"spatial":{...}};');(schema.properties as any).spatial=spatialWireSchema(request.readMode);schema.required.push('spatial');}else replace('Return only JSON {"items":[...]};','Return only JSON {"v":3,"items":[...]};');
+  if(request.readingTarget?.mode==='public-scene')prompt+='\nFor this public scene include ar on each item: the observed sourceAreaId or actual null; all other codes are unchanged.';
++ if(request.scene){(schema.properties as any).scene=sceneWireSchema();schema.required.push('scene');}
+  if(lean){prompt+='\nEach item has exactly k,b,f,q,u,a,x'+(request.readingTarget?.mode==='public-scene'?',ar':'')+'. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. u is s=single, g=group or u=unknown.\n'+VISIBLE_INSTANCE_CONTRACT.replace('Report physicalUnit from','Report u from').replace('Quantity remains','q remains');if(request.readMode==='values'||request.readMode==='cells')prompt=prompt.replace('exactly k,b,f','exactly k,f');return {prompt,schema};}
+  prompt+='\nEach item has exactly k,b,f,q,u,a'+(request.readingTarget?.mode==='public-scene'?',ar':'')+'. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. Report u as s=single when it is one distinguishable physical object, g=group when the box describes several objects as an inseparable aggregate, or u=unknown when that distinction cannot be observed. This is separate from physical quantity: do not invent a count for a single or group, and do not split a group using expected inventory. A group can have q:null. Preserve individually distinguishable neighboring objects separately.';
+  if(request.readMode==='values'||request.readMode==='cells')prompt=prompt.replace('exactly k,b,f','exactly k,f');
+@@ -62,7 +64,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
+ 
+ /** Validate the compact transport before the existing semantic validator sees reconstructed rows. */
+ export function expandCompactTerraPayload(payload:unknown,request:ObservationRequest,definition:PhotoDefinition,profile:CompactProfile=COMPACT_TERRA_PROFILE){
+- if(!exact(payload,request.spatial&&record(payload)&&Object.hasOwn(payload,'spatial')?['v','items','spatial']:['v','items'])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
++ if(!exact(payload,['v','items',...(request.spatial&&record(payload)&&Object.hasOwn(payload,'spatial')?['spatial']:[]),...(request.scene&&record(payload)&&Object.hasOwn(payload,'scene')?['scene']:[])])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
+  const lean=profile===LEAN_TERRA_PROFILE,kinds=compactTerraKinds(request,definition,profile);
+  // A row that breaks the contract becomes null, which the literal decoder drops and records.
+  return payload.items.map((raw:unknown)=>{try{
+diff --git a/server/ai/terraGameReader.ts b/server/ai/terraGameReader.ts
+index ee073bf..319f4a0 100644
+--- a/server/ai/terraGameReader.ts
++++ b/server/ai/terraGameReader.ts
+@@ -107,7 +107,7 @@ export function decodeTerraGameObservation(native:unknown,request:ObservationReq
+ }
+ function decodeTerraPayload(payload:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[],profile:TerraReaderIdentity['adapterVersion']|undefined,native?:unknown,truncated=false){
+  const compact=profile===COMPACT_TERRA_PROFILE||profile===LEAN_TERRA_PROFILE;
+- const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).some(k=>!['items',...(request.spatial?['spatial']:[])].includes(k)))throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
++ const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).some(k=>!['items',...(request.spatial?['spatial']:[]),...(request.scene?['scene']:[])].includes(k)))throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
+  const physicalUnits:Record<string,PhysicalUnitClaim>={},unitDeferred:HostedObservationWire['deferred']=[];let version2=false;
+  const decodingItems=(profile===DETAIL_TERRA_PROFILE||profile==='literal-named-fill-unit-marks-v5'||profile===LEAN_TERRA_PROFILE)?normalizeTerraDetailItems(sourceItems,request,definition):sourceItems;
+  const items=decodingItems.map((source:any,index:number)=>{
+@@ -123,9 +123,9 @@ function decodeTerraPayload(payload:unknown,request:ObservationRequest,definitio
+   return {...item,box_1000:[b.ymin,b.xmin,b.ymax,b.xmax]};
+  });
+  const trace:HostedObservationWire={id:'terra-game-wire-v1',items:[],deferred:[],...(native!==undefined?{providerResponse:structuredClone(native)}:{})};
+- const raw=decodeLiteralObservationPayload({items,...(request.spatial?{spatial:(payload as any)?.spatial}: {})},request,definition,trace,transforms);
++ const raw=decodeLiteralObservationPayload({items,...(request.spatial?{spatial:(payload as any)?.spatial}: {}),...(request.scene?{scene:(payload as any)?.scene}:{})},request,definition,trace,transforms);
+  const kept=new Set(raw.observations.map(o=>o.ref));
+- trace.items=structuredClone(sourceItems);if(version2||compact){trace.id=compact?'terra-game-wire-v3':'terra-game-wire-v2';trace.physicalUnits=Object.fromEntries(Object.entries(physicalUnits).filter(([ref])=>kept.has(ref)));trace.deferred.push(...unitDeferred);}
++ if(request.scene)trace.id='terra-game-scene-wire-v1';trace.items=structuredClone(sourceItems);if(version2||compact){trace.id=request.scene?'terra-game-scene-wire-v1':compact?'terra-game-wire-v3':'terra-game-wire-v2';trace.physicalUnits=Object.fromEntries(Object.entries(physicalUnits).filter(([ref])=>kept.has(ref)));trace.deferred.push(...unitDeferred);}
+  if(truncated)trace.deferred.push({ref:'response',property:'items',reason:'provider-output-truncated'});
+  return {raw,hostedWire:trace};
+ }
+@@ -160,7 +160,7 @@ export class LunaGameReader{
+   const read=await this.invoke(request,image,mimeType,buildTerraGameBody(request,definition,image,mimeType,this.identity.adapterVersion,{},this.identity),onRows,(payload,count)=>{
+    if(!onRows||full||!Array.isArray(payload?.items))return;
+    try{
+-    const previewRequest={...request};delete previewRequest.spatial;
++    const previewRequest={...request};delete previewRequest.spatial;delete previewRequest.scene;
+     const result=decodeTerraPayload({...(payload.v!==undefined?{v:payload.v}:{}),items:payload.items},previewRequest,definition,transforms,this.identity.adapterVersion);
+     const preview=[];let size=0;
+     for(const o of result.raw.observations){if(!Object.values(o.properties).some(p=>p.state==='observed'))continue;const bytes=Buffer.byteLength(JSON.stringify(o));if(bytes>16384)continue;if(preview.length>=64||size+bytes>65536){full=true;break;}preview.push(o);size+=bytes;}
+diff --git a/server/analysisTask.ts b/server/analysisTask.ts
+index 93940f4..40dee04 100644
+--- a/server/analysisTask.ts
++++ b/server/analysisTask.ts
+@@ -1,3 +1,4 @@
++import {refreshRestorationState} from './restorationState';
+ import {withRestoration} from '../gamepacks/catalog';
+ import {latestScopeSnapshot,snapshotForIntent} from './saveIntent';
+ import {projectScanResults} from './scanObservation';
+@@ -74,6 +75,7 @@ export async function commitAnalysisTask(store:Store,pins:PrivatePins,t:Analysis
+  }
+  if(current.room&&next.length)rooms.bump(current,new Set(next.map(a=>fieldScope(pack,a.field,a.ownerId))));if(t.prepared.purpose==='restore')current.stage='restore';
+  current.analysisSummary=results.map(r=>r.summary).join('\n');current.analysisSummaryOwnerId=t.owner??null;
++ refreshRestorationState(current,pack);
+  if(t.saveIntentId&&results.some(r=>!r.scanBundle||r.scanBundle.units.some(u=>u.state==='completed'))){const intent=current.saveIntents!.find(i=>i.id===t.saveIntentId)!;if(!intent.completionSnapshotId){const snapshot=snapshotForIntent(current,pack,intent,job.id);current.snapshots.push(snapshot);intent.completionSnapshotId=snapshot.id;intent.jobId=job.id;}}
+  current.activity.push({id:randomUUID(),type:'analyze',message:'서버 사진 읽기 완료',at:new Date().toISOString()});await store.saveSession(current);
+  return {state:results[0]?.scanBundle?.units.every(u=>u.state!=='completed')?'failed' as const:'completed' as const,candidateCount:next.length,mode:results[0]?.mode??'live' as const,...(plan||t.prepared.scanObservation?{observationReceipts}:{}),...(results[0]?.scanBundle?{scanBundle:results[0].scanBundle}:{})};
+diff --git a/server/engine.ts b/server/engine.ts
+index e69babb..bfb0c28 100644
+--- a/server/engine.ts
++++ b/server/engine.ts
+@@ -1,3 +1,5 @@
++import {sceneQuestionSkipped,sceneContextActions} from '../shared/sceneWorkflow';
++import {recordingTurnField} from '../shared/currentRecording';
+ import {rebaseEstimatedReferences} from './estimatedReferenceRebase';
+ import {linkedComponents} from '../shared/componentLinking.ts';
+ import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
+@@ -19,7 +21,7 @@ import {receiptsForValue} from './observationReceipts';
+ import {observationAnswerContext} from './observationReview';
+ import type {NativeObservationReview} from '../shared/observationReview';
+ 
+-export const isTurnField = (field: FieldDefinition | undefined) => !['player.development.boughtThisTurnType','player.development.boughtThisTurnIdentity'].includes(field?.key??'') && (field?.lifetime === 'turn' || (!field?.lifetime && field?.group === 'turn'));
++export const isTurnField=recordingTurnField;
+ export const fieldId = (field: string, ownerId?: string) => `${ownerId ?? 'public'}:${field}`;
+ const sameValue = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+ 
+@@ -238,7 +240,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
+     return { field: assertion.field, text: `${field?.label ?? assertion.field}: ${value}${assertion.basis === 'rule' && assertion.reason && assertion.field !== 'resume.nextProcedure' ? ` · ${assertion.reason}` : ''}`, ownerId: assertion.ownerId, evidenceIds: assertion.evidenceIds, basis: assertion.basis };
+   });
+   if (pack.id === 'catan-base') { const next = catanNextProcedure(session); const entry=briefing.find(b=>b.field==='resume.nextProcedure'); if(entry)entry.text=next;else briefing.unshift({field:'resume.nextProcedure',text:next,ownerId:undefined,evidenceIds:[],basis:'rule'}); }
+-  return { session, pack, questions, derived, briefing, ready: questions.length === 0, progress: { resolved: required.size - questions.length, total: required.size }, differences, actions: planActions(session, questions) };
++  return { session, pack, questions:questions.filter(q=>!sceneQuestionSkipped(session,q)), derived, briefing, ready: questions.length === 0, progress: { resolved: required.size - questions.length, total: required.size }, differences, actions: [...planActions(session, questions.filter(q=>!sceneQuestionSkipped(session,q))),...sceneContextActions(session)] };
+ }
+ 
+ export function nextTurn(session: Session, pack: GamePack, playerId?: string) {
+diff --git a/server/hostedObservation.ts b/server/hostedObservation.ts
+index 65a4a5b..61c273d 100644
+--- a/server/hostedObservation.ts
++++ b/server/hostedObservation.ts
+@@ -1,3 +1,4 @@
++import {compileRestorationProfile} from '../shared/restorationProfile';
+ import {readingAreas} from '../shared/restoration';
+ import {attachSpatialReading} from './spatialReading';
+ import {isHostedReader} from '../shared/lightweightRecognition';
+@@ -15,22 +16,24 @@ import {AnalysisJobError} from './analysisJobs';
+ const sha=(data:Buffer)=>createHash('sha256').update(data).digest('hex');
+ export interface PinnedHostedObservation {request:ObservationRequest;definition:PhotoDefinition;reader:HostedReaderIdentity;frame?:ConfirmedPhotoFrame;transforms:import('../shared/photoGeometry').PhotoTransform[];sourceImageSHA:string;inputSHA?:string;taskProfile?:undefined}
+ export async function prepareHostedObservation(input:{pack:GamePack;playerCount?:number;evidence:Evidence[];captureEpoch:string;selection:unknown;taskId:string;reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>}):Promise<PinnedHostedObservation>{
+- const s=input.selection as HostedReaderSelection;if(!s||typeof s!=='object'||Object.keys(s).some(k=>!['kind','definitionSHA','areaId','frame','readingTarget','readMode'].includes(k))||!isHostedReader(s)||s.kind!==input.reader.identity.kind||input.evidence.length!==1)throw new AnalysisJobError('사진 판독기와 한 촬영 영역·원본 사진을 확인하세요.');
++ const s=input.selection as HostedReaderSelection;if(!s||typeof s!=='object'||Object.keys(s).some(k=>!['kind','definitionSHA','areaId','frame','readingTarget','readMode','scene'].includes(k))||!isHostedReader(s)||s.kind!==input.reader.identity.kind||input.evidence.length!==1)throw new AnalysisJobError('사진 판독기와 한 촬영 영역·원본 사진을 확인하세요.');
+  if(!(await input.reader.status()).available)throw new AnalysisJobError('서버에 선택한 게임 사진 판독용 키가 연결되지 않았습니다.',503);
+  if(s.readMode&&s.frame)throw new AnalysisJobError('별도 판독 모드와 수동 frame은 함께 사용할 수 없습니다.');
++ if(s.scene!==undefined&&s.scene!==true)throw new AnalysisJobError('scene protocol 선택을 확인하세요.');
+  const e=input.evidence[0],definition=photoDefinition(input.pack,s.definitionSHA),area=readingAreas(input.pack,definition,s.areaId,s.readingTarget)[0];
+  if(!area||(area.partition==='owner_private'?(e.scope!=='player'||!e.ownerId):(e.scope!=='public'||!!e.ownerId)))throw new AnalysisJobError('공용·본인 촬영 영역을 확인하세요.');
+  if(e.captureEpoch!==input.captureEpoch)throw new AnalysisJobError('현재 촬영 단계의 사진만 읽을 수 있습니다. 과거 사진과 저장 기록은 유지됩니다.',409);
+  if(s.frame&&(definition.nativeBridge!=='catan'||area.id!=='board'||area.partition!=='common_public'||e.scope!=='public'||e.ownerId))throw new AnalysisJobError('카탄 공용 판 사진의 기준점만 사용할 수 있습니다.',409);
+  const bytes=await input.readImage(e),sourceImageSHA=sha(bytes.data),dimensions=imageDimensions(bytes.data),frame=s.frame?validatePhotoFrame(s.frame,{evidenceId:e.id,sourceSHA:sourceImageSHA,definitionSHA:definition.definitionSHA}):undefined;
+  const request=attachSpatialReading(compileObservationTask({pack:input.pack,definition,areaId:s.areaId,readMode:s.readMode,taskId:input.taskId,readingTarget:s.readingTarget,scope:{partition:s.readingTarget?.mode==='public-scene'?'common_public':area.partition,ownerId:e.ownerId??null,captureEpoch:e.captureEpoch},images:[{evidenceId:e.id,inputId:e.id,sha256:sourceImageSHA,...dimensions,transformId:null}],geometryFrameId:frame?.frameId}),input.pack,definition,input.playerCount);
++ if(s.scene){const profile=compileRestorationProfile(input.pack),areas=readingAreas(input.pack,definition,s.areaId,s.readingTarget),recipes=profile.regions.filter(r=>r.fieldKeys.some(f=>areas.some(a=>a.fields.includes(f)))&&r.allowedComponentIds.some(id=>request.allowedComponents.includes(id)));request.scene={version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,requested:request.readMode==='values'?['board-presence','region','relations']:['board-presence','region','frame','visible-support','relations'],roleHints:profile.readingHints.filter(h=>recipes.some(r=>r.id===h.roleId)),allowedRoleIds:recipes.map(r=>r.id),roleComponentIds:Object.fromEntries(recipes.map(r=>[r.id,r.allowedComponentIds])),boardComponentIds:(input.pack.runtime?.components??[]).filter(c=>c.kind==='board'&&request.allowedComponents.includes(c.id)).map(c=>c.id)};}
+  for(const component of definition.components)if(request.allowedPropertyIds[component.id])request.allowedPropertyIds[component.id]=request.allowedPropertyIds[component.id].filter(id=>hostedVisibleProperty(component,id));
+  return {request,definition,reader:structuredClone(input.reader.identity),frame,transforms:[],sourceImageSHA};
+ }
+ export async function analyzeHostedObservation(input:{plan:PinnedHostedObservation;pack:GamePack;session:import('../shared/types').Session;turnInstanceId:string;evidence:Evidence[];reader:HostedObservationReader;readImage:(e:Evidence)=>Promise<{data:Buffer;mimeType:string}>;timings?:Record<string,number>;literal?:boolean;onRows?:import('../shared/lightweightRecognition').ObservationProgressCallback}):Promise<AnalysisResult>{
+  const {plan,reader}=input;if(JSON.stringify(plan.reader)!==JSON.stringify(reader.identity))throw new AnalysisJobError('고정한 사진 판독 profile이 바뀌었습니다.',409);
+  const bytes=await input.readImage(input.evidence[0]);if(sha(bytes.data)!==(plan.inputSHA??plan.sourceImageSHA))throw new AnalysisJobError('고정한 원본 사진이 바뀌었습니다.',409);
+- if(!plan.request.readMode&&!input.literal&&plan.definition.nativeBridge==='catan'&&plan.request.areaId==='board'&&plan.request.scope.partition==='common_public'){
++ if(!plan.request.scene&&!plan.request.readMode&&!input.literal&&plan.definition.nativeBridge==='catan'&&plan.request.areaId==='board'&&plan.request.scope.partition==='common_public'){
+   const read=await reader.readCatanScene(plan.request,plan.definition,input.session,input.pack,input.evidence,bytes.data,bytes.mimeType);if(input.timings)input.timings.provider=read.timings.readerMs;
+   // Keep the pinned request frame in the receipt; native scene slots are separate from manual frame geometry.
+   for(const receipt of read.result.observationReceipts??[])receipt.frame=plan.frame??null;
+diff --git a/server/index.ts b/server/index.ts
+index a52228d..34ae366 100644
+--- a/server/index.ts
++++ b/server/index.ts
+@@ -1,3 +1,6 @@
++import {rebaseEstimatedReferences} from './estimatedReferenceRebase';
++import {isRestorationState} from '../shared/restorationScene';
++import {refreshRestorationState,applySceneCommands,snapshotRestoration,resumeRestoration,sceneCommandsAlreadyApplied,SceneCommandError} from './restorationState';
+ import {receiptProgress} from './jobProgress';
+ import {intentForCommit,analysisSaveIntent} from './saveIntent';
+ import {readingAreas} from '../shared/restoration';
+@@ -147,7 +150,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+ 
+   async function packs() {
+     const imported = await store.listPacks();
+-    const current=runtimePacks??builtinPacks();return [...current,...imported.filter(pack=>!current.some(item=>item.id===pack.id))];
++    const current=(runtimePacks??builtinPacks()).map(withRestoration);return [...current,...imported.filter(pack=>!current.some(item=>item.id===pack.id)).map(withRestoration)];
+   }
+ 
+   async function rawStoredPack(session:Session) {
+@@ -175,6 +178,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+     if(req.path.endsWith('/component-links')){const source=session.assertions.find(a=>a.id===body.sourceAssertionId);if(!source)throw new HttpError('원본 후보를 찾을 수 없어요.',404);await requireField(source.field,source.ownerId);await requireField(body.target?.field,body.target?.ownerId);}
+     if(req.method==='PATCH'&&req.path===`/api/sessions/${session.id}`){
+       for(const owner of Object.keys(body.notes??{}))await requireOwner(owner);
++      if(body.sceneCommands!==undefined){if(!Array.isArray(body.sceneCommands))throw new HttpError('장면 명령 배열이 필요합니다.');for(const c of body.sceneCommands){if(!c||typeof c!=='object')throw new HttpError('장면 명령을 확인하세요.');if(c.scopeKey!=='public'){if(!session.players.some(p=>p.id===c.scopeKey))throw new HttpError('저장 범위를 확인하세요.');await requireOwner(c.scopeKey);}}}
+       for(const answer of body.answers??[])await requireField(answer.field,answer.ownerId);
+       for(const update of body.assertions??[]){const previous=session.assertions.find(a=>a.id===update.id);if(previous)await requireField(previous.field,previous.ownerId);await requireField(update.field??previous?.field,update.ownerId??previous?.ownerId);}
+       if(Array.isArray(body.players))for(const owner of await pins.owners(session.id))if(!body.players.some((p:Player)=>p.id===owner)){await requireOwner(owner);throw new HttpError('개인 정보 보호를 해제한 뒤 플레이어를 지워 주세요.',409);}
+@@ -197,10 +201,10 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+     const job = prior.catch(() => undefined).then(async () => {
+       let at = performance.now();
+       if (timings) timings.queue = at - queuedAt;
+-      const { session, pack } = await sessionFor(id);
+-      if(cloud&&req.get('X-KeepBoard-Revision')&&req.get('X-KeepBoard-Revision')!==(session as any).storageRevision)throw new HttpError('다른 창에서 기록이 바뀌었어요. 초안을 유지하고 최신 기록을 확인해 주세요.',409);
++      const {session:stored,pack}=await sessionFor(id);const session=structuredClone(stored);
++      if(cloud&&!(req.method==='PATCH'&&sceneCommandsAlreadyApplied(session,req.body?.sceneCommands,req.body))&&req.get('X-KeepBoard-Revision')&&req.get('X-KeepBoard-Revision')!==(session as any).storageRevision)throw new HttpError('다른 창에서 기록이 바뀌었어요. 초안을 유지하고 최신 기록을 확인해 주세요.',409);
+       if (timings) timings.load = performance.now() - at;
+-      at = performance.now(); const scopes=await authorizeMutation(req, session, pack); await mutate(session, pack); if(session.room)rooms.bump(session,scopes);
++      at = performance.now(); const scopes=await authorizeMutation(req, session, pack); await mutate(session, pack); refreshRestorationState(session,pack); if(session.room)rooms.bump(session,scopes);
+       if (timings) timings.mutate = performance.now() - at;
+       at = performance.now(); const view = recompute(session, pack);
+       if (timings) timings.recompute = performance.now() - at;
+@@ -323,6 +327,9 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+   app.patch('/api/sessions/:id', async (req, res) => {
+     res.json(await change(req, req.params.id, (session, pack) => {
+       const body = req.body ?? {};
++      if(sceneCommandsAlreadyApplied(session,body.sceneCommands,body))return;
++      const beforeAnswers=session.assertions.filter(a=>a.status==='accepted'&&a.basis!=='rule');
++      if(body.sceneCommands!==undefined)refreshRestorationState(session,pack);const sceneBaseline=isRestorationState(session.restoration)?structuredClone(session.restoration):undefined;
+       if (body.name !== undefined) { if (typeof body.name !== 'string') throw new HttpError('이름을 확인하세요.'); session.name = body.name; }
+       if (body.stage !== undefined) { if (!(['capture', 'questions', 'pack', 'saved', 'restore'] satisfies Stage[]).includes(body.stage)) throw new HttpError('단계를 확인하세요.'); session.stage = body.stage; }
+       if (body.players !== undefined) {
+@@ -335,6 +342,8 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+         session.notes = { ...session.notes, ...body.notes };
+       }
+       if (body.answers !== undefined && !Array.isArray(body.answers)) throw new HttpError('답변 배열이 필요합니다.');
++      const updateKeys=(Array.isArray(body.assertions)?body.assertions:[]).map((u:any)=>{const old=session.assertions.find(a=>a.id===u.id);return JSON.stringify([u.ownerId??old?.ownerId??null,u.field??old?.field]);});
++      const answerKeys=(body.answers??[]).map((a:any)=>JSON.stringify([a.ownerId??null,a.field]));if(new Set([...answerKeys,...updateKeys]).size!==answerKeys.length+updateKeys.length)throw new HttpError('같은 필드의 충돌하는 답변을 함께 저장할 수 없습니다.');
+       for (const answer of body.answers ?? []) answerField(session, pack, answer.field, answer.value, answer.ownerId,answer.observationReview);
+       if (body.assertions !== undefined && !Array.isArray(body.assertions)) throw new HttpError('사실 배열이 필요합니다.');
+       for (const update of body.assertions ?? []) {
+@@ -345,6 +354,9 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+         if (!fieldKey || value === undefined) throw new HttpError('사실의 필드와 값을 입력하세요.');
+         answerField(session, pack, fieldKey, value, ownerId,update.observationReview);
+       }
++      for(const previous of beforeAnswers){const next=session.assertions.find(a=>a.status==='accepted'&&a.field===previous.field&&a.ownerId===previous.ownerId);if(next&&next.id!==previous.id)session.assertions=rebaseEstimatedReferences(session.assertions,previous,next.id,next.value,session.evidence);}
++      if(body.sceneCommands!==undefined)applySceneCommands(session,pack,body.sceneCommands,!!body.answers?.length||!!body.assertions?.length,sceneBaseline,body);
++      else if(session.restoration&&((body.answers?.length??0)||(body.assertions?.length??0))){refreshRestorationState(session,pack);if(session.restoration.version==='restoration-state-v1')for(const p of Object.values((session.restoration as import('../shared/restorationScene').RestorationStateV1).partitions))delete p.lastCommand;}
+       activity(session, 'edit', '입력한 상태에서 요구사항과 도출 사실을 다시 계산했습니다.');
+     }));
+   });
+@@ -631,8 +643,10 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+       if (!view.ready && !photoRecord && req.body?.allowIncomplete !== true) throw new HttpError('남은 질문을 확인하거나 미완료 저장을 명시적으로 선택하세요.', 409);
+       const assertion=(a:Session['assertions'][number])=>!key||(!session.room&&key==='public'?!privateField(pack,a.field):fieldScope(pack,a.field,a.ownerId)===key);
+       const intent=req.body?.reading?intentForCommit(session,pack,req.body.reading,key??req.body?.ownerId??'public'):undefined;saveIntentId=intent?.id;
++      refreshRestorationState(session,pack);
+       const refs=new Set(session.assertions.filter(assertion).flatMap(a=>a.evidenceIds));
+       session.snapshots.push({...(intent?{saveIntentId:intent.id}:{}), id: randomUUID(), createdAt: new Date().toISOString(), captureEpoch: session.captureEpoch, turnInstanceId: session.turnInstanceId, gamePackVersion: session.gamePackVersion, ...(key?{savedScope:key==='public'?{scope:'public' as const}:{scope:'owner' as const,ownerId:key}}:{}), assertions: structuredClone(session.assertions.filter(assertion)), evidence: structuredClone(session.evidence.filter(e=>!key||(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))), preservations: structuredClone(session.preservations.filter(p=>!key||(p.ownerId??'public')===key)), notes: key?Object.fromEntries(Object.entries(session.notes).filter(([k])=>k===key)):structuredClone(session.notes) });
++      const saved=session.snapshots.at(-1)!;saved.restoration=snapshotRestoration(session,saved.assertions,saved.evidence);
+       if(!key||key==='public')session.stage = 'saved';
+       activity(session, 'commit', view.ready ? '게임 상태와 보존 정보를 저장했습니다.' : photoRecord ? '사진과 현재 기록을 저장했습니다. 실물 보존·숨은 상태 완료는 승인하지 않았습니다.' : '미완료 항목을 포함해 명시적으로 저장했습니다.');
+     });res.json({...view,...(saveIntentId?{saveIntentId}:{})});
+@@ -642,6 +656,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+       if(req.body?.scope!==undefined||pack.runtime){resumeSnapshot(session,pack,req.body?.scope??'public',req.body?.ownerId,req.body?.snapshotId);activity(session,'resume','선택한 범위의 저장 기록을 복원했습니다.');return;}
+       if (!session.snapshots.length) throw new HttpError('먼저 저장본을 만드세요.', 409);
+       const saved = session.snapshots.at(-1)!;
++      resumeRestoration(session,saved);
+       session.assertions = structuredClone(saved.assertions);
+       session.evidence = structuredClone(saved.evidence);
+       session.preservations = structuredClone(saved.preservations);
+@@ -687,7 +702,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
+     }
+   }
+   const onError: ErrorRequestHandler = (error, _req, res, _next) => {
+-    const status = error instanceof HttpError || error instanceof PinError || error instanceof rooms.RoomError || error instanceof AnalysisJobError || error instanceof ConflictError ? error.status : error.status === 413 ? 413 : 400;
++    const status = error instanceof HttpError || error instanceof PinError || error instanceof rooms.RoomError || error instanceof AnalysisJobError || error instanceof ConflictError || error instanceof SceneCommandError ? error.status : error.status === 413 ? 413 : 400;
+     res.status(status).json({ error: error instanceof Error ? error.message : '요청을 처리하지 못했습니다.' });
+   };
+   app.use(onError);
+diff --git a/server/rooms.ts b/server/rooms.ts
+index f6cc6ac..7f28b47 100644
+--- a/server/rooms.ts
++++ b/server/rooms.ts
+@@ -1,3 +1,4 @@
++import {sceneCommandsAlreadyApplied} from './restorationState';
+ import {createHash,randomBytes,randomUUID} from 'node:crypto';
+ import type {Request,Response} from 'express';
+ import type {GamePack,Player,Session,SessionView} from '../shared/types.ts';
+@@ -26,7 +27,7 @@ export function refsAllowed(value:unknown,ids:Set<string>){if(!value||typeof val
+ export function authorizeRoom(req:Request,s:Session,pack:GamePack){const a=actor(req,s),body=req.body??{},keys=new Set<string>();const add=(key:string)=>{writeScope(a,s,key);keys.add(key);};
+  const field=(key:string,owner?:string,value?:unknown)=>{const scope=fieldScope(pack,key,owner);add(scope);refsAllowed(value,new Set(s.evidence.filter(e=>scope==='public'?!e.ownerId&&e.scope==='public':!e.ownerId&&e.scope==='public'||e.ownerId===scope).map(e=>e.id)));};
+  if(req.path.includes('/privacy/')){if(req.params.ownerId&&req.params.ownerId!==a.playerId)throw new RoomError('내 비밀번호만 관리할 수 있어요.');if(req.method==='PUT'){add(a.playerId);expected(s,body,keys);}return keys;}
+- if(req.method==='PATCH'&&req.path===`/api/sessions/${s.id}`){if(body.players!==undefined||body.room!==undefined||body.gamePack!==undefined||body.gamePackId!==undefined)throw new RoomError('참가자와 방 권한은 이 경로에서 바꿀 수 없어요.');if(body.name!==undefined||body.stage!==undefined)add('public');for(const key of Object.keys(body.notes??{}))add(key);for(const x of body.answers??[])field(x.field,x.ownerId,x.value);for(const x of body.assertions??[]){const old=s.assertions.find(y=>y.id===x.id);if(!old)throw new RoomError('기존 후보를 확인해 주세요.',404);field(old.field,old.ownerId);field(x.field??old.field,x.ownerId??old.ownerId,x.value??old.value);}}
++ if(req.method==='PATCH'&&req.path===`/api/sessions/${s.id}`){if(body.players!==undefined||body.room!==undefined||body.gamePack!==undefined||body.gamePackId!==undefined)throw new RoomError('참가자와 방 권한은 이 경로에서 바꿀 수 없어요.');if(body.name!==undefined||body.stage!==undefined)add('public');for(const key of Object.keys(body.notes??{}))add(key);if(body.sceneCommands!==undefined&&!Array.isArray(body.sceneCommands))throw new RoomError('장면 명령 배열을 확인하세요.',400);for(const c of body.sceneCommands??[])add(c?.scopeKey);for(const x of body.answers??[])field(x.field,x.ownerId,x.value);for(const x of body.assertions??[]){const old=s.assertions.find(y=>y.id===x.id);if(!old)throw new RoomError('기존 후보를 확인해 주세요.',404);field(old.field,old.ownerId);field(x.field??old.field,x.ownerId??old.ownerId,x.value??old.value);}}
+  else if(req.path.endsWith('/evidence')&&req.method==='POST'){const source=s.evidence.find(e=>e.id===body.sourceEvidenceId);if(body.sourceEvidenceId&&!source)throw new RoomError('사진을 찾을 수 없어요.',404);add(source?.ownerId??(source?'public':body.scope==='player'?body.ownerId:'public'));}
+  else if(req.params.evidenceId){const e=s.evidence.find(e=>e.id===req.params.evidenceId);if(!e)throw new RoomError('사진을 찾을 수 없어요.',404);add(e.ownerId??'public');}
+  else if(req.path.endsWith('/analyze')){const key=target(body);add(key);if(!Array.isArray(body.evidenceIds)||!body.evidenceIds.length)throw new RoomError('읽을 사진을 선택해 주세요.',400);const es=s.evidence.filter(e=>body.evidenceIds.includes(e.id));if(es.length!==new Set(body.evidenceIds).size||es.some(e=>(e.ownerId??'public')!==key))throw new RoomError('다른 영역의 사진은 함께 읽을 수 없어요.');}
+@@ -37,7 +38,7 @@ export function authorizeRoom(req:Request,s:Session,pack:GamePack){const a=actor
+  else if(req.path.endsWith('/next-turn'))add('public');
+  else if(req.path.endsWith('/me')){colorFree(s,profile(body).color,a.playerId);keys.add('roster');}
+  else throw new RoomError('허용하지 않은 방 변경입니다.');
+- expected(s,body,keys);return keys;
++ if(req.method==='PATCH'&&req.path===`/api/sessions/${s.id}`&&sceneCommandsAlreadyApplied(s,body.sceneCommands,body))return new Set<string>();expected(s,body,keys);return keys;
+ }
+ export function roomInput(s:Session,pack:GamePack,access:RoomAccess,unlocked:Set<string>,configured:Set<string>,publicOnly=false){const other=new Set(s.players.filter(p=>publicOnly||p.id!==access.playerId||configured.has(p.id)&&!unlocked.has(p.id)).map(p=>p.id));const copy=redactSession(s,pack,other,new Set());copy.room=publicMetadata(s);copy.activity=[];if(copy.saveIntents)copy.saveIntents=copy.saveIntents.filter(i=>i.scopeKey==='public'||!publicOnly&&i.scopeKey===access.playerId);copy.snapshots=copy.snapshots.filter(x=>!x.savedScope||x.savedScope.scope==='public'||!publicOnly&&x.savedScope.ownerId===access.playerId);return copy;}
+ export function roomView(s:Session,pack:GamePack,access:RoomAccess,unlocked:Set<string>,configured:Set<string>):SessionView{const copy=roomInput(s,pack,access,unlocked,configured),view=recompute(copy,structuredClone(pack)),protectedOwners=new Set(s.players.filter(p=>p.id!==access.playerId||configured.has(p.id)).map(p=>p.id));const visible=redactView(view,protectedOwners,unlocked.has(access.playerId)?new Set([access.playerId]):new Set());visible.questions=visible.questions.filter(q=>!q.ownerId||q.ownerId===access.playerId);visible.actions=visible.actions?.filter(q=>!q.ownerId||q.ownerId===access.playerId);return {...visible,ready:visible.questions.length===0,progress:{resolved:0,total:visible.questions.length},roomAccess:access};}
+diff --git a/server/runtimeResume.ts b/server/runtimeResume.ts
+index 8e1323b..5b59ed5 100644
+--- a/server/runtimeResume.ts
++++ b/server/runtimeResume.ts
+@@ -1,3 +1,4 @@
++import {resumeRestoration} from './restorationState';
+ import {hasPhotoRecord} from '../shared/sessionSummary';
+ import {componentRecord} from '../shared/componentLinking.ts';
+ import {randomUUID} from 'node:crypto';
+@@ -33,6 +34,7 @@ export function resumeSnapshot(session:Session,pack:GamePack,scope:'public'|'own
+   if(identities.has(key)&&(linked||identities.get(key)))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');
+   identities.set(key,linked);
+  }
++ resumeRestoration(session,saved,key);
+  session.assertions=nextAssertions;
+  // Retained private assertions may cite a public original that is absent from the old public snapshot.
+  const retainedRefs=new Set(session.assertions.filter(a=>!assertion(a)).flatMap(a=>a.evidenceIds));
+diff --git a/server/saveIntent.ts b/server/saveIntent.ts
+index 5d707db..5474d24 100644
+--- a/server/saveIntent.ts
++++ b/server/saveIntent.ts
+@@ -1,3 +1,4 @@
++import {snapshotRestoration} from './restorationState';
+ import {createHash,randomUUID} from 'node:crypto';
+ import type {GamePack,Session,Snapshot} from '../shared/types';
+ import {fieldScope,roomScopeKey} from '../shared/rooms';
+@@ -8,7 +9,7 @@ import {isHostedReader,type HostedReaderSelection} from '../shared/lightweightRe
+ const sha=(v:unknown)=>createHash('sha256').update(canonicalJSON(v)).digest('hex');
+ export function intentForCommit(session:Session,pack:GamePack,raw:unknown,scopeKey='public'):SaveIntent{
+  const r=raw as {reader:HostedReaderSelection;evidenceIds:string[]};
+- if(!r||!isHostedReader(r.reader)||Object.keys(r).some(k=>!['reader','evidenceIds'].includes(k))||Object.keys(r.reader).some(k=>!['kind','areaId','definitionSHA','frame','readingTarget','target','readMode'].includes(k))||!Array.isArray(r.evidenceIds)||!r.evidenceIds.length||r.evidenceIds.length>6||new Set(r.evidenceIds).size!==r.evidenceIds.length)throw Error('저장할 판독 대상과 사진을 확인하세요.');
++ if(!r||!isHostedReader(r.reader)||Object.keys(r).some(k=>!['reader','evidenceIds'].includes(k))||Object.keys(r.reader).some(k=>!['kind','areaId','definitionSHA','frame','readingTarget','target','readMode','scene'].includes(k))||!Array.isArray(r.evidenceIds)||!r.evidenceIds.length||r.evidenceIds.length>6||new Set(r.evidenceIds).size!==r.evidenceIds.length)throw Error('저장할 판독 대상과 사진을 확인하세요.');
+  if(r.reader.readMode!==undefined&&!['values','cells','boxes'].includes(r.reader.readMode))throw Error('판독 모드를 확인하세요.');
+  const d=photoDefinition(pack,r.reader.definitionSHA),areas=readingAreas(pack,d,r.reader.areaId,r.reader.readingTarget),owner=scopeKey==='public'?undefined:scopeKey;
+  if(areas.some(a=>owner?a.partition!=='owner_private':a.partition==='owner_private'))throw Error('저장 의도의 공개·본인 범위를 확인하세요.');
+@@ -27,5 +28,5 @@ export function analysisSaveIntent(session:Session,pack:GamePack,body:any,owner?
+ export function latestScopeSnapshot(session:Session,key:string){return [...session.snapshots].reverse().find(s=>s.savedScope?roomScopeKey(s.savedScope)===key:!session.room);}
+ export function snapshotForIntent(session:Session,pack:GamePack,intent:SaveIntent,jobId:string):Snapshot{
+  const key=intent.scopeKey,scoped=session.room||key!=='public',accept=(a:Session['assertions'][number])=>scoped?fieldScope(pack,a.field,a.ownerId)===key:!a.ownerId||pack.fields.some(f=>f.key===a.field&&f.visibility==='public'),assertions=session.assertions.filter(accept),refs=new Set(assertions.flatMap(a=>a.evidenceIds));
+- return {id:randomUUID(),createdAt:new Date().toISOString(),captureEpoch:session.captureEpoch,turnInstanceId:session.turnInstanceId,gamePackVersion:session.gamePackVersion,saveIntentId:intent.id,analysisJobId:jobId,savedScope:key==='public'?{scope:'public'}:{scope:'owner',ownerId:key},assertions:structuredClone(assertions),evidence:structuredClone(session.evidence.filter(e=>(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))),preservations:structuredClone(session.preservations.filter(p=>(p.ownerId??'public')===key)),notes:Object.fromEntries(Object.entries(session.notes).filter(([k])=>k===key))};
++ return {restoration:snapshotRestoration(session,assertions,session.evidence.filter(e=>(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))),id:randomUUID(),createdAt:new Date().toISOString(),captureEpoch:session.captureEpoch,turnInstanceId:session.turnInstanceId,gamePackVersion:session.gamePackVersion,saveIntentId:intent.id,analysisJobId:jobId,savedScope:key==='public'?{scope:'public'}:{scope:'owner',ownerId:key},assertions:structuredClone(assertions),evidence:structuredClone(session.evidence.filter(e=>(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))),preservations:structuredClone(session.preservations.filter(p=>(p.ownerId??'public')===key)),notes:Object.fromEntries(Object.entries(session.notes).filter(([k])=>k===key))};
+ }
+diff --git a/shared/estimatedBoardStructure.ts b/shared/estimatedBoardStructure.ts
+index bb4292e..0e525f4 100644
+--- a/shared/estimatedBoardStructure.ts
++++ b/shared/estimatedBoardStructure.ts
+@@ -1,13 +1,13 @@
+ import windowAsset from '../public/game-art/real-boards/sagrada/board.json';
+ import type {Assertion,Evidence} from './types';import type {GenericPiece} from './genericRecord';import type {DrawingItem} from './drawingProjection';
+ import {projectGenericDrawing,photoDrawingReference} from './drawingProjection';import {mapObservationRegion} from './photoGeometry';import type {ObservationBox,ObservationReceipt} from './lightweightRecognition';
+-import {sourceLine,expeditionColor,diceLattice,boardLineSide,manualFrameCells,nearbyFootprintComponents} from './estimatedGeometry';
++import {sourceLine,expeditionColor,diceLattice,boardLineSide,manualFrameCells,nearbyFootprintComponents,frameFromCorners,type BoardCorners} from './estimatedGeometry';
+ import {resolveEstimatedReference,type EstimatedReferenceRecord} from './estimatedStructureSafety';
+ import {collectStructureBoards,collectVisibleRelations,resolveStructureAnchor,partialStructureOrder,structureIdentity,anchorIdentity,pieceRef,boardLocalPoint,wonderCardRole,inferDisplayLaneLabels,type StructurePieceRef,type StructureAnchorRef,type StructureNode,type StructureBoard,type StructureBasis} from './structureRelations';
+ import {ESTIMATED_AREAS} from './estimatedStructureOverride';import {estimatedBoardMetrics,type EstimatedBoardMetrics} from './estimatedBoardMetrics';
+ export type {StructurePieceRef,StructureAnchorRef,StructureBasis} from './structureRelations';
+ export type {EstimatedStructureOverride} from './estimatedStructureOverride';export {ESTIMATED_AREAS,estimatedBoardMetrics};
+-export type EstimatedBoardGrid={rows:4;columns:5;rowAxis:{x:number;y:number};orientation:'source-order-not-printed';basis:'observed-dice-lattice'}|{rows:4;columns:5;rowAxis:null;orientation:'unknown';basis:'manual-slot-order'};
++export type EstimatedBoardGrid={rows:4;columns:5;rowAxis:{x:number;y:number};orientation:'source-order-not-printed';basis:'observed-dice-lattice'}|{rows:4;columns:5;rowAxis:null;orientation:'unknown';basis:'manual-slot-order'}|{rows:4;columns:5;rowAxis:null;orientation:'source-order-not-printed';basis:'observed-board-frame'};
+ export interface EstimatedBoardGroup {id:string;areaId:string;label:string;sourceKey:string;anchorPieceId:string|null;side:'near'|'far'|null;color:string|null;axis:{x:number;y:number}|null;slots:number[];suggestedAreaId?:string;role?:'discard'|'expedition'|'window-grid';grid?:EstimatedBoardGrid;anchorRef?:StructureAnchorRef|null;boardSide?:'A'|'B';slotBasis?:'canonical'|'relative-band'|'manual'|'unknown';orderLevels?:StructurePieceRef[][];orderUnresolved?:StructurePieceRef[];displayHypothesis?:'unanchored-grid'}
+ export interface EstimatedBoardPlacement {assertionId:string;pieceId:string;areaId:string;groupId:string;order:number;slot:number|null;anchorPieceId:string|null;attachedToPieceId:string|null;basis:'estimated'|'manual';cell?:{row:number;column:number};notes:string[];anchorRef?:StructureAnchorRef|null;attachedToRef?:StructurePieceRef|null;beforeRefs?:StructurePieceRef[];basisByField?:Record<string,StructureBasis>;boardLocal?:{x:number;y:number;basis:string}|null;orderLevel?:number|null;orderStatus?:'known'|'partial'|'cycle'|'unknown';slotBasis?:'canonical'|'relative-band'|'manual'|'unknown';anchorCandidates?:StructureAnchorRef[];suggestedAreaId?:string;displayHypothesis?:'unanchored-grid'}
+ export interface EstimatedBoardStructure {version:'estimated-board-structure-v1';gameId:string;areas:{id:string;label:string;status:'empty'|'estimated'|'retained'|'unresolved';total:number;placed:number;unassigned:number;notes:string[]}[];groups:EstimatedBoardGroup[];placements:EstimatedBoardPlacement[];retained:DrawingItem[];unassigned:{assertionId:string;pieceId:string;reason:string}[];metrics:EstimatedBoardMetrics;referenceRecords?:EstimatedReferenceRecord[];boardContexts?:{anchorRef:StructureAnchorRef;sourceKey:string;sourceRegion:ObservationBox;hasManualFrame:boolean;orientationDegrees:number|null}[]}
+@@ -49,7 +49,7 @@ function suggestedRoleArea(gameId:string,n:Node):string|undefined{
+  return;
+ }
+ /** Derived view only. Does not mutate items, receipts, owner, source geometry or canonical spatial. */
+-export function estimateBoardStructure(input:{gameId:string;items:readonly DrawingItem[];assertions:readonly Assertion[];allAssertions?:readonly Assertion[];evidence:readonly Evidence[]}):EstimatedBoardStructure{
++export function estimateBoardStructure(input:{gameId:string;items:readonly DrawingItem[];assertions:readonly Assertion[];allAssertions?:readonly Assertion[];evidence:readonly Evidence[];frameOverrides?:readonly {anchorRef:StructureAnchorRef;sourceKey:string;corners:BoardCorners;basis?:'manual'|'observation'}[]}):EstimatedBoardStructure{
+  const {gameId,assertions,evidence}=input,items=[...new Map(input.items.map(i=>[identity(i),i])).values()],allowedAssertions=[...new Map([...assertions,...(input.allAssertions??[])].map(a=>[a.id,a])).values()],requested=new Set(items.map(identity)),extra=allowedAssertions.filter(a=>!items.some(i=>i.assertionId===a.id)).flatMap(a=>{const v=a.value as any;return v?.version==='game-component-record-v1'&&Array.isArray(v.pieces)?projectGenericDrawing({...a,observationReceipts:scopeReceipts(a)},v.pieces,evidence):[];}),out:EstimatedBoardStructure={version:'estimated-board-structure-v1',gameId,areas:(ESTIMATED_AREAS[gameId]??[]).map(a=>({...a,status:'empty',total:0,placed:0,unassigned:0,notes:[]})),groups:[],placements:[],retained:[],unassigned:[],metrics:{total:0,placed:0,readKnown:0,readTotal:0,readUnknown:0,errorKnown:null,errorUnknown:0}},nodes:Node[]=[],placed=new Set<string>(),handled=new Set<string>();
+  const manualChecks:{item:DrawingItem;q:NonNullable<GenericPiece['structureOverride']>}[]=[];
+  const unassigned=(i:DrawingItem,reason:string)=>{if(!requested.has(identity(i)))return;placed.delete(identity(i));if(!out.unassigned.some(u=>identity(u)===identity(i)))out.unassigned.push({assertionId:i.assertionId,pieceId:i.pieceId,reason});};
+@@ -69,7 +69,7 @@ export function estimateBoardStructure(input:{gameId:string;items:readonly Drawi
+  }
+  const nodeById=new Map(nodes.map(n=>[identity(n.item),n]));
+  const liveReferences:EstimatedReferenceRecord[]=[...new Map([...items,...extra].map(i=>[identity(i),i])).values()].map(i=>({assertionId:i.assertionId,pieceId:i.pieceId,evidenceId:(i.value as GenericPiece).evidenceId,sourceKey:nodeById.get(identity(i))?.sourceKey??null}));
+- const allBoards=collectStructureBoards(nodes),allRelations=collectVisibleRelations(nodes,allBoards);out.referenceRecords=liveReferences;out.boardContexts=allBoards.map(b=>({anchorRef:b.ref,sourceKey:b.sourceKey,sourceRegion:b.box,hasManualFrame:!!b.frame,orientationDegrees:b.orientationDegrees}));
++ const allBoards=collectStructureBoards(nodes);for(const override of input.frameOverrides??[]){const matches=allBoards.filter(b=>b.sourceKey===override.sourceKey&&anchorIdentity(b.ref)===anchorIdentity(override.anchorRef)),matrix=frameFromCorners(override.corners);if(matches.length===1&&matrix&&!(override.basis==='observation'&&matches[0].frame?.basis==='manual-frame')){matches[0].frame={matrix,basis:override.basis==='observation'?'observed-frame':'manual-frame'};matches[0].frameConflict=false;}}const allRelations=collectVisibleRelations(nodes,allBoards);out.referenceRecords=liveReferences;out.boardContexts=allBoards.map(b=>({anchorRef:b.ref,sourceKey:b.sourceKey,sourceRegion:b.box,hasManualFrame:b.frame?.basis==='manual-frame',orientationDegrees:b.orientationDegrees}));
+  for(const {item,q}of manualChecks){const origin=liveReferences.find(r=>identity(r)===identity(item))!,n=nodeById.get(identity(item)),p=out.placements.find(p=>identity(p)===identity(item))!,v2=q.version==='estimated-structure-override-v2'?q:null;let invalid=v2&&(!n||v2.sourceKey!==n.sourceKey)?'manual-source-mismatch':null;
+   const resolve=(id:string,ref?:StructurePieceRef|null)=>{const result=resolveEstimatedReference(origin,ref??id,liveReferences);if(result.status!=='resolved'||ref&&identity(ref)!==identity(result.target)){invalid=result.status==='ambiguous'?'manual-reference-ambiguous':'manual-reference-unavailable';return null;}return {assertionId:result.target.assertionId,pieceId:result.target.pieceId};};
+   if(!invalid){if(v2?.anchorRef===null){p.anchorRef=null;p.anchorPieceId=null;}else if(v2?.anchorRef?.kind==='observed-board'){const matches=allBoards.filter(b=>b.sourceKey===n?.sourceKey&&anchorIdentity(b.ref)===anchorIdentity(v2.anchorRef!));if(matches.length===1)p.anchorRef=matches[0].ref;else invalid='manual-board-unavailable';}else{const explicit=v2?.anchorRef?.kind==='live-piece'?v2.anchorRef:null,id=explicit?.pieceId??q.anchorPieceId;if(id){const target=resolve(id,explicit);if(target)p.anchorRef={kind:'live-piece',...target};}}
+@@ -132,7 +132,7 @@ export function estimateBoardStructure(input:{gameId:string;items:readonly Drawi
+     const manualCells=b.frame?manualFrameCells(candidates.map(n=>({...centre(n.box),id:identity(n.item),width:n.box.width,height:n.box.height})),b.frame.matrix,rowCount,columnCount):null;
+     for(const n of candidates){if(handled.has(identity(n.item)))continue;if(b.frameConflict){markUnknown(n,'conflicting-manual-frames');continue;}const cell=manualCells?manualCells.get(identity(n.item)):fit.cells.get(identity(n.item)),local=boardLocalPoint(b,centre(n.box));
+      if(!cell||!b.frame&&!fit.axis||rowCount!==4||columnCount!==5){markUnknown(n,b.frame?'manual-frame-cell-boundary-uncertain':fit.reason??'window-cell-ambiguous');continue;}
+-     const anchorFields={anchorRef:b.ref,anchorPieceId:b.ref.kind==='live-piece'?b.ref.pieceId:null};put(n,group(sourceKey,'window','grid-'+anchorIdentity(b.ref),{...anchorFields,role:'window-grid',axis:fit.axis,slots:Array.from({length:template!.slots.length},(_,i)=>i+1),grid:b.frame?{rows:4,columns:5,rowAxis:null,orientation:'unknown',basis:'manual-slot-order'}:{rows:4,columns:5,rowAxis:fit.axis!,orientation:'source-order-not-printed',basis:'observed-dice-lattice'}}),{...anchorFields,cell,slot:(cell.row-1)*columnCount+cell.column,slotBasis:b.frame?'manual':'relative-band',boardLocal:local,basisByField:{position:b.frame?'manual':'estimated',anchor:b.piece?'estimated':'observed-relation'},notes:['검증된 live/observed 판 인스턴스의 반복행/수동frame 추정 · 정식 spatial/사람 소유 확정 아님']});}
++     const anchorFields={anchorRef:b.ref,anchorPieceId:b.ref.kind==='live-piece'?b.ref.pieceId:null};put(n,group(sourceKey,'window','grid-'+anchorIdentity(b.ref),{...anchorFields,role:'window-grid',axis:fit.axis,slots:Array.from({length:template!.slots.length},(_,i)=>i+1),grid:b.frame?(b.frame.basis==='manual-frame'?{rows:4,columns:5,rowAxis:null,orientation:'unknown',basis:'manual-slot-order'}:{rows:4,columns:5,rowAxis:null,orientation:'source-order-not-printed',basis:'observed-board-frame'}):{rows:4,columns:5,rowAxis:fit.axis!,orientation:'source-order-not-printed',basis:'observed-dice-lattice'}}),{...anchorFields,cell,slot:(cell.row-1)*columnCount+cell.column,slotBasis:b.frame?.basis==='manual-frame'?'manual':'relative-band',boardLocal:local,basisByField:{position:b.frame?.basis==='manual-frame'?'manual':'estimated',anchor:b.piece?'estimated':'observed-relation'},notes:['검증된 live/observed 판 인스턴스의 반복행/수동frame 추정 · 정식 spatial/사람 소유 확정 아님']});}
+    }
+    // A repeated grid can be shown even when no window was observed. It is not a
+    // synthetic board, a role correction, a canonical address or a placed success.
+diff --git a/shared/lightweightRecognition.ts b/shared/lightweightRecognition.ts
+index b2132c0..f4d340c 100644
+--- a/shared/lightweightRecognition.ts
++++ b/shared/lightweightRecognition.ts
+@@ -1,3 +1,4 @@
++import {validateStoredSceneReading} from './sceneReading';
+ import {readingAreas,compatibleRestoration,type ReadingTarget} from './restoration';
+ import {validateSpatialResult} from './spatialObservation';
+ import type {GamePack} from './types';
+@@ -10,24 +11,24 @@ export interface ObservationScope {partition:ObservationPartition;ownerId:string
+ export interface ObservationImage {evidenceId:string;sha256:string;width:number;height:number;inputId:string;transformId:string|null}
+ export type ObservationReadMode='values'|'cells'|'boxes';
+ export const validObservationReadMode=(v:unknown):v is ObservationReadMode=>['values','cells','boxes'].includes(v as string);
+-export interface ObservationRequest {readModePolicy?:'visible-values-v1';readMode?:ObservationReadMode;readingTarget?:ReadingTarget;propertyApplicability?:{frontOnlyPropertyIds:Record<string,string[]>;areaPropertyIds?:Record<string,Record<string,string[]>>;policySHA?:string};spatial?:import('./spatialDefinition').SpatialRequest;version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
++export interface ObservationRequest {scene?:import('./sceneReading').SceneReadingRequestV1;readModePolicy?:'visible-values-v1';readMode?:ObservationReadMode;readingTarget?:ReadingTarget;propertyApplicability?:{frontOnlyPropertyIds:Record<string,string[]>;areaPropertyIds?:Record<string,Record<string,string[]>>;policySHA?:string};spatial?:import('./spatialDefinition').SpatialRequest;version:typeof OBSERVATION_VERSION;taskId:string;gameId:string;packId:string;editionId:string;sourceSHA:string;definitionSHA:string;areaId:string;scope:ObservationScope;images:ObservationImage[];allowedComponents:string[];allowedPropertyIds:Record<string,string[]>;componentLabels?:Record<string,{name:string;physicalType:string}>;referenceSetId:string|null;geometryFrameId:string|null}
+ export type ObservationUnknownReason='unreadable'|'occluded'|'out-of-frame'|'not-present-unconfirmed'|'wrong-face'|'ambiguous'|'unsupported';
+ export type ObservationProperty={state:'observed';value:string|number|boolean|unknown[]|Record<string,unknown>}|{state:'unknown';value:null;reason:ObservationUnknownReason};
+ export interface ObservationBox {x:number;y:number;width:number;height:number}
+ export interface LiteralObservation {sourceAreaId?:string|null;ref:string;imageIndex:number;panelRef:string|null;componentId:string|null;bbox:ObservationBox|null;face:'front'|'back'|'unknown';quantity:number|null;rotationDegrees:number|null;properties:Record<string,ObservationProperty>;referenceCandidates:{referenceId:string;assetSHA:string}[]}
+ export interface ObservationProgressUpdate {timings?:Record<string,number>;preview?:LiteralObservation[]}
+ export type ObservationProgressCallback=(count:number,update?:ObservationProgressUpdate)=>void;
+-export interface ObservationResult {spatial?:import('./spatialObservation').SpatialResult;version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
++export interface ObservationResult {scene?:import('./sceneReading').SceneReadingResultV1;spatial?:import('./spatialObservation').SpatialResult;version:typeof OBSERVATION_VERSION;observations:LiteralObservation[];coverage:'partial';completion:'complete'|'truncated'|'failed'}
+ export interface GeometryCandidate {observationRef:string;frameId:string;locationCandidate:{type:'hex'|'edge'|'vertex';id:string};method:'confirmed-frame';status:'candidate'}
+ export interface LocalReaderSelection {kind:'local-observation-v1';task?:'catan-numerals-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;inputMode?:'original'|'catan-atlas'}
+-export interface HostedReaderSelection {readMode?:ObservationReadMode;readingTarget?:ReadingTarget;kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
++export interface HostedReaderSelection {scene?:true;readMode?:ObservationReadMode;readingTarget?:ReadingTarget;kind:'gemini-game-observation-v1'|'terra-game-observation-v1'|'luna-game-observation-v1'|'terra-high-game-observation-v1';definitionSHA:string;areaId:string;frame?:import('./photoGeometry').ConfirmedPhotoFrame;target?:import('./scanObservation').ScanTarget}
+ export type PhotoReaderSelection=LocalReaderSelection|HostedReaderSelection;
+ export interface LocalTaskProfile {id:'catan-numerals-v1';wire:'qwen-number-grounding-v1';promptSHA256:string;schemaSHA256:string;runtimeSettingsSHA256:string;contextTokens:8192;maxOutputTokens:1024;imageMinTokens:1024;temperature:0;cachePrompt:false;stream:false;automaticRetries:0;parallelRequests:1}
+ export interface LocalReaderTaskCapability {task:'catan-numerals-v1';available:boolean;reason?:string;profile:LocalTaskProfile|null}
+ export interface NativeNumeralWire {id:'qwen-number-grounding-v1';result:{items:{bbox_2d:number[];text:string|null}[]};deferred:{ref:string;reason:string}[]}
+ /** Original visible-only provider wire, separate from the validated facts used by the game. */
+ export type PhysicalUnitClaim='single'|'group'|'unknown';
+-export interface HostedObservationWire {id:'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1'|'terra-game-wire-v2'|'terra-game-wire-v3';physicalUnits?:Record<string,PhysicalUnitClaim>;providerResponse?:unknown;spatial?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
++export interface HostedObservationWire {id:'gemini-game-scene-wire-v1'|'terra-game-scene-wire-v1'|'gemini-game-wire-v1'|'gemini-catan-scene-wire-v1'|'terra-game-wire-v1'|'terra-catan-scene-wire-v1'|'terra-game-wire-v2'|'terra-game-wire-v3';physicalUnits?:Record<string,PhysicalUnitClaim>;providerResponse?:unknown;scene?:unknown;spatial?:unknown;items:unknown[];deferred:{ref:string;property:string;reason:string}[]}
+ export interface ReaderIdentity {kind:'local-observation-v1';model:string;modelRevision:string;weightSHA:string;projectorSHA:string;runtimeRevision:string;contextTokens:number;maxOutputTokens:number}
+ export interface GeminiReaderIdentity {kind:'gemini-game-observation-v1';model:'gemini-3.8-flash';thinkingLevel:'LOW';mediaResolution:'MEDIA_RESOLUTION_HIGH';maxOutputTokens:32768}
+ export interface TerraReaderIdentity {kind:'terra-game-observation-v1';model:'gpt-6.1-terra';api:'responses';reasoningEffort:'low';imageDetail:'high';maxOutputTokens:32768;adapterVersion:'literal-named-fill-original-v1'|'literal-named-fill-unit-original-v2'|'literal-compact-unit-original-v3'|'literal-named-detail-unit-original-v4'|'literal-named-fill-unit-marks-v5'|'literal-compact-visible-instance-v7';automaticRetries:0;timeoutMs:240000}
+@@ -69,7 +70,7 @@ export function compileObservationTask(input:CompileObservationInput):Observatio
+  return {...(input.readMode?{readMode:input.readMode,readModePolicy:'visible-values-v1' as const}:{}),...(input.readingTarget?{readingTarget:structuredClone(input.readingTarget)}:{}),version:OBSERVATION_VERSION,taskId,gameId:d.gameId,packId:d.packId,editionId:d.editionId,sourceSHA:d.sourceSHA,definitionSHA:d.definitionSHA,areaId,scope:structuredClone(scope),images:structuredClone(images),allowedComponents:[...components],allowedPropertyIds,propertyApplicability,componentLabels,referenceSetId:null,geometryFrameId:input.geometryFrameId??null};
+ }
+ export function validateObservationResult(raw:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[]=[]):ObservationResult {
+- const r=exact(raw,['version','observations','coverage','completion',...(isObject(raw)&&Object.hasOwn(raw,'spatial')?['spatial']:[])],'관측 응답');if(r.version!==OBSERVATION_VERSION||r.coverage!=='partial'||r.completion!=='complete')return fail('관측 응답이 완료되지 않았거나 잘렸습니다(truncated). 기존 기록은 보존됩니다.');
++ const r=exact(raw,['version','observations','coverage','completion',...(isObject(raw)&&Object.hasOwn(raw,'spatial')?['spatial']:[]),...(isObject(raw)&&Object.hasOwn(raw,'scene')?['scene']:[])],'관측 응답');if(r.version!==OBSERVATION_VERSION||r.coverage!=='partial'||r.completion!=='complete')return fail('관측 응답이 완료되지 않았거나 잘렸습니다(truncated). 기존 기록은 보존됩니다.');
+  if(request.definitionSHA!==definition.definitionSHA||!Array.isArray(r.observations)||r.observations.length>512)return fail('관측 정의와 결과를 확인하세요.');const seen=new Set<string>();
+  for(const item of r.observations){const o=exact(item,['ref','imageIndex','panelRef','componentId','bbox','face','quantity','rotationDegrees','properties','referenceCandidates',...(isObject(item)&&Object.hasOwn(item,'sourceAreaId')?['sourceAreaId']:[])],'실물 관측');
+   if(o.sourceAreaId!==undefined&&o.sourceAreaId!==null&&(!request.readingTarget||request.readingTarget.mode!=='public-scene'||!request.readingTarget.areaIds.includes(o.sourceAreaId as string)||!definition.areas.some(a=>a.id===o.sourceAreaId&&a.partition!=='owner_private'&&a.componentIds.includes(o.componentId as string))))return fail('관측 영역의 연결을 확인하세요.');
+@@ -91,6 +92,7 @@ export function validateObservationResult(raw:unknown,request:ObservationRequest
+  if(Object.hasOwn(r,'spatial')&&!request.spatial)return fail('요청하지 않은 공간 응답입니다.');
+  const checked=structuredClone(raw) as ObservationResult;
+  if(checked.spatial){const {deferred,...payload}=checked.spatial;const validated=validateSpatialResult(payload,request,checked);validated.deferred=[...new Map([...(Array.isArray(deferred)?deferred.filter(d=>d&&typeof d.section==='string'&&Number.isSafeInteger(d.index)&&typeof d.reason==='string'):[]),...validated.deferred].map(d=>[JSON.stringify(d),d])).values()];checked.spatial=validated;}
++ if(checked.scene)checked.scene=validateStoredSceneReading(checked.scene,request,checked,transforms);
+  return checked;
+ }
+ export interface ObservationReceipt {version:typeof OBSERVATION_VERSION;request:ObservationRequest;result:ObservationResult;reader:ObservationReaderIdentity;frame:import('./photoGeometry').ConfirmedPhotoFrame|null;transforms:import('./photoGeometry').PhotoTransform[];geometryCandidates:GeometryCandidate[];componentRefs:Record<string,string>;taskProfile?:LocalTaskProfile;sourceImageSHA?:string;nativeWire?:NativeNumeralWire;hostedWire?:HostedObservationWire;scanBundle?:import('./scanObservation').ScanBundleReceipt;scanUnitId?:string}
+diff --git a/shared/privacy.ts b/shared/privacy.ts
+index 562c0a0..e5d34c5 100644
+--- a/shared/privacy.ts
++++ b/shared/privacy.ts
+@@ -1,3 +1,5 @@
++import {snapshotRestoration} from './restorationSnapshot';
++import {isRestorationState} from './restorationScene';
+ import type {Assertion,GamePack,Session,SessionView} from './types';
+ import {effectiveProtectedOwners,physicalOnlyField} from './gameEssentials';
+ export function privateField(pack:GamePack,field:string){const definition=pack.fields.find(f=>f.key===field);return !definition||definition.scope==='player'&&definition.visibility!=='public';}
+@@ -11,6 +13,7 @@ export function redactSession(source:Session,pack:GamePack,protectedOwners:Set<s
+  if(session.saveIntents)session.saveIntents=session.saveIntents.filter(i=>i.scopeKey==='public'||!locked(i.scopeKey));
+  session.assertions=session.assertions.filter(visible);session.notes=notes(session.notes);session.evidence=photos(session.evidence);session.preservations=session.preservations.filter(p=>!locked(p.ownerId));
+  session.snapshots=session.snapshots.map(s=>({...s,assertions:s.assertions.filter(visible),notes:notes(s.notes),evidence:photos(s.evidence),preservations:s.preservations.filter(p=>!locked(p.ownerId))}));
++ if(session.restoration){if(isRestorationState(session.restoration))session.restoration=snapshotRestoration(session,session.assertions,session.evidence);else delete session.restoration;}for(const snapshot of session.snapshots)if(snapshot.restoration){if(isRestorationState(snapshot.restoration))snapshot.restoration=snapshotRestoration({...session,restoration:snapshot.restoration},snapshot.assertions,snapshot.evidence);else delete snapshot.restoration;}
+  if(locked(session.analysisSummaryOwnerId??undefined)||session.analysisSummaryOwnerId==='_mixed'&&[...protectedOwners].some(o=>!allowed.has(o))){delete session.analysisSummary;delete session.analysisSummaryOwnerId;}
+  return session;
+ }
+diff --git a/shared/structureRelations.ts b/shared/structureRelations.ts
+index 619ddcb..6e78440 100644
+--- a/shared/structureRelations.ts
++++ b/shared/structureRelations.ts
+@@ -7,7 +7,7 @@ export interface StructurePieceRef {assertionId:string;pieceId:string}
+ export type StructureAnchorRef=({kind:'live-piece'}&StructurePieceRef)|{kind:'observed-board';taskId:string;boardInstanceRef:string};
+ export type StructureBasis='manual'|'canonical'|'observed-relation'|'estimated'|'unknown';
+ export interface StructureNode {item:DrawingItem;piece:GenericPiece;box:ObservationBox;sourceKey:string;aspect:number;sourceAreaId:string|null;field:string;receipts:ObservationReceipt[]}
+-export interface StructureBoard {ref:StructureAnchorRef;sourceKey:string;box:ObservationBox;piece:StructureNode|null;aliases:string[];areaIds:string[];orientationDegrees:number|null;frame:{matrix:number[];basis:'manual-frame'}|null;frameConflict?:boolean;identityBasis?:'estimated'}
++export interface StructureBoard {ref:StructureAnchorRef;sourceKey:string;box:ObservationBox;piece:StructureNode|null;aliases:string[];areaIds:string[];orientationDegrees:number|null;frame:{matrix:number[];basis:'manual-frame'|'observed-frame'}|null;frameConflict?:boolean;identityBasis?:'estimated'}
+ export interface VisibleStructureRelation {from:StructurePieceRef;to:StructurePieceRef|StructureAnchorRef;kind:string;partial:boolean;basis:StructureBasis}
+ export const structureIdentity=(r:StructurePieceRef)=>JSON.stringify([r.assertionId,r.pieceId]);
+ export const anchorIdentity=(r:StructureAnchorRef)=>JSON.stringify(r.kind==='live-piece'?[r.kind,r.assertionId,r.pieceId]:[r.kind,r.taskId,r.boardInstanceRef]);
+@@ -79,7 +79,7 @@ export function resolveStructureAnchor(node:StructureNode,nodes:readonly Structu
+  if(boundary.size===1)return {anchor:[...boundary.values()][0],basis:'estimated',candidates:[...boundary.values()].map(b=>b.ref),reason:null};if(boundary.size>1)return {anchor:null,basis:'unknown',candidates:[...boundary.values()].map(b=>b.ref),reason:'competing-board-boundary-contacts'};
+  const c=centre(node.box);return {anchor:null,basis:'unknown',candidates:[...candidates].sort((a,b)=>Math.hypot(centre(a.box).x-c.x,centre(a.box).y-c.y)-Math.hypot(centre(b.box).x-c.x,centre(b.box).y-c.y)).map(b=>b.ref),reason:'no-supported-board-relation'};
+ }
+-export function boardLocalPoint(board:StructureBoard,point:Point):{x:number;y:number;basis:'manual-frame'}|null{return board.frame?((q)=>q?{...q,basis:'manual-frame' as const}:null)(projectBoardPoint(board.frame.matrix,point)):null;}
++export function boardLocalPoint(board:StructureBoard,point:Point):{x:number;y:number;basis:'manual-frame'|'observed-frame'}|null{return board.frame?((q)=>q?{...q,basis:board.frame!.basis}:null)(projectBoardPoint(board.frame.matrix,point)):null;}
+ /** Borrow a display lane, never a read value. Unlabelled bands must touch exactly
+  * one labelled connected band; two disconnected bands of the same color still compete. */
+ export function inferDisplayLaneLabels(nodes:readonly {id:string;label:string|null}[],edges:readonly [string,string][]):Map<string,string>{
+diff --git a/shared/types.ts b/shared/types.ts
+index f004697..ebd0190 100644
+--- a/shared/types.ts
++++ b/shared/types.ts
+@@ -18,6 +18,7 @@ export interface Requirement { id: string; scope: Scope; fields: string[]; when?
+ export interface DerivedRule { id: string; scope: Scope; when: Condition; field: string; value: Value; reason: string; sourceId?: string }
+ export interface PreservationTemplate { id: string; label: string; description: string; scope: Scope; conditions: string[]; restoreAfter: string[]; when?: Condition; visualFields?: string[];externalOnly?:boolean;sourceVisibility?:string;orderSensitive?:boolean;method?:string }
+ export interface GamePack {
++  restorationProfile?:import('./restorationProfile').RestorationProfileV1;
+   restorationPolicy?:import('./restoration').RestorationPolicy;
+   releaseTier?:import('./releaseSupport').ReleaseTier;
+   photoReadingPolicy?:{policySHA:string;definitionSHA:string;areas:Record<string,Record<string,string[]>>};
+@@ -60,6 +61,7 @@ export interface Preservation {
+ }
+ export interface Activity { id: string; at: string; type: string; message: string }
+ export interface Snapshot {
++  restoration?:import('./restorationScene').RestorationStateV1 | {version:string;[key:string]:unknown};
+   saveIntentId?:string;analysisJobId?:string;
+   savedScope?:SavedScope;
+   id: string; createdAt: string; captureEpoch: string; turnInstanceId: string;
+@@ -67,6 +69,7 @@ export interface Snapshot {
+   preservations: Preservation[]; notes: Record<string,string>;
+ }
+ export interface Session {
++  restoration?:import('./restorationScene').RestorationStateV1 | {version:string;[key:string]:unknown};
+   storageRevision?:string;
+   saveIntents?:import('./saveIntent').SaveIntent[];
+   room?:RoomMetadata;
+@@ -82,6 +85,7 @@ export interface Session {
+ export interface BriefingItem { field?: string; text: string; ownerId?: string; evidenceIds: string[]; basis: Assertion['basis'] }
+ export interface RestoreDifference { field: string; label: string; expected: Value; observed: Value; ownerId?: string }
+ export interface PlannedAction {
++  scene?:{scopeKey:string;groupIds:string[];entityIds:string[];reason:'structure-selection'|'preservation-review';providerRequired:false};
+   id: string; kind: 'inspectEvidence' | 'requestView' | 'askFields' | 'proposeAssertions' | 'preparePack' | 'requestCommit';
+   ownerId?: string; label: string; description: string; fields: string[];
+   evidenceIds: string[]; priority: number;
+diff --git a/tests/multiplayer-rooms-api.test.ts b/tests/multiplayer-rooms-api.test.ts
+index 0bdf472..16bb444 100644
+--- a/tests/multiplayer-rooms-api.test.ts
++++ b/tests/multiplayer-rooms-api.test.ts
+@@ -58,7 +58,7 @@ test('room scope snapshots restore their own baseline, PIN and original photos n
+  assert.equal((await a.call(p+'/privacy/'+A,'PUT',{enabled:false,expectedRevisions:{[A]:ar}})).status,403);assert.equal((await a.call(p,'PATCH',{notes:{[A]:'BLOCKED'},expectedRevisions:{[A]:ar}})).status,403);
+  assert.equal((await h.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).status,403);const token=(await a.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).body.token;assert(token);assert.equal((await a.call(url,'GET',undefined,token)).status,200);assert.equal((await h.call(url,'GET',undefined,token)).status,403);
+  assert.equal((await h.call(p+'/privacy/lock','POST',{},token)).status,403);assert.equal((await a.call(url,'GET',undefined,token)).status,200);
+- assert(!JSON.stringify((await h.call(p)).body).includes('A-SAVED'));assert(!JSON.stringify((await h.call(p)).body).includes('members'));
++ assert(!JSON.stringify((await h.call(p)).body).includes('A-SAVED'));assert(!JSON.stringify((await h.call(p)).body).includes('\"members\":'));
+  await f.restart();assert.equal((await h.call(p)).body.roomAccess.playerId,H);assert.equal((await a.call(p)).body.roomAccess.playerId,A);assert(!JSON.stringify((await a.call(p)).body).includes('A-SAVED'));const again=(await a.call(p+'/privacy/'+A+'/unlock','POST',{pin:'0007'})).body.token;assert(again);assert(JSON.stringify((await a.call(p,'GET',undefined,again)).body).includes('A-SAVED'));
+  }finally{await f.close();}});
+ 
+@@ -72,3 +72,5 @@ test('generic owner component records retain unknowns/physical IDs and cannot ci
+ test('own-hidden game data stays physical-only even for its room host and cannot be uploaded as a private photo',async()=>{const f=await fixture();try{const h=f.client();await h.init();const v=(await h.call('/api/rooms','POST',{gamePackId:'hanabi',capacity:2,me:{name:'H',color:'#ff0000'},clientRequestId:'physical-only'})).body,p='/api/sessions/'+v.session.id,H=v.roomAccess.playerId;
+  const field=v.pack.runtime.fieldBindings.find((b:any)=>b.editor==='physical-only'&&b.scope==='player');assert(field,'fixture must exercise an unsupported secret, not skip it');assert.equal((await h.call(p,'PATCH',{answers:[{field:field.key,ownerId:H,value:'DO-NOT-COLLECT'}],expectedRevisions:{[H]:0}})).status,400);assert.equal((await h.call(p+'/evidence','POST',{scope:'player',ownerId:H,dataUrl:'data:image/svg+xml;base64,PHN2Zy8+',expectedRevisions:{[H]:0}})).status,403);assert(!JSON.stringify(await f.store.getSession(v.session.id)).includes('DO-NOT-COLLECT'));
+  }finally{await f.close();}});
++
++test('scene command retries retain room write permissions but do not need the already-consumed room revision',async()=>{const f=await fixture();try{const h=f.client(),other=f.client();await h.init();await other.init();const made=await h.call('/api/rooms','POST',{gamePackId:'rummikub',capacity:2,me:{name:'host',color:'#ff0000'},clientRequestId:'scene-room'});assert.equal(made.status,201);const p='/api/sessions/'+made.body.session.id,{projectRestorationScene}=await import('../shared/sceneProjection'),{sceneQuestionInputDigest}=await import('../shared/sceneWorkflow'),scene=projectRestorationScene({session:made.body.session,pack:made.body.pack}),field=made.body.pack.fields.find((v:any)=>v.scope==='public').key,command={kind:'question-decision',commandId:'room-once',scopeKey:'public',expectedSceneRevision:scene.semanticRevision,field,inputDigest:sceneQuestionInputDigest(scene,field),action:'skipped'},payload={sceneCommands:[command],expectedRevisions:{public:made.body.roomAccess.revisions.public}};const first=await h.call(p,'PATCH',payload);assert.equal(first.status,200,JSON.stringify(first.body));const second=await h.call(p,'PATCH',payload);assert.equal(second.status,200,JSON.stringify(second.body));assert.equal(second.body.roomAccess.revisions.public,first.body.roomAccess.revisions.public);assert.equal((await h.call(p,'PATCH',{...payload,notes:{public:'different'}})).status,409);assert.equal((await other.call(p,'PATCH',payload)).status,403);}finally{await f.close();}});

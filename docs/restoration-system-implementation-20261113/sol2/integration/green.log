@@ -1,0 +1,108 @@
+TAP version 13
+# Subtest: upload tickets preserve original scope/owner/epoch and do not reassign bytes
+ok 1 - upload tickets preserve original scope/owner/epoch and do not reassign bytes
+  ---
+  duration_ms: 9.141542
+  type: 'test'
+  ...
+# Subtest: durable job requests and batch claims are shared, CAS-conflicting starts cannot both dispatch
+ok 2 - durable job requests and batch claims are shared, CAS-conflicting starts cannot both dispatch
+  ---
+  duration_ms: 2.735334
+  type: 'test'
+  ...
+# Subtest: independent cloud API instances persist private bytes, gate PIN/epoch, and reject stale editor revision
+ok 3 - independent cloud API instances persist private bytes, gate PIN/epoch, and reject stale editor revision
+  ---
+  duration_ms: 268.360666
+  type: 'test'
+  ...
+# Subtest: same room create intent racing in two HTTP function instances returns one durable room
+ok 4 - same room create intent racing in two HTTP function instances returns one durable room
+  ---
+  duration_ms: 108.065583
+  type: 'test'
+  ...
+# Subtest: cloud workflow executes the pinned Gemini reader once and preserves its receipt and timing
+ok 5 - cloud workflow executes the pinned Gemini reader once and preserves its receipt and timing
+  ---
+  duration_ms: 467.224458
+  type: 'test'
+  ...
+# Subtest: independent stores reject stale CAS and preserve existing sessions/zero/null
+ok 6 - independent stores reject stale CAS and preserve existing sessions/zero/null
+  ---
+  duration_ms: 12.422334
+  type: 'test'
+  ...
+# Subtest: new function instances share PIN lock/unlock and byte-exact private uploads
+ok 7 - new function instances share PIN lock/unlock and byte-exact private uploads
+  ---
+  duration_ms: 110.699
+  type: 'test'
+  ...
+# Subtest: cloud jobs retain old observation receipts across listing and the next start, while pruning ordinary history
+ok 8 - cloud jobs retain old observation receipts across listing and the next start, while pruning ordinary history
+  ---
+  duration_ms: 15.362417
+  type: 'test'
+  ...
+# Subtest: transaction drafts preserve the loaded CAS token without sharing mutations or refreshing a stale client
+ok 9 - transaction drafts preserve the loaded CAS token without sharing mutations or refreshing a stale client
+  ---
+  duration_ms: 3.117791
+  type: 'test'
+  ...
+# Subtest: existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin
+ok 10 - existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin
+  ---
+  duration_ms: 275.778
+  type: 'test'
+  ...
+# Subtest: room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation
+ok 11 - room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation
+  ---
+  duration_ms: 224.283084
+  type: 'test'
+  ...
+# Subtest: HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=false
+ok 12 - HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=false
+  ---
+  duration_ms: 82.47725
+  type: 'test'
+  ...
+# Subtest: HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=true
+ok 13 - HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=true
+  ---
+  duration_ms: 90.67925
+  type: 'test'
+  ...
+# {"backend":"local","photo":{"sessionLists":0,"sessionReads":1,"metadataReads":2},"list":{"fullBytes":711211,"summaryBytes":1743,"rows":9}}
+# Subtest: local: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+ok 14 - local: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+  ---
+  duration_ms: 758.557083
+  type: 'test'
+  ...
+# {"backend":"cloud","photo":{"sessionLists":0,"sessionReads":1,"metadataReads":2},"list":{"fullBytes":711211,"summaryBytes":1743,"rows":9}}
+# Subtest: cloud: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+ok 15 - cloud: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+  ---
+  duration_ms: 459.619291
+  type: 'test'
+  ...
+# Subtest: legacy index migration is one-time; independent cloud clients merge shared-photo references and reject unreferenced files
+ok 16 - legacy index migration is one-time; independent cloud clients merge shared-photo references and reject unreferenced files
+  ---
+  duration_ms: 3.25025
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2509.823834

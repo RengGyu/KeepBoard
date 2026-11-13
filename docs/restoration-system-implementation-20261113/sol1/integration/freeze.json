@@ -1,0 +1,44 @@
+{
+  "status": "source-frozen",
+  "frozenAt": "2026-11-13T08:51:27.666389+00:00",
+  "files": [
+    {
+      "path": "src/RestorationSceneView.tsx",
+      "beforeSHA256": "a6f7a4b6baf9eb1c9b94cb12c21c7247ad8764a046c624c6f2306d8e44db77cf",
+      "sha256": "f001264b161dba3e44a859b48ee4af525450edda0059ee0eeed0040d3cc44234"
+    },
+    {
+      "path": "tests/game-recognition-ui.test.ts",
+      "beforeSHA256": "2d4becc357bc3ba7e8ddcbf96f9e54535ba863a354e3d340db0a25c09b54d041",
+      "sha256": "d2e344ce6518342ecd454cd8a30db1450899670d00252a43e5d0ec715c2c070b"
+    },
+    {
+      "path": "tests/restoration-scene-ui.test.ts",
+      "beforeSHA256": "e15510ee842766a5139b126e3aff4dcab323996bd7f516410114151f0722761f",
+      "sha256": "f58f4bc43d439a3432d4379d666ee86dd7963bd5cd1fd097d75fad5054afe3f9"
+    }
+  ],
+  "patchSHA256": "336a802c31bb9d9460e8d4ebd285ef3c712b63d788ec786bd929bad612dfa493",
+  "checks": [
+    {
+      "command": "node --import tsx --test tests/game-recognition-ui.test.ts tests/restoration-scene-ui.test.ts tests/restoration-scene-layout.test.ts",
+      "exitCode": 0,
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "log": "focused-tests.log"
+    },
+    {
+      "command": "npx tsc --noEmit -p docs/restoration-system-implementation-20261113/sol1/tsconfig.json",
+      "exitCode": 0,
+      "log": "typecheck.log"
+    },
+    {
+      "command": "git diff --check -- src/RestorationSceneView.tsx tests/game-recognition-ui.test.ts tests/restoration-scene-ui.test.ts",
+      "exitCode": 0
+    }
+  ],
+  "providerCalls": 0,
+  "fullSuiteRuns": 0,
+  "buildRuns": 0
+}

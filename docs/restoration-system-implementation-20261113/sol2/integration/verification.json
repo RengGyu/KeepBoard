@@ -1,0 +1,40 @@
+{
+  "frozenAt": "2026-11-13T09:13:37.528226+00:00",
+  "providerCalls": 0,
+  "fullSuiteRun": false,
+  "buildRun": false,
+  "checks": [
+    {
+      "log": "final-focused.log",
+      "pass": 41,
+      "fail": 0,
+      "command": "npx tsx --test tests/cloud-contract.test.ts tests/cloud-gemini-execution.test.ts tests/component-linking-api.test.ts tests/performance-storage.test.ts tests/cloud-persistence.test.ts tests/placement-storage-performance.test.ts tests/restoration-system-projection.test.ts tests/restoration-system-http.test.ts tests/retired-pack-continuation.test.ts"
+    },
+    {
+      "log": "typecheck.log",
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    {
+      "log": "free-save-resume-final.log",
+      "pass": 1,
+      "fail": 0,
+      "testMs": 349537.565333,
+      "scope": "original whole test, before cost fix"
+    },
+    {
+      "log": "free-save-resume-after.log",
+      "pass": 1,
+      "fail": 0,
+      "testMs": 253889.39025,
+      "scope": "same original assertions/body in instrumented private copy, after cost fix; before later closure-count correction"
+    }
+  ],
+  "performanceRegressionRemaining": true,
+  "details": "performance-summary.json",
+  "unverified": [
+    "actual browser LC final layout (supervisor owned)",
+    "whole suite/build (supervisor owned)",
+    "original ~64-second performance recovery not achieved"
+  ]
+}

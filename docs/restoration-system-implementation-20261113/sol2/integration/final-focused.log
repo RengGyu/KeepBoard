@@ -1,0 +1,259 @@
+TAP version 13
+# Subtest: upload tickets preserve original scope/owner/epoch and do not reassign bytes
+ok 1 - upload tickets preserve original scope/owner/epoch and do not reassign bytes
+  ---
+  duration_ms: 7.525125
+  type: 'test'
+  ...
+# Subtest: durable job requests and batch claims are shared, CAS-conflicting starts cannot both dispatch
+ok 2 - durable job requests and batch claims are shared, CAS-conflicting starts cannot both dispatch
+  ---
+  duration_ms: 2.394292
+  type: 'test'
+  ...
+# Subtest: independent cloud API instances persist private bytes, gate PIN/epoch, and reject stale editor revision
+ok 3 - independent cloud API instances persist private bytes, gate PIN/epoch, and reject stale editor revision
+  ---
+  duration_ms: 393.945625
+  type: 'test'
+  ...
+# Subtest: same room create intent racing in two HTTP function instances returns one durable room
+ok 4 - same room create intent racing in two HTTP function instances returns one durable room
+  ---
+  duration_ms: 171.632708
+  type: 'test'
+  ...
+# Subtest: cloud workflow executes the pinned Gemini reader once and preserves its receipt and timing
+ok 5 - cloud workflow executes the pinned Gemini reader once and preserves its receipt and timing
+  ---
+  duration_ms: 632.515375
+  type: 'test'
+  ...
+# Subtest: independent stores reject stale CAS and preserve existing sessions/zero/null
+ok 6 - independent stores reject stale CAS and preserve existing sessions/zero/null
+  ---
+  duration_ms: 4.865875
+  type: 'test'
+  ...
+# Subtest: new function instances share PIN lock/unlock and byte-exact private uploads
+ok 7 - new function instances share PIN lock/unlock and byte-exact private uploads
+  ---
+  duration_ms: 87.676
+  type: 'test'
+  ...
+# Subtest: cloud jobs retain old observation receipts across listing and the next start, while pruning ordinary history
+ok 8 - cloud jobs retain old observation receipts across listing and the next start, while pruning ordinary history
+  ---
+  duration_ms: 9.989625
+  type: 'test'
+  ...
+# Subtest: transaction drafts preserve the loaded CAS token without sharing mutations or refreshing a stale client
+ok 9 - transaction drafts preserve the loaded CAS token without sharing mutations or refreshing a stale client
+  ---
+  duration_ms: 1.404333
+  type: 'test'
+  ...
+# Subtest: existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin
+ok 10 - existing candidate is explicitly linked by API; repeat whole candidate cannot resurrect moved pieces; snapshots/portable import/reopen retain origin
+  ---
+  duration_ms: 458.292042
+  type: 'test'
+  ...
+# Subtest: room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation
+ok 11 - room member can claim a public candidate into own public state, not another owner; correct owner commit/resume and PIN isolation
+  ---
+  duration_ms: 339.363334
+  type: 'test'
+  ...
+# Subtest: HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=false
+ok 12 - HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=false
+  ---
+  duration_ms: 135.408333
+  type: 'test'
+  ...
+# Subtest: HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=true
+ok 13 - HTTP restore does not duplicate an originally unlinked accepted source after public-to-reserved move: room=true
+  ---
+  duration_ms: 132.429375
+  type: 'test'
+  ...
+# {"backend":"local","photo":{"sessionLists":0,"sessionReads":1,"metadataReads":2},"list":{"fullBytes":711211,"summaryBytes":1743,"rows":9}}
+# Subtest: local: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+ok 14 - local: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+  ---
+  duration_ms: 1294.840709
+  type: 'test'
+  ...
+# {"backend":"cloud","photo":{"sessionLists":0,"sessionReads":1,"metadataReads":2},"list":{"fullBytes":711211,"summaryBytes":1743,"rows":9}}
+# Subtest: cloud: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+ok 15 - cloud: indexed original/snapshot photos read related sessions only; list is a card summary; save/reopen remains full
+  ---
+  duration_ms: 637.404167
+  type: 'test'
+  ...
+# Subtest: legacy index migration is one-time; independent cloud clients merge shared-photo references and reject unreferenced files
+ok 16 - legacy index migration is one-time; independent cloud clients merge shared-photo references and reject unreferenced files
+  ---
+  duration_ms: 4.302708
+  type: 'test'
+  ...
+# PERFORMANCE_COUNT {"summaryList20Sessions":{"sourceSessionReads":0,"smallDocumentReads":2}}
+# Subtest: storage codec keeps old/current snapshots/raw/errors/literals lossless and stops receipt-size growth per snapshot
+ok 17 - storage codec keeps old/current snapshots/raw/errors/literals lossless and stops receipt-size growth per snapshot
+  ---
+  duration_ms: 64.758
+  type: 'test'
+  ...
+# Subtest: independent CAS writers preserve codec tokens and summaries; normal list reads zero source sessions as count grows
+ok 18 - independent CAS writers preserve codec tokens and summaries; normal list reads zero source sessions as count grows
+  ---
+  duration_ms: 79.474917
+  type: 'test'
+  ...
+# Subtest: committed source with interrupted index finalization repairs only pending IDs; room summaries never expose membership credentials
+ok 19 - committed source with interrupted index finalization repairs only pending IDs; room summaries never expose membership credentials
+  ---
+  duration_ms: 2.792334
+  type: 'test'
+  ...
+# Subtest: actual JPEG thumbnails preserve originals and work for direct-ticket upload, import and unsupported originals
+ok 20 - actual JPEG thumbnails preserve originals and work for direct-ticket upload, import and unsupported originals
+  ---
+  duration_ms: 71.38625
+  type: 'test'
+  ...
+# Subtest: thumbnail URLs use the same all-reference PIN boundary and revoke cached unlocked access
+ok 21 - thumbnail URLs use the same all-reference PIN boundary and revoke cached unlocked access
+  ---
+  duration_ms: 1035.644542
+  type: 'test'
+  ...
+# Subtest: barrier: an overlapping failed writer must not finalize an older summary after another source commits
+ok 22 - barrier: an overlapping failed writer must not finalize an older summary after another source commits
+  ---
+  duration_ms: 1.697333
+  type: 'test'
+  ...
+# Subtest: scene snapshot profiles use lossless codec sharing without aliasing decoded copies
+ok 23 - scene snapshot profiles use lossless codec sharing without aliasing decoded copies
+  ---
+  duration_ms: 1.24875
+  type: 'test'
+  ...
+# Subtest: whole-scene cross-field command is atomic/idempotent, undoable and survives commit/reopen/resume
+ok 24 - whole-scene cross-field command is atomic/idempotent, undoable and survives commit/reopen/resume
+  ---
+  duration_ms: 4239.063084
+  type: 'test'
+  ...
+# Subtest: latest source-qualified scene frame resolves actual cells through adapter and survives save/reopen without raw edits
+ok 25 - latest source-qualified scene frame resolves actual cells through adapter and survives save/reopen without raw edits
+  ---
+  duration_ms: 278.382541
+  type: 'test'
+  ...
+# Subtest: same compound intent retry is idempotent; changed answers reject and preservation links survive reopen without auto-packing
+ok 26 - same compound intent retry is idempotent; changed answers reject and preservation links survive reopen without auto-packing
+  ---
+  duration_ms: 2356.483875
+  type: 'test'
+  ...
+# Subtest: another-view registration travels through actual PATCH/commit/reopen without fusing observations
+ok 27 - another-view registration travels through actual PATCH/commit/reopen without fusing observations
+  ---
+  duration_ms: 1001.110458
+  type: 'test'
+  ...
+# Subtest: dirty generic answers and a pre-edit question decision form one atomic intent and persist the final input digest
+ok 28 - dirty generic answers and a pre-edit question decision form one atomic intent and persist the final input digest
+  ---
+  duration_ms: 1382.178542
+  type: 'test'
+  ...
+# Subtest: opposed board subregions retain both proven sides and common center through scene command/commit/reopen/resume
+ok 29 - opposed board subregions retain both proven sides and common center through scene command/commit/reopen/resume
+  ---
+  duration_ms: 546.478833
+  type: 'test'
+  ...
+# Subtest: portable scene SHA matches SHA256 and exact120 profile pins preserve old pack fallback
+ok 30 - portable scene SHA matches SHA256 and exact120 profile pins preserve old pack fallback
+  ---
+  duration_ms: 226.873417
+  type: 'test'
+  ...
+# Subtest: whole accepted scope projects nine originals without changing any value/id/source or inventing missing boards
+ok 31 - whole accepted scope projects nine originals without changing any value/id/source or inventing missing boards
+  ---
+  duration_ms: 2162.6385
+  type: 'test'
+  ...
+# Subtest: generic recipe support groups visible field objects without inventing inventory or a real board
+ok 32 - generic recipe support groups visible field objects without inventing inventory or a real board
+  ---
+  duration_ms: 1.259834
+  type: 'test'
+  ...
+# Subtest: validated observed scene frame is consumed without claiming manual orientation or rewriting the source
+ok 33 - validated observed scene frame is consumed without claiming manual orientation or rewriting the source
+  ---
+  duration_ms: 74.0325
+  type: 'test'
+  ...
+# Subtest: a partial native component field does not become an invented real-board wrapper
+ok 34 - a partial native component field does not become an invented real-board wrapper
+  ---
+  duration_ms: 1.593666
+  type: 'test'
+  ...
+# Subtest: shared compiler has only selected pinned profile or metadata fallback; server wrapper never upgrades an old source
+ok 35 - shared compiler has only selected pinned profile or metadata fallback; server wrapper never upgrades an old source
+  ---
+  duration_ms: 70.588542
+  type: 'test'
+  ...
+# Subtest: reopened compatible historical scene profile remains pinned instead of taking the latest catalog recipe
+ok 36 - reopened compatible historical scene profile remains pinned instead of taking the latest catalog recipe
+  ---
+  duration_ms: 1.888833
+  type: 'test'
+  ...
+# Subtest: detached response scene pruning matches pure scope closure and leaves source/snapshots unchanged
+ok 37 - detached response scene pruning matches pure scope closure and leaves source/snapshots unchanged
+  ---
+  duration_ms: 121.668166
+  type: 'test'
+  ...
+# Subtest: every retired pack keeps its own capture profile and pinned photo definition
+ok 38 - every retired pack keeps its own capture profile and pinned photo definition
+  ---
+  duration_ms: 5.947708
+  type: 'test'
+  ...
+# Subtest: a retired pack prepares the same pinned public photo analysis job without upgrading its source
+ok 39 - a retired pack prepares the same pinned public photo analysis job without upgrading its source
+  ---
+  duration_ms: 1.456542
+  type: 'test'
+  ...
+# Subtest: retired typed fields survive display, validation and actual observation assembly
+ok 40 - retired typed fields survive display, validation and actual observation assembly
+  ---
+  duration_ms: 3.280917
+  type: 'test'
+  ...
+# Subtest: new sessions reject retired version while current version still starts and an old saved pack reopens
+ok 41 - new sessions reject retired version while current version still starts and an old saved pack reopens
+  ---
+  duration_ms: 266.090333
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11434.081917
