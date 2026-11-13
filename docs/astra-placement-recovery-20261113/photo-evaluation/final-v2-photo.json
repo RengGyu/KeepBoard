@@ -1,0 +1,428 @@
+{
+  "version": "bounded-photo-comparison-v1",
+  "created_at": "2026-11-13T02:39:01.697784+00:00",
+  "source_basis_sha256": "f438cc4f10db0f3c9342f650ef30694eb652bc04b1e676e1fad85c4be7f1b61f",
+  "source_matches_sha256": "8ffaa818b7dba0486981f9a8dfa5ce7477aac5f736293308b74e12a0054f58ea",
+  "source_addendum_sha256": "4ced3bb0eef4cb1ce294688adafe13145b82706c9f805b561a5123c583b885c3",
+  "script_sha256": "f401c6650ea0546806d49d15733e255600afe5d2b5c4e4ecced285c7284f66a6",
+  "snapshot_sha256": {
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/lost-cities-baseline.json": "75c3f67802cb5d055eb4c5a6734a92427a2a8fc61c2d392237b554dbde2c4529",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/lost-cities-high.json": "15925e03c1c3ddee3487de2f9f0d52df32eb5eba971e52afd443d96542d8d91c",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/lost-cities-low.json": "380297bada7335b59d8baa5eec04133bad1e2d70ff0ced8cfc949835ab655076",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/lost-cities-medium.json": "9a1fb7450897088f1d01adaa400b773ed420724c4f500184388219fcd1f5cd61",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/sagrada-baseline.json": "eb6c911e9be3e75b82d2994baabff06d3aad5b5ee9bc897cd9883e3a87fdd5ab",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/sagrada-high.json": "4899f9fd0fe284a2f5a4bde15370226f8320bf058b0c3cf16c9910b2971096b8",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/sagrada-low.json": "713637bf171a8a5a3e6b415a86c84b632883c86167af2e1e0626d58ebf5d09bf",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/sagrada-medium.json": "b594ec7e47c4301302a9fdcc7c0f2aa7c44f8d0d6891ba4ffd8e5297e6548a7d",
+    "docs/astra-placement-recovery-20261113/photo-evaluation/final-v2/structures/seven-wonders-baseline.json": "243d9517fec4fa77b038f78eb807436ea22ac5bd4d07d2f30336745a78247d90"
+  },
+  "limitations": [
+    "Observation-row counts are not distinct physical-object counts or whole-photo accuracy.",
+    "LC compound placement counts board, role and side; line pairs and source order are separate.",
+    "Unknown/invalid source geometry is deferred, never silently rescaled.",
+    "Order direction is reported under the source board-outward convention; absent relations/display-only order is unresolved. A reversed display alone is not promoted to a physical-order defect.",
+    "No manual result is credited as automatic. No new product execution or provider call."
+  ],
+  "cases": {
+    "lost-cities-baseline": {
+      "scoped_observation_rows": 42,
+      "source_match_counts": {
+        "matched_single": 32,
+        "matched_group_only": 10
+      },
+      "placement_counts": {
+        "correct": 41,
+        "deferred": 1
+      },
+      "dimensions": {
+        "board": {
+          "correct": 41
+        },
+        "cell": {},
+        "role": {
+          "correct": 41
+        },
+        "side": {
+          "correct": 35
+        }
+      },
+      "native_vs_inferred": {
+        "inferred": 42
+      },
+      "display_cell_counts": {},
+      "side_bijection": {
+        "A": "near",
+        "B": "far"
+      },
+      "side_bijection_votes": {
+        "('B', 'far')": 16,
+        "('A', 'near')": 19
+      },
+      "same_run_pairs_and_conflicting_merges": {
+        "correct": 63
+      },
+      "source_order_relation_coverage": {
+        "forward_source_convention": 53
+      },
+      "product_connection_count_unscored": {
+        "total": 42,
+        "placed": 41,
+        "readKnown": 115,
+        "readTotal": 205,
+        "readUnknown": 90,
+        "errorKnown": null,
+        "errorUnknown": 205
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "lost-cities-high": {
+      "scoped_observation_rows": 43,
+      "source_match_counts": {
+        "matched_single": 31,
+        "missing_bbox": 1,
+        "matched_group_only": 11
+      },
+      "placement_counts": {
+        "correct": 41,
+        "deferred": 2
+      },
+      "dimensions": {
+        "board": {
+          "correct": 41
+        },
+        "cell": {},
+        "role": {
+          "correct": 41
+        },
+        "side": {
+          "correct": 34
+        }
+      },
+      "native_vs_inferred": {
+        "inferred": 43
+      },
+      "display_cell_counts": {},
+      "side_bijection": {
+        "A": "far",
+        "B": "near"
+      },
+      "side_bijection_votes": {
+        "('A', 'far')": 15,
+        "('B', 'near')": 19
+      },
+      "same_run_pairs_and_conflicting_merges": {
+        "correct": 60
+      },
+      "source_order_relation_coverage": {
+        "unresolved": 50
+      },
+      "product_connection_count_unscored": {
+        "total": 43,
+        "placed": 41,
+        "readKnown": 117,
+        "readTotal": 210,
+        "readUnknown": 93,
+        "errorKnown": null,
+        "errorUnknown": 210
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "lost-cities-low": {
+      "scoped_observation_rows": 46,
+      "source_match_counts": {
+        "matched_single": 19,
+        "ambiguous": 20,
+        "matched_group_only": 7
+      },
+      "placement_counts": {
+        "correct": 25,
+        "deferred": 21
+      },
+      "dimensions": {
+        "board": {
+          "correct": 25
+        },
+        "cell": {},
+        "role": {
+          "correct": 25
+        },
+        "side": {
+          "correct": 20
+        }
+      },
+      "native_vs_inferred": {
+        "inferred": 46
+      },
+      "display_cell_counts": {},
+      "side_bijection": {
+        "A": "far",
+        "B": "near"
+      },
+      "side_bijection_votes": {
+        "('A', 'far')": 12,
+        "('B', 'near')": 8
+      },
+      "same_run_pairs_and_conflicting_merges": {
+        "correct": 20
+      },
+      "source_order_relation_coverage": {
+        "unresolved": 17
+      },
+      "product_connection_count_unscored": {
+        "total": 46,
+        "placed": 45,
+        "readKnown": 105,
+        "readTotal": 225,
+        "readUnknown": 120,
+        "errorKnown": null,
+        "errorUnknown": 225
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "lost-cities-medium": {
+      "scoped_observation_rows": 43,
+      "source_match_counts": {
+        "matched_single": 1,
+        "wrong_bbox": 7,
+        "ambiguous": 35
+      },
+      "placement_counts": {
+        "correct": 1,
+        "deferred": 42
+      },
+      "dimensions": {
+        "board": {
+          "correct": 1
+        },
+        "cell": {},
+        "role": {
+          "correct": 1
+        },
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "inferred": 43
+      },
+      "display_cell_counts": {},
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 43,
+        "placed": 42,
+        "readKnown": 116,
+        "readTotal": 210,
+        "readUnknown": 94,
+        "errorKnown": null,
+        "errorUnknown": 210
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "sagrada-baseline": {
+      "scoped_observation_rows": 18,
+      "source_match_counts": {
+        "matched_single": 18
+      },
+      "placement_counts": {
+        "correct": 18
+      },
+      "dimensions": {
+        "board": {
+          "correct": 18
+        },
+        "cell": {
+          "correct": 18
+        },
+        "role": {},
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "native-retained": 18
+      },
+      "display_cell_counts": {
+        "correct": 18
+      },
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 42,
+        "placed": 38,
+        "readKnown": 68,
+        "readTotal": 92,
+        "readUnknown": 24,
+        "errorKnown": null,
+        "errorUnknown": 92
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "sagrada-high": {
+      "scoped_observation_rows": 18,
+      "source_match_counts": {
+        "matched_single": 18
+      },
+      "placement_counts": {
+        "correct": 18
+      },
+      "dimensions": {
+        "board": {
+          "correct": 18
+        },
+        "cell": {
+          "correct": 18
+        },
+        "role": {},
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "inferred": 18
+      },
+      "display_cell_counts": {
+        "correct": 18
+      },
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 42,
+        "placed": 38,
+        "readKnown": 72,
+        "readTotal": 92,
+        "readUnknown": 20,
+        "errorKnown": null,
+        "errorUnknown": 92
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "sagrada-low": {
+      "scoped_observation_rows": 18,
+      "source_match_counts": {
+        "matched_single": 18
+      },
+      "placement_counts": {
+        "unlinked": 18
+      },
+      "dimensions": {
+        "board": {
+          "unlinked": 18
+        },
+        "cell": {
+          "unlinked": 18
+        },
+        "role": {},
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "unanchored-display-only": 18
+      },
+      "display_cell_counts": {
+        "correct": 18
+      },
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 41,
+        "placed": 19,
+        "readKnown": 72,
+        "readTotal": 87,
+        "readUnknown": 15,
+        "errorKnown": null,
+        "errorUnknown": 87
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "sagrada-medium": {
+      "scoped_observation_rows": 18,
+      "source_match_counts": {
+        "matched_single": 18
+      },
+      "placement_counts": {
+        "correct": 18
+      },
+      "dimensions": {
+        "board": {
+          "correct": 18
+        },
+        "cell": {
+          "correct": 18
+        },
+        "role": {},
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "inferred": 18
+      },
+      "display_cell_counts": {
+        "correct": 18
+      },
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 42,
+        "placed": 38,
+        "readKnown": 71,
+        "readTotal": 92,
+        "readUnknown": 21,
+        "errorKnown": null,
+        "errorUnknown": 92
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    },
+    "seven-wonders-baseline": {
+      "scoped_observation_rows": 117,
+      "source_match_counts": {
+        "matched_single": 4,
+        "matched_group_only": 93,
+        "ambiguous": 20
+      },
+      "placement_counts": {
+        "correct": 74,
+        "unlinked": 23,
+        "deferred": 20
+      },
+      "dimensions": {
+        "board": {
+          "correct": 74,
+          "unlinked": 23
+        },
+        "cell": {},
+        "role": {},
+        "side": {}
+      },
+      "native_vs_inferred": {
+        "inferred": 117
+      },
+      "display_cell_counts": {},
+      "side_bijection": null,
+      "side_bijection_votes": {},
+      "same_run_pairs_and_conflicting_merges": {},
+      "source_order_relation_coverage": {},
+      "product_connection_count_unscored": {
+        "total": 117,
+        "placed": 74,
+        "readKnown": 209,
+        "readTotal": 376,
+        "readUnknown": 167,
+        "errorKnown": null,
+        "errorUnknown": 376
+      },
+      "manual_placements": 0,
+      "manual_frames": 0
+    }
+  }
+}

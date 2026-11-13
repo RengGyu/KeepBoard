@@ -1,7 +1,7 @@
 # KeepBoard 작업 기준
 
 갱신: **2026-11-13**. 목표·현재 구현·남은 차이를 함께 읽는 진입점이다. 새 기능이나 승인 절차를 만드는 문서가 아니다.
-코드 기준: `handoff/claude-gamepacks-ui-20261026`, 제품 진행 스냅샷 `e4f9490`, Pro P0/P1 제품 커밋 `a73acc2` 및 후속 검토 자료 커밋. 11월12일까지의 미커밋·미추적 제품 구현을 스냅샷에 포함했다.
+코드 기준: `handoff/claude-gamepacks-ui-20261026`, 제품 진행 스냅샷 `e4f9490`, Pro P0/P1 제품 커밋 `a73acc2`, Astra 자동위치 제품 커밋 `818c7f1` 및 후속 검토 자료 커밋. 11월12일까지의 미커밋·미추적 제품 구현을 스냅샷에 포함했다.
 초기 감사는 소스/데이터 읽기였고 당시 판독·배포는 없었다. 후속 제품 구현·실호출·Chrome 검수·모바일 결과 공유는 아래 날짜별 통합 근거에 구분한다. [상세 근거와 범위](docs/code-context-audit-20261111/evidence.md).
 
 ## 작업을 시작할 때
@@ -12,6 +12,8 @@
 4. 종료 시 바뀐 상태·결정·근거만 이 파일에 갱신한다. 매번 전체 감사·새 체크리스트·재승인을 반복하지 않는다.
 
 ## 사용자 목표와 바꾸지 않을 방향
+
+2026-11-13 최신 Astra/max 의뢰 완료: 새 두 세션(gpt-6-astra/max, 실제/effective/runtime 확인, Normal/default)이 자동 위치 원인·설계·제품4파일/직접테스트3파일과 원사진 독립 재대조를 수행했다. [현재 결과·화면](docs/astra-placement-recovery-20261113/RESULTS.md), [설계](docs/astra-placement-recovery-20261113/design.md), [독립 최종 대조](docs/astra-placement-recovery-20261113/photo-evaluation/FINAL_V2_REPORT.md). 같은 새 사진 기준에서 LC baseline 판·편·역할16→41맞음(유보1), 같은줄63/63·오합침0; 7W33→74맞음/0오소속/23미연결/20유보다. Sagrada 기존18칸 유지, low표시격자18일치/실제판0을 분리한다. 판 alias·관측띠·색모름 줄 표시를 기존 renderer에 연결했고 원값/ID/원bbox/수동/native/저장을 보존했다. 전체1430/1430·타입/Vercel빌드·Chrome390×844/844×390/1440×900 확인, 새사진판독API0. 실제Safari·누락판/일부원bbox·읽기부족은 남는다. 기존 Sol 사진판정의 LC 노랑노출띠/빨간더미 및7W동전 유보 차이는 덮지 않고 addendum에 보존했다. Sites 최신게시 시도는 클라이언트Git미지원409로 막혀 기존공유판은 이전버전이며, 최신캡처는 현재결과에 둔다. [통합근거](docs/astra-placement-recovery-20261113/supervisor/verification.json).
 
 2026-11-13 사용자는 진행 코드를 GitHub에 올리고, 오푸스 검토·현재 사진/결과·문제를 ChatGPT Pro에 전달해 직접 고성능 분석/연구와 구현 설계를 받도록 요청했다. [검토 진입점](docs/pro-review-20261113/README.md), [전달 요청문](docs/pro-review-20261113/PRO_PROMPT.md). 원본3사진·기존9사례·공통 함수의 구조 계산·스크린샷·기존 검증 근거를 키 없는 자료로 묶었다. 오푸스가 medium의 미대응70/80을 채점기 결함 가능성으로 지적한 것을 포함하며, 과거 high 유지 결정을 현재 정확도 우승으로 인용하지 않는다. 이 최초 전달 작업의 제품 수정/새 판독/Astra 호출은0회였으며, 이후 Pro 반환 검토·승인 구현은 아래에 구분한다.
 

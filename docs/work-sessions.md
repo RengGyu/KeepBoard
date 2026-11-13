@@ -1,5 +1,16 @@
 # KeepBoard 작업 세션
 
+## 2026-11-13 최신 — Astra max 자동 위치 복원
+
+사용자가 새 세션·여러 하위 에이전트와 Astra/max 작업을 명시 요청했다. 기존 세션은 동결 상태로 두고 새 두 세션을 만들었으며 실제/effective/runtime gpt-6-astra/max, Normal/default를 확인했다. 초기 구현 세션의 capacity 오류는 동일 세션 재시도로 정상 착수했다. 이번 범위에서 Sol/high 기본의 사용자 예외이며 Fast는 사용하지 않는다.
+
+| 역할 | agent ID | 소유 범위 |
+|---|---|---|
+| 원인·설계·실제 구현 | a62bbec7-0869-4de1-8a33-1d19d1657a1d | [작업 카드](astra-placement-recovery-20261113/task.md)의 기존 제품 관계/배치·직접 테스트 및 해당 docs 폴더 |
+| 독립 원사진 자동배치 대조 | 8c8ce8df-2b13-4e89-a316-e91cd1ef9157 | [사진 대조 카드](astra-placement-recovery-20261113/photo-evaluation-task.md), photo-evaluation/만 쓰기. 제품/원자료 읽기 전용 |
+
+감독은 root 문서·계약 조정·최종 통합/화면 근거를 소유한다. 기준 d1ab646. 이는 최초 배정 기록이며 최종 결과는 같은 절의 아래 인계를 따른다. 수동 정정 성공과 자동 위치 일치를 구분하고 새 유료 판독·원자료 변경·worker commit/push/deploy는 포함하지 않는다.
+
 모든 세션은 KeepBoard의 기존 로컬 워크스페이스 `wks_81a16b8722c27606`에 있다.
 
 | 역할 | Paseo agent ID | 모델 | 추론 | 담당 파일 |
@@ -163,3 +174,5 @@
 저장 통합에서 assertion ID 교체로 qualified 참조가 끊기는 결함이 확인돼 Sol2 소유에 `server/engine.ts::answerField`의 좁은 재식별 연결·직접 HTTP 회귀를 추가했다. photo_audit는 원사진3종의 독립 메모·부분 정답·9사례 대조·7W31표본 근거를 동결하고 소유권을 반환했다. Sol1은 P0/관계·모서리 정정/위치 우선순위 및 후보 사진위치 라벨을 동결했고, 감독이 최종 통합·공유를 이어간다.
 
 최종 통합·소유권 반환: 두 구현자와 사진 작업자 모두 동결했다. 전체1420/1420·타입·Vercel 빌드, 기존9재생·16소스 동결 SHA, Chrome 세로/가로·frame18칸·실제 판정정33→34를 감독이 확인했다. 역할 영역/저장 오류 재선택은 후속 직접 UI/HTTP 회귀로 마감했다. 기존 private Sites source6e0603e... 배포 succeeded. 자동 위치는 미완료이며 7W33맞음/0오소속/68미연결/16유보와 LC baseline16/42 손실을 현재인계에 남겼다. 추가provider0·Astra0, 운영backend배포0.
+
+최종 인계: 두 새 Astra/max 세션 모두 소스/평가를 동결·반환했다. 제품7파일 변경과 원사진 최종 대조를 감독이 통합해1430/1430·타입/Vercel/viewer빌드·모바일크기Chrome 화면을 확인했다. LC16→41맞음·같은줄63/63, 7W33→74맞음/0오소속/23미연결/20유보. low 격자18은 실제판0과 분리. Sites source credential 발급이 client-upgrade-required409로 실패해 Site체크아웃/기존게시변경0, 최신화면은 task RESULTS.md에 보존했다. 새사진provider0·운영데이터접근0.
