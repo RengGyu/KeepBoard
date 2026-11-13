@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KeepBoard · 사진과 배치 비교</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f6;color:#16305c;font:15px/1.5 system-ui,-apple-system,sans-serif}header{padding:14px 20px;background:#fff;border-bottom:1px solid #c6d2df}h1{font-size:20px;margin:0}header p{margin:3px 0;color:#536278;font-size:12px}nav{display:flex;gap:6px;overflow:auto;padding:10px 20px;background:#fff}button{font:inherit;cursor:pointer;border:1px solid #aabbd0;border-radius:7px;background:#fff;color:#16305c;min-height:36px;padding:5px 12px;white-space:nowrap}button[aria-pressed=true]{background:#16305c;color:#fff;border-color:#16305c}.note{margin:0;padding:6px 20px;font-size:12px;color:#536278}.compare{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:8px 20px}.pane{min-width:0;background:#fff;border:1px solid #bdcad8;border-radius:10px;overflow:hidden}.tools{display:flex;align-items:center;flex-wrap:wrap;gap:5px;padding:8px 10px;border-bottom:1px solid #d8e0e9}.tools h2{margin:0 auto 0 0;font-size:15px}.tools button,.tools a{font-size:12px}.tools a{color:#225daa}.view{height:calc(100dvh - 235px);min-height:280px;overflow:auto;padding:10px;background:#e9eef3;overscroll-behavior:contain;touch-action:pan-x pan-y}.view img{display:block;max-width:none;object-fit:contain;user-select:none}footer{padding:5px 20px;color:#536278;font-size:11px}@media(max-width:600px){header{padding:10px}h1{font-size:17px}nav{padding:8px 10px}.compare{padding:4px 8px;gap:6px}.note{padding:4px 10px}.tools{padding:6px}.tools h2{width:100%;font-size:13px}.tools button{padding:3px 6px;min-height:32px}.view{padding:4px;height:calc(100dvh - 260px);min-height:250px}footer{padding:5px 10px}}@media(max-height:500px){header{padding:5px 12px}header p{display:none}nav{padding:4px 12px}.note{padding:2px 12px}.compare{padding-top:2px}.view{height:calc(100dvh - 175px);min-height:150px}.tools{padding:3px 7px}}
+</style></head><body><header><h1>원사진과 배치 비교</h1><p>왼쪽 원사진 · 오른쪽 현재 서비스 전체 배치 · 스크롤로 이동하고 +/−로 확대하세요.</p></header><nav aria-label="게임 선택"></nav><p class="note" id="note"></p><main class="compare"></main><footer>제품 65f5526 · 기존 저장 응답 재생 · 배치·원값 보정 없음 · 숫자는 표시한 관측 수이며 위치 정답 수가 아닙니다.</footer><script>
+const games=[
+  {
+    "id": "sagrada",
+    "name": "사그라다",
+    "observations": 42,
+    "sourcePath": "docs/pro-review-20261113/photos/sagrada.jpg",
+    "photo": "assets/sagrada-photo.jpg",
+    "photoSHA256": "94368d0c2f995914b9e857ceafa04afbfaff112c2b309ee082a4d2d4ac7a4feb",
+    "service": "assets/sagrada-service.png",
+    "serviceSHA256": "fb956e6e2e3d91adaf1f655019b41cdd2890558961f1fb60ac6e7862dea254e6",
+    "captureWidth": 1584,
+    "captureHeight": 1235,
+    "note": "기존 응답 기준. 창문 칸·도구·트랙을 함께 비교합니다."
+  },
+  {
+    "id": "lost-cities",
+    "name": "로스트 시티",
+    "observations": 42,
+    "sourcePath": "docs/pro-review-20261113/photos/lost-cities.jpg",
+    "photo": "assets/lost-cities-photo.jpg",
+    "photoSHA256": "d6abc06aca6feda5f747803aca9df403e93fddf8acd807c8b5e654afb11c78cc",
+    "service": "assets/lost-cities-service.png",
+    "serviceSHA256": "ecfd4ca0de7f8a9fea701b698af75eb1161713baaec82e97714ab312b65f15f3",
+    "captureWidth": 2448,
+    "captureHeight": 751,
+    "note": "원정 A/B와 중앙 버림을 비교합니다."
+  },
+  {
+    "id": "seven-wonders",
+    "name": "세븐 원더스",
+    "observations": 117,
+    "sourcePath": "docs/pro-review-20261113/photos/seven-wonders.jpg",
+    "photo": "assets/seven-wonders-photo.jpg",
+    "photoSHA256": "ea5f475396df0714f212b4440bb18215b85fbcc717d103d48ce59db98fbbbd14",
+    "service": "assets/seven-wonders-service.png",
+    "serviceSHA256": "8d7a684ace61dd3203cb0cd82d096fb3c93f897fca894cdf1aa3987aa8798aed",
+    "captureWidth": 5456,
+    "captureHeight": 3241,
+    "note": "판별 묶음과 미연결 구역을 비교합니다."
+  },
+  {
+    "id": "rummikub",
+    "name": "루미큐브",
+    "observations": 58,
+    "sourcePath": "docs/real-photo-review-20261110/photos/final-pool-01.jpg",
+    "photo": "assets/rummikub-photo.jpg",
+    "photoSHA256": "e874ac37c98c1b8ab5758fbe2c5f6c3e9d91f3527a1187deb5ff454a19a1f6c9",
+    "service": "assets/rummikub-service.png",
+    "serviceSHA256": "174fb65f4b94e0ff224343671a13767e3ca6eb13d1300c677137143032af8ead",
+    "captureWidth": 844,
+    "captureHeight": 1145,
+    "note": "기존 native 사진 줄 배치입니다."
+  },
+  {
+    "id": "hanabi",
+    "name": "하나비",
+    "observations": 35,
+    "sourcePath": "docs/real-photo-review-20261110/photos/final-pool-04.jpg",
+    "photo": "assets/hanabi-photo.jpg",
+    "photoSHA256": "42c88a8f34e9cd3fff9358978f90342ffc122c6ab10047d05cd821a0eff0a1b7",
+    "service": "assets/hanabi-service.png",
+    "serviceSHA256": "90d843b3d88bd58a0ea8a87ba834dbe72e8b9a59a02a6bcaf9ebc9f62a0b7a86",
+    "captureWidth": 3984,
+    "captureHeight": 251,
+    "note": "현재는 카드 목록이며 실제 손패·역할 복원이 부족합니다."
+  },
+  {
+    "id": "azul",
+    "name": "아줄",
+    "observations": 22,
+    "sourcePath": "docs/real-photo-review-20261110/photos/final-pool-05.jpg",
+    "photo": "assets/azul-photo.jpg",
+    "photoSHA256": "ba0d32483267410e3e70f9fe5d5a99ff1071d37e3ed369e5b804afcac1a5db20",
+    "service": "assets/azul-service.png",
+    "serviceSHA256": "7bb9f531ed18ce9adabce503d426665ac29d679215391d55659edefe0e2dae03",
+    "captureWidth": 2880,
+    "captureHeight": 416,
+    "note": "현재는 타일·판 관측 목록이며 정식 칸 연결은 없습니다."
+  },
+  {
+    "id": "carcassonne",
+    "name": "카르카손",
+    "observations": 43,
+    "sourcePath": "docs/real-photo-review-20261110/photos/final-pool-06.jpg",
+    "photo": "assets/carcassonne-photo.jpg",
+    "photoSHA256": "d9c52223ea0e69300cd309b0bbc985d0c69b5325b8ff877dfed90c8f1b440024",
+    "service": "assets/carcassonne-service.png",
+    "serviceSHA256": "fdf0c3671546c121dbbb7df85193be7abe3ccb8c5288a663b8b92a73829bca75",
+    "captureWidth": 4880,
+    "captureHeight": 242,
+    "note": "현재는 타일·말 목록이며 연결 지도 복원은 부족합니다."
+  },
+  {
+    "id": "dominion",
+    "name": "도미니언",
+    "observations": 49,
+    "sourcePath": "docs/real-photo-review-20261110/photos/final-pool-07.jpg",
+    "photo": "assets/dominion-photo.jpg",
+    "photoSHA256": "9413ecb2d772bc0ee937538cf228ed75e8d403f8303a3356df0a099ede6389b1",
+    "service": "assets/dominion-service.png",
+    "serviceSHA256": "7cd7e17f8dbe273fbd3b6247cd5fedcdba81c2d6fb79fab40447e02a99b4a724",
+    "captureWidth": 5552,
+    "captureHeight": 270,
+    "note": "현재는 카드·묶음 목록이며 공급 더미 구조 복원은 부족합니다."
+  }
+]
+;
+let selected=location.hash.slice(1)||'sagrada';const main=document.querySelector('main'),nav=document.querySelector('nav');
+for(const g of games){const b=document.createElement('button');b.textContent=g.name;b.dataset.game=g.id;b.onclick=()=>show(g.id);nav.append(b)}
+function pane(label,src){const section=document.createElement('section');section.className='pane';section.innerHTML='<div class="tools"><h2></h2><button type="button" data-fit>전체</button><button type="button" data-minus aria-label="축소">−</button><button type="button" data-plus aria-label="확대">+</button><button type="button" data-native>100%</button><a target="_blank" rel="noopener">원본</a></div><div class="view"><img draggable="false"></div>';section.querySelector('h2').textContent=label;section.querySelector('a').href=src;const img=section.querySelector('img'),view=section.querySelector('.view');img.alt=label;let scale=1,autoFit=true;function size(n,manual=true){if(manual)autoFit=false;scale=Math.max(.02,Math.min(3,n));img.style.width=img.naturalWidth*scale+'px';img.style.height='auto'}function fit(){autoFit=true;size(Math.min((view.clientWidth-20)/img.naturalWidth,(view.clientHeight-20)/img.naturalHeight),false);view.scrollTo(0,0)}section.fitIfNeeded=()=>{if(autoFit&&img.naturalWidth)fit()};img.onload=fit;img.src=src;section.querySelector('[data-fit]').onclick=fit;section.querySelector('[data-plus]').onclick=()=>size(scale*1.5);section.querySelector('[data-minus]').onclick=()=>size(scale/1.5);section.querySelector('[data-native]').onclick=()=>size(1);img.ondblclick=()=>scale<.8?size(1):fit();return section}
+function show(id){const g=games.find(x=>x.id===id)||games[0];selected=g.id;location.hash=g.id;for(const b of nav.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.game===g.id));document.querySelector('#note').textContent=g.name+' · '+g.note;main.replaceChildren(pane('실제 사진',g.photo),pane('서비스 전체 배치',g.service))}addEventListener('resize',()=>document.querySelectorAll('.pane').forEach(p=>p.fitIfNeeded?.()));show(selected);
+</script></body></html>
