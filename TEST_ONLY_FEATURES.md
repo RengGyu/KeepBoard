@@ -2,6 +2,12 @@
 
 사용자 요청(2026-11-10): 테스트 편의를 위한 임시 기능이다. 사용자가 테스트 모드를 모두 지우라고 하거나 실제 출시하기 전에 아래 기능과 연결 코드를 제거한다. 개발 환경 전용이어도 제거 대상이다. 일반 자동화 테스트 전체를 삭제하라는 의미는 아니다.
 
+## saved-response-review — 격리된 실제 앱 검수 서버
+
+- 2026-11-13 가독성/기존 5종 확인용 CLI: `docs/restoration-readability-generalization-20261113/sol2/{fixtures.mts,serve-five.mts}` 및 `supervisor/serve-three.mts`.
+- 제품 runtime·운영 route에 연결하지 않는다. 새 임시 Store에서 기존 답만 재생하며 provider/외부 fetch를 차단한다. 실행 중 URL은 해당 task manifest에 기록한다.
+- 테스트 모드 전체 제거/실제 출시 전에는 수동 검수용 CLI와 실행 중 검수 서버를 제거·종료한다. 원래 제품 renderer·값 편집기·일반 회귀 검사는 유지한다. 캡처/완료 보고서는 과거 검증 자료로 보관할 수 있다.
+
 ## clipboard-photo-paste — 클립보드 사진 붙여넣기
 
 - 상태: 개발용 구현 완료. `clipboard-photo-paste` 식별자로 찾는다.

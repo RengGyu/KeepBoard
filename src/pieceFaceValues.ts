@@ -19,6 +19,9 @@ export function pieceFaceValues(pack:GamePack,piece:GenericPiece,requested?:read
  const fields=definition.fields.filter(f=>f.acquisition==='visible'&&!['face','quantity','selectedSide','cell','row','column','orientation','rotationDegrees'].includes(f.id)&&!/(?:Area|Zone)$/.test(f.id)&&!['features','reference','player'].includes(f.type)&&!(specificColor&&f.id==='observedColor'));
  return fields.filter(f=>values[f.id]!==null&&values[f.id]!==undefined||requested?.includes(f.id)).map(f=>{
   const value=values[f.id],unknown=value===null||value===undefined;
-  return {id:f.id,label:f.label,text:unknown?'?':detailText(value,f),unknown,color:unknown?undefined:readoutColor(value,f.options?.find(o=>o.value===value)?.label)?.color};
+  const option=f.options?.find(o=>o.value===value),color=!unknown&&(/(?:colou?r|suit)/i.test(f.id)||/색/.test(f.label))?readoutColor(value,option?.label):undefined;
+  // Compact absence is omitted, never converted to unknown or written back. Zero remains meaningful.
+  const absent=!unknown&&(f.type==='boolean'&&value===false||f.type==='enum'&&option?.label==='없음'||Array.isArray(value)&&value.length===0||value==='');
+  return {id:f.id,label:f.label,text:unknown?'?':color?.label??detailText(value,f),unknown,absent,numeric:typeof value==='number',color:color?.color};
  });
 }

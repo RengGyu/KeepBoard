@@ -1,0 +1,9 @@
+TASK: 기존 나머지5종 응답의 현재 제품 복원 경로 무료 재생·확인 준비와 필요한 공통 호환 결함 교정.
+OUTCOME: 루미큐브·아줄·하나비·카르카손·도미니언을 기존 저장된8장 자료에서 찾아 현재 실제 App/createApp에 띄우는 격리 harness/fixture를 제공한다. 기존3종 외 표시의 성공·한계를 원값 보존과 함께 드러낸다.
+CAPABILITY / MODEL / EFFORT: C2, 기존 구현솔2 gpt-6.1-sol/high, 사용자 승인 Fast(service_tier=priority). 실제 설정 검증 후 전달.
+AUTHORITY: A1. 이 폴더 sol2/**와 5종 fixture/replay/harness 소유. 필요 시 공통 sceneProjection/수집/현재팩 호환과 관련 backend test만 좁게 수정 가능(교정 전 감독에게 경계 통지). src·sceneLayout은 Sol1 소유. 혼자 작업하는 것이 아니며 타 변경은 되돌리지 않는다.
+CONTEXT: PROJECT_CONTEXT.md, docs/work-sessions.md, docs/restoration-system-implementation-20261113/{README.md,contract.md}, supervisor/serve-product.mts 재사용. 자료 진입점 docs/remaining-validation-20261112, docs/latency-placement-20261112, docs/accuracy-review-20261111/{photo-inputs.json,app-observations.json}, 해당 문서가 명시한 기존 실험 산출물만 탐색. 현재HEAD64fc8ab. 기존 8사진 중 나머지5종의 실제 저장응답을 우선하며 가짜값/좌표/새 관측은 만들지 않는다.
+ALLOWED SCOPE: exact pack/version·원사진·기존 request/result/receipts를 재사용해 SHA manifest 고정, accepted 기록으로 기존 제품 경로에 재생. 전용 native 복원 화면은 유지하고 현재 주 경로의 커버리지를 구분(모든 게임을 generic으로 위장하지 않기). sourceSHA/raw/value/ID/owner/native/수동 보존, 삭제/중복 없는 live 목록, 표시 가능한 값/영역·미표현/원본부족을 있는 그대로 기록. 원래 데이터를 바꾸지 않는 구조 수집/호환 결함이면 최소 공통 수정. root가 실제 Chrome을 검수할 수 있도록 임시 Store·모든 provider/config 차단 harness와 URL/명령을 인계. Sol1은 독립 UI만 수정한다.
+FORBIDDEN: 추정 기하·gameId 휴리스틱·3종 profile 수정, 판독 모델/강도/구조기본값 변경, 새 유료 호출·키 열람·운영 .keepboard 접근·신규 사진 대체, 새 renderer/benchmark infra, 저장 성능 개선, Site/commit/push/deploy, 전체 suite/build·추가 agent. 과거 원자료/평가 동결을 덮지 않는다.
+ACCEPTANCE: 5종 실제 원입력 locator+SHA/원본수 유지, 현재 실제 앱용 재현 fixture/harness, 전용/일반 경로 구분, 보존·선택/저장 연결에 필요한 직접 검사. 원본에 없는 값/배치까지 성공으로 세지 않는다. 최소 소유 delta/SHA/명령과 한계 기록 후 동결. 실제 Chrome·최종 통합/루트 context는 감독 소유. 새 사진 일반화 증명이 아니라 같은 기존 자료의 범위 확장 검사임을 명시.
+ESCALATE IF: 기존5응답 또는 exact 원사진/팩이 없거나, 새 기하 규칙/원관측 수정이 있어야 표시할 수 있는 경우. 데이터 부족은 새 모델 호출로 해결하지 않는다.

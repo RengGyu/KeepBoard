@@ -20,7 +20,7 @@ const colors=[
 export function readoutColor(value:unknown,optionLabel?:string){
  const names=[value,optionLabel].filter((v):v is string=>typeof v==='string').map(v=>v.trim().toLowerCase());
  const row=colors.find(c=>names.some(n=>(c[2] as readonly string[]).includes(n)));
- return row?{name:row[0],color:row[1]}:undefined;
+ return row?{name:row[0],color:row[1],label:row[2].find(name=>/[가-힣]/.test(name))!}:undefined;
 }
 /** Symbol grammar and the pinned readout contract, never game IDs or illustrative labels. */
 export function readoutDieArt(pack:GamePack,piece:GenericPiece,symbols:readonly string[]){

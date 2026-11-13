@@ -191,3 +191,9 @@
 ## 2026-11-13 종합 복원 설계 구현·최종 통합
 
 사용자가 기존 구현솔 Fast로 전체 구현을 승인했다. 실제/effective/runtime gpt-6.1-sol/high와 service_tier=priority를 확인한 기존 Sol1(UI/sceneLayout)·Sol2(shared/profile/backend)를 재사용했다. 작업 카드는 docs/restoration-system-implementation-20261113/{sol1-task.md,sol2-task.md}, actual 계약은 contract.md. 각 작업자는 소스/검사를 동결·반환했고 추가 agent/provider/운영 데이터/커밋·배포는 하지 않았다. 감독은 CAS false409·LC 중앙/양편 합침·초기 빈 viewport를 작업자에게 재현 근거로 전달해 교정하고, 최종 이동 선택지 이름·번호만 직접 보완했다. 제품 커밋58bd187. 전체1468/1468·타입/Vercel build·실제 App 정정→저장→reload/공개재개 확인, 원입력21 SHA 보존. 새 실사진/실폰/두 시점 정합 품질은 미검증이며251-snapshot 대형 저장의 성능 회귀(최종267.7초/과거64초)는 미해결로 명시했다. root 문서·캡처·검증은 동일 task README/supervisor에 있다. 기존 Site/운영 배포는 변경하지 않았다.
+
+
+## 2026-11-13 가독성·3종 밖 무료 확인
+사용자 명시 Fast 지시로 기존 구현솔·구현솔2를 재개하고 actual/effective/runtime gpt-6.1-sol/high 및 feature service_tier=priority, plan_mode=false를 확인했다. Sol1은 src·shared/sceneLayout(표시 배치만)/직접 UI검사, Sol2는 docs/restoration-readability-generalization-20261113/sol2 fixture/harness와 필요 공통 projection 호환(변경 전 경계 통지)을 소유한다. 원기하/3종 profile 동결, 새 gameId휴리스틱/유료호출/키·운영접근/기본값변경/저장성능/Site·배포 없음. root는 최종 실제 Chrome·검사·맥락 문서 담당. 기존 다른 dirty 문서는 보존.
+
+최종 완료·소유권 반환: Sol1의9 UI/test 파일과 후속 숫자 중복/요청미상·끝jump 수정, Sol2의제품수정0/5종격리App 재생을 감독이 통합했다. 관련40/40·전체타입 포함 npm run build·diff검사 PASS, Chrome390×844/844×390과 원ID 정정→저장→reload 확인. 원자료207관측 보존과 실제 판/칸 정확도를 구별하며 일반4종은 아직 목록 중심이다. 보호7파일 SHA 불변·새provider0. 최신 인계 docs/restoration-readability-generalization-20261113/README.md. root는 최종 근거/기준문서/GitHub 반영만 담당하고 추가 구현을 시작하지 않는다.
