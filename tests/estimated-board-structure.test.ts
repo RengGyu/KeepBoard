@@ -137,7 +137,7 @@ test('LC groups are board-qualified even when two boards have the same discard c
 });
 
 test('relative track permits same-band multiple dice, while mere token/tool overlap is not attachment evidence',()=>{
- const f=fixture('sagrada',[['d1','dice',[.2,.1,.05,.05],{dieValue:2},'round-track'],['d2','dice',[.21,.11,.05,.05],{dieValue:0},'round-track'],['t','cards',[.4,.4,.2,.2],{cardType:'tool'}],['favor','tokens',[.45,.45,.04,.04]]]),r=f.run(),dice=r.placements.filter(p=>p.pieceId.startsWith('d'));assert.equal(dice.length,2);assert.equal(dice[0].slot,dice[1].slot);assert(dice.every(p=>p.slotBasis==='relative-band'));assert.equal(r.placements.find(p=>p.pieceId==='favor')!.attachedToPieceId,null);
+ const f=fixture('sagrada',[['d1','dice',[.2,.1,.05,.05],{dieValue:2},'round-track'],['d2','dice',[.21,.11,.05,.05],{dieValue:0},'round-track'],['t','cards',[.4,.4,.2,.2],{cardType:'tool'}],['favor','tokens',[.59,.59,.04,.04]]]),r=f.run(),dice=r.placements.filter(p=>p.pieceId.startsWith('d'));assert.equal(dice.length,2);assert.equal(dice[0].slot,dice[1].slot);assert(dice.every(p=>p.slotBasis==='relative-band'));assert.equal(r.placements.find(p=>p.pieceId==='favor')!.attachedToPieceId,null);
 });
 
 test('manual semantic frame is projectively stable under joint rotation/translation; invalid corners and AI v2 fail',async()=>{

@@ -3,6 +3,21 @@ export interface Point {x:number;y:number}
 export interface Footprint {id:string;x:number;y:number;width:number;height:number}
 const median=(xs:number[])=>{const a=[...xs].sort((a,b)=>a-b),m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2;};
 const dot=(p:Point,a:Point)=>p.x*a.x+p.y*a.y;
+/** A footprint is an axis-aligned observation, not a board frame. The small-gap case
+ * requires broad edge alignment; proximity to a centre alone never supplies contact. */
+export function footprintContact(a:Footprint,b:Footprint):{overlap:number;edgeGap:number|null}{
+ const ox=Math.min(a.x+a.width/2,b.x+b.width/2)-Math.max(a.x-a.width/2,b.x-b.width/2),oy=Math.min(a.y+a.height/2,b.y+b.height/2)-Math.max(a.y-a.height/2,b.y-b.height/2);
+ const overlap=Math.max(0,ox)*Math.max(0,oy)/Math.min(a.width*a.height,b.width*b.height),scale=Math.min(a.width,a.height,b.width,b.height);
+ const edgeGap=oy<=0&&ox>=Math.min(a.width,b.width)*.6?-oy/scale:ox<=0&&oy>=Math.min(a.height,b.height)*.6?-ox/scale:null;
+ return {overlap,edgeGap};
+}
+/** Local components for a display-only lattice. Fit every member; never select a
+ * value-matching subset or fill unobserved rows to manufacture a complete grid. */
+export function nearbyFootprintComponents(footprints:readonly Footprint[]):Footprint[][]{
+ const remaining=new Set(footprints),groups:Footprint[][]=[];
+ while(remaining.size){const first=remaining.values().next().value!,group=[first];remaining.delete(first);for(let i=0;i<group.length;i++)for(const p of remaining){const n=group[i],scale=Math.max(Math.min(n.width,n.height),Math.min(p.width,p.height));if(Math.hypot(p.x-n.x,p.y-n.y)<=scale*1.8){group.push(p);remaining.delete(p);}}groups.push(group);}
+ return groups;
+}
 /** Dominant line in physical source pixels. No axis is invented from an axis-aligned board bbox. */
 export function sourceLine(points:readonly Point[]):{origin:Point;axis:Point}|null {
  if(points.length<2)return null;const origin={x:points.reduce((s,p)=>s+p.x,0)/points.length,y:points.reduce((s,p)=>s+p.y,0)/points.length};
