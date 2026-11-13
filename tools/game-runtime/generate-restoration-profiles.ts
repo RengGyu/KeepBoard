@@ -1,0 +1,8 @@
+import {readFile,mkdir,writeFile} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {compileRestorationProfile,type RestorationProfileInputs} from '../../shared/restorationProfile';import type {GamePack} from '../../shared/types';
+const optional=async(file:string)=>{try{return await readFile(file);}catch(e){if((e as NodeJS.ErrnoException).code==='ENOENT')return;throw e;}};
+export async function generateRestorationProfiles(output='gamepacks/generated/restoration-profiles.json'){
+ const packs=JSON.parse(await readFile('gamepacks/generated/game-essentials.json','utf8')) as GamePack[],profiles=[];
+ for(const pack of packs){const id=pack.runtime?.source.gameId??pack.id,asset=await optional(`public/game-art/real-boards/${id}/board.json`),semantic=await optional(`gamepacks/restoration-profiles/source/${id}.json`),inputs:RestorationProfileInputs={...(asset?{asset:{id:`real-boards/${id}/board.json`,sha256:createHash('sha256').update(asset).digest('hex'),data:JSON.parse(asset.toString())}}:{}),...(semantic?{semantic:{...JSON.parse(semantic.toString()),source:{kind:'spec',id:`restoration-profiles/source/${id}.json`,sha256:createHash('sha256').update(semantic).digest('hex'),pointer:'regionHints'}}}:{})};profiles.push(compileRestorationProfile(pack,inputs));}
+ if(new Set(profiles.map(p=>p.pin.packId)).size!==120)throw Error('Expected exact120 current profiles');await mkdir(path.dirname(output),{recursive:true});await writeFile(output,JSON.stringify({version:'restoration-profiles-v1',profiles})+'\n');return {profiles:profiles.length};
+}
+if(process.argv[1]?.endsWith('generate-restoration-profiles.ts'))console.log(await generateRestorationProfiles(process.argv[2]));

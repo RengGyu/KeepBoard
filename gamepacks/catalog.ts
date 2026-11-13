@@ -1,9 +1,12 @@
+import restorationProfiles from './generated/restoration-profiles.json';
+import {compatibleRestorationProfile,type RestorationProfileV1} from '../shared/restorationProfile';
 import generated from './generated/game-essentials.json';
 import retired from './generated/retired-packs.json';
 import reading from './generated/release-reading.json';
 import restoration from './policies/restoration/index.json';
 import type {RestorationPolicy} from '../shared/restoration';
-export const withRestoration=(pack:GamePack):GamePack=>{const p=restoration.policies.find(p=>p.packId===pack.id&&p.packVersion===pack.version&&p.sourceSHA===pack.runtime?.source.sha256);return p?{...pack,restorationPolicy:p as unknown as RestorationPolicy}:pack;};
+export function withRestorationProfile(pack:GamePack):GamePack{if(compatibleRestorationProfile(pack,pack.restorationProfile))return pack;const profile=restorationProfiles.profiles.find(p=>p.pin.packId===pack.id&&p.pin.packVersion===pack.version&&p.pin.sourceSHA===(pack.runtime?.source.sha256??null)&&p.pin.editionId===(pack.runtime?.source.editionId??null)) as unknown as RestorationProfileV1|undefined;return profile&&compatibleRestorationProfile(pack,profile)?{...pack,restorationProfile:profile}:pack;}
+export const withRestoration=(pack:GamePack):GamePack=>{const p=restoration.policies.find(p=>p.packId===pack.id&&p.packVersion===pack.version&&p.sourceSHA===pack.runtime?.source.sha256);return withRestorationProfile(p?{...pack,restorationPolicy:p as unknown as RestorationPolicy}:pack);};
 import {catanPack} from './catan.ts';
 import {rummikubPack,legacyRummikubPack} from './rummikub.ts';
 import type {GamePack} from '../shared/types.ts';

@@ -1,3 +1,4 @@
+import {refreshRestorationState} from './restorationState';
 import {withRestoration} from '../gamepacks/catalog';
 import {latestScopeSnapshot,snapshotForIntent} from './saveIntent';
 import {projectScanResults} from './scanObservation';
@@ -74,6 +75,7 @@ export async function commitAnalysisTask(store:Store,pins:PrivatePins,t:Analysis
  }
  if(current.room&&next.length)rooms.bump(current,new Set(next.map(a=>fieldScope(pack,a.field,a.ownerId))));if(t.prepared.purpose==='restore')current.stage='restore';
  current.analysisSummary=results.map(r=>r.summary).join('\n');current.analysisSummaryOwnerId=t.owner??null;
+ refreshRestorationState(current,pack);
  if(t.saveIntentId&&results.some(r=>!r.scanBundle||r.scanBundle.units.some(u=>u.state==='completed'))){const intent=current.saveIntents!.find(i=>i.id===t.saveIntentId)!;if(!intent.completionSnapshotId){const snapshot=snapshotForIntent(current,pack,intent,job.id);current.snapshots.push(snapshot);intent.completionSnapshotId=snapshot.id;intent.jobId=job.id;}}
  current.activity.push({id:randomUUID(),type:'analyze',message:'서버 사진 읽기 완료',at:new Date().toISOString()});await store.saveSession(current);
  return {state:results[0]?.scanBundle?.units.every(u=>u.state!=='completed')?'failed' as const:'completed' as const,candidateCount:next.length,mode:results[0]?.mode??'live' as const,...(plan||t.prepared.scanObservation?{observationReceipts}:{}),...(results[0]?.scanBundle?{scanBundle:results[0].scanBundle}:{})};

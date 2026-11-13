@@ -18,6 +18,7 @@ export interface Requirement { id: string; scope: Scope; fields: string[]; when?
 export interface DerivedRule { id: string; scope: Scope; when: Condition; field: string; value: Value; reason: string; sourceId?: string }
 export interface PreservationTemplate { id: string; label: string; description: string; scope: Scope; conditions: string[]; restoreAfter: string[]; when?: Condition; visualFields?: string[];externalOnly?:boolean;sourceVisibility?:string;orderSensitive?:boolean;method?:string }
 export interface GamePack {
+  restorationProfile?:import('./restorationProfile').RestorationProfileV1;
   restorationPolicy?:import('./restoration').RestorationPolicy;
   releaseTier?:import('./releaseSupport').ReleaseTier;
   photoReadingPolicy?:{policySHA:string;definitionSHA:string;areas:Record<string,Record<string,string[]>>};
@@ -60,6 +61,7 @@ export interface Preservation {
 }
 export interface Activity { id: string; at: string; type: string; message: string }
 export interface Snapshot {
+  restoration?:import('./restorationScene').RestorationStateV1 | {version:string;[key:string]:unknown};
   saveIntentId?:string;analysisJobId?:string;
   savedScope?:SavedScope;
   id: string; createdAt: string; captureEpoch: string; turnInstanceId: string;
@@ -67,6 +69,7 @@ export interface Snapshot {
   preservations: Preservation[]; notes: Record<string,string>;
 }
 export interface Session {
+  restoration?:import('./restorationScene').RestorationStateV1 | {version:string;[key:string]:unknown};
   storageRevision?:string;
   saveIntents?:import('./saveIntent').SaveIntent[];
   room?:RoomMetadata;
@@ -82,6 +85,7 @@ export interface Session {
 export interface BriefingItem { field?: string; text: string; ownerId?: string; evidenceIds: string[]; basis: Assertion['basis'] }
 export interface RestoreDifference { field: string; label: string; expected: Value; observed: Value; ownerId?: string }
 export interface PlannedAction {
+  scene?:{scopeKey:string;groupIds:string[];entityIds:string[];reason:'structure-selection'|'preservation-review';providerRequired:false};
   id: string; kind: 'inspectEvidence' | 'requestView' | 'askFields' | 'proposeAssertions' | 'preparePack' | 'requestCommit';
   ownerId?: string; label: string; description: string; fields: string[];
   evidenceIds: string[]; priority: number;

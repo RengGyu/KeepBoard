@@ -50,3 +50,10 @@ test('barrier: an overlapping failed writer must not finalize an older summary a
  const a=new AStore(o),b=new BStore(o),initial=session('race');initial.name='before';await a.saveSession(initial);const left=(await a.getSession('race'))!,right=(await b.getSession('race'))!;left.name='A-committed';right.name='B-must-not-commit';a.pause=true;const savedA=a.saveSession(left);await aPaused.promise;b.fail=true;const savedB=b.saveSession(right).then(()=>null,e=>e);await bReadOld.promise;releaseA.resolve();await savedA;releaseB.resolve();assert.match(String(await savedB),/before-source failure/);
  const source=(await new BlobStore(o).getSession('race'))!;assert.equal(source.name,'A-committed');assert.equal((await new BlobStore(o).listSessionSummaries())[0].name,source.name);
 });
+
+// A scene profile is repeated in every snapshot, while its source pin and bytes stay identical.
+test('scene snapshot profiles use lossless codec sharing without aliasing decoded copies',()=>{
+ const s=session('scene-profile-codec'),profile={pin:{profileSHA:'pinned-old'},label:'SCENE_PROFILE_UNIQUE_'+('x'.repeat(12000)),unknown:null,zero:0,literal:{$ref:'not-a-link'}},scene={version:'restoration-state-v1',partitions:{public:{profile,entities:[]}}};
+ s.restoration=structuredClone(scene);s.snapshots=Array.from({length:12},(_,i)=>({id:'snapshot-'+i,restoration:{...structuredClone(scene),partitions:{public:{...structuredClone(scene.partitions.public),entities:[{id:'entity-'+i}]}}},assertions:[],evidence:[],notes:{}}));
+ const encoded=encodeSession(s),wire=JSON.stringify(encoded);assert.equal(wire.split('SCENE_PROFILE_UNIQUE_').length-1,1);assert.deepEqual(decodeSession(normalize(encoded)),s);const decoded:any=decodeSession(encoded);decoded.snapshots[0].restoration.partitions.public.profile.zero=9;assert.equal(decoded.restoration.partitions.public.profile.zero,0);assert.equal(decoded.snapshots[1].restoration.partitions.public.profile.zero,0);
+});

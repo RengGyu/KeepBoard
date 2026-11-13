@@ -1,3 +1,6 @@
+import {rebaseEstimatedReferences} from './estimatedReferenceRebase';
+import {isRestorationState} from '../shared/restorationScene';
+import {refreshRestorationState,applySceneCommands,snapshotRestoration,resumeRestoration,sceneCommandsAlreadyApplied,SceneCommandError} from './restorationState';
 import {receiptProgress} from './jobProgress';
 import {intentForCommit,analysisSaveIntent} from './saveIntent';
 import {readingAreas} from '../shared/restoration';
@@ -147,7 +150,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
 
   async function packs() {
     const imported = await store.listPacks();
-    const current=runtimePacks??builtinPacks();return [...current,...imported.filter(pack=>!current.some(item=>item.id===pack.id))];
+    const current=(runtimePacks??builtinPacks()).map(withRestoration);return [...current,...imported.filter(pack=>!current.some(item=>item.id===pack.id)).map(withRestoration)];
   }
 
   async function rawStoredPack(session:Session) {
@@ -175,6 +178,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     if(req.path.endsWith('/component-links')){const source=session.assertions.find(a=>a.id===body.sourceAssertionId);if(!source)throw new HttpError('원본 후보를 찾을 수 없어요.',404);await requireField(source.field,source.ownerId);await requireField(body.target?.field,body.target?.ownerId);}
     if(req.method==='PATCH'&&req.path===`/api/sessions/${session.id}`){
       for(const owner of Object.keys(body.notes??{}))await requireOwner(owner);
+      if(body.sceneCommands!==undefined){if(!Array.isArray(body.sceneCommands))throw new HttpError('장면 명령 배열이 필요합니다.');for(const c of body.sceneCommands){if(!c||typeof c!=='object')throw new HttpError('장면 명령을 확인하세요.');if(c.scopeKey!=='public'){if(!session.players.some(p=>p.id===c.scopeKey))throw new HttpError('저장 범위를 확인하세요.');await requireOwner(c.scopeKey);}}}
       for(const answer of body.answers??[])await requireField(answer.field,answer.ownerId);
       for(const update of body.assertions??[]){const previous=session.assertions.find(a=>a.id===update.id);if(previous)await requireField(previous.field,previous.ownerId);await requireField(update.field??previous?.field,update.ownerId??previous?.ownerId);}
       if(Array.isArray(body.players))for(const owner of await pins.owners(session.id))if(!body.players.some((p:Player)=>p.id===owner)){await requireOwner(owner);throw new HttpError('개인 정보 보호를 해제한 뒤 플레이어를 지워 주세요.',409);}
@@ -197,10 +201,10 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     const job = prior.catch(() => undefined).then(async () => {
       let at = performance.now();
       if (timings) timings.queue = at - queuedAt;
-      const { session, pack } = await sessionFor(id);
-      if(cloud&&req.get('X-KeepBoard-Revision')&&req.get('X-KeepBoard-Revision')!==(session as any).storageRevision)throw new HttpError('다른 창에서 기록이 바뀌었어요. 초안을 유지하고 최신 기록을 확인해 주세요.',409);
+      const {session:stored,pack}=await sessionFor(id);const session=store.cloneSessionForUpdate(stored);
+      if(cloud&&!(req.method==='PATCH'&&sceneCommandsAlreadyApplied(session,req.body?.sceneCommands,req.body))&&req.get('X-KeepBoard-Revision')&&req.get('X-KeepBoard-Revision')!==(session as any).storageRevision)throw new HttpError('다른 창에서 기록이 바뀌었어요. 초안을 유지하고 최신 기록을 확인해 주세요.',409);
       if (timings) timings.load = performance.now() - at;
-      at = performance.now(); const scopes=await authorizeMutation(req, session, pack); await mutate(session, pack); if(session.room)rooms.bump(session,scopes);
+      at = performance.now(); const scopes=await authorizeMutation(req, session, pack); await mutate(session, pack); refreshRestorationState(session,pack); if(session.room)rooms.bump(session,scopes);
       if (timings) timings.mutate = performance.now() - at;
       at = performance.now(); const view = recompute(session, pack);
       if (timings) timings.recompute = performance.now() - at;
@@ -323,6 +327,9 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
   app.patch('/api/sessions/:id', async (req, res) => {
     res.json(await change(req, req.params.id, (session, pack) => {
       const body = req.body ?? {};
+      if(sceneCommandsAlreadyApplied(session,body.sceneCommands,body))return;
+      const beforeAnswers=session.assertions.filter(a=>a.status==='accepted'&&a.basis!=='rule');
+      if(body.sceneCommands!==undefined)refreshRestorationState(session,pack);const sceneBaseline=isRestorationState(session.restoration)?structuredClone(session.restoration):undefined;
       if (body.name !== undefined) { if (typeof body.name !== 'string') throw new HttpError('이름을 확인하세요.'); session.name = body.name; }
       if (body.stage !== undefined) { if (!(['capture', 'questions', 'pack', 'saved', 'restore'] satisfies Stage[]).includes(body.stage)) throw new HttpError('단계를 확인하세요.'); session.stage = body.stage; }
       if (body.players !== undefined) {
@@ -335,6 +342,8 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
         session.notes = { ...session.notes, ...body.notes };
       }
       if (body.answers !== undefined && !Array.isArray(body.answers)) throw new HttpError('답변 배열이 필요합니다.');
+      const updateKeys=(Array.isArray(body.assertions)?body.assertions:[]).map((u:any)=>{const old=session.assertions.find(a=>a.id===u.id);return JSON.stringify([u.ownerId??old?.ownerId??null,u.field??old?.field]);});
+      const answerKeys=(body.answers??[]).map((a:any)=>JSON.stringify([a.ownerId??null,a.field]));if(new Set([...answerKeys,...updateKeys]).size!==answerKeys.length+updateKeys.length)throw new HttpError('같은 필드의 충돌하는 답변을 함께 저장할 수 없습니다.');
       for (const answer of body.answers ?? []) answerField(session, pack, answer.field, answer.value, answer.ownerId,answer.observationReview);
       if (body.assertions !== undefined && !Array.isArray(body.assertions)) throw new HttpError('사실 배열이 필요합니다.');
       for (const update of body.assertions ?? []) {
@@ -345,6 +354,9 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
         if (!fieldKey || value === undefined) throw new HttpError('사실의 필드와 값을 입력하세요.');
         answerField(session, pack, fieldKey, value, ownerId,update.observationReview);
       }
+      for(const previous of beforeAnswers){const next=session.assertions.find(a=>a.status==='accepted'&&a.field===previous.field&&a.ownerId===previous.ownerId);if(next&&next.id!==previous.id)session.assertions=rebaseEstimatedReferences(session.assertions,previous,next.id,next.value,session.evidence);}
+      if(body.sceneCommands!==undefined)applySceneCommands(session,pack,body.sceneCommands,!!body.answers?.length||!!body.assertions?.length,sceneBaseline,body);
+      else if(session.restoration&&((body.answers?.length??0)||(body.assertions?.length??0))){refreshRestorationState(session,pack);if(session.restoration.version==='restoration-state-v1')for(const p of Object.values((session.restoration as import('../shared/restorationScene').RestorationStateV1).partitions))delete p.lastCommand;}
       activity(session, 'edit', '입력한 상태에서 요구사항과 도출 사실을 다시 계산했습니다.');
     }));
   });
@@ -631,8 +643,10 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       if (!view.ready && !photoRecord && req.body?.allowIncomplete !== true) throw new HttpError('남은 질문을 확인하거나 미완료 저장을 명시적으로 선택하세요.', 409);
       const assertion=(a:Session['assertions'][number])=>!key||(!session.room&&key==='public'?!privateField(pack,a.field):fieldScope(pack,a.field,a.ownerId)===key);
       const intent=req.body?.reading?intentForCommit(session,pack,req.body.reading,key??req.body?.ownerId??'public'):undefined;saveIntentId=intent?.id;
+      refreshRestorationState(session,pack);
       const refs=new Set(session.assertions.filter(assertion).flatMap(a=>a.evidenceIds));
       session.snapshots.push({...(intent?{saveIntentId:intent.id}:{}), id: randomUUID(), createdAt: new Date().toISOString(), captureEpoch: session.captureEpoch, turnInstanceId: session.turnInstanceId, gamePackVersion: session.gamePackVersion, ...(key?{savedScope:key==='public'?{scope:'public' as const}:{scope:'owner' as const,ownerId:key}}:{}), assertions: structuredClone(session.assertions.filter(assertion)), evidence: structuredClone(session.evidence.filter(e=>!key||(e.ownerId??'public')===key||!e.ownerId&&e.scope==='public'&&refs.has(e.id))), preservations: structuredClone(session.preservations.filter(p=>!key||(p.ownerId??'public')===key)), notes: key?Object.fromEntries(Object.entries(session.notes).filter(([k])=>k===key)):structuredClone(session.notes) });
+      const saved=session.snapshots.at(-1)!;saved.restoration=snapshotRestoration(session,saved.assertions,saved.evidence);
       if(!key||key==='public')session.stage = 'saved';
       activity(session, 'commit', view.ready ? '게임 상태와 보존 정보를 저장했습니다.' : photoRecord ? '사진과 현재 기록을 저장했습니다. 실물 보존·숨은 상태 완료는 승인하지 않았습니다.' : '미완료 항목을 포함해 명시적으로 저장했습니다.');
     });res.json({...view,...(saveIntentId?{saveIntentId}:{})});
@@ -642,6 +656,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
       if(req.body?.scope!==undefined||pack.runtime){resumeSnapshot(session,pack,req.body?.scope??'public',req.body?.ownerId,req.body?.snapshotId);activity(session,'resume','선택한 범위의 저장 기록을 복원했습니다.');return;}
       if (!session.snapshots.length) throw new HttpError('먼저 저장본을 만드세요.', 409);
       const saved = session.snapshots.at(-1)!;
+      resumeRestoration(session,saved);
       session.assertions = structuredClone(saved.assertions);
       session.evidence = structuredClone(saved.evidence);
       session.preservations = structuredClone(saved.preservations);
@@ -687,7 +702,7 @@ export async function createApp({ store = new Store(), ui = false, runtimePacks,
     }
   }
   const onError: ErrorRequestHandler = (error, _req, res, _next) => {
-    const status = error instanceof HttpError || error instanceof PinError || error instanceof rooms.RoomError || error instanceof AnalysisJobError || error instanceof ConflictError ? error.status : error.status === 413 ? 413 : 400;
+    const status = error instanceof HttpError || error instanceof PinError || error instanceof rooms.RoomError || error instanceof AnalysisJobError || error instanceof ConflictError || error instanceof SceneCommandError ? error.status : error.status === 413 ? 413 : 400;
     res.status(status).json({ error: error instanceof Error ? error.message : '요청을 처리하지 못했습니다.' });
   };
   app.use(onError);

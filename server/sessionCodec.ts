@@ -3,7 +3,7 @@ import type {Session} from '../shared/types';
 type Link={path:(string|number)[];id:string};
 interface Block{value:any;links:Link[]}
 interface StoredSession{format:'keepboard/session-storage-v1';root:Block;objects:Record<string,Block>}
-const internKeys=new Set(['observationReceipts','hostedWire','nativeWire','providerResponse','scanBundle']);
+const internKeys=new Set(['observationReceipts','hostedWire','nativeWire','providerResponse','scanBundle','profile','restorationProfile']);
 /** Storage-only reference table. Paths live outside user JSON: literal $ref/format values never become references. */
 export function encodeSession(session:Session):StoredSession{
  const objects:Record<string,Block>={};

@@ -31,7 +31,7 @@ import {isSplendor,splendorView} from './SplendorEditor';
 import {emptyGameReadout,gameReadoutView,setReadoutValue} from '../shared/readouts/registry';
 const CARD_PREVIEW=6;
 function currentRecordPieces(value:unknown):GenericPiece[]{const r=value as Partial<GenericRecord>|null;return r?.version==='game-component-record-v1'&&Array.isArray(r.pieces)?r.pieces:[];}
-interface Props {assertion?:Assertion;allAssertions?:readonly Assertion[];onLinkItems?:(ids:string[])=>void;evidence?:readonly Evidence[];gaps?:Map<string,ObservationGap[]>;onEvidence?:(photo:Evidence,region?:Assertion['region'])=>void;players?:number;playerDetails?:readonly Player[];pack:GamePack;fieldKey:string;record:GenericRecord;mapping?:ArtMapping;ownerColor?:string;selected?:string;onSelect?:(id:string)=>void;onChange?:(r:GenericRecord)=>void;onAdd?:()=>void;busy:boolean;editor?:ReactNode;readonly?:boolean;startEditing?:boolean;layoutVariant?:string;onLayoutVariantChange?:(variant:string)=>void;layoutVariantBusy?:boolean}
+interface Props {bodyOnly?:boolean;editRequest?:string;assertion?:Assertion;allAssertions?:readonly Assertion[];onLinkItems?:(ids:string[])=>void;evidence?:readonly Evidence[];gaps?:Map<string,ObservationGap[]>;onEvidence?:(photo:Evidence,region?:Assertion['region'])=>void;players?:number;playerDetails?:readonly Player[];pack:GamePack;fieldKey:string;record:GenericRecord;mapping?:ArtMapping;ownerColor?:string;selected?:string;onSelect?:(id:string)=>void;onChange?:(r:GenericRecord)=>void;onAdd?:()=>void;busy:boolean;editor?:ReactNode;readonly?:boolean;startEditing?:boolean;layoutVariant?:string;onLayoutVariantChange?:(variant:string)=>void;layoutVariantBusy?:boolean}
 const pct=(value:number,total:number)=>`${value/total*100}%`;
 
 /** Display scale only: canonical coordinates and portrait orientation remain unchanged. */
@@ -60,11 +60,12 @@ export function BoardWorkbench({width,areas=[],children}:{width:number;areas?:{i
  return <div className="gb-workbench-wrap"><div className="gb-workbench-tools"><span className="small muted">밀어서 보기</span>{areas.length>1&&<select aria-label="판 안 영역으로 이동" defaultValue="" onChange={e=>focusArea(e.target.value)}><option value="" disabled>영역으로 이동</option>{areas.map(a=><option key={a.id} value={a.id}>{a.label}</option>)}</select>}</div><div ref={viewport} className="gb-workbench" tabIndex={0} aria-label="기록판 가로·세로로 밀어 보기"><div className="gb-working-surface" style={{width}}>{children}</div></div></div>;
 }
 
-export function GameBoardRecord({assertion,allAssertions,onLinkItems,evidence:sourceEvidence=[],gaps,onEvidence,players,playerDetails,pack,fieldKey,record,mapping,ownerColor,selected,onSelect,onChange,onAdd,busy,editor,readonly=false,startEditing=false,layoutVariant='base',onLayoutVariantChange,layoutVariantBusy=false}:Props){
+export function GameBoardRecord({bodyOnly=false,editRequest,assertion,allAssertions,onLinkItems,evidence:sourceEvidence=[],gaps,onEvidence,players,playerDetails,pack,fieldKey,record,mapping,ownerColor,selected,onSelect,onChange,onAdd,busy,editor,readonly=false,startEditing=false,layoutVariant='base',onLayoutVariantChange,layoutVariantBusy=false}:Props){
  const evidence=photoLayoutEvidence(assertion?[assertion]:[],sourceEvidence);
  const [inline,setInline]=useState(()=>typeof window!=='undefined'&&typeof window.matchMedia==='function'&&window.matchMedia('(min-width:901px)').matches);
  useEffect(()=>{if(typeof window==='undefined'||typeof window.matchMedia!=='function')return;const q=window.matchMedia('(min-width:901px)'),f=()=>setInline(q.matches);q.addEventListener?.('change',f);return()=>q.removeEventListener?.('change',f);},[]);
  const [allCards,setAllCards]=useState(false),[visual,setVisual]=useState<BoardVisual>(),[areaId,setAreaId]=useState(''),[edit,setEdit]=useState(()=>startEditing&&!!selected&&!readonly),[full,setFull]=useState(false),[zoom,setZoom]=useState(100);
+ useEffect(()=>{if(editRequest&&selected&&!readonly)setEdit(true);},[editRequest,selected,readonly]);
  const gameId=pack.runtime?.source.gameId,baseAssets=useRealAssets(gameId);
  const manualField=realManualVariantsFor(baseAssets?.board,fieldKey),manualVariants=realBoardVariantsFor(baseAssets?.board,fieldKey),manualVariantLabel=baseAssets?.board.manualVariantLabels?.[fieldKey]??baseAssets?.board.manualVariantLabel??'지도 보기';
  const [manualChoice,setManualChoice]=useState<{gameId:string|undefined;field:string;variant:string;record:GenericRecord}|null>(null);
@@ -255,6 +256,7 @@ export function GameBoardRecord({assertion,allAssertions,onLinkItems,evidence:so
  const portal=(node:ReactNode)=>typeof document==='undefined'?null:createPortal(node,document.body);
  const estimatedLayout=structure&&assertion&&<EstimatedBoardView pack={pack} structure={structure} record={{...record,pieces:viewPieces}} assertionId={assertion.id} contextPieces={(allAssertions??[]).flatMap(a=>currentRecordPieces(a.value))} contextAssertions={allAssertions} renderPiece={p=>art(p,true)} onSelect={selectDrawing} selected={selected} busy={busy}/>;
  const needsManualSurface=!pictured.size||placed.length>0||coveredOnly.length>0||viewPieces.some(p=>!pictured.has(p.id));
+ if(bodyOnly)return <div className="gb-record gb-body-only">{observedLayout}{estimatedLayout}{photoLayout}{area&&needsManualSurface&&<BoardWorkbench width={readableBoardWidth(real,realAreas)} areas={realAreas}>{dedicatedSurface?realSurface():locationOnly?locationMapSurface():board(area)}</BoardWorkbench>}{[...unplaced,...offBoard,...outsideView,...legacyPositions].some(p=>!pictured.has(p.id))&&<div className="gb-tray"><div>{[...new Map([...unplaced,...offBoard,...outsideView,...legacyPositions].filter(p=>!pictured.has(p.id)).map(p=>[p.id,p])).values()].map(p=>item(p,false))}</div></div>}</div>;
  if(!area)return null;
  return <div className="gb-record">
   {observedLayout}{estimatedLayout}{photoLayout}

@@ -336,3 +336,13 @@ test('empty source outlines retain accessible identity and clicking shows values
  assert.deepEqual(result,before);
 
 });
+
+test('optional structure co-output is selected without starting a job; omitted/default hosted selection stays legacy',async()=>{
+ const {default:SessionWorkspace}=await import('../src/SessionWorkspace'),{api}=await import('../src/api'),{loadPhotoDefinitions}=await import('../src/photoDefinitions');await loadPhotoDefinitions();
+ const old={jobs:api.analysisJobs,status:api.recognitionReaders,start:api.startAnalysisJob},bodies:any[]=[];const f=candidateFixture();Object.assign(f.view.session,{captureEpoch:'epoch',turnInstanceId:'turn',notes:{},activity:[]});
+ api.analysisJobs=async()=>({jobs:[]});api.recognitionReaders=async()=>({readers:[{kind:'terra-high-game-observation-v1',available:true,cloudSupported:true,identity:null}]} as any);api.startAnalysisJob=async(_id,body)=>{bodies.push(body);return{job:{id:'mock-'+bodies.length,sessionId:f.view.session.id,state:'completed',evidenceIds:body.evidenceIds,captureEpoch:'epoch',createdAt:'',updatedAt:''}};};
+ const ui=mount(SessionWorkspace,{view:f.view,busy:false,status:{configured:true},mutate:async()=>{},onBack(){},setOwnerId:async()=>{},onToast(){}}),settle=async()=>{await new Promise(r=>setTimeout(r,0));ui.render();};
+ try{await settle();await settle();let controls=find(ui.tree,n=>n.type===LightweightReaderControls);assert.equal(controls.props.sceneReading,false);controls.props.onRead();await settle();assert.equal(bodies.length,1);assert(!('scene'in bodies[0].reader));
+  controls=find(ui.tree,n=>n.type===LightweightReaderControls);const actual=LightweightReaderControls(controls.props);find(actual,n=>n.type==='input'&&n.props.type==='checkbox').props.onChange({target:{checked:true}});ui.render();assert.equal(bodies.length,1,'changing the optional request contract never starts a model');find(ui.tree,n=>n.type===LightweightReaderControls).props.onRead();await settle();assert.equal(bodies.length,2);assert.equal(bodies[1].reader.scene,true);const {scene,...rest}=bodies[1].reader;assert.deepEqual(rest,bodies[0].reader);assert.equal(rest.kind,'terra-high-game-observation-v1');
+ }finally{ui.dispose();api.analysisJobs=old.jobs;api.recognitionReaders=old.status;api.startAnalysisJob=old.start;}
+});

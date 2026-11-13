@@ -1,3 +1,4 @@
+import {sceneWireSchema,sceneInstructions} from './sceneWire';
 import {spatialWireSchema} from './spatialWire';
 import type {ObservationRequest,PhotoDefinition,ObservationUnknownReason} from '../../shared/lightweightRecognition';
 import {hostedVisibleProperty} from './geminiGameReader';
@@ -54,6 +55,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
  if(lean&&request.propertyApplicability?.areaPropertyIds)prompt=prompt.replace('The only exception: when f is b, leave frontOnly properties out of both a and x.','Exceptions: when f is b, leave frontOnly properties out of both a and x; omit unread properties inapplicable to the observed area from both a and x. For ar:null use all kind properties. Keep read supplemental values.');
  if(request.spatial){replace('Return only JSON {"items":[...],"spatial":{...}};','Return only JSON {"v":3,"items":[...],"spatial":{...}};');(schema.properties as any).spatial=spatialWireSchema(request.readMode);schema.required.push('spatial');}else replace('Return only JSON {"items":[...]};','Return only JSON {"v":3,"items":[...]};');
  if(request.readingTarget?.mode==='public-scene')prompt+='\nFor this public scene include ar on each item: the observed sourceAreaId or actual null; all other codes are unchanged.';
+ if(request.scene){(schema.properties as any).scene=sceneWireSchema();schema.required.push('scene');}
  if(lean){prompt+='\nEach item has exactly k,b,f,q,u,a,x'+(request.readingTarget?.mode==='public-scene'?',ar':'')+'. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. u is s=single, g=group or u=unknown.\n'+VISIBLE_INSTANCE_CONTRACT.replace('Report physicalUnit from','Report u from').replace('Quantity remains','q remains');if(request.readMode==='values'||request.readMode==='cells')prompt=prompt.replace('exactly k,b,f','exactly k,f');return {prompt,schema};}
  prompt+='\nEach item has exactly k,b,f,q,u,a'+(request.readingTarget?.mode==='public-scene'?',ar':'')+'. f is f=front/b=back/u=unknown. q is physical quantity (a visible count or actual null), not a printed value. Report u as s=single when it is one distinguishable physical object, g=group when the box describes several objects as an inseparable aggregate, or u=unknown when that distinction cannot be observed. This is separate from physical quantity: do not invent a count for a single or group, and do not split a group using expected inventory. A group can have q:null. Preserve individually distinguishable neighboring objects separately.';
  if(request.readMode==='values'||request.readMode==='cells')prompt=prompt.replace('exactly k,b,f','exactly k,f');
@@ -62,7 +64,7 @@ export function compactTerraContract(request:ObservationRequest,definition:Photo
 
 /** Validate the compact transport before the existing semantic validator sees reconstructed rows. */
 export function expandCompactTerraPayload(payload:unknown,request:ObservationRequest,definition:PhotoDefinition,profile:CompactProfile=COMPACT_TERRA_PROFILE){
- if(!exact(payload,request.spatial&&record(payload)&&Object.hasOwn(payload,'spatial')?['v','items','spatial']:['v','items'])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
+ if(!exact(payload,['v','items',...(request.spatial&&record(payload)&&Object.hasOwn(payload,'spatial')?['spatial']:[]),...(request.scene&&record(payload)&&Object.hasOwn(payload,'scene')?['scene']:[])])||payload.v!==3||!Array.isArray(payload.items)||payload.items.length>512)return invalid();
  const lean=profile===LEAN_TERRA_PROFILE,kinds=compactTerraKinds(request,definition,profile);
  // A row that breaks the contract becomes null, which the literal decoder drops and records.
  return payload.items.map((raw:unknown)=>{try{

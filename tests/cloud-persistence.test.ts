@@ -28,3 +28,9 @@ test('cloud jobs retain old observation receipts across listing and the next sta
  const next=await jobs.start(input,null,{} as any);assert.equal((await jobs.start(input,null,{} as any)).id,next.id);
  assert.deepEqual((await jobs.list(sessionId,ownerId)).map(j=>j.id),[next.id,'with-receipt']);
 });
+
+test('transaction drafts preserve the loaded CAS token without sharing mutations or refreshing a stale client',async()=>{
+ const objects=new MemoryObjects(),a=new BlobStore(objects),b=new BlobStore(objects),original:any={id:'transaction-draft',updatedAt:'',createdAt:'',snapshots:[],assertions:[],evidence:[],players:[],notes:{public:'original'},literal:{zero:0,unknown:null}};await a.saveSession(original);
+ const loadedA=(await a.getSession(original.id))!,loadedB=(await b.getSession(original.id))!,draftA=a.cloneSessionForUpdate(loadedA),draftB=b.cloneSessionForUpdate(loadedB);draftA.notes.public='committed';draftB.notes.public='stale';assert.equal(loadedA.notes.public,'original','a failed draft cannot mutate the loaded session');await a.saveSession(draftA);await assert.rejects(b.saveSession(draftB),ConflictError);const reopened:any=await b.getSession(original.id);assert.equal(reopened.notes.public,'committed');assert.deepEqual(reopened.literal,{zero:0,unknown:null});
+ const fresh=b.cloneSessionForUpdate(reopened);fresh.notes.public='fresh';await b.saveSession(fresh);assert.equal((await a.getSession(original.id))!.notes.public,'fresh');
+});

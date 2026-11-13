@@ -97,6 +97,9 @@ export class Store {
   }
   async getSession(id:string):Promise<Session|undefined>{const stored=await this.readJSON<object>(this.filename('sessions',id));if(!stored)return;const session=decodeSession(stored);this.transferVersion(stored,session);return session;}
 
+  /** A transaction draft keeps the exact version loaded by this store, never a refreshed CAS token. */
+  cloneSessionForUpdate(session:Session):Session{const draft=structuredClone(session);this.transferVersion(session,draft);return draft;}
+
   async saveSession(session: Session) {
     const token=randomUUID();await this.summaries.begin(session.id,token);
     try{

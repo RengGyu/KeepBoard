@@ -42,7 +42,7 @@ test('shared and personal records are named by scope instead of a generic headin
 });
 test('the physical storage list opens only while restoring; the reader notice is not repeated inline',()=>{
  const p=pack('carcassonne'),normal=render(view(p)),restore=render(view(p,[],'restore'));
- assert.match(normal,/<details><summary>실물 보관·복원 \d+개/);assert.match(restore,/<details open=""><summary>실물 보관·복원 \d+개/);
+ assert.match(normal,/<details id="scene-preservations-public"><summary>실물 보관·복원 \d+개/);assert.match(restore,/<details id="scene-preservations-public" open=""><summary>실물 보관·복원 \d+개/);
  assert.doesNotMatch(normal,/<p role="status"[^>]*>로컬 판독은 이번 촬영 단계/,'reader explanation lives under 읽기 설정');
 });
 test('a populated Splendor record shows six readable cards and opens the rest on demand',()=>{

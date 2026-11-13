@@ -102,3 +102,9 @@ test('needed-photo summary uses the same applicability as object gaps, without t
  result.observations.forEach(o=>o.face='unknown');assert.deepEqual(readingGaps([assertion]),{unread:3,total:3});assert.equal(observationGaps(assertion).size,3);
  request.allowedPropertyIds.cards=[];assert.equal(readingGaps([assertion]),null);assert.equal(observationGaps(assertion).size,0);
 });
+
+test('restoration workbench precedes diagnostics and saved originals stay accessible in a closed disclosure',async()=>{
+ const f=workspaceFixture('drawing');f.view.session.assertions=[{id:'current-pieces',field:'__photo.public',status:'accepted',basis:'observation',evidenceIds:['source'],value:{version:'game-component-record-v1',pieces:[{...piece,id:'die',componentId:'dice'}]}}];const ui=mount(SessionWorkspace,f.props);
+ try{await tick();ui.render();const original=find(ui.tree,n=>n.type==='details'&&n.props.className==='restoration-original-photos');assert(!original.props.open);assert(find(original,n=>n.type?.name==='PhotoRecordPanel'));const all=nodes(ui.tree),main=all.findIndex(n=>n.type?.name==='GameEssentials'),diagnostics=all.findIndex(n=>n.type?.name==='ScanObservationResults');assert(main>=0&&diagnostics>main);assert.equal(f.starts,0);
+ }finally{ui.dispose();f.restore();}
+});

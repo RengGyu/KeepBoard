@@ -1,3 +1,5 @@
+import {snapshotRestoration} from './restorationSnapshot';
+import {isRestorationState} from './restorationScene';
 import type {Assertion,GamePack,Session,SessionView} from './types';
 import {effectiveProtectedOwners,physicalOnlyField} from './gameEssentials';
 export function privateField(pack:GamePack,field:string){const definition=pack.fields.find(f=>f.key===field);return !definition||definition.scope==='player'&&definition.visibility!=='public';}
@@ -11,6 +13,7 @@ export function redactSession(source:Session,pack:GamePack,protectedOwners:Set<s
  if(session.saveIntents)session.saveIntents=session.saveIntents.filter(i=>i.scopeKey==='public'||!locked(i.scopeKey));
  session.assertions=session.assertions.filter(visible);session.notes=notes(session.notes);session.evidence=photos(session.evidence);session.preservations=session.preservations.filter(p=>!locked(p.ownerId));
  session.snapshots=session.snapshots.map(s=>({...s,assertions:s.assertions.filter(visible),notes:notes(s.notes),evidence:photos(s.evidence),preservations:s.preservations.filter(p=>!locked(p.ownerId))}));
+ if(session.restoration){if(isRestorationState(session.restoration))session.restoration=snapshotRestoration(session,session.assertions,session.evidence,{detached:true});else delete session.restoration;}for(const snapshot of session.snapshots)if(snapshot.restoration){if(isRestorationState(snapshot.restoration))snapshot.restoration=snapshotRestoration({...session,restoration:snapshot.restoration},snapshot.assertions,snapshot.evidence,{detached:true});else delete snapshot.restoration;}
  if(locked(session.analysisSummaryOwnerId??undefined)||session.analysisSummaryOwnerId==='_mixed'&&[...protectedOwners].some(o=>!allowed.has(o))){delete session.analysisSummary;delete session.analysisSummaryOwnerId;}
  return session;
 }

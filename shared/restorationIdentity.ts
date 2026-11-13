@@ -1,0 +1,8 @@
+/** Canonical portable identity: no browser crypto dependency or mutable array sorting. */
+export function sceneCanonical(value:unknown):string {if(value===undefined)return 'null';if(Array.isArray(value))return '['+value.map(sceneCanonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.entries(value).filter(([,v])=>v!==undefined).sort(([a],[b])=>a<b?-1:a>b?1:0).map(([k,v])=>JSON.stringify(k)+':'+sceneCanonical(v)).join(',')+'}';return JSON.stringify(value);}
+export function sceneDigest(value:unknown):string {
+ const bytes=new TextEncoder().encode(sceneCanonical(value)),length=Math.ceil((bytes.length+9)/64)*64,data=new Uint8Array(length);data.set(bytes);data[bytes.length]=128;const view=new DataView(data.buffer);view.setUint32(length-8,Math.floor(bytes.length/0x20000000));view.setUint32(length-4,(bytes.length*8)>>>0);
+ const primes:number[]=[];for(let n=2;primes.length<64;n++)if(!primes.some(p=>n%p===0))primes.push(n);const frac=(v:number)=>(v-Math.floor(v))*0x100000000>>>0,k=primes.map(p=>frac(Math.cbrt(p))),h=primes.slice(0,8).map(p=>frac(Math.sqrt(p))),rotate=(v:number,n:number)=>(v>>>n)|(v<<(32-n)),w=new Uint32Array(64);
+ for(let offset=0;offset<length;offset+=64){for(let i=0;i<16;i++)w[i]=view.getUint32(offset+i*4);for(let i=16;i<64;i++){const a=w[i-15],b=w[i-2];w[i]=(w[i-16]+(rotate(a,7)^rotate(a,18)^(a>>>3))+w[i-7]+(rotate(b,17)^rotate(b,19)^(b>>>10)))>>>0;}let [a,b,c,d,e,f,g,hh]=h;for(let i=0;i<64;i++){const t1=(hh+(rotate(e,6)^rotate(e,11)^rotate(e,25))+((e&f)^(~e&g))+k[i]+w[i])>>>0,t2=((rotate(a,2)^rotate(a,13)^rotate(a,22))+((a&b)^(a&c)^(b&c)))>>>0;hh=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;}[a,b,c,d,e,f,g,hh].forEach((v,i)=>h[i]=(h[i]+v)>>>0);}
+ return h.map(v=>v.toString(16).padStart(8,'0')).join('');
+}

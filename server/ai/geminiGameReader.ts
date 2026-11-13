@@ -1,3 +1,5 @@
+import {sceneWireSchema,sceneInstructions} from './sceneWire';
+import {decodeSceneReading} from '../../shared/sceneReading';
 import {observationPropertyApplicable} from '../../shared/observationGaps';
 import {spatialInstructions,spatialWireSchema} from './spatialWire';
 import {validateSpatialResult} from '../../shared/spatialObservation';
@@ -43,6 +45,7 @@ Use no owner, turn, role, hidden face, board slot, rules inference, or off-area 
   prompt+='\nRequired properties by observed source area: '+JSON.stringify(requirements)+'. For a confirmed sourceAreaId, omit unread properties not required in that area; keep any actually read listed values. When sourceAreaId is null, retain the full kind property requirements. Area assignment never proves a pile is uniform or that occluded lower values are irrelevant.';
  }
  if(request.spatial){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, role, hidden face, rules inference, or off-area information. Only the supplied spatial contract permits observed board addresses.').replace('Return only JSON {"items":[...]};','Return only JSON {"items":[...],"spatial":{...}};')+spatialInstructions(request);(schema.properties as any).spatial=spatialWireSchema(request.readMode);schema.required.push('spatial');}
+ if(request.scene){prompt=prompt.replace('Use no owner, turn, role, hidden face, board slot, rules inference, or off-area information.','Use no human owner, turn, hidden face, rules inference, or off-area information. Only the supplied scene contract allows visible functional roles and frames.');prompt+=sceneInstructions(request);(schema.properties as any).scene=sceneWireSchema();schema.required.push('scene');}
  return {contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType,data:image.toString('base64')}}]}],generationConfig:{candidateCount:1,maxOutputTokens:32768,thinkingConfig:{thinkingLevel:'LOW'},mediaResolution:'MEDIA_RESOLUTION_HIGH',responseFormat:{text:{mimeType:'APPLICATION_JSON',schema}}}};
 }
 
@@ -56,7 +59,7 @@ export function decodeGeminiGameObservation(native:unknown,request:ObservationRe
 
 /** Provider-neutral visible payload decoder; envelopes remain the adapter's responsibility. */
 export function decodeLiteralObservationPayload(wire:unknown,request:ObservationRequest,definition:PhotoDefinition,trace?:HostedObservationWire,transforms:import('../../shared/photoGeometry').PhotoTransform[]=[]):ObservationResult{
- if(!exact(wire,request.spatial&&record(wire)&&Object.hasOwn(wire,'spatial')?['items','spatial']:['items'])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
+ if(!exact(wire,['items',...(request.spatial&&record(wire)&&Object.hasOwn(wire,'spatial')?['spatial']:[]),...(request.scene&&record(wire)&&Object.hasOwn(wire,'scene')?['scene']:[])])||!Array.isArray(wire.items)||wire.items.length>512)return invalid();
  const deferred:HostedObservationWire['deferred']=[];
  // One row that breaks the contract costs only that row; the rest of a paid response is kept and the loss recorded.
  const dropRow=(index:number)=>{deferred.push({ref:'item-'+(index+1),property:'row',reason:'invalid-row'});return null;};
@@ -109,6 +112,7 @@ export function decodeLiteralObservationPayload(wire:unknown,request:Observation
  if(wire.items.length&&!observations.length)return invalid();
  const result=validateObservationResult({version:OBSERVATION_VERSION,observations,coverage:'partial',completion:'complete'},request,definition,transforms);
  if(request.spatial){result.spatial=validateSpatialResult(wire.spatial,request,result);if(trace){trace.spatial=structuredClone(wire.spatial??null);deferred.push(...result.spatial.deferred.map(d=>({ref:d.section+':'+d.index,property:'spatial',reason:d.reason})));}}
+ if(request.scene){result.scene=decodeSceneReading(wire.scene,request,result,transforms);if(trace){trace.id='gemini-game-scene-wire-v1';trace.scene=structuredClone(wire.scene??null);deferred.push(...result.scene.deferred.map(d=>({ref:d.ref??'scene',property:'scene',reason:d.reason})));}}
  if(trace){trace.items=structuredClone(wire.items);trace.deferred=deferred;}
  return result;
 }

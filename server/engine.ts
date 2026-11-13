@@ -1,3 +1,5 @@
+import {sceneQuestionSkipped,sceneContextActions} from '../shared/sceneWorkflow';
+import {recordingTurnField} from '../shared/currentRecording';
 import {rebaseEstimatedReferences} from './estimatedReferenceRebase';
 import {linkedComponents} from '../shared/componentLinking.ts';
 import {latestSnapshot,fieldScope} from '../shared/rooms.ts';
@@ -19,7 +21,7 @@ import {receiptsForValue} from './observationReceipts';
 import {observationAnswerContext} from './observationReview';
 import type {NativeObservationReview} from '../shared/observationReview';
 
-export const isTurnField = (field: FieldDefinition | undefined) => !['player.development.boughtThisTurnType','player.development.boughtThisTurnIdentity'].includes(field?.key??'') && (field?.lifetime === 'turn' || (!field?.lifetime && field?.group === 'turn'));
+export const isTurnField=recordingTurnField;
 export const fieldId = (field: string, ownerId?: string) => `${ownerId ?? 'public'}:${field}`;
 const sameValue = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -238,7 +240,7 @@ export function recompute(session: Session, pack: GamePack): SessionView {
     return { field: assertion.field, text: `${field?.label ?? assertion.field}: ${value}${assertion.basis === 'rule' && assertion.reason && assertion.field !== 'resume.nextProcedure' ? ` · ${assertion.reason}` : ''}`, ownerId: assertion.ownerId, evidenceIds: assertion.evidenceIds, basis: assertion.basis };
   });
   if (pack.id === 'catan-base') { const next = catanNextProcedure(session); const entry=briefing.find(b=>b.field==='resume.nextProcedure'); if(entry)entry.text=next;else briefing.unshift({field:'resume.nextProcedure',text:next,ownerId:undefined,evidenceIds:[],basis:'rule'}); }
-  return { session, pack, questions, derived, briefing, ready: questions.length === 0, progress: { resolved: required.size - questions.length, total: required.size }, differences, actions: planActions(session, questions) };
+  return { session, pack, questions:questions.filter(q=>!sceneQuestionSkipped(session,q)), derived, briefing, ready: questions.length === 0, progress: { resolved: required.size - questions.length, total: required.size }, differences, actions: [...planActions(session, questions.filter(q=>!sceneQuestionSkipped(session,q))),...sceneContextActions(session)] };
 }
 
 export function nextTurn(session: Session, pack: GamePack, playerId?: string) {

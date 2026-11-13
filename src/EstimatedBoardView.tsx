@@ -14,6 +14,13 @@ export function EstimatedBoardSummary({structure,scope='field'}:{structure:Struc
  return <div className="estimated-summary" role="status"><strong>배치 {m.placed}/{m.total} · 읽힌 값 {m.readKnown}/{m.readTotal} · 오독 {m.errorKnown===null?'미확인':m.errorKnown}</strong>{displayOnly>0&&<small>판 미확정 표시 격자 {displayOnly}개 · 배치 수 제외</small>}<details className="estimated-summary-details"><summary>배치 구분·영역</summary><small>정식 칸 {canonical} · 수동 {manual} · 추정 {estimated} · 미분류 {unassigned.size}</small>{structure.areas.filter(a=>scope==='all'||a.total>0).map(a=><small key={a.id}>{a.id==='unclassified'?`분류 대기 ${a.total}개`:a.total===0?`${a.label} 관측 0개 · 확인 자료 없음`:`${a.label} ${a.placed}/${a.total}${a.placed===0?' · 복원 미완료':a.unassigned>0?' · 일부 미배치':''}`}</small>)}</details></div>;
 }
 
+/** Shared readable group body. The surrounding workbench owns pan and selection state. */
+export function EstimatedGroupBody<T>({items,grid,slots=[],slotLabel=String,slotFor=()=>null,cellFor=()=>undefined,renderItem,gridLabel='사진 기준 추정 창문 칸'}:{items:readonly T[];grid?:{rows:number;columns:number};slots?:readonly number[];slotLabel?:(slot:number)=>string;slotFor?:(item:T)=>number|null;cellFor?:(item:T)=>{row:number;column:number}|undefined;renderItem:(item:T)=>ReactNode;gridLabel?:string}){
+ const inGrid=(item:T)=>{const cell=cellFor(item);return !!grid&&!!cell&&cell.row>=1&&cell.row<=grid.rows&&cell.column>=1&&cell.column<=grid.columns;};
+ return <>{grid?<div className="estimated-grid" style={{gridTemplateColumns:`repeat(${grid.columns}, 64px)`}} aria-label={gridLabel}>{Array.from({length:grid.rows},(_,row)=>Array.from({length:grid.columns},(_,column)=><div key={row+':'+column} className="estimated-cell" data-estimated-row={row+1} data-estimated-column={column+1} aria-label={`추정 ${row+1}행 ${column+1}열`}><small>{row+1}·{column+1}</small>{items.filter(item=>cellFor(item)?.row===row+1&&cellFor(item)?.column===column+1).map(renderItem)}</div>))}</div>:<div className="estimated-row">
+ {!items.length&&<small>이번 관측 0개 · 실제 부재는 미확인</small>}{slots.length?slots.map(slot=><div key={slot} className="estimated-slot"><span>{slotLabel(slot)}</span>{items.filter(item=>slotFor(item)===slot).map(renderItem)}</div>):items.map(renderItem)}{slots.length>0&&items.some(item=>!slots.includes(slotFor(item)??NaN))&&<div className="estimated-slot"><span>자리 ?</span>{items.filter(item=>!slots.includes(slotFor(item)??NaN)).map(renderItem)}</div>}</div>}{grid&&items.some(item=>!inGrid(item))&&<div className="estimated-row"><span>칸 ?</span>{items.filter(item=>!inGrid(item)).map(renderItem)}</div>}</>;
+}
+
 /** Existing physical IDs and artwork in the shared estimator's rows; never writes automatic placements. */
 export function EstimatedBoardView({pack,structure,record,assertionId,contextPieces=[],contextAssertions=[],renderPiece,onSelect,selected,busy}:{pack:GamePack;structure:Structure;record:GenericRecord;assertionId:string;contextPieces?:readonly GenericPiece[];contextAssertions?:readonly Assertion[];renderPiece:(p:GenericPiece)=>ReactNode;onSelect:(id:string)=>void;selected?:string;busy:boolean}){
  const placements=structure.placements.filter(p=>p.assertionId===assertionId&&record.pieces.some(piece=>piece.id===p.pieceId)),ids=new Set(placements.map(p=>p.pieceId));
@@ -35,18 +42,12 @@ export function EstimatedBoardView({pack,structure,record,assertionId,contextPie
  const renderGroup=(g:Structure['groups'][number])=>{
    const shown=roots(g),ref=groupAnchor(g),anchor=(g.anchorPieceId||ref)&&structure.gameId!=='seven-wonders'?anchorLabel(g.anchorPieceId,ref):'',label=groupLabel(g);
    const slotBasis=g.slotBasis??(shown.length&&shown.every(p=>p.slotBasis==='canonical')?'canonical':shown.length&&shown.every(p=>p.slotBasis==='manual')?'manual':g.areaId==='round-track'?'relative-band':'unknown'),slotLabel=(slot:number)=>slotBasis==='canonical'?`인쇄 칸 ${slot}`:slotBasis==='manual'?`직접 자리 ${slot}`:slotBasis==='relative-band'?`관측 묶음 ${String.fromCharCode(64+slot)}`:`표시 자리 ${slot}`;
-   const inGrid=(p:Structure['placements'][number])=>!!g.grid&&!!p.cell&&p.cell.row>=1&&p.cell.row<=g.grid.rows&&p.cell.column>=1&&p.cell.column<=g.grid.columns;
    return <section key={g.id} className="estimated-group" data-estimated-group={g.id} data-estimated-role={g.role} data-estimated-side={g.boardSide??g.side??undefined}><h4>{label}{anchor&&<span> · {anchor}</span>} <small>{shown.length}개</small></h4>
     {shown.some(p=>attachmentTree.externalParent[p.pieceId])&&<small>연결 대상 · {shown.filter(p=>attachmentTree.externalParent[p.pieceId]).map(p=>anchorLabel(p.attachedToPieceId,p.attachedToRef)||'연결 대상 ?').join(' · ')} (다른 기록 영역)</small>}
     {shown.some(p=>p.orderStatus&&p.orderStatus!=='known')&&<small className="estimated-order-context">{shown.some(p=>p.orderStatus==='cycle')?'순서 관계 충돌':shown.some(p=>p.orderStatus==='partial')?'부분 순서 · 같은 묶음 안 순서 미확정':'물리 순서 미확정 · 화면 배열'}</small>}
     {g.grid&&<small className="estimated-grid-context">{g.grid.basis==='manual-slot-order'?'수동':'추정'} {g.grid.rows}×{g.grid.columns} · {g.displayHypothesis?'판·역할·인쇄 방향 미확정':'인쇄 방향 미확정'}</small>}
     <div className="estimated-row-pan" tabIndex={0} aria-label={label+' · 가로로 밀어 보기'}>
-    {g.grid?<div className="estimated-grid" style={{gridTemplateColumns:`repeat(${g.grid.columns}, 64px)`}} aria-label={g.grid.basis==='manual-slot-order'?'수동 창문 칸':g.displayHypothesis?'사진 기준 표시 격자 · 판 미확정':'사진 기준 추정 창문 칸'}>{Array.from({length:g.grid.rows},(_,row)=>Array.from({length:g.grid!.columns},(_,column)=><div key={row+':'+column} className="estimated-cell" data-estimated-row={row+1} data-estimated-column={column+1} aria-label={`추정 ${row+1}행 ${column+1}열`}><small>{row+1}·{column+1}</small>{shown.filter(p=>p.cell?.row===row+1&&p.cell.column===column+1).map(p=>renderWithAttachments(p.pieceId))}</div>))}</div>:<div className="estimated-row">
-    {!shown.length&&<small>이번 관측 0개 · 실제 부재는 미확인</small>}
-    {g.slots.length?g.slots.map(slot=><div key={slot} className="estimated-slot"><span>{slotLabel(slot)}</span>{shown.filter(p=>p.slot===slot).map(p=>renderWithAttachments(p.pieceId))}</div>):shown.map(p=>renderWithAttachments(p.pieceId))}
-    {g.slots.length>0&&shown.filter(p=>p.slot===null).length>0&&<div className="estimated-slot"><span>자리 ?</span>{shown.filter(p=>p.slot===null).map(p=>renderWithAttachments(p.pieceId))}</div>}
-    </div>}
-    {g.grid&&shown.some(p=>!inGrid(p))&&<div className="estimated-row"><span>칸 ?</span>{shown.filter(p=>!inGrid(p)).map(p=>renderWithAttachments(p.pieceId))}</div>}
+    {EstimatedGroupBody({items:shown,grid:g.grid,slots:g.slots,slotLabel,slotFor:p=>p.slot,cellFor:p=>p.cell,renderItem:p=>renderWithAttachments(p.pieceId),gridLabel:g.grid?.basis==='manual-slot-order'?'수동 창문 칸':g.displayHypothesis?'사진 기준 표시 격자 · 판 미확정':'사진 기준 추정 창문 칸'})}
     </div>
    </section>;
   };
@@ -62,11 +63,16 @@ export function EstimatedBoardView({pack,structure,record,assertionId,contextPie
 type ManualV2=Extract<EstimatedStructureOverride,{version:'estimated-structure-override-v2'}>;
 type ManualFrame=NonNullable<ManualV2['frame']>;
 /** Four intentional taps on the original. No AABB-derived corners or numeric/source-key entry. */
+/** Original-photo tap surface shared by board framing and explicit cross-view landmarks. */
+export function PhotoPointSurface({photo,points,busy,onPoint,alt='판 모서리를 지정할 원사진'}:{photo:Evidence;points:readonly ({x:number;y:number}|null)[];busy:boolean;onPoint:(point:{x:number;y:number})=>void;alt?:string}){
+ return <div className="lw-frame-photo estimated-frame-photo" onClick={e=>{if(busy)return;const r=e.currentTarget.getBoundingClientRect();if(!r.width||!r.height)return;onPoint({x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))});}}><img src={photo.url} alt={alt}/>{points.map((p,i)=>p&&<span key={i} className="estimated-frame-point" aria-hidden="true" style={{left:`${p.x*100}%`,top:`${p.y*100}%`}}/>)}</div>;
+}
+
 export function EstimatedFrameEditor({photo,initial,busy,onCommit,target='board'}:{photo:Evidence;initial?:ManualFrame|null;busy:boolean;onCommit:(frame:ManualFrame)=>boolean;target?:'board'|'window-grid'}){
  const [points,setPoints]=useState<({x:number;y:number}|null)[]>(()=>initial?[...initial.corners]:[null,null,null,null]),[corner,setCorner]=useState(0),[error,setError]=useState('');
  const labels=['왼쪽 위','오른쪽 위','오른쪽 아래','왼쪽 아래'];
  return <details className="estimated-frame"><summary>{target==='window-grid'?'창문 격자의 외곽·방향 맞추기':'이 판의 외곽·방향 맞추기'}</summary><p>{target==='window-grid'?'주사위 4×5칸 격자의 외곽 네 모서리를 눌러 주세요. 장식 테두리나 전체 플레이어판은 포함하지 않아요.':'복원판의 위쪽을 기준으로 판 외곽 네 모서리를 한 번씩 눌러 주세요.'} 이 판 묶음의 기준으로만 사용해요.</p><label>다음 모서리<select aria-label="판 기준 다음 모서리" disabled={busy} value={corner} onChange={e=>setCorner(Number(e.target.value))}>{labels.map((label,i)=><option key={label} value={i}>{label}{points[i]?' · 지정됨':''}</option>)}</select></label>
- <div className="lw-frame-photo estimated-frame-photo" onClick={e=>{if(busy)return;const r=e.currentTarget.getBoundingClientRect();if(!r.width||!r.height)return;const point={x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))};setPoints(old=>old.map((p,i)=>i===corner?point:p));setCorner(i=>Math.min(3,i+1));setError('');}}><img src={photo.url} alt="판 모서리를 지정할 원사진"/>{points.map((p,i)=>p&&<span key={i} className="estimated-frame-point" aria-hidden="true" style={{left:`${p.x*100}%`,top:`${p.y*100}%`}}/>)}</div>
+ {PhotoPointSurface({photo,points,busy,onPoint:point=>{setPoints(old=>old.map((p,i)=>i===corner?point:p));setCorner(i=>Math.min(3,i+1));setError('');}})}
  <button type="button" className="button secondary small-button" disabled={busy||points.some(p=>p===null)} onClick={()=>{const [a,b,c,d]=points;if(busy||!a||!b||!c||!d)return;const frame:ManualFrame={corners:[a,b,c,d]};if(!onCommit(frame))setError('네 모서리의 순서와 판 연결을 확인해 주세요. 기존 기록은 그대로예요.');}}>이 판 묶음에 기준 적용</button>{error&&<p role="status">{error}</p>}
  </details>;
 }

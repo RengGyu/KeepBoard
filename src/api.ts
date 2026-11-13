@@ -70,7 +70,7 @@ export const api = {
   settings: (settings: AISettings) => request<AIStatus>('/settings', 'PUT', settings),
   create: (body: { recordingMode?: 'simple'; name?: string; example?: boolean; gamePackId?: string; gamePackVersion?:string; players?: Player[] }) => request<SessionView>('/sessions', 'POST', { ...body, recordingMode: 'simple' }),
   session: (id: string) => request<SessionView>(`/sessions/${id}`),
-  update: (id: string, body: { name?: string; stage?: Stage; players?: Player[]; notes?: Record<string, string>; assertions?: unknown[]; answers?: ObservationReviewAnswer[] }) => request<SessionView>(`/sessions/${id}`, 'PATCH', body),
+  update: (id: string, body: { name?: string; stage?: Stage; players?: Player[]; notes?: Record<string, string>; assertions?: unknown[]; answers?: ObservationReviewAnswer[]; sceneCommands?: import('../shared/restorationScene').SceneCommand[] }) => request<SessionView>(`/sessions/${id}`, 'PATCH', body),
   evidence: async (id: string, body: { dataUrl: string; label?: string; scope?: 'public' | 'player'; ownerId?: string; width?: number; height?: number; captureTarget?: import('../shared/photoCapture').CaptureTarget; sourceEvidenceId?: string; sourceRegion?:{x:number;y:number;width:number;height:number}; expectedCaptureEpoch?: string }) => {
     const storage=await cloudStorage();if(!storage.directPrivateUpload)return request<SessionView & {createdEvidenceId?:string}>(`/sessions/${id}/evidence`,'POST',body);
     const file=await (await fetch(body.dataUrl)).blob(),{dataUrl,...meta}=body;

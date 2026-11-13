@@ -7,7 +7,7 @@ export interface StructurePieceRef {assertionId:string;pieceId:string}
 export type StructureAnchorRef=({kind:'live-piece'}&StructurePieceRef)|{kind:'observed-board';taskId:string;boardInstanceRef:string};
 export type StructureBasis='manual'|'canonical'|'observed-relation'|'estimated'|'unknown';
 export interface StructureNode {item:DrawingItem;piece:GenericPiece;box:ObservationBox;sourceKey:string;aspect:number;sourceAreaId:string|null;field:string;receipts:ObservationReceipt[]}
-export interface StructureBoard {ref:StructureAnchorRef;sourceKey:string;box:ObservationBox;piece:StructureNode|null;aliases:string[];areaIds:string[];orientationDegrees:number|null;frame:{matrix:number[];basis:'manual-frame'}|null;frameConflict?:boolean;identityBasis?:'estimated'}
+export interface StructureBoard {ref:StructureAnchorRef;sourceKey:string;box:ObservationBox;piece:StructureNode|null;aliases:string[];areaIds:string[];orientationDegrees:number|null;frame:{matrix:number[];basis:'manual-frame'|'observed-frame'}|null;frameConflict?:boolean;identityBasis?:'estimated'}
 export interface VisibleStructureRelation {from:StructurePieceRef;to:StructurePieceRef|StructureAnchorRef;kind:string;partial:boolean;basis:StructureBasis}
 export const structureIdentity=(r:StructurePieceRef)=>JSON.stringify([r.assertionId,r.pieceId]);
 export const anchorIdentity=(r:StructureAnchorRef)=>JSON.stringify(r.kind==='live-piece'?[r.kind,r.assertionId,r.pieceId]:[r.kind,r.taskId,r.boardInstanceRef]);
@@ -79,7 +79,7 @@ export function resolveStructureAnchor(node:StructureNode,nodes:readonly Structu
  if(boundary.size===1)return {anchor:[...boundary.values()][0],basis:'estimated',candidates:[...boundary.values()].map(b=>b.ref),reason:null};if(boundary.size>1)return {anchor:null,basis:'unknown',candidates:[...boundary.values()].map(b=>b.ref),reason:'competing-board-boundary-contacts'};
  const c=centre(node.box);return {anchor:null,basis:'unknown',candidates:[...candidates].sort((a,b)=>Math.hypot(centre(a.box).x-c.x,centre(a.box).y-c.y)-Math.hypot(centre(b.box).x-c.x,centre(b.box).y-c.y)).map(b=>b.ref),reason:'no-supported-board-relation'};
 }
-export function boardLocalPoint(board:StructureBoard,point:Point):{x:number;y:number;basis:'manual-frame'}|null{return board.frame?((q)=>q?{...q,basis:'manual-frame' as const}:null)(projectBoardPoint(board.frame.matrix,point)):null;}
+export function boardLocalPoint(board:StructureBoard,point:Point):{x:number;y:number;basis:'manual-frame'|'observed-frame'}|null{return board.frame?((q)=>q?{...q,basis:board.frame!.basis}:null)(projectBoardPoint(board.frame.matrix,point)):null;}
 /** Borrow a display lane, never a read value. Unlabelled bands must touch exactly
  * one labelled connected band; two disconnected bands of the same color still compete. */
 export function inferDisplayLaneLabels(nodes:readonly {id:string;label:string|null}[],edges:readonly [string,string][]):Map<string,string>{

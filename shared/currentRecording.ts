@@ -1,0 +1,4 @@
+import type {Assertion,FieldDefinition,GamePack,Session} from './types';
+export const recordingTurnField=(f:FieldDefinition|undefined)=>!['player.development.boughtThisTurnType','player.development.boughtThisTurnIdentity'].includes(f?.key??'')&&(f?.lifetime==='turn'||!f?.lifetime&&f?.group==='turn');
+/** Latest effective accepted record; partial native records remain drawable, rules are not physical detections. */
+export function liveRecordingAssertions(session:Pick<Session,'assertions'|'turnInstanceId'>,pack:GamePack):Assertion[]{const latest=new Map<string,Assertion>();for(const a of session.assertions){if(a.status!=='accepted'||a.basis==='rule'||recordingTurnField(pack.fields.find(f=>f.key===a.field))&&a.turnInstanceId&&a.turnInstanceId!==session.turnInstanceId)continue;latest.set(JSON.stringify([a.ownerId??null,a.field]),a);}return [...latest.values()];}

@@ -1,3 +1,4 @@
+import {resumeRestoration} from './restorationState';
 import {hasPhotoRecord} from '../shared/sessionSummary';
 import {componentRecord} from '../shared/componentLinking.ts';
 import {randomUUID} from 'node:crypto';
@@ -33,6 +34,7 @@ export function resumeSnapshot(session:Session,pack:GamePack,scope:'public'|'own
   if(identities.has(key)&&(linked||identities.get(key)))throw new Error('이 실물은 다른 영역으로 이동했어요. 현재 연결을 확인한 뒤 복원해 주세요.');
   identities.set(key,linked);
  }
+ resumeRestoration(session,saved,key);
  session.assertions=nextAssertions;
  // Retained private assertions may cite a public original that is absent from the old public snapshot.
  const retainedRefs=new Set(session.assertions.filter(a=>!assertion(a)).flatMap(a=>a.evidenceIds));

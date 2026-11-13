@@ -107,7 +107,7 @@ export function decodeTerraGameObservation(native:unknown,request:ObservationReq
 }
 function decodeTerraPayload(payload:unknown,request:ObservationRequest,definition:PhotoDefinition,transforms:PhotoTransform[],profile:TerraReaderIdentity['adapterVersion']|undefined,native?:unknown,truncated=false){
  const compact=profile===COMPACT_TERRA_PROFILE||profile===LEAN_TERRA_PROFILE;
- const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).some(k=>!['items',...(request.spatial?['spatial']:[])].includes(k)))throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
+ const sourceItems=compact?expandCompactTerraPayload(payload,request,definition,profile as typeof COMPACT_TERRA_PROFILE):(()=>{if(!object(payload)||!Array.isArray(payload.items)||Object.keys(payload).some(k=>!['items',...(request.spatial?['spatial']:[]),...(request.scene?['scene']:[])].includes(k)))throw Error('Terra 관측 형식을 확인하세요.');return payload.items;})();
  const physicalUnits:Record<string,PhysicalUnitClaim>={},unitDeferred:HostedObservationWire['deferred']=[];let version2=false;
  const decodingItems=(profile===DETAIL_TERRA_PROFILE||profile==='literal-named-fill-unit-marks-v5'||profile===LEAN_TERRA_PROFILE)?normalizeTerraDetailItems(sourceItems,request,definition):sourceItems;
  const items=decodingItems.map((source:any,index:number)=>{
@@ -123,9 +123,9 @@ function decodeTerraPayload(payload:unknown,request:ObservationRequest,definitio
   return {...item,box_1000:[b.ymin,b.xmin,b.ymax,b.xmax]};
  });
  const trace:HostedObservationWire={id:'terra-game-wire-v1',items:[],deferred:[],...(native!==undefined?{providerResponse:structuredClone(native)}:{})};
- const raw=decodeLiteralObservationPayload({items,...(request.spatial?{spatial:(payload as any)?.spatial}: {})},request,definition,trace,transforms);
+ const raw=decodeLiteralObservationPayload({items,...(request.spatial?{spatial:(payload as any)?.spatial}: {}),...(request.scene?{scene:(payload as any)?.scene}:{})},request,definition,trace,transforms);
  const kept=new Set(raw.observations.map(o=>o.ref));
- trace.items=structuredClone(sourceItems);if(version2||compact){trace.id=compact?'terra-game-wire-v3':'terra-game-wire-v2';trace.physicalUnits=Object.fromEntries(Object.entries(physicalUnits).filter(([ref])=>kept.has(ref)));trace.deferred.push(...unitDeferred);}
+ if(request.scene)trace.id='terra-game-scene-wire-v1';trace.items=structuredClone(sourceItems);if(version2||compact){trace.id=request.scene?'terra-game-scene-wire-v1':compact?'terra-game-wire-v3':'terra-game-wire-v2';trace.physicalUnits=Object.fromEntries(Object.entries(physicalUnits).filter(([ref])=>kept.has(ref)));trace.deferred.push(...unitDeferred);}
  if(truncated)trace.deferred.push({ref:'response',property:'items',reason:'provider-output-truncated'});
  return {raw,hostedWire:trace};
 }
@@ -160,7 +160,7 @@ export class LunaGameReader{
   const read=await this.invoke(request,image,mimeType,buildTerraGameBody(request,definition,image,mimeType,this.identity.adapterVersion,{},this.identity),onRows,(payload,count)=>{
    if(!onRows||full||!Array.isArray(payload?.items))return;
    try{
-    const previewRequest={...request};delete previewRequest.spatial;
+    const previewRequest={...request};delete previewRequest.spatial;delete previewRequest.scene;
     const result=decodeTerraPayload({...(payload.v!==undefined?{v:payload.v}:{}),items:payload.items},previewRequest,definition,transforms,this.identity.adapterVersion);
     const preview=[];let size=0;
     for(const o of result.raw.observations){if(!Object.values(o.properties).some(p=>p.state==='observed'))continue;const bytes=Buffer.byteLength(JSON.stringify(o));if(bytes>16384)continue;if(preview.length>=64||size+bytes>65536){full=true;break;}preview.push(o);size+=bytes;}
