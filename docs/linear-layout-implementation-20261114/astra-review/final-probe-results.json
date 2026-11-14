@@ -1,0 +1,43 @@
+{
+  "scope": "synthetic bounded refresh probes, not real-photo accuracy",
+  "providerCalls": 0,
+  "checks": [
+    {
+      "id": "R1",
+      "result": "FAILED acceptance reproduced",
+      "trigger": "two automatic groups receive different set-role commands, then validated region combines their live members",
+      "beforeRoles": [
+        "discard",
+        "fireworks"
+      ],
+      "afterRoles": [
+        "fireworks",
+        "fireworks"
+      ],
+      "unappliedCount": 0,
+      "inputUnchanged": true
+    },
+    {
+      "id": "R2",
+      "result": "FAILED acceptance reproduced",
+      "trigger": "manual split retained; source precedes A→B replaced with B→A",
+      "freshUnsatisfied": 0,
+      "reusedSourcePrecedes": 1,
+      "reusedPhysicalEdges": 2,
+      "reusedUnresolvedMembers": 2,
+      "reusedUnsatisfied": 1,
+      "membershipPreserved": true,
+      "inputUnchanged": true
+    },
+    {
+      "id": "N1-source-mismatch",
+      "result": "UNCLEAR supported transition; negative cache probe only",
+      "trigger": "transform-free receipt sourceImageSHA changed alone while request image SHA remains unchanged",
+      "sourceDigestChanged": false,
+      "freshPrecedes": 1,
+      "reusedError": "복원 장면의 범위·참조·버전을 확인하세요. 원기록은 유지됩니다.",
+      "inputUnchanged": true
+    }
+  ],
+  "diskInputUnchanged": true
+}

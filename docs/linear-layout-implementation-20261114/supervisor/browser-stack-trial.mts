@@ -1,0 +1,21 @@
+/** Synthetic supported stack, mounted in the actual isolated app. Not photo truth. */
+import fs from 'node:fs/promises';import path from 'node:path';import assert from 'node:assert/strict';
+import {projectRestorationScene} from '../../../shared/sceneProjection';
+import {decodeSceneReading} from '../../../shared/sceneReading';
+const out=import.meta.dirname,m=JSON.parse(await fs.readFile(path.join(out,'serve-manifest.json'),'utf8'));
+assert(path.basename(m.dataRoot).startsWith('kb-linear-eight-'));
+for(const key of Object.keys(process.env))if(/API_KEY|KEY_FILE|AI_GATEWAY|AI_ALIAS|SUPABASE|BLOB_READ_WRITE|LOCAL_READER_CONFIG/.test(key))delete process.env[key];
+process.env.KEEPBOARD_DATA_DIR=m.dataRoot;process.chdir(m.dataRoot);
+const {Store}=await import('../../../server/store.ts'),store=new Store(m.dataRoot);
+const origin=m.cases.find((c:any)=>c.gameId==='hanabi'),v=await(await fetch(m.base+'/api/sessions/'+origin.sessionId)).json(),s=structuredClone(v.session),pack=v.pack;
+s.id=crypto.randomUUID();s.name='검증된 더미 관계 · 합성 표시 검수';delete s.restoration;
+const a=s.assertions.find((a:any)=>a.basis!=='rule'),r=a.observationReceipts[0],os=r.result.observations.slice(0,3);s.assertions=[a];
+a.value.pieces=a.value.pieces.filter((p:any)=>os.some((o:any)=>r.componentRefs[o.ref]===p.id));r.result.observations=os;
+const profile=projectRestorationScene({session:s,pack}).profile;
+r.request.scene={version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,requested:['region'],allowedRoleIds:['discard'],roleHints:[],boardComponentIds:[],roleComponentIds:{discard:['cards']}};
+r.result.scene=decodeSceneReading({version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,boardRefs:[],geometry:[],relations:[],regions:[{ref:'discard',imageIndex:0,boardRef:null,memberObservationRefs:os.map((o:any)=>o.ref),roleCandidates:['discard']}]},r.request,r.result,r.transforms);
+const z='0'.repeat(64);r.request.spatial={version:'spatial-request-v1',schemaSHA256:z,responseSchemaSHA:z,definitionSHA:z,spatialDefinitionSHA:z,sourceSHA:r.request.sourceSHA,photoDefinitionSHA:r.request.definitionSHA,packVersion:pack.version,frames:[],structuralNamespaces:[],prompt:{common:'synthetic relation fixture',gameInstruction:''}};
+r.result.spatial={version:'spatial-observation-v1',boardInstances:[],placements:[],cellStates:[],deferred:[],relations:[{fromRef:os[0].ref,toRef:os[1].ref,kind:'same-visible-stack',basis:'observed-visible-relation',partial:true}]};
+await store.saveSession(s);
+const report={scope:'synthetic supported pair + independent singleton; not real photo accuracy',sessionId:s.id,url:m.base+'/?session='+s.id,sourcePieces:a.value.pieces.map((p:any)=>({assertionId:a.id,pieceId:p.id})),expectedObjects:3,expectedVisibleStacks:1,providerCalls:0};
+await fs.writeFile(path.join(out,'browser-stack-trial.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));

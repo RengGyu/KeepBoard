@@ -1,0 +1,175 @@
+--- a/shared/sceneDisplay.ts
++++ b/shared/sceneDisplay.ts
+@@ -8,18 +8,53 @@
+ 
+ /** Display-only inputs. The caller loads the exact asset; this resolver never fetches or writes claims. */
+ export interface SceneDisplayBoardContext extends SceneBoardContext {manualLayoutTags?:readonly string[]}
+-export type SceneDisplayKind='native-record'|'canonical-board'|'manual-board'|'typed-map'|'relation-layout'|'estimated-structure'|'photo-rows'|'unlocated';
++export type SceneDisplayKind='native-record'|'canonical-board'|'manual-board'|'typed-map'|'relation-layout'|'estimated-structure'|'visible-stack'|'photo-rows'|'unlocated';
+ export interface SceneDisplayMember {entityId:string;ref:LivePieceRef;piece?:GenericPiece;drawing?:DrawingItem}
+-export interface SceneDisplayPart {id:string;regionId:string;groupId:string;kind:SceneDisplayKind;members:SceneDisplayMember[];boardContext?:SceneDisplayBoardContext;tileSize?:{width:number;height:number};topologyKind?:string;fallbackReason?:string;size:{width:number;height:number}}
++export interface SceneDisplayPart {id:string;regionId:string;groupId:string;kind:SceneDisplayKind;members:SceneDisplayMember[];boardContext?:SceneDisplayBoardContext;tileSize?:{width:number;height:number};topologyKind?:string;visibleStack?:{relationIds:string[]};fallbackReason?:string;size:{width:number;height:number}}
+ export const sceneDisplayKey=(ref:Pick<LivePieceRef,'assertionId'|'pieceId'>)=>JSON.stringify([ref.assertionId,ref.pieceId]);
+ const record=(a:Assertion|undefined)=>{const r=a?.value as GenericRecord|undefined;return r?.version==='game-component-record-v1'?r:undefined;};
+ const selected=(claim:{status:string;chosen?:unknown})=>claim.status==='selected';
+ const validBox=(p:DrawingItem['position'])=>p.space==='photo'&&!!p.sourceSHA&&[p.box.x,p.box.y,p.box.width,p.box.height].every(Number.isFinite)&&p.box.width>0&&p.box.height>0&&p.box.x>=0&&p.box.y>=0&&p.box.x+p.box.width<=1.00000001&&p.box.y+p.box.height<=1.00000001;
+ function structured(g:SceneGroup,e:SceneEntity){return !!g.presentation?.grid||!!g.presentation?.slots.length&&e.presentation?.slot!==null&&e.presentation?.slot!==undefined||e.presentation?.status==='placed';}
+ 
++/** A relation-supported display bundle, never an inventory/identity merge or a geometry guess. */
++function visibleStacks(scene:ScenePartitionState,parts:SceneDisplayPart[]){
++ const entities=new Map(scene.entities.filter(e=>!e.removed).map(e=>[e.id,e]));
++ const locations=new Map(parts.flatMap(part=>part.members.map(member=>[member.entityId,{part,member}] as const)));
++ const edges=scene.relations.filter(r=>r.kind==='same-visible-stack'),neighbors=new Map<string,Set<string>>();
++ const link=(a:string,b:string)=>{let set=neighbors.get(a);if(!set)neighbors.set(a,set=new Set());set.add(b);};
++ // Keep even unavailable/conflicting endpoints in the graph: dropping them could turn a chain into a false pair.
++ for(const edge of edges){link(edge.from,edge.to);link(edge.to,edge.from);}
++ const sameObservation=(a:SceneEntity['observations'][number],b:SceneEntity['observations'][number])=>a.taskId===b.taskId&&a.observationRef===b.observationRef&&a.evidenceId===b.evidenceId&&a.sourceSHA===b.sourceSHA&&a.definitionSHA===b.definitionSHA&&a.captureEpoch===b.captureEpoch&&a.transformId===b.transformId;
++ const usable=(edge:typeof edges[number])=>{
++  const a=locations.get(edge.from),b=locations.get(edge.to),from=entities.get(edge.from),to=entities.get(edge.to);
++  if(!a||!b||!from||!to||edge.from===edge.to||a.part!==b.part||a.part.kind!=='photo-rows'||edge.claim.status!=='selected'||edge.claim.chosen.value!==true||edge.claim.chosen.basis!=='observation')return false;
++  const x=a.member.drawing?.position,y=b.member.drawing?.position;
++  if(x?.space!=='photo'||y?.space!=='photo'||x.evidenceId!==y.evidenceId||x.sourceSHA!==y.sourceSHA)return false;
++  const supported=from.observations.filter(o=>o.evidenceId===x.evidenceId&&o.sourceSHA===x.sourceSHA&&edge.claim.status==='selected'&&edge.claim.chosen.supports.some(s=>s.kind==='observation'&&sameObservation(s.ref,o)));
++  return supported.some(o=>to.observations.some(p=>p.taskId===o.taskId&&p.evidenceId===o.evidenceId&&p.sourceSHA===o.sourceSHA&&p.definitionSHA===o.definitionSHA&&p.captureEpoch===o.captureEpoch));
++ };
++ const seen=new Set<string>(),bundles:SceneDisplayPart[]=[];
++ for(const start of neighbors.keys()){
++  if(seen.has(start))continue;
++  const ids:string[]=[],todo=[start];while(todo.length){const id=todo.pop()!;if(seen.has(id))continue;seen.add(id);ids.push(id);todo.push(...neighbors.get(id)??[]);}
++  const members=new Set(ids),relations=edges.filter(r=>members.has(r.from)||members.has(r.to));
++  // Only a complete, unambiguous clique proves one visible stack. No transitive stack/quantity inference.
++  if(ids.length<2||ids.some(id=>neighbors.get(id)?.size!==ids.length-1)||relations.some(r=>!usable(r))||scene.relations.some(r=>['attached-to','tucked-under'].includes(r.kind)&&(members.has(r.from)||members.has(r.to))))continue;
++  const original=locations.get(ids[0])!.part,stackMembers=original.members.filter(m=>members.has(m.entityId));
++  bundles.push({...original,id:JSON.stringify([original.id,'visible-stack',[...ids].sort()]),kind:'visible-stack',members:stackMembers,visibleStack:{relationIds:relations.map(r=>r.id).sort()},fallbackReason:undefined,size:{width:Math.max(320,stackMembers.length*92+24),height:180}});
++ }
++ return parts.flatMap(part=>{
++  const stacks=bundles.filter(b=>b.regionId===part.regionId&&b.groupId===part.groupId&&b.members.some(m=>part.members.includes(m))).sort((a,b)=>part.members.indexOf(a.members[0])-part.members.indexOf(b.members[0]));
++  if(!stacks.length)return [part];
++  const bundled=new Set(stacks.flatMap(b=>b.members.map(m=>m.entityId))),remaining=part.members.filter(m=>!bundled.has(m.entityId));
++  return [...stacks,...(remaining.length?[{...part,members:remaining}]:[])];
++ });
++}
++
+ /** Selects existing adapters by usable evidence, never by family name or expected inventory. */
+ export function resolveSceneDisplay({scene,assertions,evidence,pack,boardContexts=[]}:{scene:ScenePartitionState;assertions:readonly Assertion[];evidence:readonly Evidence[];pack:GamePack;boardContexts?:readonly SceneDisplayBoardContext[]}){
+- const contexts=boardContexts.filter(c=>c.packId===pack.id&&c.packVersion===pack.version&&c.sourceSHA===(pack.runtime?.source.sha256??null)),parts:SceneDisplayPart[]=[],consumed=new Set<string>(),unresolved:{entityId:string;reason:string}[]=[];
++ const contexts=boardContexts.filter(c=>c.packId===pack.id&&c.packVersion===pack.version&&c.sourceSHA===(pack.runtime?.source.sha256??null)),consumed=new Set<string>(),unresolved:{entityId:string;reason:string}[]=[];let parts:SceneDisplayPart[]=[];
+  const assertionsById=new Map(assertions.filter(a=>a.status==='accepted').map(a=>[a.id,a])),entityById=new Map(scene.entities.filter(e=>!e.removed).map(e=>[e.id,e]));
+  const sourceFor=(e:SceneEntity)=>{for(const ref of e.bindings){const a=assertionsById.get(ref.assertionId),r=record(a);if(a&&(ref.ownerId??'public')===scene.scopeKey&&(a.ownerId??null)===ref.ownerId&&a.field===ref.field&&r?.pieces.some(p=>p.id===ref.pieceId))return {ref,a,piece:r.pieces.find(p=>p.id===ref.pieceId)!};}return undefined;};
+  const typed=new Map<string,Set<string>>();for(const a of assertions){const r=record(a);if(!r)continue;const model=carcassonneLayout(pack,r),xs=model.tiles.map(t=>t.x),ys=model.tiles.map(t=>t.y);if(model.tiles.length&&Math.max(...xs)-Math.min(...xs)<50&&Math.max(...ys)-Math.min(...ys)<50)typed.set(a.id,new Set(model.tiles.map(t=>t.piece.id)));}
+@@ -46,6 +81,7 @@
+    else {add(region.id,g,'unlocated',member);unresolved.push({entityId:id,reason:piece.spatial?.resolved?'verified-board-unavailable':'source-position-unavailable'});}
+   }
+  }
++ parts=visibleStacks(scene,parts);
+  for(const p of parts){if(p.kind==='photo-rows'){const isCard=p.members.some(m=>pack.runtime?.components.some(c=>c.id===m.piece?.componentId&&c.kind==='card'));p.tileSize={width:isCard?86:64,height:isCard?96:68};const image=p.members[0]?.drawing?.position,photo=image?.space==='photo'?evidence.find(e=>e.id===image.evidenceId):undefined,layout=layoutDrawingItems(p.members.flatMap(m=>m.drawing?[m.drawing]:[]),{tileWidth:p.tileSize.width,tileHeight:p.tileSize.height,sourceAspectRatio:photo?.width&&photo?.height?photo.width/photo.height:1});p.size={width:Math.max(320,layout.width+24),height:Math.max(120,layout.height+85)};}
+   else if(p.kind==='estimated-structure'){const g=scene.groups.find(g=>g.id===p.groupId)!;p.size=g.presentation?.grid?{width:g.presentation.grid.columns*68+24,height:g.presentation.grid.rows*68+85}:{width:Math.max(320,p.members.length*92+24),height:150};}
+   else if(p.kind==='typed-map'){const r:GenericRecord={version:'game-component-record-v1',pieces:p.members.flatMap(m=>m.piece?[m.piece]:[])},tiles=carcassonneLayout(pack,r).tiles;p.size={width:Math.max(320,(Math.max(...tiles.map(t=>t.x))-Math.min(...tiles.map(t=>t.x))+1)*112+24),height:(Math.max(...tiles.map(t=>t.y))-Math.min(...tiles.map(t=>t.y))+1)*160+100};}
+--- a/src/RestorationSceneView.tsx
++++ b/src/RestorationSceneView.tsx
+@@ -62,6 +62,10 @@
+   const members=part.members.filter(m=>rootIds.has(m.entityId));if(!members.length)return null;
+   const choose=(id:string)=>{const target=members.find(m=>m.ref.pieceId===id);if(target){changeFocus(false);onSelect(target.ref);}};
+   const assertion=assertions.find(a=>a.id===members[0].ref.assertionId),sourceRecord=recordFor(assertion),subset:GenericRecord={version:'game-component-record-v1',pieces:members.flatMap(m=>m.piece?[m.piece]:[])};
++  if(part.kind==='visible-stack'){
++   const g=groups.find(g=>g.id===part.groupId)!,position=members[0].drawing?.position,photo=position?.space==='photo'?displayEvidence.find(e=>e.id===position.evidenceId):undefined;
++   return <section className="restoration-visible-stack" aria-label="같은 가시 더미" data-visible-stack={part.id}><header><strong>같은 가시 더미 · 관측 {members.length}개</strong>{photo&&onEvidence&&<button type="button" className="button text small-button" onClick={()=>{changeFocus(false);onEvidence(photo);}}>원사진</button>}</header>{groupBody({...g,entityIds:members.map(m=>m.entityId)})}<small>관측된 회원만 표시 · 내부 순서·숨은 총수 미확정</small></section>;
++  }
+   if(part.kind==='canonical-board'||part.kind==='manual-board')return assertion&&sourceRecord?<GameBoardRecord key={part.id} bodyOnly displayItems={members.flatMap(m=>m.drawing?[m.drawing]:[])} assertion={assertion} allAssertions={assertions} evidence={displayEvidence} pack={pack} fieldKey={assertion.field} record={{...sourceRecord,...subset}} layoutVariant={part.boardContext?.board.variant??'base'} players={players.length} playerDetails={players} busy={busy} readonly onSelect={choose}/>:null;
+   if(part.kind==='typed-map')return <CarcassonneLayoutPreview key={part.id} pack={pack} record={subset} disabled={busy} onSelect={choose} renderArt={p=><span data-drawing-piece={p.id} data-assertion-id={assertion?.id}><GenericPieceArt pack={pack} piece={p} symbols={assets?.symbols} compact/></span>}/>;
+   if(part.kind==='photo-rows'){
+--- a/src/restoration-scene.css
++++ b/src/restoration-scene.css
+@@ -32,3 +32,5 @@
+ .restoration-scene-panel .photo-layout-board>header{gap:4px;margin-bottom:2px}
+ .restoration-scene-panel .photo-layout-board>header>strong,.restoration-scene-panel .photo-layout-hint{display:none}
+ .restoration-scene-panel .photo-layout-board>header>.button,.restoration-scene-group>header>.button{min-height:28px;padding:3px 6px;font-size:12px}
++.restoration-visible-stack{width:max-content;margin:4px 0;padding:6px;border:2px solid #8aa7c0;border-radius:8px;background:#f4f9fd}
++.restoration-visible-stack>header{display:flex;align-items:center;gap:6px;font-size:12px}.restoration-visible-stack>small{font-size:10px;color:#536278}
+--- /dev/null
++++ b/tests/scene-visible-stack.test.ts
+@@ -0,0 +1,84 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import React from 'react';
++import {register} from 'node:module';
++import {readFileSync} from 'node:fs';
++import {withRestoration} from '../gamepacks/catalog';
++import {projectRestorationScene} from '../shared/sceneProjection';
++import {resolveSceneDisplay,sceneDisplayKey} from '../shared/sceneDisplay';
++import {decodeSceneReading} from '../shared/sceneReading';
++import type {Session,GamePack} from '../shared/types';
++import type {GenericRecord} from '../shared/genericRecord';
++import type {ScenePartitionState} from '../shared/restorationScene';
++register('../docs/board-story/feedback/skip-css.mjs',import.meta.url);
++const {RestorationSceneView}=await import('../src/RestorationSceneView');
++const {PhotoLayoutBoard}=await import('../src/PhotoLayoutBoard');
++
++// Saved literals supply normal source pins only. The supported relations/role below are synthetic, not photo truth.
++function fixture(count:number,edges:[number,number][]){
++ const data=JSON.parse(readFileSync('docs/real-photo-review-20261110/cases/final-pool-04/view.json','utf8'));
++ const session=data.session as Session,pack=withRestoration(data.pack) as GamePack,a=session.assertions.find(a=>a.basis!=='rule')!,receipt=a.observationReceipts![0],observations=receipt.result.observations.slice(0,count);
++ session.assertions=[a];delete session.restoration;
++ (a.value as unknown as GenericRecord).pieces=(a.value as unknown as GenericRecord).pieces.filter(p=>observations.some(o=>receipt.componentRefs[o.ref]===p.id));
++ receipt.result.observations=observations;
++ const profile=projectRestorationScene({session,pack}).profile;
++ receipt.request.scene={version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,requested:['region'],allowedRoleIds:['discard'],roleHints:[],boardComponentIds:[],roleComponentIds:{discard:['cards']}};
++ receipt.result.scene=decodeSceneReading({version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,boardRefs:[],geometry:[],relations:[],regions:[{ref:'discard',imageIndex:0,boardRef:null,memberObservationRefs:observations.map(o=>o.ref),roleCandidates:['discard']}]},receipt.request,receipt.result,receipt.transforms);
++ assert.equal(receipt.result.scene.deferred.length,0);
++ const syntheticSHA='0'.repeat(64);
++ receipt.request.spatial={version:'spatial-request-v1',schemaSHA256:syntheticSHA,responseSchemaSHA:syntheticSHA,definitionSHA:syntheticSHA,spatialDefinitionSHA:syntheticSHA,sourceSHA:receipt.request.sourceSHA,photoDefinitionSHA:receipt.request.definitionSHA,packVersion:pack.version,frames:[],structuralNamespaces:[],prompt:{common:'synthetic relation fixture',gameInstruction:''}};
++ receipt.result.spatial={version:'spatial-observation-v1',boardInstances:[],placements:[],cellStates:[],deferred:[],relations:edges.map(([from,to])=>({fromRef:observations[from].ref,toRef:observations[to].ref,kind:'same-visible-stack',basis:'observed-visible-relation',partial:true}))};
++ const scene=projectRestorationScene({session,pack});
++ assert.equal(scene.relations.filter(r=>r.kind==='same-visible-stack').length,edges.length,'actual validated spatial relation dispatch');
++ assert.equal(scene.profile.regions.find(r=>r.id==='discard')?.topology?.kind,'pile-collection');
++ return {session,pack,scene};
++}
++const resolve=(f:ReturnType<typeof fixture>,scene=f.scene)=>resolveSceneDisplay({scene,pack:f.pack,assertions:f.session.assertions,evidence:f.session.evidence});
++const nodes=(v:any):any[]=>!v||typeof v!=='object'?[]:Array.isArray(v)?v.flatMap(nodes):[v,...nodes(v.props?.children)];
++function render(component:any,props:any){const internal=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,old=internal.H;internal.H={useState:(v:any)=>[typeof v==='function'?v():v,()=>{}],useRef:(v:any)=>({current:v}),useEffect(){}};try{return component(props);}finally{internal.H=old;}}
++function actualView(f:ReturnType<typeof fixture>,scene=f.scene){
++ const selected:any[]=[],tree=render(RestorationSceneView,{scene,pack:f.pack,assertions:f.session.assertions,evidence:f.session.evidence,busy:false,onSelect:(ref:any)=>selected.push(ref),onCommand:async()=>{throw Error('display must not write');}});
++ const panels=nodes(tree).filter(n=>n.props?.['data-scene-content']),photos=panels.flatMap(p=>nodes(p).filter(n=>n.type===PhotoLayoutBoard));
++ const buttons=[...panels.flatMap(p=>nodes(p).filter(n=>n.props?.['data-drawing-piece'])),...photos.flatMap(p=>nodes(render(PhotoLayoutBoard,p.props)).filter(n=>n.props?.['data-drawing-piece']))];
++ return {tree,selected,buttons,stacks:panels.flatMap(p=>nodes(p).filter(n=>n.props?.['data-visible-stack'])),photos};
++}
++function assertOnce(f:ReturnType<typeof fixture>,scene=f.scene){const view=actualView(f,scene),keys=view.buttons.map(n=>sceneDisplayKey({assertionId:n.props['data-assertion-id'],pieceId:n.props['data-drawing-piece']})),expected=resolve(f,scene).parts.flatMap(p=>p.members.map(m=>sceneDisplayKey(m.ref)));assert.equal(keys.length,new Set(keys).size);assert.deepEqual([...keys].sort(),[...expected].sort());return view;}
++
++test('decoded supported pair uses a visible-stack bundle and actual existing body; unrelated singleton remains photo',()=>{
++ const f=fixture(3,[[0,1]]),before=JSON.stringify(f),out=resolve(f),stack=out.parts.find(p=>p.kind==='visible-stack')!;
++ assert.equal(stack.members.length,2);assert.equal(stack.visibleStack?.relationIds.length,1);assert.equal(out.parts.find(p=>p.kind==='photo-rows')?.members.length,1);
++ const view=assertOnce(f);assert.equal(view.stacks.length,1);assert.equal(view.photos.length,1);assert.match(JSON.stringify(view.stacks[0]),/숨은 총수 미확정/);
++ for(const button of view.buttons)button.props.onClick();
++ assert.deepEqual(view.selected.map(sceneDisplayKey).sort(),out.parts.flatMap(p=>p.members.map(m=>sceneDisplayKey(m.ref))).sort(),'actual selection is assertion+piece qualified');
++ const without=structuredClone(f.scene);without.relations=[];assert.notDeepEqual(resolve(f),resolve(f,without));assert.equal(assertOnce(f,without).stacks.length,0);assert.equal(JSON.stringify(f),before);
++});
++
++test('separate pair and complete clique are distinct bundles, including group units without quantity expansion',()=>{
++ const f=fixture(6,[[0,1],[2,3],[3,4],[2,4]]);const target=f.scene.entities.find(e=>e.id===f.scene.relations[0].from)!;target.physicalUnit='group';
++ const a=f.session.assertions[0],piece=(a.value as unknown as GenericRecord).pieces.find(p=>p.id===target.bindings[0].pieceId)!;piece.quantity=null;
++ const before=JSON.stringify(f),out=resolve(f),stacks=out.parts.filter(p=>p.kind==='visible-stack');assert.deepEqual(stacks.map(s=>s.members.length),[2,3]);assert.equal(out.parts.find(p=>p.kind==='photo-rows')?.members.length,1);assert.equal(out.consumedEntityIds.length,6);assert.equal(assertOnce(f).stacks.length,2);
++ const reversed=structuredClone(f.scene);reversed.relations.reverse();assert.deepEqual(resolve(f,reversed),out);assert.equal(JSON.stringify(f),before);
++});
++
++test('chain, conflicting claim, foreign source/owner, deleted endpoint and mixed group are deferred without hiding live items',()=>{
++ const cases:{name:string;change:(s:ScenePartitionState)=>void}[]=[
++  {name:'chain',change:s=>{const r=s.relations[0],other=s.entities.find(e=>![''+r.from,r.to].includes(e.id))!;s.relations.push({...structuredClone(r),id:'chain',from:r.to,to:other.id});}},
++  {name:'claim conflict',change:s=>{const r=s.relations[0];r.claim={id:r.claim.id,status:'conflict',candidates:[],reason:'conflicting observation'};}},
++  {name:'foreign source',change:s=>{const e=s.entities.find(e=>e.id===s.relations[0].to)!;e.observations=e.observations.map(o=>({...o,sourceSHA:'f'.repeat(64)}));}},
++  {name:'foreign epoch',change:s=>{const e=s.entities.find(e=>e.id===s.relations[0].to)!;e.observations=e.observations.map(o=>({...o,captureEpoch:'other-epoch'}));}},
++  {name:'missing support',change:s=>{const r=s.relations[0];if(r.claim.status==='selected')r.claim.chosen.supports=[];}},
++  {name:'foreign owner',change:s=>{const e=s.entities.find(e=>e.id===s.relations[0].to)!;e.bindings=e.bindings.map(b=>({...b,ownerId:'foreign'}));}},
++  {name:'deleted',change:s=>{s.entities.find(e=>e.id===s.relations[0].to)!.removed=true;}},
++  {name:'different group',change:s=>{const id=s.relations[0].to,g=s.groups.find(g=>g.entityIds.includes(id))!,copy={...structuredClone(g),id:'other-group',entityIds:[id]};g.entityIds=g.entityIds.filter(i=>i!==id);s.groups.push(copy);s.regions[0].groupIds.push(copy.id);}},
++ ];
++ for(const c of cases){const f=fixture(3,[[0,1]]);c.change(f.scene);const before=JSON.stringify(f);assert.equal(resolve(f).parts.filter(p=>p.kind==='visible-stack').length,0,c.name);assert.equal(assertOnce(f).stacks.length,0,c.name);assert.equal(JSON.stringify(f),before,c.name);}
++});
++
++test('incomplete clique and conflicting extra edge do not collapse into a smaller supported stack',()=>{
++ for(const conflict of [false,true]){const f=fixture(4,[[0,1],[1,2],[0,2],[2,3]]);if(conflict)f.scene.relations[3].claim={id:'conflict',status:'unresolved',candidates:[],reason:'unresolved'};const before=JSON.stringify(f);assert.equal(resolve(f).parts.filter(p=>p.kind==='visible-stack').length,0);assert.equal(assertOnce(f).buttons.length,4);assert.equal(JSON.stringify(f),before);}
++});
++
++test('supported order continues to use relation adapter, not a stack/photo override',()=>{
++ const f=fixture(3,[[0,1]]),g=f.scene.groups.find(g=>g.entityIds.includes(f.scene.relations[0].from))!,wanted=[...g.entityIds].reverse();g.presentation={slots:[],orderLevels:wanted.map(id=>[id]),orderUnresolved:[]};g.physicalOrder=[{before:wanted[0],after:wanted[1],claimId:'known-order'}];f.scene.plan.displayEntityOrder[g.id]=wanted;
++ const before=JSON.stringify(f),out=resolve(f);assert(out.parts.every(p=>p.kind==='relation-layout'));assert.deepEqual(out.parts.flatMap(p=>p.members.map(m=>m.entityId)),wanted);assert.equal(assertOnce(f).stacks.length,0);assert.equal(JSON.stringify(f),before);
++});

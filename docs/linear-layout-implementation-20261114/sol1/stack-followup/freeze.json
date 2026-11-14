@@ -1,0 +1,56 @@
+{
+  "frozenAt": "2026-11-14T10:06:22.754807+00:00",
+  "scope": "display-only validated visible-stack followup; original sol1 freeze unchanged",
+  "files": [
+    {
+      "path": "shared/sceneDisplay.ts",
+      "beforeSHA256": "469cafce08225defcac8e227f2f1443586d8e94d1bf99ac09fe7e9ed94fe6fd7",
+      "sha256": "67add5c09902670e9e8c7f28939cac3fe10297fd02f94078c5ff17c24fe02b24",
+      "bytes": 12582
+    },
+    {
+      "path": "src/RestorationSceneView.tsx",
+      "beforeSHA256": "6ac1760ef37816c2108f799525c6ab8eb3e83cf7f9fd32857b6435768080bf11",
+      "sha256": "53c3c76c7446e84fa023d2ce28a195e90e20a34dc379020bff90b78cc3b47352",
+      "bytes": 30421
+    },
+    {
+      "path": "src/restoration-scene.css",
+      "beforeSHA256": "6d79ee24e21febece72a0347e0238dd27b0d4c18869acfab085239c2b4a76c31",
+      "sha256": "7abe42ea62aacde16f0c556e997292bb6479045d04dd0977ed7b56405eea10d5",
+      "bytes": 7544
+    },
+    {
+      "path": "tests/scene-visible-stack.test.ts",
+      "beforeSHA256": null,
+      "sha256": "ce0e6ee619d39d37f05cf5b34300bbcebdfe70021978a8be88cadddd3eed772d",
+      "bytes": 9963
+    }
+  ],
+  "deltaSHA256": "fc03b54b176e0d35d4b6e8dbd5e59df3846a8e09e06fbbe07c586b9fce165624",
+  "priorFreezeSHA256": "ade690d3a51d45617fcd339aae8e1276d0ce6e47272cc174ba8041b31a1313a1",
+  "checks": {
+    "focused": {
+      "command": "node --import tsx --test tests/scene-visible-stack.test.ts tests/scene-display.test.ts tests/restoration-scene-ui.test.ts tests/photo-layout-board.test.ts",
+      "exitCode": 0,
+      "tests": 32,
+      "pass": 32,
+      "fail": 0,
+      "skip": 0,
+      "log": "focused-tests.log"
+    },
+    "typecheck": {
+      "command": "./node_modules/.bin/tsc --noEmit -p docs/linear-layout-implementation-20261114/sol1/stack-followup/tsconfig.json",
+      "exitCode": 0,
+      "log": "typecheck.log"
+    }
+  },
+  "providerCalls": 0,
+  "wholeSuiteRuns": 0,
+  "builds": 0,
+  "limitations": [
+    "No real-photo accuracy or actual browser validation in this followup.",
+    "Only residual photo parts with complete pairwise selected observation support within the same source/group are bundled. Chains, incomplete cliques, conflicting/unsupported/deleted/foreign endpoints, attachments and independently placed/ordered items retain existing display.",
+    "Visible stack membership does not establish physical order, quantity, hidden contents or full pile inventory."
+  ]
+}

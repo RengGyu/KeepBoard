@@ -42,7 +42,7 @@ export type SceneEntity = {
   supportingAssertionIds?:string[];
   presentation?:{status:'placed'|'unassigned'|'retained';basis:'estimated'|'manual'|'native';cell?:{row:number;column:number};slot?:number|null;slotBasis?:EstimatedBoardPlacement['slotBasis'];position?:DrawingPosition;notes:string[]};
   physicalUnit: 'single' | 'group' | 'unknown';
-  observedRole: string | null; // copy/reference only; never rewritten by layout
+  observedRole: string | null; requestAreaIds?:string[]; // copy/reference only; never rewritten by layout
   role: Claim<string>;
   removed: boolean;
 };
@@ -69,7 +69,7 @@ export type Placement =
       row: number | null; column: number | null }
   | { space: 'unlocated' };
 export type SceneGroup = {
-  id: GroupId; entityIds: EntityId[];
+  id: GroupId; entityIds: EntityId[]; contextRoleIds?:string[];
   family: Family; role: Claim<string>;
   boardMembership: Claim<EntityId>; placement: Claim<Placement>;
   membershipEdit?:{commandId:string;kind:'split'|'merge';sourceGroupIds:string[]};
@@ -94,7 +94,7 @@ export type SceneFrame = {
 export type SceneRelation =
   | { id: string; kind: 'left-of' | 'above' | 'neighbor-of';
       from: RegionId; to: RegionId; claim: Claim<true> }
-  | { id: string; kind: 'overlaps' | 'attached-to' | 'tucked-under' | 'precedes';
+  | { id: string; kind: 'overlaps' | 'attached-to' | 'tucked-under' | 'precedes' | 'same-visible-stack' | 'adjacent-to';
       from: EntityId; to: EntityId; claim: Claim<true> };
 
 export type SceneLayoutPlan = {
@@ -108,7 +108,8 @@ export type SceneLayoutPlan = {
 };
 export type ScenePartitionState = {
   scopeKey: ScopeKey;
-  semanticRevision: string; sourceDigest: SHA256;
+  semanticRevision: string; sourceDigest: SHA256; projectorVersion?:string;
+  unappliedEdits?:{kind:string;id:string;reason:string;value:unknown}[];
   profile: RestorationProfileV1; // small resolved contract pinned on save
   entities: SceneEntity[]; regions: SceneRegion[]; groups: SceneGroup[];
   frames: SceneFrame[];

@@ -1,0 +1,70 @@
+{
+  "scope": "R1/R2/C5 followup only; synthetic supported inputs, not photo accuracy",
+  "command": "TSX_DISABLE_CACHE=1 node --import tsx docs/linear-layout-implementation-20261114/astra-review/recheck/probe.mts",
+  "providerCalls": 0,
+  "networkCalls": 0,
+  "checks": [
+    {
+      "id": "R1-original-role-competition",
+      "status": "VERIFIED",
+      "beforeRoles": [
+        "discard",
+        "fireworks"
+      ],
+      "after": {
+        "status": "conflict",
+        "candidates": [
+          "discard",
+          "fireworks"
+        ],
+        "originalDecisions": 2
+      },
+      "iterationOrderIndependent": true,
+      "reopenProjectionPreservesDecisions": true,
+      "inputUnchanged": true
+    },
+    {
+      "id": "R1-coverage-and-consensus",
+      "status": "VERIFIED",
+      "partialCoverage": "original decision unapplied; no manual promotion to extra member",
+      "fullAgreement": "selected with both manual supports",
+      "inputUnchanged": true
+    },
+    {
+      "id": "R2-latest-observed-order-and-manual-order",
+      "status": "VERIFIED",
+      "manualMembershipPreserved": true,
+      "latestObservedPhysicalEdges": 1,
+      "falseCycles": 0,
+      "removedObservationLeavesEdges": 0,
+      "explicitManualEdgePreserved": true,
+      "genuineManualVsObservedConflict": 2,
+      "inputUnchanged": true
+    },
+    {
+      "id": "C5-original-stack-actual-component",
+      "status": "VERIFIED",
+      "validatedStackEdges": 1,
+      "visibleStackMembers": 2,
+      "unrelatedPhotoMembers": 1,
+      "actualStackWithRelation": 1,
+      "actualStackWithoutRelation": 0,
+      "physicalItemsExactlyOnce": 3,
+      "allQualifiedClicksCorrect": true,
+      "inputUnchanged": true
+    },
+    {
+      "id": "C5-qualified-selection-and-conservative-boundaries",
+      "status": "VERIFIED",
+      "equalBareIDsAcrossAssertions": "three qualified selections correct",
+      "chain": "deferred; all three remain selectable",
+      "independentPairs": 2,
+      "unrelatedSingletons": 1,
+      "missingObservationSupport": "deferred",
+      "inputUnchanged": true
+    }
+  ],
+  "allInputsAndFrozenSourcesUnchanged": true,
+  "failures": 0,
+  "status": "VERIFIED — three original corrections accepted"
+}

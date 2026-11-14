@@ -1,0 +1,117 @@
+TAP version 13
+# Subtest: actual whole-scene UI collects multiple fields once and source tap/pan/jump use original references without rewriting records
+ok 1 - actual whole-scene UI collects multiple fields once and source tap/pan/jump use original references without rewriting records
+  ---
+  duration_ms: 33.381291
+  type: 'test'
+  ...
+# Subtest: actual group controls emit revision-qualified board/role/split/merge/frame/undo commands, never value answers or paid reads
+ok 2 - actual group controls emit revision-qualified board/role/split/merge/frame/undo commands, never value answers or paid reads
+  ---
+  duration_ms: 13.892083
+  type: 'test'
+  ...
+# Subtest: GameEssentials whole-scene selection opens existing exact-piece editor and sends dirty answers with scene command in one PATCH
+ok 3 - GameEssentials whole-scene selection opens existing exact-piece editor and sends dirty answers with scene command in one PATCH
+  ---
+  duration_ms: 10.271833
+  type: 'test'
+  ...
+# Subtest: scene focus and shared presentation keep readable 4×5 cells and source actions return to existing ROI and preservation paths
+ok 4 - scene focus and shared presentation keep readable 4×5 cells and source actions return to existing ROI and preservation paths
+  ---
+  duration_ms: 8.247709
+  type: 'test'
+  ...
+# Subtest: scene attachment self/cycle/chain across fields exposes every live physical ID once and readonly prevents commands
+ok 5 - scene attachment self/cycle/chain across fields exposes every live physical ID once and readonly prevents commands
+  ---
+  duration_ms: 11.005625
+  type: 'test'
+  ...
+# Subtest: existing question skip and actual preservation linking dispatch persistently without answering/packing on behalf of the user
+ok 6 - existing question skip and actual preservation linking dispatch persistently without answering/packing on behalf of the user
+  ---
+  duration_ms: 34.118208
+  type: 'test'
+  ...
+# Subtest: cross-view photo taps send board-qualified correspondence; only unique current-state candidates expose identity confirmation
+ok 7 - cross-view photo taps send board-qualified correspondence; only unique current-state candidates expose identity confirmation
+  ---
+  duration_ms: 10.91275
+  type: 'test'
+  ...
+# Subtest: shared lane labels and partial order are presentation only; retained board body has no competing toolbar/editor
+not ok 8 - shared lane labels and partial order are presentation only; retained board body has no competing toolbar/editor
+  ---
+  duration_ms: 6.605417
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/restoration-scene-ui.test.ts:1:22783'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'die1',
+        'die2',
+    -   'die1'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'die2'
+    1: 'die1'
+  actual:
+    0: 'die1'
+    1: 'die2'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/restoration-scene-ui.test.ts:71:163)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: already composed lane labels stay singular and two regions on the same actual board keep distinct headings
+ok 9 - already composed lane labels stay singular and two regions on the same actual board keep distinct headings
+  ---
+  duration_ms: 5.498667
+  type: 'test'
+  ...
+# Subtest: empty canvas origin opens on an actual panel, focus remount restores navigation, and first-location never returns to empty zero
+ok 10 - empty canvas origin opens on an actual panel, focus remount restores navigation, and first-location never returns to empty zero
+  ---
+  duration_ms: 16.462
+  type: 'test'
+  ...
+# Subtest: portrait panel uses natural content height instead of row estimates or its own min-height feedback
+ok 11 - portrait panel uses natural content height instead of row estimates or its own min-height feedback
+  ---
+  duration_ms: 11.297292
+  type: 'test'
+  ...
+# Subtest: scene compact face receives applicable requested properties from its exact source receipt
+ok 12 - scene compact face receives applicable requested properties from its exact source receipt
+  ---
+  duration_ms: 3.619875
+  type: 'test'
+  ...
+# Subtest: end-region jump has viewport scroll room without moving panels, losing pan or clamping focus re-entry
+ok 13 - end-region jump has viewport scroll room without moving panels, losing pan or clamping focus re-entry
+  ---
+  duration_ms: 13.32375
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 12
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 660.561667

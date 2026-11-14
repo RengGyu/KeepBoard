@@ -1,0 +1,119 @@
+TAP version 13
+# Subtest: R1 automatic merge cannot overwrite competing manual roles in either previous-group order
+not ok 1 - R1 automatic merge cannot overwrite competing manual roles in either previous-group order
+  ---
+  duration_ms: 66.807292
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:1:2479'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'selected'
+    - 'conflict'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'conflict'
+  actual: 'selected'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:5:410)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: agreeing manual roles covering all merged members reconnect with both manual supports; partial coverage does not promote
+not ok 2 - agreeing manual roles covering all merged members reconnect with both manual supports; partial coverage does not promote
+  ---
+  duration_ms: 12.176083
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:1:3323'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:6:324)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: R2 manual split preserves membership but regenerates observed physical order from latest source
+not ok 3 - R2 manual split preserves membership but regenerates observed physical order from latest source
+  ---
+  duration_ms: 17.401875
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:1:4046'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+        [
+    +     'entity:4d0c5cc44f4bf9f41980668d29f526eb',
+          'entity:d8dbc39a76275e753f04cde43094057b',
+    +   ],
+    +   [
+    +     'entity:d8dbc39a76275e753f04cde43094057b',
+          'entity:4d0c5cc44f4bf9f41980668d29f526eb'
+        ]
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: 'entity:d8dbc39a76275e753f04cde43094057b'
+      1: 'entity:4d0c5cc44f4bf9f41980668d29f526eb'
+  actual:
+    0:
+      0: 'entity:4d0c5cc44f4bf9f41980668d29f526eb'
+      1: 'entity:d8dbc39a76275e753f04cde43094057b'
+    1:
+      0: 'entity:d8dbc39a76275e753f04cde43094057b'
+      1: 'entity:4d0c5cc44f4bf9f41980668d29f526eb'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:7:993)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: explicit manual precedes claim survives refresh; opposition with new observation remains a genuine unresolved cycle
+not ok 4 - explicit manual precedes claim survives refresh; opposition with new observation remains a genuine unresolved cycle
+  ---
+  duration_ms: 10.006875
+  type: 'test'
+  location: '/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:1:5319'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert(p.relations.some(r=>r.id===manual.id&&sceneDigest(r.claim)===sceneDigest(manual.claim)))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/Users/jeonggyuju/Project_folder/KeepBoard/tests/linear-scene-refresh.test.ts:8:884)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 426.857833

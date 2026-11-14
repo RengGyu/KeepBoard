@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import type {Assertion,GamePack} from '../shared/types';
+import type {GenericRecord} from '../shared/genericRecord';
 
 // Drawn boards and piece symbols per game, from public/game-art/real-boards/{gameId}/.
 // Complete slot boards and explicitly location-only partial boards may be rendered.
@@ -127,3 +129,13 @@ export const realBoardSvg = (board: RealBoard) => `${base(board.gameId)}/${board
 export const pieceSymbolHref = (gameId: string, symbol: string) => `${base(gameId)}/pieces.svg#${symbol}`;
 /** The first drawn symbol for a component (symbols are named piece-{componentId}-{shape}). */
 export const pieceSymbolFor = (symbols: string[], componentId: string) => symbols.find(id => id.startsWith(`piece-${componentId}-`));
+
+/** Tags name coordinate frames, never asset variants. Reuse the record editor's existing interpretation. */
+export function sceneDisplayBoardContext(pack:GamePack,board:RealBoard){return {packId:pack.id,packVersion:pack.version,sourceSHA:pack.runtime?.source.sha256??null,board,manualLayoutTags:[realFreeLayoutVariant(board.placementFrame??board.variant??'base'),realSlotLayoutVariant(board.placementFrame??'base')]};}
+/** Exact loaded board variants for display only; async loading never writes a scene or a record. */
+export function useSceneBoardAssets(pack:GamePack,assertions:readonly Assertion[]){
+ const gameId=pack.runtime?.source.gameId,records=assertions.flatMap(a=>{const r=a.value as unknown as GenericRecord;return r?.version==='game-component-record-v1'?[{field:a.field,pieces:r.pieces}]:[];}),key=JSON.stringify([gameId,pack.id,pack.version,pack.runtime?.source.sha256,records.map(r=>[r.field,r.pieces.map(p=>[p.placement?.layoutVariant,p.spatial?.resolved?.frameId])])]);
+ const [loaded,setLoaded]=useState<{key:string;assets:RealAssets[]}>({key:'',assets:[]});
+ useEffect(()=>{let alive=true;if(!gameId)return;void (async()=>{const base=await loadRealAssets(gameId,'base',true);if(!base)return [];const variants=new Set(['base']);for(const record of records)for(const piece of record.pieces){if(piece.spatial?.resolved?.frameId)variants.add(piece.spatial.resolved.frameId);const restored=realBoardViewForPlacements(base.board,record.field,[piece.placement]);if(restored!=='base')variants.add(restored);const tag=piece.placement?.layoutVariant;if(tag&&base.variants.some(v=>v.id===tag))variants.add(tag);}return Promise.all([...variants].map(v=>v==='base'?base:loadRealAssets(gameId,v,true)));})().then(results=>{if(alive)setLoaded({key,assets:results.filter((a):a is RealAssets=>!!a)});});return()=>{alive=false;};},[key]);
+ return loaded.key===key?loaded.assets:[];
+}

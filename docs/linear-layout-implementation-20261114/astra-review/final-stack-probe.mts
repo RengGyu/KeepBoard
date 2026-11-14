@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import React from 'react';
+import {register} from 'node:module';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {withRestoration} from '../../../gamepacks/catalog.ts';
+import {projectRestorationScene} from '../../../shared/sceneProjection.ts';
+import {resolveSceneDisplay} from '../../../shared/sceneDisplay.ts';
+import {decodeSceneReading} from '../../../shared/sceneReading.ts';
+import {sceneDigest} from '../../../shared/restorationIdentity.ts';
+register('../../board-story/feedback/skip-css.mjs',import.meta.url);
+const {RestorationSceneView}=await import('../../../src/RestorationSceneView.tsx');
+const {PhotoLayoutBoard}=await import('../../../src/PhotoLayoutBoard.tsx');
+const path='docs/real-photo-review-20261110/cases/final-pool-04/view.json',bytes=readFileSync(path),d=JSON.parse(bytes.toString()),s=d.session,pack=withRestoration(d.pack),a=s.assertions.find((a:any)=>a.basis!=='rule'),r=a.observationReceipts[0],os=r.result.observations.slice(0,3);
+s.assertions=[a];delete s.restoration;a.value.pieces=a.value.pieces.filter((p:any)=>os.some((o:any)=>r.componentRefs[o.ref]===p.id));r.result.observations=os;
+const profile=projectRestorationScene({session:s,pack}).profile;
+r.request.scene={version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,requested:['region'],allowedRoleIds:['discard'],roleHints:[],boardComponentIds:[],roleComponentIds:{discard:['cards']}};
+r.result.scene=decodeSceneReading({version:'scene-reading-v1',profileSHA:profile.pin.profileSHA,boardRefs:[],geometry:[],relations:[],regions:[{ref:'discard-region',imageIndex:0,boardRef:null,memberObservationRefs:os.map((o:any)=>o.ref),roleCandidates:['discard']}]},r.request,r.result,r.transforms);
+assert.equal(r.result.scene.deferred.length,0);
+r.request.spatial={version:'spatial-request-v1',frames:[],structuralNamespaces:[]};
+r.result.spatial={version:'spatial-observation-v1',boardInstances:[],placements:[],cellStates:[],deferred:[],relations:[{fromRef:os[0].ref,toRef:os[1].ref,kind:'same-visible-stack',basis:'observed-visible-relation',partial:true}]};
+const immutable=sceneDigest(s),scene=projectRestorationScene({session:s,pack}),without=structuredClone(scene);without.relations=without.relations.filter(r=>r.kind!=='same-visible-stack');
+assert.equal(scene.relations.filter(r=>r.kind==='same-visible-stack').length,1);
+assert.equal(scene.profile.regions.find(r=>r.id==='discard')!.topology!.kind,'pile-collection');
+const resolve=(scene:any)=>resolveSceneDisplay({scene,pack,assertions:s.assertions,evidence:s.evidence});
+assert.deepEqual(resolve(scene),resolve(without));
+const nodes=(v:any):any[]=>!v||typeof v!=='object'?[]:Array.isArray(v)?v.flatMap(nodes):[v,...nodes(v.props?.children)];
+function render(component:any,props:any){const internals=(React as any).__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE,old=internals.H;internals.H={useState:(v:any)=>[typeof v==='function'?v():v,()=>{}],useRef:(v:any)=>({current:v}),useEffect(){}};try{return component(props);}finally{internals.H=old;}}
+function visible(scene:any){const tree=render(RestorationSceneView,{scene,pack,assertions:s.assertions,evidence:s.evidence,busy:false,onSelect(){},onCommand(){throw Error('writes forbidden');}}),panels=nodes(tree).filter(n=>n.props?.['data-scene-content']),photos=panels.flatMap(p=>nodes(p).filter(n=>n.type===PhotoLayoutBoard));return {adapters:panels.flatMap(p=>nodes(p).filter(n=>n.props?.['data-scene-adapter']).map(n=>n.props['data-scene-adapter'])),photoRows:photos.map(p=>{const body=render(PhotoLayoutBoard,p.props);return nodes(body).filter(n=>n.props?.className==='photo-layout-row-pan').length;}),tiles:photos.flatMap(p=>nodes(render(PhotoLayoutBoard,p.props)).filter(n=>n.props?.['data-drawing-piece']).map(n=>[n.props['data-assertion-id'],n.props['data-drawing-piece']]))};}
+const withRelation=visible(scene),withoutRelation=visible(without);assert.deepEqual(withRelation,withoutRelation);assert.equal(withRelation.tiles.length,3);assert.equal(sceneDigest(s),immutable);assert(readFileSync(path).equals(bytes));
+const out={scope:'synthetic supported stack relation with existing actual components; not photo accuracy',providerCalls:0,result:'FAILED C5 structure consumption reproduced',validatedStackEdges:1,observedRole:'discard',profileTopology:'pile-collection',sameDisplayPlanWithOrWithoutStack:true,sameActualPanelOutputWithOrWithoutStack:true,adapters:withRelation.adapters,photoRows:withRelation.photoRows,displayedPhysicalItems:withRelation.tiles.length,sourceUnchanged:true};
+writeFileSync('docs/linear-layout-implementation-20261114/astra-review/final-stack-results.json',JSON.stringify(out,null,2)+'\n');console.log(JSON.stringify(out,null,2));

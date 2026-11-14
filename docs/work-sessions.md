@@ -203,3 +203,10 @@
 사용자가 Astra로 일자 나열 원인과 해결 방법을 요청했다. 연구 아스트라 프로필(notes: 기존 방식의 한계·새 접근 연구)에 따라 새 세션 22d2fb47-a98e-4e43-a18a-e48985ea1297 / srv_AlXOWgKXvFmY를 생성하고 actual/effective/runtime gpt-6-astra/max, Normal, auto-review를 확인했다. 전체 대화 없이 runtime 규칙과 docs/linear-layout-diagnosis-20261114/astra-task.md만 전달한다. 제품/팩/기존 응답·평가 읽기 전용; 새 task 문서/무료 분석 코드만 소유한다. 새 provider/키·운영 접근/구현/전체suite/build/Git·배포/추가 agent 권한은 없다. 감독은 근거 검토·사용자 브리핑·context를 담당하며 완료 통지를 기다린다.
 
 일자 연구 완료·소유권 반환: 새 Astra max/Normal 세션이8종 사진/기존응답과7반례(실제2·합성5)를 대조하고 README/evidence/design/implementation-cards 및 무료재현 코드를 전달했다. root가7반례를재실행하고488입력/제품 해시와주요코드경계를 확인했다. 설계만수락,제품구현/새provider/기본값변경0. input-invariance는연구완료시점동결기록,감독후속은동일task/supervisor에분리한다. 기존비교캡처의아줄픽셀불완전·LC상단잘림도숨기지않고후속화면검수대상으로남겼다.
+
+
+## 2026-11-14 일자 배치 소비 경로 구현·통합
+
+사용자 승인 C1–C6를 기존 구현솔·구현솔2 actual/effective/runtime gpt-6.1-sol/high/Normal로 구현했다. Sol1은 sceneDisplay·기존 UI/body/asset 연결, Sol2는 projection/역할·관계/갱신·snapshot/4종 profile을 소유했다. 기존 연구 Astra gpt-6-astra/max/Normal은 계약과 최종 diff를 읽기전용 검토했다. 작업 카드·계약·동결 근거는 docs/linear-layout-implementation-20261114에 있다. 두 구현자 모두 후속 동결·소유권 반환.
+
+감독은 실제 격리 App의 기존8종408관측·Chrome 가로/세로·완전 작업면 캡처·사진대조 갤러리·원ID 상세선택/저장/reload를 확인했다. 초기 동결본 전체1498/1498 이후 Astra material3건을 해당 소유자에게 반환해 교정했고, 최종25파일 source SHA와 관련50/50·global타입 포함 build·diff검사를 확인했다. 최초 실패 근거를 보존하고 동일 세 경계만 Astra가 독립5묶음·실패0으로 후속 재검토해 수락했다. 감독은23근거 SHA를 재확인했다. 새사진/판독provider/키·운영접근/기본값변경/Sites·운영배포0, 기존 unrelated untracked 자료는 별도 보존한다. 표시 관측 수를 실제 칸/소속 정답률로 보고하지 않는다. root는 기준문서·최종 근거/GitHub 반영을 맡는다.
