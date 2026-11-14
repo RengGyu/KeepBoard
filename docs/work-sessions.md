@@ -197,3 +197,9 @@
 사용자 명시 Fast 지시로 기존 구현솔·구현솔2를 재개하고 actual/effective/runtime gpt-6.1-sol/high 및 feature service_tier=priority, plan_mode=false를 확인했다. Sol1은 src·shared/sceneLayout(표시 배치만)/직접 UI검사, Sol2는 docs/restoration-readability-generalization-20261113/sol2 fixture/harness와 필요 공통 projection 호환(변경 전 경계 통지)을 소유한다. 원기하/3종 profile 동결, 새 gameId휴리스틱/유료호출/키·운영접근/기본값변경/저장성능/Site·배포 없음. root는 최종 실제 Chrome·검사·맥락 문서 담당. 기존 다른 dirty 문서는 보존.
 
 최종 완료·소유권 반환: Sol1의9 UI/test 파일과 후속 숫자 중복/요청미상·끝jump 수정, Sol2의제품수정0/5종격리App 재생을 감독이 통합했다. 관련40/40·전체타입 포함 npm run build·diff검사 PASS, Chrome390×844/844×390과 원ID 정정→저장→reload 확인. 원자료207관측 보존과 실제 판/칸 정확도를 구별하며 일반4종은 아직 목록 중심이다. 보호7파일 SHA 불변·새provider0. 최신 인계 docs/restoration-readability-generalization-20261113/README.md. root는 최종 근거/기준문서/GitHub 반영만 담당하고 추가 구현을 시작하지 않는다.
+
+
+## 2026-11-14 일자 배치 원인·해결 연구
+사용자가 Astra로 일자 나열 원인과 해결 방법을 요청했다. 연구 아스트라 프로필(notes: 기존 방식의 한계·새 접근 연구)에 따라 새 세션 22d2fb47-a98e-4e43-a18a-e48985ea1297 / srv_AlXOWgKXvFmY를 생성하고 actual/effective/runtime gpt-6-astra/max, Normal, auto-review를 확인했다. 전체 대화 없이 runtime 규칙과 docs/linear-layout-diagnosis-20261114/astra-task.md만 전달한다. 제품/팩/기존 응답·평가 읽기 전용; 새 task 문서/무료 분석 코드만 소유한다. 새 provider/키·운영 접근/구현/전체suite/build/Git·배포/추가 agent 권한은 없다. 감독은 근거 검토·사용자 브리핑·context를 담당하며 완료 통지를 기다린다.
+
+일자 연구 완료·소유권 반환: 새 Astra max/Normal 세션이8종 사진/기존응답과7반례(실제2·합성5)를 대조하고 README/evidence/design/implementation-cards 및 무료재현 코드를 전달했다. root가7반례를재실행하고488입력/제품 해시와주요코드경계를 확인했다. 설계만수락,제품구현/새provider/기본값변경0. input-invariance는연구완료시점동결기록,감독후속은동일task/supervisor에분리한다. 기존비교캡처의아줄픽셀불완전·LC상단잘림도숨기지않고후속화면검수대상으로남겼다.
