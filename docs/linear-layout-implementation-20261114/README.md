@@ -2,7 +2,9 @@
 
 **제품 구현·통합 완료. Astra가 최종 교정 3건을 독립 재검토해 수락했다.** 사용자 승인 범위 C1–C6를 기존 Sol 두 세션으로 구현했다. C7 새 판독·기본 강도 변경은 포함하지 않는다.
 
-**[원사진과 수정 화면 8종 비교](comparison/README.md)** · [확대·이동 가능한 로컬 비교](http://127.0.0.1:58117/#hanabi) · [짧은 코드·화면 안내](REVIEW_GUIDE.md)
+**[모바일 인터넷으로 원사진·수정 화면 보기](https://keepboard-placement-compare-nov14.wjdrb3434.chatgpt.site/#hanabi)** · [GitHub 8종 비교표](comparison/README.md) · [짧은 코드·화면 안내](REVIEW_GUIDE.md)
+
+모바일 공유 후속: 컴퓨터/같은 와이파이 없이 볼 수 있도록 비교 자료만 별도 Sites에 게시했다. 같은 ChatGPT 계정의 소유자 전용이며, 원사진/실제 화면 PNG와 확대·이동 UI만 있다. 실제 앱 백엔드·운영 저장소는 게시하지 않았다. [게시 근거](supervisor/mobile-publication.json).
 
 ## 달라진 행동
 
